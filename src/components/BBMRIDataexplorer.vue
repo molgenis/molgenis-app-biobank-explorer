@@ -22,6 +22,7 @@
     </div>
   </div>
 </template>
+
 <script>
   import Filters from './Filters'
   import Biobanks from './Biobanks'

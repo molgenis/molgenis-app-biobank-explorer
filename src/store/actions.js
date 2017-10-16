@@ -1,4 +1,4 @@
-import { get } from '@molgenis/molgenis-api-client'
+import api from '@molgenis/molgenis-api-client'
 import { SET_BIOBANKS, SET_COUNTRIES, SET_ERROR, SET_MATERIAL_TYPES, SET_QUALITY, SET_LOADING } from './mutations'
 
 export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
@@ -12,7 +12,7 @@ export default {
     if (state.search !== '') uri += '&q=*=q="' + state.search + '"'
 
     commit(SET_LOADING, true)
-    get(uri, {}).then(response => {
+    api.get(uri, {}).then(response => {
       commit(SET_BIOBANKS, response)
       commit(SET_LOADING, false)
     }, error => {
@@ -25,7 +25,7 @@ export default {
      * @type {{}}
      */
     const options = {}
-    get('/api/v2/eu_bbmri_eric_countries', options).then(response => {
+    api.get('/api/v2/eu_bbmri_eric_countries', options).then(response => {
       // FIXME: get complete response and show label attribute in checkbox
       commit(SET_COUNTRIES, response.items)
     }, error => {
@@ -38,7 +38,7 @@ export default {
      * @type {{}}
      */
     const options = {}
-    get('/api/v2/eu_bbmri_eric_material_types', options).then(response => {
+    api.get('/api/v2/eu_bbmri_eric_material_types', options).then(response => {
       commit(SET_MATERIAL_TYPES, response.items)
     }, error => {
       commit(SET_ERROR, error)
@@ -50,7 +50,7 @@ export default {
      * @type {{}}
      */
     const options = {}
-    get('/api/v2/eu_bbmri_eric_lab_standards', options).then(response => {
+    api.get('/api/v2/eu_bbmri_eric_lab_standards', options).then(response => {
       commit(SET_QUALITY, response.items)
     }, error => {
       commit(SET_ERROR, error)

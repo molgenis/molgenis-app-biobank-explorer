@@ -30,12 +30,9 @@
   </div>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   .biobank_report {
-    background-color: $gray-lightest;
+    background-color: #B1B1B1;
     margin-top: 1em;
   }
 </style>

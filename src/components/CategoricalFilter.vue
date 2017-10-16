@@ -29,15 +29,13 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
 
+<style>
   .filter_option {
     background-color: inherit;
-
   }
 </style>
+
 <script>
   import FilterCheckbox from './FilterCheckbox'
   import { SET_FILTER } from '../store/mutations'

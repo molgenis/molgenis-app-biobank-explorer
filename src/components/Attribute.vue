@@ -7,22 +7,24 @@
       <i class="fa fa-times" aria-hidden="true" v-else></i>
     </span>
     <span v-else-if="attribute.fieldType==='XREF' | attribute.fieldType==='CATEGORICAL'">{{value[getRefLabel()]}}</span>
-    <ul v-else-if="attribute.fieldType==='MREF' | attribute.fieldType==='CATEGORICAL_MREF'" ><li v-for="val in value">{{val[getRefLabel()]}}</li><li v-if="value.length === 0">None</li></ul>
+    <ul v-else-if="attribute.fieldType==='MREF' | attribute.fieldType==='CATEGORICAL_MREF'">
+      <li v-for="val in value">{{val[getRefLabel()]}}</li>
+      <li v-if="value.length === 0">None</li>
+    </ul>
     <span v-else>{{value}}<span v-show="!value">-</span></span>
   </div>
 </template>
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
 
+<style>
   .fa-check {
-    color: $green
+    color: #3c763d;
   }
 
   .fa-times {
-    color: $red
+    color: #c9302c;
   }
 </style>
+
 <script>
   export default {
     name: 'attribute',

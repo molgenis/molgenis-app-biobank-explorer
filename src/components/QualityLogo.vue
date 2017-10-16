@@ -4,10 +4,7 @@
   </div>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   .biobank_card {
     margin-top: 1em;
   }
