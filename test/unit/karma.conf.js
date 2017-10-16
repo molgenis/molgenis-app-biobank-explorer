@@ -17,15 +17,10 @@ module.exports = function (config) {
       noInfo: true
     },
     coverageReporter: {
-      dir: '../../../../../target/generated-sources/coverage',
+      dir: './coverage',
       reporters: [
         {type: 'cobertura', subdir: 'cobertura'}
       ]
-    },
-    junitReporter: {
-      outputDir: '../../../../../target/surefire-reports',
-      outputFile: 'TEST-results.xml',
-      useBrowserName: false
     }
   })
 }

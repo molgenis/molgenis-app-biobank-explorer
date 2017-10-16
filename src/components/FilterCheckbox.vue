@@ -12,18 +12,14 @@
   </div>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   .form-check-label {
     width: 100%;
   }
 
   .filter_checkbox {
-    background-color: $white;
+    background-color: #ffffff;
     padding: 0.3em;
-
   }
 </style>
 

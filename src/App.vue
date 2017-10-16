@@ -1,17 +1,13 @@
 <template>
   <div class="container">
-      <router-view></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   #app {
-    background-color: $white;
-    text-align: left!important;
-
+    background-color: #ffffff;
+    text-align: left !important;
   }
 </style>
 

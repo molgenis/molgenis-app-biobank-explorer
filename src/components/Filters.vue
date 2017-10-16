@@ -3,23 +3,22 @@
     <p class="card-text">
 
       <categorical-filter v-for="(filter, id) in filters"
-        :key="filter.label"
-        :name="filter.label"
-        :options="filter.options"
-        :id="id">
+                          :key="filter.label"
+                          :name="filter.label"
+                          :options="filter.options"
+                          :id="id">
       </categorical-filter>
     </p>
   </div>
 </template>
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
 
+<style>
   #categorical_filter {
-    background-color: $gray-lightest;
+    background-color: #B1B1B1;
     height: 100%
   }
 </style>
+
 <script>
   import CategoricalFilter from './CategoricalFilter'
 

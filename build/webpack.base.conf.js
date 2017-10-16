@@ -28,9 +28,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js',
       'src': resolve('src'),
       'assets': resolve('src/assets'),
-      'components': resolve('src/components'),
-      'variables': resolve('node_modules/bootstrap/scss/_variables.scss'),
-      'mixins': resolve('node_modules/bootstrap/scss/_mixins.scss')
+      'components': resolve('src/components')
     }
   },
   module: {
@@ -38,7 +36,7 @@ module.exports = {
       {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
-        enforce: "pre",
+        enforce: 'pre',
         include: [resolve('src'), resolve('test')],
         options: {
           formatter: require('eslint-friendly-formatter')
@@ -53,6 +51,10 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
       },
       {
         test: /\.s[a|c]ss$/,

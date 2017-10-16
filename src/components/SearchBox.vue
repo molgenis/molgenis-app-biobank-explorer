@@ -13,10 +13,7 @@
   </div>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   #search_items {
     margin-top: 1em;
     margin-bottom: 1em;
@@ -24,7 +21,7 @@
 
   .input-group-addon {
     border-radius: 50px;
-    background-color: $white;
+    background-color: #ffffff;
   }
 
   .form-control {

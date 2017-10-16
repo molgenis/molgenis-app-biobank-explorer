@@ -12,12 +12,11 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
+<style>
   .info {
-    background-color: $white;
+    background-color: #ffffff;
   }
+
   .pane {
     background-color: inherit;
 
@@ -25,6 +24,7 @@
 </style>
 <script>
   import Attribute from './Attribute'
+
   export default {
     name: 'collapsable-pane',
     props: ['paneTitle', 'excluded', 'entity'],

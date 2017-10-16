@@ -14,14 +14,16 @@
 
     <tbody>
     <tr v-for="collection in filteredCollections">
-      <td><a :href="serverUrl + '/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id" class="btn btn-primary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i></a></td>
+      <td><a :href="serverUrl + '/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id"
+             class="btn btn-primary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i></a></td>
       <td v-for="column in columns">
         <span v-if="column === 'name'">{{collection[column]}}</span>
         <span v-else-if="column === 'order_of_magnitude'">
           {{collection[column].size}}
         </span>
         <span v-else-if="column === 'standards'">
-          <quality-logo v-for="quality in collection[column]" :quality="quality.label" :key="quality.label"></quality-logo>
+          <quality-logo v-for="quality in collection[column]" :quality="quality.label"
+                        :key="quality.label"></quality-logo>
         </span>
 
         <ul v-else>
@@ -30,16 +32,12 @@
       </td>
     </tr>
     </tbody>
-
   </table>
 </template>
 
-<style lang="scss">
-  @import "~variables";
-  @import "~mixins";
-
+<style>
   th.active {
-    color: $blue;
+    color: #01549b;
   }
 
   th.active .arrow {

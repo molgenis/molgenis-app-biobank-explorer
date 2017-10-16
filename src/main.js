@@ -11,8 +11,6 @@ import { INITIAL_STATE } from './store/state'
 
 import App from './App'
 
-import 'bootstrap/dist/css/bootstrap.css' // Bootstrap import
-
 sync(store, router)
 
 if (window.__webpack_public_path__) {
