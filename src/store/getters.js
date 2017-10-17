@@ -56,19 +56,6 @@ export default {
       return []
     }
   },
-  getFilteredCollections: (state, getters) => {
-    const biobanks = getters.getFilteredBiobanks(state)
-
-    return biobanks.reduce((acc, biobank) => {
-      const biobankId = biobank.id
-      return acc.concat(biobank.collections.map(collection => {
-        return {
-          collectionId: collection.id,
-          biobankId: biobankId
-        }
-      }))
-    }, [])
-  },
   /**
    * Gets a complete query object used in the vue-router URL
    *
