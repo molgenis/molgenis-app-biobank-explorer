@@ -1,45 +1,47 @@
 <template>
-  <div class="card pane">
-    <h5 class="card-header" @click="toggleOptions">
-      <i class="fa fa-caret-up" aria-hidden="true" v-if="showContent"></i>
-      <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
-      {{paneTitle}}
-    </h5>
-    <div class="card-block info" v-show="showContent" v-if="entity._meta">
-      <div v-for="attr in entity._meta.attributes">
-        <attribute :value="entity[attr.name]" :attribute="attr"></attribute>
+  <div class="card">
+    <div class="card-header">
+      <span @click.prevent="toggle">
+        <i class="fa fa-caret-up" aria-hidden="true" v-if="collapsed"></i>
+        <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
+        More information
+      </span>
+    </div>
+    <div class="card-body" v-if="!collapsed && biobank">
+      <div v-for="(value, key, index) in biobank">
+        <dl v-if="excluded.indexOf(key) === -1" class="row">
+          <dt class="col-sm-3">{{ key }}</dt>
+          <dd class="col-sm-9">{{ getTypedValue(value) }}</dd>
+        </dl>
       </div>
     </div>
   </div>
 </template>
-<style>
-  .info {
-    background-color: #ffffff;
-  }
 
-  .pane {
-    background-color: inherit;
-
-  }
-</style>
 <script>
-  import Attribute from './Attribute'
-
   export default {
     name: 'collapsable-pane',
-    props: ['paneTitle', 'excluded', 'entity'],
-    components: {Attribute},
-    data: function () {
+    props: ['biobank'],
+    data () {
       return {
-        showContent: false
+        collapsed: true,
+        excluded: ['name', 'description', 'contact', 'collections', '_href']
       }
     },
     methods: {
-      toggleOptions () {
-        this.showContent = !this.showContent
-        return this.showContent
+      toggle () {
+        this.collapsed = !this.collapsed
+      },
+      getTypedValue (value) {
+        if (Array.isArray(value)) {
+          return value.join(',')
+        } else if (value.name !== undefined) {
+          console.log(value.name)
+          return value.name
+        } else {
+          return value
+        }
       }
     }
-
   }
 </script>

@@ -11,11 +11,9 @@
         </p>
       </div>
 
-      <collapsable-pane
-        paneTitle="More information"
-        :excluded="['name', 'description', 'contact']"
-        :entity="biobank">
-      </collapsable-pane>
+      <hr>
+      <collapsable-pane :biobank="biobank"></collapsable-pane>
+      <hr>
 
       <div class="card-block">
         <h4>Collections</h4>
@@ -26,7 +24,6 @@
         </collection-overview>
       </div>
     </div>
-
   </div>
 </template>
 
