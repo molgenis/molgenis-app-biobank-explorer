@@ -7,15 +7,9 @@ const getInitialState = () => {
   return {
     search: '',
     filters: {
-      countries: {
-        selectedOptions: []
-      },
-      material_types: {
-        selectedOptions: []
-      },
-      quality: {
-        selectedOptions: []
-      }
+      countries: {selectedOptions: []},
+      material_types: {selectedOptions: []},
+      quality: {selectedOptions: []}
     }
   }
 }
@@ -27,33 +21,23 @@ describe('Negotiator Query utilities', () => {
         biobanks: [
           {
             id: 'biobank_1',
-            collections: [
-              {
-                id: 'collection_1'
-              }
-            ]
+            collections: [{id: 'collection_1'}]
           },
           {
             id: 'biobank_2',
             collections:
               [
-                {
-                  id: 'collection_1'
-                },
-                {
-                  id: 'collection_2'
-                },
-                {
-                  id: 'collection_3'
-                }
+                {id: 'collection_1'},
+                {id: 'collection_2'},
+                {id: 'collection_3'}
               ]
           }
         ]
       }
 
-      const getFilteredBiobanks = td.function('getFilteredBiobanks')
+      const getFilteredBiobanks = td.function('getters.getFilteredBiobanks')
       td.when(getFilteredBiobanks(td.matchers.anything())).thenReturn(state.biobanks)
-      td.replace('getFilteredBiobanks', getFilteredBiobanks)
+      td.replace(getters, 'getFilteredBiobanks', getFilteredBiobanks)
 
       const actual = getFilteredCollections(state, getters)
       const expected = [
@@ -69,9 +53,7 @@ describe('Negotiator Query utilities', () => {
 
   describe('getHumanReadableString', () => {
     let state = getInitialState()
-    afterEach(() => {
-      state = getInitialState()
-    })
+    afterEach(() => { state = getInitialState() })
 
     it('should generate a human readable string with only a free text search', () => {
       state.search = 'this is a free text search'
