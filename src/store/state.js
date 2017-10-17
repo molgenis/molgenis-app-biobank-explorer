@@ -24,6 +24,13 @@ const state = {
       label: 'Quality',
       options: [],
       selectedOptions: []
+    },
+    disease_types: {
+      entityTypeName: 'eu_bbmri_eric_disease_types',
+      attributeName: 'diseases',
+      label: 'Disease type',
+      options: [],
+      selectedOptions: []
     }
   },
   search: '',

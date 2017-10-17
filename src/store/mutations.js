@@ -2,6 +2,7 @@ export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIAL_TYPES = '__SET_MATERIAL_TYPES__'
 export const SET_QUALITY = '__SET_QUALITY__'
+export const SET_DISEASE_TYPES = '__SET_DISEASE_TYPES__'
 export const SET_FILTER = '__SET_FILTER__'
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_SEARCH = '__SET_SEARCH__'
@@ -20,6 +21,9 @@ export default {
   },
   [SET_QUALITY] (state, quality) {
     state.filters.quality.options = quality
+  },
+  [SET_DISEASE_TYPES] (state, diseaseTypes) {
+    state.filters.disease_types.options = diseaseTypes
   },
   [SET_FILTER] (state, {name, newSelectedOptions}) {
     state.filters[name].selectedOptions = newSelectedOptions
