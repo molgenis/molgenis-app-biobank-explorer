@@ -32,7 +32,7 @@
 
 <style>
   .biobank_report {
-    background-color: #B1B1B1;
+    background-color: #f2f2f2;
     margin-top: 1em;
   }
 </style>

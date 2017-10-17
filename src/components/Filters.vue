@@ -14,7 +14,7 @@
 
 <style>
   #categorical_filter {
-    background-color: #B1B1B1;
+    background-color: #f2f2f2;
     height: 100%
   }
 </style>
