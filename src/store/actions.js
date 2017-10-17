@@ -1,12 +1,13 @@
 import api from '@molgenis/molgenis-api-client'
 import { getFilteredCollections, getHumanReadableString } from './utils/negotiator.query'
-import { SET_BIOBANKS, SET_COUNTRIES, SET_ERROR, SET_LOADING, SET_MATERIAL_TYPES, SET_QUALITY } from './mutations'
+import { SET_BIOBANKS, SET_COUNTRIES, SET_ERROR, SET_LOADING, SET_MATERIAL_TYPES, SET_QUALITY, SET_DISEASE_TYPES } from './mutations'
 
 export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
 export const GET_COUNTRIES = '__GET_COUNTRIES__'
 export const GET_MATERIAL_TYPES = '__GET_MATERIAL_TYPES__'
 export const GET_QUALITY = '__GET_QUALITY__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
+export const QUERY_DISEASE_TYPES = '__QUERY_DISEASE_TYPES__'
 
 export default {
   [GET_BIOBANKS_AND_COLLECTIONS] ({commit, state}) {
@@ -54,6 +55,14 @@ export default {
     const options = {}
     api.get('/api/v2/eu_bbmri_eric_lab_standards', options).then(response => {
       commit(SET_QUALITY, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [QUERY_DISEASE_TYPES] ({commit}, query) {
+    const options = {}
+    api.get('/api/v2/eu_bbmri_eric_disease_types?num=20&q=label=q=' + query, options).then(response => {
+      commit(SET_DISEASE_TYPES, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
