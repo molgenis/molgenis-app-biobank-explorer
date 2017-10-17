@@ -6,7 +6,8 @@
     <div class="col-md-9">
       <div class="row">
         <div class="col-md" id="plots">
-          <!--[Statistics Placeholder]-->
+          <button type="button" class="btn btn-light btn-block" @click="sendToNegotiator">Send query to negotiator
+          </button>
         </div>
       </div>
       <div class="row">
@@ -32,13 +33,19 @@
     GET_COUNTRIES,
     GET_MATERIAL_TYPES,
     GET_QUALITY,
-    GET_BIOBANKS_AND_COLLECTIONS
+    GET_BIOBANKS_AND_COLLECTIONS,
+    SEND_TO_NEGOTIATOR
   } from '../store/actions'
 
   import { mapGetters } from 'vuex'
 
   export default {
     name: 'bbmri-dataexplorer',
+    methods: {
+      sendToNegotiator () {
+        this.$store.dispatch(SEND_TO_NEGOTIATOR)
+      }
+    },
     computed: {
       ...mapGetters({query: 'getCompleteQuery'})
     },
