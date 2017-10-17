@@ -69,7 +69,7 @@ export default {
       URL: url,
       collections: collections,
       humanReadable: humanReadable,
-      nToken: 'token'
+      nToken: state.nToken
     }
 
     const options = {

@@ -27,6 +27,7 @@ const state = {
     }
   },
   search: '',
+  nToken: null,
   loading: false
 }
 

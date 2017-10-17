@@ -35,6 +35,7 @@ export default {
     if (query.countries) state.filters.countries.selectedOptions = query.countries.split(',')
     if (query.materialTypes) state.filters.material_types.selectedOptions = query.materialTypes.split(',')
     if (query.quality) state.filters.quality.selectedOptions = query.quality.split(',')
+    if (query.nToken) state.nToken = query.nToken
   },
   [SET_LOADING] (state, loading) {
     state.loading = loading
