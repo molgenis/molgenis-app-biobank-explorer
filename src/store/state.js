@@ -4,6 +4,7 @@ export default {
   error: null,
   biobanks: [],
   search: '',
+  filterEmptyCollections: false,
   nToken: null,
   loading: false,
   country: {

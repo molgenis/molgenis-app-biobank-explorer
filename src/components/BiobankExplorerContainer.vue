@@ -33,15 +33,9 @@
   import SearchBox from './SearchBox'
 
   import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
-  import { mapGetters } from 'vuex'
 
   export default {
     name: 'biobank-explorer-container',
-    computed: {
-      ...mapGetters({
-        biobanks: 'getBiobanksFilteredWithSearch'
-      })
-    },
     components: {
       BiobankCardsContainer,
       FilterContainer,

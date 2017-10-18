@@ -7,6 +7,7 @@ export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_FILTER = '__SET_FILTER__'
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_SEARCH = '__SET_SEARCH__'
+export const FILTER_EMPTY_COLLECTIONS = '__FILTER_EMPTY_COLLECTIONS__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const SET_LOADING = '__SET_LOADING__'
 
@@ -48,6 +49,9 @@ export default {
   },
   [SET_SEARCH] (state, search) {
     state.search = search
+  },
+  [FILTER_EMPTY_COLLECTIONS] (state) {
+    state.filterEmptyCollections = !state.filterEmptyCollections
   },
   [MAP_QUERY_TO_STATE] (state, query) {
     if (query.search) state.search = query.search

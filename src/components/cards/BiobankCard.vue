@@ -1,17 +1,25 @@
 <template>
   <div class="card biobank-card">
 
-    <div class="card-header">
+    <div class="card-header biobank-header">
       <div class="d-flex justify-content-between">
-        <h5>{{ biobank.name }}</h5>
+        <router-link :to="{ name: 'biobank', params: { id: biobank.id}}">
+          <h5>{{ biobank.name }}</h5>
+        </router-link>
+        <div>
+          <small>
+            <b>Country</b>: {{ biobank['country'].name }}
+          </small>
+        </div>
       </div>
     </div>
 
     <div class="card-body">
-      <collection-overview
-        filterKey=""
+      <collections-table
+        v-if="biobank.collections.length > 0"
         :collections="biobank.collections">
-      </collection-overview>
+      </collections-table>
+      <span v-else>No collections available...</span>
     </div>
   </div>
 </template>
@@ -20,16 +28,20 @@
   .biobank-card {
     margin-top: 1em;
   }
+
+  .biobank-header:hover {
+    cursor: hand;
+  }
 </style>
 
 <script>
-  import CollectionOverview from '../CollectionOverview'
+  import CollectionsTable from '../tables/CollectionsTable.vue'
 
   export default {
     name: 'biobank-card',
     props: ['biobank'],
     components: {
-      CollectionOverview
+      CollectionsTable
     }
   }
 </script>

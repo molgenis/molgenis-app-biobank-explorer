@@ -24,12 +24,14 @@
 
 <script>
   import BiobankCard from './BiobankCard'
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'biobank-cards-container',
     computed: {
-      ...mapState(['biobanks'])
+      ...mapGetters({
+        biobanks: 'getBiobanksFilteredWithSearch'
+      })
     },
     components: {
       BiobankCard
