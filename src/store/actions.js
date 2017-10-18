@@ -3,21 +3,22 @@ import { getFilteredCollections, getHumanReadableString } from './utils/negotiat
 import {
   SET_BIOBANKS,
   SET_COUNTRIES,
-  SET_DISEASE_TYPES,
+  SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
   SET_LOADING,
-  SET_MATERIAL_TYPES,
-  SET_QUALITY
+  SET_MATERIALS,
+  SET_STANDARDS
 } from './mutations'
+
+export const GET_COUNTRIES = '__GET_COUNTRIES__'
+export const GET_MATERIALS = '__GET_MATERIALS__'
+export const GET_STANDARDS = '__GET_STANDARDS__'
+export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
 
 export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
-export const GET_COUNTRIES = '__GET_COUNTRIES__'
-export const GET_MATERIAL_TYPES = '__GET_MATERIAL_TYPES__'
-export const GET_QUALITY = '__GET_QUALITY__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
-export const QUERY_DISEASE_TYPES = '__QUERY_DISEASE_TYPES__'
 
 /**
  * Translate the identifiers used in the state to the names of the actual column names in the database
@@ -49,17 +50,47 @@ const getUniqueBiobanksIds = (biobanks) => {
 }
 
 export default {
+  [GET_COUNTRIES] ({commit}) {
+    api.get('/api/v2/eu_bbmri_eric_countries').then(response => {
+      commit(SET_COUNTRIES, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_MATERIALS] ({commit}) {
+    api.get('/api/v2/eu_bbmri_eric_material_types').then(response => {
+      commit(SET_MATERIALS, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_STANDARDS] ({commit}) {
+    api.get('/api/v2/eu_bbmri_eric_lab_standards').then(response => {
+      commit(SET_STANDARDS, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [QUERY_DIAGNOSIS_AVAILABLE] ({commit}, query) {
+    if (query) {
+      api.get('/api/v2/eu_bbmri_eric_disease_types?num=20&q=label=q=' + query + ',id=q=' + query).then(response => {
+        commit(SET_DIAGNOSIS_AVAILABLE, response.items)
+      }, error => {
+        commit(SET_ERROR, error)
+      })
+    } else {
+      commit(SET_DIAGNOSIS_AVAILABLE, [])
+    }
+  },
   /**
-   * Retrieve 100 biobanks with expanded collections
+   * Retrieve all biobanks with expanded collections
    *
    * @param commit
    */
   [GET_BIOBANKS_AND_COLLECTIONS] ({commit}) {
-    commit(SET_LOADING, true)
-
-    const uri = '/api/v2/eu_bbmri_eric_biobanks?attrs=collections(materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
+    const uri = '/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
     api.get(uri).then(response => {
-      commit(SET_BIOBANKS, response)
+      commit(SET_BIOBANKS, response.items)
       commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
@@ -105,38 +136,6 @@ export default {
     }, error => {
       commit(SET_ERROR, error)
     })
-  },
-  [GET_COUNTRIES] ({commit}) {
-    api.get('/api/v2/eu_bbmri_eric_countries').then(response => {
-      commit(SET_COUNTRIES, response.items)
-    }, error => {
-      commit(SET_ERROR, error)
-    })
-  },
-  [GET_MATERIAL_TYPES] ({commit}) {
-    api.get('/api/v2/eu_bbmri_eric_material_types').then(response => {
-      commit(SET_MATERIAL_TYPES, response.items)
-    }, error => {
-      commit(SET_ERROR, error)
-    })
-  },
-  [GET_QUALITY] ({commit}) {
-    api.get('/api/v2/eu_bbmri_eric_lab_standards').then(response => {
-      commit(SET_QUALITY, response.items)
-    }, error => {
-      commit(SET_ERROR, error)
-    })
-  },
-  [QUERY_DISEASE_TYPES] ({commit}, query) {
-    if (query) {
-      api.get('/api/v2/eu_bbmri_eric_disease_types?num=20&q=label=q=' + query + ',id=q=' + query).then(response => {
-        commit(SET_DISEASE_TYPES, response.items)
-      }, error => {
-        commit(SET_ERROR, error)
-      })
-    } else {
-      commit(SET_DISEASE_TYPES, [])
-    }
   },
   [SEND_TO_NEGOTIATOR] ({state}) {
     // Remove the nToken from the URL to prevent duplication on the negotiator side

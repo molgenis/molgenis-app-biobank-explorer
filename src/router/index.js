@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import BBMRIDataexplorer from 'components/BBMRIDataexplorer'
+import BiobankExplorerContainer from 'components/BiobankExplorerContainer'
 import BiobankReport from 'components/BiobankReport'
 import { INITIAL_STATE } from '../store/state'
 
@@ -12,7 +12,7 @@ export default new Router({
     {
       name: 'biobanks',
       path: '/biobanks',
-      component: BBMRIDataexplorer
+      component: BiobankExplorerContainer
     },
     {
       name: 'biobank',

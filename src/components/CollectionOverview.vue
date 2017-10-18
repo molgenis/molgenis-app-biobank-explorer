@@ -1,6 +1,5 @@
 <template>
   <table class="table table-striped">
-
     <thead>
     <tr>
       <th></th>
@@ -51,7 +50,7 @@
 
   export default {
     name: 'collection-overview',
-    props: ['columns', 'filterKey', 'collections'],
+    props: ['filterKey', 'collections'],
     components: {QualityLogo},
     data: function () {
       const sortOrders = {}
@@ -60,6 +59,7 @@
       })
 
       return {
+        columns: ['name', 'type', 'materials', 'order_of_magnitude', 'standards'],
         sortKey: '',
         sortOrders: sortOrders,
         serverUrl: INITIAL_STATE.serverUrl

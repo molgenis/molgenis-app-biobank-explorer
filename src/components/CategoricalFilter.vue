@@ -43,11 +43,6 @@
         <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
         {{name}}
       </h5>
-
-      <div class="card-block" v-show="true">
-        <filter-multiselect :options="options"></filter-multiselect>
-      </div>
-
     </div>
   </div>
 </template>
@@ -61,14 +56,12 @@
 <script>
   import FilterCheckbox from './FilterCheckbox'
   import { SET_FILTER } from '../store/mutations'
-  import FilterMultiselect from './FilterMultiselect.vue'
 
   export default {
     name: 'categorical-filter',
     props: ['id', 'name', 'options'],
     components: {
-      FilterCheckbox,
-      FilterMultiselect
+      FilterCheckbox
     },
     data: function () {
       return {

@@ -1,41 +1,25 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
-const state = {
-  error: undefined,
-  biobanks: null,
-  filters: {
-    countries: {
-      entityTypeName: 'eu_bbmri_eric_biobanks',
-      attributeName: 'country',
-      label: 'Country',
-      options: [],
-      selectedOptions: []
-    },
-    material_types: {
-      entityTypeName: 'eu_bbmri_eric_collections',
-      attributeName: 'materials',
-      label: 'Material type',
-      options: [],
-      selectedOptions: []
-    },
-    quality: {
-      entityTypeName: 'eu_bbmri_eric_collections',
-      attributeName: 'standards',
-      label: 'Quality',
-      options: [],
-      selectedOptions: []
-    },
-    disease_types: {
-      entityTypeName: 'eu_bbmri_eric_disease_types',
-      attributeName: 'diseases',
-      label: 'Disease type',
-      options: [],
-      selectedOptions: []
-    }
-  },
+export default {
+  error: null,
+  biobanks: [],
   search: '',
   nToken: null,
-  loading: false
+  loading: false,
+  country: {
+    filters: [],
+    options: []
+  },
+  materials: {
+    filters: [],
+    options: []
+  },
+  standards: {
+    filters: [],
+    options: []
+  },
+  diagnosis_available: {
+    filters: [],
+    options: []
+  }
 }
-
-export default state
