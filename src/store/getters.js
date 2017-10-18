@@ -16,8 +16,15 @@ export default {
       const countryFilters = state.filters.countries.selectedOptions
       const materialTypeFilters = state.filters.material_types.selectedOptions
       const qualityFilters = state.filters.quality.selectedOptions
+      const diseaseTypeFilters = state.filters.quality.selectedOptions.map(option => option.id)
 
-      if (countryFilters.length === 0 && materialTypeFilters.length === 0 && qualityFilters.length === 0) {
+      const countryFilterLength = countryFilters.length
+      const materialTypeFilterLength = materialTypeFilters.length
+      const qualityFilterLength = qualityFilters.length
+      const diseaseTypeFilterLength = diseaseTypeFilters.length
+
+      if (countryFilterLength === 0 && materialTypeFilterLength === 0 &&
+        qualityFilterLength === 0 && diseaseTypeFilterLength === 0) {
         return biobanks
       } else {
         if (countryFilters.length > 0) {
@@ -26,11 +33,11 @@ export default {
           })
         }
 
-        if (materialTypeFilters.length === 0 && qualityFilters === 0) {
+        if (materialTypeFilterLength === 0 && qualityFilterLength === 0 && diseaseTypeFilterLength === 0) {
           return biobanks
         }
 
-        if (materialTypeFilters.length > 0 || qualityFilters.length > 0) {
+        if (materialTypeFilterLength > 0 || qualityFilterLength > 0 || diseaseTypeFilterLength > 0) {
           biobanks = biobanks.filter(biobank => {
             const collections = biobank.collections
 
@@ -43,9 +50,14 @@ export default {
                 return qualityFilters.includes(collectionStandard.id)
               })
 
-              return (materialTypeFilters.length > 0 && qualityFilters.length === 0 && !!collectionsContainingMaterial) ||
-                (materialTypeFilters.length === 0 && qualityFilters.length > 0 && !!collectionsContainingQuality) ||
-                (!!collectionsContainingMaterial && !!collectionsContainingQuality)
+              const collectionsContainingDiseaseType = collection.diagnosis_available.find(collectionDiagnosis => {
+                return diseaseTypeFilters.includes(collectionDiagnosis.id)
+              })
+
+              return (materialTypeFilterLength > 0 && qualityFilterLength === 0 && diseaseTypeFilterLength === 0 && !!collectionsContainingMaterial) ||
+                (materialTypeFilterLength === 0 && qualityFilterLength > 0 && diseaseTypeFilterLength === 0 && !!collectionsContainingQuality) ||
+                (materialTypeFilterLength === 0 && qualityFilterLength === 0 && diseaseTypeFilterLength > 0 && !!collectionsContainingDiseaseType) ||
+                (!!collectionsContainingMaterial && !!collectionsContainingQuality && !!collectionsContainingDiseaseType)
             })
             return filteredCollections.length > 0
           })
@@ -64,8 +76,11 @@ export default {
    *  search: String,
    *  countries: Array<String>,
    *  materialTypes: Array<String>,
-   *  quality: Array<String>
+   *  quality: Array<String>,
+   *  diseaseTypes: Array<String>
    * }
+   *
+   * Do not add token, because we send the token in the Negotiator request
    *
    * @param state
    * @returns Query object
@@ -75,12 +90,14 @@ export default {
     const countries = state.filters.countries.selectedOptions
     const materialTypes = state.filters.material_types.selectedOptions
     const quality = state.filters.quality.selectedOptions
+    const diseaseTypes = state.filters.disease_types.selectedOptions.map(option => option.id)
 
     let query = {}
     if (search !== '') query.search = search
     if (countries.length > 0) query.countries = countries.join(',')
     if (materialTypes.length > 0) query.materialTypes = materialTypes.join(',')
     if (quality.length > 0) query.quality = quality.join(',')
+    if (diseaseTypes.length > 0) query.diseaseTypes = diseaseTypes.join(',')
 
     return query
   },

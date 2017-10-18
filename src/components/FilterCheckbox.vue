@@ -8,7 +8,6 @@
         <span v-if="label">{{label}}</span><span v-if="name">{{name}}</span>
       </div>
     </label>
-
   </div>
 </template>
 
@@ -24,7 +23,7 @@
 </style>
 
 <script>
-  import { SET_FILTER } from '../store/mutations'
+  import { GET_BIOBANK_IDENTIFIERS } from '../store/actions'
 
   export default {
     name: 'filter-checkbox',
@@ -43,8 +42,7 @@
             let index = filters.indexOf(this.id)
             filters.splice(index, 1)
           }
-
-          this.$store.commit(SET_FILTER, {name: this.partOf, newSelectedOptions: filters})
+          this.$store.dispatch(GET_BIOBANK_IDENTIFIERS, {options: filters, attribute: this.partOf})
         }
       }
     }
