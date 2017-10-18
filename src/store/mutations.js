@@ -58,7 +58,7 @@ export default {
   },
   [MAP_QUERY_TO_STATE] (state, query) {
     if (query.search) state.search = query.search
-    if (query.countries) state.country.filters = query.countries.split(',')
+    if (query.country) state.country.filters = query.country.split(',')
     if (query.materials) state.materials.filters = query.materials.split(',')
     if (query.standards) state.standards.filters = query.standards.split(',')
     if (query.diagnosis_available) state.diagnosis_available.filters = query.diagnosis_available.split(',')

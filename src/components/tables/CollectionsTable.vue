@@ -2,7 +2,11 @@
   <table class="table table-striped">
     <thead>
       <th></th>
-      <th v-for="column in columns">{{ column }}</th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Materials</th>
+      <th>Order of Magnitude</th>
+      <th>Standards</th>
     </thead>
 
     <tbody>

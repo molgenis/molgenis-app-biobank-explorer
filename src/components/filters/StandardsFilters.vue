@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header"  @click.prevent="toggle">
+    <div class="card-header" @click.prevent="toggle">
       <i class="fa fa-caret-up" aria-hidden="true" v-if="collapsed"></i>
       <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Standards
@@ -25,8 +25,7 @@
     name: 'standards-filters',
     data () {
       return {
-        collapsed: true,
-        filters: []
+        collapsed: true
       }
     },
     methods: {
@@ -37,11 +36,14 @@
     computed: {
       ...mapGetters({
         options: 'getStandardsOptions'
-      })
-    },
-    watch: {
-      filters (filters) {
-        this.$store.commit(UPDATE_FILTER, {name: 'standards', filters: filters})
+      }),
+      filters: {
+        get () {
+          return this.$store.state.standards.filters
+        },
+        set (filters) {
+          this.$store.commit(UPDATE_FILTER, {name: 'standards', filters: filters})
+        }
       }
     },
     beforeCreate () {

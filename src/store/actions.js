@@ -70,7 +70,7 @@ export default {
   [GET_BIOBANKS_AND_COLLECTIONS] ({commit}, search) {
     commit(SET_LOADING, true)
 
-    let uri = '/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
+    let uri = '/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
     if (search) {
       commit(SET_SEARCH, search)
       uri += '&q=*=q=' + search

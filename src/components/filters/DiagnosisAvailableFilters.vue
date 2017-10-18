@@ -1,9 +1,11 @@
 <template>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header" @click.prevent="toggle">
+      <i class="fa fa-caret-up" aria-hidden="true" v-if="collapsed"></i>
+      <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Diagnosis available
     </div>
-    <div class="card-body">
+    <div class="card-body" v-if="!collapsed">
       <multiselect
         v-model="filters"
         :options="options"
@@ -29,8 +31,7 @@
     name: 'diagnosis-available-filters',
     data () {
       return {
-        collapsed: true,
-        filters: []
+        collapsed: true
       }
     },
     methods: {
@@ -44,11 +45,14 @@
     computed: {
       ...mapGetters({
         options: 'getDiagnosisAvailableOptions'
-      })
-    },
-    watch: {
-      filters (filters) {
-        this.$store.commit(UPDATE_FILTER, {name: 'diagnosis_available', filters: filters})
+      }),
+      filters: {
+        get () {
+          return this.$store.state.diagnosis_available.filters
+        },
+        set (filters) {
+          this.$store.commit(UPDATE_FILTER, {name: 'diagnosis_available', filters: filters})
+        }
       }
     },
     components: {

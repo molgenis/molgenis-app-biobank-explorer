@@ -40,7 +40,7 @@
     name: 'biobank-explorer-container',
     computed: {
       ...mapGetters({
-        query: 'getFilterParameters'
+        query: 'getRouteQueryParams'
       })
     },
     components: {
@@ -48,6 +48,11 @@
       FilterContainer,
       Negotiator,
       SearchBox
+    },
+    watch: {
+      query (query) {
+        this.$router.push({query: query})
+      }
     },
     beforeCreate () {
       this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS)

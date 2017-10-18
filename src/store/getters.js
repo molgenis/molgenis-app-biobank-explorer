@@ -41,10 +41,10 @@ export default {
    */
   getRouteQueryParams: state => {
     const search = state.search
-    const country = state.country.options
-    const materials = state.materials.options
-    const standards = state.standards.options
-    const diseases = state.diagnosis_available.options.map(option => option.id)
+    const country = state.country.filters
+    const materials = state.materials.filters
+    const standards = state.standards.filters
+    const diseases = state.diagnosis_available.filters.map(filter => filter.id)
 
     let query = {}
     if (search !== '') query.search = search

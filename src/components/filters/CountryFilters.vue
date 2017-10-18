@@ -25,8 +25,7 @@
     name: 'country-filters',
     data () {
       return {
-        collapsed: true,
-        filters: []
+        collapsed: true
       }
     },
     methods: {
@@ -37,11 +36,14 @@
     computed: {
       ...mapGetters({
         options: 'getCountryOptions'
-      })
-    },
-    watch: {
-      filters (filters) {
-        this.$store.commit(UPDATE_FILTER, {name: 'country', filters: filters})
+      }),
+      filters: {
+        get () {
+          return this.$store.state.country.filters
+        },
+        set (filters) {
+          this.$store.commit(UPDATE_FILTER, {name: 'country', filters: filters})
+        }
       }
     },
     beforeCreate () {
