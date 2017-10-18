@@ -1,6 +1,6 @@
 <template>
   <div class="biobank-cards-container">
-    <div v-if="biobanks.length > 0">
+    <div v-if="!loading">
       <biobank-card
         v-for="(biobank, id) in biobanks"
         :key="biobank.id"
@@ -24,11 +24,12 @@
 
 <script>
   import BiobankCard from './BiobankCard'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
 
   export default {
     name: 'biobank-cards-container',
     computed: {
+      ...mapState(['loading']),
       ...mapGetters({
         biobanks: 'getBiobanksFilteredWithSearch'
       })

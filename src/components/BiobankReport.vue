@@ -17,11 +17,6 @@
 
       <div class="card-block">
         <h4>Collections</h4>
-        <collection-overview
-          filterKey=""
-          :columns="['name', 'type', 'materials', 'order_of_magnitude', 'standards']"
-          :collections="biobank.collections">
-        </collection-overview>
       </div>
     </div>
   </div>
@@ -36,7 +31,6 @@
 
 <script>
   import CollapsablePane from './CollapsablePane'
-  import CollectionOverview from './CollectionOverview'
   import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
   import { MAP_QUERY_TO_STATE } from '../store/mutations'
   import { mapGetters } from 'vuex'
@@ -50,8 +44,7 @@
       })
     },
     components: {
-      CollapsablePane,
-      CollectionOverview
+      CollapsablePane
     },
     beforeCreate: function () {
       if (!this.$store.state.biobanks) {

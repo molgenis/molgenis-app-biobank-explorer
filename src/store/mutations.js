@@ -4,12 +4,11 @@ export const SET_STANDARDS = '__SET_STANDARDS__'
 export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const SET_BIOBANKS = '__SET_BIOBANKS__'
-export const SET_FILTER = '__SET_FILTER__'
-export const SET_ERROR = '__SET_ERROR__'
 export const SET_SEARCH = '__SET_SEARCH__'
 export const FILTER_EMPTY_COLLECTIONS = '__FILTER_EMPTY_COLLECTIONS__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const SET_LOADING = '__SET_LOADING__'
+export const SET_ERROR = '__SET_ERROR__'
 
 export default {
   /**
@@ -38,11 +37,15 @@ export default {
   [UPDATE_FILTER] (state, {name, filters}) {
     state[name].filters = filters
   },
+  /**
+   * Stores biobanks in the state. The list of biobanks is only overwritten when:
+   *
+   * 1) Any filter is changed
+   * 2) A search query is submitted
+   * 3) The page is refreshed
+   */
   [SET_BIOBANKS] (state, biobanks) {
     state.biobanks = biobanks
-  },
-  [SET_FILTER] (state, {name, newSelectedOptions}) {
-    state.filters[name].selectedOptions = newSelectedOptions
   },
   [SET_ERROR] (state, error) {
     state.error = error
@@ -55,10 +58,10 @@ export default {
   },
   [MAP_QUERY_TO_STATE] (state, query) {
     if (query.search) state.search = query.search
-    if (query.countries) state.filters.countries.selectedOptions = query.countries.split(',')
-    if (query.materialTypes) state.filters.material_types.selectedOptions = query.materialTypes.split(',')
-    if (query.quality) state.filters.quality.selectedOptions = query.quality.split(',')
-    if (query.diseaseTypes) state.filters.disease_types.selectedOptions = query.diseaseTypes.split(',')
+    if (query.countries) state.country.filters = query.countries.split(',')
+    if (query.materials) state.materials.filters = query.materials.split(',')
+    if (query.standards) state.standards.filters = query.standards.split(',')
+    if (query.diagnosis_available) state.diagnosis_available.filters = query.diagnosis_available.split(',')
     if (query.nToken) state.nToken = query.nToken
   },
   [SET_LOADING] (state, loading) {

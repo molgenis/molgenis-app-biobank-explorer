@@ -28,7 +28,8 @@
 </style>
 
 <script>
-  import { SET_SEARCH, FILTER_EMPTY_COLLECTIONS } from '../store/mutations'
+  import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
+  import { FILTER_EMPTY_COLLECTIONS } from '../store/mutations'
 
   export default {
     name: 'search-box',
@@ -40,7 +41,7 @@
     },
     watch: {
       search (search) {
-        this.$store.commit(SET_SEARCH, search)
+        this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS, search)
       },
       filterEmptyCollections () {
         this.$store.commit(FILTER_EMPTY_COLLECTIONS)

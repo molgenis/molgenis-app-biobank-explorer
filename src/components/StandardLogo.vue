@@ -1,19 +1,8 @@
 <template>
   <div>
-    <img :src=imgSource :alt="quality" width="161" height="56"/>
+    <img :src=imgSource :alt="standard" width="161" height="56"/>
   </div>
 </template>
-
-<style>
-  .biobank_card {
-    margin-top: 1em;
-  }
-
-  .biobank_header:hover {
-    cursor: pointer;
-    cursor: hand;
-  }
-</style>
 
 <script>
   import '../assets/img/CEN_TS_16826_1_2015_E.png'
@@ -30,8 +19,8 @@
   import '../assets/img/EN_ISO_15189_2012_E.png'
 
   export default {
-    name: 'quality-logo',
-    props: ['quality'],
+    name: 'standard-logo',
+    props: ['standard'],
     computed: {
       imgSource: function get () {
         return window.__webpack_public_path__ + 'img/' + this.quality.replace(/[- :/]/g, '_') + '_E.png'

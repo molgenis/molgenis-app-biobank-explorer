@@ -7,6 +7,7 @@ import {
   SET_ERROR,
   SET_LOADING,
   SET_MATERIALS,
+  SET_SEARCH,
   SET_STANDARDS
 } from './mutations'
 
@@ -14,30 +15,10 @@ export const GET_COUNTRIES = '__GET_COUNTRIES__'
 export const GET_MATERIALS = '__GET_MATERIALS__'
 export const GET_STANDARDS = '__GET_STANDARDS__'
 export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
-
 export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
-
-/**
- * Translate the identifiers used in the state to the names of the actual column names in the database
- *
- * @param attribute
- * @returns {*}
- */
-const translateAttributeToColumnName = (attribute) => {
-  switch (attribute) {
-    case 'material_types':
-      return 'materials.id'
-    case 'quality':
-      return 'standard.id'
-    case 'countries':
-      return 'country.id'
-    case 'disease_types':
-      return 'diagnosis_available.id'
-  }
-}
 
 /**
  * Return an Array of unique biobank identifiers
@@ -84,11 +65,17 @@ export default {
   },
   /**
    * Retrieve all biobanks with expanded collections
-   *
-   * @param commit
+   * Filters the initial list of biobanks immediately if a search is included
    */
-  [GET_BIOBANKS_AND_COLLECTIONS] ({commit}) {
-    const uri = '/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
+  [GET_BIOBANKS_AND_COLLECTIONS] ({commit}, search) {
+    commit(SET_LOADING, true)
+
+    let uri = '/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(materials,standards,diagnosis_available,name,type,order_of_magnitude),*'
+    if (search) {
+      commit(SET_SEARCH, search)
+      uri += '&q=*=q=' + search
+    }
+
     api.get(uri).then(response => {
       commit(SET_BIOBANKS, response.items)
       commit(SET_LOADING, false)
@@ -127,11 +114,10 @@ export default {
    * @param dispatch
    * @param filter
    */
-  [GET_BIOBANK_IDENTIFIERS] ({commit, dispatch}, {options, attribute}) {
+  [GET_BIOBANK_IDENTIFIERS] ({commit, dispatch}, {options, filter}) {
     commit(SET_LOADING, true)
 
-    const column = translateAttributeToColumnName(attribute)
-    api.get('/api/v2/eu_bbmri_eric_collections?num=2000&attrs=biobank&q=' + options.map(option => column + '==' + option).join(',')).then(response => {
+    api.get('/api/v2/eu_bbmri_eric_collections?num=2000&attrs=biobank&q=' + options.map(option => filter + '==' + option).join(',')).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {
       commit(SET_ERROR, error)

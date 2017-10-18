@@ -33,9 +33,16 @@
   import SearchBox from './SearchBox'
 
   import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
+  import { MAP_QUERY_TO_STATE } from '../store/mutations'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'biobank-explorer-container',
+    computed: {
+      ...mapGetters({
+        query: 'getFilterParameters'
+      })
+    },
     components: {
       BiobankCardsContainer,
       FilterContainer,
@@ -44,6 +51,9 @@
     },
     beforeCreate () {
       this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS)
+      if (this.$store.state.route.query) {
+        this.$store.commit(MAP_QUERY_TO_STATE, this.$store.state.route.query)
+      }
     }
   }
 </script>

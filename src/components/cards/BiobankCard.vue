@@ -1,6 +1,5 @@
 <template>
   <div class="card biobank-card">
-
     <div class="card-header biobank-header">
       <div class="d-flex justify-content-between">
         <router-link :to="{ name: 'biobank', params: { id: biobank.id}}">
