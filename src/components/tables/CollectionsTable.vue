@@ -6,7 +6,6 @@
       <th>Name</th>
       <th>Type</th>
       <th>Materials</th>
-      <th>Order of Magnitude</th>
       <th>Standards</th>
     </tr>
     </thead>
@@ -22,13 +21,12 @@
 
       <td v-for="column in columns">
         <span v-if="column === 'name'">{{collection[column]}}</span>
-        <span v-else-if="column === 'order_of_magnitude'">{{collection[column].size}}</span>
         <span v-else-if="column === 'standards'">
-          <standard-logo
-            v-for="standard in collection[column]"
-            :standard="standard.label"
-            :key="standard.label">
-          </standard-logo>
+          <ul>
+            <li v-for="standard in collection[column]">
+              {{ standard.label }} <i class="fa fa-check"></i>
+            </li>
+          </ul>
         </span>
 
         <ul v-else>
@@ -40,19 +38,20 @@
   </table>
 </template>
 
-<script>
-  import StandardLogo from '../StandardLogo.vue'
+<style>
+  .fa-check {
+    color: green;
+  }
+</style>
 
+<script>
   export default {
     name: 'collections-table',
     props: ['collections'],
     data () {
       return {
-        columns: ['name', 'type', 'materials', 'order_of_magnitude', 'standards']
+        columns: ['name', 'type', 'materials', 'standards']
       }
-    },
-    components: {
-      StandardLogo
     }
   }
 </script>
