@@ -3,6 +3,7 @@ import { getFilteredCollections, getHumanReadableString } from './utils/negotiat
 import utils from '../utils'
 import {
   MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
+  SET_BIOBANK_REPORT,
   SET_BIOBANKS,
   SET_COUNTRIES,
   SET_DIAGNOSIS_AVAILABLE,
@@ -22,6 +23,7 @@ export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
 export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
+export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
@@ -168,10 +170,19 @@ export default {
 
     let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
 
-    if (state.search) query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
+    if (state.search) {
+      query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
+    }
 
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_BIOBANK_REPORT] ({commit}, biobankId) {
+    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id==${biobankId}`).then(response => {
+      commit(SET_BIOBANK_REPORT, response.items[0])
     }, error => {
       commit(SET_ERROR, error)
     })

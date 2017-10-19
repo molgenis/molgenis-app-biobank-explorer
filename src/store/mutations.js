@@ -5,7 +5,7 @@ export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_SEARCH = '__SET_SEARCH__'
-export const FILTER_EMPTY_COLLECTIONS = '__FILTER_EMPTY_COLLECTIONS__'
+export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE = '__MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE__'
 export const SET_LOADING = '__SET_LOADING__'
@@ -63,6 +63,9 @@ export default {
   },
   [MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE] (state, filters) {
     state.diagnosis_available.filters = filters
+  },
+  [SET_BIOBANK_REPORT] (state, biobank) {
+    state.biobankReport = biobank
   },
   [SET_LOADING] (state, loading) {
     state.loading = loading

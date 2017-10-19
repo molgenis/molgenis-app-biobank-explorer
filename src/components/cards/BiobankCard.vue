@@ -2,7 +2,7 @@
   <div class="card biobank-card">
     <div class="card-header biobank-header">
       <div class="d-flex justify-content-between">
-        <router-link :to="{ name: 'biobank', params: { id: biobank.id}}">
+        <router-link :to="{ name: 'biobank-report', params: { id: biobank.id}, query: query}">
           <h5>{{ biobank.name }}</h5>
         </router-link>
         <div>
@@ -39,6 +39,11 @@
   export default {
     name: 'biobank-card',
     props: ['biobank'],
+    computed: {
+      query () {
+        return this.$route.query
+      }
+    },
     components: {
       CollectionsTable
     }

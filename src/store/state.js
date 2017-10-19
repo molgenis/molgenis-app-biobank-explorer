@@ -3,6 +3,7 @@ export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 export default {
   error: null,
   biobanks: [],
+  biobankReport: {},
   search: '',
   filterEmptyCollections: false,
   nToken: null,
