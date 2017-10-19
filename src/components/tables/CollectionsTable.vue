@@ -1,22 +1,24 @@
 <template>
   <table class="table table-striped">
     <thead>
+    <tr>
       <th></th>
       <th>Name</th>
       <th>Type</th>
       <th>Materials</th>
       <th>Order of Magnitude</th>
       <th>Standards</th>
+    </tr>
     </thead>
 
     <tbody>
     <tr v-for="collection in collections">
-      <td>
+      <th scope="row">
         <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id"
            class="btn btn-primary btn-sm">
           <i class="fa fa-info-circle" aria-hidden="true"></i>
         </a>
-      </td>
+      </th>
 
       <td v-for="column in columns">
         <span v-if="column === 'name'">{{collection[column]}}</span>

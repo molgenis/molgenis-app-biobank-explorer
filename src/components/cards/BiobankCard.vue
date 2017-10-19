@@ -14,13 +14,11 @@
     </div>
 
     <div class="card-body">
-      <div class="row">
       <collections-table
         v-if="biobank.collections.length > 0"
         :collections="biobank.collections">
       </collections-table>
       <span v-else>No collections available...</span>
-      </div>
     </div>
   </div>
 </template>
