@@ -133,7 +133,11 @@ export default {
         commit(SET_LOADING, false)
       }, error => {
         commit(SET_ERROR, error)
+        commit(SET_LOADING, false)
       })
+    } else {
+      commit(SET_BIOBANKS, [])
+      commit(SET_LOADING, false)
     }
   },
   /**
@@ -162,7 +166,10 @@ export default {
     queryParts.push(utils.filterToQueryPart('standards.id', state.standards.filters))
     queryParts.push(utils.filterToQueryPart('diagnosis_available.code', state.diagnosis_available.filters.map(filter => filter.code)))
 
-    const query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
+    let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
+
+    if (state.search) query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
+
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {

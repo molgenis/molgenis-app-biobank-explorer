@@ -13,7 +13,7 @@ const queryPartsToQuery = (queryParts) => {
   return queryParts.reduce((accumulator, queryPart) => {
     if (queryPart.length > 0) {
       if (accumulator.length > 0) {
-        accumulator += '&'
+        accumulator += ';'
       }
       accumulator += queryPart
     }
