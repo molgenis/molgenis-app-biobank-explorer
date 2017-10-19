@@ -7,6 +7,7 @@ export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_SEARCH = '__SET_SEARCH__'
 export const FILTER_EMPTY_COLLECTIONS = '__FILTER_EMPTY_COLLECTIONS__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
+export const MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE = '__MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE__'
 export const SET_LOADING = '__SET_LOADING__'
 export const SET_ERROR = '__SET_ERROR__'
 
@@ -53,16 +54,15 @@ export default {
   [SET_SEARCH] (state, search) {
     state.search = search
   },
-  [FILTER_EMPTY_COLLECTIONS] (state) {
-    state.filterEmptyCollections = !state.filterEmptyCollections
-  },
   [MAP_QUERY_TO_STATE] (state, query) {
     if (query.search) state.search = query.search
     if (query.country) state.country.filters = query.country.split(',')
     if (query.materials) state.materials.filters = query.materials.split(',')
     if (query.standards) state.standards.filters = query.standards.split(',')
-    if (query.diagnosis_available) state.diagnosis_available.filters = query.diagnosis_available.split(',')
     if (query.nToken) state.nToken = query.nToken
+  },
+  [MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE] (state, filters) {
+    state.diagnosis_available.filters = filters
   },
   [SET_LOADING] (state, loading) {
     state.loading = loading

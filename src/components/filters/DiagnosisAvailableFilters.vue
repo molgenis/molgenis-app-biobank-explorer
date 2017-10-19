@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header" @click.prevent="toggle">
-      <i class="fa fa-caret-up" aria-hidden="true" v-if="collapsed"></i>
+      <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
       <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Diagnosis available
     </div>
@@ -12,6 +12,7 @@
         :multiple="true"
         :searchable="true"
         :hideSelected="true"
+        track-by="code"
         @search-change="getDiagnosisOptions"
         placeholder="Type to search"
         label="label"
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE } from '../../store/actions'
+  import { QUERY_DIAGNOSIS_AVAILABLE, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -31,7 +32,7 @@
     name: 'diagnosis-available-filters',
     data () {
       return {
-        collapsed: true
+        collapsed: false
       }
     },
     methods: {
@@ -53,6 +54,11 @@
         set (filters) {
           this.$store.commit(UPDATE_FILTER, {name: 'diagnosis_available', filters: filters})
         }
+      }
+    },
+    watch: {
+      filters () {
+        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     components: {

@@ -16,13 +16,6 @@ export default {
    */
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
   /**
-   * Get biobanks filtered by the free text search parameter.
-   * With no filter present, return all biobanks
-   *
-   * If the hide empty collection box is checked, filter out all the biobanks with empty collections
-   */
-  getBiobanksFilteredWithSearch: state => state.filterEmptyCollections ? state.biobanks.filter(biobank => biobank.collections.length > 0) : state.biobanks,
-  /**
    * Gets a complete query object used in the vue-router URL
    *
    * will provide an object like so:
@@ -44,7 +37,7 @@ export default {
     const country = state.country.filters
     const materials = state.materials.filters
     const standards = state.standards.filters
-    const diseases = state.diagnosis_available.filters.map(filter => filter.id)
+    const diseases = state.diagnosis_available.filters.map(filter => filter.code)
 
     let query = {}
     if (search !== '') query.search = search

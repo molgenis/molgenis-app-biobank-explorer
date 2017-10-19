@@ -22,11 +22,11 @@
         <span v-if="column === 'name'">{{collection[column]}}</span>
         <span v-else-if="column === 'order_of_magnitude'">{{collection[column].size}}</span>
         <span v-else-if="column === 'standards'">
-          <quality-logo
+          <standard-logo
             v-for="standard in collection[column]"
             :standard="standard.label"
             :key="standard.label">
-          </quality-logo>
+          </standard-logo>
         </span>
 
         <ul v-else>

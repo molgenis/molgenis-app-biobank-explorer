@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header" @click.prevent="toggle">
-      <i class="fa fa-caret-up" aria-hidden="true" v-if="collapsed"></i>
+      <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
       <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Standards
     </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { GET_STANDARDS } from '../../store/actions'
+  import { GET_STANDARDS, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -44,6 +44,11 @@
         set (filters) {
           this.$store.commit(UPDATE_FILTER, {name: 'standards', filters: filters})
         }
+      }
+    },
+    watch: {
+      filters () {
+        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     beforeCreate () {
