@@ -8,11 +8,11 @@
 <style>
   .search-box-container {
     padding-top: 1em;
+    padding-bottom: 1em;
   }
 </style>
 
 <script>
-  import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
   import { SET_SEARCH } from '../store/mutations'
 
   export default {
@@ -22,14 +22,9 @@
         get () {
           return this.$store.state.search
         },
-        set () {
-          this.$store.commit(SET_SEARCH)
+        set (search) {
+          this.$store.commit(SET_SEARCH, search)
         }
-      }
-    },
-    watch: {
-      search (search) {
-        this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS, search)
       }
     }
   }

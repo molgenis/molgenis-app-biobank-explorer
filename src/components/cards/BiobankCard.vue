@@ -25,7 +25,7 @@
 
 <style>
   .biobank-card {
-    margin-top: 1em;
+    margin-bottom: 1em;
   }
 
   .biobank-header:hover {
