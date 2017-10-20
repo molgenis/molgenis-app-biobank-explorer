@@ -21,6 +21,15 @@
   </div>
 </template>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style>
+  .multiselect__tag {
+    text-overflow: ellipsis;
+    max-width: 10em;
+    overflow: hidden;
+  }
+</style>
+
 <script>
   import { QUERY_DIAGNOSIS_AVAILABLE, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
@@ -67,4 +76,4 @@
   }
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
