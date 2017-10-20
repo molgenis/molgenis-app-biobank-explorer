@@ -100,7 +100,7 @@ export default {
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
     if (biobanks.length > 0) {
       const biobankIds = getUniqueBiobanksIds(biobanks)
-      const uri = `${BIOBANK_API_PATH}?num=100&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${biobankIds.join(',')})`
+      const uri = `${BIOBANK_API_PATH}?num=2000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${biobankIds.join(',')})`
 
       api.get(uri).then(response => {
         commit(SET_BIOBANKS, response.items)
