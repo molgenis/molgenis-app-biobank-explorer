@@ -85,11 +85,13 @@ export default {
    * Fetches complete disease type objects if the route query parameters contains diagnosis_available IDs
    */
   [GET_DIAGNOSIS_AVAILABLE] ({commit}, diagnosisAvailableIds) {
-    api.get(`${DISEASE_API_PATH}?num=10&q=code=in=(${diagnosisAvailableIds})`).then(response => {
-      commit(MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE, response.items)
-    }, error => {
-      commit(SET_ERROR, error)
-    })
+    if (diagnosisAvailableIds) {
+      api.get(`${DISEASE_API_PATH}?num=10&q=code=in=(${diagnosisAvailableIds})`).then(response => {
+        commit(MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE, response.items)
+      }, error => {
+        commit(SET_ERROR, error)
+      })
+    }
   },
   /**
    * Retrieve biobanks with expanded collections based on a list of biobank ids

@@ -32,7 +32,7 @@
   import Negotiator from './negotiator/Negotiator'
   import SearchBox from './SearchBox'
 
-  import { GET_DIAGNOSIS_AVAILABLE, GET_BIOBANK_IDENTIFIERS } from '../store/actions'
+  import { GET_BIOBANK_IDENTIFIERS } from '../store/actions'
   import { MAP_QUERY_TO_STATE } from '../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -51,21 +51,14 @@
     },
     watch: {
       query (query) {
+        console.log('watch', query)
         this.$router.push({query: query})
         this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     mounted () {
-      const queryParams = this.$store.state.route.query
-
-      if (Object.keys(queryParams).length > 0) {
-        if (queryParams.diagnosis_available) {
-          this.$store.dispatch(GET_DIAGNOSIS_AVAILABLE, queryParams.diagnosis_available)
-        }
-        this.$store.commit(MAP_QUERY_TO_STATE, queryParams)
-      } else {
-        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
-      }
+      this.$store.commit(MAP_QUERY_TO_STATE, this.$store.state.route.query)
+      this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
     }
   }
 </script>

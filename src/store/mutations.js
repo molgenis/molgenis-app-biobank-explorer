@@ -55,11 +55,13 @@ export default {
     state.search = search
   },
   [MAP_QUERY_TO_STATE] (state, query) {
-    if (query.search) state.search = query.search
-    if (query.country) state.country.filters = query.country.split(',')
-    if (query.materials) state.materials.filters = query.materials.split(',')
-    if (query.standards) state.standards.filters = query.standards.split(',')
-    if (query.nToken) state.nToken = query.nToken
+    if (Object.keys(query).length > 0) {
+      if (query.search) state.search = query.search
+      if (query.country) state.country.filters = query.country.split(',')
+      if (query.materials) state.materials.filters = query.materials.split(',')
+      if (query.standards) state.standards.filters = query.standards.split(',')
+      if (query.nToken) state.nToken = query.nToken
+    }
   },
   [MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE] (state, filters) {
     state.diagnosis_available.filters = filters

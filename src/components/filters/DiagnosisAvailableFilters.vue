@@ -36,7 +36,7 @@
 </style>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE } from '../../store/actions'
+  import { QUERY_DIAGNOSIS_AVAILABLE, GET_DIAGNOSIS_AVAILABLE } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -72,6 +72,7 @@
     },
     mounted () {
       this.collapsed = !this.$store.state.route.query.diagnosis_available
+      this.$store.dispatch(GET_DIAGNOSIS_AVAILABLE, this.$store.state.route.query.diagnosis_available)
     },
     components: {
       Multiselect
