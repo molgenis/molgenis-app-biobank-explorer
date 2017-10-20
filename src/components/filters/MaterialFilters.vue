@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { GET_MATERIALS, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
+  import { GET_MATERIALS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -70,11 +70,6 @@
         set (filters) {
           this.$store.commit(UPDATE_FILTER, {name: 'materials', filters: filters})
         }
-      }
-    },
-    watch: {
-      filters () {
-        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     beforeCreate () {

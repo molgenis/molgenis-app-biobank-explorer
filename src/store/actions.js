@@ -10,7 +10,6 @@ import {
   SET_ERROR,
   SET_LOADING,
   SET_MATERIALS,
-  SET_SEARCH,
   SET_STANDARDS
 } from './mutations'
 
@@ -20,7 +19,6 @@ export const GET_MATERIALS = '__GET_MATERIALS__'
 export const GET_STANDARDS = '__GET_STANDARDS__'
 export const GET_DIAGNOSIS_AVAILABLE = '__GET_DIAGNOSIS_AVAILABLE__'
 export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
-export const GET_BIOBANKS_AND_COLLECTIONS = '__GET_BIOBANKS_AND_COLLECTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
@@ -94,32 +92,6 @@ export default {
     })
   },
   /**
-   * Retrieve 100 biobanks with expanded collections
-   * Filters the initial list of biobanks immediately if a search is included
-   *
-   * Do not show all because:
-   * 1) It severely slows down the app
-   * 2) Users can not scroll through them anyway
-   * 3) The server is called again on filter change, always presenting the most relevant biobanks
-   *
-   */
-  [GET_BIOBANKS_AND_COLLECTIONS] ({commit}, search) {
-    commit(SET_LOADING, true)
-
-    let uri = `${BIOBANK_API_PATH}?num=100&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`
-    if (search) {
-      commit(SET_SEARCH, search)
-      uri += `&q=*=q=${search}`
-    }
-
-    api.get(uri).then(response => {
-      commit(SET_BIOBANKS, response.items)
-      commit(SET_LOADING, false)
-    }, error => {
-      commit(SET_ERROR, error)
-    })
-  },
-  /**
    * Retrieve biobanks with expanded collections based on a list of biobank ids
    *
    * @param commit
@@ -178,6 +150,7 @@ export default {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {
       commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
     })
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {

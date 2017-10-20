@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { GET_COUNTRIES, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
+  import { GET_COUNTRIES } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -70,11 +70,6 @@
         set (filters) {
           this.$store.commit(UPDATE_FILTER, {name: 'country', filters: filters})
         }
-      }
-    },
-    watch: {
-      filters () {
-        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     beforeCreate () {

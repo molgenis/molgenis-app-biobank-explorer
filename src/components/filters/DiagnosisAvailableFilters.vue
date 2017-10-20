@@ -36,7 +36,7 @@
 </style>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE, GET_BIOBANK_IDENTIFIERS } from '../../store/actions'
+  import { QUERY_DIAGNOSIS_AVAILABLE } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -68,11 +68,6 @@
         set (filters) {
           this.$store.commit(UPDATE_FILTER, {name: 'diagnosis_available', filters: filters})
         }
-      }
-    },
-    watch: {
-      filters () {
-        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     components: {
