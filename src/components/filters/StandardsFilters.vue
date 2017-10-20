@@ -6,12 +6,24 @@
       Standards
     </div>
     <div class="card-body" v-if="!collapsed">
-      <div v-if="options.length > 0" v-for="option in options" class="form-check">
+      <p class="text-right" @click.prevent="toggleSelect">
+        <small v-if="!select"><a href=""><i>Select all</i></a></small>
+        <small v-else><a href=""><i>Deselect all</i></a></small>
+      </p>
+
+      <div v-if="options.length > 0" v-for="(option, index) in options" class="form-check"
+           v-show="index < 4 | showAllOptions">
+
         <label class="form-check-label">
           <input class="form-check-input" type="checkbox" :id="option.id" :value="option.id" v-model="filters">
           {{ option.label }}
         </label>
       </div>
+
+      <p class="text-right" @click.prevent="toggleAllOptions">
+        <small v-if="!showAllOptions"><a href=""><i> Show more</i></a></small>
+        <small v-else><a href=""><i>Show less</i></a></small>
+      </p>
     </div>
   </div>
 </template>
@@ -25,12 +37,26 @@
     name: 'standards-filters',
     data () {
       return {
-        collapsed: true
+        collapsed: true,
+        select: false,
+        showAllOptions: false
       }
     },
     methods: {
       toggle () {
         this.collapsed = !this.collapsed
+      },
+      toggleSelect () {
+        this.select = !this.select
+
+        if (this.select) {
+          this.filters = this.$store.state.standards.options.map(option => option.id)
+        } else {
+          this.filters = []
+        }
+      },
+      toggleAllOptions () {
+        this.showAllOptions = !this.showAllOptions
       }
     },
     computed: {
