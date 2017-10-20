@@ -28,6 +28,11 @@
     max-width: 10em;
     overflow: hidden;
   }
+
+  .multiselect__tag:hover {
+    overflow: visible;
+    max-width: none;
+  }
 </style>
 
 <script>
