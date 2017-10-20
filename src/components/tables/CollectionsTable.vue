@@ -22,14 +22,14 @@
       <td v-for="column in columns">
         <span v-if="column === 'name'">{{collection[column]}}</span>
         <span v-else-if="column === 'standards'">
-          <ul>
+          <ul class="list-unstyled">
             <li v-for="standard in collection[column]">
               {{ standard.label }} <i class="fa fa-check"></i>
             </li>
           </ul>
         </span>
 
-        <ul v-else>
+        <ul class="list-unstyled" v-else>
           <li v-for="info in collection[column]">{{info.label}}</li>
         </ul>
       </td>
