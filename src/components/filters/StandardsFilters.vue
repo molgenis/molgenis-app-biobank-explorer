@@ -72,8 +72,9 @@
         }
       }
     },
-    beforeCreate () {
+    mounted () {
       this.$store.dispatch(GET_STANDARDS)
+      this.collapsed = !this.$store.state.route.query.standards
     }
   }
 </script>

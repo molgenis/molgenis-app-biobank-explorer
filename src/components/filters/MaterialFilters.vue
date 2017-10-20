@@ -72,8 +72,9 @@
         }
       }
     },
-    beforeCreate () {
+    mounted () {
       this.$store.dispatch(GET_MATERIALS)
+      this.collapsed = !this.$store.state.route.query.materials
     }
   }
 </script>

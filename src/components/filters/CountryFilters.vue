@@ -72,8 +72,9 @@
         }
       }
     },
-    beforeCreate () {
+    mounted () {
       this.$store.dispatch(GET_COUNTRIES)
+      this.collapsed = !this.$store.state.route.query.country
     }
   }
 </script>

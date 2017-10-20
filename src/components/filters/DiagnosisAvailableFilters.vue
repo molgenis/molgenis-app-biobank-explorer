@@ -46,7 +46,7 @@
     name: 'diagnosis-available-filters',
     data () {
       return {
-        collapsed: false
+        collapsed: true
       }
     },
     methods: {
@@ -69,6 +69,9 @@
           this.$store.commit(UPDATE_FILTER, {name: 'diagnosis_available', filters: filters})
         }
       }
+    },
+    mounted () {
+      this.collapsed = !this.$store.state.route.query.diagnosis_available
     },
     components: {
       Multiselect
