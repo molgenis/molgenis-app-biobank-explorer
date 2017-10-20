@@ -128,6 +128,9 @@ describe('mutations', () => {
         standards: {
           filters: []
         },
+        diagnosis_available: {
+          filters: []
+        },
         search: '',
         nToken: null
       }
@@ -137,6 +140,7 @@ describe('mutations', () => {
         country: 'NL,BE',
         materials: 'PLASMA,RNA,DNA',
         standards: 'cen-ts-16826-1-2015,cen-ts-17238-1-2016',
+        diagnosis_available: 'C18,L40',
         nToken: 'jsh72938ShZ!2304DkdlfLLSds0923!s'
       }
       mutations.__MAP_QUERY_TO_STATE__(state, query)
@@ -145,6 +149,7 @@ describe('mutations', () => {
       expect(state.country.filters).to.deep.equal(['NL', 'BE'])
       expect(state.materials.filters).to.deep.equal(['PLASMA', 'RNA', 'DNA'])
       expect(state.standards.filters).to.deep.equal(['cen-ts-16826-1-2015', 'cen-ts-17238-1-2016'])
+      expect(state.diagnosis_available.filters).to.deep.equal(['C18', 'L40'])
       expect(state.nToken).to.equal('jsh72938ShZ!2304DkdlfLLSds0923!s')
     })
   })
