@@ -60,6 +60,7 @@ export default {
       if (query.country) state.country.filters = query.country.split(',')
       if (query.materials) state.materials.filters = query.materials.split(',')
       if (query.standards) state.standards.filters = query.standards.split(',')
+      if (query.diagnosis_available) state.diagnosis_available.filters = query.diagnosis_available.split(',')
       if (query.nToken) state.nToken = query.nToken
     }
   },
