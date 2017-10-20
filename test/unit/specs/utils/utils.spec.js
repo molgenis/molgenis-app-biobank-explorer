@@ -25,20 +25,20 @@ describe('Utilities', () => {
   })
 
   describe('queryPartsToQuery', () => {
-    it('should transform [country==NL,country==BE,,,diagnosis_available==C18] to country==NL,country==BE;diagnosis_available==C18', () => {
+    it('should transform [country==NL,country==BE,,,diagnosis_available==C18] to (country==NL,country==BE);(diagnosis_available==C18)', () => {
       const queryParts = ['country==NL,country==BE', '', '', 'diagnosis_available==C18']
 
       const actual = utils.queryPartsToQuery(queryParts)
-      const expected = 'country==NL,country==BE;diagnosis_available==C18'
+      const expected = '(country==NL,country==BE);(diagnosis_available==C18)'
 
       expect(actual).to.equal(expected)
     })
 
-    it('should transform [,materials==RNA,materials==DNA,,diagnosis_available==C18] to materials==RNA,materials==DNA;diagnosis_available==C18', () => {
+    it('should transform [,materials==RNA,materials==DNA,,diagnosis_available==C18] to (materials==RNA,materials==DNA);(diagnosis_available==C18)', () => {
       const queryParts = ['', 'materials==RNA,materials==DNA', '', 'diagnosis_available==C18']
 
       const actual = utils.queryPartsToQuery(queryParts)
-      const expected = 'materials==RNA,materials==DNA;diagnosis_available==C18'
+      const expected = '(materials==RNA,materials==DNA);(diagnosis_available==C18)'
 
       expect(actual).to.equal(expected)
     })

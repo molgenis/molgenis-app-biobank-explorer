@@ -15,7 +15,7 @@ const queryPartsToQuery = (queryParts) => {
       if (accumulator.length > 0) {
         accumulator += ';'
       }
-      accumulator += queryPart
+      accumulator += `(${queryPart})`
     }
     return accumulator
   }, '')
