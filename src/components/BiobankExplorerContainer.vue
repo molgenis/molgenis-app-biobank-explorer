@@ -51,7 +51,6 @@
     },
     watch: {
       query (query) {
-        console.log('watch', query)
         this.$router.push({query: query})
         this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
