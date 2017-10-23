@@ -1,5 +1,5 @@
 import api from '@molgenis/molgenis-api-client'
-import { getFilteredCollections, getHumanReadableString } from './utils/negotiator-utils'
+import helpers from './helpers'
 import utils from '../utils'
 import {
   MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
@@ -108,35 +108,12 @@ export default {
   },
   /**
    * Retrieve biobank identifiers for filters on collection.country, collection.standards, collection.materials,
-   * or collection.diagnosis_available.code
-   *
-   * @example queries
-   * q=country.id==NL,country.id==BE
-   * q=materials.id==RNA,materials.id==DNA
-   * q=diagnosis_available.code==C18,diagnosis_available.code==L40
-   * q=standards.id==cen-ts-16835-1-2015,standards.id==cen-ts-16827-1-2015
-   *
-   * TODO replace with =in=(...) queries once https://github.com/molgenis/molgenis/issues/6811 is fixed
-   *
-   * @param state
-   * @param commit
-   * @param dispatch
-   * @param filter
+   * or collection.diagnosis_available
    */
   [GET_BIOBANK_IDENTIFIERS] ({state, commit, dispatch}) {
     commit(SET_LOADING, true)
 
-    const queryParts = []
-    queryParts.push(utils.filterToQueryPart('country.id', state.country.filters))
-    queryParts.push(utils.filterToQueryPart('materials.id', state.materials.filters))
-    queryParts.push(utils.filterToQueryPart('standards.id', state.standards.filters))
-    queryParts.push(utils.filterToQueryPart('diagnosis_available.code', state.diagnosis_available.filters.map(filter => filter.code)))
-
-    let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
-
-    if (state.search) {
-      query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
-    }
+    const query = helpers.createQuery(state)
 
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
@@ -161,8 +138,8 @@ export default {
     // Remove the nToken from the URL to prevent duplication on the negotiator side
     // when a query is edited more than once
     const url = window.location.href.replace(/&nToken=\w{32}/, '')
-    const collections = getFilteredCollections(state.biobanks)
-    const humanReadable = getHumanReadableString(state)
+    const collections = helpers.getFilteredCollections(state.biobanks)
+    const humanReadable = helpers.getHumanReadableString(state)
 
     const negotiatorQuery = {
       URL: url,

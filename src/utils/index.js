@@ -1,14 +1,6 @@
-const filterToQueryPart = (attribute, filters) => {
-  return filters.reduce((accumulator, filter) => {
-    if (accumulator.length > 0) {
-      accumulator += ','
-    }
-
-    accumulator += attribute + '==' + filter
-    return accumulator
-  }, '')
-}
-
+/**
+ * Generate a syntactically correct RSQL query from a list of RSQL queries
+ */
 const queryPartsToQuery = (queryParts) => {
   return queryParts.reduce((accumulator, queryPart) => {
     if (queryPart.length > 0) {
@@ -22,6 +14,16 @@ const queryPartsToQuery = (queryParts) => {
 }
 
 /**
+ * Create an RSQL 'in' query for filters
+ *
+ * @example in query for country filter
+ * country=in=(NL,BE,DE)
+ */
+const createInQuery = (attribute, filters) => {
+  return filters.length > 0 ? `${attribute}=in=(${filters.join(',')})` : ''
+}
+
+/**
  * Return an Array of unique identifiers
  *
  * @param list List of strings
@@ -32,7 +34,7 @@ const getUniqueIdArray = (list) => {
 }
 
 export default {
-  filterToQueryPart,
   queryPartsToQuery,
-  getUniqueIdArray
+  getUniqueIdArray,
+  createInQuery
 }

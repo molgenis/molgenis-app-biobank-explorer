@@ -1,4 +1,29 @@
-export const getHumanReadableString = (state) => {
+import utils from '../../utils'
+
+/**
+ * @example queries
+ * q=country.id=in=(NL,BE)
+ * q=materials.id=in=(RNA,DNA)
+ * q=diagnosis_available.code=in=(C18,L40)
+ * q=standards.id=in=(cen-ts-16835-1-2015,cen-ts-16827-1-2015)
+ */
+const createQuery = (state) => {
+  const queryParts = []
+  queryParts.push(utils.createInQuery('country', state.country.filters))
+  queryParts.push(utils.createInQuery('materials', state.materials.filters))
+  queryParts.push(utils.createInQuery('standards', state.standards.filters))
+  queryParts.push(utils.createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)))
+
+  let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
+
+  if (state.search) {
+    query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
+  }
+
+  return query
+}
+
+const getHumanReadableString = (state) => {
   let humanReadableString = ''
 
   const countries = state.country.filters
@@ -33,7 +58,7 @@ export const getHumanReadableString = (state) => {
   return humanReadableString
 }
 
-export const getFilteredCollections = (biobanks) => {
+const getFilteredCollections = (biobanks) => {
   return biobanks.reduce((acc, biobank) => {
     const biobankId = biobank.id
     return acc.concat(biobank.collections.map(collection => {
@@ -43,4 +68,10 @@ export const getFilteredCollections = (biobanks) => {
       }
     }))
   }, [])
+}
+
+export default {
+  createQuery,
+  getHumanReadableString,
+  getFilteredCollections
 }

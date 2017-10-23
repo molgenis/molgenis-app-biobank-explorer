@@ -1,9 +1,11 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions from 'src/store/actions'
+import helpers from 'src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
+  SET_BIOBANK_REPORT,
   SET_BIOBANKS,
   SET_COUNTRIES,
   SET_DIAGNOSIS_AVAILABLE,
@@ -13,6 +15,8 @@ import {
 } from 'src/store/mutations'
 
 describe('actions', () => {
+  afterEach(() => td.reset())
+
   describe('GET_COUNTRIES', () => {
     it('should retrieve list of available countries from the server and store them in the state', done => {
       const response = {
@@ -180,7 +184,7 @@ describe('actions', () => {
           {biobank: {id: '1'}},
           {biobank: {id: '2'}},
           {biobank: {id: '3'}},
-          {biobank: {id: '3'}},
+          {biobank: {id: '3'}}
         ],
         expectedMutations: [
           {type: SET_BIOBANKS, payload: response.items},
@@ -189,6 +193,60 @@ describe('actions', () => {
       }
 
       utils.testAction(actions.__GET_BIOBANKS_BY_ID__, options, done)
+    })
+  })
+
+  describe('GET_BIOBANK_IDENTIFIERS', () => {
+    it('should retrieve biobank ids from the server based on a set of filters and dispatch another action', done => {
+      const response = {
+        items: [
+          {biobank: {id: 'biobank-1'}},
+          {biobank: {id: 'biobank-2'}}
+        ]
+      }
+
+      const createQuery = td.function('helpers.createQuery')
+      td.when(createQuery(td.matchers.anything())).thenReturn('&q=id=q=biobank-1')
+      td.replace(helpers, 'createQuery', createQuery)
+
+      const get = td.function('api.get')
+      td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=biobank&q=id=q=biobank-1')).thenResolve(response)
+      td.replace(api, 'get', get)
+
+      const options = {
+        expectedMutations: [
+          {type: SET_LOADING, payload: true}
+        ],
+        expectedActions: [
+          {type: '__GET_BIOBANKS_BY_ID__', payload: response.items}
+        ]
+      }
+
+      utils.testAction(actions.__GET_BIOBANK_IDENTIFIERS__, options, done)
+    })
+  })
+
+  describe('GET_BIOBANK_REPORT', () => {
+    it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', done => {
+      const response = {
+        items: [
+          {id: 'biobank-1'},
+          {id: 'biobank-2'}
+        ]
+      }
+
+      const get = td.function('api.get')
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*&q=id==biobank-1')).thenResolve(response)
+      td.replace(api, 'get', get)
+
+      const options = {
+        payload: 'biobank-1',
+        expectedMutations: [
+          {type: SET_BIOBANK_REPORT, payload: {id: 'biobank-1'}}
+        ]
+      }
+
+      utils.testAction(actions.__GET_BIOBANK_REPORT__, options, done)
     })
   })
 })

@@ -2,28 +2,6 @@ import { expect } from 'chai'
 import utils from 'src/utils'
 
 describe('Utilities', () => {
-  describe('filterToQuery', () => {
-    it('should transform [NL, BE] to country==NL,country==BE', () => {
-      const attribute = 'country'
-      const filters = ['NL', 'BE']
-
-      const actual = utils.filterToQueryPart(attribute, filters)
-      const expected = 'country==NL,country==BE'
-
-      expect(actual).to.equal(expected)
-    })
-
-    it('should transform [] to an empty string', () => {
-      const attribute = 'country'
-      const filters = []
-
-      const actual = utils.filterToQueryPart(attribute, filters)
-      const expected = ''
-
-      expect(actual).to.equal(expected)
-    })
-  })
-
   describe('queryPartsToQuery', () => {
     it('should transform [country==NL,country==BE,,,diagnosis_available==C18] to (country==NL,country==BE);(diagnosis_available==C18)', () => {
       const queryParts = ['country==NL,country==BE', '', '', 'diagnosis_available==C18']
@@ -61,6 +39,22 @@ describe('Utilities', () => {
       const expected = ['1', '2', '3', '4', '5']
 
       expect(actual).to.deep.equal(expected)
+    })
+  })
+
+  describe('createInQuery', () => {
+    it('should return an empty string if the filters are empty', () => {
+      const actual = utils.createInQuery('country', [])
+      const expected = ''
+
+      expect(actual).to.equal(expected)
+    })
+
+    it('should transform (country, [AT,BE]) to country=in=(AT,BE)', () => {
+      const actual = utils.createInQuery('country', ['AT', 'BE'])
+      const expected = 'country=in=(AT,BE)'
+
+      expect(actual).to.equal(expected)
     })
   })
 })
