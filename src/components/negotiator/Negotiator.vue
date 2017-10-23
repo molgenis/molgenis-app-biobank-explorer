@@ -1,6 +1,7 @@
 <template>
-  <button type="button" class="btn btn-light btn-block" @click="sendToNegotiator">
-    Send query to negotiator
+  <button type="button" class="btn btn-primary btn-block" data-toggle="tooltip" data-placement="bottom"
+          title="Send to the negotiator" @click="sendToNegotiator">
+    Go to sample / data negotiation
   </button>
 </template>
 
@@ -14,5 +15,6 @@
         this.$store.dispatch(SEND_TO_NEGOTIATOR)
       }
     }
+
   }
 </script>

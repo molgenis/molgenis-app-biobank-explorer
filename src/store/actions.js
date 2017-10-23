@@ -1,5 +1,5 @@
 import api from '@molgenis/molgenis-api-client'
-import { getFilteredCollections, getHumanReadableString } from './utils/negotiator.query'
+import { getFilteredCollections, getHumanReadableString } from './utils/negotiator-utils'
 import utils from '../utils'
 import {
   MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
@@ -171,7 +171,7 @@ export default {
     // Remove the nToken from the URL to prevent duplication on the negotiator side
     // when a query is edited more than once
     const url = window.location.href.replace(/&nToken=\w{32}/, '')
-    const collections = getFilteredCollections(state)
+    const collections = getFilteredCollections(state.biobanks)
     const humanReadable = getHumanReadableString(state)
 
     const negotiatorQuery = {
