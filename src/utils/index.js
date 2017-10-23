@@ -21,7 +21,18 @@ const queryPartsToQuery = (queryParts) => {
   }, '')
 }
 
+/**
+ * Return an Array of unique identifiers
+ *
+ * @param list List of strings
+ * @returns Array containing unique string values
+ */
+const getUniqueIdArray = (list) => {
+  return Array.from(new Set(list))
+}
+
 export default {
   filterToQueryPart,
-  queryPartsToQuery
+  queryPartsToQuery,
+  getUniqueIdArray
 }

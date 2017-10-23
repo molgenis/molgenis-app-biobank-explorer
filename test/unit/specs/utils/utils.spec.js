@@ -52,4 +52,15 @@ describe('Utilities', () => {
       expect(actual).to.equal(expected)
     })
   })
+
+  describe('getUniqueIdArray', () => {
+    it('should transform [1, 1, 2, 3, 2, 4, 5] to [1, 2, 3, 4, 5]', () => {
+      const list = ['1', '1', '2', '3', '2', '4', '5']
+
+      const actual = utils.getUniqueIdArray(list)
+      const expected = ['1', '2', '3', '4', '5']
+
+      expect(actual).to.deep.equal(expected)
+    })
+  })
 })

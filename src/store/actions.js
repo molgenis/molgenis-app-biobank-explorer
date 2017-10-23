@@ -26,23 +26,13 @@ export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
-const COLLECTION_API_PATH = 'api/v2/eu_bbmri_eric_collections'
-const STANDARDS_API_PATH = 'api/v2/eu_bbmri_eric_lab_standards'
+const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+const STANDARDS_API_PATH = '/api/v2/eu_bbmri_eric_lab_standards'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude)'
-
-/**
- * Return an Array of unique biobank identifiers
- *
- * @param biobanks
- * @returns {Array}
- */
-const getUniqueBiobanksIds = (biobanks) => {
-  return Array.from(new Set(biobanks.map(biobank => biobank.biobank.id)))
-}
 
 export default {
   /**
@@ -86,7 +76,7 @@ export default {
    */
   [GET_DIAGNOSIS_AVAILABLE] ({commit}, diagnosisAvailableIds) {
     if (diagnosisAvailableIds) {
-      api.get(`${DISEASE_API_PATH}?num=10&q=code=in=(${diagnosisAvailableIds})`).then(response => {
+      api.get(`${DISEASE_API_PATH}?q=code=in=(${diagnosisAvailableIds})`).then(response => {
         commit(MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE, response.items)
       }, error => {
         commit(SET_ERROR, error)
@@ -101,8 +91,8 @@ export default {
    */
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
     if (biobanks.length > 0) {
-      const biobankIds = getUniqueBiobanksIds(biobanks)
-      const uri = `${BIOBANK_API_PATH}?num=2000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${biobankIds.join(',')})`
+      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id))
+      const uri = `${BIOBANK_API_PATH}?num=2000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
 
       api.get(uri).then(response => {
         commit(SET_BIOBANKS, response.items)
