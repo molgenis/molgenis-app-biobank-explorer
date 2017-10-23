@@ -24,14 +24,9 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
   .multiselect__tag {
-    text-overflow: ellipsis;
     max-width: 10em;
     overflow: hidden;
-  }
-
-  .multiselect__tag:hover {
-    overflow: visible;
-    max-width: none;
+    text-overflow: ellipsis;
   }
 </style>
 
