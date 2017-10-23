@@ -7,8 +7,8 @@
     </div>
     <div class="card-body" v-if="!collapsed">
       <p class="text-right" @click.prevent="toggleSelect">
-        <small v-if="!select"><a href=""><i>Select all</i></a></small>
-        <small v-else><a href=""><i>Deselect all</i></a></small>
+        <small v-if="filters.length === 0"><a href=""><i>Select all</i></a></small>
+        <small v-if="filters.length > 0"><a href=""><i>Deselect all</i></a></small>
       </p>
 
       <div v-if="options.length > 0" v-for="(option, index) in options" class="form-check"
@@ -38,7 +38,6 @@
     data () {
       return {
         collapsed: true,
-        select: false,
         showAllOptions: false
       }
     },
@@ -47,13 +46,7 @@
         this.collapsed = !this.collapsed
       },
       toggleSelect () {
-        this.select = !this.select
-
-        if (this.select) {
-          this.filters = this.$store.state.country.options.map(option => option.id)
-        } else {
-          this.filters = []
-        }
+        this.filters = this.filters.length > 0 ? [] : this.$store.state.country.options.map(option => option.id)
       },
       toggleAllOptions () {
         this.showAllOptions = !this.showAllOptions
