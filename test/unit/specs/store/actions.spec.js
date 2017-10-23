@@ -205,9 +205,9 @@ describe('actions', () => {
         ]
       }
 
-      const createQuery = td.function('helpers.createQuery')
-      td.when(createQuery(td.matchers.anything())).thenReturn('&q=id=q=biobank-1')
-      td.replace(helpers, 'createQuery', createQuery)
+      const createRSQLQuery = td.function('helpers.createRSQLQuery')
+      td.when(createRSQLQuery(td.matchers.anything())).thenReturn('&q=id=q=biobank-1')
+      td.replace(helpers, 'createRSQLQuery', createRSQLQuery)
 
       const get = td.function('api.get')
       td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=biobank&q=id=q=biobank-1')).thenResolve(response)

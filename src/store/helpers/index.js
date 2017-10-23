@@ -7,7 +7,7 @@ import utils from '../../utils'
  * q=diagnosis_available.code=in=(C18,L40)
  * q=standards.id=in=(cen-ts-16835-1-2015,cen-ts-16827-1-2015)
  */
-const createQuery = (state) => {
+const createRSQLQuery = (state) => {
   const queryParts = []
   queryParts.push(utils.createInQuery('country', state.country.filters))
   queryParts.push(utils.createInQuery('materials', state.materials.filters))
@@ -21,6 +21,19 @@ const createQuery = (state) => {
   }
 
   return query
+}
+
+const createNegotiatorQueryBody = (state, url) => {
+  const collections = getFilteredCollections(state.biobanks)
+  const humanReadable = getHumanReadableString(state)
+
+  return {
+    /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
+    URL: url.replace(/&nToken=\w{32}/, ''),
+    collections: collections,
+    humanReadable: humanReadable,
+    nToken: state.nToken
+  }
 }
 
 const getHumanReadableString = (state) => {
@@ -71,7 +84,8 @@ const getFilteredCollections = (biobanks) => {
 }
 
 export default {
-  createQuery,
+  createRSQLQuery,
+  createNegotiatorQueryBody,
   getHumanReadableString,
   getFilteredCollections
 }

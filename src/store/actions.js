@@ -113,7 +113,7 @@ export default {
   [GET_BIOBANK_IDENTIFIERS] ({state, commit, dispatch}) {
     commit(SET_LOADING, true)
 
-    const query = helpers.createQuery(state)
+    const query = helpers.createRSQLQuery(state)
 
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
@@ -135,21 +135,8 @@ export default {
    * that redirects to a Negotiator server specified in the Directory settings
    */
   [SEND_TO_NEGOTIATOR] ({state}) {
-    // Remove the nToken from the URL to prevent duplication on the negotiator side
-    // when a query is edited more than once
-    const url = window.location.href.replace(/&nToken=\w{32}/, '')
-    const collections = helpers.getFilteredCollections(state.biobanks)
-    const humanReadable = helpers.getHumanReadableString(state)
-
-    const negotiatorQuery = {
-      URL: url,
-      collections: collections,
-      humanReadable: humanReadable,
-      nToken: state.nToken
-    }
-
     const options = {
-      body: JSON.stringify(negotiatorQuery)
+      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, window.location.href))
     }
 
     api.post('/plugin/directory/export', options).then(response => {
