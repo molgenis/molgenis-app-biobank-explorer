@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row biobank-explorer-container">
     <div class="col-md-3">
       <filter-container></filter-container>
     </div>
@@ -25,6 +25,12 @@
     </div>
   </div>
 </template>
+
+<style>
+  .biobank-explorer-container {
+    padding-top: 1rem;
+  }
+</style>
 
 <script>
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
