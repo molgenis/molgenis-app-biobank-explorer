@@ -14,11 +14,19 @@
     </div>
 
     <div class="card-body">
+      <div class="card">
+        <div class="card-header collections-header" @click.prevent="toggle">
+          <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
+          <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
+          Collections
+        </div>
+      </div>
+      <div v-if="!collapsed">
       <collections-table
         v-if="biobank.collections.length > 0"
         :collections="biobank.collections">
       </collections-table>
-      <span v-else>No collections available...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -31,6 +39,8 @@
   .biobank-header:hover {
     cursor: hand;
   }
+
+
 </style>
 
 <script>
@@ -39,6 +49,16 @@
   export default {
     name: 'biobank-card',
     props: ['biobank'],
+    data () {
+      return {
+        collapsed: true
+      }
+    },
+    methods: {
+      toggle () {
+        this.collapsed = !this.collapsed
+      }
+    },
     computed: {
       query () {
         return this.$route.query
