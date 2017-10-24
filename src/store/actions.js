@@ -62,7 +62,7 @@ export default {
   },
   [QUERY_DIAGNOSIS_AVAILABLE] ({commit}, query) {
     if (query) {
-      api.get(`${DISEASE_API_PATH}?num=10&q=label=q=${query},id=q=${query}`).then(response => {
+      api.get(`${DISEASE_API_PATH}?num=10&q=label=q=${query},id=q=${query},code=q=${query}`).then(response => {
         commit(SET_DIAGNOSIS_AVAILABLE, response.items)
       }, error => {
         commit(SET_ERROR, error)
