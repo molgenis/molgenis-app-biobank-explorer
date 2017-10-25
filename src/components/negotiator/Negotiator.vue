@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+  <button type="button" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="bottom"
           title="Send to the negotiator" @click="sendToNegotiator" :disabled="disabled">
     Go to sample / data negotiation
   </button>
