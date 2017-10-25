@@ -1,6 +1,6 @@
 <template>
-  <button type="button" class="btn btn-primary btn-block" data-toggle="tooltip" data-placement="bottom"
-          title="Send to the negotiator" @click="sendToNegotiator">
+  <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
+          title="Send to the negotiator" @click="sendToNegotiator" :disabled="disabled">
     Go to sample / data negotiation
   </button>
 </template>
@@ -10,6 +10,13 @@
 
   export default {
     name: 'negotiator',
+    props: {
+      disabled: {
+        type: Boolean,
+        required: false,
+        default: true
+      }
+    },
     methods: {
       sendToNegotiator () {
         this.$store.dispatch(SEND_TO_NEGOTIATOR)
