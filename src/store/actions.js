@@ -70,15 +70,19 @@ export default {
       commit(SET_DIAGNOSIS_AVAILABLE, [])
     }
   },
-  [MAP_QUERY_TO_STATE] ({state, commit}) {
-    if (state.route.query.diagnosis_available) {
-      const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
+  [MAP_QUERY_TO_STATE] ({state, dispatch, commit}) {
+    if (Object.keys(state.route.query).length > 0) {
+      if (state.route.query.diagnosis_available) {
+        const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
 
-      api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
-        commit(MAP_QUERY_TO_STATE, response.items)
-      })
+        api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
+          commit(MAP_QUERY_TO_STATE, response.items)
+        })
+      } else {
+        commit(MAP_QUERY_TO_STATE)
+      }
     } else {
-      commit(MAP_QUERY_TO_STATE)
+      dispatch(GET_BIOBANK_IDENTIFIERS)
     }
   },
   /**
@@ -90,7 +94,7 @@ export default {
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
     if (biobanks.length > 0) {
       const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id))
-      const uri = `${BIOBANK_API_PATH}?num=2000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
+      const uri = `${BIOBANK_API_PATH}?num=101&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
 
       api.get(uri).then(response => {
         commit(SET_BIOBANKS, response.items)

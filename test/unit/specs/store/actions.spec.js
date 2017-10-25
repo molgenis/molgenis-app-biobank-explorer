@@ -1,6 +1,6 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions from 'src/store/actions'
+import actions, { GET_BIOBANK_IDENTIFIERS } from 'src/store/actions'
 import helpers from 'src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
@@ -124,7 +124,9 @@ describe('actions', () => {
     it('should commit MAP_QUERY_TO_STATE mutation when no diagnosis ids are in the URL', done => {
       const state = {
         route: {
-          query: {}
+          query: {
+            country: 'NL,BE'
+          }
         }
       }
 
@@ -132,6 +134,23 @@ describe('actions', () => {
         state: state,
         expectedMutations: [
           {type: MAP_QUERY_TO_STATE}
+        ]
+      }
+
+      utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
+    })
+
+    it('should fetch biobanks when no query is present', done => {
+      const state = {
+        route: {
+          query: {}
+        }
+      }
+
+      const options = {
+        state: state,
+        expectedActions: [
+          {type: GET_BIOBANK_IDENTIFIERS}
         ]
       }
 
@@ -192,7 +211,7 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=2000&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*&q=id=in=(1,2,3)')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*&q=id=in=(1,2,3)')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
