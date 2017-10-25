@@ -1,9 +1,9 @@
 <template>
-  <table class="table table-striped">
+  <table class="table table-condensed table-responsive">
     <thead>
     <tr>
       <th></th>
-      <th>Name</th>
+      <th>Collection</th>
       <th>Type</th>
       <th>Materials</th>
       <th>Standards</th>
@@ -12,14 +12,13 @@
 
     <tbody>
     <tr v-for="collection in collections">
-      <th scope="row">
-        <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id"
-           class="btn btn-primary btn-sm">
-          <i class="fa fa-info-circle" aria-hidden="true"></i>
+      <td>
+        <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id">
+          <i class="fa fa-th fa-lg collection-detail-btn" aria-hidden="true"></i>
         </a>
-      </th>
+      </td>
 
-      <td v-for="column in columns">
+      <td class="table-text-content-columns" v-for="column in columns">
         <span v-if="column === 'name'">{{collection[column]}}</span>
         <span v-else-if="column === 'standards'">
           <ul class="list-unstyled">
@@ -29,9 +28,8 @@
           </ul>
         </span>
 
-        <ul class="list-unstyled" v-else>
-          <li v-for="info in collection[column]">{{info.label}}</li>
-        </ul>
+        <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
+        <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
       </td>
     </tr>
     </tbody>
@@ -39,18 +37,36 @@
 </template>
 
 <style>
+  .collection-detail-btn {
+    color: #d46907;
+  }
+
+  .table-text-content-columns {
+    font-size: 13px;
+  }
+
   .fa-check {
     color: green;
   }
 </style>
 
 <script>
+  import utils from 'src/utils'
+
   export default {
     name: 'collections-table',
     props: ['collections'],
     data () {
       return {
         columns: ['name', 'type', 'materials', 'standards']
+      }
+    },
+    methods: {
+      getCollectionMaterials (collection) {
+        return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
+      },
+      getCollectionType (collection) {
+        return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
       }
     }
   }

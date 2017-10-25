@@ -1,53 +1,49 @@
 <template>
   <div class="card biobank-card">
-    <div class="card-header biobank-header">
-      <div class="d-flex justify-content-between">
-        <router-link :to="{ path:'/biobank/report/' + biobank.id, query: query}">
-          <h5>{{ biobank.name }}</h5>
-        </router-link>
-        <div>
-          <small>
-            <b>Country</b>: {{ biobank['country'].name }}
-          </small>
+    <div class="card-header biobank-card-header" @click.prevent="collapsed = !collapsed">
+      <div class="row">
+        <div class="col-md-5">
+          <router-link :to="'/biobank/report/' + biobank.id"><h5>{{ biobank.name }}</h5></router-link>
+        </div>
+        <div class="col-md-7">
+          <p>
+            <small><b>Biobank type: </b></small><small>{{ biobankTypes }}</small><br>
+            <small><b>Juridical person: </b></small><small>{{ biobank['juridical_person'] }}</small>
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="card-body">
-      <div class="card">
-        <div class="card-header collections-header" @click.prevent="toggle">
-          <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
-          <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
-          Collections
-        </div>
-      </div>
-      <div v-if="!collapsed">
+    <div class="card-body table-card" v-if="!collapsed">
       <collections-table
         v-if="biobank.collections.length > 0"
         :collections="biobank.collections">
       </collections-table>
-      </div>
     </div>
   </div>
 </template>
 
 <style>
+  .table-card {
+    padding: 0.1rem;
+  }
+
   .biobank-card {
     margin-bottom: 1em;
   }
 
-  .biobank-header:hover {
-    cursor: pointer;
+  .biobank-card-header {
+    background-color: #dedede;
   }
 
-  .collections-header:hover {
+  .biobank-card-header:hover {
     cursor: pointer;
-    background-color: #e4e4e4;
   }
 </style>
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable.vue'
+  import utils from 'src/utils'
 
   export default {
     name: 'biobank-card',
@@ -65,6 +61,11 @@
     computed: {
       query () {
         return this.$route.query
+      },
+      biobankTypes () {
+        return utils.getUniqueIdArray(this.biobank.collections.reduce((accumulator, collection) => {
+          return accumulator.concat(collection.materials.map(material => material.label))
+        }, [])).join(', ')
       }
     },
     components: {
