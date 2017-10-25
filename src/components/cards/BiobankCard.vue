@@ -37,10 +37,12 @@
   }
 
   .biobank-header:hover {
-    cursor: hand;
+    cursor: pointer;
   }
 
-
+  .collections-header:hover {
+    cursor: pointer;
+  }
 </style>
 
 <script>
