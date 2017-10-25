@@ -38,8 +38,7 @@
   import Negotiator from './negotiator/Negotiator'
   import SearchBox from './SearchBox'
 
-  import { GET_BIOBANK_IDENTIFIERS } from '../store/actions'
-  import { MAP_QUERY_TO_STATE } from '../store/mutations'
+  import { GET_BIOBANK_IDENTIFIERS, MAP_QUERY_TO_STATE } from '../store/actions'
   import { mapGetters } from 'vuex'
 
   export default {
@@ -62,8 +61,7 @@
       }
     },
     mounted () {
-      this.$store.commit(MAP_QUERY_TO_STATE, this.$store.state.route.query)
-      this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
+      this.$store.dispatch(MAP_QUERY_TO_STATE)
     }
   }
 </script>

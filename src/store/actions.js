@@ -2,7 +2,6 @@ import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
 import utils from '../utils'
 import {
-  MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
   SET_BIOBANK_REPORT,
   SET_BIOBANKS,
   SET_COUNTRIES,
@@ -17,10 +16,10 @@ import {
 export const GET_COUNTRIES = '__GET_COUNTRIES__'
 export const GET_MATERIALS = '__GET_MATERIALS__'
 export const GET_STANDARDS = '__GET_STANDARDS__'
-export const GET_DIAGNOSIS_AVAILABLE = '__GET_DIAGNOSIS_AVAILABLE__'
 export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
+export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
@@ -71,16 +70,17 @@ export default {
       commit(SET_DIAGNOSIS_AVAILABLE, [])
     }
   },
-  /**
-   * Fetches complete disease type objects if the route query parameters contains diagnosis_available IDs
-   */
-  [GET_DIAGNOSIS_AVAILABLE] ({commit}, diagnosisAvailableIds) {
-    if (diagnosisAvailableIds) {
-      api.get(`${DISEASE_API_PATH}?q=code=in=(${diagnosisAvailableIds})`).then(response => {
-        commit(MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE, response.items)
-      }, error => {
-        commit(SET_ERROR, error)
+  [MAP_QUERY_TO_STATE] ({state, commit, dispatch}) {
+    if (state.route.query.diagnosis_available) {
+      const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
+
+      api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
+        commit(MAP_QUERY_TO_STATE, response.items)
+        dispatch(GET_BIOBANK_IDENTIFIERS)
       })
+    } else {
+      commit(MAP_QUERY_TO_STATE)
+      dispatch(GET_BIOBANK_IDENTIFIERS)
     }
   },
   /**

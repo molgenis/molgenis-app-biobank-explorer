@@ -2,12 +2,15 @@ export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
 export const SET_STANDARDS = '__SET_STANDARDS__'
 export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
-export const UPDATE_FILTER = '__UPDATE_FILTER__'
-export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_SEARCH = '__SET_SEARCH__'
+
+export const UPDATE_FILTER = '__UPDATE_FILTER__'
+
+export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
+
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
-export const MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE = '__MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE__'
+
 export const SET_LOADING = '__SET_LOADING__'
 export const SET_ERROR = '__SET_ERROR__'
 
@@ -26,6 +29,9 @@ export default {
   },
   [SET_DIAGNOSIS_AVAILABLE] (state, diagnoses) {
     state.diagnosis_available.options = diagnoses
+  },
+  [SET_SEARCH] (state, search) {
+    state.search = search
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -48,29 +54,28 @@ export default {
   [SET_BIOBANKS] (state, biobanks) {
     state.biobanks = biobanks
   },
-  [SET_ERROR] (state, error) {
-    state.error = error
-  },
-  [SET_SEARCH] (state, search) {
-    state.search = search
-  },
-  [MAP_QUERY_TO_STATE] (state, query) {
-    if (Object.keys(query).length > 0) {
-      if (query.search) state.search = query.search
-      if (query.country) state.country.filters = query.country.split(',')
-      if (query.materials) state.materials.filters = query.materials.split(',')
-      if (query.standards) state.standards.filters = query.standards.split(',')
-      if (query.diagnosis_available) state.diagnosis_available.filters = query.diagnosis_available.split(',')
-      if (query.nToken) state.nToken = query.nToken
-    }
-  },
-  [MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE] (state, filters) {
-    state.diagnosis_available.filters = filters
-  },
   [SET_BIOBANK_REPORT] (state, biobank) {
     state.biobankReport = biobank
   },
+  /**
+   *
+   * @param state
+   * @param diagnoses
+   */
+  [MAP_QUERY_TO_STATE] (state, diagnoses) {
+    const query = state.route.query
+
+    if (diagnoses) state.diagnosis_available.filters = diagnoses
+    if (query.search) state.search = query.search
+    if (query.country) state.country.filters = query.country.split(',')
+    if (query.materials) state.materials.filters = query.materials.split(',')
+    if (query.standards) state.standards.filters = query.standards.split(',')
+    if (query.nToken) state.nToken = query.nToken
+  },
   [SET_LOADING] (state, loading) {
     state.loading = loading
+  },
+  [SET_ERROR] (state, error) {
+    state.error = error
   }
 }
