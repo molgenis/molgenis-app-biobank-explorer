@@ -2,7 +2,8 @@
   <div class="search-box-container">
     <input type="text" class="form-control" id="search-box" v-model.lazy="search"
            placeholder="Search for biobanks and collections...">
-    <small><i>{{biobanks.length}} biobanks found</i></small>
+    <small v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i></small>
+    <small v-else><i>{{biobanks.length}} biobanks shown</i></small>
   </div>
 </template>
 
