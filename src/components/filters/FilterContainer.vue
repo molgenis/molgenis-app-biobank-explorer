@@ -1,22 +1,17 @@
 <template>
-  <div id="filters">
+  <div id="filter-container">
     <country-filters></country-filters>
-
-    <hr>
-
     <material-filters></material-filters>
-
-    <hr>
-
     <standards-filters></standards-filters>
-
-    <hr>
-
     <diagnosis-available-filters></diagnosis-available-filters>
   </div>
 </template>
 
 <style>
+  .filter-card {
+    margin-bottom: 1rem;
+  }
+
   .filter-header {
     background-color: #dedede;
   }
