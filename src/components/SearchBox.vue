@@ -1,13 +1,10 @@
 <template>
   <div class="search-box-container">
-    <div class="input-group search-box">
-      <input type="text" class="form-control" id="search-box" v-model.lazy="search"
-             placeholder="Search for biobanks and collections..." ref="search-bar">
-      <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-      </span>
+    <div class="input-group search-input-container">
+      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+      <input type="text" class="form-control search-input" v-model.lazy="search"
+             placeholder="Search through biobanks and collections...">
     </div>
-
     <div class="row">
       <div class="col-md-12">
         <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
@@ -15,21 +12,31 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <small v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i></small>
-        <small v-else><i>{{biobanks.length}} biobanks shown</i></small>
-        <br>
+        <small class="biobank-number-report" v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i>
+        </small>
+        <small class="biobank-number-report" v-else><i>{{biobanks.length}} biobanks shown</i></small>
+        <div class="divider"></div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
-  .search-box {
-    margin-bottom: 1em;
+  .divider {
+    border-bottom: solid 1px black;
+    width: 100%;
+  }
+
+  .search-input-container {
+    margin-bottom: 1rem;
+  }
+
+  .search-input {
+    border-radius: 1rem;
   }
 
   .search-box-container {
-    padding-bottom: 1em;
+    margin-bottom: 1rem;
   }
 </style>
 
