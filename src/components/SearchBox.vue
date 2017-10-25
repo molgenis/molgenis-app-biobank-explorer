@@ -2,6 +2,7 @@
   <div class="search-box-container">
     <input type="text" class="form-control" id="search-box" v-model.lazy="search"
            placeholder="Search for biobanks and collections...">
+    <small><i>{{biobanks.length}} biobanks found</i></small>
   </div>
 </template>
 
@@ -14,10 +15,12 @@
 
 <script>
   import { SET_SEARCH } from '../store/mutations'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'search-box',
     computed: {
+      ...mapState(['biobanks']),
       search: {
         get () {
           return this.$store.state.search
