@@ -117,8 +117,17 @@ describe('mutations', () => {
   })
 
   describe('MAP_QUERY_TO_STATE', () => {
-    it('should map the query values from the router to the state', () => {
+    it('should map everything from router query to state without diagnoses', () => {
       const state = {
+        route: {
+          query: {
+            country: 'NL,BE',
+            materials: 'RNA,PLASMA',
+            standards: 'standard-1,standard-2',
+            search: 'search',
+            nToken: '29djgCm29104958f7dLqopf92JDJKS'
+          }
+        },
         country: {
           filters: []
         },
@@ -135,37 +144,55 @@ describe('mutations', () => {
         nToken: null
       }
 
-      const query = {
-        search: 'free text search',
-        country: 'NL,BE',
-        materials: 'PLASMA,RNA,DNA',
-        standards: 'cen-ts-16826-1-2015,cen-ts-17238-1-2016',
-        diagnosis_available: 'C18,L40',
-        nToken: 'jsh72938ShZ!2304DkdlfLLSds0923!s'
-      }
-      mutations.__MAP_QUERY_TO_STATE__(state, query)
+      mutations.__MAP_QUERY_TO_STATE__(state)
 
-      expect(state.search).to.equal('free text search')
       expect(state.country.filters).to.deep.equal(['NL', 'BE'])
-      expect(state.materials.filters).to.deep.equal(['PLASMA', 'RNA', 'DNA'])
-      expect(state.standards.filters).to.deep.equal(['cen-ts-16826-1-2015', 'cen-ts-17238-1-2016'])
-      expect(state.diagnosis_available.filters).to.deep.equal(['C18', 'L40'])
-      expect(state.nToken).to.equal('jsh72938ShZ!2304DkdlfLLSds0923!s')
+      expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
+      expect(state.standards.filters).to.deep.equal(['standard-1', 'standard-2'])
+      expect(state.search).to.equal('search')
+      expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
     })
-  })
 
-  describe('MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE', () => {
-    it('should set the list of selected diagnosis filers with the payload', () => {
+    it('should map everything from router query to state with diagnoses', () => {
       const state = {
+        route: {
+          query: {
+            country: 'NL,BE',
+            materials: 'RNA,PLASMA',
+            standards: 'standard-1,standard-2',
+            search: 'search',
+            nToken: '29djgCm29104958f7dLqopf92JDJKS'
+          }
+        },
+        country: {
+          filters: []
+        },
+        materials: {
+          filters: []
+        },
+        standards: {
+          filters: []
+        },
         diagnosis_available: {
           filters: []
-        }
+        },
+        search: '',
+        nToken: null
       }
 
-      const filters = [{id: '1'}, {id: '2'}]
-      mutations.__MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE__(state, filters)
+      const diagnoses = [
+        {code: 'C18'},
+        {code: 'L40'}
+      ]
 
-      expect(state.diagnosis_available.filters).to.deep.equal(filters)
+      mutations.__MAP_QUERY_TO_STATE__(state, diagnoses)
+
+      expect(state.country.filters).to.deep.equal(['NL', 'BE'])
+      expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
+      expect(state.standards.filters).to.deep.equal(['standard-1', 'standard-2'])
+      expect(state.diagnosis_available.filters).to.deep.equal(diagnoses)
+      expect(state.search).to.equal('search')
+      expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
     })
   })
 

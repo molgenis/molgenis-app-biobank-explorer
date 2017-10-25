@@ -24,7 +24,7 @@ const createRSQLQuery = (state) => {
 }
 
 const createNegotiatorQueryBody = (state, url) => {
-  const collections = getFilteredCollections(state.biobanks)
+  const collections = getNegotiatorQueryObjects(state.biobanks)
   const humanReadable = getHumanReadableString(state)
 
   return {
@@ -71,7 +71,7 @@ const getHumanReadableString = (state) => {
   return humanReadableString
 }
 
-const getFilteredCollections = (biobanks) => {
+const getNegotiatorQueryObjects = (biobanks) => {
   return biobanks.reduce((acc, biobank) => {
     const biobankId = biobank.id
     return acc.concat(biobank.collections.map(collection => {
@@ -87,5 +87,5 @@ export default {
   createRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
-  getFilteredCollections
+  getNegotiatorQueryObjects
 }

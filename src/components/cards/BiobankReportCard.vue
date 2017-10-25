@@ -12,7 +12,7 @@
 
       <div class="card-block">
         <div class="card">
-          <div class="card-header more-info-header" @click.prevent="toggle">
+          <div class="card-header more-info-header" @click.prevent="collapsed = !collapsed">
             <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
             <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
             More information
@@ -62,9 +62,6 @@
     methods: {
       showThisKey (key) {
         return key !== 'collections' && key !== 'country' && key !== '_href' && key !== 'contact'
-      },
-      toggle () {
-        this.collapsed = !this.collapsed
       }
     },
     computed: {

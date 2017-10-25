@@ -65,12 +65,29 @@ export default {
   [MAP_QUERY_TO_STATE] (state, diagnoses) {
     const query = state.route.query
 
-    if (diagnoses) state.diagnosis_available.filters = diagnoses
-    if (query.search) state.search = query.search
-    if (query.country) state.country.filters = query.country.split(',')
-    if (query.materials) state.materials.filters = query.materials.split(',')
-    if (query.standards) state.standards.filters = query.standards.split(',')
-    if (query.nToken) state.nToken = query.nToken
+    if (diagnoses) {
+      state.diagnosis_available.filters = diagnoses
+    }
+
+    if (query.search) {
+      state.search = query.search
+    }
+
+    if (query.country) {
+      state.country.filters = query.country.split(',')
+    }
+
+    if (query.materials) {
+      state.materials.filters = query.materials.split(',')
+    }
+
+    if (query.standards) {
+      state.standards.filters = query.standards.split(',')
+    }
+
+    if (query.nToken) {
+      state.nToken = query.nToken
+    }
   },
   [SET_LOADING] (state, loading) {
     state.loading = loading

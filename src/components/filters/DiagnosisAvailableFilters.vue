@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header" @click.prevent="toggle">
+    <div class="card-header" @click.prevent="collapsed = !collapsed">
       <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
       <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Diagnosis available
@@ -17,6 +17,8 @@
         track-by="code"
         @search-change="getDiagnosisOptions"
         placeholder="Type to search"
+        :limit=10
+        :limitText="getLimitText"
         label="label"
       ></multiselect>
     </div>
@@ -33,7 +35,7 @@
 </style>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE } from '../../store/actions'
+  import { QUERY_DIAGNOSIS_AVAILABLE_OPTIONS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -47,11 +49,11 @@
       }
     },
     methods: {
-      toggle () {
-        this.collapsed = !this.collapsed
-      },
       getDiagnosisOptions (query) {
-        this.$store.dispatch(QUERY_DIAGNOSIS_AVAILABLE, query)
+        this.$store.dispatch(QUERY_DIAGNOSIS_AVAILABLE_OPTIONS, query)
+      },
+      getLimitText (count) {
+        return `and ${count} more`
       }
     },
     computed: {

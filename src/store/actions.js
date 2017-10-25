@@ -13,10 +13,10 @@ import {
 } from './mutations'
 
 /* ACTION CONSTANTS */
-export const GET_COUNTRIES = '__GET_COUNTRIES__'
-export const GET_MATERIALS = '__GET_MATERIALS__'
-export const GET_STANDARDS = '__GET_STANDARDS__'
-export const QUERY_DIAGNOSIS_AVAILABLE = '__QUERY_DIAGNOSIS_AVAILABLE__'
+export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
+export const GET_MATERIALS_OPTIONS = '__GET_MATERIALS_OPTIONS__'
+export const GET_STANDARDS_OPTIONS = '__GET_STANDARDS_OPTIONS__'
+export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
@@ -38,30 +38,30 @@ export default {
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.
    */
-  [GET_COUNTRIES] ({commit}) {
+  [GET_COUNTRY_OPTIONS] ({commit}) {
     api.get(COUNTRY_API_PATH).then(response => {
       commit(SET_COUNTRIES, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_MATERIALS] ({commit}) {
+  [GET_MATERIALS_OPTIONS] ({commit}) {
     api.get(MATERIALS_API_PATH).then(response => {
       commit(SET_MATERIALS, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_STANDARDS] ({commit}) {
+  [GET_STANDARDS_OPTIONS] ({commit}) {
     api.get(STANDARDS_API_PATH).then(response => {
       commit(SET_STANDARDS, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [QUERY_DIAGNOSIS_AVAILABLE] ({commit}, query) {
+  [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({commit}, query) {
     if (query) {
-      api.get(`${DISEASE_API_PATH}?num=10&q=label=q=${query},id=q=${query},code=q=${query}`).then(response => {
+      api.get(`${DISEASE_API_PATH}?q=label=q=${query},id=q=${query},code=q=${query}`).then(response => {
         commit(SET_DIAGNOSIS_AVAILABLE, response.items)
       }, error => {
         commit(SET_ERROR, error)
@@ -70,7 +70,7 @@ export default {
       commit(SET_DIAGNOSIS_AVAILABLE, [])
     }
   },
-  [MAP_QUERY_TO_STATE] ({state, commit, dispatch}) {
+  [MAP_QUERY_TO_STATE] ({state, commit}) {
     if (state.route.query.diagnosis_available) {
       const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
 
@@ -132,7 +132,7 @@ export default {
    * Calls the DirectoryController method '/export' which answers with a URL
    * that redirects to a Negotiator server specified in the Directory settings
    */
-  [SEND_TO_NEGOTIATOR] ({state}) {
+  [SEND_TO_NEGOTIATOR] ({state, commit}) {
     const options = {
       body: JSON.stringify(helpers.createNegotiatorQueryBody(state, window.location.href))
     }
@@ -140,7 +140,7 @@ export default {
     api.post('/plugin/directory/export', options).then(response => {
       window.location.href = response
     }, error => {
-      console.log(error)
+      commit(SET_ERROR, error)
     })
   }
 }

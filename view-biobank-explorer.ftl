@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>biobank-plots</title>
+  <title>BBMRI-ERIC Directory</title>
+  <!-- work around for bug in app store, not loading resources -->
   <script src="https://use.fontawesome.com/4b6985a594.js"></script>
   <link rel="icon" href="/apps/${app.id}/img/favicon.ico" type="image/x-icon"/>
 </head>

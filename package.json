@@ -1,7 +1,7 @@
 {
-  "name": "biobank-explorer",
+  "name": "bbmri-eric-biobank-explorer",
   "version": "1.0.0",
-  "description": "The poc for the dataexplorer 2.0 for bbmri eric specific, based on mock ups",
+  "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "author": "mkslofstra <mariska-karina@hotmail.com>",
   "private": true,
   "scripts": {

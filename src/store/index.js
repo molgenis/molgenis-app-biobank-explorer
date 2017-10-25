@@ -15,8 +15,3 @@ export default new Vuex.Store({
   getters,
   strict: process.env.NODE_ENV !== 'production'
 })
-
-Vue.filter('replace_specials', function (value) {
-  // eslint-disable-next-line
-  return value.replace(/[^a-zA-Z0-9]/g, '_')
-})

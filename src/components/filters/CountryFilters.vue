@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header" @click.prevent="toggle">
+    <div class="card-header" @click.prevent="collapsed = !collapsed">
       <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
       <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
       Countries
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { GET_COUNTRIES } from '../../store/actions'
+  import { GET_COUNTRY_OPTIONS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
   import { mapGetters } from 'vuex'
 
@@ -42,9 +42,6 @@
       }
     },
     methods: {
-      toggle () {
-        this.collapsed = !this.collapsed
-      },
       toggleSelect () {
         this.filters = this.filters.length > 0 ? [] : this.$store.state.country.options.map(option => option.id)
       },
@@ -72,7 +69,7 @@
       }
     },
     mounted () {
-      this.$store.dispatch(GET_COUNTRIES)
+      this.$store.dispatch(GET_COUNTRY_OPTIONS)
       this.collapsed = !this.$store.state.route.query.country
     }
   }

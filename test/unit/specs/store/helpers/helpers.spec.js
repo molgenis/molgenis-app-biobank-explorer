@@ -147,7 +147,7 @@ describe('Vuex store helper functions', () => {
     })
   })
 
-  describe('getFilteredCollections', () => {
+  describe('getNegotiatorQueryObjects', () => {
     it('should return a list of objects containing biobank and collection ids', () => {
       const biobanks = [
         {
@@ -165,7 +165,7 @@ describe('Vuex store helper functions', () => {
         }
       ]
 
-      const actual = helpers.getFilteredCollections(biobanks)
+      const actual = helpers.getNegotiatorQueryObjects(biobanks)
       const expected = [
         {biobankId: 'biobank_1', collectionId: 'collection_1'},
         {biobankId: 'biobank_2', collectionId: 'collection_1'},

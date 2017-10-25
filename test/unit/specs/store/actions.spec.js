@@ -4,7 +4,7 @@ import actions from 'src/store/actions'
 import helpers from 'src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
-  MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE,
+  MAP_QUERY_TO_STATE,
   SET_BIOBANK_REPORT,
   SET_BIOBANKS,
   SET_COUNTRIES,
@@ -36,7 +36,7 @@ describe('actions', () => {
         ]
       }
 
-      utils.testAction(actions.__GET_COUNTRIES__, options, done)
+      utils.testAction(actions.__GET_COUNTRY_OPTIONS__, options, done)
     })
   })
 
@@ -59,7 +59,7 @@ describe('actions', () => {
         ]
       }
 
-      utils.testAction(actions.__GET_MATERIALS__, options, done)
+      utils.testAction(actions.__GET_MATERIALS_OPTIONS__, options, done)
     })
   })
 
@@ -82,11 +82,11 @@ describe('actions', () => {
         ]
       }
 
-      utils.testAction(actions.__GET_STANDARDS__, options, done)
+      utils.testAction(actions.__GET_STANDARDS_OPTIONS__, options, done)
     })
   })
 
-  describe('QUERY_DIAGNOSIS_AVAILABLE', () => {
+  describe('QUERY_DIAGNOSIS_AVAILABLE_OPTIONS', () => {
     it('should store an empty list in the state when query is empty', done => {
       const options = {
         payload: '',
@@ -95,7 +95,7 @@ describe('actions', () => {
         ]
       }
 
-      utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE__, options, done)
+      utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
     })
 
     it('should retrieve a list of disease types based on a search query from the server and store them in the state', done => {
@@ -106,7 +106,7 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_disease_types?num=10&q=label=q=search,id=q=search')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q=search,id=q=search,code=q=search')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
@@ -116,39 +116,56 @@ describe('actions', () => {
         ]
       }
 
-      utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE__, options, done)
+      utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
     })
   })
 
-  describe('GET_DIAGNOSIS_AVAILABLE', () => {
-    it('should do nothing if there are no ids for disease types', done => {
-      const options = {
-        payload: '',
-        expectedMutations: []
+  describe('MAP_QUERY_TO_STATE', () => {
+    it('should commit MAP_QUERY_TO_STATE mutation when no diagnosis ids are in the URL', done => {
+      const state = {
+        route: {
+          query: {}
+        }
       }
 
-      utils.testAction(actions.__GET_DIAGNOSIS_AVAILABLE__, options, done)
+      const options = {
+        state: state,
+        expectedMutations: [
+          {type: MAP_QUERY_TO_STATE}
+        ]
+      }
+
+      utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
     })
 
-    it('should retrieve disease type items for the supplied disease type ids from the server and store them in the state', done => {
+    it('should fetch diagnoses from the server and map result + URL query to state', done => {
+      const state = {
+        route: {
+          query: {
+            diagnosis_available: 'C18,L40'
+          }
+        }
+      }
+
       const response = {
         items: [
-          {id: 'urn:miriam:disease-1', label: 'disease-1'}
+          {code: 'C18'},
+          {code: 'L40'}
         ]
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=code=in=(urn:miriam:disease-1)')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=code=in=(C18,L40)')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
-        payload: 'urn:miriam:disease-1',
+        state: state,
         expectedMutations: [
-          {type: MAP_DIAGNOSIS_AVAILABLE_QUERY_TO_STATE, payload: response.items}
+          {type: MAP_QUERY_TO_STATE, payload: response.items}
         ]
       }
 
-      utils.testAction(actions.__GET_DIAGNOSIS_AVAILABLE__, options, done)
+      utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
     })
   })
 
