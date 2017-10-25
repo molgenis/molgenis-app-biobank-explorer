@@ -76,11 +76,9 @@ export default {
 
       api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
         commit(MAP_QUERY_TO_STATE, response.items)
-        dispatch(GET_BIOBANK_IDENTIFIERS)
       })
     } else {
       commit(MAP_QUERY_TO_STATE)
-      dispatch(GET_BIOBANK_IDENTIFIERS)
     }
   },
   /**

@@ -67,6 +67,12 @@
         }
       }
     },
+    watch: {
+      filters (filters) {
+        const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {diagnosis_available: filters.length === 0 ? undefined : filters.map(filter => filter.code).join(',')})
+        this.$router.push({query: updatedRouteQuery})
+      }
+    },
     mounted () {
       this.collapsed = !this.$store.state.route.query.diagnosis_available
     },

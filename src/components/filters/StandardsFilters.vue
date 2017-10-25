@@ -65,6 +65,12 @@
         }
       }
     },
+    watch: {
+      filters (filters) {
+        const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {standards: filters.length === 0 ? undefined : filters.join(',')})
+        this.$router.push({query: updatedRouteQuery})
+      }
+    },
     mounted () {
       this.$store.dispatch(GET_STANDARDS)
       this.collapsed = !this.$store.state.route.query.standards

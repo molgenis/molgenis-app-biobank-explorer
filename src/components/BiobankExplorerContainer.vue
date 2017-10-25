@@ -38,29 +38,35 @@
   import Negotiator from './negotiator/Negotiator'
   import SearchBox from './SearchBox'
 
-  import { GET_BIOBANK_IDENTIFIERS, MAP_QUERY_TO_STATE } from '../store/actions'
-  import { mapGetters } from 'vuex'
+  import { MAP_QUERY_TO_STATE, GET_BIOBANK_IDENTIFIERS } from '../store/actions'
 
   export default {
     name: 'biobank-explorer-container',
-    computed: {
-      ...mapGetters({
-        query: 'getRouteQueryParams'
-      })
-    },
     components: {
       BiobankCardsContainer,
       FilterContainer,
       Negotiator,
       SearchBox
     },
+    computed: {
+      /* A computed 'compound' object for watching all filters */
+      filters () {
+        return {
+          search: this.$store.state.search,
+          country: this.$store.state.country.filters,
+          materials: this.$store.state.materials.filters,
+          standards: this.$store.state.standards.filters,
+          diagnosis_available: this.$store.state.diagnosis_available.filters
+        }
+      }
+    },
     watch: {
-      query (query) {
-        this.$router.push({query: query})
+      filters () {
         this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },
     mounted () {
+      /* On page load, maps URL query parameters to the state */
       this.$store.dispatch(MAP_QUERY_TO_STATE)
     }
   }
