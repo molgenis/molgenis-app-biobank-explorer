@@ -11,7 +11,7 @@
     <small v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i></small>
     <small v-else><i>{{biobanks.length}} biobanks shown</i></small><br>
 
-    <negotiator :disabled="biobanks.length > 100"></negotiator>
+    <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
   </div>
 </template>
 
