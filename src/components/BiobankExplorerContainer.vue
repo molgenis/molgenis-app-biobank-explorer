@@ -7,12 +7,6 @@
     <div class="col-md-9">
       <div class="row">
         <div class="col-md-12">
-          <negotiator></negotiator>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12">
           <search-box></search-box>
         </div>
       </div>
@@ -35,7 +29,6 @@
 <script>
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
   import FilterContainer from './filters/FilterContainer'
-  import Negotiator from './negotiator/Negotiator'
   import SearchBox from './SearchBox'
 
   import { MAP_QUERY_TO_STATE, GET_BIOBANK_IDENTIFIERS } from '../store/actions'
@@ -45,7 +38,6 @@
     components: {
       BiobankCardsContainer,
       FilterContainer,
-      Negotiator,
       SearchBox
     },
     computed: {
