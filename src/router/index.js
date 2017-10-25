@@ -10,7 +10,7 @@ export default new Router({
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
-      path: '/',
+      path: '/biobankexplorer',
       component: BiobankExplorerContainer
     },
     {
