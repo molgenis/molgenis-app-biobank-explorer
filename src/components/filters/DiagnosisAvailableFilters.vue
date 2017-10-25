@@ -7,6 +7,8 @@
     </div>
     <div class="card-body" v-if="!collapsed">
       <multiselect
+        id="disease-type-select"
+        :internalSearch="false"
         v-model="filters"
         :options="options"
         :multiple="true"
