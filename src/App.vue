@@ -4,17 +4,8 @@
   </div>
 </template>
 
-<style>
-  #app {
-    background-color: #ffffff;
-    text-align: left !important;
-  }
-</style>
-
 <script>
-  import './assets/img/favicon.ico'
-
   export default {
-    name: 'molgenis-app'
+    name: 'biobank-explorer'
   }
 </script>

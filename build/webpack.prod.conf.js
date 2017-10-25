@@ -46,6 +46,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         : config.build.index,
       template: 'html-loader!view-biobank-explorer.ftl',
       inject: true,
+      favicon: 'src/assets/img/favicon.ico',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
