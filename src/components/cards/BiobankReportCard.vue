@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{path: '/biobanks', query: query}">Back to searching through biobanks</router-link>
+    <router-link :to="{path: '/', query: query}">Back to searching through biobanks</router-link>
 
     <div class="card biobank-card">
       <div class="card-header">

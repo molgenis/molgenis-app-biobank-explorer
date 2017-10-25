@@ -10,16 +10,12 @@ export default new Router({
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
-      name: 'biobanks',
-      path: '/biobanks',
+      path: '/',
       component: BiobankExplorerContainer
     },
     {
-      name: 'biobank-report',
-      path: '/biobanks/:id',
+      path: '/biobank/report/:id',
       component: BiobankReportCard
-    },
-    // catch all redirect
-    { path: '/', redirect: '/biobanks' }
+    }
   ]
 })
