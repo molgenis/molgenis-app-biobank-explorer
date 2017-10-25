@@ -21,7 +21,7 @@
       </div>
 
       <p class="text-right" @click.prevent="toggleAllOptions">
-        <small v-if="!showAllOptions"><a href=""><i> Show more</i></a></small>
+        <small v-if="!showAllOptions"><a href=""><i><i class="fa fa-caret-down"></i> {{ options.length - 4 }} more</i></a></small>
         <small v-else><a href=""><i>Show less</i></a></small>
       </p>
     </div>
