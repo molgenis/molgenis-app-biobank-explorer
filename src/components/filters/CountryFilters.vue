@@ -37,7 +37,7 @@
     name: 'country-filters',
     data () {
       return {
-        collapsed: true,
+        collapsed: false,
         showAllOptions: false
       }
     },
@@ -70,7 +70,6 @@
     },
     mounted () {
       this.$store.dispatch(GET_COUNTRY_OPTIONS)
-      this.collapsed = !this.$store.state.route.query.country
     }
   }
 </script>
