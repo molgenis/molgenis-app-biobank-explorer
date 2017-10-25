@@ -9,13 +9,15 @@
     </div>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
+        <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <small v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i></small>
         <small v-else><i>{{biobanks.length}} biobanks shown</i></small>
         <br>
-      </div>
-      <div class="col-md-6">
-        <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
       </div>
     </div>
   </div>
