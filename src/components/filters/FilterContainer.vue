@@ -16,6 +16,13 @@
   </div>
 </template>
 
+<style>
+  .filter-header:hover {
+    cursor: pointer;
+  }
+</style>
+
+
 <script>
   import CountryFilters from './CountryFilters.vue'
   import MaterialFilters from './MaterialFilters.vue'
