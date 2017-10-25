@@ -5,7 +5,6 @@ export default {
   biobanks: [],
   biobankReport: {},
   search: '',
-  filterEmptyCollections: false,
   nToken: null,
   loading: false,
   country: {
