@@ -17,6 +17,10 @@
 </template>
 
 <style>
+  .filter-header {
+    background-color: #dedede;
+  }
+
   .filter-header:hover {
     cursor: pointer;
   }
