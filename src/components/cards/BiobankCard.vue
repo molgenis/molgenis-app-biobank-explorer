@@ -42,6 +42,7 @@
 
   .collections-header:hover {
     cursor: pointer;
+    background-color: #e4e4e4;
   }
 </style>
 
