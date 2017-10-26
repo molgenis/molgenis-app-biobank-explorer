@@ -25,7 +25,8 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugin({
       template: 'index.html',
-      inject: true
+      inject: true,
+      favicon: 'src/assets/img/favicon.ico'
     }),
     new FriendlyErrorsPlugin(),
     new FlowBabelWebpackPlugin()

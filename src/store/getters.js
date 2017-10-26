@@ -1,105 +1,18 @@
 export default {
   /**
-   * Returns a biobank object based on the ID in the URL
-   * @param state
+   * Get the option list for the country categorical filter
    */
-  getSelectedBiobank: state => state.biobanks && state.biobanks.items.find(biobank => biobank.id === state.route.params.id),
+  getCountryOptions: state => state.country.options,
   /**
-   *
-   * @param state
-   * @returns {Array}
+   * Get the option list for the materials categorical filter
    */
-  getFilteredBiobanks: state => {
-    if (state.biobanks) {
-      let biobanks = state.biobanks.items
-
-      const countryFilters = state.filters.countries.selectedOptions
-      const materialTypeFilters = state.filters.material_types.selectedOptions
-      const qualityFilters = state.filters.quality.selectedOptions
-
-      if (countryFilters.length === 0 && materialTypeFilters.length === 0 && qualityFilters.length === 0) {
-        return biobanks
-      } else {
-        if (countryFilters.length > 0) {
-          biobanks = state.biobanks.items.filter(biobank => {
-            return countryFilters.includes(biobank.country.id)
-          })
-        }
-
-        if (materialTypeFilters.length === 0 && qualityFilters === 0) {
-          return biobanks
-        }
-
-        if (materialTypeFilters.length > 0 || qualityFilters.length > 0) {
-          biobanks = biobanks.filter(biobank => {
-            const collections = biobank.collections
-
-            const filteredCollections = collections.filter(collection => {
-              const collectionsContainingMaterial = collection.materials.find(collectionMaterial => {
-                return materialTypeFilters.includes(collectionMaterial.id)
-              })
-
-              const collectionsContainingQuality = collection.standards.find(collectionStandard => {
-                return qualityFilters.includes(collectionStandard.id)
-              })
-
-              return (materialTypeFilters.length > 0 && qualityFilters.length === 0 && !!collectionsContainingMaterial) ||
-                (materialTypeFilters.length === 0 && qualityFilters.length > 0 && !!collectionsContainingQuality) ||
-                (!!collectionsContainingMaterial && !!collectionsContainingQuality)
-            })
-            return filteredCollections.length > 0
-          })
-        }
-      }
-      return biobanks
-    } else {
-      return []
-    }
-  },
-  getFilteredCollections: (state, getters) => {
-    const biobanks = getters.getFilteredBiobanks(state)
-
-    return biobanks.reduce((acc, biobank) => {
-      const biobankId = biobank.id
-      return acc.concat(biobank.collections.map(collection => {
-        return {
-          collectionId: collection.id,
-          biobankId: biobankId
-        }
-      }))
-    }, [])
-  },
+  getMaterialOptions: state => state.materials.options,
   /**
-   * Gets a complete query object used in the vue-router URL
-   *
-   * will provide an object like so:
-   * query = {
-   *  search: String,
-   *  countries: Array<String>,
-   *  materialTypes: Array<String>,
-   *  quality: Array<String>
-   * }
-   *
-   * @param state
-   * @returns Query object
+   * Get the option list for the standards categorical filter
    */
-  getCompleteQuery: state => {
-    const search = state.search
-    const countries = state.filters.countries.selectedOptions
-    const materialTypes = state.filters.material_types.selectedOptions
-    const quality = state.filters.quality.selectedOptions
-
-    let query = {}
-    if (search !== '') query.search = search
-    if (countries.length > 0) query.countries = countries.join(',')
-    if (materialTypes.length > 0) query.materialTypes = materialTypes.join(',')
-    if (quality.length > 0) query.quality = quality.join(',')
-
-    return query
-  },
+  getStandardsOptions: state => state.standards.options,
   /**
-   * Get loading boolean for showing spinners
-   * @param state
+   * Get the option list for the diagnosis available asynchronous xref filter
    */
-  getLoading: state => state.loading
+  getDiagnosisAvailableOptions: state => state.diagnosis_available.options
 }

@@ -1,50 +1,55 @@
 <template>
-  <div class="input-group" id="search_items">
-    <input type="text" class="form-control" placeholder="Search for..." v-model="search"
-           v-on:keyup.enter="submit(query)">
-
-    <button class="btn btn-danger input-group-addon" @click="clear()">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </button>
-
-    <button class="btn btn-primary input-group-addon" @click="submit(query)">
-      <i class="fa fa-search" aria-hidden="true"></i>
-    </button>
+  <div class="search-box-container">
+    <div class="input-group search-input-container">
+      <span class="input-group-addon"><i class="fa fa-search"></i></span>
+      <input type="text" class="form-control search-input" v-model.lazy="search"
+             placeholder="Search through biobanks and collections...">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <small class="biobank-number-report" v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i>
+        </small>
+        <small class="biobank-number-report" v-else><i>{{biobanks.length}} biobanks shown</i></small>
+        <div class="divider"></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
-  #search_items {
-    margin-top: 1em;
-    margin-bottom: 1em;
+  .divider {
+    border-bottom: solid 1px black;
+    width: 100%;
   }
 
-  .input-group-addon {
-    border-radius: 50px;
-    background-color: #ffffff;
+  .search-input-container {
+    margin-bottom: 1rem;
   }
 
-  .form-control {
-    border-radius: 50px;
+  .search-input {
+    border-radius: 1rem;
+  }
+
+  .search-box-container {
+    margin-bottom: 1rem;
   }
 </style>
 
 <script>
+  import Negotiator from './negotiator/Negotiator'
+
   import { SET_SEARCH } from '../store/mutations'
-  import { GET_BIOBANKS_AND_COLLECTIONS } from '../store/actions'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'search-box',
-    methods: {
-      submit: function () {
-        this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS)
-      },
-      clear: function () {
-        this.$store.commit(SET_SEARCH, '')
-        this.$store.dispatch(GET_BIOBANKS_AND_COLLECTIONS)
-      }
-    },
     computed: {
+      ...mapState(['biobanks']),
       search: {
         get () {
           return this.$store.state.search
@@ -53,6 +58,15 @@
           this.$store.commit(SET_SEARCH, search)
         }
       }
+    },
+    watch: {
+      search (search) {
+        const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {search: search.length === 0 ? undefined : search})
+        this.$router.push({query: updatedRouteQuery})
+      }
+    },
+    components: {
+      Negotiator
     }
   }
 </script>

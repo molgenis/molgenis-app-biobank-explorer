@@ -1,7 +1,7 @@
 {
-  "name": "biobank-explorer",
+  "name": "bbmri-eric-biobank-explorer",
   "version": "1.0.0",
-  "description": "The poc for the dataexplorer 2.0 for bbmri eric specific, based on mock ups",
+  "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "author": "mkslofstra <mariska-karina@hotmail.com>",
   "private": true,
   "scripts": {
@@ -16,8 +16,9 @@
   "dependencies": {
     "@molgenis/molgenis-api-client": "^2.1.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
-    "folder-zip": "^0.0.5",
+    "@molgenis/molgenis-vue-test-utils": "^1.0.0",
     "vue": "^2.5.2",
+    "vue-multiselect": "^2.0.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.0",
     "vuex-router-sync": "5.0.0"
@@ -54,6 +55,7 @@
     "file-loader": "^1.1.5",
     "flow": "^0.2.3",
     "flow-babel-webpack-plugin": "^1.1.0",
+    "folder-zip": "^0.0.5",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "function-bind": "^1.1.1",
     "html-loader": "^0.5.1",

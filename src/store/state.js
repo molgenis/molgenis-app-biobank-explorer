@@ -1,33 +1,29 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
-const state = {
-  error: undefined,
-  biobanks: null,
-  filters: {
-    countries: {
-      entityTypeName: 'eu_bbmri_eric_biobanks',
-      attributeName: 'country',
-      label: 'Country',
-      options: [],
-      selectedOptions: []
-    },
-    material_types: {
-      entityTypeName: 'eu_bbmri_eric_collections',
-      attributeName: 'materials',
-      label: 'Material type',
-      options: [],
-      selectedOptions: []
-    },
-    quality: {
-      entityTypeName: 'eu_bbmri_eric_collections',
-      attributeName: 'standards',
-      label: 'Quality',
-      options: [],
-      selectedOptions: []
-    }
-  },
+export default {
+  error: null,
+  biobanks: [],
+  /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
+  biobankReport: {},
   search: '',
-  loading: false
+  /* Randomly generated 32 character token provided by the Negotiator
+  when they want to edit an existing query */
+  nToken: null,
+  loading: false,
+  country: {
+    filters: [],
+    options: []
+  },
+  materials: {
+    filters: [],
+    options: []
+  },
+  standards: {
+    filters: [],
+    options: []
+  },
+  diagnosis_available: {
+    filters: [],
+    options: []
+  }
 }
-
-export default state

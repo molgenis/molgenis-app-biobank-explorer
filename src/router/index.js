@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import BBMRIDataexplorer from 'components/BBMRIDataexplorer'
-import BiobankReport from 'components/BiobankReport'
+import BiobankExplorerContainer from 'components/BiobankExplorerContainer'
+import BiobankReportCard from 'components/cards/BiobankReportCard'
 import { INITIAL_STATE } from '../store/state'
 
 Vue.use(Router)
@@ -10,16 +10,13 @@ export default new Router({
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
-      name: 'biobanks',
-      path: '/biobanks',
-      component: BBMRIDataexplorer
+      path: '/biobankexplorer',
+      component: BiobankExplorerContainer
     },
     {
-      name: 'biobank',
-      path: '/biobanks/:id',
-      component: BiobankReport
+      path: '/biobank/report/:id',
+      component: BiobankReportCard
     },
-    // catch all redirect
-    { path: '/', redirect: '/biobanks' }
+    { path: '/', redirect: '/biobankexplorer' }
   ]
 })
