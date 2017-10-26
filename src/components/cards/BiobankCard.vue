@@ -3,12 +3,20 @@
     <div class="card-header biobank-card-header" @click.prevent="collapsed = !collapsed">
       <div class="row">
         <div class="col-md-5">
-          <router-link :to="'/biobank/report/' + biobank.id"><h5>{{ biobank.name }}</h5></router-link>
+          <h5>
+            <router-link :to="'/biobank/report/' + biobank.id">
+              <i class="fa fa-table"></i>
+            </router-link>
+            {{ biobank.name }}
+          </h5>
         </div>
         <div class="col-md-7">
           <p>
-            <small><b>Biobank type: </b></small><small>{{ biobankTypes }}</small><br>
-            <small><b>Juridical person: </b></small><small>{{ biobank['juridical_person'] }}</small>
+            <small><b>Biobank type: </b></small>
+            <small>{{ biobankTypes }}</small>
+            <br>
+            <small><b>Juridical person: </b></small>
+            <small>{{ biobank['juridical_person'] }}</small>
           </p>
         </div>
       </div>
