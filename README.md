@@ -18,6 +18,11 @@ Import metadata first, then data
 
 _TODO..._
 
+## Configuring Negotiator
+
+This version of the biobank explorer is 
+compatible with the Negotiator API in MOLGENIS version 5.2.0
+
 ## Contributing
 
 yarn install

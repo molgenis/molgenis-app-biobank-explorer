@@ -1,9 +1,9 @@
 <template>
   <div class="search-box-container">
     <div class="input-group search-input-container">
-      <span class="input-group-addon"><i class="fa fa-search"></i></span>
       <input type="text" class="form-control search-input" v-model.lazy="search"
              placeholder="Search through biobanks and collections...">
+      <span class="input-group-addon search-input-addon"><i class="fa fa-search"></i></span>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -12,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <small class="biobank-number-report" v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i>
+        <small class="biobank-number-report" v-if="biobanks.length > 100"><i><b>More then 100 biobanks found, please refine your query</b></i>
         </small>
         <small class="biobank-number-report" v-else><i>{{biobanks.length}} biobanks shown</i></small>
         <div class="divider"></div>
@@ -37,6 +37,10 @@
 
   .search-box-container {
     margin-bottom: 1rem;
+  }
+
+  .search-input-addon:hover {
+    cursor: pointer
   }
 </style>
 

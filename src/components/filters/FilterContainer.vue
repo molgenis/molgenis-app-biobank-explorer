@@ -12,10 +12,6 @@
     margin-bottom: 1rem;
   }
 
-  .filter-card>.card-body {
-    padding-bottom: 0;
-  }
-
   .filter-header {
     background-color: #dedede;
   }

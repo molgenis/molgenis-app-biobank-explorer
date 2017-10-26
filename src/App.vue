@@ -19,7 +19,6 @@
     margin-top: 1em;
     text-align: center;
     position: relative;
-    z-index: 2;
 
   }
 
@@ -30,7 +29,7 @@
     left: 0;
     right: 0;
     border-top: solid 1px black;
-    z-index: -1;
+    z-index: -1; /* Makes solid line go behind text present inside H5 element */
   }
 </style>
 

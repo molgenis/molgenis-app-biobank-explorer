@@ -20,6 +20,7 @@
         :limit=10
         :limitText="getLimitText"
         label="label"
+        selectLabel=""
       ></multiselect>
     </div>
   </div>
@@ -31,6 +32,10 @@
     max-width: 10em;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .multiselect__content-wrapper {
+    width: 250%;
   }
 </style>
 
