@@ -38,6 +38,10 @@
   .search-box-container {
     margin-bottom: 1rem;
   }
+
+  .search-input-addon:hover {
+    cursor: pointer
+  }
 </style>
 
 <script>
