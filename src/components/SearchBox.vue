@@ -12,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <small class="biobank-number-report" v-if="biobanks.length > 100"><i>More then 100 biobanks found, please refine your query</i>
+        <small class="biobank-number-report" v-if="biobanks.length > 100"><i><b>More then 100 biobanks found, please refine your query</b></i>
         </small>
         <small class="biobank-number-report" v-else><i>{{biobanks.length}} biobanks shown</i></small>
         <div class="divider"></div>
