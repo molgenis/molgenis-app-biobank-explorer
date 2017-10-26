@@ -117,7 +117,7 @@ export default {
 
     const query = helpers.createRSQLQuery(state)
 
-    api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
+    api.get(`${COLLECTION_API_PATH}?num=101&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {
       commit(SET_ERROR, error)
