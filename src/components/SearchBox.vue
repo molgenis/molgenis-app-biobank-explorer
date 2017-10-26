@@ -1,9 +1,9 @@
 <template>
   <div class="search-box-container">
     <div class="input-group search-input-container">
-      <span class="input-group-addon"><i class="fa fa-search"></i></span>
       <input type="text" class="form-control search-input" v-model.lazy="search"
              placeholder="Search through biobanks and collections...">
+      <span class="input-group-addon search-input-addon"><i class="fa fa-search"></i></span>
     </div>
     <div class="row">
       <div class="col-md-12">
