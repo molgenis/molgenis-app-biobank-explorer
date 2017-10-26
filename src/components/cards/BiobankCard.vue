@@ -33,7 +33,7 @@
   }
 
   .biobank-card-header {
-    background-color: #dedede;
+    background-color: #f5f5f5;
   }
 
   .biobank-card-header:hover {
