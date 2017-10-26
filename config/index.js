@@ -3,7 +3,7 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/view-biobank-plots.ftl'),
+    index: path.resolve(__dirname, '../dist/view-biobank-explorer.ftl'),
     assetsRoot: path.resolve(__dirname, '../dist/assets'),
     assetsSubDirectory: '',
     assetsPublicPath: '/apps/${app.id}',
