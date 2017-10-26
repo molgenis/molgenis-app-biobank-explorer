@@ -16,6 +16,7 @@ export default new Router({
     {
       path: '/biobank/report/:id',
       component: BiobankReportCard
-    }
+    },
+    { path: '/', redirect: '/biobankexplorer' }
   ]
 })
