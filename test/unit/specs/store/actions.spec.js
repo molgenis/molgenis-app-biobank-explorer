@@ -211,7 +211,7 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*&q=id=in=(1,2,3)')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size),*&q=id=in=(1,2,3)')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
@@ -265,6 +265,9 @@ describe('actions', () => {
   describe('GET_BIOBANK_REPORT', () => {
     it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', done => {
       const response = {
+        meta: {
+          name: 'meta'
+        },
         items: [
           {id: 'biobank-1'},
           {id: 'biobank-2'}
@@ -272,13 +275,13 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude),*&q=id==biobank-1')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size),contact(*),*&q=id==biobank-1')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
         payload: 'biobank-1',
         expectedMutations: [
-          {type: SET_BIOBANK_REPORT, payload: {id: 'biobank-1'}}
+          {type: SET_BIOBANK_REPORT, payload: response}
         ]
       }
 

@@ -31,7 +31,7 @@ const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude)'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size)'
 
 export default {
   /**
@@ -93,7 +93,8 @@ export default {
    */
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
     if (biobanks.length > 0) {
-      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id))
+      /* To prevent the =in= query from becoming huge, we slice the first 101 biobank identifiers from the list of unique IDs  */
+      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id)).slice(0, 101)
       const uri = `${BIOBANK_API_PATH}?num=101&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
 
       api.get(uri).then(response => {
@@ -125,8 +126,8 @@ export default {
     })
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response.items[0])
+    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},contact(*),*&q=id==${biobankId}`).then(response => {
+      commit(SET_BIOBANK_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)
     })
