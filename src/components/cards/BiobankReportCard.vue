@@ -96,7 +96,7 @@
   }
 
   .more-info-header {
-    background-color: #ffffff;
+    background-color: #e4e4e4;
   }
 
   .biobank-card {
