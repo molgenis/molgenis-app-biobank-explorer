@@ -75,7 +75,7 @@ describe('Vuex store helper functions', () => {
       state.search = 'test search'
 
       const actual = helpers.createRSQLQuery(state)
-      const expected = '&q=*=q=test search'
+      const expected = '&q=*=q="test search"'
 
       expect(actual).to.equal(expected)
     })
@@ -85,7 +85,7 @@ describe('Vuex store helper functions', () => {
       state.search = 'test search'
 
       const actual = helpers.createRSQLQuery(state)
-      const expected = '&q=(country=in=(NL,BE));*=q=test search'
+      const expected = '&q=(country=in=(NL,BE));*=q="test search"'
 
       expect(actual).to.equal(expected)
     })

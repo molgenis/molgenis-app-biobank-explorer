@@ -17,7 +17,7 @@ const createRSQLQuery = (state) => {
   let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
 
   if (state.search) {
-    query += query.length > 0 ? `;*=q=${state.search}` : `&q=*=q=${state.search}`
+    query += query.length > 0 ? `;*=q="${state.search}"` : `&q=*=q="${state.search}"`
   }
 
   return query
