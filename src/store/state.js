@@ -4,7 +4,10 @@ export default {
   error: null,
   biobanks: [],
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
-  biobankReport: {},
+  biobankReport: {
+    data: {},
+    metadata: {}
+  },
   search: '',
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */

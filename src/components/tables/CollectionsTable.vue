@@ -7,6 +7,7 @@
       <th>Type</th>
       <th>Materials</th>
       <th>Standards</th>
+      <th>#Samples</th>
     </tr>
     </thead>
 
@@ -30,6 +31,7 @@
 
         <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
         <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
+        <span v-else-if="column === 'size'">{{ collection[column] }}</span>
       </td>
     </tr>
     </tbody>
@@ -58,7 +60,7 @@
     props: ['collections'],
     data () {
       return {
-        columns: ['name', 'type', 'materials', 'standards']
+        columns: ['name', 'type', 'materials', 'standards', 'size']
       }
     },
     methods: {

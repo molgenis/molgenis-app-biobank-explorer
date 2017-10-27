@@ -31,7 +31,7 @@ const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude)'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size)'
 
 export default {
   /**
@@ -125,8 +125,8 @@ export default {
     })
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response.items[0])
+    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},contact(*),*&q=id==${biobankId}`).then(response => {
+      commit(SET_BIOBANK_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)
     })

@@ -55,7 +55,10 @@ export default {
     state.biobanks = biobanks
   },
   [SET_BIOBANK_REPORT] (state, biobank) {
-    state.biobankReport = biobank
+    state.biobankReport = {
+      data: biobank.items[0],
+      metadata: biobank.meta
+    }
   },
   /**
    *
