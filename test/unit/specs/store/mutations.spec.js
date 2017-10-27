@@ -208,4 +208,30 @@ describe('mutations', () => {
       expect(state.loading).to.equal(payload)
     })
   })
+
+  describe('SET_BIOBANK_REPORT', () => {
+    it('should set the biobank report value in the state with the payload', () => {
+      const state = {
+        biobankReport: {
+          data: {},
+          metadata: {}
+        }
+      }
+
+      const payload = {
+        meta: {
+          name: 'metadata'
+        },
+        items: [
+          {id: 'biobank-1'},
+          {id: 'biobank-1-other'}
+        ]
+      }
+
+      mutations.__SET_BIOBANK_REPORT__(state, payload)
+
+      expect(state.biobankReport.data).to.deep.equal(payload.items[0])
+      expect(state.biobankReport.metadata).to.deep.equal(payload.meta)
+    })
+  })
 })

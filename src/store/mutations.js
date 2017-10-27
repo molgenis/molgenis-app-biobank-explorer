@@ -54,6 +54,11 @@ export default {
   [SET_BIOBANKS] (state, biobanks) {
     state.biobanks = biobanks
   },
+  /**
+   * Store a single biobank in the state for showing a biobank report
+   * @param state
+   * @param biobank response object from the server containing meta and items for a single biobank
+   */
   [SET_BIOBANK_REPORT] (state, biobank) {
     state.biobankReport = {
       data: biobank.items[0],
