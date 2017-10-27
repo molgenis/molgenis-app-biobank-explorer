@@ -93,7 +93,8 @@ export default {
    */
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
     if (biobanks.length > 0) {
-      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id))
+      /* To prevent the =in= query from becoming huge, we slice the first 101 biobank identifiers from the list of unique IDs  */
+      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id)).slice(0, 101)
       const uri = `${BIOBANK_API_PATH}?num=101&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
 
       api.get(uri).then(response => {
@@ -117,7 +118,7 @@ export default {
 
     const query = helpers.createRSQLQuery(state)
 
-    api.get(`${COLLECTION_API_PATH}?num=101&attrs=biobank${query}`).then(response => {
+    api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {
       commit(SET_ERROR, error)
