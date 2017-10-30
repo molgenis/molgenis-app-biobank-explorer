@@ -73,7 +73,7 @@
       },
       biobankTypes () {
         return utils.getUniqueIdArray(this.biobank.collections.reduce((accumulator, collection) => {
-          return accumulator.concat(collection.materials.map(material => material.label))
+          return accumulator.concat(collection.type.map(type => type.label))
         }, [])).join(', ')
       }
     },

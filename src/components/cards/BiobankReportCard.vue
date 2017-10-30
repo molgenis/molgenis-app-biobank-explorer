@@ -1,6 +1,6 @@
 <template>
   <div v-if="biobank.data.collections">
-    <router-link :to="{path: '/biobankexplorer', query: query}">Back to searching through biobanks</router-link>
+    <router-link :to="{path: '/biobankexplorer', query: query}">Back to search results</router-link>
 
     <div class="card biobank-card">
       <div class="card-header">
@@ -152,7 +152,7 @@
       biobankTypes () {
         if (this.biobank.data.collections) {
           return utils.getUniqueIdArray(this.biobank.data.collections.reduce((accumulator, collection) => {
-            return accumulator.concat(collection.materials.map(material => material.label))
+            return accumulator.concat(collection.type.map(type => type.label))
           }, [])).join(', ')
         }
       },
