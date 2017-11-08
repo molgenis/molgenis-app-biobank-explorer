@@ -10,6 +10,17 @@ import { sync } from 'vuex-router-sync'
 import { INITIAL_STATE } from './store/state'
 
 import App from './App'
+import VueAnalytics from 'vue-analytics'
+
+if (INITIAL_STATE.GA_KEY) {
+  Vue.use(VueAnalytics, {
+    id: INITIAL_STATE.GA_KEY,
+    router,
+    autoTracking: {
+      transformQueryString: true
+    }
+  })
+}
 
 sync(store, router)
 
