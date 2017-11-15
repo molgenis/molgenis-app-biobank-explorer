@@ -10,6 +10,22 @@ import { sync } from 'vuex-router-sync'
 import { INITIAL_STATE } from './store/state'
 
 import App from './App'
+import VueAnalytics from 'vue-analytics'
+
+if (INITIAL_STATE.GA_KEY) {
+  Vue.use(VueAnalytics, {
+    id: INITIAL_STATE.GA_KEY,
+    router,
+    // TODO Use MOLGENIS settings for this
+    set: [
+      {field: 'forceSSL', value: true},
+      {field: 'anonymizeIp', value: true}
+    ],
+    autoTracking: {
+      transformQueryString: true
+    }
+  })
+}
 
 sync(store, router)
 

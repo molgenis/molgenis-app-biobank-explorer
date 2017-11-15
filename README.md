@@ -18,6 +18,18 @@ Import metadata first, then data
 
 _TODO..._
 
+## Enable Google Analytics
+We use the [Vue Analytics library](https://github.com/MatteoGabriele/vue-analytics) to connect to Google Analytics.
+Add the GA_KEY parameter: 
+
+```js
+  window.__INITIAL_STATE__ = {
+    GA_KEY: 'UA-XXXXXXXX-X'
+  }
+```
+
+to your index.html or freemarker template to start tracking your biobank explorer app.
+
 ## Configuring Negotiator
 
 This version of the biobank explorer is 
