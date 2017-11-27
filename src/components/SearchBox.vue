@@ -2,7 +2,7 @@
   <div class="search-box-container">
     <div class="input-group search-input-container">
       <input type="text" class="form-control search-input" v-model.lazy="search"
-             placeholder="Search through biobanks and collections...">
+             placeholder="Search biobanks by name">
       <span class="input-group-addon search-input-addon"><i class="fa fa-search"></i></span>
     </div>
     <div class="row">
