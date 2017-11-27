@@ -13,7 +13,7 @@
   }
 
   .filter-header {
-    background-color: #e4e4e4;
+    background-color: #f5f5f5;
   }
 
   .filter-header:hover {
