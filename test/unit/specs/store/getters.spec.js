@@ -67,4 +67,40 @@ describe('getters', () => {
       expect(actual).to.deep.equal(expected)
     })
   })
+
+  describe('getActiveFilters', () => {
+    it('should retrieve an object of filter name <-> filters', () => {
+      const state = {
+        country: {
+          filters: ['AT'],
+          options: [{id: 'AT', name: 'Austria'}]
+        },
+        materials: {
+          filters: ['PLASMA'],
+          options: [{id: 'PLASMA', label: 'Plasma'}]
+        },
+        diagnosis_available: {
+          filters: [],
+          options: []
+        },
+        standards: {
+          filters: [],
+          options: []
+        }
+      }
+
+      const actual = getters.getActiveFilters(state)
+      console.log(actual)
+      const expected = {
+        'materials': [
+          {id: 'PLASMA', label: 'Plasma'}
+        ],
+        'country': [
+          {id: 'AT', label: 'Austria'}
+        ]
+      }
+
+      expect(actual).to.deep.equal(expected)
+    })
+  })
 })

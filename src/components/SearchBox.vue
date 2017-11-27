@@ -10,6 +10,13 @@
         <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
       </div>
     </div>
+
+    <div class="row>">
+      <div class="col-md-12">
+        <active-filter-list></active-filter-list>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-12">
         <small class="biobank-number-report" v-if="biobanks.length > 100"><i><b>More than 100 biobanks found, please refine your query</b></i>
@@ -46,6 +53,7 @@
 
 <script>
   import Negotiator from './negotiator/Negotiator'
+  import ActiveFilterList from './filters/ActiveFilterList'
 
   import { SET_SEARCH } from '../store/mutations'
   import { mapState } from 'vuex'
@@ -70,6 +78,7 @@
       }
     },
     components: {
+      ActiveFilterList,
       Negotiator
     }
   }

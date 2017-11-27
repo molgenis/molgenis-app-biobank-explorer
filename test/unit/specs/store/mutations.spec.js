@@ -77,6 +77,54 @@ describe('mutations', () => {
     })
   })
 
+  describe('RESET_FILTERS', () => {
+    it('should reset all the filters in the state', () => {
+      const state = {
+        country: {
+          filters: ['AT'],
+          options: [{id: 'AT', name: 'Austria'}]
+        },
+        materials: {
+          filters: ['PLASMA'],
+          options: [{id: 'PLASMA', label: 'Plasma'}]
+        },
+        diagnosis_available: {
+          filters: ['C18'],
+          options: []
+        },
+        standards: {
+          filters: ['Awesome standard'],
+          options: []
+        }
+      }
+
+      mutations.__RESET_FILTERS__(state)
+      const expected = {
+        country: {
+          filters: [],
+          options: [{id: 'AT', name: 'Austria'}]
+        },
+        materials: {
+          filters: [],
+          options: [{id: 'PLASMA', label: 'Plasma'}]
+        },
+        diagnosis_available: {
+          filters: [],
+          options: []
+        },
+        standards: {
+          filters: [],
+          options: []
+        }
+      }
+
+      expect(state.country).to.deep.equal(expected.country)
+      expect(state.materials).to.deep.equal(expected.materials)
+      expect(state.diagnosis_available).to.deep.equal(expected.diagnosis_available)
+      expect(state.standards).to.deep.equal(expected.standards)
+    })
+  })
+
   describe('SET_BIOBANKS', () => {
     it('should set the biobanks in the state with the payload', () => {
       const state = {
