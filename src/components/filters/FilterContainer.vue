@@ -1,9 +1,9 @@
 <template>
   <div id="filter-container">
-    <country-filters></country-filters>
-    <material-filters></material-filters>
-    <standards-filters></standards-filters>
     <diagnosis-available-filters></diagnosis-available-filters>
+    <material-filters></material-filters>
+    <country-filters></country-filters>
+    <standards-filters></standards-filters>
   </div>
 </template>
 
