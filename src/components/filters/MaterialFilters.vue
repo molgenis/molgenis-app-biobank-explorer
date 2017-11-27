@@ -37,7 +37,7 @@
     name: 'material-filters',
     data () {
       return {
-        collapsed: true,
+        collapsed: false,
         showAllOptions: false
       }
     },
