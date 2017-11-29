@@ -2,7 +2,7 @@
   <div class="search-box-container">
     <div class="input-group search-input-container">
       <input type="text" class="form-control search-input" v-model.lazy="search"
-             placeholder="Search through biobanks and collections...">
+             placeholder="Search biobanks by name">
       <span class="input-group-addon search-input-addon"><i class="fa fa-search"></i></span>
     </div>
     <div class="row">
@@ -10,6 +10,13 @@
         <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
       </div>
     </div>
+
+    <div class="row>">
+      <div class="col-md-12">
+        <active-filter-list></active-filter-list>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-12">
         <small class="biobank-number-report" v-if="biobanks.length > 100"><i><b>More than 100 biobanks found, please refine your query</b></i>
@@ -31,10 +38,6 @@
     margin-bottom: 1rem;
   }
 
-  .search-input {
-    border-radius: 1rem;
-  }
-
   .search-box-container {
     margin-bottom: 1rem;
   }
@@ -46,6 +49,7 @@
 
 <script>
   import Negotiator from './negotiator/Negotiator'
+  import ActiveFilterList from './filters/ActiveFilterList'
 
   import { SET_SEARCH } from '../store/mutations'
   import { mapState } from 'vuex'
@@ -70,6 +74,7 @@
       }
     },
     components: {
+      ActiveFilterList,
       Negotiator
     }
   }

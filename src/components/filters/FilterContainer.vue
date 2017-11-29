@@ -1,9 +1,9 @@
 <template>
   <div id="filter-container">
-    <country-filters></country-filters>
-    <material-filters></material-filters>
-    <standards-filters></standards-filters>
     <diagnosis-available-filters></diagnosis-available-filters>
+    <material-filters></material-filters>
+    <country-filters></country-filters>
+    <standards-filters></standards-filters>
   </div>
 </template>
 
@@ -13,7 +13,8 @@
   }
 
   .filter-header {
-    background-color: #e4e4e4;
+    /* Same color as BiobankCard */
+    background-color: #f5f5f5;
   }
 
   .filter-header:hover {

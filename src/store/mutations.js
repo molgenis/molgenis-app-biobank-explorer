@@ -5,6 +5,7 @@ export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const SET_SEARCH = '__SET_SEARCH__'
 
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
+export const RESET_FILTERS = '__RESET_FILTERS__'
 
 export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
@@ -43,6 +44,15 @@ export default {
    */
   [UPDATE_FILTER] (state, {name, filters}) {
     state[name].filters = filters
+  },
+  /**
+   * Reset all filters in the state
+   */
+  [RESET_FILTERS] (state) {
+    state.diagnosis_available.filters = []
+    state.materials.filters = []
+    state.country.filters = []
+    state.standards.filters = []
   },
   /**
    * Stores biobanks in the state. The list of biobanks is only overwritten when:

@@ -33,8 +33,16 @@ const getUniqueIdArray = (list) => {
   return Array.from(new Set(list))
 }
 
+/**
+ * Return an Array of Filter IDs without the selectedFilterId
+ */
+const removeFilterFromFilterArrayById = (filters, selectedFilterId) => {
+  return filters.filter(filter => filter.id !== selectedFilterId).map(filter => filter.id)
+}
+
 export default {
   queryPartsToQuery,
   getUniqueIdArray,
-  createInQuery
+  createInQuery,
+  removeFilterFromFilterArrayById
 }
