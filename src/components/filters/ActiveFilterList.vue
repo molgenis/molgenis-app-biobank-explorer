@@ -18,7 +18,6 @@
     padding: 0.1em 0.3em 0.3em;
     border: solid 1px;
     margin-bottom: 0.2em;
-    border-radius: 0.5em;
   }
 
   .active-filter:hover {

@@ -38,10 +38,6 @@
     margin-bottom: 1rem;
   }
 
-  .search-input {
-    border-radius: 1rem;
-  }
-
   .search-box-container {
     margin-bottom: 1rem;
   }
