@@ -2,10 +2,14 @@
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
       <li class="list-inline-item active-filter" v-for="value in values" @click="removeFilter(filter, value.id)">
-        <small>{{ value.label }}</b></small> <i title="remove this filter" class="fa fa-times remove-filter-btn"></i>
+        <small>{{ value.label }}</b></small>
+        <i title="remove this filter" class="fa fa-times remove-filter-btn"></i>
       </li>
     </template>
-    <li class="list-inline-item"><button class="btn btn-sm btn-outline-danger reset-all-filters-btn" @click="resetAllFilters">Reset all filters</button></li>
+    <li class="list-inline-item">
+      <button class="btn btn-sm btn-outline-danger reset-all-filters-btn" @click="resetAllFilters">Reset all filters
+      </button>
+    </li>
   </ul>
 </template>
 
@@ -14,6 +18,7 @@
     padding: 0.1em 0.3em 0.3em;
     border: solid 1px;
     margin-bottom: 0.2em;
+    border-radius: 0.5em;
   }
 
   .active-filter:hover {
@@ -28,13 +33,14 @@
 
 <script>
   import { UPDATE_FILTER, RESET_FILTERS } from '../../store/mutations'
+  import utils from '../../utils'
   import { mapGetters } from 'vuex'
 
   export default {
     name: 'active-filter-list',
     methods: {
       removeFilter (filterType, selectedFilterId) {
-        const filters = this.activeFilters[filterType].filter(filter => filter.id !== selectedFilterId).map(filter => filter.id)
+        const filters = utils.removeFilterFromFilterArrayById(this.activeFilters[filterType], selectedFilterId)
         this.$store.commit(UPDATE_FILTER, {name: filterType, filters: filters})
       },
       resetAllFilters () {

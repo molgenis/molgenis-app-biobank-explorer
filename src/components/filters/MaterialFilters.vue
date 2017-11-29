@@ -70,7 +70,6 @@
     },
     mounted () {
       this.$store.dispatch(GET_MATERIALS_OPTIONS)
-      this.collapsed = !this.$store.state.route.query.materials
     }
   }
 </script>

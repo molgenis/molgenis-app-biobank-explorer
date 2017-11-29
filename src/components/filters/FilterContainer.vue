@@ -13,6 +13,7 @@
   }
 
   .filter-header {
+    /* Same color as BiobankCard */
     background-color: #f5f5f5;
   }
 

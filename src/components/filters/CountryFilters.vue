@@ -59,6 +59,7 @@
     },
     mounted () {
       this.$store.dispatch(GET_COUNTRY_OPTIONS)
+      this.collapsed = !this.$store.state.route.query.country
     }
   }
 </script>
