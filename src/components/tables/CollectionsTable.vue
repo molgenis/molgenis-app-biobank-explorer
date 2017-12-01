@@ -2,7 +2,6 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
-        <!--<th></th>-->
         <th>Collection</th>
         <th>Type</th>
         <th>Materials</th>
@@ -13,12 +12,6 @@
     <tbody>
       <template v-for="collection in topLevelElements">
         <tr>
-          <!--<td :class="{'table-text-content-columns-has-sub': hasSubCollections, 'table-text-content-columns': !hasSubCollections}">-->
-          <!--<a class="btn btn-outline-secondary btn-sm" v-if="hasSubCollections" v-on:click="showSubCollectionsTable">-->
-          <!--<i :class="{'fa fa-plus' : !isSubCollectionsTableVisible, 'fa fa-minus' : isSubCollectionsTableVisible}" aria-hidden="true"></i>-->
-          <!--</a>-->
-          <!--</td>-->
-
           <td :class="{'table-text-content-columns-has-sub': hasSubCollections(collection), 'table-text-content-columns': !hasSubCollections(collection)}" v-for="column in columns">
               <span v-if="column === 'name'">
                 <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id">{{collection[column]}}</a>
@@ -36,7 +29,6 @@
             <span v-else-if="column === 'size'">{{ collection[column] }}</span>
           </td>
         </tr>
-        <!--<tr v-if="hasSubCollections && isSubCollectionsTableVisible">-->
         <tr v-if="hasSubCollections(collection)">
           <td colspan="5" class="sub-table-cell">
             <sub-collections-table :subCollections="collection.sub_collections"></sub-collections-table>
@@ -103,13 +95,6 @@
       },
       getCollectionType (collection) {
         return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
-      },
-      showSubCollectionsTable () {
-        if (this.isSubCollectionsTableVisible) {
-          this.isSubCollectionsTableVisible = false
-        } else {
-          this.isSubCollectionsTableVisible = true
-        }
       },
       hasSubCollections (collection) {
         return collection.sub_collections.length > 0

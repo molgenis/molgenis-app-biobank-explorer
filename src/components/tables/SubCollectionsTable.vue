@@ -38,22 +38,11 @@
 
 <style>
   .sub-collection-table thead th {
-    /*border-collapse: collapse;*/
-    /*border-width: 0px;*/
-    /*border-style: hidden;*/
     font-size: 12px;
-  }
-
-  .sub-collection-table td, .sub-collection-table th{
-    /*border-collapse: collapse;*/
-    /*border-width: 0px;*/
-    /*border-style: hidden;*/
   }
 
   .table-text-content-columns-sub {
     font-size: 12px;
-    /*border: 0px;*/
-    /*border-style: hidden;*/
     padding: 5px;
   }
 
