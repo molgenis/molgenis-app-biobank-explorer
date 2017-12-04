@@ -5,4 +5,4 @@
     fallbackLng: 'en'
   }
   // See https://webpack.github.io/docs/configuration.html
-  __webpack_public_path__ = '/apps/${app.id}/'</script><script type=text/javascript src=/apps/${app.id}/js/manifest.436fa7b4953b6a673cb4.js></script><script type=text/javascript src=/apps/${app.id}/js/vendor.d70fadbfb57c8e6f6c48.js></script><script type=text/javascript src=/apps/${app.id}/js/app.54c2c270766384054f42.js></script></body></html>
+  __webpack_public_path__ = '/apps/${app.id}/'</script><script type=text/javascript src=/apps/${app.id}/js/manifest.69e7b5ca172fbaa5ae3d.js></script><script type=text/javascript src=/apps/${app.id}/js/vendor.d70fadbfb57c8e6f6c48.js></script><script type=text/javascript src=/apps/${app.id}/js/app.5bd9aa19dae49e010fb7.js></script></body></html>
