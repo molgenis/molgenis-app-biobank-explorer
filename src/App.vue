@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <a :href="home">< Back to home</a>
     <h5>
       <span class="line-center">BBMRI-ERIC Directory</span>
     </h5>
@@ -34,7 +35,14 @@
 </style>
 
 <script>
+  import { INITIAL_STATE } from './store/state'
+
   export default {
-    name: 'biobank-explorer'
+    name: 'biobank-explorer',
+    data () {
+      return {
+        home: INITIAL_STATE.serverUrl
+      }
+    }
   }
 </script>
