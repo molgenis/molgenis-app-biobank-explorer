@@ -211,7 +211,7 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size),*&q=id=in=(1,2,3)')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*)),*&q=id=in=(1,2,3)')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {
@@ -275,7 +275,7 @@ describe('actions', () => {
       }
 
       const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size),contact(*),*&q=id==biobank-1')).thenResolve(response)
+      td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*)),contact(*),*&q=id==biobank-1')).thenResolve(response)
       td.replace(api, 'get', get)
 
       const options = {

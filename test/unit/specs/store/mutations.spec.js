@@ -55,10 +55,20 @@ describe('mutations', () => {
         }
       }
 
-      const diagnoses = ['C18', 'L40']
-      mutations.__SET_DIAGNOSIS_AVAILABLE__(state, diagnoses)
+      const payload = [{
+        code: 'C22.3',
+        label: 'Angiosarcoma of liver'
+      }]
+      mutations.__SET_DIAGNOSIS_AVAILABLE__(state, payload)
 
-      expect(state.diagnosis_available.options).to.deep.equal(diagnoses)
+      const expected = [
+        {
+          code: 'C22.3',
+          label: 'C22.3 - Angiosarcoma of liver',
+          originalLabel: 'Angiosarcoma of liver'
+        }
+      ]
+      expect(state.diagnosis_available.options).to.deep.equal(expected)
     })
   })
 
@@ -228,17 +238,24 @@ describe('mutations', () => {
         nToken: null
       }
 
-      const diagnoses = [
-        {code: 'C18'},
-        {code: 'L40'}
-      ]
+      const payload = [{
+        code: 'C22.3',
+        label: 'Angiosarcoma of liver'
+      }]
+      mutations.__MAP_QUERY_TO_STATE__(state, payload)
 
-      mutations.__MAP_QUERY_TO_STATE__(state, diagnoses)
+      const expected = [
+        {
+          code: 'C22.3',
+          label: 'C22.3 - Angiosarcoma of liver',
+          originalLabel: 'Angiosarcoma of liver'
+        }
+      ]
 
       expect(state.country.filters).to.deep.equal(['NL', 'BE'])
       expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
       expect(state.standards.filters).to.deep.equal(['standard-1', 'standard-2'])
-      expect(state.diagnosis_available.filters).to.deep.equal(diagnoses)
+      expect(state.diagnosis_available.filters).to.deep.equal(expected)
       expect(state.search).to.equal('search')
       expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
     })
