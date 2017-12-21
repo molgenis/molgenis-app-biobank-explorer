@@ -29,6 +29,12 @@ module.exports = merge(baseWebpackConfig, {
       favicon: 'src/assets/img/favicon.ico'
     }),
     new FriendlyErrorsPlugin(),
-    new FlowBabelWebpackPlugin()
+    new FlowBabelWebpackPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Popper: ['popper.js', 'default']
+    })
   ]
 })

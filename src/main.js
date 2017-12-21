@@ -12,6 +12,9 @@ import { INITIAL_STATE } from './store/state'
 import App from './App'
 import VueAnalytics from 'vue-analytics'
 
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {
     id: INITIAL_STATE.GA_KEY,
