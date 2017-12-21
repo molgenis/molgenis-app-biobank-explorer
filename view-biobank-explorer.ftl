@@ -6,7 +6,6 @@
   <!-- work around for bug in app store, not loading resources -->
   <script src="https://use.fontawesome.com/4b6985a594.js"></script>
   <link rel="icon" href="/apps/${app.id}/img/favicon.ico" type="image/x-icon"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
 </head>
 <body>
 <div id="app"></div>
