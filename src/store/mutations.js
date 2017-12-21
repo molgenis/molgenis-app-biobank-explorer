@@ -15,6 +15,14 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const SET_LOADING = '__SET_LOADING__'
 export const SET_ERROR = '__SET_ERROR__'
 
+const combineCodeAndLabels = (diagnoses) => {
+  return diagnoses.map(diagnosis => {
+    diagnosis.originalLabel = diagnosis.label
+    diagnosis.label = diagnosis.code + ' - ' + diagnosis.label
+    return diagnosis
+  })
+}
+
 export default {
   /**
    * Update the options for the different filters available in the biobank explorer
@@ -29,7 +37,7 @@ export default {
     state.standards.options = standards
   },
   [SET_DIAGNOSIS_AVAILABLE] (state, diagnoses) {
-    state.diagnosis_available.options = diagnoses
+    state.diagnosis_available.options = combineCodeAndLabels(diagnoses)
   },
   [SET_SEARCH] (state, search) {
     state.search = search
@@ -84,7 +92,7 @@ export default {
     const query = state.route.query
 
     if (diagnoses) {
-      state.diagnosis_available.filters = diagnoses
+      state.diagnosis_available.filters = combineCodeAndLabels(diagnoses)
     }
 
     if (query.search) {

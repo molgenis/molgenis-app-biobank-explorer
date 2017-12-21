@@ -90,7 +90,6 @@ describe('getters', () => {
       }
 
       const actual = getters.getActiveFilters(state)
-      console.log(actual)
       const expected = {
         'materials': [
           {id: 'PLASMA', label: 'Plasma'}
