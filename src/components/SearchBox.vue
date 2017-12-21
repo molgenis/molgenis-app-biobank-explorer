@@ -19,17 +19,21 @@
 
     <div class="row">
       <div class="col-md-12">
-        <small class="biobank-number-report" v-if="biobanks.length > 100"><i><b>More than 100 biobanks found, please refine your query</b></i>
-        </small>
-        <small class="biobank-number-report" v-else><i>{{biobanks.length}} biobanks shown</i></small>
-        <div class="divider"></div>
+        <div class="biobank-number-report-container">
+          <small class="biobank-number-report" v-if="biobanks.length > 100">
+            <i><b>More than 100 biobanks found, please refine your query</b></i>
+          </small>
+          <small class="biobank-number-report" v-else>
+            <i>{{biobanks.length}} biobanks shown</i>
+          </small>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
-  .divider {
+  .biobank-number-report-container {
     border-bottom: solid 1px black;
     width: 100%;
   }
