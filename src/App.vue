@@ -13,15 +13,15 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link"
-              :href="home + '/menu/main/redirect?url=https://molgenis114.gcc.rug.nl/menu/main/apps/aaaacx4r5ehjr6qwhylusdiaai'">
-              Biobank explorer - BETA
+              :href="home + '/menu/main/apps/aaaacx4r5ehjr6qwhylusdiaai'">
+              Directory 4.0
             </a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link"
               :href="home + '/menu/main/dataexplorer?entity=eu_bbmri_eric_collections&amp;mod=data&amp;attrs[]=country&amp;attrs[]=biobank&amp;attrs[]=collection&amp;hideselect=true'">
-              Directory 3.2
+              Directory 4.0 (Advanced search)
             </a>
           </li>
 
@@ -36,6 +36,20 @@
             <a class="nav-link"
               :href="home + '/menu/main/redirect?url=https://drive.google.com/file/d/0B0PMkmx_peQ7cmhkdFBncTRzSTg/view?usp=sharing'">
               User Manual
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link"
+               :href="home + '/menu/main/references'">
+              References
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link"
+               :href="home + '/menu/main/feedback'">
+              Feedback
             </a>
           </li>
         </ul>
