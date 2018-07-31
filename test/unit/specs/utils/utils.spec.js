@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import utils from 'src/utils'
+import utils from '../../../../src/utils'
 
 describe('Utilities', () => {
   describe('queryPartsToQuery', () => {

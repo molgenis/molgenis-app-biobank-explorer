@@ -62,7 +62,7 @@
 </style>
 
 <script>
-  import utils from 'src/utils'
+  import utils from '../../utils'
   import SubCollectionsTable from './SubCollectionsTable'
 
   export default {

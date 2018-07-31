@@ -1,26 +1,24 @@
 {
   "presets": [
-    [
-      "env"
-    ]
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
   ],
   "plugins": [
+    "transform-vue-jsx",
     "transform-runtime",
-    "transform-flow-comments",
-    "transform-object-rest-spread"
+    "babel-plugin-transform-class-properties",
+    "babel-plugin-syntax-flow",
+    "babel-plugin-transform-flow-strip-types"
   ],
-  "comments": false,
   "env": {
     "test": {
-      "plugins": [
-        "istanbul",
-        "transform-object-rest-spread"
-      ],
-      "presets": [
-        [
-          "env"
-        ]
-      ]
+      "presets": ["env", "stage-2"],
+      "plugins": ["transform-vue-jsx", "istanbul"]
     }
   }
 }

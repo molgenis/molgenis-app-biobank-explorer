@@ -60,7 +60,7 @@
 </style>
 
 <script>
-  import utils from 'src/utils'
+  import utils from '../../utils'
 
   export default {
     name: 'sub-collections-table',
