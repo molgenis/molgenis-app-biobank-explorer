@@ -69,7 +69,7 @@ yarn debug
 ```
 
 #### Run end-to-end tests
-You can run edn-to-end test locally by running the following command:
+You can run end-to-end test locally by running the following command:
 
 ```bash
 yarn e2e
@@ -80,7 +80,7 @@ For local testing with a running MOLGENIS instance you have to alter the config 
 
 Comment in the following block
 
-```src/main/frontend/config/index.js```
+```config/index.js```
 
 ```javascript
 module.exports = {
@@ -125,7 +125,7 @@ yarn dev
 
 See: [App developement documentation](https://molgenis.gitbooks.io/molgenis/content/developer_documentation/app-development.html)
 
-You can now create a working application that can be imported in MOLGENIS directly by executing:
+You can now create a working application that can be imported in MOLGENIS directly, by executing:
 
 ```bash
 yarn build
