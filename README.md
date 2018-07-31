@@ -92,13 +92,13 @@ module.exports = {
     // Beginning of block
     proxyTable: {
       '/login': {
-        target: 'http://::1:8080'
+        target: 'http://localhost:8080'
       },
       '/plugin/directory/export': {
-        target: 'http://::1:8080'
+        target: 'http://localhost:8080'
       },
       '/api': {
-        target: 'http://::1:8080'
+        target: 'http://localhost:8080'
       }
     },
     // End of block
