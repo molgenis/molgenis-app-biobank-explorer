@@ -121,7 +121,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       description: packageJson.description,
       version: packageJson.version,
       apiDependency: "v2",
-      includeMenuAndFooter: false,
+      includeMenuAndFooter: true,
       runtimeOptions: {
         language: "en"
       }
