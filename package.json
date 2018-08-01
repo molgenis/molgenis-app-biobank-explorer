@@ -15,7 +15,7 @@
     "preversion": "yarn install; yarn test; yarn build"
   },
   "dependencies": {
-    "@molgenis/molgenis-api-client": "^2.1.0",
+    "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
     "bootstrap": "^4.0.0-beta.2",
     "jquery": "^3.2.1",
