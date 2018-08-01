@@ -80,7 +80,7 @@
     },
     computed: {
       topLevelElements () {
-        const subCollectionIds = this.collections.flatMap(collection => collection.sub_collections.map(subCollection => subCollection.id))
+        const subCollectionIds = this.collections.map(collection => collection.sub_collections.map(subCollection => subCollection.id))
         return this.collections.filter(collection => subCollectionIds.indexOf(collection.id) === -1)
       }
     },
