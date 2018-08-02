@@ -7,11 +7,11 @@
     </div>
     <div class="card-body" v-if="!collapsed">
       <p class="text-right" @click.prevent="toggleSelect">
-        <small v-if="filters.length === 0"><a href=""><i>Select all</i></a></small>
-        <small v-if="filters.length > 0"><a href=""><i>Deselect all</i></a></small>
+        <small v-if="filters && filters.length === 0"><a href=""><i>Select all</i></a></small>
+        <small v-if="filters && filters.length > 0"><a href=""><i>Deselect all</i></a></small>
       </p>
 
-      <div v-if="options.length > 0" v-for="(option, index) in options" class="form-check"
+      <div v-if="options && options.length > 0" v-for="(option, index) in options" class="form-check"
            v-show="index < 4 | showAllOptions">
 
         <label class="form-check-label">
@@ -21,7 +21,7 @@
       </div>
 
       <p class="text-right" @click.prevent="toggleAllOptions">
-        <small v-if="!showAllOptions"><a href=""><i><i class="fa fa-caret-down"></i> {{ options.length - 4 }} more</i></a></small>
+        <small v-if="!showAllOptions"><a href=""><i v-if="options"><i class="fa fa-caret-down"></i> {{ options.length - 4 }} more</i></a></small>
         <small v-else><a href=""><i>Show less</i></a></small>
       </p>
     </div>
@@ -43,7 +43,7 @@
     },
     methods: {
       toggleSelect () {
-        this.filters = this.filters.length > 0 ? [] : this.$store.state.materials.options.map(option => option.id)
+        this.filters = this.filters && this.filters.length > 0 ? [] : this.$store.state.materials.options.map(option => option.id)
       },
       toggleAllOptions () {
         this.showAllOptions = !this.showAllOptions
@@ -64,8 +64,10 @@
     },
     watch: {
       filters (filters) {
-        const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {materials: filters.length === 0 ? undefined : filters.join(',')})
-        this.$router.push({query: updatedRouteQuery})
+        if (filters) {
+          const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {materials: filters && filters.length === 0 ? undefined : filters.join(',')})
+          this.$router.push({query: updatedRouteQuery})
+        }
       }
     },
     mounted () {

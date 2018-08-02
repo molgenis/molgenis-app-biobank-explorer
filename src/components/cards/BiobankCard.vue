@@ -52,7 +52,7 @@
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable.vue'
-  import utils from 'src/utils'
+  import utils from '../..//utils'
 
   export default {
     name: 'biobank-card',

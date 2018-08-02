@@ -1,7 +1,7 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, { GET_BIOBANK_IDENTIFIERS } from 'src/store/actions'
-import helpers from 'src/store/helpers'
+import actions, { GET_BIOBANK_IDENTIFIERS } from '../../../../src/store/actions'
+import helpers from '../../../../src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
@@ -12,7 +12,7 @@ import {
   SET_LOADING,
   SET_MATERIALS,
   SET_STANDARDS
-} from 'src/store/mutations'
+} from '../../../../src/store/mutations'
 
 describe('actions', () => {
   afterEach(() => td.reset())

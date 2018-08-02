@@ -92,7 +92,7 @@ export default {
    * @param biobanks
    */
   [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
-    if (biobanks.length > 0) {
+    if (biobanks && biobanks.length > 0) {
       /* To prevent the =in= query from becoming huge, we slice the first 101 biobank identifiers from the list of unique IDs  */
       const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id)).slice(0, 101)
       const uri = `${BIOBANK_API_PATH}?num=101&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`

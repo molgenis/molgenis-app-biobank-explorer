@@ -113,7 +113,7 @@
 
   import { mapState } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import utils from 'src/utils'
+  import utils from '../../utils'
 
   export default {
     name: 'biobank-report-card',

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import mutations from 'src/store/mutations'
+import mutations from '../../../../src/store/mutations'
 
 describe('mutations', () => {
   describe('SET_COUNTRIES', () => {
