@@ -128,3 +128,5 @@ You can now create a working application that can be imported in MOLGENIS direct
 ```bash
 yarn build
 ```
+
+You can find the zip-file in the ```dist/molgenis-app-biobank-explorer.zip```.
