@@ -11,8 +11,7 @@ This is the BBMRI-ERIC model and consists of the following tables:
 - eu_bbmri_eric_disease_types
 - eu_bbmri_eric_lab_standards
 
-Test model + data can be found [here](sample-data/bbmri-eric.xlsx)
-Import metadata first, then data
+Test model + data can be found [here](sample-data/bbmri-eric.xlsx). Upload the data via the [Advanced data import](https://molgenis.gitbooks.io/molgenis/content/user_documentation/import-data/guide-upload.html)
 
 ## Configure the Biobank Explorer
 You can configure 2 main settings in the Biobank Explorer.
@@ -30,12 +29,11 @@ Add the GA_KEY parameter:
   }
 ```
 
-to your index.html or freemarker template to start tracking your biobank explorer app.
+to your index.html or freemarker template to start tracking your Biobank Explorer app.
 
 ### Configuring Negotiator
 
-This version of the biobank explorer is 
-compatible with the Negotiator API in MOLGENIS version 5.2.0
+This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 7.0.0.
 
 ## Contributing
 There are 2 ways to test and develop in apps for MOLGENIS.
