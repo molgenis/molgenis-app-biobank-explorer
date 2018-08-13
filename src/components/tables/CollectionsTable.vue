@@ -26,7 +26,7 @@
 
             <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
-            <span v-else-if="column === 'size'">{{ collection[column] }}</span>
+            <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)">
@@ -98,6 +98,9 @@
       },
       hasSubCollections (collection) {
         return collection.sub_collections.length > 0
+      },
+      getCollectionSize (collection) {
+        return collection.size || collection.order_of_magnitude.size
       }
     },
     components: {
