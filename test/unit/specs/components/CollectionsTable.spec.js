@@ -59,15 +59,15 @@ describe('components', () => {
         'id': 'TISSUE_FROZEN',
         'label': 'Tissue (frozen)'
       }]
-    }]
+    }, {parent_collection: {id: 5}}]
+
+    let wrapper
+
+    beforeEach(() => {
+      wrapper = shallowMount(CollectionsTable, { propsData: {collections} })
+    })
 
     describe('html', () =>{
-      let wrapper
-
-      beforeEach(() => {
-        wrapper = shallowMount(CollectionsTable, { propsData: {collections} })
-      })
-
       it('should render collection name', () => {
         expect(wrapper.findAll('tr').at(2).findAll('td').at(0).text()).eq('Short Term Storage Collection')
       })
@@ -82,6 +82,12 @@ describe('components', () => {
 
       it('should render collection\'s size', () => {
         expect(wrapper.findAll('tr').at(2).findAll('td').at(4).text()).eq('46000')
+      })
+    })
+
+    describe('topLevelElements', () => {
+      it('should filter subcollections', () => {
+        expect(wrapper.vm.topLevelElements.size === 2)
       })
     })
 
