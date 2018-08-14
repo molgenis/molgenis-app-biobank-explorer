@@ -11,6 +11,8 @@ export default {
    * Get the option list for the standards categorical filter
    */
   getStandardsOptions: state => state.standards.options,
+
+  getTypesOptions: state => state.type.options,
   /**
    * Get the option list for the diagnosis available asynchronous xref filter
    */
@@ -40,6 +42,11 @@ export default {
     if (state.standards.filters.length > 0) {
       activeFilters.standards = state.standards.options.filter(option => state.standards.filters.includes(option.id))
     }
+
+    if (state.type.filters.length > 0) {
+      activeFilters.type = state.type.options.filter(option => state.type.filters.includes(option.id))
+    }
+
     return activeFilters
   }
 }

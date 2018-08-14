@@ -42,13 +42,15 @@
     },
     computed: {
       /* A computed 'compound' object for watching all filters */
+      // TODO: Use an action to retrieve the collections when the filters are changed
       filters () {
         return {
           search: this.$store.state.search,
           country: this.$store.state.country.filters,
           materials: this.$store.state.materials.filters,
           standards: this.$store.state.standards.filters,
-          diagnosis_available: this.$store.state.diagnosis_available.filters
+          diagnosis_available: this.$store.state.diagnosis_available.filters,
+          type: this.$store.state.type.filters
         }
       }
     },
