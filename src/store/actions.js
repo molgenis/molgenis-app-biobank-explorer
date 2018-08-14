@@ -31,7 +31,7 @@ const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*))'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection)'
 
 export default {
   /**
