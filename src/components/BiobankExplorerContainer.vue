@@ -50,7 +50,8 @@
           materials: this.$store.state.materials.filters,
           standards: this.$store.state.standards.filters,
           diagnosis_available: this.$store.state.diagnosis_available.filters,
-          type: this.$store.state.type.filters
+          type: this.$store.state.type.filters,
+          dataType: this.$store.state.dataType.filters
         }
       }
     },

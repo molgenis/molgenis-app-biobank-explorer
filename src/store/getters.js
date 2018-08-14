@@ -1,21 +1,9 @@
 export default {
-  /**
-   * Get the option list for the country categorical filter
-   */
   getCountryOptions: state => state.country.options,
-  /**
-   * Get the option list for the materials categorical filter
-   */
   getMaterialOptions: state => state.materials.options,
-  /**
-   * Get the option list for the standards categorical filter
-   */
   getStandardsOptions: state => state.standards.options,
-
   getTypesOptions: state => state.type.options,
-  /**
-   * Get the option list for the diagnosis available asynchronous xref filter
-   */
+  getDataTypeOptions: state => state.dataType.options,
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
   /**
    * Get map of active filters
@@ -45,6 +33,10 @@ export default {
 
     if (state.type.filters.length > 0) {
       activeFilters.type = state.type.options.filter(option => state.type.filters.includes(option.id))
+    }
+
+    if (state.dataType.filters.length > 0) {
+      activeFilters.dataType = state.dataType.options.filter(option => state.dataType.filters.includes(option.id))
     }
 
     return activeFilters

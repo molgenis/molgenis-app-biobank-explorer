@@ -28,7 +28,7 @@
 <script>
   import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
   import { UPDATE_FILTER } from '../../store/mutations'
-  import { GET_COUNTRY_OPTIONS, GET_MATERIALS_OPTIONS, GET_STANDARDS_OPTIONS, GET_TYPES_OPTIONS } from '../../store/actions'
+  import { GET_COUNTRY_OPTIONS, GET_MATERIALS_OPTIONS, GET_STANDARDS_OPTIONS, GET_TYPES_OPTIONS, GET_DATA_TYPE_OPTIONS } from '../../store/actions'
   import { mapGetters, mapMutations } from 'vuex'
   import CheckboxFilters from './CheckboxFilters'
 
@@ -37,7 +37,8 @@
       ...mapGetters({countryOptions: 'getCountryOptions',
         materialOptions: 'getMaterialOptions',
         standardsOptions: 'getStandardsOptions',
-        typesOptions: 'getTypesOptions'
+        typesOptions: 'getTypesOptions',
+        dataTypeOptions: 'getDataTypeOptions'
       }),
       filters () {
         return [{
@@ -67,6 +68,13 @@
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
           maxVisibleOptions: 4
+        }, {
+          name: 'dataType',
+          label: 'Data types',
+          options: this.dataTypeOptions,
+          initiallyCollapsed: !this.$store.state.route.query.dataType,
+          filters: this.$store.state.dataType.filters,
+          maxVisibleOptions: 4
         }]
       }
     },
@@ -83,6 +91,7 @@
       this.$store.dispatch(GET_MATERIALS_OPTIONS)
       this.$store.dispatch(GET_STANDARDS_OPTIONS)
       this.$store.dispatch(GET_TYPES_OPTIONS)
+      this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
     },
     components: { CheckboxFilters, DiagnosisAvailableFilters }
   }

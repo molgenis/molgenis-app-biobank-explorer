@@ -13,6 +13,7 @@ const createRSQLQuery = (state) => {
   queryParts.push(utils.createInQuery('materials', state.materials.filters))
   queryParts.push(utils.createInQuery('standards', state.standards.filters))
   queryParts.push(utils.createInQuery('type', state.type.filters))
+  queryParts.push(utils.createInQuery('data_categories', state.dataType.filters))
   queryParts.push(utils.createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)))
 
   let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
@@ -44,6 +45,7 @@ const getHumanReadableString = (state) => {
   const materials = state.materials.filters
   const standards = state.standards.filters
   const types = state.type.filters
+  const dataTypes = state.dataType.filters
   const diseases = state.diagnosis_available.filters.map(disease => disease.label)
 
   if (state.search.length > 0) {
@@ -68,6 +70,11 @@ const getHumanReadableString = (state) => {
   if (types.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
     humanReadableString += 'selected collection types are ' + types.join(',')
+  }
+
+  if (dataTypes.length > 0) {
+    if (humanReadableString.length > 0) humanReadableString += ' and '
+    humanReadableString += 'selected data types are ' + dataTypes.join(',')
   }
 
   if (diseases.length > 0) {

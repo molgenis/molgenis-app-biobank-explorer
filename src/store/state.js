@@ -32,5 +32,9 @@ export default {
   type: {
     filters: [],
     options: []
+  },
+  dataType: {
+    filters: [],
+    options: []
   }
 }
