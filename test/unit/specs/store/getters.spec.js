@@ -87,6 +87,14 @@ describe('store', () => {
           standards: {
             filters: [],
             options: []
+          },
+          type: {
+            filters: [],
+            options: []
+          },
+          dataType: {
+            filters: [],
+            options: []
           }
         }
 

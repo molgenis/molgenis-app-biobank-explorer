@@ -11,10 +11,11 @@ describe('store', () => {
           }
         }
 
-        const countries = ['NL', 'BE', 'DE']
+        const countries = [{id: 'NL', name: 'Nederland'}, {id: 'BE', name: 'Belgie'}, {id: 'DE', name: 'Duitsland'}]
         mutations.__SET_COUNTRIES__(state, countries)
 
-        expect(state.country.options).to.deep.equal(countries)
+        expect(state.country.options).to.deep.equal([{id: 'NL', name: 'Nederland', label: 'Nederland'},
+          {id: 'BE', name: 'Belgie', label: 'Belgie'}, {id: 'DE', name: 'Duitsland', label: 'Duitsland'}])
       })
     })
 
@@ -106,6 +107,14 @@ describe('store', () => {
           standards: {
             filters: ['Awesome standard'],
             options: []
+          },
+          type: {
+            filters: ['type'],
+            options: [{id: 'type'}]
+          },
+          dataType: {
+            filters: ['type'],
+            options: [{id: 'type'}]
           }
         }
 
@@ -126,6 +135,14 @@ describe('store', () => {
           standards: {
             filters: [],
             options: []
+          },
+          type: {
+            filters: [],
+            options: [{id: 'type'}]
+          },
+          dataType: {
+            filters: [],
+            options: [{id: 'type'}]
           }
         }
 

@@ -247,7 +247,7 @@ describe('store', () => {
         td.replace(helpers, 'createRSQLQuery', createRSQLQuery)
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=biobank&q=id=q=biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id,biobank&q=id=q=biobank-1')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
