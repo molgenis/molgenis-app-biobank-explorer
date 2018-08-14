@@ -28,7 +28,7 @@ export default {
    * Update the options for the different filters available in the biobank explorer
    */
   [SET_COUNTRIES] (state, countries) {
-    state.country.options = countries
+    state.country.options = countries.map(country => ({...country, label: country.name}))
   },
   [SET_MATERIALS] (state, materials) {
     state.materials.options = materials
