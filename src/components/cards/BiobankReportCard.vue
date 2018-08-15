@@ -8,8 +8,8 @@
 
         <small>
           <dl class="row">
-            <dt class="col-sm-2"><b>Biobank type:</b></dt>
-            <dd class="col-sm-10"><i>{{ biobankTypes }}</i></dd>
+            <dt class="col-sm-2"><b>Collection types:</b></dt>
+            <dd class="col-sm-10"><i>{{ collectionTypes }}</i></dd>
             <dt class="col-sm-2"><b>Number of collections:</b></dt>
             <dd class="col-sm-10"><i>{{ biobank.data.collections.length }}</i></dd>
             <dt class="col-sm-2"><b>Number of samples:</b></dt>
@@ -149,7 +149,7 @@
       query () {
         return this.$route.query
       },
-      biobankTypes () {
+      collectionTypes () {
         if (this.biobank.data.collections) {
           return utils.getUniqueIdArray(this.biobank.data.collections.reduce((accumulator, collection) => {
             return accumulator.concat(collection.type.map(type => type.label))

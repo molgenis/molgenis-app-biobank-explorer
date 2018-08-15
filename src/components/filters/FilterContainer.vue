@@ -63,7 +63,7 @@
           maxVisibleOptions: 4
         }, {
           name: 'type',
-          label: 'Types',
+          label: 'Collection Types',
           options: this.typesOptions,
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
