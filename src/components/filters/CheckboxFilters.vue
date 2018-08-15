@@ -1,35 +1,27 @@
 <template>
-  <div class="card filter-card">
-    <div class="card-header filter-header" @click.prevent="collapsed = !collapsed">
-      <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
-      <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
+  <b-card class="filter-card" no-body v-if="options.length">
+    <b-card-header class="filter-header" v-b-toggle="'filter-card-'+name">
+      <i class="fa fa-caret-right when-closed" aria-hidden="true"></i>
+      <i class="fa fa-caret-down when-opened" aria-hidden="true"></i>
       {{label}}
-    </div>
-    <div class="card-body" v-if="!collapsed">
-      <p class="text-right toggle-select" @click.prevent="toggleSelect">
-        <small v-if="value.length"><a href=""><i>Deselect all</i></a></small>
-        <small v-else><a href=""><i>Select all</i></a></small>
-      </p>
-
-      <div v-if="options.length" v-for="option in visibleOptions" class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input"
-                 type="checkbox"
-                 v-model="selection"
-                 :id="option.id"
-                 :value="option.id">
-          {{ option.label }}
-        </label>
-      </div>
-
-      <p class="toggle-slice text-right" @click.prevent="toggleSliceOptions" v-if="showToggle">
-        <small v-if="sliceOptions"><a href=""><i v-if="options"><i class="fa fa-caret-down"></i> {{ options.length - maxVisibleOptions }} more</i></a></small>
-        <small v-else><a href=""><i>Show less</i></a></small>
-      </p>
-    </div>
-  </div>
+    </b-card-header>
+    <b-collapse :visible='!collapsed' :id="'filter-card-'+name">
+      <b-card-body>
+        <b-form-group class="pt-2">
+          <b-form-checkbox-group stacked v-model="selection" :name="name" :options="optionsInternal">
+          </b-form-checkbox-group>
+        </b-form-group>
+        <b-link class="toggle-slice card-link" @click.prevent="toggleSlice" v-if="showToggleSlice">{{toggleSliceText}}</b-link>
+        <b-link class="toggle-select card-link" @click.prevent="toggleSelect">{{toggleSelectText}}</b-link>
+      </b-card-body>
+    </b-collapse>
+  </b-card>
 </template>
 
+<style>
+  .collapsed > .when-opened, :not(.collapsed) > .when-closed { display: none; }
+  .card-link { font-style: italic; font-size: small; }
+</style>
 <script>
   export default {
     data () {
@@ -39,6 +31,7 @@
       }
     },
     props: {
+      name: String,
       label: String,
       options: Array,
       value: Array,
@@ -54,27 +47,37 @@
           this.$emit('input', value)
         }
       },
+      optionsInternal () {
+        return this.visibleOptions.map(o => ({value: o.id, text: o.label}))
+      },
       visibleOptions () {
         return this.sliceOptions ? this.options.slice(0, this.maxVisibleOptions) : this.options
       },
-      showToggle () {
+      showToggleSlice () {
         return this.maxVisibleOptions && this.maxVisibleOptions < this.options.length
+      },
+      toggleSelectText () {
+        return this.selection.length ? 'Deselect all' : 'Select all'
+      },
+      toggleSliceText () {
+        return this.sliceOptions ? `Show ${this.options.length - this.maxVisibleOptions} more` : 'Show less'
       }
     },
     methods: {
       toggleSelect () {
         this.selection = this.selection && this.selection.length ? [] : this.options.map(option => option.id)
       },
-      toggleSliceOptions () {
+      toggleSlice () {
         this.sliceOptions = !this.sliceOptions
-      },
-      updateSliceOptions () {
-        this.sliceOptions = this.maxVisibleOptions && this.maxVisibleOptions < this.options.length
       }
     },
     watch: {
-      options () { this.updateSliceOptions() },
-      maxVisibleOptions () { this.updateSliceOptions() }
+      options () {
+        this.sliceOptions = this.showToggleSlice
+      },
+      maxVisibleOptions () {
+        this.sliceOptions = this.showToggleSlice
+      }
     }
   }
 </script>
