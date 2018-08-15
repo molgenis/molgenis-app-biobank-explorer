@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import mutations from '../../../../src/store/mutations'
+import mutations, { SET_COLLECTION_TYPES, SET_DATA_TYPES } from '../../../../src/store/mutations'
 
 describe('store', () => {
   describe('mutations', () => {
@@ -16,6 +16,57 @@ describe('store', () => {
 
         expect(state.country.options).to.deep.equal([{id: 'NL', name: 'Nederland', label: 'Nederland'},
           {id: 'BE', name: 'Belgie', label: 'Belgie'}, {id: 'DE', name: 'Duitsland', label: 'Duitsland'}])
+      })
+    })
+
+    describe('SET_DATA_TYPES', () => {
+      it('should set the data types in the state with the payload', () => {
+        const state = {
+          dataType: {
+            options: []
+          }
+        }
+
+        const dataTypes = [{
+          _href: '/api/v2/eu_bbmri_eric_data_types/BIOLOGICAL_SAMPLES',
+          description: 'Y/N if biological samples are collected from the participants in the sample collection/study',
+          id: 'BIOLOGICAL_SAMPLES',
+          label: 'Biological samples'
+        }, {
+          _href: '/api/v2/eu_bbmri_eric_data_types/GENEALOGICAL_RECORDS',
+          description: 'Y/N if genealogical records are associated with the participants in the sample collection/study',
+          id: 'GENEALOGICAL_RECORDS',
+          label: 'Genealogical records',
+          ontology: 'Miabis'
+        }]
+        mutations[SET_DATA_TYPES](state, dataTypes)
+
+        expect(state.dataType.options).to.deep.equal(dataTypes)
+      })
+    })
+
+    describe('SET_COLLECTION_TYPES', () => {
+      it('should set the collection types in the state with the payload', () => {
+        const state = {
+          type: {
+            options: []
+          }
+        }
+
+        const collectionTypes = [{
+          _href: '/api/v2/eu_bbmri_eric_collection_types/BIRTH_COHORT',
+          description: 'A cohort study for which the subjects are followed from the time of birth usually including information about gestation and follow up.',
+          id: 'BIRTH_COHORT',
+          label: 'Birth cohort'
+        }, {
+          _href: '/api/v2/eu_bbmri_eric_collection_types/CASE_CONTROL',
+          description: 'A case-control study design compares two groups of subjects: those with the disease or condition under study (cases) and a very similar group of subjects who do not have the disease or condition (controls).',
+          id: 'CASE_CONTROL',
+          label: 'Case-Control'
+        }]
+        mutations[SET_COLLECTION_TYPES](state, collectionTypes)
+
+        expect(state.type.options).to.deep.equal(collectionTypes)
       })
     })
 

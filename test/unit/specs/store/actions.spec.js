@@ -1,13 +1,13 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, { GET_BIOBANK_IDENTIFIERS } from '../../../../src/store/actions'
+import actions, { GET_BIOBANK_IDENTIFIERS, GET_DATA_TYPE_OPTIONS, GET_TYPES_OPTIONS } from '../../../../src/store/actions'
 import helpers from '../../../../src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
   SET_BIOBANK_REPORT,
-  SET_BIOBANKS,
-  SET_COUNTRIES,
+  SET_BIOBANKS, SET_COLLECTION_TYPES,
+  SET_COUNTRIES, SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_LOADING,
   SET_MATERIALS,
@@ -38,6 +38,73 @@ describe('store', () => {
         }
 
         utils.testAction(actions.__GET_COUNTRY_OPTIONS__, options, done)
+      })
+    })
+
+    describe('GET_TYPES_OPTIONS', () => {
+      it('should retrieve list of available collection types from the server and store them in the state', done => {
+        const response = {
+          items: [
+            {
+              _href: '/api/v2/eu_bbmri_eric_collection_types/BIRTH_COHORT',
+              description: 'A cohort study for which the subjects are followed from the time of birth usually including information about gestation and follow up.',
+              id: 'BIRTH_COHORT',
+              label: 'Birth cohort'
+            },
+            {
+              _href: '/api/v2/eu_bbmri_eric_collection_types/CASE_CONTROL',
+              description: 'A case-control study design compares two groups of subjects: those with the disease or condition under study (cases) and a very similar group of subjects who do not have the disease or condition (controls).',
+              id: 'CASE_CONTROL',
+              label: 'Case-Control'
+            }
+          ]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_collection_types')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          expectedMutations: [
+            {type: SET_COLLECTION_TYPES, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions[GET_TYPES_OPTIONS], options, done)
+      })
+    })
+
+    describe('GET_DATA_TYPES_OPTIONS', () => {
+      it('should retrieve list of available collection types from the server and store them in the state', done => {
+        const response = {
+          items: [
+            {
+              _href: '/api/v2/eu_bbmri_eric_data_types/BIOLOGICAL_SAMPLES',
+              description: 'Y/N if biological samples are collected from the participants in the sample collection/study',
+              id: 'BIOLOGICAL_SAMPLES',
+              label: 'Biological samples'
+            },
+            {
+              _href: '/api/v2/eu_bbmri_eric_data_types/GENEALOGICAL_RECORDS',
+              description: 'Y/N if genealogical records are associated with the participants in the sample collection/study',
+              id: 'GENEALOGICAL_RECORDS',
+              label: 'Genealogical records',
+              ontology: 'Miabis'
+            }
+          ]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_data_types')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          expectedMutations: [
+            {type: SET_DATA_TYPES, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions[GET_DATA_TYPE_OPTIONS], options, done)
       })
     })
 
