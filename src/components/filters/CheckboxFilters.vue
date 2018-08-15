@@ -6,7 +6,7 @@
       {{label}}
     </div>
     <div class="card-body" v-if="!collapsed">
-      <p class="text-right" @click.prevent="toggleSelect">
+      <p class="text-right toggle-select" @click.prevent="toggleSelect">
         <small v-if="value.length"><a href=""><i>Deselect all</i></a></small>
         <small v-else><a href=""><i>Select all</i></a></small>
       </p>
