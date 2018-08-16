@@ -15,6 +15,12 @@ const getInitialState = () => {
     },
     diagnosis_available: {
       filters: []
+    },
+    type: {
+      filters: []
+    },
+    dataType: {
+      filters: []
     }
   }
 }
@@ -121,6 +127,12 @@ describe('store', () => {
           standards: {
             filters: ['cen-ts-16826-1-2015']
           },
+          type: {
+            filters: ['type']
+          },
+          dataType: {
+            filters: ['dataType']
+          },
           diagnosis_available: {
             filters: [
               {label: 'small disease'},
@@ -140,7 +152,7 @@ describe('store', () => {
             {biobankId: 'biobank-2', collectionId: 'collection-3'},
             {biobankId: 'biobank-2', collectionId: 'collection-4'}
           ],
-          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected standards are cen-ts-16826-1-2015 and selected disease types are small disease,medium disease,big disease',
+          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected standards are cen-ts-16826-1-2015 and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
           nToken: state.nToken
         }
 

@@ -12,8 +12,8 @@
         </div>
         <div class="col-md-7">
           <p>
-            <small><b>Biobank type: </b></small>
-            <small>{{ biobankTypes }}</small>
+            <small><b>Collection types: </b></small>
+            <small>{{ collectionTypes }}</small>
             <br>
             <small><b>Juridical person: </b></small>
             <small>{{ biobank['juridical_person'] }}</small>
@@ -71,7 +71,7 @@
       query () {
         return this.$route.query
       },
-      biobankTypes () {
+      collectionTypes () {
         return utils.getUniqueIdArray(this.biobank.collections.reduce((accumulator, collection) => {
           return accumulator.concat(collection.type.map(type => type.label))
         }, [])).join(', ')

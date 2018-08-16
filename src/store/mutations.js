@@ -1,6 +1,8 @@
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
 export const SET_STANDARDS = '__SET_STANDARDS__'
+export const SET_COLLECTION_TYPES = '__SET_COLLECTION_TYPES__'
+export const SET_DATA_TYPES = '__SET_DATA_TYPES__'
 export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const SET_SEARCH = '__SET_SEARCH__'
 
@@ -28,13 +30,19 @@ export default {
    * Update the options for the different filters available in the biobank explorer
    */
   [SET_COUNTRIES] (state, countries) {
-    state.country.options = countries
+    state.country.options = countries.map(country => ({...country, label: country.name}))
   },
   [SET_MATERIALS] (state, materials) {
     state.materials.options = materials
   },
   [SET_STANDARDS] (state, standards) {
     state.standards.options = standards
+  },
+  [SET_COLLECTION_TYPES] (state, types) {
+    state.type.options = types
+  },
+  [SET_DATA_TYPES] (state, dataTypes) {
+    state.dataType.options = dataTypes
   },
   [SET_DIAGNOSIS_AVAILABLE] (state, diagnoses) {
     state.diagnosis_available.options = combineCodeAndLabels(diagnoses)
@@ -61,6 +69,8 @@ export default {
     state.materials.filters = []
     state.country.filters = []
     state.standards.filters = []
+    state.type.filters = []
+    state.dataType.filters = []
   },
   /**
    * Stores biobanks in the state. The list of biobanks is only overwritten when:
@@ -109,6 +119,14 @@ export default {
 
     if (query.standards) {
       state.standards.filters = query.standards.split(',')
+    }
+
+    if (query.type) {
+      state.type.filters = query.type.split(',')
+    }
+
+    if (query.dataType) {
+      state.dataType.filters = query.dataType.split(',')
     }
 
     if (query.nToken) {

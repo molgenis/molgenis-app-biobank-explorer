@@ -3,6 +3,20 @@ import getters from '../../../../src/store/getters'
 
 describe('store', () => {
   describe('getters', () => {
+    describe('getTypesOptions', () => {
+      it('should retrieve the type options', () => {
+        const state = {type: {options: [{id: 'id', label: 'label'}]}}
+        expect(state.type.options).to.deep.equal(getters.getTypesOptions(state))
+      })
+    })
+
+    describe('getDataTypeOptions', () => {
+      it('should retrieve the type options', () => {
+        const state = {dataType: {options: [{id: 'id', label: 'label'}]}}
+        expect(state.dataType.options).to.deep.equal(getters.getDataTypeOptions(state))
+      })
+    })
+
     describe('getCountryOptions', () => {
       it('should retrieve the options that are available for the country filter', () => {
         const state = {
@@ -85,6 +99,14 @@ describe('store', () => {
             options: []
           },
           standards: {
+            filters: [],
+            options: []
+          },
+          type: {
+            filters: [],
+            options: []
+          },
+          dataType: {
             filters: [],
             options: []
           }

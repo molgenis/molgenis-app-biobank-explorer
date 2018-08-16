@@ -4,7 +4,9 @@ import utils from '../utils'
 import {
   SET_BIOBANK_REPORT,
   SET_BIOBANKS,
+  SET_COLLECTION_TYPES,
   SET_COUNTRIES,
+  SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
   SET_LOADING,
@@ -16,6 +18,8 @@ import {
 export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
 export const GET_MATERIALS_OPTIONS = '__GET_MATERIALS_OPTIONS__'
 export const GET_STANDARDS_OPTIONS = '__GET_STANDARDS_OPTIONS__'
+export const GET_TYPES_OPTIONS = '__GET_TYPES_OPTIONS__'
+export const GET_DATA_TYPE_OPTIONS = '__GET_DATA_TYPE_OPTIONS__'
 export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
 export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
@@ -29,6 +33,8 @@ const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const STANDARDS_API_PATH = '/api/v2/eu_bbmri_eric_lab_standards'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
+const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
+const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection)'
@@ -38,6 +44,20 @@ export default {
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.
    */
+  [GET_DATA_TYPE_OPTIONS] ({commit}) {
+    api.get(DATA_TYPES_API_PATH).then(response => {
+      commit(SET_DATA_TYPES, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_TYPES_OPTIONS] ({commit}) {
+    api.get(COLLECTION_TYPES_API_PATH).then(response => {
+      commit(SET_COLLECTION_TYPES, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
   [GET_COUNTRY_OPTIONS] ({commit}) {
     api.get(COUNTRY_API_PATH).then(response => {
       commit(SET_COUNTRIES, response.items)
@@ -118,7 +138,7 @@ export default {
 
     const query = helpers.createRSQLQuery(state)
 
-    api.get(`${COLLECTION_API_PATH}?num=10000&attrs=biobank${query}`).then(response => {
+    api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
     }, error => {
       commit(SET_ERROR, error)

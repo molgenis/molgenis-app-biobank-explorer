@@ -41,9 +41,12 @@
       removeFilter (filterType, selectedFilterId) {
         const filters = utils.removeFilterFromFilterArrayById(this.activeFilters[filterType], selectedFilterId)
         this.$store.commit(UPDATE_FILTER, {name: filterType, filters: filters})
+        const value = filters.length === 0 ? undefined : filters.join(',')
+        this.$router.push({query: {...this.$store.state.route.query, [filterType]: value}})
       },
       resetAllFilters () {
         this.$store.commit(RESET_FILTERS)
+        this.$router.push({query: {}})
       }
     },
     computed: {

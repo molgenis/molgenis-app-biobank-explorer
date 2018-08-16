@@ -67,7 +67,7 @@ describe('components', () => {
       wrapper = shallowMount(CollectionsTable, { propsData: {collections} })
     })
 
-    describe('html', () =>{
+    describe('html', () => {
       it('should render collection name', () => {
         expect(wrapper.findAll('tr').at(2).findAll('td').at(0).text()).eq('Short Term Storage Collection')
       })

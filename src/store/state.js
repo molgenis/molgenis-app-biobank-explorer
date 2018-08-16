@@ -28,5 +28,13 @@ export default {
   diagnosis_available: {
     filters: [],
     options: []
+  },
+  type: {
+    filters: [],
+    options: []
+  },
+  dataType: {
+    filters: [],
+    options: []
   }
 }
