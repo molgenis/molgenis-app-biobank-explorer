@@ -70,7 +70,7 @@ pipeline {
       environment {
         ORG = 'molgenis'
         APP_NAME = 'molgenis-app-biobank-explorer'
-        NPM_REGISTRY = 'registry.molgenis.org'
+        REGISTRY = 'registry.molgenis.org'
         GITHUB_CRED = credentials('molgenis-jenkins-github-secret')
         REGISTRY_CRED = credentials('molgenis-jenkins-nexus-secret')
       }
@@ -94,6 +94,7 @@ pipeline {
 
           sh "git checkout -f ${BRANCH_NAME}"
 
+          sh "npm config set unsafe-perm true"
           sh "npm version ${env.RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
 
           sh "git push --tags origin ${BRANCH_NAME}"
