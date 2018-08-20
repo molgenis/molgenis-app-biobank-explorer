@@ -31,7 +31,7 @@
 </style>
 
 <script>
-  import { UPDATE_FILTER, RESET_FILTERS } from '../../store/mutations'
+  import { UPDATE_FILTER, RESET_FILTERS, SET_SEARCH } from '../../store/mutations'
   import utils from '../../utils'
   import { mapGetters } from 'vuex'
 
@@ -46,6 +46,7 @@
       },
       resetAllFilters () {
         this.$store.commit(RESET_FILTERS)
+        this.$store.commit(SET_SEARCH, '')
         this.$router.push({query: {}})
       }
     },
