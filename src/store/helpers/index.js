@@ -19,7 +19,11 @@ const createRSQLQuery = (state) => {
   let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
 
   if (state.search) {
-    query += query.length > 0 ? `;*=q="${state.search}"` : `&q=*=q="${state.search}"`
+    const searchQuery = ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
+      .map(attr => `${attr}=q="${state.search}"`)
+      .join()
+    query += query.length > 0 ? ';' : '&q='
+    query += `(${searchQuery})`
   }
 
   return query
