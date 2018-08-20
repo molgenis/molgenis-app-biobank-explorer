@@ -15,9 +15,6 @@
     "preversion": "yarn install; yarn unit; yarn build",
     "postversion": "curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
   },
-  "config": {
-    "unsafe-perm":true
-  },
   "dependencies": {
     "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
