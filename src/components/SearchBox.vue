@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="!loading">
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report" v-if="biobanks.length > 100">
@@ -61,7 +61,7 @@
   export default {
     name: 'search-box',
     computed: {
-      ...mapState(['biobanks']),
+      ...mapState(['biobanks', 'loading']),
       search: {
         get () {
           return this.$store.state.search
