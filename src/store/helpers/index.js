@@ -1,4 +1,6 @@
-import utils from '../../utils'
+import { createInQuery } from '../../utils'
+import { flatten } from 'lodash'
+import { transformToRSQL } from '@molgenis/rsql'
 
 /**
  * @example queries
@@ -7,27 +9,21 @@ import utils from '../../utils'
  * q=diagnosis_available.code=in=(C18,L40)
  * q=standards.id=in=(cen-ts-16835-1-2015,cen-ts-16827-1-2015)
  */
-const createRSQLQuery = (state) => {
-  const queryParts = []
-  queryParts.push(utils.createInQuery('country', state.country.filters))
-  queryParts.push(utils.createInQuery('materials', state.materials.filters))
-  queryParts.push(utils.createInQuery('standards', state.standards.filters))
-  queryParts.push(utils.createInQuery('type', state.type.filters))
-  queryParts.push(utils.createInQuery('data_categories', state.dataType.filters))
-  queryParts.push(utils.createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)))
-
-  let query = utils.queryPartsToQuery(queryParts).length > 0 ? '&q=' + utils.queryPartsToQuery(queryParts) : ''
-
-  if (state.search) {
-    const searchQuery = ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
-      .map(attr => `${attr}=q="${state.search}"`)
-      .join()
-    query += query.length > 0 ? ';' : '&q='
-    query += `(${searchQuery})`
-  }
-
-  return query
-}
+export const createRSQLQuery = (state) => transformToRSQL({
+  operator: 'AND',
+  operands: flatten([
+    createInQuery('country', state.country.filters),
+    createInQuery('materials', state.materials.filters),
+    createInQuery('standards', state.standards.filters),
+    createInQuery('type', state.type.filters),
+    createInQuery('data_categories', state.dataType.filters),
+    createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
+    state.search ? [{
+      operator: 'OR',
+      operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
+        .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
+    }] : []
+  ])})
 
 const createNegotiatorQueryBody = (state, url) => {
   const collections = getNegotiatorQueryObjects(state.biobanks)
