@@ -13,6 +13,7 @@ import {
   SET_MATERIALS,
   SET_STANDARDS
 } from './mutations'
+import {encodeRsqlValue} from '@molgenis/rsql'
 
 /* ACTION CONSTANTS */
 export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
@@ -136,7 +137,7 @@ export default {
   [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters, dispatch}) {
     commit(SET_LOADING, true)
 
-    const query = getters.rsql.length ? `&q=${getters.rsql}` : ''
+    const query = getters.rsql.length ? `&q=${encodeRsqlValue(getters.rsql)}` : ''
 
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
