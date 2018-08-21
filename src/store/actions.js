@@ -133,10 +133,10 @@ export default {
    * Retrieve biobank identifiers for filters on collection.country, collection.standards, collection.materials,
    * or collection.diagnosis_available
    */
-  [GET_BIOBANK_IDENTIFIERS] ({state, commit, dispatch}) {
+  [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters, dispatch}) {
     commit(SET_LOADING, true)
 
-    const query = helpers.createRSQLQuery(state)
+    const query = getters.rsql.length ? `&q=${getters.rsql}` : ''
 
     api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank${query}`).then(response => {
       dispatch(GET_BIOBANKS_BY_ID, response.items)
