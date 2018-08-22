@@ -45,7 +45,7 @@
           <div class="col-2">
             <span v-if="biobank.data.quality.length > 0" class="row">
               <p v-for="standard in biobank.data.quality" class="col-12">
-                <a href="standard.certification_report" target="_blank" v-if="standard.certification_report">
+                <a :href="standard.certification_report" target="_blank" v-if="standard.certification_report">
                   <span v-if="standard.certification_image_link">
                   <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
                        :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
