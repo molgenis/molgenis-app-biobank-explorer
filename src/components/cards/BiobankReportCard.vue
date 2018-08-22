@@ -175,7 +175,7 @@
       },
       showThisAttribute (attribute) {
         return attribute.name !== '_href' && attribute.name !== 'collections' && attribute.name !== 'country' &&
-          attribute.name !== 'contact' && attribute.name !== 'description' && attribute.name !== 'operational_qualitys'
+          attribute.name !== 'contact' && attribute.name !== 'description' && attribute.name !== 'operational_standards'
       },
       singleReferenceType (type) {
         return type === 'XREF' || type === 'CATEGORICAL'
