@@ -50,15 +50,15 @@
                   <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
                        :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
                 </span>
-                <span v-else>{{standard.label!=='Others'?standard.label:standard.certification_number}} <i
+                <span v-else>{{generateQualityLabel(standard)}} <i
                   class="fa fa-check"></i></span>
                 </a>
                 <span v-else>
                   <span v-if="standard.certification_image_link">
                   <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
-                       :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
+                       :alt="generateQualityLabel(standard)"/>
                 </span>
-                <span v-else>{{standard.label!=='Others'?standard.label:standard.certification_number}} <i
+                <span v-else>{{generateQualityLabel(standard)}} <i
                   class="fa fa-check"></i></span>
                 </span>
               </p>
@@ -154,6 +154,9 @@
       }
     },
     methods: {
+      generateQualityLabel (standard) {
+        return standard.label !== 'Others' ? standard.label : standard.certification_number
+      },
       showThisAttribute (attribute) {
         return attribute.name !== '_href' && attribute.name !== 'collections' && attribute.name !== 'country' &&
           attribute.name !== 'contact' && attribute.name !== 'description'
