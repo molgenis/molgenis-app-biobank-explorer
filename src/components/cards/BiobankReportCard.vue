@@ -47,7 +47,7 @@
               <p v-for="quality in biobank.data.quality" class="col-12">
                 <a :href="quality.certification_report" target="_blank" v-if="quality.certification_report">
                   <span v-if="quality.certification_image_link">
-                  <img :src="quality.certification_image_link" style="max-width:9rem;max-height:5rem"
+                  <img :src="quality.certification_image_link" :style=quality_logo_size
                        :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
                 </span>
                 <span v-else>{{generateQualityLabel(quality)}} <i
@@ -55,7 +55,7 @@
                 </a>
                 <span v-else>
                   <span v-if="quality.certification_image_link">
-                  <img :src="quality.certification_image_link" style="max-width:9rem;max-height:5rem"
+                  <img :src="quality.certification_image_link" :style=quality_logo_size
                        :alt="generateQualityLabel(quality)"/>
                 </span>
                 <span v-else>{{generateQualityLabel(quality)}} <i
@@ -166,7 +166,8 @@
     name: 'biobank-report-card',
     data () {
       return {
-        collapsed: true
+        collapsed: true,
+        quality_logo: {height: 4, width: 9}
       }
     },
     methods: {
@@ -205,6 +206,9 @@
             return accumulator.concat(collection.type.map(type => type.label))
           }, [])).join(', ')
         }
+      },
+      quality_logo_size () {
+        return `max-width:${this.quality_logo.width}rem;max-height:${this.quality_logo.height}rem`
       },
       numberOfSamples () {
         if (this.biobank.data.collections) {

@@ -26,7 +26,7 @@
                         {{ quality.label }} <i class="fa fa-check"></i>
                       </span>
                       <span v-else>
-                        <img :src="quality.certification_image_link" style="max-width:9rem;max-height:6rem"
+                        <img :src="quality.certification_image_link" :style=quality_logo_size
                              :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
                       </span>
                     </a>
@@ -35,7 +35,7 @@
                         {{ quality.label }} <i class="fa fa-check"></i>
                       </span>
                       <span v-else>
-                        <img :src="quality.certification_image_link" style="max-width:9rem;max-height:6rem"
+                        <img :src="quality.certification_image_link" :style=quality_logo_size
                              :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
                       </span>
                     </span>
@@ -100,11 +100,15 @@
     computed: {
       topLevelElements () {
         return this.collections.filter(collection => !collection.parent_collection)
+      },
+      quality_logo_size () {
+        return `max-width:${this.quality_logo.width}rem;max-height:${this.quality_logo.height}rem`
       }
     },
     data () {
       return {
-        columns: ['name', 'type', 'materials', 'quality', 'size']
+        columns: ['name', 'type', 'materials', 'quality', 'size'],
+        quality_logo: {height: 4, width: 9}
       }
     },
     methods: {
