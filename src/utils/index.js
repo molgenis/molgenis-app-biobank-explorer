@@ -1,4 +1,11 @@
 /**
+ * Generate the attribute selector for quality parameters (can be either for collection or for biobank)
+ * */
+const qualityAttributeSelector = (type) => {
+  return `quality(id,standards(*),assess_level_${type}(*),certification_number,certification_image_link,certification_report,label)`
+}
+
+/**
  * Generate a syntactically correct RSQL query from a list of RSQL queries
  */
 const queryPartsToQuery = (queryParts) => {
@@ -44,5 +51,6 @@ export default {
   queryPartsToQuery,
   getUniqueIdArray,
   createInQuery,
-  removeFilterFromFilterArrayById
+  removeFilterFromFilterArrayById,
+  qualityAttributeSelector
 }

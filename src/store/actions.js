@@ -38,7 +38,6 @@ const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection)'
-const QUALITY_ATTRIBUTE_SELECTOR = 'quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label)'
 
 export default {
   /**
@@ -147,7 +146,7 @@ export default {
     })
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${QUALITY_ATTRIBUTE_SELECTOR},contact(*),*&q=id==${biobankId}`).then(response => {
+    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
       commit(SET_BIOBANK_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)
