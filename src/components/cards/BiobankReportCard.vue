@@ -44,21 +44,21 @@
           </div>
           <div class="col-2">
             <span v-if="biobank.data.quality.length > 0" class="row">
-              <p v-for="standard in biobank.data.quality" class="col-12">
-                <a :href="standard.certification_report" target="_blank" v-if="standard.certification_report">
-                  <span v-if="standard.certification_image_link">
-                  <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
-                       :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
+              <p v-for="quality in biobank.data.quality" class="col-12">
+                <a :href="quality.certification_report" target="_blank" v-if="quality.certification_report">
+                  <span v-if="quality.certification_image_link">
+                  <img :src="quality.certification_image_link" style="max-width:9rem;max-height:5rem"
+                       :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
                 </span>
-                <span v-else>{{generateQualityLabel(standard)}} <i
+                <span v-else>{{generateQualityLabel(quality)}} <i
                   class="fa fa-check"></i></span>
                 </a>
                 <span v-else>
-                  <span v-if="standard.certification_image_link">
-                  <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
-                       :alt="generateQualityLabel(standard)"/>
+                  <span v-if="quality.certification_image_link">
+                  <img :src="quality.certification_image_link" style="max-width:9rem;max-height:5rem"
+                       :alt="generateQualityLabel(quality)"/>
                 </span>
-                <span v-else>{{generateQualityLabel(standard)}} <i
+                <span v-else>{{generateQualityLabel(quality)}} <i
                   class="fa fa-check"></i></span>
                 </span>
               </p>
@@ -92,6 +92,22 @@
 
                 <span v-else-if="attribute.fieldType === 'HYPERLINK'">
                   <a :href="biobank.data[attribute.name]" target="_blank">{{ biobank.data[attribute.name] }}</a>
+                </span>
+
+                <span v-else-if="attribute.name === 'quality'">
+                  <table class="table table-sm">
+                    <tr v-for="quality in biobank.data[attribute.name]">
+                      <td>
+                        <a v-if=quality.certification_report :href="quality.certification_report" target="_blank">
+                          {{generateQualityLabel(quality)}}
+                        </a>
+                        <span v-else>{{generateQualityLabel(quality)}}</span>
+                      </td>
+                      <td>
+                        <span>{{quality.assess_level_bio.label}}</span>
+                      </td>
+                    </tr>
+                  </table>
                 </span>
 
                 <span v-else-if="singleReferenceType(attribute.fieldType)">
@@ -154,12 +170,12 @@
       }
     },
     methods: {
-      generateQualityLabel (standard) {
-        return standard.label !== 'Others' ? standard.label : standard.certification_number
+      generateQualityLabel (quality) {
+        return quality.label !== 'Others' ? quality.label : quality.certification_number
       },
       showThisAttribute (attribute) {
         return attribute.name !== '_href' && attribute.name !== 'collections' && attribute.name !== 'country' &&
-          attribute.name !== 'contact' && attribute.name !== 'description'
+          attribute.name !== 'contact' && attribute.name !== 'description' && attribute.name !== 'operational_qualitys'
       },
       singleReferenceType (type) {
         return type === 'XREF' || type === 'CATEGORICAL'
