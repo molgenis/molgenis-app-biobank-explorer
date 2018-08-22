@@ -16,7 +16,7 @@ describe('Utilities', () => {
       const type = 'col'
 
       const actual = utils.qualityAttributeSelector(type)
-      const expected = 'quality(id,standards(*),assess_level_col(*),certification_number,certification_image_link,certification_report,label'
+      const expected = 'quality(id,standards(*),assess_level_col(*),certification_number,certification_image_link,certification_report,label)'
 
       expect(actual).to.equal(expected)
     })
