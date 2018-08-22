@@ -1,6 +1,10 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, { GET_BIOBANK_IDENTIFIERS, GET_DATA_TYPE_OPTIONS, GET_TYPES_OPTIONS } from '../../../../src/store/actions'
+import actions, {
+  GET_BIOBANK_IDENTIFIERS,
+  GET_DATA_TYPE_OPTIONS,
+  GET_TYPES_OPTIONS
+} from '../../../../src/store/actions'
 import helpers from '../../../../src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
@@ -343,7 +347,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),contact(*),*&q=id==biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*&q=id==biobank-1')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {

@@ -4,38 +4,65 @@
 
     <div class="card biobank-card">
       <div class="card-header">
-        <h3>{{biobank.data.name}}</h3>
-
-        <small>
-          <dl class="row">
-            <dt class="col-sm-2"><b>Collection types:</b></dt>
-            <dd class="col-sm-10"><i>{{ collectionTypes }}</i></dd>
-            <dt class="col-sm-2"><b>Number of collections:</b></dt>
-            <dd class="col-sm-10"><i>{{ biobank.data.collections.length }}</i></dd>
-            <dt class="col-sm-2"><b>Number of samples:</b></dt>
-            <dd class="col-sm-10"><i>{{ numberOfSamples }}</i></dd>
-          </dl>
-        </small>
-
-        <p>{{biobank.data.description}}</p>
-
-        <br/>
-
         <div class="row">
-          <div class="col-md-6">
-            <ul class="list-unstyled">
-              <li><b>{{ biobank.data.juridical_person }}</b></li>
-              <li v-if="biobank.data.contact.address">{{ biobank.data.contact.address }}</li>
-              <li>{{ biobank.data.contact.zip }} {{ biobank.data.contact.city }}</li>
-              <li>{{ biobank.data.country.name }}</li>
-            </ul>
+          <div class="col-md-10">
+            <h3>{{biobank.data.name}}</h3>
+
+            <small>
+              <dl class="row">
+                <dt class="col-sm-3"><b>Collection types:</b></dt>
+                <dd class="col-sm-9"><i>{{ collectionTypes }}</i></dd>
+                <dt class="col-sm-3"><b>Number of collections:</b></dt>
+                <dd class="col-sm-9"><i>{{ biobank.data.collections.length }}</i></dd>
+                <dt class="col-sm-3"><b>Number of samples:</b></dt>
+                <dd class="col-sm-9"><i>{{ numberOfSamples }}</i></dd>
+              </dl>
+            </small>
+
+
+            <p>{{biobank.data.description}}</p>
+
+            <br/>
+
+            <div class="row">
+              <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li><b>{{ biobank.data.juridical_person }}</b></li>
+                  <li v-if="biobank.data.contact.address">{{ biobank.data.contact.address }}</li>
+                  <li>{{ biobank.data.contact.zip }} {{ biobank.data.contact.city }}</li>
+                  <li>{{ biobank.data.country.name }}</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <ul class="list-unstyled">
+                  <li><b>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</b></li>
+                  <li>Email: {{ biobank.data.contact.email }}</li>
+                  <li>Tel: {{ biobank.data.contact.phone }}</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4">
-            <ul class="list-unstyled">
-              <li><b>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</b></li>
-              <li>Email: {{ biobank.data.contact.email }}</li>
-              <li>Tel: {{ biobank.data.contact.phone }}</li>
-            </ul>
+          <div class="col-2">
+            <span v-if="biobank.data.quality.length > 0" class="row">
+              <p v-for="standard in biobank.data.quality" class="col-12">
+                <a href="standard.certification_report" target="_blank" v-if="standard.certification_report">
+                  <span v-if="standard.certification_image_link">
+                  <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
+                       :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
+                </span>
+                <span v-else>{{standard.label!=='Others'?standard.label:standard.certification_number}} <i
+                  class="fa fa-check"></i></span>
+                </a>
+                <span v-else>
+                  <span v-if="standard.certification_image_link">
+                  <img :src="standard.certification_image_link" style="max-width:9rem;max-height:5rem"
+                       :alt="standard.label!=='Others'?standard.label:standard.certification_number"/>
+                </span>
+                <span v-else>{{standard.label!=='Others'?standard.label:standard.certification_number}} <i
+                  class="fa fa-check"></i></span>
+                </span>
+              </p>
+            </span>
           </div>
         </div>
       </div>
@@ -105,6 +132,10 @@
 
   .fa-times {
     color: darkred;
+  }
+
+  .fa-check {
+    color: green;
   }
 </style>
 
