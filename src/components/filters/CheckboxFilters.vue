@@ -19,6 +19,7 @@
 </template>
 
 <style>
+  /* Hides inactive caret icon, see https://bootstrap-vue.js.org/docs/components/collapse/ docs. */
   .collapsed > .when-opened, :not(.collapsed) > .when-closed { display: none; }
   .card-link { font-style: italic; font-size: small; }
 </style>
