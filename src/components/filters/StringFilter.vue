@@ -6,12 +6,17 @@
       {{label}}
     </div>
     <div class="card-body" v-if="!collapsed">
-      <div class="form-group">
-        <input type="text" class="form-control"
-               :placeholder="placeholder"
-               :aria-label="label"
-               :aria-describedby="description"
-               v-model.lazy="model">
+        <div class="input-group">
+          <input type="text" class="form-control"
+                 :placeholder="placeholder"
+                 :aria-label="label"
+                 v-model.lazy="model">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary"
+                    type="button"
+                    @click.prevent="model=''">x</button>
+          </div>
+        </div>
         <small v-if="description" class="form-text text-muted">{{description}}</small>
       </div>
     </div>
