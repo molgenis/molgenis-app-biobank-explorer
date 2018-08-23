@@ -1,7 +1,6 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions, { GET_BIOBANK_IDENTIFIERS, GET_DATA_TYPE_OPTIONS, GET_TYPES_OPTIONS } from '../../../../src/store/actions'
-import helpers from '../../../../src/store/helpers'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
@@ -309,15 +308,14 @@ describe('store', () => {
           ]
         }
 
-        const createRSQLQuery = td.function('helpers.createRSQLQuery')
-        td.when(createRSQLQuery(td.matchers.anything())).thenReturn('&q=id=q=biobank-1')
-        td.replace(helpers, 'createRSQLQuery', createRSQLQuery)
-
         const get = td.function('api.get')
         td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id,biobank&q=id=q=biobank-1')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
+          getters: {
+            rsql: 'id=q=biobank-1'
+          },
           expectedMutations: [
             {type: SET_LOADING, payload: true}
           ],

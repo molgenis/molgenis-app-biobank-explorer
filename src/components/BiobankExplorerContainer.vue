@@ -7,7 +7,7 @@
     <div class="col-md-9">
       <div class="row">
         <div class="col-md-12">
-          <search-box></search-box>
+          <result-header></result-header>
         </div>
       </div>
 
@@ -29,7 +29,8 @@
 <script>
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
   import FilterContainer from './filters/FilterContainer'
-  import SearchBox from './SearchBox'
+  import ResultHeader from './ResultHeader'
+  import { mapGetters } from 'vuex'
 
   import { MAP_QUERY_TO_STATE, GET_BIOBANK_IDENTIFIERS } from '../store/actions'
 
@@ -38,25 +39,13 @@
     components: {
       BiobankCardsContainer,
       FilterContainer,
-      SearchBox
+      ResultHeader
     },
     computed: {
-      /* A computed 'compound' object for watching all filters */
-      // TODO: Use an action to retrieve the collections when the filters are changed
-      filters () {
-        return {
-          search: this.$store.state.search,
-          country: this.$store.state.country.filters,
-          materials: this.$store.state.materials.filters,
-          standards: this.$store.state.standards.filters,
-          diagnosis_available: this.$store.state.diagnosis_available.filters,
-          type: this.$store.state.type.filters,
-          dataType: this.$store.state.dataType.filters
-        }
-      }
+      ...mapGetters(['rsql'])
     },
     watch: {
-      filters () {
+      rsql () {
         this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
       }
     },

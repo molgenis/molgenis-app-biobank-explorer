@@ -1,10 +1,5 @@
 <template>
   <div class="search-box-container">
-    <div class="input-group search-input-container">
-      <input type="text" class="form-control search-input" v-model.lazy="search"
-             placeholder="Search biobanks by name">
-      <span class="input-group-addon search-input-addon"><i class="fa fa-search"></i></span>
-    </div>
     <div class="row">
       <div class="col-md-12">
         <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
@@ -55,27 +50,12 @@
   import Negotiator from './negotiator/Negotiator'
   import ActiveFilterList from './filters/ActiveFilterList'
 
-  import { SET_SEARCH } from '../store/mutations'
   import { mapState } from 'vuex'
 
   export default {
     name: 'search-box',
     computed: {
-      ...mapState(['biobanks', 'loading']),
-      search: {
-        get () {
-          return this.$store.state.search
-        },
-        set (search) {
-          this.$store.commit(SET_SEARCH, search)
-        }
-      }
-    },
-    watch: {
-      search (search) {
-        const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {search: search.length === 0 ? undefined : search})
-        this.$router.push({query: updatedRouteQuery})
-      }
+      ...mapState(['biobanks', 'loading'])
     },
     components: {
       ActiveFilterList,

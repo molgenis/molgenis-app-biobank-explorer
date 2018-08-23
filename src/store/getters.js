@@ -1,4 +1,7 @@
+import { createRSQLQuery } from './helpers'
+
 export default {
+  rsql: createRSQLQuery,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
   getStandardsOptions: state => state.standards.options,
