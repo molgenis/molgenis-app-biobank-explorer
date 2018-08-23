@@ -6,6 +6,7 @@ describe('components', () => {
     describe('html', () => {
       let wrapper, boxes
       beforeEach(() => {
+        // Do a full mount so we can click the actual inputs
         wrapper = mount(CheckboxFilters, {
           propsData: {
             name: 'facet',
@@ -106,6 +107,7 @@ describe('components', () => {
         wrapper.setProps({value: []})
         expect(selectionToggler.text()).eq('Select all')
         selectionToggler.trigger('click')
+        // the empty list is emitted when setProps is called
         expect(wrapper.emitted().input).to.deep.eq([[[]], [['1', '2']]])
       })
     })
