@@ -18,6 +18,7 @@
   "dependencies": {
     "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
+    "bootstrap-vue": "^2.0.0-rc.11",
     "@molgenis/rsql": "^0.1.1",
     "popper.js": "^1.12.9",
     "vue": "^2.5.2",
