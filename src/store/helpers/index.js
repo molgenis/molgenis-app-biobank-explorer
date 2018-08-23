@@ -25,8 +25,8 @@ export const createRSQLQuery = (state) => transformToRSQL({
     }] : []
   ])})
 
-const createNegotiatorQueryBody = (state, url) => {
-  const collections = getNegotiatorQueryObjects(state.biobanks)
+const createNegotiatorQueryBody = (state, getters, url) => {
+  const collections = getNegotiatorQueryObjects(getters.biobanks)
   const humanReadable = getHumanReadableString(state)
 
   return {
@@ -97,9 +97,14 @@ const getNegotiatorQueryObjects = (biobanks) => {
   }, [])
 }
 
+const setLocationHref = (href) => { window.location.href = href }
+const getLocationHref = () => window.location.href
+
 export default {
   createRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
-  getNegotiatorQueryObjects
+  getNegotiatorQueryObjects,
+  setLocationHref,
+  getLocationHref
 }

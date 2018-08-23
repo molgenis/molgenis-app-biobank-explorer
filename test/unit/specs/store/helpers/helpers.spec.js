@@ -100,7 +100,7 @@ describe('store', () => {
 
     describe('createNegotiatorQueryBody', () => {
       it('should generate a javascript object containing URL, collections, human readable, and an nToken', () => {
-        const state = {
+        const getters = {
           biobanks: [
             {
               id: 'biobank-1',
@@ -116,7 +116,9 @@ describe('store', () => {
                 {id: 'collection-4'}
               ]
             }
-          ],
+          ]
+        }
+        const state = {
           search: 'free text search',
           country: {
             filters: ['NL', 'BE']
@@ -143,7 +145,7 @@ describe('store', () => {
           nToken: '2837538B50189SR237489X14098A2374'
         }
 
-        const actual = helpers.createNegotiatorQueryBody(state, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
           collections: [

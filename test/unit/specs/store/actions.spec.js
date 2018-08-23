@@ -1,17 +1,27 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, { GET_BIOBANK_IDENTIFIERS, GET_DATA_TYPE_OPTIONS, GET_TYPES_OPTIONS } from '../../../../src/store/actions'
+import actions, {
+  GET_ALL_BIOBANKS,
+  GET_BIOBANK_IDENTIFIERS,
+  GET_DATA_TYPE_OPTIONS,
+  GET_TYPES_OPTIONS,
+  SEND_TO_NEGOTIATOR
+} from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
+  SET_ALL_BIOBANKS,
+  SET_BIOBANK_IDS,
   SET_BIOBANK_REPORT,
-  SET_BIOBANKS, SET_COLLECTION_TYPES,
-  SET_COUNTRIES, SET_DATA_TYPES,
+  SET_COLLECTION_TYPES,
+  SET_COUNTRIES,
+  SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
-  SET_LOADING,
+  SET_ERROR,
   SET_MATERIALS,
   SET_STANDARDS
 } from '../../../../src/store/mutations'
+import helpers from '../../../../src/store/helpers'
 
 describe('store', () => {
   describe('actions', () => {
@@ -207,23 +217,6 @@ describe('store', () => {
         utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
       })
 
-      it('should fetch biobanks when no query is present', done => {
-        const state = {
-          route: {
-            query: {}
-          }
-        }
-
-        const options = {
-          state: state,
-          expectedActions: [
-            {type: GET_BIOBANK_IDENTIFIERS}
-          ]
-        }
-
-        utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
-      })
-
       it('should fetch diagnoses from the server and map result + URL query to state', done => {
         const state = {
           route: {
@@ -255,20 +248,8 @@ describe('store', () => {
       })
     })
 
-    describe('GET_BIOBANKS_BY_ID', () => {
-      it('should store an empty list in the state when the list of biobanks is empty', done => {
-        const options = {
-          payload: [],
-          expectedMutations: [
-            {type: SET_BIOBANKS, payload: []},
-            {type: SET_LOADING, payload: false}
-          ]
-        }
-
-        utils.testAction(actions.__GET_BIOBANKS_BY_ID__, options, done)
-      })
-
-      it('should retrieve a list of biobanks based on a unique set of biobank ids from the server and store them in state', done => {
+    describe('GET_ALL_BIOBANKS', () => {
+      it('should retrieve all biobanks from the server and store them in state', done => {
         const response = {
           items: [
             {id: '1', name: 'biobank-1'},
@@ -278,29 +259,94 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),*&q=id=in=(1,2,3)')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),*')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
-          payload: [
-            {biobank: {id: '1'}},
-            {biobank: {id: '1'}},
-            {biobank: {id: '2'}},
-            {biobank: {id: '3'}},
-            {biobank: {id: '3'}}
-          ],
           expectedMutations: [
-            {type: SET_BIOBANKS, payload: response.items},
-            {type: SET_LOADING, payload: false}
+            {type: SET_ALL_BIOBANKS, payload: response.items}
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANKS_BY_ID__, options, done)
+        utils.testAction(actions[GET_ALL_BIOBANKS], options, done)
+      })
+    })
+
+    describe('SEND_TO_NEGOTIATOR', () => {
+      const state = {
+        search: 'Cell&Co',
+        country: {filters: []},
+        materials: {filters: ['CELL_LINES']},
+        standards: {filters: []},
+        diagnosis_available: {filters: []},
+        type: {filters: []},
+        dataType: {filters: []}
+      }
+      const getters = {
+        biobanks: [
+          {id: 'biobank1', collections: [{id: 'collection1'}, {id: 'collection2'}]},
+          {id: 'biobank2', collections: [{id: 'collection3'}, {id: 'collection4'}]}
+        ]
+      }
+      const location = 'https://www.example.org/biobankexplorer?search=Cell%26Co&materials=CELL_LINES'
+
+      it('should send a negotiator query to the server and then surf to the negotiator', (done) => {
+        const post = td.function('api.post')
+        const getLocationHref = td.function('getLocationHref')
+        const setLocationHref = td.function('setLocationHref')
+        td.replace(api, 'post', post)
+        td.replace(helpers, 'setLocationHref', setLocationHref)
+        td.replace(helpers, 'getLocationHref', getLocationHref)
+
+        const location = 'https://www.example.org/biobankexplorer?search=Cell%26Co&materials=CELL_LINES'
+        td.when(getLocationHref()).thenReturn(location)
+
+        const bodyCaptor = td.matchers.captor()
+        const negotiatorResponse = Promise.resolve('http://example.org/negotiator')
+        td.when(post('/plugin/directory/export', bodyCaptor.capture())).thenReturn(negotiatorResponse)
+
+        utils.testAction(actions[SEND_TO_NEGOTIATOR], {state, getters}, (arg) => {
+          if (arg) {
+            // testAction found an error
+            done(arg)
+          } else {
+            negotiatorResponse.then(() => {
+              expect(JSON.parse(bodyCaptor.value.body)).to.deep.eq({
+                URL: location,
+                collections: [
+                  {collectionId: 'collection1', biobankId: 'biobank1'},
+                  {collectionId: 'collection2', biobankId: 'biobank1'},
+                  {collectionId: 'collection3', biobankId: 'biobank2'},
+                  {collectionId: 'collection4', biobankId: 'biobank2'}],
+                humanReadable: 'Free text search contains Cell&Co and selected material types are CELL_LINES'
+              })
+              td.verify(setLocationHref('http://example.org/negotiator'))
+            }).then(done).catch(done)
+          }
+        })
+      })
+
+      it('should commit the error if the server response was bad', (done) => {
+        const post = td.function('api.post')
+        const getLocationHref = td.function('getLocationHref')
+        td.replace(api, 'post', post)
+        td.replace(helpers, 'getLocationHref', getLocationHref)
+
+        td.when(getLocationHref()).thenReturn(location)
+
+        const error = {errors: [{message: 'Negotiator not configured'}]}
+        td.when(post('/plugin/directory/export', td.matchers.anything())).thenReject(error)
+
+        utils.testAction(actions[SEND_TO_NEGOTIATOR], {
+          state,
+          getters,
+          expectedMutations: [{type: SET_ERROR, payload: error}]
+        }, done)
       })
     })
 
     describe('GET_BIOBANK_IDENTIFIERS', () => {
-      it('should retrieve biobank ids from the server based on a set of filters and dispatch another action', done => {
+      it('should retrieve biobank ids from the server based on a set of filters', done => {
         const response = {
           items: [
             {biobank: {id: 'biobank-1'}},
@@ -309,22 +355,36 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id,biobank&q=id=q=biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id,biobank(id)&q=name=q="Cell%26Co";country=in=(A,B)'))
+          .thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
-          getters: {
-            rsql: 'id=q=biobank-1'
-          },
+          getters: { rsql: 'name=q="Cell&Co";country=in=(A,B)' },
           expectedMutations: [
-            {type: SET_LOADING, payload: true}
-          ],
-          expectedActions: [
-            {type: '__GET_BIOBANKS_BY_ID__', payload: response.items}
+            {type: SET_BIOBANK_IDS, payload: undefined},
+            {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_IDENTIFIERS__, options, done)
+        utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
+      })
+
+      it('should select all biobanks if filters are empty', done => {
+        const options = {
+          getters: { rsql: '' },
+          state: {
+            allBiobanks: {
+              'biobank-1': {id: 'biobank-1', name: 'Biobank B'},
+              'biobank-2': {id: 'biobank-2', name: 'Biobank A'}
+            }
+          },
+          expectedMutations: [
+            {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
+          ]
+        }
+
+        utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
       })
     })
 
