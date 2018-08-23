@@ -1,5 +1,10 @@
 <template>
   <div id="filter-container">
+    <string-filter label="Search"
+                   v-model="search"
+                   :initiallyCollapsed="!$store.state.route.query.search"
+                   placeholder=""
+                   description="search by name, id, acronym and press enter"></string-filter>
     <diagnosis-available-filters></diagnosis-available-filters>
     <checkbox-filters v-for="filter in filters"
                       :key="filter.name"
@@ -26,8 +31,9 @@
 
 
 <script>
+  import StringFilter from './StringFilter'
   import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
-  import { UPDATE_FILTER } from '../../store/mutations'
+  import { UPDATE_FILTER, SET_SEARCH } from '../../store/mutations'
   import { GET_COUNTRY_OPTIONS, GET_MATERIALS_OPTIONS, GET_STANDARDS_OPTIONS, GET_TYPES_OPTIONS, GET_DATA_TYPE_OPTIONS } from '../../store/actions'
   import { mapGetters, mapMutations } from 'vuex'
   import CheckboxFilters from './CheckboxFilters'
@@ -40,6 +46,16 @@
         typesOptions: 'getTypesOptions',
         dataTypeOptions: 'getDataTypeOptions'
       }),
+      search: {
+        get () {
+          return this.$store.state.search
+        },
+        set (search) {
+          const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {search: search.length === 0 ? undefined : search})
+          this.$router.push({query: updatedRouteQuery})
+          this.$store.commit(SET_SEARCH, search)
+        }
+      },
       filters () {
         return [{
           name: 'materials',
@@ -93,6 +109,6 @@
       this.$store.dispatch(GET_TYPES_OPTIONS)
       this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
     },
-    components: { CheckboxFilters, DiagnosisAvailableFilters }
+    components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
   }
 </script>

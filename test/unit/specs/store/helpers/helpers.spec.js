@@ -35,7 +35,7 @@ describe('store', () => {
         state.country.filters.push('NL', 'BE')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=(country=in=(NL,BE))'
+        const expected = 'country=in=(NL,BE)'
 
         expect(actual).to.equal(expected)
       })
@@ -44,7 +44,7 @@ describe('store', () => {
         state.materials.filters.push('RNA', 'DNA')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=(materials=in=(RNA,DNA))'
+        const expected = 'materials=in=(RNA,DNA)'
 
         expect(actual).to.equal(expected)
       })
@@ -53,7 +53,7 @@ describe('store', () => {
         state.standards.filters.push('cen-ts-16826-1-2015')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=(standards=in=(cen-ts-16826-1-2015))'
+        const expected = 'standards=in=(cen-ts-16826-1-2015)'
 
         expect(actual).to.equal(expected)
       })
@@ -66,7 +66,7 @@ describe('store', () => {
         )
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=(diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3))'
+        const expected = 'diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3)'
 
         expect(actual).to.equal(expected)
       })
@@ -82,7 +82,7 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=*=q="test search"'
+        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\''
 
         expect(actual).to.equal(expected)
       })
@@ -92,7 +92,7 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = '&q=(country=in=(NL,BE));*=q="test search"'
+        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\')'
 
         expect(actual).to.equal(expected)
       })

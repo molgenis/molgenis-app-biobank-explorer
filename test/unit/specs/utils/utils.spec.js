@@ -21,34 +21,6 @@ describe('Utilities', () => {
       expect(actual).to.equal(expected)
     })
   })
-  describe('queryPartsToQuery', () => {
-    it('should transform [country==NL,country==BE,,,diagnosis_available==C18] to (country==NL,country==BE);(diagnosis_available==C18)', () => {
-      const queryParts = ['country==NL,country==BE', '', '', 'diagnosis_available==C18']
-
-      const actual = utils.queryPartsToQuery(queryParts)
-      const expected = '(country==NL,country==BE);(diagnosis_available==C18)'
-
-      expect(actual).to.equal(expected)
-    })
-
-    it('should transform [,materials==RNA,materials==DNA,,diagnosis_available==C18] to (materials==RNA,materials==DNA);(diagnosis_available==C18)', () => {
-      const queryParts = ['', 'materials==RNA,materials==DNA', '', 'diagnosis_available==C18']
-
-      const actual = utils.queryPartsToQuery(queryParts)
-      const expected = '(materials==RNA,materials==DNA);(diagnosis_available==C18)'
-
-      expect(actual).to.equal(expected)
-    })
-
-    it('should transform [,,] to an empty string', () => {
-      const queryParts = ['', '']
-
-      const actual = utils.queryPartsToQuery(queryParts)
-      const expected = ''
-
-      expect(actual).to.equal(expected)
-    })
-  })
 
   describe('getUniqueIdArray', () => {
     it('should transform [1, 1, 2, 3, 2, 4, 5] to [1, 2, 3, 4, 5]', () => {
@@ -64,16 +36,16 @@ describe('Utilities', () => {
   describe('createInQuery', () => {
     it('should return an empty string if the filters are empty', () => {
       const actual = utils.createInQuery('country', [])
-      const expected = ''
+      const expected = []
 
-      expect(actual).to.equal(expected)
+      expect(actual).to.deep.equal(expected)
     })
 
     it('should transform (country, [AT,BE]) to country=in=(AT,BE)', () => {
       const actual = utils.createInQuery('country', ['AT', 'BE'])
-      const expected = 'country=in=(AT,BE)'
+      const expected = [{selector: 'country', comparison: '=in=', arguments: ['AT', 'BE']}]
 
-      expect(actual).to.equal(expected)
+      expect(actual).to.deep.equal(expected)
     })
   })
 
