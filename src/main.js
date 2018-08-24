@@ -10,6 +10,8 @@ import { INITIAL_STATE } from './store/state'
 
 import App from './App'
 import VueAnalytics from 'vue-analytics'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {
@@ -49,3 +51,5 @@ Vue.use(i18n, {
     })
   }
 })
+
+Vue.use(BootstrapVue)
