@@ -2,6 +2,26 @@ import { expect } from 'chai'
 import utils from '../../../../src/utils'
 
 describe('Utilities', () => {
+  describe('qualityAttributeSelector', () => {
+    it('should build correct quality attributes selector for biobanks', () => {
+      const type = 'bio'
+
+      const actual = utils.qualityAttributeSelector(type)
+      const expected = 'quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label)'
+
+      expect(actual).to.equal(expected)
+    })
+
+    it('should build correct quality attributes selector for collections', () => {
+      const type = 'col'
+
+      const actual = utils.qualityAttributeSelector(type)
+      const expected = 'quality(id,standards(*),assess_level_col(*),certification_number,certification_image_link,certification_report,label)'
+
+      expect(actual).to.equal(expected)
+    })
+  })
+
   describe('getUniqueIdArray', () => {
     it('should transform [1, 1, 2, 3, 2, 4, 5] to [1, 2, 3, 4, 5]', () => {
       const list = ['1', '1', '2', '3', '2', '4', '5']

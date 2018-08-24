@@ -1,6 +1,10 @@
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, { GET_BIOBANK_IDENTIFIERS, GET_DATA_TYPE_OPTIONS, GET_TYPES_OPTIONS } from '../../../../src/store/actions'
+import actions, {
+  GET_BIOBANK_IDENTIFIERS,
+  GET_DATA_TYPE_OPTIONS,
+  GET_TYPES_OPTIONS
+} from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
@@ -278,7 +282,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),*&q=id=in=(1,2,3)')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=101&attrs=collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*)),*&q=id=in=(1,2,3)')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -341,7 +345,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection),contact(*),*&q=id==biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*)),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*&q=id==biobank-1')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
