@@ -19,28 +19,7 @@
                 <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id">{{collection[column]}}</a>
               </span>
               <span v-else-if="column === 'quality'">
-                <ul class="list-unstyled">
-                  <li v-for="quality in collection[column]">
-                    <a :href="quality.certification_report" target="_blank" v-if="quality.certification_report">
-                      <span v-if="!quality.certification_image_link">
-                        {{ quality.label }} <i class="fa fa-check"></i>
-                      </span>
-                      <span v-else>
-                        <img :src="quality.certification_image_link" :style=quality_logo_size
-                             :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
-                      </span>
-                    </a>
-                    <span v-else>
-                      <span v-if="!quality.certification_image_link">
-                        {{ quality.label }} <i class="fa fa-check"></i>
-                      </span>
-                      <span v-else>
-                        <img :src="quality.certification_image_link" :style=quality_logo_size
-                             :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
-                      </span>
-                    </span>
-                  </li>
-                </ul>
+              <quality-column :qualities="collection[column]" :spacing=0></quality-column>
               </span>
 
           <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
@@ -74,15 +53,12 @@
   .sub-table-cell {
     padding-top: 0px;
   }
-
-  .fa-check {
-    color: green;
-  }
 </style>
 
 <script>
   import utils from '../../utils'
   import SubCollectionsTable from './SubCollectionsTable'
+  import QualityColumn from './QualityColumn'
 
   export default {
     name: 'collections-table',
@@ -100,9 +76,6 @@
     computed: {
       topLevelElements () {
         return this.collections.filter(collection => !collection.parent_collection)
-      },
-      quality_logo_size () {
-        return `max-width:${this.quality_logo.width}rem;max-height:${this.quality_logo.height}rem`
       }
     },
     data () {
@@ -126,7 +99,7 @@
       }
     },
     components: {
-      SubCollectionsTable
+      SubCollectionsTable, QualityColumn
     }
   }
 </script>

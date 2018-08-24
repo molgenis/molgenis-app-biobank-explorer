@@ -43,26 +43,7 @@
             </div>
           </div>
           <div class="col-2">
-            <span v-if="biobank.data.quality.length > 0" class="row">
-              <p v-for="quality in biobank.data.quality" class="col-12">
-                <a :href="quality.certification_report" target="_blank" v-if="quality.certification_report">
-                  <span v-if="quality.certification_image_link">
-                  <img :src="quality.certification_image_link" :style=quality_logo_size
-                       :alt="quality.label!=='Others'?quality.label:quality.certification_number"/>
-                </span>
-                <span v-else>{{generateQualityLabel(quality)}} <i
-                  class="fa fa-check"></i></span>
-                </a>
-                <span v-else>
-                  <span v-if="quality.certification_image_link">
-                  <img :src="quality.certification_image_link" :style=quality_logo_size
-                       :alt="generateQualityLabel(quality)"/>
-                </span>
-                <span v-else>{{generateQualityLabel(quality)}} <i
-                  class="fa fa-check"></i></span>
-                </span>
-              </p>
-            </span>
+            <quality-column :qualities="biobank.data.quality" spacing=1></quality-column>
           </div>
         </div>
       </div>
@@ -96,7 +77,7 @@
 
                 <span v-else-if="attribute.name === 'quality'">
                   <table class="table table-sm">
-                    <tr v-for="quality in biobank.data[attribute.name]">
+                    <tr v-for="quality in biobank.data.quality">
                       <td>
                         <a v-if=quality.certification_report :href="quality.certification_report" target="_blank">
                           {{generateQualityLabel(quality)}}
@@ -157,6 +138,7 @@
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable'
+  import QualityColumn from '../tables/QualityColumn'
 
   import { mapState } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
@@ -166,17 +148,14 @@
     name: 'biobank-report-card',
     data () {
       return {
-        collapsed: true,
-        quality_logo: {height: 4, width: 9}
+        collapsed: true
       }
     },
     methods: {
-      generateQualityLabel (quality) {
-        return quality.label !== 'Others' ? quality.label : quality.certification_number
-      },
       showThisAttribute (attribute) {
         return attribute.name !== '_href' && attribute.name !== 'collections' && attribute.name !== 'country' &&
-          attribute.name !== 'contact' && attribute.name !== 'description' && attribute.name !== 'operational_standards'
+          attribute.name !== 'contact' && attribute.name !== 'description' &&
+          attribute.name !== 'operational_standards' && attribute.name !== 'other_standards'
       },
       singleReferenceType (type) {
         return type === 'XREF' || type === 'CATEGORICAL'
@@ -191,6 +170,9 @@
       getMultiRefLabels (attribute, refs) {
         const labelAttribute = attribute.refEntity.labelAttribute
         return refs.map(ref => ref[labelAttribute]).join(', ')
+      },
+      generateQualityLabel (quality) {
+        return quality.label !== 'Others' ? quality.label : quality.certification_number
       }
     },
     computed: {
@@ -207,9 +189,6 @@
           }, [])).join(', ')
         }
       },
-      quality_logo_size () {
-        return `max-width:${this.quality_logo.width}rem;max-height:${this.quality_logo.height}rem`
-      },
       numberOfSamples () {
         if (this.biobank.data.collections) {
           const numberOfSamples = this.biobank.data.collections.reduce((accumulator, collection) => {
@@ -222,7 +201,7 @@
       }
     },
     components: {
-      CollectionsTable
+      CollectionsTable, QualityColumn
     },
     mounted () {
       this.$store.dispatch(GET_BIOBANK_REPORT, this.$store.state.route.params.id)
