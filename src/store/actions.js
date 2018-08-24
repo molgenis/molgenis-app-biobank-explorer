@@ -1,6 +1,6 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import { getUniqueIdArray } from '../utils'
+import utils, { getUniqueIdArray } from '../utils'
 import {
   SET_ALL_BIOBANKS,
   SET_BIOBANK_IDS,
@@ -38,7 +38,7 @@ const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
 const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,standards,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection)'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
 
 export default {
   /**
@@ -136,7 +136,7 @@ export default {
     }
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},contact(*),*&q=id==${biobankId}`).then(response => {
+    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
       commit(SET_BIOBANK_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)

@@ -4,38 +4,46 @@
 
     <div class="card biobank-card">
       <div class="card-header">
-        <h3>{{biobank.data.name}}</h3>
-
-        <small>
-          <dl class="row">
-            <dt class="col-sm-2"><b>Collection types:</b></dt>
-            <dd class="col-sm-10"><i>{{ collectionTypes }}</i></dd>
-            <dt class="col-sm-2"><b>Number of collections:</b></dt>
-            <dd class="col-sm-10"><i>{{ biobank.data.collections.length }}</i></dd>
-            <dt class="col-sm-2"><b>Number of samples:</b></dt>
-            <dd class="col-sm-10"><i>{{ numberOfSamples }}</i></dd>
-          </dl>
-        </small>
-
-        <p>{{biobank.data.description}}</p>
-
-        <br/>
-
         <div class="row">
-          <div class="col-md-6">
-            <ul class="list-unstyled">
-              <li><b>{{ biobank.data.juridical_person }}</b></li>
-              <li v-if="biobank.data.contact.address">{{ biobank.data.contact.address }}</li>
-              <li>{{ biobank.data.contact.zip }} {{ biobank.data.contact.city }}</li>
-              <li>{{ biobank.data.country.name }}</li>
-            </ul>
+          <div class="col-md-10">
+            <h3>{{biobank.data.name}}</h3>
+
+            <small>
+              <dl class="row">
+                <dt class="col-sm-3"><b>Collection types:</b></dt>
+                <dd class="col-sm-9"><i>{{ collectionTypes }}</i></dd>
+                <dt class="col-sm-3"><b>Number of collections:</b></dt>
+                <dd class="col-sm-9"><i>{{ biobank.data.collections.length }}</i></dd>
+                <dt class="col-sm-3"><b>Number of samples:</b></dt>
+                <dd class="col-sm-9"><i>{{ numberOfSamples }}</i></dd>
+              </dl>
+            </small>
+
+
+            <p>{{biobank.data.description}}</p>
+
+            <br/>
+
+            <div class="row">
+              <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li><b>{{ biobank.data.juridical_person }}</b></li>
+                  <li v-if="biobank.data.contact.address">{{ biobank.data.contact.address }}</li>
+                  <li>{{ biobank.data.contact.zip }} {{ biobank.data.contact.city }}</li>
+                  <li>{{ biobank.data.country.name }}</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <ul class="list-unstyled">
+                  <li><b>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</b></li>
+                  <li>Email: {{ biobank.data.contact.email }}</li>
+                  <li>Tel: {{ biobank.data.contact.phone }}</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div class="col-md-4">
-            <ul class="list-unstyled">
-              <li><b>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</b></li>
-              <li>Email: {{ biobank.data.contact.email }}</li>
-              <li>Tel: {{ biobank.data.contact.phone }}</li>
-            </ul>
+          <div class="col-2">
+            <quality-column :qualities="biobank.data.quality" spacing=1></quality-column>
           </div>
         </div>
       </div>
@@ -65,6 +73,22 @@
 
                 <span v-else-if="attribute.fieldType === 'HYPERLINK'">
                   <a :href="biobank.data[attribute.name]" target="_blank">{{ biobank.data[attribute.name] }}</a>
+                </span>
+
+                <span v-else-if="attribute.name === 'quality'">
+                  <table class="table table-sm">
+                    <tr v-for="quality in biobank.data.quality">
+                      <td>
+                        <a v-if=quality.certification_report :href="quality.certification_report" target="_blank">
+                          {{generateQualityLabel(quality)}}
+                        </a>
+                        <span v-else>{{generateQualityLabel(quality)}}</span>
+                      </td>
+                      <td>
+                        <span>{{quality.assess_level_bio.label}}</span>
+                      </td>
+                    </tr>
+                  </table>
                 </span>
 
                 <span v-else-if="singleReferenceType(attribute.fieldType)">
@@ -106,10 +130,15 @@
   .fa-times {
     color: darkred;
   }
+
+  .fa-check {
+    color: green;
+  }
 </style>
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable'
+  import QualityColumn from '../tables/QualityColumn'
 
   import { mapState } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
@@ -125,7 +154,8 @@
     methods: {
       showThisAttribute (attribute) {
         return attribute.name !== '_href' && attribute.name !== 'collections' && attribute.name !== 'country' &&
-          attribute.name !== 'contact' && attribute.name !== 'description'
+          attribute.name !== 'contact' && attribute.name !== 'description' &&
+          attribute.name !== 'operational_standards' && attribute.name !== 'other_standards'
       },
       singleReferenceType (type) {
         return type === 'XREF' || type === 'CATEGORICAL'
@@ -140,6 +170,9 @@
       getMultiRefLabels (attribute, refs) {
         const labelAttribute = attribute.refEntity.labelAttribute
         return refs.map(ref => ref[labelAttribute]).join(', ')
+      },
+      generateQualityLabel (quality) {
+        return quality.label !== 'Others' ? quality.label : quality.certification_number
       }
     },
     computed: {
@@ -168,7 +201,7 @@
       }
     },
     components: {
-      CollectionsTable
+      CollectionsTable, QualityColumn
     },
     mounted () {
       this.$store.dispatch(GET_BIOBANK_REPORT, this.$store.state.route.params.id)
