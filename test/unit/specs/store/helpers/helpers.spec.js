@@ -99,8 +99,9 @@ describe('store', () => {
     })
 
     describe('createNegotiatorQueryBody', () => {
-      it('should generate a javascript object containing URL, collections, human readable, and an nToken', () => {
+      it('should generate a javascript object containing URL, collections, human readable, entityType, rsql, and an nToken', () => {
         const getters = {
+          rsql: 'long rsql string',
           biobanks: [
             {
               id: 'biobank-1',
@@ -155,7 +156,9 @@ describe('store', () => {
             {biobankId: 'biobank-2', collectionId: 'collection-4'}
           ],
           humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected standards are cen-ts-16826-1-2015 and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
-          nToken: state.nToken
+          nToken: state.nToken,
+          entityId: 'eu_bbmri_eric_collections',
+          rsql: 'long rsql string'
         }
 
         expect(actual).to.deep.equal(expected)

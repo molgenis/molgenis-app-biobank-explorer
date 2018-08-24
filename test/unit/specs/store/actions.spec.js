@@ -283,6 +283,7 @@ describe('store', () => {
         dataType: {filters: []}
       }
       const getters = {
+        rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
         biobanks: [
           {id: 'biobank1', collections: [{id: 'collection1'}, {id: 'collection2'}]},
           {id: 'biobank2', collections: [{id: 'collection3'}, {id: 'collection4'}]}
@@ -313,6 +314,8 @@ describe('store', () => {
             negotiatorResponse.then(() => {
               expect(JSON.parse(bodyCaptor.value.body)).to.deep.eq({
                 URL: location,
+                entityId: 'eu_bbmri_eric_collections',
+                rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
                 collections: [
                   {collectionId: 'collection1', biobankId: 'biobank1'},
                   {collectionId: 'collection2', biobankId: 'biobank1'},
