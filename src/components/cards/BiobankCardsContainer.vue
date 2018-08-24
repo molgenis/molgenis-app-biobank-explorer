@@ -1,11 +1,16 @@
 <template>
   <div class="biobank-cards-container">
     <div v-if="!loading && biobanks.length > 0">
+      <b-pagination v-if="biobanks.length > pageSize" size="md" align="center"
+                    :total-rows="biobanks.length" v-model="currentPage" :per-page="pageSize"></b-pagination>
       <biobank-card
-        v-for="(biobank, id) in biobanks"
+        v-for="biobank in biobanks.slice(pageSize * (currentPage-1), pageSize * currentPage)"
         :key="biobank.id"
         :biobank="biobank">
       </biobank-card>
+
+      <b-pagination v-if="biobanks.length > pageSize" size="md" align="center"
+                    :total-rows="biobanks.length" v-model="currentPage" :per-page="pageSize"></b-pagination>
     </div>
 
     <div v-else-if="!loading && biobanks.length === 0" class="status-text">
@@ -32,15 +37,26 @@
 
 <script>
   import BiobankCard from './BiobankCard'
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'biobank-cards-container',
+    data () {
+      return {
+        currentPage: 1,
+        pageSize: 10
+      }
+    },
     computed: {
-      ...mapState(['loading', 'biobanks'])
+      ...mapGetters(['biobanks', 'loading'])
     },
     components: {
       BiobankCard
+    },
+    watch: {
+      biobanks () {
+        this.currentPage = 1
+      }
     }
   }
 </script>

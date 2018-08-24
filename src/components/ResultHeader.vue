@@ -2,7 +2,7 @@
   <div class="search-box-container">
     <div class="row">
       <div class="col-md-12">
-        <negotiator :disabled="biobanks.length ? biobanks.length > 100 : true"></negotiator>
+        <negotiator :disabled="!biobanks.length"></negotiator>
       </div>
     </div>
 
@@ -15,11 +15,8 @@
     <div class="row" v-if="!loading">
       <div class="col-md-12">
         <div class="biobank-number-report-container">
-          <small class="biobank-number-report" v-if="biobanks.length > 100">
-            <i><b>More than 100 biobanks found, please refine your query</b></i>
-          </small>
-          <small class="biobank-number-report" v-else>
-            <i>{{biobanks.length}} biobanks shown</i>
+          <small class="biobank-number-report">
+            <i>{{biobanks.length}} biobanks found</i>
           </small>
         </div>
       </div>
@@ -50,12 +47,12 @@
   import Negotiator from './negotiator/Negotiator'
   import ActiveFilterList from './filters/ActiveFilterList'
 
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'search-box',
     computed: {
-      ...mapState(['biobanks', 'loading'])
+      ...mapGetters(['biobanks', 'loading'])
     },
     components: {
       ActiveFilterList,

@@ -99,8 +99,9 @@ describe('store', () => {
     })
 
     describe('createNegotiatorQueryBody', () => {
-      it('should generate a javascript object containing URL, collections, human readable, and an nToken', () => {
-        const state = {
+      it('should generate a javascript object containing URL, collections, human readable, entityType, rsql, and an nToken', () => {
+        const getters = {
+          rsql: 'long rsql string',
           biobanks: [
             {
               id: 'biobank-1',
@@ -116,7 +117,9 @@ describe('store', () => {
                 {id: 'collection-4'}
               ]
             }
-          ],
+          ]
+        }
+        const state = {
           search: 'free text search',
           country: {
             filters: ['NL', 'BE']
@@ -143,7 +146,7 @@ describe('store', () => {
           nToken: '2837538B50189SR237489X14098A2374'
         }
 
-        const actual = helpers.createNegotiatorQueryBody(state, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
           collections: [
@@ -153,7 +156,9 @@ describe('store', () => {
             {biobankId: 'biobank-2', collectionId: 'collection-4'}
           ],
           humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected standards are cen-ts-16826-1-2015 and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
-          nToken: state.nToken
+          nToken: state.nToken,
+          entityId: 'eu_bbmri_eric_collections',
+          rsql: 'long rsql string'
         }
 
         expect(actual).to.deep.equal(expected)

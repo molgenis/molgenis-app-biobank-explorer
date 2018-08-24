@@ -30,9 +30,9 @@
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
   import FilterContainer from './filters/FilterContainer'
   import ResultHeader from './ResultHeader'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
-  import { MAP_QUERY_TO_STATE, GET_BIOBANK_IDENTIFIERS } from '../store/actions'
+  import { GET_ALL_BIOBANKS, GET_BIOBANK_IDENTIFIERS, MAP_QUERY_TO_STATE } from '../store/actions'
 
   export default {
     name: 'biobank-explorer-container',
@@ -46,12 +46,19 @@
     },
     watch: {
       rsql () {
-        this.$store.dispatch(GET_BIOBANK_IDENTIFIERS)
+        this.getBiobankIdentifiers()
       }
     },
+    methods: {
+      ...mapActions({
+        getAllBiobanks: GET_ALL_BIOBANKS,
+        getBiobankIdentifiers: GET_BIOBANK_IDENTIFIERS,
+        mapQueryToState: MAP_QUERY_TO_STATE
+      })
+    },
     mounted () {
-      /* On page load, maps URL query parameters to the state */
-      this.$store.dispatch(MAP_QUERY_TO_STATE)
+      this.mapQueryToState()
+      this.getAllBiobanks()
     }
   }
 </script>

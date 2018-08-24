@@ -1,5 +1,10 @@
 import { expect } from 'chai'
-import mutations, { SET_COLLECTION_TYPES, SET_DATA_TYPES } from '../../../../src/store/mutations'
+import mutations, {
+  SET_ALL_BIOBANKS,
+  SET_BIOBANK_IDS,
+  SET_COLLECTION_TYPES,
+  SET_DATA_TYPES
+} from '../../../../src/store/mutations'
 
 describe('store', () => {
   describe('mutations', () => {
@@ -204,16 +209,25 @@ describe('store', () => {
       })
     })
 
-    describe('SET_BIOBANKS', () => {
+    describe('SET_ALL_BIOBANKS', () => {
       it('should set the biobanks in the state with the payload', () => {
-        const state = {
-          biobanks: []
-        }
-
+        const state = {}
         const biobanks = [{id: 'biobank1'}, {id: 'biobank2'}]
-        mutations.__SET_BIOBANKS__(state, biobanks)
 
-        expect(state.biobanks).to.deep.equal(biobanks)
+        mutations[SET_ALL_BIOBANKS](state, biobanks)
+
+        expect(state.allBiobanks).to.deep.equal({'biobank1': {id: 'biobank1'}, 'biobank2': {id: 'biobank2'}})
+      })
+    })
+
+    describe('SET_BIOBANK_IDS', () => {
+      it('should set the biobank ids in the state with the payload', () => {
+        const state = {}
+        const biobankIds = ['1', '2']
+
+        mutations[SET_BIOBANK_IDS](state, biobankIds)
+
+        expect(state.biobankIds).to.deep.equal(biobankIds)
       })
     })
 
@@ -327,19 +341,6 @@ describe('store', () => {
         expect(state.diagnosis_available.filters).to.deep.equal(expected)
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
-      })
-    })
-
-    describe('SET_LOADING', () => {
-      it('should set loading value in the state with the payload', () => {
-        const state = {
-          loading: false
-        }
-
-        const payload = true
-        mutations.__SET_LOADING__(state, payload)
-
-        expect(state.loading).to.equal(payload)
       })
     })
 

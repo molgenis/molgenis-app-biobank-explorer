@@ -9,12 +9,12 @@ export const SET_SEARCH = '__SET_SEARCH__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
-export const SET_BIOBANKS = '__SET_BIOBANKS__'
+export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
+export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
-export const SET_LOADING = '__SET_LOADING__'
 export const SET_ERROR = '__SET_ERROR__'
 
 const combineCodeAndLabels = (diagnoses) => {
@@ -72,15 +72,11 @@ export default {
     state.type.filters = []
     state.dataType.filters = []
   },
-  /**
-   * Stores biobanks in the state. The list of biobanks is only overwritten when:
-   *
-   * 1) Any filter is changed
-   * 2) A search query is submitted
-   * 3) The page is refreshed
-   */
-  [SET_BIOBANKS] (state, biobanks) {
-    state.biobanks = biobanks
+  [SET_ALL_BIOBANKS] (state, biobanks) {
+    state.allBiobanks = biobanks.reduce((soFar, next) => ({...soFar, [next.id]: next}), {})
+  },
+  [SET_BIOBANK_IDS] (state, biobankIds) {
+    state.biobankIds = biobankIds
   },
   /**
    * Store a single biobank in the state for showing a biobank report
@@ -132,9 +128,6 @@ export default {
     if (query.nToken) {
       state.nToken = query.nToken
     }
-  },
-  [SET_LOADING] (state, loading) {
-    state.loading = loading
   },
   [SET_ERROR] (state, error) {
     state.error = error

@@ -25,13 +25,15 @@ export const createRSQLQuery = (state) => transformToRSQL({
     }] : []
   ])})
 
-const createNegotiatorQueryBody = (state, url) => {
-  const collections = getNegotiatorQueryObjects(state.biobanks)
+const createNegotiatorQueryBody = (state, getters, url) => {
+  const collections = getNegotiatorQueryObjects(getters.biobanks)
   const humanReadable = getHumanReadableString(state)
 
   return {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
+    entityId: 'eu_bbmri_eric_collections',
+    rsql: getters.rsql,
     collections: collections,
     humanReadable: humanReadable,
     nToken: state.nToken
@@ -97,9 +99,14 @@ const getNegotiatorQueryObjects = (biobanks) => {
   }, [])
 }
 
+const setLocationHref = (href) => { window.location.href = href }
+const getLocationHref = () => window.location.href
+
 export default {
   createRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
-  getNegotiatorQueryObjects
+  getNegotiatorQueryObjects,
+  setLocationHref,
+  getLocationHref
 }

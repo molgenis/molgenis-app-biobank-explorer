@@ -3,6 +3,78 @@ import getters from '../../../../src/store/getters'
 
 describe('store', () => {
   describe('getters', () => {
+    describe('rsql', () => {
+      it('should transform the filters to rsql', () => {
+        const state = {
+          search: 'Cell&Co',
+          country: {filters: ['AT', 'BE']},
+          materials: {filters: []},
+          standards: {filters: []},
+          diagnosis_available: {filters: []},
+          type: {filters: []},
+          dataType: {filters: []}
+        }
+        expect(getters.rsql(state)).to.equal('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
+      })
+      it('should return the empty string if no filters are selected', () => {
+        const state = {
+          search: '',
+          country: {filters: []},
+          materials: {filters: []},
+          standards: {filters: []},
+          diagnosis_available: {filters: []},
+          type: {filters: []},
+          dataType: {filters: []}
+        }
+        expect(getters.rsql(state)).to.equal('')
+      })
+    })
+    describe('biobanks', () => {
+      it('should return empty list when loading', () => {
+        const state = {}
+        expect(getters.biobanks(state, {loading: true})).to.deep.equal([])
+      })
+      it('should look up the biobanks for matching IDs', () => {
+        const state = {
+          allBiobanks: {
+            '1': {id: '1', name: 'one'},
+            '2': {id: '2', name: 'two'}
+          },
+          biobankIds: ['2']
+        }
+        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two'}])
+      })
+
+      it('should sort the biobanks by name', () => {
+        const state = {allBiobanks: {'1': {id: '1', name: 'B'}, '2': {id: '2', name: 'A'}}, biobankIds: ['1', '2']}
+        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'A'}, {id: '1', name: 'B'}])
+      })
+    })
+
+    describe('loading', () => {
+      it('should be false if both allBiobanks and biobankIds are present', () => {
+        const state = {
+          allBiobanks: {'1': {id: '1', name: 'one'}, '2': {id: '2', name: 'two'}},
+          biobankIds: ['2']
+        }
+        expect(getters.loading(state)).to.eq(false)
+      })
+
+      it('should be true if allBiobanks are missing', () => {
+        const state = {
+          biobankIds: ['2']
+        }
+        expect(getters.loading(state)).to.eq(true)
+      })
+
+      it('should be true if biobankIds are missing', () => {
+        const state = {
+          allBiobanks: {'1': {id: '1', name: 'one'}, '2': {id: '2', name: 'two'}}
+        }
+        expect(getters.loading(state)).to.eq(true)
+      })
+    })
+
     describe('getTypesOptions', () => {
       it('should retrieve the type options', () => {
         const state = {type: {options: [{id: 'id', label: 'label'}]}}

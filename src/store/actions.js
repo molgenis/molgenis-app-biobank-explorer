@@ -1,15 +1,15 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils from '../utils'
+import utils, { getUniqueIdArray } from '../utils'
 import {
+  SET_ALL_BIOBANKS,
+  SET_BIOBANK_IDS,
   SET_BIOBANK_REPORT,
-  SET_BIOBANKS,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
-  SET_LOADING,
   SET_MATERIALS,
   SET_STANDARDS
 } from './mutations'
@@ -22,7 +22,7 @@ export const GET_STANDARDS_OPTIONS = '__GET_STANDARDS_OPTIONS__'
 export const GET_TYPES_OPTIONS = '__GET_TYPES_OPTIONS__'
 export const GET_DATA_TYPE_OPTIONS = '__GET_DATA_TYPE_OPTIONS__'
 export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
-export const GET_BIOBANKS_BY_ID = '__GET_BIOBANKS_BY_ID__'
+export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
@@ -102,8 +102,6 @@ export default {
       } else {
         commit(MAP_QUERY_TO_STATE)
       }
-    } else {
-      dispatch(GET_BIOBANK_IDENTIFIERS)
     }
   },
   /**
@@ -112,39 +110,30 @@ export default {
    * @param commit
    * @param biobanks
    */
-  [GET_BIOBANKS_BY_ID] ({commit}, biobanks) {
-    if (biobanks && biobanks.length > 0) {
-      /* To prevent the =in= query from becoming huge, we slice the first 101 biobank identifiers from the list of unique IDs  */
-      const uniqueBiobankIds = utils.getUniqueIdArray(biobanks.map(biobank => biobank.biobank.id)).slice(0, 101)
-      const uri = `${BIOBANK_API_PATH}?num=101&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(${uniqueBiobankIds.join(',')})`
-
-      api.get(uri).then(response => {
-        commit(SET_BIOBANKS, response.items)
-        commit(SET_LOADING, false)
+  [GET_ALL_BIOBANKS] ({commit, dispatch}) {
+    api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
+      .then(response => {
+        commit(SET_ALL_BIOBANKS, response.items)
+        dispatch(GET_BIOBANK_IDENTIFIERS)
       }, error => {
         commit(SET_ERROR, error)
-        commit(SET_LOADING, false)
       })
-    } else {
-      commit(SET_BIOBANKS, [])
-      commit(SET_LOADING, false)
-    }
   },
   /**
-   * Retrieve biobank identifiers for filters on collection.country, collection.standards, collection.materials,
-   * or collection.diagnosis_available
+   * Retrieve biobank identifiers for rsql value
    */
-  [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters, dispatch}) {
-    commit(SET_LOADING, true)
-
-    const query = getters.rsql.length ? `&q=${encodeRsqlValue(getters.rsql)}` : ''
-
-    api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank${query}`).then(response => {
-      dispatch(GET_BIOBANKS_BY_ID, response.items)
-    }, error => {
-      commit(SET_ERROR, error)
-      commit(SET_LOADING, false)
-    })
+  [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters}) {
+    if (!getters.rsql.length) {
+      commit(SET_BIOBANK_IDS, Object.keys(state.allBiobanks))
+    } else {
+      commit(SET_BIOBANK_IDS, undefined)
+      api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank(id)&q=${encodeRsqlValue(getters.rsql)}`)
+        .then(response => {
+          commit(SET_BIOBANK_IDS, getUniqueIdArray(response.items.map(item => item.biobank.id)))
+        }, error => {
+          commit(SET_ERROR, error)
+        })
+    }
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
     api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
@@ -158,15 +147,11 @@ export default {
    * Calls the DirectoryController method '/export' which answers with a URL
    * that redirects to a Negotiator server specified in the Directory settings
    */
-  [SEND_TO_NEGOTIATOR] ({state, commit}) {
+  [SEND_TO_NEGOTIATOR] ({state, getters, commit}) {
     const options = {
-      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, window.location.href))
+      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }
-
-    api.post('/plugin/directory/export', options).then(response => {
-      window.location.href = response
-    }, error => {
-      commit(SET_ERROR, error)
-    })
+    api.post('/plugin/directory/export', options)
+      .then(helpers.setLocationHref, error => commit(SET_ERROR, error))
   }
 }
