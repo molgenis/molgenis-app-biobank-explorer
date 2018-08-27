@@ -30,9 +30,13 @@
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
   import FilterContainer from './filters/FilterContainer'
   import ResultHeader from './ResultHeader'
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-  import { GET_ALL_BIOBANKS, GET_BIOBANK_IDENTIFIERS, MAP_QUERY_TO_STATE } from '../store/actions'
+  import {
+    MAP_QUERY_TO_STATE
+  } from '../store/actions'
+  import { SET_ALL_BIOBANKS, SET_BIOBANK_IDS } from '../store/mutations'
+  import {$rsql, $biobankIds, $allBiobanks} from '../client/reactive-biobank-client'
 
   export default {
     name: 'biobank-explorer-container',
@@ -46,19 +50,23 @@
     },
     watch: {
       rsql () {
-        this.getBiobankIdentifiers()
+        $rsql.push(this.rsql)
       }
     },
     methods: {
       ...mapActions({
-        getAllBiobanks: GET_ALL_BIOBANKS,
-        getBiobankIdentifiers: GET_BIOBANK_IDENTIFIERS,
         mapQueryToState: MAP_QUERY_TO_STATE
+      }),
+      ...mapMutations({
+        setAllBiobanks: SET_ALL_BIOBANKS,
+        setBiobankIds: SET_BIOBANK_IDS
       })
     },
     mounted () {
       this.mapQueryToState()
-      this.getAllBiobanks()
+      $biobankIds.onValue(this.setBiobankIds)
+      $allBiobanks.onValue(this.setAllBiobanks)
+      $rsql.push(this.rsql)
     }
   }
 </script>

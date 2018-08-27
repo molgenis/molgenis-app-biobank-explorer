@@ -1,9 +1,7 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils, { getUniqueIdArray } from '../utils'
+import utils from '../utils'
 import {
-  SET_ALL_BIOBANKS,
-  SET_BIOBANK_IDS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
@@ -13,7 +11,7 @@ import {
   SET_MATERIALS,
   SET_STANDARDS
 } from './mutations'
-import {encodeRsqlValue} from '@molgenis/rsql'
+import { BIOBANK_API_PATH, COLLECTION_ATTRIBUTE_SELECTOR } from '../client/biobank-client'
 
 /* ACTION CONSTANTS */
 export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
@@ -29,16 +27,12 @@ export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
-const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
-const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const STANDARDS_API_PATH = '/api/v2/eu_bbmri_eric_lab_standards'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
 const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
-
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
 
 export default {
   /**
@@ -102,37 +96,6 @@ export default {
       } else {
         commit(MAP_QUERY_TO_STATE)
       }
-    }
-  },
-  /**
-   * Retrieve biobanks with expanded collections based on a list of biobank ids
-   *
-   * @param commit
-   * @param biobanks
-   */
-  [GET_ALL_BIOBANKS] ({commit, dispatch}) {
-    api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
-      .then(response => {
-        commit(SET_ALL_BIOBANKS, response.items)
-        dispatch(GET_BIOBANK_IDENTIFIERS)
-      }, error => {
-        commit(SET_ERROR, error)
-      })
-  },
-  /**
-   * Retrieve biobank identifiers for rsql value
-   */
-  [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters}) {
-    if (!getters.rsql.length) {
-      commit(SET_BIOBANK_IDS, Object.keys(state.allBiobanks))
-    } else {
-      commit(SET_BIOBANK_IDS, undefined)
-      api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank(id)&q=${encodeRsqlValue(getters.rsql)}`)
-        .then(response => {
-          commit(SET_BIOBANK_IDS, getUniqueIdArray(response.items.map(item => item.biobank.id)))
-        }, error => {
-          commit(SET_ERROR, error)
-        })
     }
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
