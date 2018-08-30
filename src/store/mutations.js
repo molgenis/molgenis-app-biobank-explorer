@@ -1,10 +1,11 @@
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
-export const SET_STANDARDS = '__SET_STANDARDS__'
+export const SET_COLLECTION_QUALITY = '__SET_COLLECTION_QUALITY__'
 export const SET_COLLECTION_TYPES = '__SET_COLLECTION_TYPES__'
 export const SET_DATA_TYPES = '__SET_DATA_TYPES__'
 export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const SET_SEARCH = '__SET_SEARCH__'
+export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLLECTIONS__'
 
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
@@ -25,6 +26,12 @@ const combineCodeAndLabels = (diagnoses) => {
   })
 }
 
+const getCollectionsMatchingQualityQuery = (collectionQuality) => {
+  const collections = collectionQuality.map((quality) => { return quality.collection.id })
+  const uniqueCollections = collections.filter((elem, pos, arr) => arr.indexOf(elem) === pos)
+  return uniqueCollections
+}
+
 export default {
   /**
    * Update the options for the different filters available in the biobank explorer
@@ -35,8 +42,8 @@ export default {
   [SET_MATERIALS] (state, materials) {
     state.materials.options = materials
   },
-  [SET_STANDARDS] (state, standards) {
-    state.standards.options = standards
+  [SET_COLLECTION_QUALITY] (state, collectionQuality) {
+    state.collection_quality.options = collectionQuality
   },
   [SET_COLLECTION_TYPES] (state, types) {
     state.type.options = types
@@ -49,6 +56,9 @@ export default {
   },
   [SET_SEARCH] (state, search) {
     state.search = search
+  },
+  [SET_COLLECTION_QUALITY_COLLECTIONS] (state, collections) {
+    state.collection_quality.collections = getCollectionsMatchingQualityQuery(collections)
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -68,7 +78,8 @@ export default {
     state.diagnosis_available.filters = []
     state.materials.filters = []
     state.country.filters = []
-    state.standards.filters = []
+    state.collection_quality.filters = []
+    state.collection_quality.collections = []
     state.type.filters = []
     state.dataType.filters = []
   },
@@ -92,13 +103,17 @@ export default {
   /**
    *
    * @param state
-   * @param diagnoses
+   * @param params
    */
-  [MAP_QUERY_TO_STATE] (state, diagnoses) {
+  [MAP_QUERY_TO_STATE] (state, params) {
     const query = state.route.query
 
-    if (diagnoses) {
-      state.diagnosis_available.filters = combineCodeAndLabels(diagnoses)
+    if (params && params.diagnoses) {
+      state.diagnosis_available.filters = combineCodeAndLabels(params.diagnoses)
+    }
+
+    if (query.collection_quality) {
+      state.collection_quality.filters = query.collection_quality.split(',')
     }
 
     if (query.search) {
@@ -113,8 +128,8 @@ export default {
       state.materials.filters = query.materials.split(',')
     }
 
-    if (query.standards) {
-      state.standards.filters = query.standards.split(',')
+    if (query.collection_quality) {
+      state.collection_quality.filters = query.collection_quality.split(',')
     }
 
     if (query.type) {

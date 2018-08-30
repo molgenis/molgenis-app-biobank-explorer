@@ -14,10 +14,10 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.country.filters),
     createInQuery('materials', state.materials.filters),
-    createInQuery('standards', state.standards.filters),
     createInQuery('type', state.type.filters),
     createInQuery('data_categories', state.dataType.filters),
     createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
+    createInQuery('id', state.collection_quality.collections),
     state.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']

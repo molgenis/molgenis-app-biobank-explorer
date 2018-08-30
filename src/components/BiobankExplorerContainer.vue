@@ -32,7 +32,7 @@
   import ResultHeader from './ResultHeader'
   import { mapGetters, mapActions } from 'vuex'
 
-  import { GET_ALL_BIOBANKS, GET_BIOBANK_IDENTIFIERS, MAP_QUERY_TO_STATE } from '../store/actions'
+  import { GET_ALL_BIOBANKS, GET_BIOBANK_IDENTIFIERS, GET_QUERY } from '../store/actions'
 
   export default {
     name: 'biobank-explorer-container',
@@ -53,7 +53,7 @@
       ...mapActions({
         getAllBiobanks: GET_ALL_BIOBANKS,
         getBiobankIdentifiers: GET_BIOBANK_IDENTIFIERS,
-        mapQueryToState: MAP_QUERY_TO_STATE
+        mapQueryToState: GET_QUERY
       })
     },
     mounted () {

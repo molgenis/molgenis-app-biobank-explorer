@@ -11,32 +11,37 @@ import {
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
   SET_MATERIALS,
-  SET_STANDARDS
+  SET_COLLECTION_QUALITY,
+  MAP_QUERY_TO_STATE,
+  SET_COLLECTION_QUALITY_COLLECTIONS
 } from './mutations'
-import {encodeRsqlValue} from '@molgenis/rsql'
+import { encodeRsqlValue } from '@molgenis/rsql'
 
 /* ACTION CONSTANTS */
 export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
 export const GET_MATERIALS_OPTIONS = '__GET_MATERIALS_OPTIONS__'
-export const GET_STANDARDS_OPTIONS = '__GET_STANDARDS_OPTIONS__'
+export const GET_COLLECTION_QUALITY_OPTIONS = '__GET_COLLECTION_QUALITY_OPTIONS__'
 export const GET_TYPES_OPTIONS = '__GET_TYPES_OPTIONS__'
 export const GET_DATA_TYPE_OPTIONS = '__GET_DATA_TYPE_OPTIONS__'
 export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
+export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
 export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
-export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
+export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
-const STANDARDS_API_PATH = '/api/v2/eu_bbmri_eric_lab_standards'
+const COLLECTION_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_col'
+// const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_ops_standards'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
 const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
+const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
 
@@ -73,9 +78,9 @@ export default {
       commit(SET_ERROR, error)
     })
   },
-  [GET_STANDARDS_OPTIONS] ({commit}) {
-    api.get(STANDARDS_API_PATH).then(response => {
-      commit(SET_STANDARDS, response.items)
+  [GET_COLLECTION_QUALITY_OPTIONS] ({commit}) {
+    api.get(COLLECTION_QUALITY_API_PATH).then(response => {
+      commit(SET_COLLECTION_QUALITY, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
@@ -91,14 +96,31 @@ export default {
       commit(SET_DIAGNOSIS_AVAILABLE, [])
     }
   },
-  [MAP_QUERY_TO_STATE] ({state, dispatch, commit}) {
+  [GET_COLLECTION_QUALITY_COLLECTIONS] ({state, commit}) {
+    if (state.route.query.collection_quality) {
+      const collectionQualityIds = state.route.query.collection_quality.split(',')
+      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?q=assess_level_col=in=(${collectionQualityIds})`).then(response => {
+        commit(SET_COLLECTION_QUALITY_COLLECTIONS, response.items)
+      })
+    } else {
+      commit(SET_COLLECTION_QUALITY_COLLECTIONS, [])
+    }
+  },
+
+  [GET_QUERY] ({state, dispatch, commit}) {
     if (Object.keys(state.route.query).length > 0) {
       if (state.route.query.diagnosis_available) {
         const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
 
         api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
-          commit(MAP_QUERY_TO_STATE, response.items)
+          commit(MAP_QUERY_TO_STATE, {diagnoses: response.items})
         })
+      } else {
+        commit(MAP_QUERY_TO_STATE)
+      }
+      if (state.route.query.collection_quality) {
+        dispatch(GET_COLLECTION_QUALITY_COLLECTIONS)
+        commit(MAP_QUERY_TO_STATE)
       } else {
         commit(MAP_QUERY_TO_STATE)
       }
