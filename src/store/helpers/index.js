@@ -45,7 +45,7 @@ const getHumanReadableString = (state) => {
 
   const countries = state.country.filters
   const materials = state.materials.filters
-  const standards = state.standards.filters
+  const collectionQuality = state.collection_quality.filters
   const types = state.type.filters
   const dataTypes = state.dataType.filters
   const diseases = state.diagnosis_available.filters.map(disease => disease.label)
@@ -64,9 +64,9 @@ const getHumanReadableString = (state) => {
     humanReadableString += 'selected material types are ' + materials.join(',')
   }
 
-  if (standards.length > 0) {
+  if (collectionQuality.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'selected standards are ' + standards.join(',')
+    humanReadableString += 'selected collection quality standards are ' + collectionQuality.join(',')
   }
 
   if (types.length > 0) {
