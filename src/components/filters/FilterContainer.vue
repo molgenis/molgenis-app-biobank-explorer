@@ -87,7 +87,7 @@
           //   maxVisibleOptions: 4
           // }, {
           name: 'collection_quality',
-          label: 'Quality marks - Collection',
+          label: 'Collection quality marks',
           options: this.collectionQualityOptions,
           initiallyCollapsed: !this.$store.state.route.query.collection_quality,
           filters: this.$store.state.collection_quality.filters,
