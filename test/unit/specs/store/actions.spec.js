@@ -2,7 +2,7 @@ import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions, {
   GET_ALL_BIOBANKS,
-  GET_BIOBANK_IDENTIFIERS,
+  GET_BIOBANK_IDENTIFIERS, GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
   SEND_TO_NEGOTIATOR
@@ -19,7 +19,8 @@ import {
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
-  SET_MATERIALS
+  SET_MATERIALS,
+  SET_COLLECTION_QUALITY_COLLECTIONS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -246,6 +247,27 @@ describe('store', () => {
 
         utils.testAction(actions.__GET_QUERY__, options, done)
       })
+
+      it('should trigger the action to get the collections matching the applied quality standards and map result + URL query to state', done => {
+        const state = {
+          route: {
+            query: {
+              collection_quality: 'eric,self'
+            }
+          }
+        }
+        const options = {
+          state: state,
+          expectedActions: [
+            {type: GET_COLLECTION_QUALITY_COLLECTIONS}
+          ],
+          expectedMutations: [
+            {type: MAP_QUERY_TO_STATE}
+          ]
+        }
+
+        utils.testAction(actions.__GET_QUERY__, options, done)
+      })
     })
 
     describe('GET_ALL_BIOBANKS', () => {
@@ -388,6 +410,58 @@ describe('store', () => {
         }
 
         utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
+      })
+    })
+
+    describe('GET_COLLECTION_QUALITY_COLLECTIONS', () => {
+      it('should retrieve the collections for which certain level of assessment is applied for the quality standards', done => {
+        const response = {
+          meta: {
+            name: 'meta'
+          },
+          items: [
+            {id: 'random-1', collection: 'col-1', quality_standard: '1', asses_level_col: 'eric'},
+            {id: 'random-2', collection: 'col-1', quality_standard: '2', asses_level_col: 'self'},
+            {id: 'random-3', collection: 'col-2', quality_standard: '2', asses_level_col: 'eric'}
+          ]
+        }
+
+        const state = {
+          route: {
+            query: {
+              collection_quality: 'eric,self'
+            }
+          }
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_col_qual_info?q=assess_level_col=in=(eric,self)')).thenResolve(response)
+        td.replace(api, 'get', get)
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+      })
+
+      it('should pass empty array to mutation when no quality standards are selected', done => {
+        const state = {
+          route: {
+            query: {}
+          }
+        }
+
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: []}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
       })
     })
 

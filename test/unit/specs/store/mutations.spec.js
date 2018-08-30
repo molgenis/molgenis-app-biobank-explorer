@@ -268,6 +268,8 @@ describe('store', () => {
               materials: 'RNA,PLASMA',
               collection_quality: 'eric,self',
               search: 'search',
+              type: 'BIRTH_COHORT',
+              dataType: 'BIOLOGICAL_SAMPLES',
               nToken: '29djgCm29104958f7dLqopf92JDJKS'
             }
           },
@@ -283,6 +285,12 @@ describe('store', () => {
           diagnosis_available: {
             filters: []
           },
+          type: {
+            filters: []
+          },
+          dataType: {
+            filters: []
+          },
           search: '',
           nToken: null
         }
@@ -291,6 +299,8 @@ describe('store', () => {
 
         expect(state.country.filters).to.deep.equal(['NL', 'BE'])
         expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
+        expect(state.type.filters).to.deep.equal(['BIRTH_COHORT'])
+        expect(state.dataType.filters).to.deep.equal(['BIOLOGICAL_SAMPLES'])
         expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
