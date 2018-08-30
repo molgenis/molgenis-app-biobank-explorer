@@ -90,18 +90,18 @@ describe('store', () => {
       })
     })
 
-    describe('SET_STANDARDS', () => {
+    describe('SET_COLLECTION_QUALITY', () => {
       it('should set the qualities in the state with the payload', () => {
         const state = {
-          standards: {
+          collection_quality: {
             options: []
           }
         }
 
-        const standards = ['cen-ts-16826-1-2015']
-        mutations.__SET_STANDARDS__(state, standards)
+        const collectionQuality = ['eric']
+        mutations.__SET_COLLECTION_QUALITY__(state, collectionQuality)
 
-        expect(state.standards.options).to.deep.equal(standards)
+        expect(state.collection_quality.options).to.deep.equal(collectionQuality)
       })
     })
 
@@ -160,8 +160,9 @@ describe('store', () => {
             filters: ['C18'],
             options: []
           },
-          standards: {
+          collection_quality: {
             filters: ['Awesome standard'],
+            collections: [],
             options: []
           },
           type: {
@@ -188,8 +189,9 @@ describe('store', () => {
             filters: [],
             options: []
           },
-          standards: {
+          collection_quality: {
             filters: [],
+            collections: [],
             options: []
           },
           type: {
@@ -205,7 +207,7 @@ describe('store', () => {
         expect(state.country).to.deep.equal(expected.country)
         expect(state.materials).to.deep.equal(expected.materials)
         expect(state.diagnosis_available).to.deep.equal(expected.diagnosis_available)
-        expect(state.standards).to.deep.equal(expected.standards)
+        expect(state.collection_quality).to.deep.equal(expected.collection_quality)
       })
     })
 
@@ -264,7 +266,7 @@ describe('store', () => {
             query: {
               country: 'NL,BE',
               materials: 'RNA,PLASMA',
-              standards: 'standard-1,standard-2',
+              collection_quality: 'eric,self',
               search: 'search',
               nToken: '29djgCm29104958f7dLqopf92JDJKS'
             }
@@ -275,7 +277,7 @@ describe('store', () => {
           materials: {
             filters: []
           },
-          standards: {
+          collection_quality: {
             filters: []
           },
           diagnosis_available: {
@@ -289,7 +291,7 @@ describe('store', () => {
 
         expect(state.country.filters).to.deep.equal(['NL', 'BE'])
         expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
-        expect(state.standards.filters).to.deep.equal(['standard-1', 'standard-2'])
+        expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
       })
@@ -300,7 +302,7 @@ describe('store', () => {
             query: {
               country: 'NL,BE',
               materials: 'RNA,PLASMA',
-              standards: 'standard-1,standard-2',
+              collection_quality: 'eric,self',
               search: 'search',
               nToken: '29djgCm29104958f7dLqopf92JDJKS'
             }
@@ -311,7 +313,7 @@ describe('store', () => {
           materials: {
             filters: []
           },
-          standards: {
+          collection_quality: {
             filters: []
           },
           diagnosis_available: {
@@ -325,7 +327,7 @@ describe('store', () => {
           code: 'C22.3',
           label: 'Angiosarcoma of liver'
         }]
-        mutations.__MAP_QUERY_TO_STATE__(state, payload)
+        mutations.__MAP_QUERY_TO_STATE__(state, {diagnoses: payload})
 
         const expected = [
           {
@@ -337,7 +339,7 @@ describe('store', () => {
 
         expect(state.country.filters).to.deep.equal(['NL', 'BE'])
         expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
-        expect(state.standards.filters).to.deep.equal(['standard-1', 'standard-2'])
+        expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
         expect(state.diagnosis_available.filters).to.deep.equal(expected)
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')

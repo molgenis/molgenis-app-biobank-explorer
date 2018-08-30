@@ -10,8 +10,9 @@ const getInitialState = () => {
     materials: {
       filters: []
     },
-    standards: {
-      filters: []
+    collection_quality: {
+      filters: [],
+      collections: []
     },
     diagnosis_available: {
       filters: []
@@ -49,11 +50,11 @@ describe('store', () => {
         expect(actual).to.equal(expected)
       })
 
-      it('should create a query with only a standards filter', () => {
-        state.standards.filters.push('cen-ts-16826-1-2015')
+      it('should create a query with only a collection quality filter', () => {
+        state.collection_quality.collections.push('collection1')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'standards=in=(cen-ts-16826-1-2015)'
+        const expected = 'id=in=(collection1)'
 
         expect(actual).to.equal(expected)
       })
@@ -127,8 +128,8 @@ describe('store', () => {
           materials: {
             filters: ['RNA']
           },
-          standards: {
-            filters: ['cen-ts-16826-1-2015']
+          collection_quality: {
+            filters: ['eric']
           },
           type: {
             filters: ['type']
@@ -155,7 +156,7 @@ describe('store', () => {
             {biobankId: 'biobank-2', collectionId: 'collection-3'},
             {biobankId: 'biobank-2', collectionId: 'collection-4'}
           ],
-          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected standards are cen-ts-16826-1-2015 and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
+          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'long rsql string'
@@ -225,11 +226,11 @@ describe('store', () => {
         expect(actual).to.equal(expected)
       })
 
-      it('should generate a human readable string with only a standards filter', () => {
-        state.standards.filters.push('cen-ts-16826-1-2015')
+      it('should generate a human readable string with only a collection quality filter', () => {
+        state.collection_quality.filters.push('eric')
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'selected standards are cen-ts-16826-1-2015'
+        const expected = 'selected collection quality standards are eric'
 
         expect(actual).to.equal(expected)
       })
@@ -250,14 +251,14 @@ describe('store', () => {
         state.search = 'this is a free text search'
         state.country.filters.push('NL', 'BE')
         state.materials.filters.push('PLASMA', 'RNA')
-        state.standards.filters.push('cen-ts-16826-1-2015')
+        state.collection_quality.filters.push('eric')
         state.diagnosis_available.filters.push(
           {id: '1', label: 'small disease'},
           {id: '2', label: 'big disease'}
         )
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected standards are cen-ts-16826-1-2015 and selected disease types are small disease,big disease'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease'
 
         expect(actual).to.equal(expected)
       })

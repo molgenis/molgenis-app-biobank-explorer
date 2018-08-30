@@ -13,13 +13,13 @@ import {
   SET_ALL_BIOBANKS,
   SET_BIOBANK_IDS,
   SET_BIOBANK_REPORT,
+  SET_COLLECTION_QUALITY,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
-  SET_MATERIALS,
-  SET_STANDARDS
+  SET_MATERIALS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -140,26 +140,26 @@ describe('store', () => {
       })
     })
 
-    describe('GET_STANDARDS', () => {
-      it('should retrieve list of available standards from the server and store them in the state', done => {
+    describe('GET_COLLECTION_QUALITY_OPTIONS', () => {
+      it('should retrieve list of available collection quality standards from the server and store them in the state', done => {
         const response = {
           items: [
-            {id: 'a-smart_standard', label: 'A cool standard'},
+            {id: 'a-cool_standard', label: 'A cool standard'},
             {id: 'a-smart_standard', label: 'A smart standard'}
           ]
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_lab_standards')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_assess_level_col')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           expectedMutations: [
-            {type: SET_STANDARDS, payload: response.items}
+            {type: SET_COLLECTION_QUALITY, payload: response.items}
           ]
         }
 
-        utils.testAction(actions.__GET_STANDARDS_OPTIONS__, options, done)
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_OPTIONS__, options, done)
       })
     })
 
@@ -197,8 +197,8 @@ describe('store', () => {
       })
     })
 
-    describe('MAP_QUERY_TO_STATE', () => {
-      it('should commit MAP_QUERY_TO_STATE mutation when no diagnosis ids are in the URL', done => {
+    describe('GET_QUERY', () => {
+      it('should commit GET_QUERY mutation when no diagnosis ids are in the URL', done => {
         const state = {
           route: {
             query: {
@@ -214,7 +214,7 @@ describe('store', () => {
           ]
         }
 
-        utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
+        utils.testAction(actions.__GET_QUERY__, options, done)
       })
 
       it('should fetch diagnoses from the server and map result + URL query to state', done => {
@@ -244,7 +244,7 @@ describe('store', () => {
           ]
         }
 
-        utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
+        utils.testAction(actions.__GET_QUERY__, options, done)
       })
     })
 
@@ -277,7 +277,7 @@ describe('store', () => {
         search: 'Cell&Co',
         country: {filters: []},
         materials: {filters: ['CELL_LINES']},
-        standards: {filters: []},
+        collection_quality: {filters: []},
         diagnosis_available: {filters: []},
         type: {filters: []},
         dataType: {filters: []}
@@ -363,7 +363,7 @@ describe('store', () => {
         td.replace(api, 'get', get)
 
         const options = {
-          getters: { rsql: 'name=q="Cell&Co";country=in=(A,B)' },
+          getters: {rsql: 'name=q="Cell&Co";country=in=(A,B)'},
           expectedMutations: [
             {type: SET_BIOBANK_IDS, payload: undefined},
             {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
@@ -375,7 +375,7 @@ describe('store', () => {
 
       it('should select all biobanks if filters are empty', done => {
         const options = {
-          getters: { rsql: '' },
+          getters: {rsql: ''},
           state: {
             allBiobanks: {
               'biobank-1': {id: 'biobank-1', name: 'Biobank B'},

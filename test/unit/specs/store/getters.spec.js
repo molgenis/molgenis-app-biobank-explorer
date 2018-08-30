@@ -11,6 +11,7 @@ describe('store', () => {
           materials: {filters: []},
           standards: {filters: []},
           diagnosis_available: {filters: []},
+          collection_quality: {filters: [], collections: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -23,6 +24,7 @@ describe('store', () => {
           materials: {filters: []},
           standards: {filters: []},
           diagnosis_available: {filters: []},
+          collection_quality: {filters: [], collections: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -119,16 +121,16 @@ describe('store', () => {
       })
     })
 
-    describe('getStandardsOptions', () => {
+    describe('getCollectionQualityOptions', () => {
       it('should retrieve the options that are available for the standards filter', () => {
         const state = {
-          standards: {
-            options: ['cen-ts-16826-1-2015', 'cen-ts-17238-1-2016']
+          collection_quality: {
+            options: ['self', 'eric']
           }
         }
 
-        const actual = getters.getStandardsOptions(state)
-        const expected = ['cen-ts-16826-1-2015', 'cen-ts-17238-1-2016']
+        const actual = getters.getCollectionQualityOptions(state)
+        const expected = ['self', 'eric']
 
         expect(actual).to.deep.equal(expected)
       })
@@ -170,8 +172,9 @@ describe('store', () => {
             filters: [],
             options: []
           },
-          standards: {
+          collection_quality: {
             filters: [],
+            collections: [],
             options: []
           },
           type: {
