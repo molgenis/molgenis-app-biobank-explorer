@@ -1,3 +1,5 @@
+import utils, { getUniqueIdArray } from '../utils'
+
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
 export const SET_COLLECTION_QUALITY = '__SET_COLLECTION_QUALITY__'
@@ -30,7 +32,7 @@ const combineCodeAndLabels = (diagnoses) => {
 
 const getUniqueFilterMatches = (quality, selector) => {
   const matches = quality.map((quality) => { return quality[selector].id })
-  const uniqueMatches = matches.filter((elem, pos, arr) => arr.indexOf(elem) === pos)
+  const uniqueMatches = getUniqueIdArray(matches)
   return uniqueMatches
 }
 
