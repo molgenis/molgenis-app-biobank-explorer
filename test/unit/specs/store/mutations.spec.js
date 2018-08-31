@@ -365,7 +365,8 @@ describe('store', () => {
       it('should set the collections that match the applied quality standards filter', () => {
         const state = {
           collection_quality: {
-            collections: []
+            collections: [],
+            filters: []
           }
         }
 

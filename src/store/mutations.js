@@ -1,4 +1,4 @@
-import utils, { getUniqueIdArray } from '../utils'
+import { getUniqueIdArray } from '../utils'
 
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
@@ -30,10 +30,14 @@ const combineCodeAndLabels = (diagnoses) => {
   })
 }
 
-const getUniqueFilterMatches = (quality, selector) => {
-  const matches = quality.map((quality) => { return quality[selector].id })
+const getUniqueFilterMatches = (filter, selector) => {
+  const matches = filter.map((filter) => { return filter[selector].id })
   const uniqueMatches = getUniqueIdArray(matches)
   return uniqueMatches
+}
+
+const hasFilterWithoutMatches = (filter, matches) => {
+  return filter.length && !matches.length
 }
 
 export default {
@@ -65,10 +69,10 @@ export default {
     state.search = search
   },
   [SET_COLLECTION_QUALITY_COLLECTIONS] (state, collections) {
-    state.collection_quality.collections = getUniqueFilterMatches(collections, 'collection')
+    state.collection_quality.collections = hasFilterWithoutMatches(state.collection_quality.filters, collections) ? ['invalid_collection'] : getUniqueFilterMatches(collections, 'collection')
   },
   [SET_BIOBANK_QUALITY_BIOBANKS] (state, biobanks) {
-    state.biobank_quality.biobanks = getUniqueFilterMatches(biobanks, 'biobank')
+    state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
