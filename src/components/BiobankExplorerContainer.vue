@@ -53,11 +53,11 @@
       ...mapActions({
         getAllBiobanks: GET_ALL_BIOBANKS,
         getBiobankIdentifiers: GET_BIOBANK_IDENTIFIERS,
-        mapQueryToState: GET_QUERY
+        getQuery: GET_QUERY
       })
     },
     mounted () {
-      this.mapQueryToState()
+      this.getQuery()
       this.getAllBiobanks()
     }
   }

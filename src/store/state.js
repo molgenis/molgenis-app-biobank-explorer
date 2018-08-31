@@ -21,15 +21,15 @@ export default {
     filters: [],
     options: []
   },
-  biobank_quality: {
-    filters: [],
-    options: [],
-    biobanks: []
-  },
   collection_quality: {
     filters: [],
     options: [],
     collections: []
+  },
+  biobank_quality: {
+    filters: [],
+    options: [],
+    biobanks: []
   },
   diagnosis_available: {
     filters: [],
