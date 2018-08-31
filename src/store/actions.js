@@ -12,8 +12,10 @@ import {
   SET_ERROR,
   SET_MATERIALS,
   SET_COLLECTION_QUALITY,
+  SET_BIOBANK_QUALITY,
   MAP_QUERY_TO_STATE,
-  SET_COLLECTION_QUALITY_COLLECTIONS
+  SET_COLLECTION_QUALITY_COLLECTIONS,
+  SET_BIOBANK_QUALITY_BIOBANKS
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -21,10 +23,12 @@ import { encodeRsqlValue } from '@molgenis/rsql'
 export const GET_COUNTRY_OPTIONS = '__GET_COUNTRY_OPTIONS__'
 export const GET_MATERIALS_OPTIONS = '__GET_MATERIALS_OPTIONS__'
 export const GET_COLLECTION_QUALITY_OPTIONS = '__GET_COLLECTION_QUALITY_OPTIONS__'
+export const GET_BIOBANK_QUALITY_OPTIONS = '__GET_BIOBANK_QUALITY_OPTIONS__'
 export const GET_TYPES_OPTIONS = '__GET_TYPES_OPTIONS__'
 export const GET_DATA_TYPE_OPTIONS = '__GET_DATA_TYPE_OPTIONS__'
 export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
 export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
+export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
 export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
@@ -35,13 +39,14 @@ export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const COLLECTION_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_col'
-// const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_ops_standards'
+const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_bio'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
 const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
 const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
 const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
+const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
 
@@ -85,6 +90,13 @@ export default {
       commit(SET_ERROR, error)
     })
   },
+  [GET_BIOBANK_QUALITY_OPTIONS] ({commit}) {
+    api.get(BIOBANK_QUALITY_API_PATH).then(response => {
+      commit(SET_BIOBANK_QUALITY, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
   [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({commit}, query) {
     if (query) {
       const rsql = `label=q="${query}",id=q="${query}",code=q="${query}"`
@@ -105,6 +117,17 @@ export default {
       })
     } else {
       commit(SET_COLLECTION_QUALITY_COLLECTIONS, [])
+    }
+  },
+
+  [GET_BIOBANK_QUALITY_BIOBANKS] ({state, commit}) {
+    if (state.route.query.biobank_quality) {
+      const biobankQualityIds = state.route.query.biobank_quality.split(',')
+      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?q=assess_level_bio=in=(${biobankQualityIds})`).then(response => {
+        commit(SET_BIOBANK_QUALITY_BIOBANKS, response.items)
+      })
+    } else {
+      commit(SET_BIOBANK_QUALITY_BIOBANKS, [])
     }
   },
 

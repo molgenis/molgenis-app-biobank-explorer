@@ -8,6 +8,7 @@ export default {
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
   getCollectionQualityOptions: state => state.collection_quality.options,
+  getBiobankQualityOptions: state => state.biobank_quality.options,
   getTypesOptions: state => state.type.options,
   getDataTypeOptions: state => state.dataType.options,
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
@@ -35,6 +36,10 @@ export default {
 
     if (state.collection_quality.filters.length > 0) {
       activeFilters.collection_quality = state.collection_quality.options.filter(option => state.collection_quality.filters.includes(option.id))
+    }
+
+    if (state.biobank_quality.filters.length > 0) {
+      activeFilters.biobank_quality = state.biobank_quality.options.filter(option => state.biobank_quality.filters.includes(option.id))
     }
 
     if (state.type.filters.length > 0) {

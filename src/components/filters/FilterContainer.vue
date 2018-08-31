@@ -38,9 +38,11 @@
     GET_COUNTRY_OPTIONS,
     GET_MATERIALS_OPTIONS,
     GET_COLLECTION_QUALITY_OPTIONS,
+    GET_BIOBANK_QUALITY_OPTIONS,
     GET_TYPES_OPTIONS,
     GET_DATA_TYPE_OPTIONS,
-    GET_COLLECTION_QUALITY_COLLECTIONS
+    GET_COLLECTION_QUALITY_COLLECTIONS,
+    GET_BIOBANK_QUALITY_BIOBANKS
   } from '../../store/actions'
   import { mapGetters, mapMutations } from 'vuex'
   import CheckboxFilters from './CheckboxFilters'
@@ -51,6 +53,7 @@
         countryOptions: 'getCountryOptions',
         materialOptions: 'getMaterialOptions',
         collectionQualityOptions: 'getCollectionQualityOptions',
+        biobankQualityOptions: 'getBiobankQualityOptions',
         typesOptions: 'getTypesOptions',
         dataTypeOptions: 'getDataTypeOptions'
       }),
@@ -79,13 +82,13 @@
           initiallyCollapsed: !this.$store.state.route.query.country,
           filters: this.$store.state.country.filters
         }, {
-          //   name: 'biobank_quality',
-          //   label: 'Quality marks - Biobank',
-          //   options: this.standardsOptions,
-          //   initiallyCollapsed: !this.$store.state.route.query.standards,
-          //   filters: this.$store.state.biobankQuality.filters,
-          //   maxVisibleOptions: 4
-          // }, {
+          name: 'biobank_quality',
+          label: 'Biobank quality marks',
+          options: this.biobankQualityOptions,
+          initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
+          filters: this.$store.state.biobank_quality.filters,
+          maxVisibleOptions: 4
+        }, {
           name: 'collection_quality',
           label: 'Collection quality marks',
           options: this.collectionQualityOptions,
@@ -118,12 +121,16 @@
         if (name === 'collection_quality') {
           this.$store.dispatch(GET_COLLECTION_QUALITY_COLLECTIONS)
         }
+        if (name === 'biobank_quality') {
+          this.$store.dispatch(GET_BIOBANK_QUALITY_BIOBANKS)
+        }
       }
     },
     mounted () {
       this.$store.dispatch(GET_COUNTRY_OPTIONS)
       this.$store.dispatch(GET_MATERIALS_OPTIONS)
       this.$store.dispatch(GET_COLLECTION_QUALITY_OPTIONS)
+      this.$store.dispatch(GET_BIOBANK_QUALITY_OPTIONS)
       this.$store.dispatch(GET_TYPES_OPTIONS)
       this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
     },
