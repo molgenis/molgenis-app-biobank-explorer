@@ -87,7 +87,8 @@ export default {
   },
   [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({commit}, query) {
     if (query) {
-      api.get(`${DISEASE_API_PATH}?q=label=q=${query},id=q=${query},code=q=${query}`).then(response => {
+      const rsql = `label=q="${query}",id=q="${query}",code=q="${query}"`
+      api.get(`${DISEASE_API_PATH}?q=${encodeRsqlValue(rsql)}`).then(response => {
         commit(SET_DIAGNOSIS_AVAILABLE, response.items)
       }, error => {
         commit(SET_ERROR, error)

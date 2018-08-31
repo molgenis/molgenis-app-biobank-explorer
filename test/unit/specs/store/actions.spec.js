@@ -184,7 +184,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q=search,id=q=search,code=q=search')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q="search",id=q="search",code=q="search"')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
