@@ -124,7 +124,7 @@ describe('store', () => {
     })
 
     describe('getCollectionQualityOptions', () => {
-      it('should retrieve the options that are available for the standards filter', () => {
+      it('should retrieve the options that are available for the collection standards filter', () => {
         const state = {
           collection_quality: {
             options: ['self', 'eric']
@@ -133,6 +133,21 @@ describe('store', () => {
 
         const actual = getters.getCollectionQualityOptions(state)
         const expected = ['self', 'eric']
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
+    describe('getBiobankQualityOptions', () => {
+      it('should retrieve the options that are available for the biobank standards filter', () => {
+        const state = {
+          biobank_quality: {
+            options: ['accredited', 'eric']
+          }
+        }
+
+        const actual = getters.getBiobankQualityOptions(state)
+        const expected = ['accredited', 'eric']
 
         expect(actual).to.deep.equal(expected)
       })

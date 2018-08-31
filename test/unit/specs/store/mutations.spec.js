@@ -105,6 +105,21 @@ describe('store', () => {
       })
     })
 
+    describe('SET_BIOBANK_QUALITY', () => {
+      it('should set the qualities in the state with the payload', () => {
+        const state = {
+          biobank_quality: {
+            options: []
+          }
+        }
+
+        const biobankQuality = ['eric']
+        mutations.__SET_BIOBANK_QUALITY__(state, biobankQuality)
+
+        expect(state.biobank_quality.options).to.deep.equal(biobankQuality)
+      })
+    })
+
     describe('SET_DIAGNOSIS_AVAILABLE', () => {
       it('should set the diagnosis available in the state with the payload', () => {
         const state = {
@@ -361,8 +376,60 @@ describe('store', () => {
       })
     })
 
+    describe('SET_BIOBANK_QUALITY_BIOBANKS', () => {
+      it('should set the biobanks that match the applied quality standards filter', () => {
+        const state = {
+          biobank_quality: {
+            biobanks: [],
+            filters: []
+          }
+        }
+
+        const payload = [
+          {
+            biobank: {id: 'biobank-1'},
+            quality_standard: {id: 'iso-15189', label: 'ISO 15189:2012'},
+            assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
+          },
+          {
+            biobank: {id: 'biobank-1'},
+            quality_standard: {id: 'iso-17043-2010', label: 'ISO 17043:2010'},
+            assess_level_col: {id: 'accredited', label: 'Certified by accredited body'}
+          },
+          {
+            biobank: {id: 'biobank-2'},
+            quality_standard: {id: 'iso-17043-2010', label: 'ISO 17043:2010'},
+            assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
+          }
+        ]
+
+        const expected = ['biobank-1', 'biobank-2']
+
+        mutations.__SET_BIOBANK_QUALITY_BIOBANKS__(state, payload)
+
+        expect(state.biobank_quality.biobanks).to.deep.equal(expected)
+      })
+
+      it('should set an invalid collection id when the filter applied on the biobank quality standards returns no matching biobanks', () => {
+        const state = {
+          biobank_quality: {
+            biobanks: [],
+            filters: ['eric']
+          }
+        }
+
+        const payload = []
+
+        const expected = ['invalid_biobank']
+
+        mutations.__SET_BIOBANK_QUALITY_BIOBANKS__(state, payload)
+
+        expect(state.biobank_quality.biobanks).to.deep.equal(expected)
+      })
+    })
+
     describe('SET_COLLECTION_QUALITY_COLLECTIONS', () => {
-      it('should set the collections that match the applied quality standards filter', () => {
+      it('should set the cols that match the applied quality standards filter', () => {
         const state = {
           collection_quality: {
             collections: [],
@@ -373,22 +440,39 @@ describe('store', () => {
         const payload = [
           {
             collection: {id: 'col-1'},
-            quality_standard: {id: 'cen-ts-xxx', label: 'CEN/TS xxx'},
+            quality_standard: {id: 'iso-15189', label: 'ISO 15189:2012'},
             assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
           },
           {
             collection: {id: 'col-1'},
-            quality_standard: {id: 'cen-ts-xxxx', label: 'CEN/TS xxxx'},
-            assess_level_col: {id: 'self', label: 'Self assessment (BBMRI-ERIC remote audited)'}
+            quality_standard: {id: 'iso-17043-2010', label: 'ISO 17043:2010'},
+            assess_level_col: {id: 'accredited', label: 'Certified by accredited body'}
           },
           {
             collection: {id: 'col-2'},
-            quality_standard: {id: 'cen-ts-xxx', label: 'CEN/TS xxx'},
+            quality_standard: {id: 'iso-17043-2010', label: 'ISO 17043:2010'},
             assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
           }
         ]
 
         const expected = ['col-1', 'col-2']
+
+        mutations.__SET_COLLECTION_QUALITY_COLLECTIONS__(state, payload)
+
+        expect(state.collection_quality.collections).to.deep.equal(expected)
+      })
+
+      it('should set an invalid collection id when the filter applied on the col quality standards returns no matching cols', () => {
+        const state = {
+          collection_quality: {
+            collections: [],
+            filters: ['eric']
+          }
+        }
+
+        const payload = []
+
+        const expected = ['invalid_collection']
 
         mutations.__SET_COLLECTION_QUALITY_COLLECTIONS__(state, payload)
 
