@@ -79,13 +79,6 @@
           initiallyCollapsed: !this.$store.state.route.query.country,
           filters: this.$store.state.country.filters
         }, {
-          //   name: 'biobank_quality',
-          //   label: 'Quality marks - Biobank',
-          //   options: this.standardsOptions,
-          //   initiallyCollapsed: !this.$store.state.route.query.standards,
-          //   filters: this.$store.state.biobankQuality.filters,
-          //   maxVisibleOptions: 4
-          // }, {
           name: 'collection_quality',
           label: 'Collection quality marks',
           options: this.collectionQualityOptions,
