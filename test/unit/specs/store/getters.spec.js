@@ -173,6 +173,83 @@ describe('store', () => {
             options: []
           },
           collection_quality: {
+            filters: ['eric'],
+            collections: [],
+            options: [{
+              'id': 'eric',
+              'label': 'BBMRI-ERIC audited'
+            }, {
+              'id': 'self',
+              'label': 'Self assessment (BBMRI-ERIC remote audited)'
+            }, {
+              'id': 'self_dev',
+              'label': 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
+            }]
+          },
+          type: {
+            filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
+            options: [
+              {id: 'BIRTH_COHORT', label: 'Birth cohort'},
+              {id: 'CASE_CONTROL', label: 'Case control'}
+            ]
+          },
+          dataType: {
+            filters: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
+            options: [
+              {id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples'},
+              {id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records'}
+            ]
+          }
+        }
+
+        const actual = getters.getActiveFilters(state)
+        const expected = {
+          'materials': [
+            {id: 'PLASMA', label: 'Plasma'}
+          ],
+          'country': [
+            {id: 'AT', label: 'Austria'}
+          ],
+          'type': [
+            {id: 'BIRTH_COHORT', label: 'Birth cohort'},
+            {id: 'CASE_CONTROL', label: 'Case control'}
+          ],
+          'dataType': [
+            {id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples'},
+            {id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records'}
+          ],
+          'collection_quality': [{
+            id: 'eric',
+            label: 'BBMRI-ERIC audited'
+          }]
+        }
+
+        expect(actual).to.deep.equal(expected)
+      })
+
+      it('should retrieve an object of filters with diagnosis_available in it', () => {
+        const state = {
+          country: {
+            filters: [],
+            options: []
+          },
+          materials: {
+            filters: [],
+            options: []
+          },
+          diagnosis_available: {
+            filters: [
+              {
+                '_href': '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
+                'id': 'urn:miriam:icd:C00-C97',
+                'code': 'C00-C97',
+                'label': 'C00-C97 - Malignant neoplasms',
+                'ontology': 'ICD-10'
+              }
+            ],
+            options: []
+          },
+          collection_quality: {
             filters: [],
             collections: [],
             options: []
@@ -186,17 +263,18 @@ describe('store', () => {
             options: []
           }
         }
-
         const actual = getters.getActiveFilters(state)
         const expected = {
-          'materials': [
-            {id: 'PLASMA', label: 'Plasma'}
-          ],
-          'country': [
-            {id: 'AT', label: 'Austria'}
+          diagnosis_available: [
+            {
+              '_href': '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
+              'id': 'urn:miriam:icd:C00-C97',
+              'code': 'C00-C97',
+              'label': 'C00-C97 - Malignant neoplasms',
+              'ontology': 'ICD-10'
+            }
           ]
         }
-
         expect(actual).to.deep.equal(expected)
       })
     })

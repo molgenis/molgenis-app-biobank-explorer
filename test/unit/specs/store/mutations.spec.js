@@ -356,6 +356,40 @@ describe('store', () => {
       })
     })
 
+    describe('SET_COLLECTION_QUALITY_COLLECTIONS', () => {
+      it('should set the collections that match the applied quality standards filter', () => {
+        const state = {
+          collection_quality: {
+            collections: []
+          }
+        }
+
+        const payload = [
+          {
+            collection: {id: 'col-1'},
+            quality_standard: {id: 'cen-ts-xxx', label: 'CEN/TS xxx'},
+            assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
+          },
+          {
+            collection: {id: 'col-1'},
+            quality_standard: {id: 'cen-ts-xxxx', label: 'CEN/TS xxxx'},
+            assess_level_col: {id: 'self', label: 'Self assessment (BBMRI-ERIC remote audited)'}
+          },
+          {
+            collection: {id: 'col-2'},
+            quality_standard: {id: 'cen-ts-xxx', label: 'CEN/TS xxx'},
+            assess_level_col: {id: 'eric', label: 'BBMRI-ERIC audited'}
+          }
+        ]
+
+        const expected = ['col-1', 'col-2']
+
+        mutations.__SET_COLLECTION_QUALITY_COLLECTIONS__(state, payload)
+
+        expect(state.collection_quality.collections).to.deep.equal(expected)
+      })
+    })
+
     describe('SET_BIOBANK_REPORT', () => {
       it('should set the biobank report value in the state with the payload', () => {
         const state = {
