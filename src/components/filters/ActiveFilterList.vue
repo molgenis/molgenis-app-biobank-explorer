@@ -2,7 +2,7 @@
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
       <li class="list-inline-item active-filter" v-for="value in values" @click="removeFilter(filter, value.id)">
-        <small>{{ value.label }}</b></small>
+        <small>{{ value.label }}</small>
         <i title="remove this filter" class="fa fa-times remove-filter-btn"></i>
       </li>
     </template>

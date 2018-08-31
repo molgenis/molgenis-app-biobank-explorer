@@ -7,7 +7,7 @@ export default {
   rsql: createRSQLQuery,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
-  getStandardsOptions: state => state.standards.options,
+  getCollectionQualityOptions: state => state.collection_quality.options,
   getTypesOptions: state => state.type.options,
   getDataTypeOptions: state => state.dataType.options,
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
@@ -33,8 +33,8 @@ export default {
       })
     }
 
-    if (state.standards.filters.length > 0) {
-      activeFilters.standards = state.standards.options.filter(option => state.standards.filters.includes(option.id))
+    if (state.collection_quality.filters.length > 0) {
+      activeFilters.collection_quality = state.collection_quality.options.filter(option => state.collection_quality.filters.includes(option.id))
     }
 
     if (state.type.filters.length > 0) {

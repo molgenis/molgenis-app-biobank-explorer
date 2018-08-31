@@ -21,9 +21,10 @@ export default {
     filters: [],
     options: []
   },
-  standards: {
+  collection_quality: {
     filters: [],
-    options: []
+    options: [],
+    collections: []
   },
   diagnosis_available: {
     filters: [],

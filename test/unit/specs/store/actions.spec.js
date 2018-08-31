@@ -3,6 +3,7 @@ import api from '@molgenis/molgenis-api-client'
 import actions, {
   GET_ALL_BIOBANKS,
   GET_BIOBANK_IDENTIFIERS,
+  GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
   SEND_TO_NEGOTIATOR
@@ -13,13 +14,14 @@ import {
   SET_ALL_BIOBANKS,
   SET_BIOBANK_IDS,
   SET_BIOBANK_REPORT,
+  SET_COLLECTION_QUALITY,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
   SET_MATERIALS,
-  SET_STANDARDS
+  SET_COLLECTION_QUALITY_COLLECTIONS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -140,26 +142,26 @@ describe('store', () => {
       })
     })
 
-    describe('GET_STANDARDS', () => {
-      it('should retrieve list of available standards from the server and store them in the state', done => {
+    describe('GET_COLLECTION_QUALITY_OPTIONS', () => {
+      it('should retrieve list of available collection quality standards from the server and store them in the state', done => {
         const response = {
           items: [
-            {id: 'a-smart_standard', label: 'A cool standard'},
+            {id: 'a-cool_standard', label: 'A cool standard'},
             {id: 'a-smart_standard', label: 'A smart standard'}
           ]
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_lab_standards')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_assess_level_col')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           expectedMutations: [
-            {type: SET_STANDARDS, payload: response.items}
+            {type: SET_COLLECTION_QUALITY, payload: response.items}
           ]
         }
 
-        utils.testAction(actions.__GET_STANDARDS_OPTIONS__, options, done)
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_OPTIONS__, options, done)
       })
     })
 
@@ -183,7 +185,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q=search,id=q=search,code=q=search')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q="search",id=q="search",code=q="search"')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -197,8 +199,8 @@ describe('store', () => {
       })
     })
 
-    describe('MAP_QUERY_TO_STATE', () => {
-      it('should commit MAP_QUERY_TO_STATE mutation when no diagnosis ids are in the URL', done => {
+    describe('GET_QUERY', () => {
+      it('should commit GET_QUERY mutation when no diagnosis ids are in the URL', done => {
         const state = {
           route: {
             query: {
@@ -214,7 +216,7 @@ describe('store', () => {
           ]
         }
 
-        utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
+        utils.testAction(actions.__GET_QUERY__, options, done)
       })
 
       it('should fetch diagnoses from the server and map result + URL query to state', done => {
@@ -244,7 +246,28 @@ describe('store', () => {
           ]
         }
 
-        utils.testAction(actions.__MAP_QUERY_TO_STATE__, options, done)
+        utils.testAction(actions.__GET_QUERY__, options, done)
+      })
+
+      it('should trigger the action to get the collections matching the applied quality standards and map result + URL query to state', done => {
+        const state = {
+          route: {
+            query: {
+              collection_quality: 'eric,self'
+            }
+          }
+        }
+        const options = {
+          state: state,
+          expectedActions: [
+            {type: GET_COLLECTION_QUALITY_COLLECTIONS}
+          ],
+          expectedMutations: [
+            {type: MAP_QUERY_TO_STATE}
+          ]
+        }
+
+        utils.testAction(actions.__GET_QUERY__, options, done)
       })
     })
 
@@ -277,7 +300,7 @@ describe('store', () => {
         search: 'Cell&Co',
         country: {filters: []},
         materials: {filters: ['CELL_LINES']},
-        standards: {filters: []},
+        collection_quality: {filters: []},
         diagnosis_available: {filters: []},
         type: {filters: []},
         dataType: {filters: []}
@@ -363,7 +386,7 @@ describe('store', () => {
         td.replace(api, 'get', get)
 
         const options = {
-          getters: { rsql: 'name=q="Cell&Co";country=in=(A,B)' },
+          getters: {rsql: 'name=q="Cell&Co";country=in=(A,B)'},
           expectedMutations: [
             {type: SET_BIOBANK_IDS, payload: undefined},
             {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
@@ -375,7 +398,7 @@ describe('store', () => {
 
       it('should select all biobanks if filters are empty', done => {
         const options = {
-          getters: { rsql: '' },
+          getters: {rsql: ''},
           state: {
             allBiobanks: {
               'biobank-1': {id: 'biobank-1', name: 'Biobank B'},
@@ -388,6 +411,58 @@ describe('store', () => {
         }
 
         utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
+      })
+    })
+
+    describe('GET_COLLECTION_QUALITY_COLLECTIONS', () => {
+      it('should retrieve the collections for which certain level of assessment is applied for the quality standards', done => {
+        const response = {
+          meta: {
+            name: 'meta'
+          },
+          items: [
+            {id: 'random-1', collection: 'col-1', quality_standard: '1', asses_level_col: 'eric'},
+            {id: 'random-2', collection: 'col-1', quality_standard: '2', asses_level_col: 'self'},
+            {id: 'random-3', collection: 'col-2', quality_standard: '2', asses_level_col: 'eric'}
+          ]
+        }
+
+        const state = {
+          route: {
+            query: {
+              collection_quality: 'eric,self'
+            }
+          }
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_col_qual_info?q=assess_level_col=in=(eric,self)')).thenResolve(response)
+        td.replace(api, 'get', get)
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+      })
+
+      it('should pass empty array to mutation when no quality standards are selected', done => {
+        const state = {
+          route: {
+            query: {}
+          }
+        }
+
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: []}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
       })
     })
 

@@ -14,10 +14,10 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.country.filters),
     createInQuery('materials', state.materials.filters),
-    createInQuery('standards', state.standards.filters),
     createInQuery('type', state.type.filters),
     createInQuery('data_categories', state.dataType.filters),
     createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
+    createInQuery('id', state.collection_quality.collections),
     state.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
@@ -45,7 +45,7 @@ const getHumanReadableString = (state) => {
 
   const countries = state.country.filters
   const materials = state.materials.filters
-  const standards = state.standards.filters
+  const collectionQuality = state.collection_quality.filters
   const types = state.type.filters
   const dataTypes = state.dataType.filters
   const diseases = state.diagnosis_available.filters.map(disease => disease.label)
@@ -64,9 +64,9 @@ const getHumanReadableString = (state) => {
     humanReadableString += 'selected material types are ' + materials.join(',')
   }
 
-  if (standards.length > 0) {
+  if (collectionQuality.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'selected standards are ' + standards.join(',')
+    humanReadableString += 'selected collection quality standards are ' + collectionQuality.join(',')
   }
 
   if (types.length > 0) {
