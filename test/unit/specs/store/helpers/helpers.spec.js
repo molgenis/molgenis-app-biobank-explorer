@@ -14,6 +14,10 @@ const getInitialState = () => {
       filters: [],
       collections: []
     },
+    biobank_quality: {
+      filters: [],
+      biobanks: []
+    },
     diagnosis_available: {
       filters: []
     },

@@ -165,6 +165,11 @@ describe('store', () => {
             collections: [],
             options: []
           },
+          biobank_quality: {
+            filters: ['Awesome standard'],
+            collections: [],
+            options: []
+          },
           type: {
             filters: ['type'],
             options: [{id: 'type'}]

@@ -12,6 +12,7 @@ describe('store', () => {
           standards: {filters: []},
           diagnosis_available: {filters: []},
           collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -25,6 +26,7 @@ describe('store', () => {
           standards: {filters: []},
           diagnosis_available: {filters: []},
           collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -186,6 +188,16 @@ describe('store', () => {
               'label': 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
             }]
           },
+          biobank_quality: {
+            filters: ['eric'],
+            options: [{
+              'id': 'eric',
+              'label': 'BBMRI-ERIC audited'
+            }, {
+              'id': 'accredited',
+              'label': 'Certified by accredited body'
+            }]
+          },
           type: {
             filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
             options: [
@@ -221,6 +233,10 @@ describe('store', () => {
           'collection_quality': [{
             id: 'eric',
             label: 'BBMRI-ERIC audited'
+          }],
+          'biobank_quality': [{
+            id: 'eric',
+            label: 'BBMRI-ERIC audited'
           }]
         }
 
@@ -252,6 +268,11 @@ describe('store', () => {
           collection_quality: {
             filters: [],
             collections: [],
+            options: []
+          },
+          biobank_quality: {
+            filters: [],
+            biobanks: [],
             options: []
           },
           type: {
