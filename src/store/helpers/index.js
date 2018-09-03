@@ -18,6 +18,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('data_categories', state.dataType.filters),
     createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
     createInQuery('id', state.collection_quality.collections),
+    createInQuery('biobank', state.biobank_quality.biobanks),
     state.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']

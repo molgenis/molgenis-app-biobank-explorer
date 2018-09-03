@@ -12,6 +12,7 @@ describe('store', () => {
           standards: {filters: []},
           diagnosis_available: {filters: []},
           collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -25,6 +26,7 @@ describe('store', () => {
           standards: {filters: []},
           diagnosis_available: {filters: []},
           collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []}
         }
@@ -122,7 +124,7 @@ describe('store', () => {
     })
 
     describe('getCollectionQualityOptions', () => {
-      it('should retrieve the options that are available for the standards filter', () => {
+      it('should retrieve the options that are available for the collection standards filter', () => {
         const state = {
           collection_quality: {
             options: ['self', 'eric']
@@ -131,6 +133,21 @@ describe('store', () => {
 
         const actual = getters.getCollectionQualityOptions(state)
         const expected = ['self', 'eric']
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
+    describe('getBiobankQualityOptions', () => {
+      it('should retrieve the options that are available for the biobank standards filter', () => {
+        const state = {
+          biobank_quality: {
+            options: ['accredited', 'eric']
+          }
+        }
+
+        const actual = getters.getBiobankQualityOptions(state)
+        const expected = ['accredited', 'eric']
 
         expect(actual).to.deep.equal(expected)
       })
@@ -186,6 +203,16 @@ describe('store', () => {
               'label': 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
             }]
           },
+          biobank_quality: {
+            filters: ['eric'],
+            options: [{
+              'id': 'eric',
+              'label': 'BBMRI-ERIC audited'
+            }, {
+              'id': 'accredited',
+              'label': 'Certified by accredited body'
+            }]
+          },
           type: {
             filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
             options: [
@@ -221,6 +248,10 @@ describe('store', () => {
           'collection_quality': [{
             id: 'eric',
             label: 'BBMRI-ERIC audited'
+          }],
+          'biobank_quality': [{
+            id: 'eric',
+            label: 'BBMRI-ERIC audited'
           }]
         }
 
@@ -252,6 +283,11 @@ describe('store', () => {
           collection_quality: {
             filters: [],
             collections: [],
+            options: []
+          },
+          biobank_quality: {
+            filters: [],
+            biobanks: [],
             options: []
           },
           type: {

@@ -26,6 +26,11 @@ export default {
     options: [],
     collections: []
   },
+  biobank_quality: {
+    filters: [],
+    options: [],
+    biobanks: []
+  },
   diagnosis_available: {
     filters: [],
     options: []
