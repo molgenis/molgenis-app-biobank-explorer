@@ -24,7 +24,21 @@ export const createRSQLQuery = (state) => transformToRSQL({
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
         .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
     }] : []
-  ])})
+  ])
+})
+
+/**
+ * @example queries
+ * q=label=query,id=q=query,code=q=query
+ */
+export const createDiagnosisRSQLQuery = (query) => transformToRSQL({
+  operator: 'OR',
+  operands: flatten([
+    {selector: 'label', comparison: '=q=', arguments: query},
+    {selector: 'id', comparison: '=q=', arguments: query},
+    {selector: 'code', comparison: '=q=', arguments: query}
+  ])
+})
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   const collections = getNegotiatorQueryObjects(getters.biobanks)
@@ -105,6 +119,7 @@ const getLocationHref = () => window.location.href
 
 export default {
   createRSQLQuery,
+  createDiagnosisRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
   getNegotiatorQueryObjects,
