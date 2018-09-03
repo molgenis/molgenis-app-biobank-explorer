@@ -15,7 +15,7 @@ pipeline {
         }
         container('vault') {
           script {
-            env.TUNNEL_IDENTIFIER = $ { GIT_COMMIT } - $ { BUILD_NUMBER }
+            env.TUNNEL_IDENTIFIER = sh(script: 'echo ${GIT_COMMIT}-${BUILD_NUMBER}', returnStdout: true)
             env.GITHUB_TOKEN = sh(script: 'vault read -field=value secret/ops/token/github', returnStdout: true)
             env.CODECOV_TOKEN = sh(script: 'vault read -field=molgenis-app-biobank-explorer secret/ops/token/codecov', returnStdout: true)
             env.SAUCE_CRED_USR = sh(script: 'vault read -field=username secret/ops/token/saucelabs', returnStdout: true)
