@@ -32,6 +32,16 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
+    describe('createDiagnosisRSQLQuery', () => {
+      it('should create a query for a diagnosis search query', () => {
+        const query = 'search awesome things'
+        const actual = helpers.createDiagnosisRSQLQuery(query)
+        const expected = 'label=q=\'search awesome things\',id=q=\'search awesome things\',code=q=\'search awesome things\''
+
+        expect(actual).to.equal(expected)
+      })
+    })
+
     describe('createRSQLQuery', () => {
       let state = getInitialState()
       afterEach(() => { state = getInitialState() })
