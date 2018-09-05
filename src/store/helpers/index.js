@@ -27,11 +27,11 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-export const CODE_REGEX = /^[A-Z]+(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/
+export const CODE_REGEX = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
 
 export const createDiagnosisLabelQuery = (query) => transformToRSQL({selector: 'label', comparison: '=q=', arguments: query})
 
-export const createDiagnosisCodeQuery = (query) => transformToRSQL({selector: 'code', comparison: '=like=', arguments: query})
+export const createDiagnosisCodeQuery = (query) => transformToRSQL({selector: 'code', comparison: '=like=', arguments: query.toUpperCase()})
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   const collections = getNegotiatorQueryObjects(getters.biobanks)
