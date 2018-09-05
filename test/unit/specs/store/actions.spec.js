@@ -204,17 +204,34 @@ describe('store', () => {
 
       it('should retrieve a list of disease types based on a search query from the server and store them in the state', done => {
         const response = {
-          items: [
-            {id: 'search'}
-          ]
+          items: [{label: 'search'}]
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q=search,id=q=search,code=q=search&sort=code')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=label=q=search')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           payload: 'search',
+          expectedMutations: [
+            {type: SET_DIAGNOSIS_AVAILABLE, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
+      })
+
+      it('should retrieve a list of disease types based on a code query from the server and store them in the state', done => {
+        const response = {
+          items: [{code: 'A01'}]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_disease_types?q=code=like=A01&sort=code')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          payload: 'A01',
           expectedMutations: [
             {type: SET_DIAGNOSIS_AVAILABLE, payload: response.items}
           ]

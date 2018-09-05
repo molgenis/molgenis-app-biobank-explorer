@@ -99,7 +99,12 @@ export default {
   },
   [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({commit}, query) {
     if (query) {
-      api.get(`${DISEASE_API_PATH}?q=${encodeRsqlValue(helpers.createDiagnosisRSQLQuery(query))}&sort=code`).then(response => {
+      const isCodeQuery = helpers.CODE_REGEX.test(query)
+      const url = isCodeQuery
+        ? `${DISEASE_API_PATH}?q=${encodeRsqlValue(helpers.createDiagnosisCodeQuery(query))}&sort=code`
+        : `${DISEASE_API_PATH}?q=${encodeRsqlValue(helpers.createDiagnosisLabelQuery(query))}`
+
+      api.get(url).then(response => {
         commit(SET_DIAGNOSIS_AVAILABLE, response.items)
       }, error => {
         commit(SET_ERROR, error)
