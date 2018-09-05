@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import helpers from '../../../../../src/store/helpers'
+import helpers, {CODE_REGEX} from '../../../../../src/store/helpers'
 
 const getInitialState = () => {
   return {
@@ -32,11 +32,47 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
-    describe('createDiagnosisRSQLQuery', () => {
-      it('should create a query for a diagnosis search query', () => {
+    describe('Code regex', () => {
+      it('should match single uppercase character', () => {
+        expect(CODE_REGEX.test('A')).to.eq(true)
+      })
+
+      it('should not match single lowercase character', () => {
+        expect(CODE_REGEX.test('a')).to.eq(false)
+      })
+
+      it('should match chapter code', () => {
+        expect(CODE_REGEX.test('A10-A12')).to.eq(true)
+      })
+
+      it('should match top level chapter code', () => {
+        expect(CODE_REGEX.test('XIX')).to.eq(true)
+      })
+
+      it('should match disease code', () => {
+        expect(CODE_REGEX.test('A10.001')).to.eq(true)
+      })
+
+      it('should not match other query string', () => {
+        expect(CODE_REGEX.test('he')).to.eq(false)
+      })
+    })
+
+    describe('createDiagnosisLabelQuery', () => {
+      it('should create a label search query', () => {
         const query = 'search awesome things'
-        const actual = helpers.createDiagnosisRSQLQuery(query)
-        const expected = 'label=q=\'search awesome things\',id=q=\'search awesome things\',code=q=\'search awesome things\''
+        const actual = helpers.createDiagnosisLabelQuery(query)
+        const expected = 'label=q=\'search awesome things\''
+
+        expect(actual).to.equal(expected)
+      })
+    })
+
+    describe('createDiagnosisCodeQuery', () => {
+      it('should create a code like query', () => {
+        const query = 'A01'
+        const actual = helpers.createDiagnosisCodeQuery(query)
+        const expected = 'code=like=A01'
 
         expect(actual).to.equal(expected)
       })

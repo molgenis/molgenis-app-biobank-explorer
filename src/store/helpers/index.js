@@ -27,18 +27,11 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-/**
- * @example queries
- * q=label=query,id=q=query,code=q=query
- */
-export const createDiagnosisRSQLQuery = (query) => transformToRSQL({
-  operator: 'OR',
-  operands: flatten([
-    {selector: 'label', comparison: '=q=', arguments: query},
-    {selector: 'id', comparison: '=q=', arguments: query},
-    {selector: 'code', comparison: '=q=', arguments: query}
-  ])
-})
+export const CODE_REGEX = /^[A-Z]+(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/
+
+export const createDiagnosisLabelQuery = (query) => transformToRSQL({selector: 'label', comparison: '=q=', arguments: query})
+
+export const createDiagnosisCodeQuery = (query) => transformToRSQL({selector: 'code', comparison: '=like=', arguments: query})
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   const collections = getNegotiatorQueryObjects(getters.biobanks)
@@ -119,10 +112,12 @@ const getLocationHref = () => window.location.href
 
 export default {
   createRSQLQuery,
-  createDiagnosisRSQLQuery,
+  createDiagnosisCodeQuery,
+  createDiagnosisLabelQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
   getNegotiatorQueryObjects,
   setLocationHref,
-  getLocationHref
+  getLocationHref,
+  CODE_REGEX
 }
