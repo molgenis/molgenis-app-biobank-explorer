@@ -37,8 +37,8 @@ describe('store', () => {
         expect(CODE_REGEX.test('A')).to.eq(true)
       })
 
-      it('should not match single lowercase character', () => {
-        expect(CODE_REGEX.test('a')).to.eq(false)
+      it('should be case-insensitive', () => {
+        expect(CODE_REGEX.flags).to.eq('i')
       })
 
       it('should match chapter code', () => {
@@ -73,6 +73,14 @@ describe('store', () => {
         const query = 'A01'
         const actual = helpers.createDiagnosisCodeQuery(query)
         const expected = 'code=like=A01'
+
+        expect(actual).to.equal(expected)
+      })
+
+      it('should uppercase the query', () => {
+        const query = 'xix'
+        const actual = helpers.createDiagnosisCodeQuery(query)
+        const expected = 'code=like=XIX'
 
         expect(actual).to.equal(expected)
       })
