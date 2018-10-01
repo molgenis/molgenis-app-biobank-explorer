@@ -124,7 +124,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       includeMenuAndFooter: true,
       runtimeOptions: {
         language: "en"
-      }
+      },
+      showCountryFacet: packageJson.appOptions.showCountryFacet,
+      preConfiguredCountyCode: packageJson.appOptions.preConfiguredCountyCode
     }),
 
     // copy custom static assets

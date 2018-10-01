@@ -26,7 +26,8 @@ const getInitialState = () => {
     },
     dataType: {
       filters: []
-    }
+    },
+    showCountryFacet: true
   }
 }
 

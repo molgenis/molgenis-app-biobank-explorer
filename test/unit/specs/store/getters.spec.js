@@ -14,7 +14,8 @@ describe('store', () => {
           collection_quality: {filters: [], collections: []},
           biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
-          dataType: {filters: []}
+          dataType: {filters: []},
+          showCountryFacet: true
         }
         expect(getters.rsql(state)).to.equal('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
       })
@@ -28,9 +29,26 @@ describe('store', () => {
           collection_quality: {filters: [], collections: []},
           biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
-          dataType: {filters: []}
+          dataType: {filters: []},
+          showCountryFacet: true
         }
         expect(getters.rsql(state)).to.equal('')
+      })
+      it('should include the default country code if showCountryFacet is set to false', () => {
+        const state = {
+          search: '',
+          country: {filters: []},
+          materials: {filters: []},
+          standards: {filters: []},
+          diagnosis_available: {filters: []},
+          collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
+          type: {filters: []},
+          dataType: {filters: []},
+          showCountryFacet: false,
+          preConfiguredCountyCode: 'BE'
+        }
+        expect(getters.rsql(state)).to.equal('country=in=BE')
       })
     })
     describe('biobanks', () => {
@@ -312,6 +330,17 @@ describe('store', () => {
           ]
         }
         expect(actual).to.deep.equal(expected)
+      })
+    })
+
+    describe('showCountryFacet', () => {
+      it('should return true if showCountryFacet setting is set to true', () => {
+        const state = {showCountryFacet: true}
+        expect(getters.showCountryFacet(state)).to.equal(true)
+      })
+      it('should return false if showCountryFacet setting is set to false', () => {
+        const state = {showCountryFacet: false}
+        expect(getters.showCountryFacet(state)).to.equal(false)
       })
     })
   })
