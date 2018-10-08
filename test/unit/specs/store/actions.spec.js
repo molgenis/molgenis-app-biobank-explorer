@@ -231,7 +231,7 @@ describe('store', () => {
         td.replace(api, 'get', get)
 
         const options = {
-          payload: 'A01',
+          payload: 'a01',
           expectedMutations: [
             {type: SET_DIAGNOSIS_AVAILABLE, payload: response.items}
           ]
