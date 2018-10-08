@@ -1,4 +1,4 @@
-import CollectionsTable from '../../../../src/components/tables/CollectionsTable'
+import CollectionsTable from '@/components/tables/CollectionsTable'
 import { shallowMount } from '@vue/test-utils'
 
 describe('components', () => {
