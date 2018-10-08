@@ -12,6 +12,7 @@ export default {
   getTypesOptions: state => state.type.options,
   getDataTypeOptions: state => state.dataType.options,
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
+  showCountryFacet: state => state.showCountryFacet,
   /**
    * Get map of active filters
    */
