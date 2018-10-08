@@ -35,14 +35,14 @@ to your index.html or freemarker template to start tracking your Biobank Explore
 
 This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 7.0.0.
 
-### App configuration
+### Pre-selection a country
 
 The country facet can removed from the list of facets and a country filter can be set by default.
-This setting can be toggled using the appOptions section in the package.json or at runtime using the config entity
+This setting can be toggled using the runtimeOptions section in the webpack.prod.conf.js or at runtime using the config entity
 
-`appOptions.showCountryFacet` should contain a boolean value indicating if the country facet needs to be shoen.
+`runtimeOptions.showCountryFacet` should contain a boolean value indicating if the country facet needs to be shown.
 
-`appOptions.preConfiguredCountyCode` should contain a valid country code if the showCountryFacet options is set to `false`.
+`runtimeOptions.preConfiguredCountyCode` should contain a valid country code if the showCountryFacet options is set to `false`.
 
 ```js
 "appOptions": {

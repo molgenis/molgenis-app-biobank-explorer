@@ -123,10 +123,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       apiDependency: "v2",
       includeMenuAndFooter: true,
       runtimeOptions: {
-        language: "en"
-      },
-      showCountryFacet: packageJson.appOptions.showCountryFacet,
-      preConfiguredCountyCode: packageJson.appOptions.preConfiguredCountyCode
+        language: "en",
+        showCountryFacet: true,
+        preConfiguredCountyCode: ""
+      }
     }),
 
     // copy custom static assets
