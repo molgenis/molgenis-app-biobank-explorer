@@ -11,7 +11,7 @@ This is the BBMRI-ERIC model and consists of the following tables:
 - eu_bbmri_eric_disease_types
 - eu_bbmri_eric_lab_standards
 
-Test model + data can be found [here](sample-data/bbmri-eric.xlsx). Upload the data via the [Advanced data import](https://molgenis.gitbooks.io/molgenis/content/user_documentation/import-data/guide-upload.html)
+Test model + data can be found in the 'sample-data' folder of this repository. Upload the data via the [Advanced data import](https://molgenis.gitbooks.io/molgenis/content/user_documentation/import-data/guide-upload.html)
 
 ## Configure the Biobank Explorer
 You can configure 2 main settings in the Biobank Explorer.
