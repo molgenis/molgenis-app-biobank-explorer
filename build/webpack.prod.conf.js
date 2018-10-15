@@ -123,7 +123,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       apiDependency: "v2",
       includeMenuAndFooter: true,
       runtimeOptions: {
-        language: "en"
+        language: "en",
+        showCountryFacet: true,
+        preConfiguredCountyCode: ""
       }
     }),
 

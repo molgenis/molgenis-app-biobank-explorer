@@ -55,7 +55,8 @@
         collectionQualityOptions: 'getCollectionQualityOptions',
         biobankQualityOptions: 'getBiobankQualityOptions',
         typesOptions: 'getTypesOptions',
-        dataTypeOptions: 'getDataTypeOptions'
+        dataTypeOptions: 'getDataTypeOptions',
+        showCountryFacet: 'showCountryFacet'
       }),
       search: {
         get () {
@@ -109,7 +110,10 @@
           initiallyCollapsed: !this.$store.state.route.query.dataType,
           filters: this.$store.state.dataType.filters,
           maxVisibleOptions: 4
-        }]
+        }].filter((facet) => {
+          // config option showCountryFacet is used to toggle Country facet
+          return !(this.showCountryFacet === false && facet.name === 'country')
+        })
       }
     },
     methods: {

@@ -12,7 +12,7 @@ import { transformToRSQL } from '@molgenis/rsql'
 export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createInQuery('country', state.country.filters),
+    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
     createInQuery('materials', state.materials.filters),
     createInQuery('type', state.type.filters),
     createInQuery('data_categories', state.dataType.filters),

@@ -1,4 +1,4 @@
-import CheckboxFilters from '../../../../src/components/filters/CheckboxFilters'
+import CheckboxFilters from '@/components/filters/CheckboxFilters'
 import { mount } from '@vue/test-utils'
 
 describe('components', () => {

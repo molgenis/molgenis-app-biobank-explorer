@@ -2,6 +2,8 @@ export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
   error: null,
+  showCountryFacet: !!(INITIAL_STATE.runtimeOptions && INITIAL_STATE.runtimeOptions.showCountryFacet === true), // defaults to true
+  preConfiguredCountyCode: INITIAL_STATE.runtimeOptions ? INITIAL_STATE.runtimeOptions.preConfiguredCountyCode : undefined,
   allBiobanks: undefined,
   biobankIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
