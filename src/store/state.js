@@ -6,7 +6,7 @@ function AppConfigurationException (message: string) {
   this.name = 'ConfigurationException'
 }
 
-if (window.__INITIAL_STATE__.showCountryFacet === false && !window.__INITIAL_STATE__.preConfiguredCountyCode) {
+if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === false && !window.__INITIAL_STATE__.preConfiguredCountyCode) {
   throw new AppConfigurationException('You have to specify a preconfigured country code in your app-configuration.')
 }
 
