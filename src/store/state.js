@@ -1,9 +1,19 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
+// Create an object type AppConfigurationException
+function AppConfigurationException (message: string) {
+  this.message = message
+  this.name = 'ConfigurationException'
+}
+
+if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === false && !window.__INITIAL_STATE__.preConfiguredCountyCode) {
+  throw new AppConfigurationException('You have to specify a preconfigured country code in your app-configuration.')
+}
+
 export default {
   error: null,
-  showCountryFacet: !!(INITIAL_STATE.runtimeOptions && INITIAL_STATE.runtimeOptions.showCountryFacet === true), // defaults to true
-  preConfiguredCountyCode: INITIAL_STATE.runtimeOptions ? INITIAL_STATE.runtimeOptions.preConfiguredCountyCode : undefined,
+  showCountryFacet: INITIAL_STATE.hasOwnProperty('showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
+  preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
   allBiobanks: undefined,
   biobankIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
