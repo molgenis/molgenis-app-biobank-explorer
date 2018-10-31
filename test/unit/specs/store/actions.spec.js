@@ -2,7 +2,7 @@ import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions, {
   GET_ALL_BIOBANKS,
-  GET_BIOBANK_IDENTIFIERS,
+  GET_COLLECTION_IDENTIFIERS,
   GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
@@ -12,7 +12,7 @@ import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
   SET_ALL_BIOBANKS,
-  SET_BIOBANK_IDS,
+  SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_QUALITY,
   SET_COLLECTION_TYPES,
@@ -413,7 +413,7 @@ describe('store', () => {
       })
     })
 
-    describe('GET_BIOBANK_IDENTIFIERS', () => {
+    describe('GET_COLLECTION_IDENTIFIERS', () => {
       it('should retrieve biobank ids from the server based on a set of filters', done => {
         const response = {
           items: [
@@ -423,36 +423,44 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id,biobank(id)&q=name=q="Cell%26Co";country=in=(A,B)'))
+        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id&q=name=q="Cell%26Co";country=in=(A,B)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           getters: {rsql: 'name=q="Cell&Co";country=in=(A,B)'},
           expectedMutations: [
-            {type: SET_BIOBANK_IDS, payload: undefined},
-            {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
+            {type: SET_COLLECTION_IDS, payload: ['biobank-1', 'biobank-2']}
           ]
         }
 
-        utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
+        utils.testAction(actions[GET_COLLECTION_IDENTIFIERS], options, done)
       })
 
       it('should select all biobanks if filters are empty', done => {
         const options = {
           getters: {rsql: ''},
           state: {
-            allBiobanks: {
-              'biobank-1': {id: 'biobank-1', name: 'Biobank B'},
-              'biobank-2': {id: 'biobank-2', name: 'Biobank A'}
-            }
+            allBiobanks: [
+              {
+                id: 'biobank-1',
+                name: 'Biobank B',
+                collections: [{id: 'collection-1'}]
+
+              },
+              {
+                id: 'biobank-2',
+                name: 'Biobank A',
+                collections: [{id: 'collection-2'}]
+              }
+            ]
           },
           expectedMutations: [
-            {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
+            {type: SET_COLLECTION_IDS, payload: ['collection-1', 'collection-2']}
           ]
         }
 
-        utils.testAction(actions[GET_BIOBANK_IDENTIFIERS], options, done)
+        utils.testAction(actions[GET_COLLECTION_IDENTIFIERS], options, done)
       })
     })
 
