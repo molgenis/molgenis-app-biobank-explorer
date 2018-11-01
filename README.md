@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer)
+
 # BBMRI-ERIC Biobank Explorer
 Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data
 
