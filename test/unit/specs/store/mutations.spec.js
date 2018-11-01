@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import mutations, {
   SET_ALL_BIOBANKS,
-  SET_BIOBANK_IDS,
+  SET_COLLECTION_IDS,
   SET_COLLECTION_TYPES,
   SET_DATA_TYPES
 } from '../../../../src/store/mutations'
@@ -238,18 +238,18 @@ describe('store', () => {
 
         mutations[SET_ALL_BIOBANKS](state, biobanks)
 
-        expect(state.allBiobanks).to.deep.equal({'biobank1': {id: 'biobank1'}, 'biobank2': {id: 'biobank2'}})
+        expect(state.allBiobanks).to.deep.equal([{id: 'biobank1'}, {id: 'biobank2'}])
       })
     })
 
-    describe('SET_BIOBANK_IDS', () => {
-      it('should set the biobank ids in the state with the payload', () => {
+    describe('SET_COLLECTION_IDS', () => {
+      it('should set the collection ids in the state with the payload', () => {
         const state = {}
-        const biobankIds = ['1', '2']
+        const collectionIds = ['1', '2']
 
-        mutations[SET_BIOBANK_IDS](state, biobankIds)
+        mutations[SET_COLLECTION_IDS](state, collectionIds)
 
-        expect(state.biobankIds).to.deep.equal(biobankIds)
+        expect(state.collectionIds).to.deep.equal(collectionIds)
       })
     })
 

@@ -56,42 +56,55 @@ describe('store', () => {
         const state = {}
         expect(getters.biobanks(state, {loading: true})).to.deep.equal([])
       })
-      it('should look up the biobanks for matching IDs', () => {
+      it('should look up the biobanks for matching collection id\'s and filter the biobanks collectons', () => {
         const state = {
-          allBiobanks: {
-            '1': {id: '1', name: 'one'},
-            '2': {id: '2', name: 'two'}
-          },
-          biobankIds: ['2']
+          allBiobanks: [
+            {id: '1', name: 'one', collections: [{id: 'col-1'}]},
+            {id: '2', name: 'two', collections: [{id: 'col-2'}, {id: 'col-3'}]}
+          ],
+          collectionIds: ['col-2']
         }
-        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two'}])
+        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2'}]}])
       })
 
       it('should sort the biobanks by name', () => {
-        const state = {allBiobanks: {'1': {id: '1', name: 'B'}, '2': {id: '2', name: 'A'}}, biobankIds: ['1', '2']}
-        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'A'}, {id: '1', name: 'B'}])
+        const state = {
+          allBiobanks: [
+            {id: '1', name: 'B', collections: [{id: 'col-1'}]},
+            {id: '2', name: 'A', collections: [{id: 'col-2'}]}
+          ],
+          collectionIds: ['col-1', 'col-2']
+        }
+        expect(getters.biobanks(state, {loading: false})).to.deep.equal(
+          [{id: '2', name: 'A', collections: [{id: 'col-2'}]}, {id: '1', name: 'B', collections: [{id: 'col-1'}]}])
       })
     })
 
     describe('loading', () => {
-      it('should be false if both allBiobanks and biobankIds are present', () => {
+      it('should be false if both allBiobanks and collectionIds are present', () => {
         const state = {
-          allBiobanks: {'1': {id: '1', name: 'one'}, '2': {id: '2', name: 'two'}},
-          biobankIds: ['2']
+          allBiobanks: [
+            {id: '1', name: 'one', collections: [{id: 'col-1'}]},
+            {id: '2', name: 'two', collections: [{id: 'col-2'}, {id: 'col-3'}]}
+          ],
+          collectionIds: ['col-2']
         }
         expect(getters.loading(state)).to.eq(false)
       })
 
       it('should be true if allBiobanks are missing', () => {
         const state = {
-          biobankIds: ['2']
+          collectionIds: ['col-2']
         }
         expect(getters.loading(state)).to.eq(true)
       })
 
-      it('should be true if biobankIds are missing', () => {
+      it('should be true if collectionIds are missing', () => {
         const state = {
-          allBiobanks: {'1': {id: '1', name: 'one'}, '2': {id: '2', name: 'two'}}
+          allBiobanks: [
+            {id: '1', name: 'one', collections: [{id: 'col-1'}]},
+            {id: '2', name: 'two', collections: [{id: 'col-2'}, {id: 'col-3'}]}
+          ]
         }
         expect(getters.loading(state)).to.eq(true)
       })
