@@ -1,9 +1,9 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils, { getUniqueIdArray } from '../utils'
+import utils from '../utils'
 import {
   SET_ALL_BIOBANKS,
-  SET_BIOBANK_IDS,
+  SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
@@ -30,7 +30,7 @@ export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OP
 export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
 export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
 export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
-export const GET_BIOBANK_IDENTIFIERS = '__GET_BIOBANK_IDENTIFIERS__'
+export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
@@ -164,7 +164,7 @@ export default {
     api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
       .then(response => {
         commit(SET_ALL_BIOBANKS, response.items)
-        dispatch(GET_BIOBANK_IDENTIFIERS)
+        dispatch(GET_COLLECTION_IDENTIFIERS)
       }, error => {
         commit(SET_ERROR, error)
       })
@@ -172,14 +172,14 @@ export default {
   /**
    * Retrieve biobank identifiers for rsql value
    */
-  [GET_BIOBANK_IDENTIFIERS] ({state, commit, getters}) {
+  [GET_COLLECTION_IDENTIFIERS] ({state, commit, getters}) {
     if (!getters.rsql.length) {
-      commit(SET_BIOBANK_IDS, Object.keys(state.allBiobanks))
+      commit(SET_COLLECTION_IDS, state.allBiobanks.flatMap(biobank => biobank.collections.map(collection => collection.id)))
     } else {
-      commit(SET_BIOBANK_IDS, undefined)
-      api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id,biobank(id)&q=${encodeRsqlValue(getters.rsql)}`)
+      commit(SET_COLLECTION_IDS, undefined)
+      api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id&q=${encodeRsqlValue(getters.rsql)}`)
         .then(response => {
-          commit(SET_BIOBANK_IDS, getUniqueIdArray(response.items.map(item => item.biobank.id)))
+          commit(SET_COLLECTION_IDS, response.items.map(item => item.id))
         }, error => {
           commit(SET_ERROR, error)
         })

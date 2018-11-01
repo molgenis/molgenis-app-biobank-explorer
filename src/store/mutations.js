@@ -15,7 +15,7 @@ export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
 export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
-export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
+export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
@@ -100,10 +100,10 @@ export default {
     state.dataType.filters = []
   },
   [SET_ALL_BIOBANKS] (state, biobanks) {
-    state.allBiobanks = biobanks.reduce((soFar, next) => ({...soFar, [next.id]: next}), {})
+    state.allBiobanks = biobanks
   },
-  [SET_BIOBANK_IDS] (state, biobankIds) {
-    state.biobankIds = biobankIds
+  [SET_COLLECTION_IDS] (state, collectionIds) {
+    state.collectionIds = collectionIds
   },
   /**
    * Store a single biobank in the state for showing a biobank report

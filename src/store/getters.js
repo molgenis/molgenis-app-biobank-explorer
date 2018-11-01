@@ -2,8 +2,16 @@ import { createRSQLQuery } from './helpers'
 import _ from 'lodash'
 
 export default {
-  loading: state => !(state.allBiobanks && state.biobankIds),
-  biobanks: (state, getters) => getters.loading ? [] : _.sortBy(state.biobankIds.map(id => state.allBiobanks[id]), 'name'),
+  loading: state => !(state.allBiobanks && state.collectionIds),
+  biobanks: (state, getters) => getters.loading ? [] : _.sortBy(
+    state.allBiobanks
+      .map(biobank => ({...biobank}))
+      .map((biobank) => {
+        biobank.collections = biobank.collections.filter(collection => state.collectionIds.includes(collection.id))
+        return biobank
+      })
+      .filter(biobank => biobank.collections.length > 0),
+    'name'),
   rsql: createRSQLQuery,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
