@@ -12,5 +12,8 @@ testsContext.keys().forEach(testsContext)
 // require all src files except main.js for coverage.
 // you can also change this to match only the subset of files that
 // you want coverage for.
-const srcContext = require.context('../../src', true, /^\.\/(?!main(\.js)?$)/)
+
+// see comment section of https://eddyerburgh.me/stub-$route-in-vue-unit-tests for $route issue
+const srcContext = require.context('../../src/', true, /^(?!.*(?:assets|main|router)).*\.*$/)
+
 srcContext.keys().forEach(srcContext)
