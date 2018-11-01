@@ -56,21 +56,20 @@
 
   export default {
     name: 'biobank-card',
-    props: ['biobank'],
-    data () {
-      return {
-        collapsed: true
+    props: {
+      'biobank': Object,
+      'initCollapsed': {
+        type: Boolean,
+        required: false,
+        default: true
       }
     },
-    methods: {
-      toggle () {
-        this.collapsed = !this.collapsed
+    data () {
+      return {
+        collapsed: this.initCollapsed
       }
     },
     computed: {
-      query () {
-        return this.$route.query
-      },
       collectionTypes () {
         return utils.getUniqueIdArray(this.biobank.collections.reduce((accumulator, collection) => {
           return accumulator.concat(collection.type.map(type => type.label))

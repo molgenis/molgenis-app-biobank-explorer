@@ -6,7 +6,8 @@
       <biobank-card
         v-for="biobank in biobanks.slice(pageSize * (currentPage-1), pageSize * currentPage)"
         :key="biobank.id"
-        :biobank="biobank">
+        :biobank="biobank"
+        :initCollapsed="!isAnyFilterActive">
       </biobank-card>
 
       <b-pagination v-if="biobanks.length > pageSize" size="md" align="center"
@@ -48,7 +49,10 @@
       }
     },
     computed: {
-      ...mapGetters(['biobanks', 'loading'])
+      ...mapGetters(['biobanks', 'loading', 'getActiveFilters']),
+      isAnyFilterActive () {
+        return Object.keys(this.getActiveFilters).length > 0
+      }
     },
     components: {
       BiobankCard
