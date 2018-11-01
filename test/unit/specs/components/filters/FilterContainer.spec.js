@@ -1,4 +1,4 @@
-/* global describe beforeEach it expect */
+/* global describe it expect */
 import FilterContainer from '@/components/filters/FilterContainer'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
