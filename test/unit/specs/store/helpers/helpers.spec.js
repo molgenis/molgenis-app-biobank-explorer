@@ -1,5 +1,9 @@
 import { expect } from 'chai'
-import helpers, {CODE_REGEX} from '../../../../../src/store/helpers'
+import helpers, {
+  CODE_REGEX,
+  getCollectionIds,
+  showCollection
+} from '../../../../../src/store/helpers'
 
 const getInitialState = () => {
   return {
@@ -33,6 +37,48 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
+    describe('getCollectionIds', () => {
+      it('should add collection\'s own ID', () => {
+        expect(getCollectionIds({id: 3})).to.deep.eq([3])
+      })
+      it('should add IDs for all of the collection\'s subcollections', () => {
+        const collectionIds = getCollectionIds({
+          id: 1,
+          sub_collections: [{id: 2}, {id: 3}]
+        })
+        expect(collectionIds).to.deep.eq([1, 2, 3])
+      })
+      it('should also dive all the way down the tree to sub sub collections', () => {
+        expect(getCollectionIds({
+          id: 1,
+          sub_collections: [{id: 2, sub_collections: [{id: 3}]}]
+        })).to.deep.eq([1, 2, 3])
+      })
+    })
+
+    describe('showCollection', () => {
+      const showCollections3and4 = showCollection([3, 4])
+      it('should show collections with matching IDs', () => {
+        expect(showCollections3and4({id: 3})).to.eq(true)
+        expect(showCollections3and4({id: 4})).to.eq(true)
+        expect(showCollections3and4({id: 1})).to.eq(false)
+      })
+      it('should also show collections with subcollections with matching IDs', () => {
+        expect(showCollections3and4({
+          id: 1,
+          sub_collections: [{id: 2}, {id: 3}]
+        })).to.eq(true)
+        expect(showCollections3and4({
+          id: 1,
+          sub_collections: [{id: 2}, {id: 4}]
+        })).to.eq(true)
+        expect(showCollections3and4({
+          id: 1,
+          sub_collections: [{id: 2}, {id: 5}]
+        })).to.eq(false)
+      })
+    })
+
     describe('Code regex', () => {
       it('should match single uppercase character', () => {
         expect(CODE_REGEX.test('A')).to.eq(true)

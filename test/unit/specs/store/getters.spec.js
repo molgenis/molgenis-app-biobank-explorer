@@ -56,7 +56,7 @@ describe('store', () => {
         const state = {}
         expect(getters.biobanks(state, {loading: true})).to.deep.equal([])
       })
-      it('should look up the biobanks for matching collection id\'s and filter the biobanks collectons', () => {
+      it('should look up the biobanks for matching collection ids and filter the biobank\'s collections', () => {
         const state = {
           allBiobanks: [
             {id: '1', name: 'one', collections: [{id: 'col-1'}]},
@@ -66,6 +66,30 @@ describe('store', () => {
         }
         expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2'}]}])
       })
+
+      it('should not filter out collections with matching subcollections',
+        () => {
+          const biobank1 = {
+            id: '1',
+            name: 'one',
+            collections: [{id: 'col-1'}]
+          }
+          const biobank2 = {
+            id: '2',
+            name: 'two',
+            collections: [
+              {id: 'col-2'},
+              {id: 'col-3', sub_collections: [{id: 'col-4'}]}]
+          }
+          const state = {
+            allBiobanks: [biobank1, biobank2],
+            collectionIds: ['col-4']
+          }
+          expect(getters.biobanks(state, {loading: false})).to.deep.equal([{
+            id: '2',
+            name: 'two',
+            collections: [{id: 'col-3', sub_collections: [{id: 'col-4'}]}]}])
+        })
 
       it('should sort the biobanks by name', () => {
         const state = {

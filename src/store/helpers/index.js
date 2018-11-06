@@ -110,6 +110,16 @@ const getNegotiatorQueryObjects = (biobanks) => {
 const setLocationHref = (href) => { window.location.href = href }
 const getLocationHref = () => window.location.href
 
+/**
+ * Gets an array containing the IDs of a collection or any of its sub_collections.
+ */
+export const getCollectionIds = (collection) => [collection.id, ...(collection.sub_collections || []).flatMap(getCollectionIds)]
+/**
+ * Indicates if a collection should be shown.
+ * This is the case if its id or one of its subcollections' ids is included in collectionIds.
+ */
+export const showCollection = collectionIds => collection => getCollectionIds(collection).some(id => collectionIds.includes(id))
+
 export default {
   createRSQLQuery,
   createDiagnosisCodeQuery,

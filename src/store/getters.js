@@ -1,4 +1,4 @@
-import { createRSQLQuery } from './helpers'
+import { createRSQLQuery, showCollection } from './helpers'
 import _ from 'lodash'
 
 export default {
@@ -7,7 +7,7 @@ export default {
     state.allBiobanks
       .map(biobank => ({...biobank}))
       .map((biobank) => {
-        biobank.collections = biobank.collections.filter(collection => state.collectionIds.includes(collection.id))
+        biobank.collections = biobank.collections.filter(showCollection(state.collectionIds))
         return biobank
       })
       .filter(biobank => biobank.collections.length > 0),
