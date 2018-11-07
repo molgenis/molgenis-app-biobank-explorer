@@ -11,27 +11,33 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="sub-table-row" v-for="subCollection in subCollections">
-        <td></td>
-        <td class="table-text-content-columns-sub" v-for="column in columns">
-          <span v-if="column === 'name'">
-            <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + subCollection.id">
-              {{subCollection[column]}}
-            </a>
-          </span>
-          <span v-else-if="column === 'standards'">
-            <ul class="list-unstyled">
-              <li v-for="standard in subCollection[column]">
-                {{ standard.label }} <i class="fa fa-check"></i>
-              </li>
-            </ul>
-          </span>
-
-          <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
-          <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>
-          <span v-else-if="column === 'size'">{{ subCollection[column] }}</span>
-        </td>
-      </tr>
+      <template v-for="subCollection in subCollections">
+        <tr class="sub-table-row">
+          <td v-repeat="indent || 1"></td>
+          <td class="table-text-content-columns-sub" v-for="column in columns">
+            <span v-if="column === 'name'">
+              <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + subCollection.id">
+                {{subCollection[column]}}
+              </a>
+            </span>
+            <span v-else-if="column === 'standards'">
+              <ul class="list-unstyled">
+                <li v-for="standard in subCollection[column]">
+                  {{ standard.label }} <i class="fa fa-check"></i>
+                </li>
+              </ul>
+            </span>
+            <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
+            <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>
+            <span v-else-if="column === 'size'">{{ subCollection[column] }}</span>
+          </td>
+        </tr>
+        <tr v-if="subCollection.sub_collections.length">
+          <td colspan="5" class="sub-table-cell">
+            <sub-collections-table :subCollections="subCollection.sub_collections"></sub-collections-table>
+          </td>
+        </tr>
+      </template>
     </tbody>
   </table>
 </template>
