@@ -118,7 +118,7 @@ export const getCollectionIds = (collection) => [collection.id, ...(collection.s
  * Indicates if a collection should be shown.
  * This is the case if its id or one of its subcollections' ids is included in collectionIds.
  */
-export const showCollection = collectionIds => collection => getCollectionIds(collection).some(id => collectionIds.includes(id))
+export const showCollection = (collectionIds, collection) => getCollectionIds(collection).some(id => collectionIds.includes(id))
 
 export default {
   createRSQLQuery,

@@ -57,22 +57,21 @@ describe('store', () => {
     })
 
     describe('showCollection', () => {
-      const showCollections3and4 = showCollection([3, 4])
       it('should show collections with matching IDs', () => {
-        expect(showCollections3and4({id: 3})).to.eq(true)
-        expect(showCollections3and4({id: 4})).to.eq(true)
-        expect(showCollections3and4({id: 1})).to.eq(false)
+        expect(showCollection([3, 4], {id: 3})).to.eq(true)
+        expect(showCollection([3, 4], {id: 4})).to.eq(true)
+        expect(showCollection([3, 4], {id: 1})).to.eq(false)
       })
       it('should also show collections with subcollections with matching IDs', () => {
-        expect(showCollections3and4({
+        expect(showCollection([3, 4], {
           id: 1,
           sub_collections: [{id: 2}, {id: 3}]
         })).to.eq(true)
-        expect(showCollections3and4({
+        expect(showCollection([3, 4], {
           id: 1,
           sub_collections: [{id: 2}, {id: 4}]
         })).to.eq(true)
-        expect(showCollections3and4({
+        expect(showCollection([3, 4], {
           id: 1,
           sub_collections: [{id: 2}, {id: 5}]
         })).to.eq(false)

@@ -7,7 +7,7 @@ export default {
     state.allBiobanks
       .map(biobank => ({...biobank}))
       .map((biobank) => {
-        biobank.collections = biobank.collections.filter(showCollection(state.collectionIds))
+        biobank.collections = biobank.collections.filter(collection => showCollection(state.collectionIds, collection))
         return biobank
       })
       .filter(biobank => biobank.collections.length > 0),
