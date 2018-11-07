@@ -59,12 +59,12 @@ describe('store', () => {
       it('should look up the biobanks for matching collection ids and filter the biobank\'s collections', () => {
         const state = {
           allBiobanks: [
-            {id: '1', name: 'one', collections: [{id: 'col-1'}]},
-            {id: '2', name: 'two', collections: [{id: 'col-2'}, {id: 'col-3'}]}
+            {id: '1', name: 'one', collections: [{id: 'col-1', sub_collections: []}]},
+            {id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}, {id: 'col-3', sub_collections: []}]}
           ],
           collectionIds: ['col-2']
         }
-        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2'}]}])
+        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}]}])
       })
 
       it('should not filter out collections with matching subcollections',
@@ -72,14 +72,14 @@ describe('store', () => {
           const biobank1 = {
             id: '1',
             name: 'one',
-            collections: [{id: 'col-1'}]
+            collections: [{id: 'col-1', sub_collections: []}]
           }
           const biobank2 = {
             id: '2',
             name: 'two',
             collections: [
-              {id: 'col-2'},
-              {id: 'col-3', sub_collections: [{id: 'col-4'}]}]
+              {id: 'col-2', sub_collections: []},
+              {id: 'col-3', sub_collections: [{id: 'col-4', sub_collections: []}]}]
           }
           const state = {
             allBiobanks: [biobank1, biobank2],
@@ -88,19 +88,19 @@ describe('store', () => {
           expect(getters.biobanks(state, {loading: false})).to.deep.equal([{
             id: '2',
             name: 'two',
-            collections: [{id: 'col-3', sub_collections: [{id: 'col-4'}]}]}])
+            collections: [{id: 'col-3', sub_collections: [{id: 'col-4', sub_collections: []}]}]}])
         })
 
       it('should sort the biobanks by name', () => {
         const state = {
           allBiobanks: [
-            {id: '1', name: 'B', collections: [{id: 'col-1'}]},
-            {id: '2', name: 'A', collections: [{id: 'col-2'}]}
+            {id: '1', name: 'B', collections: [{id: 'col-1', sub_collections: []}]},
+            {id: '2', name: 'A', collections: [{id: 'col-2', sub_collections: []}]}
           ],
           collectionIds: ['col-1', 'col-2']
         }
         expect(getters.biobanks(state, {loading: false})).to.deep.equal(
-          [{id: '2', name: 'A', collections: [{id: 'col-2'}]}, {id: '1', name: 'B', collections: [{id: 'col-1'}]}])
+          [{id: '2', name: 'A', collections: [{id: 'col-2', sub_collections: []}]}, {id: '1', name: 'B', collections: [{id: 'col-1', sub_collections: []}]}])
       })
     })
 

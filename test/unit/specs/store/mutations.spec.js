@@ -234,11 +234,45 @@ describe('store', () => {
     describe('SET_ALL_BIOBANKS', () => {
       it('should set the biobanks in the state with the payload', () => {
         const state = {}
-        const biobanks = [{id: 'biobank1'}, {id: 'biobank2'}]
+        const biobanks = [{id: 'biobank1', collections: []}, {id: 'biobank2', collections: []}]
 
         mutations[SET_ALL_BIOBANKS](state, biobanks)
 
-        expect(state.allBiobanks).to.deep.equal([{id: 'biobank1'}, {id: 'biobank2'}])
+        expect(state.allBiobanks).to.deep.equal(biobanks)
+      })
+      it('should reconstruct the collections tree', () => {
+        const state = {}
+        const biobanks = [{
+          id: 'biobank1',
+          collections: [
+            {id: 1, sub_collections: [{id: 2}]},
+            {id: 2, parent: 1, sub_collections: [{id: 3}]},
+            {id: 3, parent: 2, sub_collections: [{id: 4}]},
+            {id: 4, parent: 3, sub_collections: []}]
+        }]
+        const expected = [{
+          id: 'biobank1',
+          collections: [
+            {
+              id: 1,
+              sub_collections: [{
+                id: 2,
+                parent: 1,
+                sub_collections: [{
+                  id: 3,
+                  parent: 2,
+                  sub_collections: [{
+                    id: 4,
+                    parent: 3,
+                    sub_collections: []
+                  }]
+                }]
+              }]
+            }]
+        }]
+        mutations[SET_ALL_BIOBANKS](state, biobanks)
+
+        expect(state.allBiobanks).to.deep.equal(expected)
       })
     })
 

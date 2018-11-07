@@ -1,8 +1,7 @@
 import { expect } from 'chai'
 import helpers, {
   CODE_REGEX,
-  getCollectionIds,
-  showCollection
+  filterCollectionTree
 } from '../../../../../src/store/helpers'
 
 const getInitialState = () => {
@@ -37,44 +36,66 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
-    describe('getCollectionIds', () => {
-      it('should add collection\'s own ID', () => {
-        expect(getCollectionIds({id: 3})).to.deep.eq([3])
+    describe('filterCollectionTree', () => {
+      it('should filter collections with matching IDs', () => {
+        const collections = [
+          {id: 1, sub_collections: []},
+          {id: 2, sub_collections: []},
+          {id: 3, sub_collections: []},
+          {id: 4, sub_collections: []},
+          {id: 5, sub_collections: []}
+        ]
+        const expected = [
+          {id: 2, sub_collections: []},
+          {id: 4, sub_collections: []}
+        ]
+        expect(filterCollectionTree([2, 4], collections)).to.deep.eq(expected)
       })
-      it('should add IDs for all of the collection\'s subcollections', () => {
-        const collectionIds = getCollectionIds({
+      it('should filter subcollections', () => {
+        expect(filterCollectionTree([2, 4], [{
           id: 1,
-          sub_collections: [{id: 2}, {id: 3}]
-        })
-        expect(collectionIds).to.deep.eq([1, 2, 3])
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 3, sub_collections: []},
+            {id: 4, sub_collections: []},
+            {id: 5, sub_collections: []}
+          ]
+        }])).to.deep.eq([{
+          id: 1,
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 4, sub_collections: []}
+          ]
+        }])
       })
-      it('should also dive all the way down the tree to sub sub collections', () => {
-        expect(getCollectionIds({
+      it('should filter deeply nested tree of collections', () => {
+        expect(filterCollectionTree([2, 4], [{
           id: 1,
-          sub_collections: [{id: 2, sub_collections: [{id: 3}]}]
-        })).to.deep.eq([1, 2, 3])
-      })
-    })
-
-    describe('showCollection', () => {
-      it('should show collections with matching IDs', () => {
-        expect(showCollection([3, 4], {id: 3})).to.eq(true)
-        expect(showCollection([3, 4], {id: 4})).to.eq(true)
-        expect(showCollection([3, 4], {id: 1})).to.eq(false)
-      })
-      it('should also show collections with subcollections with matching IDs', () => {
-        expect(showCollection([3, 4], {
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: [{
+                  id: 5, sub_collections: []
+                }]
+              }]
+            }]
+          }]
+        }])).to.deep.eq([{
           id: 1,
-          sub_collections: [{id: 2}, {id: 3}]
-        })).to.eq(true)
-        expect(showCollection([3, 4], {
-          id: 1,
-          sub_collections: [{id: 2}, {id: 4}]
-        })).to.eq(true)
-        expect(showCollection([3, 4], {
-          id: 1,
-          sub_collections: [{id: 2}, {id: 5}]
-        })).to.eq(false)
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: []
+              }]
+            }]
+          }]
+        }])
       })
     })
 
