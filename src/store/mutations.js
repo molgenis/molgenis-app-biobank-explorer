@@ -1,4 +1,5 @@
 import { getUniqueIdArray } from '@/utils'
+import { fixCollectionTree } from './helpers'
 
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
@@ -100,7 +101,7 @@ export default {
     state.dataType.filters = []
   },
   [SET_ALL_BIOBANKS] (state, biobanks) {
-    state.allBiobanks = biobanks
+    state.allBiobanks = biobanks.map(fixCollectionTree)
   },
   [SET_COLLECTION_IDS] (state, collectionIds) {
     state.collectionIds = collectionIds

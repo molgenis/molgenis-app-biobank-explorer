@@ -1,5 +1,8 @@
 import { expect } from 'chai'
-import helpers, {CODE_REGEX} from '@/store/helpers'
+import helpers, {
+  CODE_REGEX,
+  filterCollectionTree
+} from '@/store/helpers'
 
 const getInitialState = () => {
   return {
@@ -33,6 +36,69 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
+    describe('filterCollectionTree', () => {
+      it('should filter collections with matching IDs', () => {
+        const collections = [
+          {id: 1, sub_collections: []},
+          {id: 2, sub_collections: []},
+          {id: 3, sub_collections: []},
+          {id: 4, sub_collections: []},
+          {id: 5, sub_collections: []}
+        ]
+        const expected = [
+          {id: 2, sub_collections: []},
+          {id: 4, sub_collections: []}
+        ]
+        expect(filterCollectionTree([2, 4], collections)).to.deep.eq(expected)
+      })
+      it('should filter subcollections', () => {
+        expect(filterCollectionTree([2, 4], [{
+          id: 1,
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 3, sub_collections: []},
+            {id: 4, sub_collections: []},
+            {id: 5, sub_collections: []}
+          ]
+        }])).to.deep.eq([{
+          id: 1,
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 4, sub_collections: []}
+          ]
+        }])
+      })
+      it('should filter deeply nested tree of collections', () => {
+        expect(filterCollectionTree([2, 4], [{
+          id: 1,
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: [{
+                  id: 5, sub_collections: []
+                }]
+              }]
+            }]
+          }]
+        }])).to.deep.eq([{
+          id: 1,
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: []
+              }]
+            }]
+          }]
+        }])
+      })
+    })
+
     describe('Code regex', () => {
       it('should match single uppercase character', () => {
         expect(CODE_REGEX.test('A')).to.eq(true)

@@ -110,6 +110,32 @@ const getNegotiatorQueryObjects = (biobanks) => {
 const setLocationHref = (href) => { window.location.href = href }
 const getLocationHref = () => window.location.href
 
+const fixSubCollectionTree = (collections, collectionId) => {
+  const collection = collections.find(c => c.id === collectionId)
+  const subCollections = collection.sub_collections
+    .map(subCollection => fixSubCollectionTree(collections, subCollection.id))
+  return {
+    ...collection,
+    sub_collections: subCollections
+  }
+}
+export const fixCollectionTree = (biobank) => ({
+  ...biobank,
+  collections: biobank.collections
+    .filter(collection => !collection.parent)
+    .map(collection => fixSubCollectionTree(biobank.collections, collection.id))
+})
+
+export const filterCollectionTree = (collectionIds, collections) =>
+  collections.reduce(
+    (accumulator, collection) => {
+      const filteredSubCollections = filterCollectionTree(collectionIds, collection.sub_collections)
+      if (collectionIds.includes(collection.id) || filteredSubCollections.length) {
+        return [...accumulator, {...collection, sub_collections: filteredSubCollections}]
+      }
+      return accumulator
+    }, [])
+
 export default {
   createRSQLQuery,
   createDiagnosisCodeQuery,
