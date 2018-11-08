@@ -4,9 +4,6 @@ pipeline {
       label 'node-carbon'
     }
   }
-  environment {
-    npm_config_registry = 'http://nexus.molgenis-nexus:8081/repository/npm-central/'
-  }
   stages {
     stage('Prepare') {
       steps {
@@ -73,9 +70,7 @@ pipeline {
         branch 'master'
       }
       environment {
-        ORG = 'molgenis'
-        APP_NAME = 'molgenis-app-biobank-explorer'
-        REGISTRY = 'registry.molgenis.org'
+        REPOSITORY = 'molgenis/molgenis-app-biobank-explorer'
       }
       steps {
         timeout(time: 30, unit: 'MINUTES') {
@@ -91,9 +86,7 @@ pipeline {
         }
         milestone 2
         container('node') {
-          sh "git config --global user.email molgenis+ci@gmail.com"
-          sh "git config --global user.name molgenis-jenkins"
-          sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${ORG}/${APP_NAME}.git"
+          sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${REPOSITORY}.git"
 
           sh "git checkout -f ${BRANCH_NAME}"
 
@@ -101,6 +94,7 @@ pipeline {
           sh "npm version ${RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
 
           sh "git push --tags origin ${BRANCH_NAME}"
+          hubotSend(message: 'Biobank explorer app has been successfully deployed on https://registry.npmjs.org.', status:'SUCCESS')
         }
       }
     }
@@ -111,20 +105,11 @@ pipeline {
         sh "daemon --name=sauceconnect --stop"
       }
     }
-    // [ slackSend ]; has to be configured on the host, it is the "Slack Notification Plugin" that has to be installed
     success {
-      notifySuccess()
+      hubotSend(message: 'Build success', status:'INFO', site: 'slack-pr-app-team')
     }
     failure {
-      notifyFailed()
+      hubotSend(message: 'Build failed', status:'ERROR', site: 'slack-pr-app-team')
     }
   }
-}
-
-def notifySuccess() {
-  slackSend(channel: '#releases', color: '#00FF00', message: 'JS-module-build is successfully deployed on https://registry.npmjs.org: Job - <${env.BUILD_URL}|${env.JOB_NAME}> | #${env.BUILD_NUMBER}')
-}
-
-def notifyFailed() {
-  slackSend(channel: '#releases', color: '#FF0000', message: 'JS-module-build has failed: Job - <${env.BUILD_URL}|${env.JOB_NAME}> | #${env.BUILD_NUMBER}')
 }
