@@ -7,7 +7,7 @@ import actions, {
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
   SEND_TO_NEGOTIATOR
-} from '../../../../src/store/actions'
+} from '@/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,

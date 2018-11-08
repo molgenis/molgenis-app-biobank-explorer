@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import helpers, {
   CODE_REGEX,
   filterCollectionTree
-} from '../../../../../src/store/helpers'
+} from '@/store/helpers'
 
 const getInitialState = () => {
   return {

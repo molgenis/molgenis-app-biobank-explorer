@@ -4,7 +4,7 @@ import mutations, {
   SET_COLLECTION_IDS,
   SET_COLLECTION_TYPES,
   SET_DATA_TYPES
-} from '../../../../src/store/mutations'
+} from '@/store/mutations'
 
 describe('store', () => {
   describe('mutations', () => {
