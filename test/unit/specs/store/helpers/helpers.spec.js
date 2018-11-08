@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import helpers, {CODE_REGEX} from '../../../../../src/store/helpers'
+import helpers, {CODE_REGEX} from '@/store/helpers'
 
 const getInitialState = () => {
   return {

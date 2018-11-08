@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import getters from '../../../../src/store/getters'
+import getters from '@/store/getters'
 
 describe('store', () => {
   describe('getters', () => {

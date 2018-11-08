@@ -1,4 +1,4 @@
-import { createRSQLQuery } from './helpers'
+import { createRSQLQuery } from '@/store/helpers'
 import _ from 'lodash'
 
 export default {

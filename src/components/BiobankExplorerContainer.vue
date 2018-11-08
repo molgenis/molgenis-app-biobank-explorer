@@ -27,12 +27,12 @@
 </style>
 
 <script>
-  import BiobankCardsContainer from './cards/BiobankCardsContainer'
-  import FilterContainer from './filters/FilterContainer'
-  import ResultHeader from './ResultHeader'
+  import BiobankCardsContainer from '@/components/cards/BiobankCardsContainer'
+  import FilterContainer from '@/components/filters/FilterContainer'
+  import ResultHeader from '@/components/ResultHeader'
   import { mapGetters, mapActions } from 'vuex'
 
-  import { GET_ALL_BIOBANKS, GET_COLLECTION_IDENTIFIERS, GET_QUERY } from '../store/actions'
+  import { GET_ALL_BIOBANKS, GET_COLLECTION_IDENTIFIERS, GET_QUERY } from '@/store/actions'
 
   export default {
     name: 'biobank-explorer-container',

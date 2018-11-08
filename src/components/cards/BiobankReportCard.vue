@@ -137,12 +137,12 @@
 </style>
 
 <script>
-  import CollectionsTable from '../tables/CollectionsTable'
-  import QualityColumn from '../tables/QualityColumn'
+  import CollectionsTable from '@/components/tables/CollectionsTable'
+  import QualityColumn from '@/components/tables/QualityColumn'
 
   import { mapState } from 'vuex'
-  import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import utils from '../../utils'
+  import { GET_BIOBANK_REPORT } from '@/store/actions'
+  import utils from '@/utils'
 
   export default {
     name: 'biobank-report-card',

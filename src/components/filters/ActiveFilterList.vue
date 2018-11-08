@@ -31,8 +31,8 @@
 </style>
 
 <script>
-  import { UPDATE_FILTER, RESET_FILTERS, SET_SEARCH } from '../../store/mutations'
-  import utils from '../../utils'
+  import { UPDATE_FILTER, RESET_FILTERS, SET_SEARCH } from '@/store/mutations'
+  import utils from '@/utils'
   import { mapGetters } from 'vuex'
 
   export default {

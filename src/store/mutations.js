@@ -1,4 +1,4 @@
-import { getUniqueIdArray } from '../utils'
+import { getUniqueIdArray } from '@/utils'
 
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'

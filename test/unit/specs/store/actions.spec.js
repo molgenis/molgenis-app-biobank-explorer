@@ -7,7 +7,7 @@ import actions, {
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
   SEND_TO_NEGOTIATOR
-} from '../../../../src/store/actions'
+} from '@/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
@@ -24,8 +24,8 @@ import {
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
   SET_BIOBANK_QUALITY
-} from '../../../../src/store/mutations'
-import helpers from '../../../../src/store/helpers'
+} from '@/store/mutations'
+import helpers from '@/store/helpers'
 
 describe('store', () => {
   describe('actions', () => {

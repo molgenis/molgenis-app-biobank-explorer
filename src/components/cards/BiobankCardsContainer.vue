@@ -37,7 +37,7 @@
 </style>
 
 <script>
-  import BiobankCard from './BiobankCard'
+  import BiobankCard from '@/components/cards/BiobankCard'
   import { mapGetters } from 'vuex'
 
   export default {

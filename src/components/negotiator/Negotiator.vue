@@ -12,7 +12,7 @@
 </style>
 
 <script>
-  import { SEND_TO_NEGOTIATOR } from '../../store/actions'
+  import { SEND_TO_NEGOTIATOR } from '@/store/actions'
 
   export default {
     name: 'negotiator',

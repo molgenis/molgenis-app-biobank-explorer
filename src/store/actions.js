@@ -1,6 +1,6 @@
 import api from '@molgenis/molgenis-api-client'
-import helpers from './helpers'
-import utils from '../utils'
+import helpers from '@/store/helpers'
+import utils from '@/utils'
 import {
   SET_ALL_BIOBANKS,
   SET_COLLECTION_IDS,

@@ -1,4 +1,4 @@
-import { createInQuery } from '../../utils'
+import { createInQuery } from '@/utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 

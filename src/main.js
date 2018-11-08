@@ -1,14 +1,14 @@
 import 'es6-promise/auto'
 
 import Vue from 'vue'
-import store from './store'
-import router from './router'
+import store from '@/store'
+import router from '@/router'
 import i18n from '@molgenis/molgenis-i18n-js/dist/molgenis-i18n.esm'
 
 import { sync } from 'vuex-router-sync'
-import { INITIAL_STATE } from './store/state'
+import { INITIAL_STATE } from '@/store/state'
 
-import App from './App'
+import App from '@/App'
 import VueAnalytics from 'vue-analytics'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

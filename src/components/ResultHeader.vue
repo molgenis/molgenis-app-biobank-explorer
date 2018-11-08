@@ -44,8 +44,8 @@
 </style>
 
 <script>
-  import Negotiator from './negotiator/Negotiator'
-  import ActiveFilterList from './filters/ActiveFilterList'
+  import Negotiator from '@/components/negotiator/Negotiator'
+  import ActiveFilterList from '@/components/filters/ActiveFilterList'
 
   import { mapGetters } from 'vuex'
 

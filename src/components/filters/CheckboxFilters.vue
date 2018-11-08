@@ -23,6 +23,7 @@
   .collapsed > .when-opened, :not(.collapsed) > .when-closed { display: none; }
   .card-link { font-style: italic; font-size: small; }
 </style>
+
 <script>
   export default {
     data () {

@@ -40,8 +40,8 @@
 </style>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE_OPTIONS } from '../../store/actions'
-  import { UPDATE_FILTER } from '../../store/mutations'
+  import { QUERY_DIAGNOSIS_AVAILABLE_OPTIONS } from '@/store/actions'
+  import { UPDATE_FILTER } from '@/store/mutations'
   import { mapGetters } from 'vuex'
 
   import Multiselect from 'vue-multiselect'

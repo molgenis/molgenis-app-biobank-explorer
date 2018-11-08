@@ -31,9 +31,9 @@
 
 
 <script>
-  import StringFilter from './StringFilter'
-  import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
-  import { UPDATE_FILTER, SET_SEARCH } from '../../store/mutations'
+  import StringFilter from '@/components/filters/StringFilter'
+  import DiagnosisAvailableFilters from '@/components/filters/DiagnosisAvailableFilters.vue'
+  import { UPDATE_FILTER, SET_SEARCH } from '@/store/mutations'
   import {
     GET_COUNTRY_OPTIONS,
     GET_MATERIALS_OPTIONS,
