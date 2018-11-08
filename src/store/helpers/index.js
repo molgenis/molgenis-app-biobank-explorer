@@ -128,12 +128,12 @@ export const fixCollectionTree = (biobank) => ({
 
 export const filterCollectionTree = (collectionIds, collections) =>
   collections.reduce(
-    (soFar, collection) => {
+    (accumulator, collection) => {
       const filteredSubCollections = filterCollectionTree(collectionIds, collection.sub_collections)
       if (collectionIds.includes(collection.id) || filteredSubCollections.length) {
-        return [...soFar, {...collection, sub_collections: filteredSubCollections}]
+        return [...accumulator, {...collection, sub_collections: filteredSubCollections}]
       }
-      return soFar
+      return accumulator
     }, [])
 
 export default {
