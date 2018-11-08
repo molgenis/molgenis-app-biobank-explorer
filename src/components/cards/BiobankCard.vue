@@ -71,9 +71,12 @@
     },
     computed: {
       collectionTypes () {
-        return utils.getUniqueIdArray(this.biobank.collections.reduce((accumulator, collection) => {
-          return accumulator.concat(collection.type.map(type => type.label))
-        }, [])).join(', ')
+        const getSubCollections = (collection) => [collection, ...collection.sub_collections.flatMap(getSubCollections)]
+        const types = this.biobank.collections
+          .flatMap(getSubCollections)
+          .flatMap(collection => collection.type)
+          .map(type => type.label)
+        return utils.getUniqueIdArray(types).join(', ')
       }
     },
     components: {
