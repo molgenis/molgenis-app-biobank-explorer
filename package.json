@@ -12,8 +12,8 @@
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
     "debug": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --browsers=Chrome --single-run=false --auto-watch",
-    "preversion": "yarn install; yarn unit; yarn build",
-    "postversion": "curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
+    "preversion": "yarn install; yarn unit",
+    "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
   },
   "dependencies": {
     "@molgenis/molgenis-api-client": "^3.0.0",
