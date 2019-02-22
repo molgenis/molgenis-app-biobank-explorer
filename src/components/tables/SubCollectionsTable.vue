@@ -20,15 +20,11 @@
                 {{subCollection[column]}}
               </a>
             </span>
-            <span v-else-if="column === 'standards'">
-              <ul class="list-unstyled">
-                <li v-for="standard in subCollection[column]">
-                  {{ standard.label }} <i class="fa fa-check"></i>
-                </li>
-              </ul>
-            </span>
             <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>
+            <span v-else-if="column === 'quality'">
+              <quality-column :qualities="subCollection[column]" :spacing=0></quality-column>
+            </span>
             <span v-else-if="column === 'size'">{{ subCollection[column] }}</span>
           </td>
         </tr>
@@ -67,6 +63,7 @@
 
 <script>
   import utils from '../../utils'
+  import QualityColumn from './QualityColumn'
 
   export default {
     name: 'sub-collections-table',
@@ -78,7 +75,7 @@
     },
     data () {
       return {
-        columns: ['name', 'type', 'materials', 'standards', 'size']
+        columns: ['name', 'type', 'materials', 'quality', 'size']
       }
     },
     methods: {
@@ -88,6 +85,9 @@
       getCollectionType (collection) {
         return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
       }
+    },
+    components: {
+      QualityColumn
     }
   }
 </script>
