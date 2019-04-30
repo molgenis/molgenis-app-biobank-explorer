@@ -9,6 +9,7 @@
             </router-link>
             {{ biobank.name }}
           </h5>
+          <small v-if="biobank.quality && biobank.quality.length > 0"><quality-column :qualities="biobank.quality" :spacing=0></quality-column></small>
         </div>
         <div class="col-md-7">
           <p>
@@ -53,6 +54,7 @@
 <script>
   import CollectionsTable from '../tables/CollectionsTable.vue'
   import utils from '../..//utils'
+  import QualityColumn from '../tables/QualityColumn'
 
   export default {
     name: 'biobank-card',
@@ -80,7 +82,7 @@
       }
     },
     components: {
-      CollectionsTable
+      CollectionsTable, QualityColumn
     }
   }
 </script>

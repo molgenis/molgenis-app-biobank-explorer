@@ -13,7 +13,7 @@
     <tbody>
       <template v-for="subCollection in subCollections">
         <tr class="sub-table-row">
-          <td v-repeat="indent || 1"></td>
+          <td></td>
           <td class="table-text-content-columns-sub" v-for="column in columns">
             <span v-if="column === 'name'">
               <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + subCollection.id">
@@ -54,10 +54,6 @@
 
   .sub-table-row th {
     padding: 5px;
-  }
-
-  .fa-check {
-    color: green;
   }
 </style>
 
