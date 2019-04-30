@@ -41,6 +41,9 @@
 </script>
 
 <style scoped>
+  li{
+    white-space: nowrap;
+  }
   .fa-check {
     color: green;
   }
