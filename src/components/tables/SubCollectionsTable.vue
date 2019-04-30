@@ -55,10 +55,6 @@
   .sub-table-row th {
     padding: 5px;
   }
-
-  .fa-check {
-    color: green;
-  }
 </style>
 
 <script>
