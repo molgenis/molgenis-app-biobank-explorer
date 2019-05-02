@@ -1,13 +1,12 @@
 <template>
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
-      <li class="list-inline-item active-filter" v-for="value in values" @click="removeFilter(filter, value.id)">
-        <small>{{ value.label }}</small>
-        <i title="remove this filter" class="fa fa-times remove-filter-btn"></i>
+      <li class="list-inline-item" v-for="value in values" v-bind:key="value.id">
+        <button type="button" class="btn btn-sm btn-outline-secondary" @click="removeFilter(filter, value.id)">{{ value.label }} <i class="fa fa-times"></i></button>
       </li>
     </template>
     <li class="list-inline-item">
-      <button class="btn btn-sm btn-outline-danger reset-all-filters-btn" @click="resetAllFilters">Reset all filters
+      <button type="button" class="btn btn-sm btn-outline-danger reset-all-filters-btn" @click="resetAllFilters">Reset all filters
       </button>
     </li>
   </ul>
