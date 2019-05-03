@@ -1,18 +1,12 @@
 <template>
   <div class="search-box-container">
-    <div class="row">
-      <div class="col-md-12">
-        <negotiator :disabled="!rsql.length || !biobanks.length"></negotiator>
-      </div>
-    </div>
-
     <div class="row>">
       <div class="col-md-12">
         <active-filter-list></active-filter-list>
       </div>
     </div>
 
-    <div class="row" v-if="!loading">
+    <div class="row">
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
@@ -44,19 +38,16 @@
 </style>
 
 <script>
-  import Negotiator from './negotiator/Negotiator'
   import ActiveFilterList from './filters/ActiveFilterList'
-
   import { mapGetters } from 'vuex'
 
   export default {
     name: 'search-box',
     computed: {
-      ...mapGetters(['biobanks', 'loading', 'rsql'])
+      ...mapGetters(['biobanks', 'rsql'])
     },
     components: {
-      ActiveFilterList,
-      Negotiator
+      ActiveFilterList
     }
   }
 </script>

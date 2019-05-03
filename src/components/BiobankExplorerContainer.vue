@@ -6,8 +6,9 @@
 
     <div class="col-md-9">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
+          <negotiator :disabled="!rsql.length || !biobanks.length"></negotiator>
         </div>
       </div>
 
@@ -30,6 +31,7 @@
   import BiobankCardsContainer from './cards/BiobankCardsContainer'
   import FilterContainer from './filters/FilterContainer'
   import ResultHeader from './ResultHeader'
+  import Negotiator from './negotiator/Negotiator'
   import { mapGetters, mapActions } from 'vuex'
 
   import { GET_ALL_BIOBANKS, GET_COLLECTION_IDENTIFIERS, GET_QUERY } from '../store/actions'
@@ -39,10 +41,11 @@
     components: {
       BiobankCardsContainer,
       FilterContainer,
-      ResultHeader
+      ResultHeader,
+      Negotiator
     },
     computed: {
-      ...mapGetters(['rsql'])
+      ...mapGetters(['rsql', 'loading', 'biobanks'])
     },
     watch: {
       rsql () {
