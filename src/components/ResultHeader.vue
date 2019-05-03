@@ -6,7 +6,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="!loading">
+    <div class="row">
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
@@ -44,7 +44,7 @@
   export default {
     name: 'search-box',
     computed: {
-      ...mapGetters(['biobanks', 'loading', 'rsql'])
+      ...mapGetters(['biobanks', 'rsql'])
     },
     components: {
       ActiveFilterList
