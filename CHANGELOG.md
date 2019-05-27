@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 ### Fixed
 
+## [2.7.1] - 2019-05-27
+### Fixed
+- [molgenis-8264](https://github.com/molgenis/molgenis/issues/8264) Biobank explorer 'go to sample/data negotiator' button should stand out more
+
 ## [2.7.0] - 2019-04-30
 ### Added
 - #90 Added quality to biobank card
