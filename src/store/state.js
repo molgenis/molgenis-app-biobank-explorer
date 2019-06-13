@@ -47,6 +47,7 @@ export default {
     filters: [],
     options: []
   },
+  diagnoses: [],
   type: {
     filters: [],
     options: []

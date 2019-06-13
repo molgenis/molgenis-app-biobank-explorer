@@ -15,7 +15,8 @@ import {
   SET_BIOBANK_QUALITY,
   MAP_QUERY_TO_STATE,
   SET_COLLECTION_QUALITY_COLLECTIONS,
-  SET_BIOBANK_QUALITY_BIOBANKS
+  SET_BIOBANK_QUALITY_BIOBANKS,
+  SET_DIAGNOSES
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -33,6 +34,7 @@ export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
+export const GET_DIAGNOSES = '__GET_DIAGNOSES__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
@@ -55,6 +57,12 @@ export default {
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.
    */
+  [GET_DIAGNOSES] ({commit}) {
+    Promise.all([
+      api.get(`${DISEASE_API_PATH}?attrs=id,code,label&num=10000`),
+      api.get(`${DISEASE_API_PATH}?attrs=id,code,label&num=10000&start=10000`)
+    ]).then(([first, second]) => commit(SET_DIAGNOSES, [...first.items, ...second.items]))
+  },
   [GET_DATA_TYPE_OPTIONS] ({commit}) {
     api.get(DATA_TYPES_API_PATH).then(response => {
       commit(SET_DATA_TYPES, response.items)

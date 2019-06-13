@@ -34,7 +34,7 @@
   import Negotiator from './negotiator/Negotiator'
   import { mapGetters, mapActions } from 'vuex'
 
-  import { GET_ALL_BIOBANKS, GET_COLLECTION_IDENTIFIERS, GET_QUERY } from '../store/actions'
+  import { GET_ALL_BIOBANKS, GET_COLLECTION_IDENTIFIERS, GET_QUERY, GET_DIAGNOSES } from '../store/actions'
 
   export default {
     name: 'biobank-explorer-container',
@@ -56,12 +56,14 @@
       ...mapActions({
         getAllBiobanks: GET_ALL_BIOBANKS,
         getBiobankIdentifiers: GET_COLLECTION_IDENTIFIERS,
-        getQuery: GET_QUERY
+        getQuery: GET_QUERY,
+        getDiagnoses: GET_DIAGNOSES
       })
     },
     mounted () {
       this.getQuery()
       this.getAllBiobanks()
+      this.getDiagnoses()
     }
   }
 </script>
