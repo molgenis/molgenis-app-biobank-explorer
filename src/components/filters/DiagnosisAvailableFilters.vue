@@ -8,19 +8,14 @@
     <div class="card-body" v-if="!collapsed">
       <multiselect
         id="disease-type-select"
-        :internalSearch="false"
         v-model="filters"
         :options="options"
         :multiple="true"
-        :searchable="true"
         :hideSelected="true"
         track-by="code"
-        @search-change="getDiagnosisOptions"
         placeholder="Type to search"
-        :limit=10
-        :limitText="getLimitText"
         label="label"
-        selectLabel=""
+        :custom-label="searchableFields"
       ></multiselect>
     </div>
   </div>
@@ -40,9 +35,8 @@
 </style>
 
 <script>
-  import { QUERY_DIAGNOSIS_AVAILABLE_OPTIONS } from '../../store/actions'
   import { UPDATE_FILTER } from '../../store/mutations'
-  import { mapGetters } from 'vuex'
+  import { mapState } from 'vuex'
 
   import Multiselect from 'vue-multiselect'
 
@@ -54,16 +48,16 @@
       }
     },
     methods: {
-      getDiagnosisOptions (query) {
-        this.$store.dispatch(QUERY_DIAGNOSIS_AVAILABLE_OPTIONS, query)
+      searchableFields ({code, label}) {
+        return `${code} - ${label}`
       },
       getLimitText (count) {
         return `and ${count} more`
       }
     },
     computed: {
-      ...mapGetters({
-        options: 'getDiagnosisAvailableOptions'
+      ...mapState({
+        options: 'diagnoses'
       }),
       filters: {
         get () {
