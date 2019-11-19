@@ -12,14 +12,21 @@ module.exports = {
     assetsSubDirectory: '',
     assetsPublicPath: '/',
     proxyTable: {
-      '/login': {
-        target: 'http://localhost:8080'
-      },
-      '/plugin/directory/export': {
-        target: 'http://localhost:8080'
-      },
+      // '/login': {
+      //  target: 'https://bbmri.accept.molgenis.org/',
+      //  changeOrigin: true
+      //  },
+      // '/plugin/directory/export': {
+      //   target: 'https://bbmri.accept.molgenis.org/',
+      //   changeOrigin: true
+      // },
       '/api': {
-        target: 'http://localhost:8080'
+        target: 'https://directory.bbmri-eric.eu',
+        changeOrigin: true
+      },
+      '/logout': {
+        target: 'https://directory.bbmri-eric.eu',
+        changeOrigin: true
       }
     },
 
