@@ -6,6 +6,7 @@ import {
   SET_ALL_BIOBANKS,
   SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
+  SET_COLLECTION_REPORT,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
@@ -34,6 +35,7 @@ export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
+export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
@@ -189,6 +191,13 @@ export default {
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
     api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
       commit(SET_BIOBANK_REPORT, response)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_COLLECTION_REPORT] ({commit}, collectionId) {
+    api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=*,diagnosis_available(label),biobank(*),contact(*)`).then(response => {
+      commit(SET_COLLECTION_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)
     })

@@ -16,7 +16,9 @@
           :class="{'table-text-content-columns-has-sub': hasSubCollections(collection), 'table-text-content-columns': !hasSubCollections(collection)}"
           v-for="column in columns">
               <span v-if="column === 'name'">
-                <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id">{{collection[column]}}</a>
+                <router-link :to="'/collection/report/' + collection['id']">
+                  <button class="btn btn-link">{{collection[column]}}</button>
+                </router-link>
               </span>
               <span v-else-if="column === 'quality'">
               <quality-column :qualities="collection[column]" :spacing=0></quality-column>

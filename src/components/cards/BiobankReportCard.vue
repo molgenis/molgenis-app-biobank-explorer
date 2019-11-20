@@ -1,8 +1,8 @@
 <template>
   <div v-if="biobank.data.collections">
-    <router-link :to="{path: '/biobankexplorer', query: query}">Back to search results</router-link>
+    <router-link :to="{path: '/biobankexplorer', query: query}"><em class="fa fa-angle-left"></em> Back to search results</router-link>
 
-    <div class="card biobank-card">
+    <div class="card mt-3">
       <div class="card-header">
         <div class="row">
           <div class="col-md-10">
@@ -10,12 +10,12 @@
 
             <small>
               <dl class="row">
-                <dt class="col-sm-3"><b>Collection types:</b></dt>
-                <dd class="col-sm-9"><i>{{ collectionTypes }}</i></dd>
-                <dt class="col-sm-3"><b>Number of collections:</b></dt>
-                <dd class="col-sm-9"><i>{{ biobank.data.collections.length }}</i></dd>
-                <dt class="col-sm-3"><b>Number of samples:</b></dt>
-                <dd class="col-sm-9"><i>{{ numberOfSamples }}</i></dd>
+                <dt class="col-sm-3"><strong>Collection types:</strong></dt>
+                <dd class="col-sm-9"><em>{{ collectionTypes }}</em></dd>
+                <dt class="col-sm-3"><strong>Number of collections:</strong></dt>
+                <dd class="col-sm-9"><em>{{ biobank.data.collections.length }}</em></dd>
+                <dt class="col-sm-3"><strong>Number of samples:</strong></dt>
+                <dd class="col-sm-9"><em>{{ numberOfSamples }}</em></dd>
               </dl>
             </small>
 
@@ -27,7 +27,7 @@
             <div class="row">
               <div class="col-md-6">
                 <ul class="list-unstyled">
-                  <li><b>{{ biobank.data.juridical_person }}</b></li>
+                  <li><strong>{{ biobank.data.juridical_person }}</strong></li>
                   <li v-if="biobank.data.contact.address">{{ biobank.data.contact.address }}</li>
                   <li>{{ biobank.data.contact.zip }} {{ biobank.data.contact.city }}</li>
                   <li>{{ biobank.data.country.name }}</li>
@@ -35,9 +35,9 @@
               </div>
               <div class="col-md-4">
                 <ul class="list-unstyled">
-                  <li><b>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</b></li>
-                  <li>Email: {{ biobank.data.contact.email }}</li>
-                  <li>Tel: {{ biobank.data.contact.phone }}</li>
+                  <li><strong>{{ biobank.data.contact.first_name }} {{ biobank.data.contact.last_name }}</strong></li>
+                  <li>Email: <a :href="'mailto:' + biobank.data.contact.email">{{biobank.data.contact.email}}</a></li>
+                  <li v-if="biobank.data.contact.phone">Tel: {{ biobank.data.contact.phone }}</li>
                 </ul>
               </div>
             </div>
@@ -67,8 +67,8 @@
 
               <dd class="col-sm-9" v-else>
                 <span v-if="attribute.fieldType === 'BOOL'">
-                  <i v-if="biobank.data[attribute.name]" class="fa fa-check"></i>
-                  <i v-else-if="!biobank.data[attribute.name]" class="fa fa-times"></i>
+                  <em v-if="biobank.data[attribute.name]" class="fa fa-check"></em>
+                  <em v-else-if="!biobank.data[attribute.name]" class="fa fa-times"></em>
                 </span>
 
                 <span v-else-if="attribute.fieldType === 'HYPERLINK'">
@@ -121,10 +121,6 @@
 
   .more-info-header {
     background-color: #e4e4e4;
-  }
-
-  .biobank-card {
-    margin-top: 1em;
   }
 
   .fa-times {
