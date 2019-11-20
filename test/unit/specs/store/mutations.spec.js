@@ -539,5 +539,26 @@ describe('store', () => {
         expect(state.biobankReport.metadata).to.deep.equal(payload.meta)
       })
     })
+
+    describe('SET_COLLECTION_REPORT', () => {
+      it('should set the collection report value in the state with the payload', () => {
+        const state = {
+          collectionReport: undefined
+        }
+
+        const payload = {
+          _meta: {
+            name: 'meta'
+          },
+          id: '001',
+          name: 'beautiful collection',
+          description: 'beautiful samples'
+        }
+
+        mutations.__SET_COLLECTION_REPORT__(state, payload)
+
+        expect(state.collectionReport).to.deep.equal(payload)
+      })
+    })
   })
 })

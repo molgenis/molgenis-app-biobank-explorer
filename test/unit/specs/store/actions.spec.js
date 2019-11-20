@@ -14,6 +14,7 @@ import {
   SET_ALL_BIOBANKS,
   SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
+  SET_COLLECTION_REPORT,
   SET_COLLECTION_QUALITY,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
@@ -542,55 +543,80 @@ describe('store', () => {
         utils.testAction(actions.__GET_BIOBANK_REPORT__, options, done)
       })
     })
-  })
-
-  describe('GET_BIOBANK_QUALITY_BIOBANKS', () => {
-    it('should retrieve the biobanks for which certain level of assessment is applied for the quality standards', done => {
-      const response = {
-        meta: {
-          name: 'meta'
-        },
-        items: [
-          {id: 'random-1', biobank: 'col-1', quality_standard: '1', asses_level_bio: 'eric'}
-        ]
-      }
-
-      const state = {
-        route: {
-          query: {
-            biobank_quality: 'eric'
-          }
+    describe('GET_COLLECTION_REPORT', () => {
+      it('should retrieve a single collection entity from the server based on a collection id and store it in the state', done => {
+        const response = {
+          _meta: {
+            name: 'meta'
+          },
+          id: '001',
+          name: 'beautiful collection',
+          description: 'beautiful samples'
         }
-      }
 
-      const get = td.function('api.get')
-      td.when(get('/api/v2/eu_bbmri_eric_bio_qual_info?q=assess_level_bio=in=(eric)')).thenResolve(response)
-      td.replace(api, 'get', get)
-      const options = {
-        state: state,
-        expectedMutations: [
-          {type: SET_BIOBANK_QUALITY_BIOBANKS, payload: response.items}
-        ]
-      }
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(*),contact(*)')).thenResolve(response)
+        td.replace(api, 'get', get)
 
-      utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+        const options = {
+          payload: '001',
+          expectedMutations: [
+            {type: SET_COLLECTION_REPORT, payload: response}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COLLECTION_REPORT__, options, done)
+      })
     })
 
-    it('should pass empty array to mutation when no quality standards are selected', (done) => {
-      const state = {
-        route: {
-          query: {}
+    describe('GET_BIOBANK_QUALITY_BIOBANKS', () => {
+      it('should retrieve the biobanks for which certain level of assessment is applied for the quality standards', done => {
+        const response = {
+          meta: {
+            name: 'meta'
+          },
+          items: [
+            {id: 'random-1', biobank: 'col-1', quality_standard: '1', asses_level_bio: 'eric'}
+          ]
         }
-      }
 
-      const options = {
-        state: state,
-        expectedMutations: [
-          {type: SET_BIOBANK_QUALITY_BIOBANKS, payload: []}
-        ]
-      }
+        const state = {
+          route: {
+            query: {
+              biobank_quality: 'eric'
+            }
+          }
+        }
 
-      utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_bio_qual_info?q=assess_level_bio=in=(eric)')).thenResolve(response)
+        td.replace(api, 'get', get)
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_BIOBANK_QUALITY_BIOBANKS, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+      })
+
+      it('should pass empty array to mutation when no quality standards are selected', (done) => {
+        const state = {
+          route: {
+            query: {}
+          }
+        }
+
+        const options = {
+          state: state,
+          expectedMutations: [
+            {type: SET_BIOBANK_QUALITY_BIOBANKS, payload: []}
+          ]
+        }
+
+        utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+      })
     })
   })
 })
