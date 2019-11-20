@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container mg-collection-report-card">
     <div class="row">
       <div class="col">
         <!-- Back to previous page buttons -->

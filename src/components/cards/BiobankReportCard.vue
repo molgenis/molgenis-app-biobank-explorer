@@ -2,7 +2,7 @@
   <div v-if="biobank.data.collections">
     <router-link :to="{path: '/biobankexplorer', query: query}"><em class="fa fa-angle-left"></em> Back to search results</router-link>
 
-    <div class="card mt-3">
+    <div class="card mt-3 mg-biobank-card">
       <div class="card-header">
         <div class="row">
           <div class="col-md-10">

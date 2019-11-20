@@ -52,7 +52,7 @@ describe('BiobankReportCard', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
-    expect(wrapper.html()).to.have.string('<div class="card biobank-card">')
+    expect(wrapper.html()).to.have.string('<div class="card mt-3 mg-biobank-card">')
   })
 
   describe('methods', () => {
