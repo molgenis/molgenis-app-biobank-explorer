@@ -51,7 +51,7 @@
 <script>
   import { mapState } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import { mapContactInfo, mapCollectionsData } from '../../utils/biobankTemplateMapper'
+  import { mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
 
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'

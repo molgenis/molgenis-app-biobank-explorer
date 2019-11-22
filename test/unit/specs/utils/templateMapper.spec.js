@@ -3,7 +3,7 @@ import {
   mapDetailsTableContent,
   mapAgeRange,
   mapDetailsListContent
-} from '../../../../src/utils/collectionTemplateMapper'
+} from '../../../../src/utils/templateMapper'
 
 describe('collectionTemplateMapper', () => {
   const report = {

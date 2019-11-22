@@ -76,8 +76,7 @@
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportSubCollection from '../report-components/ReportSubCollection'
-  import { mapDetailsTableContent, mapDetailsListContent } from '../../utils/collectionTemplateMapper'
-  import { mapCollectionsData } from '../../utils/biobankTemplateMapper'
+  import { mapDetailsTableContent, mapDetailsListContent, mapCollectionsData } from '../../utils/templateMapper'
 
   export default {
     name: 'CollectionReportCard',
