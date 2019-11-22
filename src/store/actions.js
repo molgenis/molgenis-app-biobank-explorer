@@ -51,7 +51,7 @@ const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
 
 export default {
   /**

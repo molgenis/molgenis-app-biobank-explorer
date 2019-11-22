@@ -22,7 +22,7 @@
           <div class="row">
             <div class="col-8">
               <!-- Description -->
-              <report-description :description="report.description"></report-description>
+              <report-description :description="report.description" :maxLength="500"></report-description>
 
               <!-- Collection details -->
               <report-details-table :tableContent="detailsTableContent"></report-details-table>
@@ -74,7 +74,7 @@
       })
     },
     computed: {
-      ...mapState({report: state => state.collectionReport}),
+      ...mapState({report: 'collectionReport'}),
       detailsTableContent () {
         return this.report ? mapDetailsTableContent(this.report) : {}
       },
