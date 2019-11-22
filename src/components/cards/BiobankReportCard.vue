@@ -22,11 +22,8 @@
 
               <!-- Collections-->
               <h3>Collections</h3>
-              <div v-for="collection in collectionsData" v-if="!collection.parent_collection">
-                <hr/>
-                <h4><a :href='"/collection/report/"+collection.id'>{{collection.name}}</a></h4>
-                <report-description :description="collection.description" :maxLength="200"></report-description>
-                <report-details-table :tableContent="collection.tableContent"></report-details-table>
+              <div v-for="collection in collectionsData" v-if="!collection.parentCollection">
+                <biobank-report-collection :collection="collection"></biobank-report-collection>
               </div>
             </div>
 
@@ -187,15 +184,17 @@
   import { mapState } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
   // import utils from '../../utils'
+  import { mapContactInfo, mapCollectionsData } from '../../utils/biobankTemplateMapper'
 
-  import ReportDescription from './ReportDescription.vue'
-  import ReportTitle from './ReportTitle.vue'
-  import ReportDetailsTable from './ReportDetailsTable.vue'
-  import ReportDetailsList from './ReportDetailsList.vue'
+  import ReportDescription from '../report-components/ReportDescription.vue'
+  import ReportTitle from '../report-components/ReportTitle.vue'
+  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
+  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
+  import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
 
   export default {
     name: 'biobank-report-card',
-    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList},
+    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList, BiobankReportCollection},
     data () {
       return {
         collapsed: true
@@ -250,41 +249,10 @@
       //   }
       // }
       contactInfo () {
-        return {
-          website: {value: this.biobank.data.url, type: 'url'},
-          email: {value: this.biobank.data.email, type: 'email'},
-          juridical_person: {value: this.biobank.data.juridical_person, type: 'string'},
-          country: {value: this.biobank.data.country ? this.biobank.data.country.name : undefined, type: 'string'}
-        }
+        return this.biobank ? mapContactInfo(this.biobank.data) : {}
       },
       collectionsData () {
-        return this.biobank && this.biobank.data && this.biobank.data.collections ? this.biobank.data.collections.map(
-          (collection) => {
-            return {
-              description: collection.description,
-              parent: collection.parent,
-              subCollections: collection.sub_collections,
-              name: collection.name,
-              id: collection.id,
-              tableContent: {
-                stringValues: {},
-                listValues: {
-                  Size: {
-                    values: collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
-                    badgeColor: 'success'
-                  },
-                  Materials: {
-                    values: collection.materials ? collection.materials.map((material) => material.label) : [],
-                    badgeColor: 'danger'
-                  },
-                  Data: {
-                    values: collection.data_categories ? collection.data_categories.map((data) => data.label) : [],
-                    badgeColor: 'primary'
-                  }
-                }
-              }
-            }
-          }) : []
+        return this.biobank && this.biobank.data && this.biobank.data.collections ? mapCollectionsData(this.biobank.data.collections) : []
       }
     },
     // components: {

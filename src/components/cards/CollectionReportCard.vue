@@ -7,6 +7,9 @@
                      name="previous">
           <em class="fa fa-angle-left"></em> Back
         </router-link>
+        <router-link v-else-if="this.report.parent_collection" :to="`/collection/report/${this.report.parent_collection.id}`" name="parent">
+          <em class="fa fa-angle-left"></em> Back to parent collection
+        </router-link>
         <router-link v-else :to="`/biobank/report/${this.report.biobank.id}`" name="biobank">
           <em class="fa fa-angle-left"></em> Back to biobank
         </router-link>
@@ -59,10 +62,10 @@
 <script>
   import { mapActions, mapState } from 'vuex'
   import { GET_COLLECTION_REPORT } from '../../store/actions'
-  import ReportDescription from './ReportDescription.vue'
-  import ReportTitle from './ReportTitle.vue'
-  import ReportDetailsTable from './ReportDetailsTable.vue'
-  import ReportDetailsList from './ReportDetailsList.vue'
+  import ReportDescription from '../report-components/ReportDescription.vue'
+  import ReportTitle from '../report-components/ReportTitle.vue'
+  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
+  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import { mapDetailsTableContent, mapDetailsListContent } from '../../utils/collectionTemplateMapper'
 
   export default {
