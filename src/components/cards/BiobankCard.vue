@@ -53,7 +53,7 @@
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable.vue'
-  import utils from '../..//utils'
+  import utils from '../../utils'
   import QualityColumn from '../tables/QualityColumn'
   import 'array-flat-polyfill'
 

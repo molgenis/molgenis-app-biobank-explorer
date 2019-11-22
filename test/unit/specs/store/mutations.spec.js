@@ -543,7 +543,7 @@ describe('store', () => {
     describe('SET_COLLECTION_REPORT', () => {
       it('should set the collection report value in the state with the payload', () => {
         const state = {
-          collectionReport: undefined
+          report: undefined
         }
 
         const payload = {
