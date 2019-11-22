@@ -76,41 +76,4 @@ describe('CollectionReportCard', () => {
   it('should initialize component', () => {
     expect(wrapper.html()).to.have.string('<div class="container mg-collection-report-card">')
   })
-
-  describe('computed', () => {
-    describe('detailsTableContent', () => {
-      it('should generate stringValues of details table content', () => {
-        expect(wrapper.vm.detailsTableContent.stringValues.Size).to.equal('666 participants')
-        expect(wrapper.vm.detailsTableContent.stringValues.Age).to.equal('0-20 years')
-      })
-
-      it('should generate listValues of details table content', () => {
-        expect(wrapper.vm.detailsTableContent.listValues.Type.values).to.deep.equal(['type1', 'type2'])
-        expect(wrapper.vm.detailsTableContent.listValues.Storage.values).to.deep.equal(['10 degrees'])
-        expect(wrapper.vm.detailsTableContent.listValues.Data.values).to.deep.equal(['One type'])
-        expect(wrapper.vm.detailsTableContent.listValues.Diagnosis.values).to.deep.equal(['Common cold', 'Mysterious illness', 'Instaneous death'])
-      })
-    })
-
-    describe('detailsListContent', () => {
-      it('should generate contact of detailsListContent', () => {
-        expect(wrapper.vm.detailsListContent.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia) ')
-        expect(wrapper.vm.detailsListContent.contact.email.value).to.equal('mia@genovia.gnv')
-        expect(wrapper.vm.detailsListContent.contact.phone.value).to.equal('+66 123456789')
-      })
-
-      it('should generate quality of detailsListContent', () => {
-        expect(wrapper.vm.detailsListContent.quality['Partner charter']).to.deep.equal({value: true, type: 'bool'})
-        expect(wrapper.vm.detailsListContent.quality.Certification).to.deep.equal({
-          value: ['Order of the rose'],
-          type: 'list'
-        })
-      })
-
-      it('should generate collaboration of detailsListContent', () => {
-        expect(wrapper.vm.detailsListContent.collaboration['Not for profit']).to.deep.equal({value: true, type: 'bool'})
-        expect(wrapper.vm.detailsListContent.collaboration.Commercial).to.deep.equal({value: false, type: 'bool'})
-      })
-    })
-  })
 })
