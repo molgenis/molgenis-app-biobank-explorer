@@ -6,7 +6,7 @@
     <report-details-table :tableContent="collection.tableContent"></report-details-table>
     <div v-if="collection.subCollections.length" class="m-3">
       <h5>Sub collections</h5>
-      <biobank-report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1"></biobank-report-sub-collection>
+      <report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1"></report-sub-collection>
     </div>
   </div>
 </template>
@@ -14,11 +14,11 @@
 <script>
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
-  import BiobankReportSubCollection from '../report-components/BiobankReportSubCollection.vue'
+  import ReportSubCollection from './ReportSubCollection.vue'
 
   export default {
     name: 'BiobankReportCollection',
-    components: {ReportDescription, ReportDetailsTable, BiobankReportSubCollection},
+    components: {ReportDescription, ReportDetailsTable, ReportSubCollection},
     props: {
       collection: {
         description: String,

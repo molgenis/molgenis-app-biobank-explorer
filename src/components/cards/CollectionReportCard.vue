@@ -1,5 +1,5 @@
 <template>
-  <div class="container mg-collection-report-card" v-if="this.report && this.prevRoute">
+  <div class="container mg-collection-report-card" v-if="this.collection && this.prevRoute">
     <div class="row">
       <div class="col">
         <!-- Back to previous page buttons -->
@@ -7,10 +7,11 @@
                      name="previous">
           <em class="fa fa-angle-left"></em> Back
         </router-link>
-        <router-link v-else-if="this.report.parent_collection" :to="`/collection/report/${this.report.parent_collection.id}`" name="parent">
+        <router-link v-else-if="this.collection.parent_collection"
+                     :to="`/collection/report/${this.collection.parent_collection.id}`" name="parent">
           <em class="fa fa-angle-left"></em> Back to parent collection
         </router-link>
-        <router-link v-else :to="`/biobank/report/${this.report.biobank.id}`" name="biobank">
+        <router-link v-else :to="`/biobank/report/${this.collection.biobank.id}`" name="biobank">
           <em class="fa fa-angle-left"></em> Back to biobank
         </router-link>
       </div>
@@ -19,16 +20,24 @@
     <div class="row">
       <div class="col">
         <!-- Title -->
-        <report-title type="Collection" :id="report.id" :name="report.name"></report-title>
+        <report-title type="Collection" :id="collection.id" :name="collection.name"></report-title>
 
         <div class="container">
           <div class="row">
             <div class="col-8">
               <!-- Description -->
-              <report-description :description="report.description" :maxLength="500"></report-description>
+              <report-description :description="collection.description" :maxLength="500"></report-description>
 
               <!-- Collection details -->
               <report-details-table :tableContent="detailsTableContent"></report-details-table>
+
+              <!-- Sub collections -->
+              <div v-if="collection.sub_collections.length">
+                <h5>Sub collections</h5>
+                <report-sub-collection v-for="subCollection in subCollections"
+                                       :collection="subCollection"
+                                       :level="1"></report-sub-collection>
+              </div>
             </div>
 
             <!-- Right side card -->
@@ -66,23 +75,28 @@
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
+  import ReportSubCollection from '../report-components/ReportSubCollection'
   import { mapDetailsTableContent, mapDetailsListContent } from '../../utils/collectionTemplateMapper'
+  import { mapCollectionsData } from '../../utils/biobankTemplateMapper'
 
   export default {
     name: 'CollectionReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList},
+    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList, ReportSubCollection},
     methods: {
       ...mapActions({
         getCollectionReport: GET_COLLECTION_REPORT
       })
     },
     computed: {
-      ...mapState({report: 'collectionReport'}),
+      ...mapState({collection: 'collectionReport'}),
       detailsTableContent () {
-        return this.report ? mapDetailsTableContent(this.report) : {}
+        return this.collection ? mapDetailsTableContent(this.collection) : {}
       },
       detailsListContent () {
-        return this.report ? mapDetailsListContent(this.report) : {}
+        return this.collection ? mapDetailsListContent(this.collection) : {}
+      },
+      subCollections () {
+        return this.collection.sub_collections.length ? mapCollectionsData(this.collection.sub_collections) : []
       }
     },
     data () {

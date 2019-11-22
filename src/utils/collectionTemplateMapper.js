@@ -73,7 +73,7 @@ export const mapDetailsListContent = (report) => {
       juridical_person: {value: report.biobank.juridical_person, type: 'string'},
       country: {value: report.country.name, type: 'string'},
       website: {value: report.biobank.url, type: 'url'},
-      email: {value: report.biobank.email, type: 'email'}
+      email: {value: report.biobank.contact.email, type: 'email'}
     },
     quality: {
       'Partner charter': {value: report.biobank.partner_charter_signed, type: 'bool'},
