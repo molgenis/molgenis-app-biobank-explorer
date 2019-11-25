@@ -99,7 +99,7 @@ export const mapCollectionsData = (collections) => {
   return collections.map(
     (collection) => {
       return {
-        description: collection.description,
+        description: collection.description ? collection.description : undefined,
         parentCollection: collection.parent_collection,
         subCollections: mapCollectionsData(collection.sub_collections),
         name: collection.name,
