@@ -2,11 +2,11 @@
   <table class="table table-condensed table-responsive">
     <thead>
     <tr>
-      <th>Collection</th>
-      <th>Type</th>
-      <th>Materials</th>
-      <th>Standards</th>
-      <th>#Samples</th>
+      <th scope="col">Collection</th>
+      <th scope="col">Type</th>
+      <th scope="col">Materials</th>
+      <th scope="col">Standards</th>
+      <th scope="col">#Samples</th>
     </tr>
     </thead>
     <tbody>
@@ -63,7 +63,7 @@
   import QualityColumn from './QualityColumn'
 
   export default {
-    name: 'collections-table',
+    name: 'CollectionsTable',
     props: {
       collections: {
         type: Array,

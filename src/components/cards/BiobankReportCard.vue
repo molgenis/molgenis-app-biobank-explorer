@@ -22,7 +22,7 @@
 
               <!-- Collections-->
               <h3>Collections</h3>
-              <div v-for="collection in collectionsData" v-if="!collection.parentCollection">
+              <div v-for="collection in collectionsData" v-if="!collection.parentCollection" :key="collection.id">
                 <biobank-report-collection :collection="collection"></biobank-report-collection>
               </div>
             </div>
@@ -75,7 +75,7 @@
         return this.$route.query
       },
       contactInfo () {
-        return this.biobank ? mapContactInfo(this.biobank.data) : {}
+        return this.biobank && this.biobank.data && this.biobank.data.contact ? mapContactInfo(this.biobank.data) : {}
       },
       collectionsData () {
         return this.biobank && this.biobank.data && this.biobank.data.collections ? mapCollectionsData(this.biobank.data.collections) : []

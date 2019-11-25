@@ -1,6 +1,6 @@
 /* global describe it expect beforeEach */
 import { shallowMount } from '@vue/test-utils'
-import ReportDescription from '@/components/cards/ReportDescription'
+import ReportDescription from '@/components/report-components/ReportDescription'
 
 describe('ReportDescription', () => {
   it('should initialize component with description', () => {

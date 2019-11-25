@@ -32,10 +32,11 @@
               <report-details-table :tableContent="detailsTableContent"></report-details-table>
 
               <!-- Sub collections -->
-              <div v-if="collection.sub_collections.length">
+              <div v-if="collection.sub_collections && collection.sub_collections.length">
                 <h5>Sub collections</h5>
                 <report-sub-collection v-for="subCollection in subCollections"
                                        :collection="subCollection"
+                                       :key="subCollection.id"
                                        :level="1"></report-sub-collection>
               </div>
             </div>
@@ -95,7 +96,7 @@
         return this.collection ? mapDetailsListContent(this.collection) : {}
       },
       subCollections () {
-        return this.collection.sub_collections.length ? mapCollectionsData(this.collection.sub_collections) : []
+        return this.collection && this.collection.sub_collections && this.collection.sub_collections.length ? mapCollectionsData(this.collection.sub_collections) : []
       }
     },
     data () {

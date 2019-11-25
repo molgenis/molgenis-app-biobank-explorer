@@ -6,7 +6,7 @@
     <report-details-table :tableContent="collection.tableContent"></report-details-table>
     <div v-if="collection.subCollections.length" class="m-3">
       <h5>Sub collections</h5>
-      <report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1"></report-sub-collection>
+      <report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1" :key="subCollection.id"></report-sub-collection>
     </div>
   </div>
 </template>

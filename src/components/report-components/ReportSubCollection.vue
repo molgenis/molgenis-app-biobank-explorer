@@ -13,7 +13,7 @@
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
 
   export default {
-    name: 'BiobankReportSubCollection',
+    name: 'ReportSubCollection',
     components: {ReportDetailsTable},
     props: {
       level: Number,

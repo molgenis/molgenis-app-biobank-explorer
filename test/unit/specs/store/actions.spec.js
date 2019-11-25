@@ -325,7 +325,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*)),*')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -530,7 +530,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*)),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*&q=id==biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*&q=id==biobank-1')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -555,7 +555,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(*),contact(*)')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {

@@ -64,7 +64,7 @@ describe('components', () => {
     let wrapper
 
     beforeEach(() => {
-      wrapper = shallowMount(CollectionsTable, { propsData: {collections} })
+      wrapper = shallowMount(CollectionsTable, { propsData: {collections}, stubs: ['router-link'] })
     })
 
     describe('html', () => {

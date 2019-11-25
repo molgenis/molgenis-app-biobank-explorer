@@ -1,6 +1,6 @@
 /* global describe it expect beforeEach */
 import { shallowMount } from '@vue/test-utils'
-import ReportDetailsList from '@/components/cards/ReportDetailsList'
+import ReportDetailsList from '@/components/report-components/ReportDetailsList'
 
 describe('ReportDetailsList', () => {
   let wrapper

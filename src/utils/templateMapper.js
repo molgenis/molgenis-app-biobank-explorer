@@ -73,7 +73,7 @@ export const mapDetailsListContent = (report) => {
       juridical_person: {value: report.biobank.juridical_person, type: 'string'},
       country: {value: report.country.name, type: 'string'},
       website: {value: report.biobank.url, type: 'url'},
-      email: {value: report.biobank.contact.email, type: 'email'}
+      email: {value: report.biobank.contact ? report.biobank.contact.email : undefined, type: 'email'}
     },
     quality: {
       'Partner charter': {value: report.biobank.partner_charter_signed, type: 'bool'},
@@ -89,7 +89,7 @@ export const mapDetailsListContent = (report) => {
 export const mapContactInfo = (biobank) => {
   return {
     website: {value: biobank.url, type: 'url'},
-    email: {value: biobank.email, type: 'email'},
+    email: {value: biobank.contact ? biobank.contact.email : undefined, type: 'email'},
     juridical_person: {value: biobank.juridical_person, type: 'string'},
     country: {value: biobank.country ? biobank.country.name : undefined, type: 'string'}
   }
@@ -124,4 +124,3 @@ export const mapCollectionsData = (collections) => {
       }
     })
 }
-

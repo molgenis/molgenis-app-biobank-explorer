@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import ReportDetailsTable from '@/components/cards/ReportDetailsTable'
+import ReportDetailsTable from '@/components/report-components/ReportDetailsTable'
 
 describe('ReportDetailsTable', () => {
   let wrapper
