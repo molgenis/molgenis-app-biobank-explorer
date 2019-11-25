@@ -32,7 +32,7 @@
               <report-details-table :tableContent="detailsTableContent"></report-details-table>
 
               <!-- Sub collections -->
-              <div v-if="collection.sub_collections && collection.sub_collections.length">
+              <div v-if="collection.sub_collections && collection.sub_collections.length" class="mt-2">
                 <h5>Sub collections</h5>
                 <report-sub-collection v-for="subCollection in subCollections"
                                        :collection="subCollection"
