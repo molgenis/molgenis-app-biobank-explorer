@@ -23,6 +23,16 @@ describe('CollectionReportCard', () => {
       country: {
         name: 'Genovia'
       },
+      network: [
+        {
+          id: 'network-x',
+          name: 'Network x'
+        },
+        {
+          id: 'network-y',
+          name: 'Network y'
+        }
+      ],
       biobank: {
         id: 'b-001',
         name: 'beautiful biobank',
@@ -47,7 +57,7 @@ describe('CollectionReportCard', () => {
     })
     mocks = {
       $route: {
-        fullPath: '/biobank/report/b-001'
+        fullPath: '/collection/report/c-001'
       }
     }
     stubs = ['router-link', 'router-view']
@@ -59,6 +69,12 @@ describe('CollectionReportCard', () => {
   })
 
   describe('computed', () => {
+    describe('collectionId', () => {
+      it('computes the collection id based on URL', () => {
+        const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.collectionId).to.equal('c-001')
+      })
+    })
     describe('subCollections', () => {
       it('computes empty array for empty subCollections', () => {
         const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})

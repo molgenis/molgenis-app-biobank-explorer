@@ -19,10 +19,13 @@ export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
 export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
+export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
 
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
+
+export const SET_LAST_URL = '__SET_LAST_URL__'
 
 const combineCodeAndLabels = (diagnoses) => {
   return diagnoses.map(diagnosis => {
@@ -120,6 +123,9 @@ export default {
   },
   [SET_COLLECTION_REPORT] (state, collection) {
     state.collectionReport = collection
+  },
+  [SET_NETWORK_REPORT] (state, network) {
+    state.networkReport = network
   },
   /**
    *

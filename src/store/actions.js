@@ -7,6 +7,7 @@ import {
   SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_REPORT,
+  SET_NETWORK_REPORT,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
@@ -36,11 +37,13 @@ export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
+export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 const COLLECTION_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_col'
 const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_bio'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
@@ -199,6 +202,13 @@ export default {
   [GET_COLLECTION_REPORT] ({commit}, collectionId) {
     api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`).then(response => {
       commit(SET_COLLECTION_REPORT, response)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_NETWORK_REPORT] ({commit}, networkId) {
+    api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
+      commit(SET_NETWORK_REPORT, response)
     }, error => {
       commit(SET_ERROR, error)
     })

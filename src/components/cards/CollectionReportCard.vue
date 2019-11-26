@@ -1,19 +1,15 @@
 <template>
-  <div class="container mg-collection-report-card" v-if="this.collection && this.prevRoute">
+  <div class="container mg-collection-report-card" v-if="this.collection">
     <div class="row">
       <div class="col">
         <!-- Back to previous page buttons -->
-        <router-link v-if="this.prevRoute.fullPath !== '/'" :to="this.prevRoute.fullPath"
-                     name="previous">
-          <em class="fa fa-angle-left"></em> Back
-        </router-link>
-        <router-link v-else-if="this.collection.parent_collection"
+        <router-link v-if="this.collection.parent_collection"
                      :to="`/collection/report/${this.collection.parent_collection.id}`" name="parent">
           <em class="fa fa-angle-left"></em> Back to parent collection
         </router-link>
-        <router-link v-else :to="`/biobank/report/${this.collection.biobank.id}`" name="biobank">
-          <em class="fa fa-angle-left"></em> Back to biobank
-        </router-link>
+        <button class="btn btn-link" v-else @click="back">
+          <em class="fa fa-angle-left"></em> Back
+        </button>
       </div>
     </div>
 
@@ -52,6 +48,10 @@
                     <!-- Biobank -->
                     <h5>Biobank</h5>
                     <report-details-list :reportDetails="detailsListContent.biobank"></report-details-list>
+                    <!-- Network -->
+                    <h5 v-if="detailsListContent.networks && detailsListContent.networks.length > 0">Networks</h5>
+                    <report-details-list :reportDetails="network" v-for="network in detailsListContent.networks"
+                                         :key="network.id"></report-details-list>
                     <!-- Quality -->
                     <h5>Quality</h5>
                     <report-details-list :reportDetails="detailsListContent.quality"></report-details-list>
@@ -77,7 +77,7 @@
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportSubCollection from '../report-components/ReportSubCollection'
-  import { mapDetailsTableContent, mapDetailsListContent, mapCollectionsData } from '../../utils/templateMapper'
+  import { mapDetailsTableContent, mapCollectionDetailsListContent, mapCollectionsData } from '../../utils/templateMapper'
 
   export default {
     name: 'CollectionReportCard',
@@ -85,7 +85,10 @@
     methods: {
       ...mapActions({
         getCollectionReport: GET_COLLECTION_REPORT
-      })
+      }),
+      back () {
+        this.$router.go(-1)
+      }
     },
     computed: {
       ...mapState({collection: 'collectionReport'}),
@@ -93,25 +96,18 @@
         return this.collection ? mapDetailsTableContent(this.collection) : {}
       },
       detailsListContent () {
-        return this.collection ? mapDetailsListContent(this.collection) : {}
+        return this.collection ? mapCollectionDetailsListContent(this.collection) : {}
       },
       subCollections () {
         return this.collection && this.collection.sub_collections && this.collection.sub_collections.length ? mapCollectionsData(this.collection.sub_collections) : []
+      },
+      collectionId () {
+        const splittedUrl = this.$route.fullPath.split('/')
+        return splittedUrl[splittedUrl.length - 1]
       }
-    },
-    data () {
-      return {
-        prevRoute: {fullPath: '/'}
-      }
-    },
-    beforeRouteEnter (to, from, next) {
-      next(vm => {
-        vm.prevRoute = from
-      })
     },
     mounted () {
-      const splittedUrl = this.$route.fullPath.split('/')
-      this.getCollectionReport([splittedUrl[splittedUrl.length - 1]])
+      this.getCollectionReport([this.collectionId])
     }
   }
 </script>

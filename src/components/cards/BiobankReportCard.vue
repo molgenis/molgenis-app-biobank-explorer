@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col">
         <!-- Back to previous page buttons -->
-        <router-link :to="{path: '/biobankexplorer', query: query}"><em class="fa fa-angle-left"></em> Back to search
-          results
-        </router-link>
+        <button class="btn btn-link" @click="back">
+          <em class="fa fa-angle-left"></em> Back
+        </button>
       </div>
     </div>
 
@@ -34,7 +34,12 @@
                   <div class="card-text">
                     <!-- Contact -->
                     <h5>Contact Information</h5>
-                    <report-details-list :reportDetails="contactInfo"></report-details-list>
+                    <report-details-list :reportDetails="contact"></report-details-list>
+
+                    <!-- Network -->
+                    <h5 v-if="this.networks && this.networks.length > 0">Networks</h5>
+                    <report-details-list :reportDetails="network" v-for="network in networks"
+                                         :key="network.id"></report-details-list>
                   </div>
                 </div>
               </div>
@@ -49,9 +54,9 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import { mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
+  import { mapContactInfo, mapCollectionsData, mapNetworkInfo } from '../../utils/templateMapper'
 
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
@@ -74,15 +79,26 @@
       query () {
         return this.$route.query
       },
-      contactInfo () {
+      networks () {
+        return this.biobank && this.biobank.data && this.biobank.data.network ? mapNetworkInfo(this.biobank.data) : {}
+      },
+      contact () {
         return this.biobank && this.biobank.data && this.biobank.data.contact ? mapContactInfo(this.biobank.data) : {}
       },
       collectionsData () {
         return this.biobank && this.biobank.data && this.biobank.data.collections ? mapCollectionsData(this.biobank.data.collections) : []
       }
     },
+    methods: {
+      ...mapActions({
+        getBiobankReport: GET_BIOBANK_REPORT
+      }),
+      back () {
+        this.$router.go(-1)
+      }
+    },
     mounted () {
-      this.$store.dispatch(GET_BIOBANK_REPORT, this.$store.state.route.params.id)
+      this.getBiobankReport(this.$store.state.route.params.id)
     }
   }
 </script>

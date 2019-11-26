@@ -22,6 +22,7 @@ export default {
     metadata: {}
   },
   collectionReport: undefined,
+  networkReport: undefined,
   search: '',
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */

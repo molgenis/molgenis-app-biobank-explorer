@@ -22,6 +22,10 @@ describe('BiobankReportCard', () => {
           city: 'city',
           zip: 'zip'
         },
+        network: [
+          {id: 'n01', name: 'Network 01'},
+          {id: 'n02', name: 'Network 02'}
+        ],
         country: {
           name: 'name'
         }
@@ -70,10 +74,17 @@ describe('BiobankReportCard', () => {
       })
     })
 
-    describe('collectionsData', () => {
-      it('should fill contactInfo', () => {
+    describe('contact', () => {
+      it('should fill contact', () => {
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
-        expect(wrapper.vm.contactInfo.email).to.deep.equal({'value': 'email', type: 'email'})
+        expect(wrapper.vm.contact.email).to.deep.equal({'value': 'email', type: 'email'})
+      })
+    })
+
+    describe('networks', () => {
+      it('should fill networks', () => {
+        const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.networks.length).to.equal(2)
       })
     })
   })

@@ -28,6 +28,10 @@
           <span v-for="val in value.value" class="badge"
                 :class="'badge-'+ (value.badgeColor ? value.badgeColor : 'success')">{{val}}</span>
         </span>
+        <!--Type report-->
+        <a v-else-if="value.type === 'report'" :href="value.value">
+          <em class="fa fa-address-card"></em> Overview
+        </a>
       </span>
     </dd>
   </dl>
@@ -37,6 +41,6 @@
   export default {
     name: 'ReportDetailsList',
     // Object with as key the variable, as value an object with two keys: value and type
-    props: {reportDetails: {[String]: {value: String, type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone'}}}
+    props: {reportDetails: {[String]: {value: String, type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report'}}}
   }
 </script>

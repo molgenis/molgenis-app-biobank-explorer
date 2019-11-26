@@ -2,11 +2,14 @@ import { expect } from 'chai'
 import {
   mapDetailsTableContent,
   mapAgeRange,
-  mapDetailsListContent,
-  mapCollectionsData
+  mapCollectionDetailsListContent,
+  mapCollectionsData,
+  mapNetworkInfo,
+  mapContactInfo,
+  mapNetworkData
 } from '../../../../src/utils/templateMapper'
 
-describe('collectionTemplateMapper', () => {
+describe('templateMapper', () => {
   const collectionsReport = {
     _meta: {
       name: 'meta'
@@ -17,6 +20,7 @@ describe('collectionTemplateMapper', () => {
     order_of_magnitude: {
       size: '666'
     },
+    network: [],
     age_low: 0,
     age_high: 20,
     age_unit: [{label: 'years'}],
@@ -111,14 +115,14 @@ describe('collectionTemplateMapper', () => {
 
   describe('detailsListContent', () => {
     it('should generate contact of detailsListContent', () => {
-      const actual = mapDetailsListContent(collectionsReport)
+      const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia) ')
       expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
       expect(actual.contact.phone.value).to.equal('+66 123456789')
     })
 
     it('should generate quality of detailsListContent', () => {
-      const actual = mapDetailsListContent(collectionsReport)
+      const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.quality['Partner charter']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.quality.Certification).to.deep.equal({
         value: ['Order of the rose'],
@@ -127,14 +131,14 @@ describe('collectionTemplateMapper', () => {
     })
 
     it('should generate collaboration of detailsListContent', () => {
-      const actual = mapDetailsListContent(collectionsReport)
+      const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.collaboration['Not for profit']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.collaboration.Commercial).to.deep.equal({value: false, type: 'bool'})
     })
   })
 
   describe('mapCollectionsData', () => {
-    it('should generate contact of detailsListContent', () => {
+    it('should generate details list data for sub collections', () => {
       const expected = [
         {
           description: 'Description of test1',
@@ -211,6 +215,105 @@ describe('collectionTemplateMapper', () => {
         }
       ]
       const actual = mapCollectionsData(collectionsReport.sub_collections)
+      expect(actual).to.deep.equal(expected)
+    })
+  })
+
+  describe('mapNetworkData', () => {
+    it('should map network data', () => {
+      const network = {
+        common_collection_focus: true,
+        common_charter: true,
+        common_sops: false,
+        common_data_access_policy: true,
+        common_sample_access_policy: false,
+        common_mta: true,
+        common_image_access_policy: false,
+        common_image_mta: false,
+        common_representation: true,
+        common_url: true
+      }
+      const expected = {
+        'Common collection focus': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        },
+        'Common charter': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        },
+        'Common SOPS': {
+          values: ['No'],
+          badgeColor: 'danger'
+        },
+        'Data access policy': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        },
+        'Sample access policy': {
+          values: ['No'],
+          badgeColor: 'danger'
+        },
+        'Common MTA': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        },
+        'Common image access policy': {
+          values: ['No'],
+          badgeColor: 'danger'
+        },
+        'Common image MTA': {
+          values: ['No'],
+          badgeColor: 'danger'
+        },
+        'Common representation': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        },
+        'Common URL': {
+          values: ['Yes'],
+          badgeColor: 'success'
+        }
+      }
+      const actual = mapNetworkData(network).listValues
+      expect(actual).to.deep.equal(expected)
+    })
+  })
+
+  describe('mapNetworkInfo', () => {
+    it('should map network info', () => {
+      const data = {
+        network: [{
+          name: 'Network',
+          id: 'n'
+        }]
+      }
+      const expected = [{
+        name: {value: 'Network', type: 'string'},
+        report: {value: '/network/report/n', type: 'report'}
+      }]
+      const actual = mapNetworkInfo(data)
+      expect(actual).to.deep.equal(expected)
+    })
+  })
+
+  describe('mapContactInfo', () => {
+    it('should map network info', () => {
+      const instance = {
+        url: 'https://website.com',
+        contact: {email: 'email@email.com'},
+        juridical_person: 'blaat',
+        country: {
+          name: 'Netherlands'
+        }
+      }
+      const expected = {
+        website: {value: 'https://website.com', type: 'url'},
+        email: {value: 'email@email.com', type: 'email'},
+        juridical_person: {value: 'blaat', type: 'string'},
+        country: {value: 'Netherlands', type: 'string'}
+      }
+      const actual = mapContactInfo(instance)
       expect(actual).to.deep.equal(expected)
     })
   })
