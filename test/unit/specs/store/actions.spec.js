@@ -21,10 +21,12 @@ import {
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
+  SET_LOADING,
+  SET_NETWORK_REPORT,
   SET_MATERIALS,
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY, SET_LOADING
+  SET_BIOBANK_QUALITY
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -569,6 +571,33 @@ describe('store', () => {
           ]
         }
         utils.testAction(actions.__GET_COLLECTION_REPORT__, options, done)
+      })
+    })
+
+    describe('GET_NETWORK_REPORT', () => {
+      it('should retrieve a single network entity from the server based on a network id and store it in the state', done => {
+        const response = {
+          _meta: {
+            name: 'meta'
+          },
+          id: '001',
+          name: 'beautiful network',
+          description: 'beautiful data'
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          payload: '001',
+          expectedMutations: [
+            {type: SET_LOADING, payload: true},
+            {type: SET_NETWORK_REPORT, payload: response},
+            {type: SET_LOADING, payload: false}
+          ]
+        }
+        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
       })
     })
 

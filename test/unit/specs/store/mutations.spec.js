@@ -543,7 +543,7 @@ describe('store', () => {
     describe('SET_COLLECTION_REPORT', () => {
       it('should set the collection report value in the state with the payload', () => {
         const state = {
-          report: undefined
+          collectionReport: undefined
         }
 
         const payload = {
@@ -558,6 +558,39 @@ describe('store', () => {
         mutations.__SET_COLLECTION_REPORT__(state, payload)
 
         expect(state.collectionReport).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_NETWORK_REPORT', () => {
+      it('should set the network report value in the state with the payload', () => {
+        const state = {
+          networkReport: undefined
+        }
+
+        const payload = {
+          _meta: {
+            name: 'meta'
+          },
+          id: '001',
+          name: 'beautiful network',
+          description: 'beautiful data'
+        }
+
+        mutations.__SET_NETWORK_REPORT__(state, payload)
+
+        expect(state.networkReport).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_LOADING', () => {
+      it('should set the loading boolean in the state', () => {
+        const state = {
+          isLoading: undefined
+        }
+
+        mutations.__SET_LOADING__(state, true)
+
+        expect(state.isLoading).to.deep.equal(true)
       })
     })
   })
