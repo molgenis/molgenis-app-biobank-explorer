@@ -32,7 +32,7 @@ sync(store, router)
 
 if (window.__webpack_public_path__) {
   /* eslint-disable no-undef, camelcase */
-  __webpack_public_path__ = window.__webpack_public_path__
+  __webpack_public_path__ = window.__webpack_public_path__ // NOSONAR
   /* eslint-enable */
 }
 
