@@ -5,9 +5,9 @@
         <div class="col-md-5">
           <h5>
             <router-link :to="'/biobank/report/' + biobank.id">
-              <em class="fa fa-table"></em>
+              <i class="fa fa-table" aria-hidden="true" aria-labelledby="biobank-name"></i>
             </router-link>
-            {{ biobank.name }}
+            <span id="biobank-name">{{ biobank.name }}</span>
           </h5>
           <small v-if="biobank.quality && biobank.quality.length > 0"><quality-column :qualities="biobank.quality" :spacing=0></quality-column></small>
         </div>
