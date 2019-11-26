@@ -100,7 +100,7 @@
         return this.$route.query
       },
       networks () {
-        return this.biobank && this.biobank.data && this.biobank.data.network ? mapNetworkInfo(this.biobank.data) : {}
+        return this.biobank && this.biobank.data && this.biobank.data.network ? mapNetworkInfo(this.biobank.data) : []
       },
       contact () {
         return this.biobank && this.biobank.data && this.biobank.data.contact ? mapContactInfo(this.biobank.data) : {}

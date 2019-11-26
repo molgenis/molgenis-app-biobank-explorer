@@ -70,12 +70,29 @@ describe('CollectionReportCard', () => {
   })
 
   describe('computed', () => {
+    describe('detailsListContent', () => {
+      it('should return empty object', () => {
+        store.state.collectionReport = undefined
+        const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.detailsListContent).to.deep.equal({})
+      })
+    })
+
+    describe('detailsTableContent', () => {
+      it('should return empty object', () => {
+        store.state.collectionReport = undefined
+        const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.detailsTableContent).to.deep.equal({})
+      })
+    })
+
     describe('collectionId', () => {
       it('computes the collection id based on URL', () => {
         const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
         expect(wrapper.vm.collectionId).to.equal('c-001')
       })
     })
+
     describe('subCollections', () => {
       it('computes empty array for empty subCollections', () => {
         const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})

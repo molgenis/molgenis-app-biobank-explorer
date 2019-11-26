@@ -73,6 +73,12 @@ describe('BiobankReportCard', () => {
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.collectionsData).to.deep.equal([])
       })
+
+      it('should return empty array', () => {
+        store.state.biobankReport.data = undefined
+        const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.collectionsData).to.deep.equal([])
+      })
     })
 
     describe('contact', () => {
@@ -80,12 +86,24 @@ describe('BiobankReportCard', () => {
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.contact.email).to.deep.equal({'value': 'email', type: 'email'})
       })
+
+      it('should return empty object', () => {
+        store.state.biobankReport.data = undefined
+        const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.contact).to.deep.equal({})
+      })
     })
 
     describe('networks', () => {
       it('should fill networks', () => {
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.networks.length).to.equal(2)
+      })
+
+      it('should return empty array', () => {
+        store.state.biobankReport.data = undefined
+        const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.networks).to.deep.equal([])
       })
     })
   })
