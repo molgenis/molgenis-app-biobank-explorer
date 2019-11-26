@@ -35,6 +35,7 @@ describe('BiobankReportCard', () => {
 
     store = new Vuex.Store({
       state: {
+        isLoading: false,
         biobankReport,
         route: {
           params: {
@@ -56,7 +57,7 @@ describe('BiobankReportCard', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
-    expect(wrapper.html()).to.have.string('<div class="mg-biobank-card container">')
+    expect(wrapper.html()).to.have.string('class="mg-biobank-card container"')
   })
 
   describe('computed', () => {

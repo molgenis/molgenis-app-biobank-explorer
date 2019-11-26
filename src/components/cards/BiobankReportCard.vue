@@ -1,58 +1,68 @@
 <template>
-  <div class="mg-biobank-card container" v-if="biobank.data">
-    <div class="row">
-      <div class="col">
-        <!-- Back to previous page buttons -->
-        <button class="btn btn-link" @click="back">
-          <em class="fa fa-angle-left"></em> Back
-        </button>
+  <div class="mg-biobank-card container">
+    <loading
+      :active="isLoading"
+      loader="dots"
+      color="var(--secondary)"
+      background-color="var(--light)"
+    ></loading>
+    <div class="container-fluid" v-if="biobank.data && !this.isLoading">
+      <div class="row">
+        <div class="col">
+          <!-- Back to previous page buttons -->
+          <button class="btn btn-link" @click="back">
+            <em class="fa fa-angle-left"></em> Back
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <!-- Title -->
-        <report-title type="Biobank" :id="biobank.data.id" :name="biobank.data.name"></report-title>
+      <div class="row">
+        <div class="col">
+          <!-- Title -->
+          <report-title type="Biobank" :id="biobank.data.id" :name="biobank.data.name"></report-title>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-8">
-              <!-- Description -->
-              <report-description :description="biobank.data.description" :maxLength="500"></report-description>
+          <div class="container">
+            <div class="row">
+              <div class="col-8">
+                <!-- Description -->
+                <report-description :description="biobank.data.description" :maxLength="500"></report-description>
 
-              <!-- Collections-->
-              <h3>Collections</h3>
-              <div v-for="collection in collectionsData" v-if="!collection.parentCollection" :key="collection.id">
-                <biobank-report-collection :collection="collection"></biobank-report-collection>
+                <!-- Collections-->
+                <h3>Collections</h3>
+                <div v-for="collection in collectionsData" v-if="!collection.parentCollection" :key="collection.id">
+                  <biobank-report-collection :collection="collection"></biobank-report-collection>
+                </div>
               </div>
-            </div>
 
-            <!-- Right side card -->
-            <div class="col-4">
-              <div class="card">
-                <div class="card-body">
-                  <div class="card-text">
-                    <!-- Contact -->
-                    <h5>Contact Information</h5>
-                    <report-details-list :reportDetails="contact"></report-details-list>
+              <!-- Right side card -->
+              <div class="col-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="card-text">
+                      <!-- Contact -->
+                      <h5>Contact Information</h5>
+                      <report-details-list :reportDetails="contact"></report-details-list>
 
-                    <!-- Network -->
-                    <h5 v-if="this.networks && this.networks.length > 0">Networks</h5>
-                    <report-details-list :reportDetails="network" v-for="network in networks"
-                                         :key="network.id"></report-details-list>
+                      <!-- Network -->
+                      <h5 v-if="this.networks && this.networks.length > 0">Networks</h5>
+                      <report-details-list :reportDetails="network" v-for="network in networks"
+                                           :key="network.id"></report-details-list>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
+<style scoped>
+  body > div > div > div > div.vld-overlay.is-active.is-full-page {
+    margin-left: 50%;
+  }
+</style>
 <script>
   import { mapState, mapActions } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
@@ -64,9 +74,18 @@
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
 
+  import Loading from 'vue-loading-overlay'
+
   export default {
     name: 'biobank-report-card',
-    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList, BiobankReportCollection},
+    components: {
+      ReportTitle,
+      ReportDescription,
+      ReportDetailsTable,
+      ReportDetailsList,
+      BiobankReportCollection,
+      Loading
+    },
     data () {
       return {
         collapsed: true
@@ -74,7 +93,8 @@
     },
     computed: {
       ...mapState({
-        biobank: 'biobankReport'
+        biobank: 'biobankReport',
+        isLoading: 'isLoading'
       }),
       query () {
         return this.$route.query

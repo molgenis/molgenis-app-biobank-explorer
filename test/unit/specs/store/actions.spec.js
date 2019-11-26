@@ -24,7 +24,7 @@ import {
   SET_MATERIALS,
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY
+  SET_BIOBANK_QUALITY, SET_LOADING
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -536,7 +536,9 @@ describe('store', () => {
         const options = {
           payload: 'biobank-1',
           expectedMutations: [
-            {type: SET_BIOBANK_REPORT, payload: response}
+            {type: SET_LOADING, payload: true},
+            {type: SET_BIOBANK_REPORT, payload: response},
+            {type: SET_LOADING, payload: false}
           ]
         }
 
@@ -561,10 +563,11 @@ describe('store', () => {
         const options = {
           payload: '001',
           expectedMutations: [
-            {type: SET_COLLECTION_REPORT, payload: response}
+            {type: SET_LOADING, payload: true},
+            {type: SET_COLLECTION_REPORT, payload: response},
+            {type: SET_LOADING, payload: false}
           ]
         }
-
         utils.testAction(actions.__GET_COLLECTION_REPORT__, options, done)
       })
     })

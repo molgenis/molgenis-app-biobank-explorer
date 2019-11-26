@@ -13,6 +13,7 @@ import {
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
+  SET_LOADING,
   SET_MATERIALS,
   SET_COLLECTION_QUALITY,
   SET_BIOBANK_QUALITY,
@@ -193,24 +194,33 @@ export default {
     }
   },
   [GET_BIOBANK_REPORT] ({commit}, biobankId) {
+    commit(SET_LOADING, true)
     api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
       commit(SET_BIOBANK_REPORT, response)
+      commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
     })
   },
   [GET_COLLECTION_REPORT] ({commit}, collectionId) {
+    commit(SET_LOADING, true)
     api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`).then(response => {
       commit(SET_COLLECTION_REPORT, response)
+      commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
     })
   },
   [GET_NETWORK_REPORT] ({commit}, networkId) {
+    commit(SET_LOADING, true)
     api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
       commit(SET_NETWORK_REPORT, response)
+      commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
     })
   },
   /**

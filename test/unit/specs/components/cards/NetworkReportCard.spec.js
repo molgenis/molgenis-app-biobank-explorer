@@ -37,6 +37,7 @@ describe('CollectionReportCard', () => {
     store = new Vuex.Store({
       state: {
         networkReport,
+        isLoading: false,
         route: {
           params: {
             id: 'my-id'
@@ -57,7 +58,7 @@ describe('CollectionReportCard', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(NetworkReportCard, {mocks, stubs, store})
-    expect(wrapper.html()).to.have.string('<div class="container mg-network-report-card">')
+    expect(wrapper.html()).to.have.string('class="container mg-network-report-card"')
   })
 
   describe('computed', () => {

@@ -24,6 +24,7 @@ export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
+export const SET_LOADING = '__SET_LOADING__'
 
 export const SET_LAST_URL = '__SET_LAST_URL__'
 
@@ -173,5 +174,8 @@ export default {
   },
   [SET_ERROR] (state, error) {
     state.error = error
+  },
+  [SET_LOADING] (state, loading) {
+    state.isLoading = loading
   }
 }
