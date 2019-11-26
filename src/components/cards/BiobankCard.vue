@@ -5,7 +5,7 @@
         <div class="col-md-5">
           <h5>
             <router-link :to="'/biobank/report/' + biobank.id">
-              <i class="fa fa-table"></i>
+              <em class="fa fa-table"></em>
             </router-link>
             {{ biobank.name }}
           </h5>
@@ -13,10 +13,10 @@
         </div>
         <div class="col-md-7">
           <p>
-            <small><b>Collection types: </b></small>
+            <small><strong>Collection types: </strong></small>
             <small>{{ collectionTypes }}</small>
             <br>
-            <small><b>Juridical person: </b></small>
+            <small><strong>Juridical person: </strong></small>
             <small>{{ biobank['juridical_person'] }}</small>
           </p>
         </div>
