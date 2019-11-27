@@ -16,10 +16,39 @@ describe('ReportDescription', () => {
   describe('methods', () => {
     describe('showThisAttribute', () => {
       it('should toggle the ReportDescription boolean', () => {
-        const wrapper = shallowMount(ReportDescription, {propsData: {description: 'beautiful description'}})
+        const wrapper = shallowMount(ReportDescription, {
+          propsData: {
+            description: 'beautiful description',
+            maxLength: 12
+          }
+        })
         expect(wrapper.vm.descriptionClosed).to.equal(true)
         wrapper.vm.toggleDescription()
         expect(wrapper.vm.descriptionClosed).to.equal(false)
+      })
+    })
+  })
+
+  describe('computed', () => {
+    describe('descriptionToDisplay', () => {
+      it('should not cut off words when closed', () => {
+        const wrapper = shallowMount(ReportDescription, {
+          propsData: {
+            description: 'beautiful description',
+            maxLength: 12
+          }
+        })
+        expect(wrapper.vm.descriptionToDisplay).to.equal('beautiful')
+      })
+
+      it('should display complete description when max length is equal to length of description', () => {
+        const wrapper = shallowMount(ReportDescription, {
+          propsData: {
+            description: 'beautiful description',
+            maxLength: 21
+          }
+        })
+        expect(wrapper.vm.descriptionToDisplay).to.equal('beautiful description')
       })
     })
   })

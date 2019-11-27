@@ -1,13 +1,10 @@
 <template>
   <p v-if="description" class="mg-report-description">
-    <strong>Description: </strong>{{description.substr(0,maxLength)}}
-    <span v-if="description.length > (maxLength - 1)">
-      <span :style="{ display : descriptionClosed ? 'none' : 'inline'}">
-        {{description.substr(maxLength)}}
-      </span>
+    <strong>Description: </strong>{{descriptionToDisplay}}
+    <span v-if="description.length > maxLength">
       <button @click="toggleDescription" class="btn btn-link p-0">
-        <span v-if="descriptionClosed"> ... show more <em class="fa fa-angle-down"></em></span>
-        <span v-else> show less <em class="fa fa-angle-up"></em></span>
+        <span v-if="descriptionClosed">... show more <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+        <span v-else> show less <i class="fa fa-angle-up"aria-hidden="true"></i></span>
       </button>
     </span>
   </p>
@@ -23,6 +20,16 @@
     methods: {
       toggleDescription () {
         this.descriptionClosed = !this.descriptionClosed
+      }
+    },
+    computed: {
+      descriptionToDisplay () {
+        if (this.descriptionClosed && this.maxLength < this.description.length) {
+          const shortDescription = this.description.substr(0, this.maxLength)
+          return shortDescription.substr(0, Math.min(shortDescription.length, shortDescription.lastIndexOf(' ')))
+        } else {
+          return this.description
+        }
       }
     },
     data () {
