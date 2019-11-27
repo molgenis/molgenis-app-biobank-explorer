@@ -16,9 +16,9 @@
           <td></td>
           <td class="table-text-content-columns-sub" v-for="column in columns">
             <span v-if="column === 'name'">
-              <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + subCollection.id">
+              <router-link :to="'/collection/' + subCollection.id">
                 {{subCollection[column]}}
-              </a>
+              </router-link>
             </span>
             <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>

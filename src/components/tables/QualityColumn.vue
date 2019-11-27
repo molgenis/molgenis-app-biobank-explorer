@@ -1,7 +1,7 @@
 <template>
   <ul class="list-unstyled">
     <li v-for="quality in qualities" :style="margin">
-      <a :href="quality.certification_report" target="_blank" v-if="quality.certification_report">
+      <a :href="quality.certification_report" target="_blank" rel="noopener noreferrer" v-if="quality.certification_report">
         <span v-if="!quality.certification_image_link">
           {{ quality.label }} <i class="fa fa-check" aria-hidden="true"></i>
         </span>

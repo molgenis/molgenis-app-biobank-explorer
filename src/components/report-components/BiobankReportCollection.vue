@@ -1,7 +1,7 @@
 <template>
   <div>
     <hr/>
-    <h4><a :href='"/collection/"+collection.id'>{{collection.name}}</a></h4>
+    <h4><router-link :to='"/collection/"+collection.id'>{{collection.name}}</router-link></h4>
     <report-description :description="collection.description" :maxLength="200"></report-description>
     <report-details-list :reportDetails="collection.content"></report-details-list>
     <div v-if="collection.subCollections.length" class="m-3">
