@@ -65,7 +65,7 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('<a href="mailto:myEmail@myWebsite.com"><i aria-hidden="true" class="fa fa-paper-plane"></i> Email')
   })
   it('should contain website as url', () => {
-    expect(wrapper.html()).to.have.string('<a href="http://myWebsite.com"><i aria-hidden="true" class="fa fa-globe"></i> Website')
+    expect(wrapper.html()).to.have.string('<a href="http://myWebsite.com" target="_blank" rel="noreferrer"><i aria-hidden="true" class="fa fa-globe"></i> Website')
   })
   it('should contain phone number as phone type', () => {
     expect(wrapper.html()).to.have.string('<i aria-hidden="true" class="fa fa-phone"></i> +1234567890')

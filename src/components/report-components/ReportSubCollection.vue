@@ -1,6 +1,6 @@
 <template>
   <div :class="'mt-3 ml-'+(level)">
-    <strong><a :href='"/collection/report/"+collection.id'>{{collection.name}}</a></strong>
+    <strong><a :href='"/collection/"+collection.id'>{{collection.name}}</a></strong>
     <report-details-list :content="collection.content"></report-details-list>
     <div v-if="collection.subCollections.length" class="m-3">
       <strong>Sub collections</strong>

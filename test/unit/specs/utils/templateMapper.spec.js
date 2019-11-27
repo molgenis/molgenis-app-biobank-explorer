@@ -6,7 +6,8 @@ import {
   mapCollectionsData,
   mapNetworkInfo,
   mapContactInfo,
-  mapNetworkData
+  mapNetworkData,
+  mapUrl
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -290,7 +291,7 @@ describe('templateMapper', () => {
       }
       const expected = [{
         name: {value: 'Network', type: 'string'},
-        report: {value: '/network/report/n', type: 'report'}
+        report: {value: '/network/n', type: 'report'}
       }]
       const actual = mapNetworkInfo(data)
       expect(actual).to.deep.equal(expected)
@@ -315,6 +316,23 @@ describe('templateMapper', () => {
       }
       const actual = mapContactInfo(instance)
       expect(actual).to.deep.equal(expected)
+    })
+  })
+
+  describe('mapUrl', () => {
+    it('should do nothing if url is undefined', () => {
+      const actual = mapUrl(undefined)
+      expect(actual).to.equal(undefined)
+    })
+
+    it('should add http:// if url doesnt start with http', () => {
+      const actual = mapUrl('www.somewebsite.com')
+      expect(actual).to.equal('http://www.somewebsite.com')
+    })
+
+    it('should do nothing if url starts with http', () => {
+      const actual = mapUrl('http://molgenis.org')
+      expect(actual).to.equal('http://molgenis.org')
     })
   })
 })

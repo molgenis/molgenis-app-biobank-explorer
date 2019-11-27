@@ -17,14 +17,21 @@ export default new VueRouter({
     },
     {
       path: '/biobank/report/:id',
+      redirect: '/biobank/:id'
+    },
+    {
+      path: '/biobank/:id',
+      name: 'biobank',
       component: BiobankReportCard
     },
     {
-      path: '/collection/report/:id',
+      path: '/collection/:id',
+      name: 'collection',
       component: CollectionReportCard
     },
     {
-      path: '/network/report/:id',
+      path: '/network/:id',
+      name: 'network',
       component: NetworkReportCard
     },
     { path: '/', redirect: '/biobankexplorer' }

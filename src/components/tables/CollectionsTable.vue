@@ -16,7 +16,7 @@
           :class="{'table-text-content-columns-has-sub': hasSubCollections(collection), 'table-text-content-columns': !hasSubCollections(collection)}"
           v-for="column in columns">
               <span v-if="column === 'name'">
-                <router-link :to="'/collection/report/' + collection['id']">
+                <router-link :to="'/collection/' + collection['id']">
                   <button class="btn btn-link">{{collection[column]}}</button>
                 </router-link>
               </span>

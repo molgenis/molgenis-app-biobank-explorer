@@ -11,11 +11,7 @@
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
-          <router-link v-if="this.collection.parent_collection"
-                       :to="`/collection/report/${this.collection.parent_collection.id}`" name="parent">
-            <i class="fa fa-angle-left" aria-hidden="true"></i> Back to parent collection
-          </router-link>
-          <button class="btn btn-link" v-else @click="back">
+          <button class="btn btn-link" @click="back">
             <i class="fa fa-angle-left" aria-hidden="true"></i> Back
           </button>
         </div>

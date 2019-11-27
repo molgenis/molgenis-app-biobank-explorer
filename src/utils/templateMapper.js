@@ -1,4 +1,5 @@
 const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
+export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
 
 export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   let ageRange = ''
@@ -78,8 +79,8 @@ export const mapCollectionDetailsListContent = (collection) => {
       name: {value: collection.biobank.name, type: 'string'},
       juridical_person: {value: collection.biobank.juridical_person, type: 'string'},
       country: {value: collection.country.name, type: 'string'},
-      report: {value: `/biobank/report/${collection.biobank.id}`, type: 'report'},
-      website: {value: collection.biobank.url, type: 'url'},
+      report: {value: `/biobank/${collection.biobank.id}`, type: 'report'},
+      website: {value: mapUrl(collection.biobank.url), type: 'url'},
       email: {value: collection.biobank.contact ? collection.biobank.contact.email : undefined, type: 'email'}
     },
     networks: mapNetworkInfo(collection),
@@ -98,17 +99,14 @@ export const mapNetworkInfo = (data) => {
   return data.network.map((network) => {
     return {
       name: {value: network.name, type: 'string'},
-      report: {value: `/network/report/${network.id}`, type: 'report'}
+      report: {value: `/network/${network.id}`, type: 'report'}
     }
   })
 }
 
 export const mapContactInfo = (instance) => {
   return {
-    website: {
-      value: instance.url && (instance.url.startsWith('http') ? instance.url : 'http://' + instance.url),
-      type: 'url'
-    },
+    website: {value: mapUrl(instance.url), type: 'url'},
     email: {value: instance.contact ? instance.contact.email : undefined, type: 'email'},
     juridical_person: {value: instance.juridical_person, type: 'string'},
     country: {value: instance.country ? instance.country.name : undefined, type: 'string'}

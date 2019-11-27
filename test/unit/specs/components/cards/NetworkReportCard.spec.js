@@ -50,7 +50,7 @@ describe('CollectionReportCard', () => {
     })
     mocks = {
       $route: {
-        fullPath: '/network/report/n-001'
+        fullPath: '/network/n-001'
       }
     }
     stubs = ['router-link', 'router-view']
