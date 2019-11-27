@@ -12,15 +12,15 @@
         <span v-if="value.type === 'string'">{{value.value}}</span>
         <!--Type url-->
         <a v-else-if="value.type === 'url'" :href="value.value">
-          <em class="fa fa-globe"></em> Website
+          <i class="fa fa-globe" aria-hidden="true"></i> Website
         </a>
         <!--Type email-->
         <a v-else-if="value.type === 'email'" :href="'mailto:' + value.value">
-          <em class="fa fa-paper-plane"></em> Email
+          <i class="fa fa-paper-plane" aria-hidden="true"></i> Email
         </a>
         <!--Type phone-->
         <span v-else-if="value.type === 'phone'">
-          <em class="fa fa-phone"></em> {{value.value}}
+          <i class="fa fa-phone" aria-hidden="true"></i> {{value.value}}
         </span>
         <!--Type list-->
         <span v-else-if="value.type==='list' && value.value.length > 0">
@@ -30,7 +30,7 @@
         </span>
         <!--Type report-->
         <a v-else-if="value.type === 'report'" :href="value.value">
-          <em class="fa fa-address-card"></em> Overview
+          <i class="fa fa-address-card" aria-hidden="true"></i> Overview
         </a>
       </span>
     </dd>
@@ -41,6 +41,13 @@
   export default {
     name: 'ReportDetailsList',
     // Object with as key the variable, as value an object with two keys: value and type
-    props: {reportDetails: {[String]: {value: String, type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report'}}}
+    props: {
+      reportDetails: {
+        [String]: {
+          value: String,
+          type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report'
+        }
+      }
+    }
   }
 </script>

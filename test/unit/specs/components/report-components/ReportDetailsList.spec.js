@@ -54,13 +54,13 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('<span>Some Name</span>')
   })
   it('should contain email as email', () => {
-    expect(wrapper.html()).to.have.string('<a href="mailto:myEmail@myWebsite.com"><em class="fa fa-paper-plane"></em> Email')
+    expect(wrapper.html()).to.have.string('<a href="mailto:myEmail@myWebsite.com"><i class="fa fa-paper-plane" aria-hidden="true"></i> Email')
   })
   it('should contain website as url', () => {
-    expect(wrapper.html()).to.have.string('<a href="http://myWebsite.com"><em class="fa fa-globe"></em> Website')
+    expect(wrapper.html()).to.have.string('<a href="http://myWebsite.com"><i class="fa fa-globe" aria-hidden="true"></i> Website')
   })
   it('should contain phone number as phone type', () => {
-    expect(wrapper.html()).to.have.string('<em class="fa fa-phone"></em> +1234567890')
+    expect(wrapper.html()).to.have.string('<i class="fa fa-phone" aria-hidden="true"></i> +1234567890')
   })
   it('should contain bool true value', () => {
     expect(wrapper.html()).to.have.string('<span class="badge badge-success">yes')

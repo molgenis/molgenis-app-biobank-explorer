@@ -11,7 +11,7 @@
         <div class="col">
           <!-- Back to previous page buttons -->
           <button class="btn btn-link" @click="back">
-            <em class="fa fa-angle-left"></em> Back
+            <i class="fa fa-angle-left" aria-hidden="true"></i> Back
           </button>
         </div>
       </div>
