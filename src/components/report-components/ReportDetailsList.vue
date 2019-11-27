@@ -1,7 +1,7 @@
 <template>
   <table class="mg-report-details-list mb-3">
     <caption v-show="false">Details list</caption>
-    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)">
+    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)" :key="key">
       <!-- Header -->
       <th scope="row" class="pr-1" v-if="showKey(value.type)">{{key}}:</th>
 
@@ -30,7 +30,7 @@
       </td>
       <!--Type list-->
       <td v-else-if="value.type==='list' && value.value.length > 0">
-          <span v-for="val in value.value" class="m-1 badge"
+          <span v-for="(val, index) in value.value" class="m-1 badge" :key="index"
                 :class="'badge-'+ (value.badgeColor ? value.badgeColor : 'success')">{{val}}</span>
       </td>
       <!--Type report-->

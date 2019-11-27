@@ -24,7 +24,7 @@
               <div class="col-md-8">
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
                 <h3>Collections</h3>
-                <div v-for="collection in collectionsData" v-if="!collection.parentCollection" :key="collection.id">
+                <div v-for="collection in collectionsData" :key="collection.id">
                   <biobank-report-collection :collection="collection"></biobank-report-collection>
                 </div>
               </div>
@@ -93,7 +93,7 @@
         return this.biobankDataAvailable && this.biobank.contact ? mapContactInfo(this.biobank) : {}
       },
       collectionsData () {
-        return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections) : []
+        return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections).filter(it => !it.parentCollection) : []
       }
     },
     methods: {

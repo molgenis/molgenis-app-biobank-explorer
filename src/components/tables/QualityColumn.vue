@@ -1,6 +1,6 @@
 <template>
   <ul class="list-unstyled">
-    <li v-for="quality in qualities" :style="margin">
+    <li v-for="quality in qualities" :style="margin" :key="quality.id">
       <a :href="quality.certification_report" target="_blank" rel="noopener noreferrer" v-if="quality.certification_report">
         <span v-if="!quality.certification_image_link">
           {{ quality.label }} <i class="fa fa-check" aria-hidden="true"></i>
@@ -12,7 +12,7 @@
       </a>
       <span v-else>
         <span v-if="!quality.certification_image_link">
-          {{ quality.label }} <i class="fa fa-check" aria-hidden="true"></i>
+          {{ quality.label }}<i class="fa fa-check" aria-hidden="true"></i>
         </span>
         <span v-else>
           <img :src="quality.certification_image_link" class="quality-logo"
