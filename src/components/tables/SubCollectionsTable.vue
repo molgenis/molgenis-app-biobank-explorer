@@ -2,12 +2,12 @@
   <table class="sub-collection-table">
     <thead>
       <tr class="sub-table-row">
-        <th></th>
-        <th>Subcollection</th>
-        <th>Type</th>
-        <th>Materials</th>
-        <th>Standards</th>
-        <th>#Samples</th>
+        <th scope="col"></th>
+        <th scope="col">Subcollection</th>
+        <th scope="col">Type</th>
+        <th scope="col">Materials</th>
+        <th scope="col">Standards</th>
+        <th scope="col">#Samples</th>
       </tr>
     </thead>
     <tbody>

@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
-            <i>{{biobanks.length}} biobanks found</i>
+            <em>{{biobanks.length}} biobanks found</em>
           </small>
         </div>
       </div>

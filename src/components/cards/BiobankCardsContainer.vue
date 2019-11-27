@@ -19,7 +19,7 @@
     </div>
 
     <div v-else class="status-text">
-      <h4>Loading Biobanks... <i class="fa fa-spinner fa-pulse"></i></h4>
+      <h4>Loading Biobanks... <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></h4>
     </div>
   </div>
 </template>
