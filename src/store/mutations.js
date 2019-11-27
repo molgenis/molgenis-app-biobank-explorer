@@ -37,8 +37,9 @@ const combineCodeAndLabels = (diagnoses) => {
 }
 
 const getUniqueFilterMatches = (filter, selector) => {
-  const matches = filter.map((match) => { return match[selector].id })
-  return getUniqueIdArray(matches)
+  const matches = filter.map((filter) => { return filter[selector].id })
+  const uniqueMatches = getUniqueIdArray(matches)
+  return uniqueMatches
 }
 
 const hasFilterWithoutMatches = (filter, matches) => {

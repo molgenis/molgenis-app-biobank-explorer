@@ -2,7 +2,7 @@
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
       <li class="list-inline-item" v-for="value in values" v-bind:key="value.id">
-        <button type="button" class="btn btn-sm btn-outline-secondary" @click="removeFilter(filter, value.id)">{{ value.label }} <em class="fa fa-times"></em></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @click="removeFilter(filter, value.id)">{{ value.label }} <i class="fa fa-times"></i></button>
       </li>
     </template>
     <li class="list-inline-item">

@@ -367,6 +367,7 @@ describe('store', () => {
         td.replace(helpers, 'setLocationHref', setLocationHref)
         td.replace(helpers, 'getLocationHref', getLocationHref)
 
+        const location = 'https://www.example.org/biobankexplorer?search=Cell%26Co&materials=CELL_LINES'
         td.when(getLocationHref()).thenReturn(location)
 
         const bodyCaptor = td.matchers.captor()
