@@ -538,8 +538,26 @@ describe('store', () => {
           payload: 'biobank-1',
           expectedMutations: [
             {type: SET_LOADING, payload: true},
-            {type: SET_BIOBANK_REPORT, payload: response},
+            {type: SET_BIOBANK_REPORT, payload: response.items[0]},
             {type: SET_LOADING, payload: false}
+          ]
+        }
+
+        utils.testAction(actions.__GET_BIOBANK_REPORT__, options, done)
+      })
+
+      it('should return biobank from state if it is already there', done => {
+        const state = {
+          allBiobanks: [
+            {id: 'biobank'}
+          ]
+        }
+
+        const options = {
+          state,
+          payload: 'biobank',
+          expectedMutations: [
+            {type: SET_BIOBANK_REPORT, payload: {id: 'biobank'}}
           ]
         }
 

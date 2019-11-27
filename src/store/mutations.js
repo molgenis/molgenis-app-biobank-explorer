@@ -116,10 +116,7 @@ export default {
    * @param biobank response object from the server containing meta and items for a single biobank
    */
   [SET_BIOBANK_REPORT] (state, biobank) {
-    state.biobankReport = {
-      data: biobank.items[0],
-      metadata: biobank.meta
-    }
+    state.biobankReport = biobank
   },
   [SET_COLLECTION_REPORT] (state, collection) {
     state.collectionReport = collection

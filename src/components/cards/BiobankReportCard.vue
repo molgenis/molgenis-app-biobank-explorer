@@ -6,7 +6,7 @@
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-if="biobank.data && !this.isLoading">
+    <div class="container-fluid" v-if="biobankDataAvailable && !this.isLoading">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -19,13 +19,13 @@
       <div class="row">
         <div class="col">
           <!-- Title -->
-          <report-title type="Biobank" :id="biobank.data.id" :name="biobank.data.name"></report-title>
+          <report-title type="Biobank" :name="biobank.name"></report-title>
 
           <div class="container">
             <div class="row">
               <div class="col-8">
                 <!-- Description -->
-                <report-description :description="biobank.data.description" :maxLength="500"></report-description>
+                <report-description :description="biobank.description" :maxLength="500"></report-description>
 
                 <!-- Collections-->
                 <h3>Collections</h3>
@@ -66,7 +66,6 @@
   import 'vue-loading-overlay/dist/vue-loading.css'
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
-  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
   import { mapContactInfo, mapCollectionsData, mapNetworkInfo } from '../../utils/templateMapper'
@@ -76,7 +75,6 @@
     components: {
       ReportTitle,
       ReportDescription,
-      ReportDetailsTable,
       ReportDetailsList,
       BiobankReportCollection,
       Loading
@@ -91,17 +89,20 @@
         biobank: 'biobankReport',
         isLoading: 'isLoading'
       }),
+      biobankDataAvailable () {
+        return this.biobank && this.biobank
+      },
       query () {
         return this.$route.query
       },
       networks () {
-        return this.biobank && this.biobank.data && this.biobank.data.network ? mapNetworkInfo(this.biobank.data) : []
+        return this.biobankDataAvailable && this.biobank.network ? mapNetworkInfo(this.biobank) : []
       },
       contact () {
-        return this.biobank && this.biobank.data && this.biobank.data.contact ? mapContactInfo(this.biobank.data) : {}
+        return this.biobankDataAvailable && this.biobank.contact ? mapContactInfo(this.biobank) : {}
       },
       collectionsData () {
-        return this.biobank && this.biobank.data && this.biobank.data.collections ? mapCollectionsData(this.biobank.data.collections) : []
+        return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections) : []
       }
     },
     methods: {

@@ -11,26 +11,23 @@ describe('BiobankReportCard', () => {
 
   beforeEach(() => {
     biobankReport = {
-      data: {
-        collections: [],
-        contact: {
-          first_name: 'first_name',
-          last_name: 'last_name',
-          email: 'email',
-          phone: 'phone',
-          address: 'address',
-          city: 'city',
-          zip: 'zip'
-        },
-        network: [
-          {id: 'n01', name: 'Network 01'},
-          {id: 'n02', name: 'Network 02'}
-        ],
-        country: {
-          name: 'name'
-        }
+      collections: [],
+      contact: {
+        first_name: 'first_name',
+        last_name: 'last_name',
+        email: 'email',
+        phone: 'phone',
+        address: 'address',
+        city: 'city',
+        zip: 'zip'
       },
-      metadata: {}
+      network: [
+        {id: 'n01', name: 'Network 01'},
+        {id: 'n02', name: 'Network 02'}
+      ],
+      country: {
+        name: 'name'
+      }
     }
 
     store = new Vuex.Store({
@@ -75,7 +72,7 @@ describe('BiobankReportCard', () => {
       })
 
       it('should return empty array', () => {
-        store.state.biobankReport.data = undefined
+        store.state.biobankReport = undefined
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.collectionsData).to.deep.equal([])
       })
@@ -88,7 +85,7 @@ describe('BiobankReportCard', () => {
       })
 
       it('should return empty object', () => {
-        store.state.biobankReport.data = undefined
+        store.state.biobankReport = undefined
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.contact).to.deep.equal({})
       })
@@ -101,7 +98,7 @@ describe('BiobankReportCard', () => {
       })
 
       it('should return empty array', () => {
-        store.state.biobankReport.data = undefined
+        store.state.biobankReport = undefined
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.networks).to.deep.equal([])
       })

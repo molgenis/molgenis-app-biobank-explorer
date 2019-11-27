@@ -3,22 +3,23 @@
     <hr/>
     <h4><a :href='"/collection/report/"+collection.id'>{{collection.name}}</a></h4>
     <report-description :description="collection.description" :maxLength="200"></report-description>
-    <report-details-table :tableContent="collection.tableContent"></report-details-table>
+    <report-details-list :reportDetails="collection.content"></report-details-list>
     <div v-if="collection.subCollections.length" class="m-3">
       <h5>Sub collections</h5>
-      <report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1" :key="subCollection.id"></report-sub-collection>
+      <report-sub-collection v-for="subCollection in collection.subCollections" :collection="subCollection" :level="1"
+                             :key="subCollection.id"></report-sub-collection>
     </div>
   </div>
 </template>
 
 <script>
   import ReportDescription from '../report-components/ReportDescription.vue'
-  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
+  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportSubCollection from './ReportSubCollection.vue'
 
   export default {
     name: 'BiobankReportCollection',
-    components: {ReportDescription, ReportDetailsTable, ReportSubCollection},
+    components: {ReportDescription, ReportDetailsList, ReportSubCollection},
     props: {
       collection: {
         description: String,
@@ -26,7 +27,7 @@
         subCollections: Array,
         name: String,
         id: String,
-        tableContent: {
+        content: {
           stringValues: Object,
           listValues: {
             Size: {

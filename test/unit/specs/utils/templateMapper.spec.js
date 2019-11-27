@@ -83,16 +83,16 @@ describe('templateMapper', () => {
   describe('mapDetailsTableContent', () => {
     it('should generate stringValues of details table content', () => {
       const actual = mapDetailsTableContent(collectionsReport)
-      const expectedSize = '666 participants'
-      expect(actual.stringValues.Size).to.equal(expectedSize)
+      const expectedSize = ['666']
+      expect(actual.Size.value).to.deep.equal(expectedSize)
     })
 
     it('should generate listValues of details table content', () => {
       const actual = mapDetailsTableContent(collectionsReport)
-      expect(actual.listValues.Type.values).to.deep.equal(['type1', 'type2'])
-      expect(actual.listValues.Storage.values).to.deep.equal(['10 degrees'])
-      expect(actual.listValues.Data.values).to.deep.equal(['One type'])
-      expect(actual.listValues.Diagnosis.values).to.deep.equal(['Common cold', 'Mysterious illness', 'Instaneous death'])
+      expect(actual.Type.value).to.deep.equal(['type1', 'type2'])
+      expect(actual.Storage.value).to.deep.equal(['10 degrees'])
+      expect(actual.Data.value).to.deep.equal(['One type'])
+      expect(actual.Diagnosis.value).to.deep.equal(['Common cold', 'Mysterious illness', 'Instaneous death'])
     })
   })
 
@@ -114,14 +114,14 @@ describe('templateMapper', () => {
   })
 
   describe('detailsListContent', () => {
-    it('should generate contact of detailsListContent', () => {
+    it('should generate contact of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia) ')
       expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
       expect(actual.contact.phone.value).to.equal('+66 123456789')
     })
 
-    it('should generate quality of detailsListContent', () => {
+    it('should generate quality of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.quality['Partner charter']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.quality.Certification).to.deep.equal({
@@ -130,7 +130,7 @@ describe('templateMapper', () => {
       })
     })
 
-    it('should generate collaboration of detailsListContent', () => {
+    it('should generate collaboration of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.collaboration['Not for profit']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.collaboration.Commercial).to.deep.equal({value: false, type: 'bool'})
@@ -146,21 +146,21 @@ describe('templateMapper', () => {
           subCollections: [],
           name: 'Test 1',
           id: '1',
-          tableContent: {
-            stringValues: {},
-            listValues: {
-              Size: {
-                values: ['10.000 - 100.000'],
-                badgeColor: 'success'
-              },
-              Materials: {
-                values: ['Other'],
-                badgeColor: 'danger'
-              },
-              Data: {
-                values: ['Biological samples'],
-                badgeColor: 'primary'
-              }
+          content: {
+            Size: {
+              value: ['10.000 - 100.000'],
+              type: 'list',
+              badgeColor: 'success'
+            },
+            Materials: {
+              value: ['Other'],
+              type: 'list',
+              badgeColor: 'danger'
+            },
+            Data: {
+              value: ['Biological samples'],
+              type: 'list',
+              badgeColor: 'primary'
             }
           }
         },
@@ -174,42 +174,42 @@ describe('templateMapper', () => {
               name: 'Test 3 (sub sub)',
               id: '3',
               description: undefined,
-              tableContent: {
-                stringValues: {},
-                listValues: {
-                  Size: {
-                    values: ['10.000 - 100.000'],
-                    badgeColor: 'success'
-                  },
-                  Materials: {
-                    values: ['Other'],
-                    badgeColor: 'danger'
-                  },
-                  Data: {
-                    values: [],
-                    badgeColor: 'primary'
-                  }
+              content: {
+                Size: {
+                  value: ['10.000 - 100.000'],
+                  type: 'list',
+                  badgeColor: 'success'
+                },
+                Materials: {
+                  value: ['Other'],
+                  type: 'list',
+                  badgeColor: 'danger'
+                },
+                Data: {
+                  value: [],
+                  type: 'list',
+                  badgeColor: 'primary'
                 }
               }
             }
           ],
           name: 'Test 2',
           id: '2',
-          tableContent: {
-            stringValues: {},
-            listValues: {
-              Size: {
-                values: ['10.000 - 100.000'],
-                badgeColor: 'success'
-              },
-              Materials: {
-                values: ['Other'],
-                badgeColor: 'danger'
-              },
-              Data: {
-                values: ['Biological samples'],
-                badgeColor: 'primary'
-              }
+          content: {
+            Size: {
+              value: ['10.000 - 100.000'],
+              type: 'list',
+              badgeColor: 'success'
+            },
+            Materials: {
+              value: ['Other'],
+              type: 'list',
+              badgeColor: 'danger'
+            },
+            Data: {
+              value: ['Biological samples'],
+              type: 'list',
+              badgeColor: 'primary'
             }
           }
         }
@@ -235,47 +235,47 @@ describe('templateMapper', () => {
       }
       const expected = {
         'Common collection focus': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         },
         'Common charter': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         },
         'Common SOPS': {
-          values: ['No'],
-          badgeColor: 'danger'
+          value: false,
+          type: 'bool'
         },
         'Data access policy': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         },
         'Sample access policy': {
-          values: ['No'],
-          badgeColor: 'danger'
+          value: false,
+          type: 'bool'
         },
         'Common MTA': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         },
         'Common image access policy': {
-          values: ['No'],
-          badgeColor: 'danger'
+          value: false,
+          type: 'bool'
         },
         'Common image MTA': {
-          values: ['No'],
-          badgeColor: 'danger'
+          value: false,
+          type: 'bool'
         },
         'Common representation': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         },
         'Common URL': {
-          values: ['Yes'],
-          badgeColor: 'success'
+          value: true,
+          type: 'bool'
         }
       }
-      const actual = mapNetworkData(network).listValues
+      const actual = mapNetworkData(network)
       expect(actual).to.deep.equal(expected)
     })
   })

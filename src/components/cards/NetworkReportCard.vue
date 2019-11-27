@@ -2,13 +2,12 @@
   <div class="container mg-network-report-card">
     <loading
       :active="isLoading"
-      v-if="isLoading"
       loader="dots"
       :is-full-page="true"
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-else-if="this.network && !this.isLoading">
+    <div class="container-fluid" v-if="this.network && !this.isLoading">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -21,7 +20,7 @@
       <div class="row">
         <div class="col">
           <!-- Title -->
-          <report-title type="Network" :id="network.id" :name="network.name"></report-title>
+          <report-title type="Network" :name="network.name"></report-title>
 
           <div class="container">
             <div class="row">
@@ -30,7 +29,7 @@
                 <report-description :description="network.description" :maxLength="500"></report-description>
 
                 <!-- Network details -->
-                <report-details-table :tableContent="detailsTableContent"></report-details-table>
+                <report-details-list :reportDetails="detailsContent"></report-details-list>
 
               </div>
               <!-- Right side card -->
@@ -60,14 +59,13 @@
   import 'vue-loading-overlay/dist/vue-loading.css'
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
-  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportSubCollection from '../report-components/ReportSubCollection'
   import { mapNetworkData, mapContactInfo } from '../../utils/templateMapper'
 
   export default {
     name: 'NetworkReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsTable, ReportDetailsList, ReportSubCollection, Loading},
+    components: {ReportTitle, ReportDescription, ReportDetailsList, ReportSubCollection, Loading},
     methods: {
       ...mapActions({
         getNetworkReport: GET_NETWORK_REPORT
@@ -78,7 +76,7 @@
     },
     computed: {
       ...mapState({network: 'networkReport', isLoading: 'isLoading'}),
-      detailsTableContent () {
+      detailsContent () {
         return mapNetworkData(this.network)
       },
       contact () {

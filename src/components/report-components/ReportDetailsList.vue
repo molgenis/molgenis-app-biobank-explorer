@@ -1,40 +1,46 @@
 <template>
-  <dl class="mg-report-details-list">
-    <dd v-for="(value, key) in reportDetails">
+  <table class="mg-report-details-list mb-3">
+    <caption v-show="false">Details list</caption>
+    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)">
+      <!-- Header -->
+      <th scope="row" class="pr-1" v-if="showKey(value.type)">{{key}}:</th>
+
       <!--Type bool-->
-      <span v-if="value.type==='bool'">
-        {{key}}:
+      <td v-if="value.type==='bool'">
         <span v-if="value.value" class="badge badge-success">yes</span>
         <span v-else class="badge badge-danger">no</span>
-      </span>
-      <span v-else-if="value.value">
-        <!--Type string-->
-        <span v-if="value.type === 'string'">{{value.value}}</span>
-        <!--Type url-->
-        <a v-else-if="value.type === 'url'" :href="value.value">
+      </td>
+      <!--Type string-->
+      <td v-else-if="value.type.includes('string')">{{value.value}}</td>
+      <!--Type url-->
+      <td v-else-if="value.type === 'url'">
+        <a :href="value.value" target="_blank" rel="noreferrer">
           <i class="fa fa-globe" aria-hidden="true"></i> Website
         </a>
-        <!--Type email-->
-        <a v-else-if="value.type === 'email'" :href="'mailto:' + value.value">
+      </td>
+      <!--Type email-->
+      <td v-else-if="value.type === 'email'">
+        <a :href="'mailto:' + value.value">
           <i class="fa fa-paper-plane" aria-hidden="true"></i> Email
         </a>
-        <!--Type phone-->
-        <span v-else-if="value.type === 'phone'">
-          <i class="fa fa-phone" aria-hidden="true"></i> {{value.value}}
-        </span>
-        <!--Type list-->
-        <span v-else-if="value.type==='list' && value.value.length > 0">
-          {{key}}:
-          <span v-for="val in value.value" class="badge"
+      </td>
+      <!--Type phone-->
+      <td v-else-if="value.type === 'phone'">
+        <i class="fa fa-phone" aria-hidden="true"></i> {{value.value}}
+      </td>
+      <!--Type list-->
+      <td v-else-if="value.type==='list' && value.value.length > 0">
+          <span v-for="val in value.value" class="m-1 badge"
                 :class="'badge-'+ (value.badgeColor ? value.badgeColor : 'success')">{{val}}</span>
-        </span>
-        <!--Type report-->
-        <a v-else-if="value.type === 'report'" :href="value.value">
+      </td>
+      <!--Type report-->
+      <td v-else-if="value.type === 'report'">
+        <a :href="value.value">
           <i class="fa fa-address-card" aria-hidden="true"></i> Overview
         </a>
-      </span>
-    </dd>
-  </dl>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
@@ -45,8 +51,20 @@
       reportDetails: {
         [String]: {
           value: String,
-          type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report'
+          type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report' | 'string-with-key',
+          batchColor: {
+            type: 'success' | 'warning' | 'info' | 'secondary' | 'danger' | 'light' | 'dark',
+            required: false
+          }
         }
+      }
+    },
+    methods: {
+      showRow (value) {
+        return (value.value && value.value.length !== 0) || value.type === 'bool'
+      },
+      showKey (type) {
+        return ['bool', 'string-with-key', 'list'].includes(type)
       }
     }
   }

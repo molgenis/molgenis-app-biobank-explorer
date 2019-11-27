@@ -1,7 +1,7 @@
 <template>
   <div :class="'mt-3 ml-'+(level)">
     <strong><a :href='"/collection/report/"+collection.id'>{{collection.name}}</a></strong>
-    <report-details-table :tableContent="collection.tableContent"></report-details-table>
+    <report-details-list :content="collection.content"></report-details-list>
     <div v-if="collection.subCollections.length" class="m-3">
       <strong>Sub collections</strong>
       <biobank-report-sub-collection :collection="collection.subCollections"></biobank-report-sub-collection>
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-  import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
+  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
 
   export default {
     name: 'ReportSubCollection',
-    components: {ReportDetailsTable},
+    components: {ReportDetailsList},
     props: {
       level: Number,
       collection: {
@@ -23,20 +23,13 @@
         subCollections: Array,
         name: String,
         id: String,
-        tableContent: {
-          stringValues: Object,
-          listValues: {
-            Size: {
-              values: Array,
-              badgeColor: String
-            },
-            Materials: {
-              values: Array,
-              badgeColor: String
-            },
-            Data: {
-              values: Array,
-              badgeColor: String
+        content: {
+          [String]: {
+            value: String,
+            type: 'string' | 'email' | 'url' | 'bool' | 'list' | 'phone' | 'report' | 'string-with-key',
+            batchColor: {
+              type: 'success' | 'warning' | 'info' | 'secondary' | 'danger' | 'light' | 'dark',
+              required: false
             }
           }
         }
@@ -44,7 +37,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,6 +1,4 @@
 const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
-const mapBoolToString = (bool) => bool ? 'Yes' : 'No'
-const mapBadgeColorForBool = (bool) => bool ? 'success' : 'danger'
 
 export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   let ageRange = ''
@@ -21,35 +19,41 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 
 export const mapDetailsTableContent = (report) => {
   return {
-    stringValues: {
-      Size: report.order_of_magnitude.size ? report.order_of_magnitude.size + ' participants' : undefined,
-      Age: mapAgeRange(report.age_low, report.age_high, report.age_unit)
+    Size: {
+      value: report.order_of_magnitude.size ? [report.order_of_magnitude.size] : [],
+      type: 'list',
+      badgeColor: 'success'
     },
-    listValues: {
-      Type: {
-        values: mapObjArrayToStringArrayIfExists(report.type),
-        badgeColor: 'info'
-      },
-      Sex: {
-        values: mapObjArrayToStringArrayIfExists(report.sex),
-        badgeColor: 'secondary'
-      },
-      Materials: {
-        values: mapObjArrayToStringArrayIfExists(report.material),
-        badgeColor: 'danger'
-      },
-      Storage: {
-        values: mapObjArrayToStringArrayIfExists(report.storage_temperatures),
-        badgeColor: 'warning'
-      },
-      Data: {
-        values: mapObjArrayToStringArrayIfExists(report.data_categories),
-        badgeColor: 'primary'
-      },
-      Diagnosis: {
-        values: mapObjArrayToStringArrayIfExists(report.diagnosis_available),
-        badgeColor: 'primary'
-      }
+    Age: {value: mapAgeRange(report.age_low, report.age_high, report.age_unit), type: 'string-with-key'},
+    Type: {
+      value: mapObjArrayToStringArrayIfExists(report.type),
+      type: 'list',
+      badgeColor: 'info'
+    },
+    Sex: {
+      value: mapObjArrayToStringArrayIfExists(report.sex),
+      type: 'list',
+      badgeColor: 'secondary'
+    },
+    Materials: {
+      value: mapObjArrayToStringArrayIfExists(report.materials),
+      type: 'list',
+      badgeColor: 'danger'
+    },
+    Storage: {
+      value: mapObjArrayToStringArrayIfExists(report.storage_temperatures),
+      type: 'list',
+      badgeColor: 'warning'
+    },
+    Data: {
+      value: mapObjArrayToStringArrayIfExists(report.data_categories),
+      type: 'list',
+      badgeColor: 'primary'
+    },
+    Diagnosis: {
+      value: mapObjArrayToStringArrayIfExists(report.diagnosis_available),
+      type: 'list',
+      badgeColor: 'primary'
     }
   }
 }
@@ -101,7 +105,10 @@ export const mapNetworkInfo = (data) => {
 
 export const mapContactInfo = (instance) => {
   return {
-    website: {value: instance.url, type: 'url'},
+    website: {
+      value: instance.url && (instance.url.startsWith('http') ? instance.url : 'http://' + instance.url),
+      type: 'url'
+    },
     email: {value: instance.contact ? instance.contact.email : undefined, type: 'email'},
     juridical_person: {value: instance.juridical_person, type: 'string'},
     country: {value: instance.country ? instance.country.name : undefined, type: 'string'}
@@ -117,21 +124,21 @@ export const mapCollectionsData = (collections) => {
         subCollections: mapCollectionsData(collection.sub_collections),
         name: collection.name,
         id: collection.id,
-        tableContent: {
-          stringValues: {},
-          listValues: {
-            Size: {
-              values: collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
-              badgeColor: 'success'
-            },
-            Materials: {
-              values: mapObjArrayToStringArrayIfExists(collection.materials),
-              badgeColor: 'danger'
-            },
-            Data: {
-              values: mapObjArrayToStringArrayIfExists(collection.data_categories),
-              badgeColor: 'primary'
-            }
+        content: {
+          Size: {
+            value: collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
+            type: 'list',
+            badgeColor: 'success'
+          },
+          Materials: {
+            value: mapObjArrayToStringArrayIfExists(collection.materials),
+            type: 'list',
+            badgeColor: 'danger'
+          },
+          Data: {
+            value: mapObjArrayToStringArrayIfExists(collection.data_categories),
+            type: 'list',
+            badgeColor: 'primary'
           }
         }
       }
@@ -140,48 +147,45 @@ export const mapCollectionsData = (collections) => {
 
 export const mapNetworkData = (network) => {
   return {
-    stringValues: {},
-    listValues: {
-      'Common collection focus': {
-        values: [mapBoolToString(network.common_collection_focus)],
-        badgeColor: mapBadgeColorForBool(network.common_collection_focus)
-      },
-      'Common charter': {
-        values: [mapBoolToString(network.common_charter)],
-        badgeColor: mapBadgeColorForBool(network.common_charter)
-      },
-      'Common SOPS': {
-        values: [mapBoolToString(network.common_sops)],
-        badgeColor: mapBadgeColorForBool(network.common_sops)
-      },
-      'Data access policy': {
-        values: [mapBoolToString(network.common_data_access_policy)],
-        badgeColor: mapBadgeColorForBool(network.common_data_access_policy)
-      },
-      'Sample access policy': {
-        values: [mapBoolToString(network.common_sample_access_policy)],
-        badgeColor: mapBadgeColorForBool(network.common_sample_access_policy)
-      },
-      'Common MTA': {
-        values: [mapBoolToString(network.common_mta)],
-        badgeColor: mapBadgeColorForBool(network.common_mta)
-      },
-      'Common image access policy': {
-        values: [mapBoolToString(network.common_image_access_policy)],
-        badgeColor: mapBadgeColorForBool(network.common_image_access_policy)
-      },
-      'Common image MTA': {
-        values: [mapBoolToString(network.common_image_mta)],
-        badgeColor: mapBadgeColorForBool(network.common_image_mta)
-      },
-      'Common representation': {
-        values: [mapBoolToString(network.common_representation)],
-        badgeColor: mapBadgeColorForBool(network.common_representation)
-      },
-      'Common URL': {
-        values: [mapBoolToString(network.common_url)],
-        badgeColor: mapBadgeColorForBool(network.common_url)
-      }
+    'Common collection focus': {
+      value: network.common_collection_focus,
+      type: 'bool'
+    },
+    'Common charter': {
+      value: network.common_charter,
+      type: 'bool'
+    },
+    'Common SOPS': {
+      value: network.common_sops,
+      type: 'bool'
+    },
+    'Data access policy': {
+      value: network.common_data_access_policy,
+      type: 'bool'
+    },
+    'Sample access policy': {
+      value: network.common_sample_access_policy,
+      type: 'bool'
+    },
+    'Common MTA': {
+      value: network.common_mta,
+      type: 'bool'
+    },
+    'Common image access policy': {
+      value: network.common_image_access_policy,
+      type: 'bool'
+    },
+    'Common image MTA': {
+      value: network.common_image_mta,
+      type: 'bool'
+    },
+    'Common representation': {
+      value: network.common_representation,
+      type: 'bool'
+    },
+    'Common URL': {
+      value: network.common_url,
+      type: 'bool'
     }
   }
 }

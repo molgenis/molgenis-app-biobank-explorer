@@ -76,19 +76,19 @@ describe('CollectionReportCard', () => {
       })
     })
 
-    describe('detailsTableContent', () => {
-      it('should fill detailsTableContent', () => {
+    describe('detailsContent', () => {
+      it('should fill detailsContent', () => {
         const wrapper = shallowMount(NetworkReportCard, {mocks, stubs, store})
-        expect(wrapper.vm.detailsTableContent.listValues['Common collection focus'].values[0]).to.equal('Yes')
-        expect(wrapper.vm.detailsTableContent.listValues['Common charter'].values[0]).to.equal('Yes')
-        expect(wrapper.vm.detailsTableContent.listValues['Common SOPS'].values[0]).to.equal('No')
-        expect(wrapper.vm.detailsTableContent.listValues['Data access policy'].values[0]).to.equal('Yes')
-        expect(wrapper.vm.detailsTableContent.listValues['Sample access policy'].values[0]).to.equal('No')
-        expect(wrapper.vm.detailsTableContent.listValues['Common MTA'].values[0]).to.equal('Yes')
-        expect(wrapper.vm.detailsTableContent.listValues['Common image access policy'].values[0]).to.equal('No')
-        expect(wrapper.vm.detailsTableContent.listValues['Common image MTA'].values[0]).to.equal('No')
-        expect(wrapper.vm.detailsTableContent.listValues['Common representation'].values[0]).to.equal('Yes')
-        expect(wrapper.vm.detailsTableContent.listValues['Common URL'].values[0]).to.equal('Yes')
+        expect(wrapper.vm.detailsContent['Common collection focus'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Common charter'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Common SOPS'].value).to.equal(false)
+        expect(wrapper.vm.detailsContent['Data access policy'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Sample access policy'].value).to.equal(false)
+        expect(wrapper.vm.detailsContent['Common MTA'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Common image access policy'].value).to.equal(false)
+        expect(wrapper.vm.detailsContent['Common image MTA'].value).to.equal(false)
+        expect(wrapper.vm.detailsContent['Common representation'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Common URL'].value).to.equal(true)
       })
     })
   })

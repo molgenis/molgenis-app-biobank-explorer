@@ -18,10 +18,7 @@ export default {
   allBiobanks: undefined,
   collectionIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
-  biobankReport: {
-    data: {},
-    metadata: {}
-  },
+  biobankReport: undefined,
   collectionReport: undefined,
   networkReport: undefined,
   search: '',

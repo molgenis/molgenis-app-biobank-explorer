@@ -42,16 +42,24 @@ describe('ReportDetailsList', () => {
                 value: ['val3'],
                 type: 'list',
                 badgeColor: 'primary'
+              },
+              report: {
+                value: 'somelink',
+                type: 'report'
+              },
+              string_with_key: {
+                value: 'string',
+                type: 'string-with-key'
               }
             }
           }
       })
   })
   it('should initialize', () => {
-    expect(wrapper.html()).to.have.string('<dl class="mg-report-details-list">')
+    expect(wrapper.html()).to.have.string('<table class="mg-report-details-list mb-3">')
   })
   it('should contain name as string', () => {
-    expect(wrapper.html()).to.have.string('<span>Some Name</span>')
+    expect(wrapper.html()).to.have.string('<td>Some Name</td>')
   })
   it('should contain email as email', () => {
     expect(wrapper.html()).to.have.string('<a href="mailto:myEmail@myWebsite.com"><i aria-hidden="true" class="fa fa-paper-plane"></i> Email')
@@ -69,9 +77,15 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('<span class="badge badge-danger">no')
   })
   it('should contain list with default color', () => {
-    expect(wrapper.html()).to.have.string('<span class="badge badge-success">val1')
+    expect(wrapper.html()).to.have.string('<span class="m-1 badge badge-success">val1')
   })
   it('should contain list with other color', () => {
-    expect(wrapper.html()).to.have.string('<span class="badge badge-primary">val3')
+    expect(wrapper.html()).to.have.string('<span class="m-1 badge badge-primary">val3')
+  })
+  it('should contain report', () => {
+    expect(wrapper.html()).to.have.string('<i aria-hidden="true" class="fa fa-address-card"></i>')
+  })
+  it('should contain string with key', () => {
+    expect(wrapper.html()).to.have.string('string_with_key:')
   })
 })

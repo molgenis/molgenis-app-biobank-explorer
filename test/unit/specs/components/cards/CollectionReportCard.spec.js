@@ -70,19 +70,19 @@ describe('CollectionReportCard', () => {
   })
 
   describe('computed', () => {
-    describe('detailsListContent', () => {
+    describe('rightCardContent', () => {
       it('should return empty object', () => {
         store.state.collectionReport = undefined
         const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
-        expect(wrapper.vm.detailsListContent).to.deep.equal({})
+        expect(wrapper.vm.rightCardContent).to.deep.equal({})
       })
     })
 
-    describe('detailsTableContent', () => {
+    describe('mainContent', () => {
       it('should return empty object', () => {
         store.state.collectionReport = undefined
         const wrapper = shallowMount(CollectionReportCard, {mocks, stubs, store})
-        expect(wrapper.vm.detailsTableContent).to.deep.equal({})
+        expect(wrapper.vm.mainContent).to.deep.equal({})
       })
     })
 
@@ -128,22 +128,23 @@ describe('CollectionReportCard', () => {
             subCollections: [],
             name: 'Test 1',
             id: '1',
-            tableContent: {
-              stringValues: {},
-              listValues: {
-                Size: {
-                  values: ['10.000 - 100.000'],
-                  badgeColor: 'success'
-                },
-                Materials: {
-                  values: ['Other'],
-                  badgeColor: 'danger'
-                },
-                Data: {
-                  values: ['Biological samples'],
-                  badgeColor: 'primary'
-                }
+            content: {
+              Size: {
+                value: ['10.000 - 100.000'],
+                type: 'list',
+                badgeColor: 'success'
+              },
+              Materials: {
+                value: ['Other'],
+                type: 'list',
+                badgeColor: 'danger'
+              },
+              Data: {
+                value: ['Biological samples'],
+                type: 'list',
+                badgeColor: 'primary'
               }
+
             }
           },
           {
@@ -152,21 +153,21 @@ describe('CollectionReportCard', () => {
             subCollections: [],
             name: 'Test 2',
             id: '2',
-            tableContent: {
-              stringValues: {},
-              listValues: {
-                Size: {
-                  values: ['10.000 - 100.000'],
-                  badgeColor: 'success'
-                },
-                Materials: {
-                  values: ['Other'],
-                  badgeColor: 'danger'
-                },
-                Data: {
-                  values: ['Biological samples'],
-                  badgeColor: 'primary'
-                }
+            content: {
+              Size: {
+                value: ['10.000 - 100.000'],
+                type: 'list',
+                badgeColor: 'success'
+              },
+              Materials: {
+                value: ['Other'],
+                type: 'list',
+                badgeColor: 'danger'
+              },
+              Data: {
+                value: ['Biological samples'],
+                type: 'list',
+                badgeColor: 'primary'
               }
             }
           }

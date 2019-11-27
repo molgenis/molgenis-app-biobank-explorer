@@ -5,7 +5,7 @@ import ReportTitle from '@/components/report-components/ReportTitle'
 describe('ReportTitle', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = shallowMount(ReportTitle, {propsData: {id: 'd-001', name: 'beautiful collection', type: 'collection'}})
+    wrapper = shallowMount(ReportTitle, {propsData: {name: 'beautiful collection', type: 'collection'}})
   })
 
   it('should initialize component with title', () => {
@@ -18,9 +18,5 @@ describe('ReportTitle', () => {
 
   it('should have correct title', () => {
     expect(wrapper.html()).to.have.string('<h1>beautiful collection')
-  })
-
-  it('should have correct id', () => {
-    expect(wrapper.html()).to.have.string('ID:d-001')
   })
 })

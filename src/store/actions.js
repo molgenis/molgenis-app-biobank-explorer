@@ -168,14 +168,16 @@ export default {
    * @param commit
    * @param biobanks
    */
-  [GET_ALL_BIOBANKS] ({commit, dispatch}) {
-    api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
-      .then(response => {
-        commit(SET_ALL_BIOBANKS, response.items)
-        dispatch(GET_COLLECTION_IDENTIFIERS)
-      }, error => {
-        commit(SET_ERROR, error)
-      })
+  [GET_ALL_BIOBANKS] ({commit, dispatch, state}) {
+    if (!state.allBiobanks) {
+      api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
+        .then(response => {
+          commit(SET_ALL_BIOBANKS, response.items)
+          dispatch(GET_COLLECTION_IDENTIFIERS)
+        }, error => {
+          commit(SET_ERROR, error)
+        })
+    }
   },
   /**
    * Retrieve biobank identifiers for rsql value
@@ -193,10 +195,14 @@ export default {
         })
     }
   },
-  [GET_BIOBANK_REPORT] ({commit}, biobankId) {
+  [GET_BIOBANK_REPORT] ({commit, state}, biobankId) {
+    if (state.allBiobanks) {
+      commit(SET_BIOBANK_REPORT, state.allBiobanks.find(it => it.id === biobankId))
+      return
+    }
     commit(SET_LOADING, true)
     api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response)
+      commit(SET_BIOBANK_REPORT, response.items[0])
       commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
