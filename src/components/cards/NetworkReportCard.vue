@@ -19,25 +19,18 @@
 
       <div class="row">
         <div class="col">
-          <!-- Title -->
           <report-title type="Network" :name="network.name"></report-title>
-
           <div class="container">
             <div class="row">
-              <div class="col-8">
-                <!-- Description -->
+              <div class="col-md-8">
                 <report-description :description="network.description" :maxLength="500"></report-description>
-
-                <!-- Network details -->
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
-
               </div>
               <!-- Right side card -->
-              <div class="col-4">
+              <div class="col-md-4">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-text">
-                      <!-- Contact -->
                       <h5>Contact Information</h5>
                       <report-details-list :reportDetails="contact"></report-details-list>
                     </div>

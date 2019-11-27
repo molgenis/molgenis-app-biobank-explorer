@@ -18,32 +18,23 @@
 
       <div class="row">
         <div class="col">
-          <!-- Title -->
           <report-title type="Biobank" :name="biobank.name"></report-title>
-
           <div class="container">
             <div class="row">
-              <div class="col-8">
-                <!-- Description -->
+              <div class="col-md-8">
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
-
-                <!-- Collections-->
                 <h3>Collections</h3>
                 <div v-for="collection in collectionsData" v-if="!collection.parentCollection" :key="collection.id">
                   <biobank-report-collection :collection="collection"></biobank-report-collection>
                 </div>
               </div>
-
               <!-- Right side card -->
-              <div class="col-4">
+              <div class="col-md-4">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-text">
-                      <!-- Contact -->
                       <h5>Contact Information</h5>
                       <report-details-list :reportDetails="contact"></report-details-list>
-
-                      <!-- Network -->
                       <h5 v-if="this.networks && this.networks.length > 0">Networks</h5>
                       <report-details-list :reportDetails="network" v-for="network in networks"
                                            :key="network.id"></report-details-list>

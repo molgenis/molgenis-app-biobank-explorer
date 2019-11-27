@@ -23,19 +23,13 @@
 
       <div class="row">
         <div class="col">
-          <!-- Title -->
           <report-title type="Collection" :name="collection.name"></report-title>
 
           <div class="container">
             <div class="row">
-              <div class="col-8">
-                <!-- Description -->
+              <div class="col-md-8">
                 <report-description :description="collection.description" :maxLength="500"></report-description>
-
-                <!-- Collection details -->
                 <report-details-list :reportDetails="mainContent"></report-details-list>
-
-                <!-- Sub collections -->
                 <div v-if="collection.sub_collections && collection.sub_collections.length" class="mt-2">
                   <h5>Sub collections</h5>
                   <report-sub-collection v-for="subCollection in subCollections"
@@ -46,24 +40,19 @@
               </div>
 
               <!-- Right side card -->
-              <div class="col-4">
+              <div class="col-md-4">
                 <div class="card">
                   <div class="card-body">
                     <div class="card-text">
-                      <!-- Contact -->
                       <h5>Contact Information</h5>
                       <report-details-list :reportDetails="rightCardContent.contact"></report-details-list>
-                      <!-- Biobank -->
                       <h5>Biobank</h5>
                       <report-details-list :reportDetails="rightCardContent.biobank"></report-details-list>
-                      <!-- Network -->
                       <h5 v-if="rightCardContent.networks && rightCardContent.networks.length > 0">Networks</h5>
                       <report-details-list :reportDetails="network" v-for="network in rightCardContent.networks"
                                            :key="network.id"></report-details-list>
-                      <!-- Quality -->
                       <h5>Quality</h5>
                       <report-details-list :reportDetails="rightCardContent.quality"></report-details-list>
-                      <!-- Collaboration -->
                       <h5>Collaboration</h5>
                       <report-details-list :reportDetails="rightCardContent.collaboration"></report-details-list>
                     </div>
