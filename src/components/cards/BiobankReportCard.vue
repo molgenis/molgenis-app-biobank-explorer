@@ -58,23 +58,18 @@
     </div>
   </div>
 </template>
-<style scoped>
-  body > div > div > div > div.vld-overlay.is-active.is-full-page {
-    margin-left: 50%;
-  }
-</style>
+
 <script>
   import { mapState, mapActions } from 'vuex'
   import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import { mapContactInfo, mapCollectionsData, mapNetworkInfo } from '../../utils/templateMapper'
-
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
-
-  import Loading from 'vue-loading-overlay'
+  import { mapContactInfo, mapCollectionsData, mapNetworkInfo } from '../../utils/templateMapper'
 
   export default {
     name: 'biobank-report-card',

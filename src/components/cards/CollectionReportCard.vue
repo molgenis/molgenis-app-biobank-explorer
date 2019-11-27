@@ -78,14 +78,10 @@
   </div>
 </template>
 
-<style scoped>
-  body > div > div > div > div.vld-overlay.is-active.is-full-page {
-    margin-left: 50%;
-  }
-</style>
-
 <script>
   import { mapActions, mapState } from 'vuex'
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
   import { GET_COLLECTION_REPORT } from '../../store/actions'
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
@@ -97,7 +93,6 @@
     mapCollectionDetailsListContent,
     mapCollectionsData
   } from '../../utils/templateMapper'
-  import Loading from 'vue-loading-overlay'
 
   export default {
     name: 'CollectionReportCard',

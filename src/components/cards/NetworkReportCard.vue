@@ -2,12 +2,13 @@
   <div class="container mg-network-report-card">
     <loading
       :active="isLoading"
+      v-if="isLoading"
       loader="dots"
       :is-full-page="true"
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-if="this.network && !this.isLoading">
+    <div class="container-fluid" v-else-if="this.network && !this.isLoading">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -52,22 +53,17 @@
   </div>
 </template>
 
-<style scoped>
-  body > div > div > div > div.vld-overlay.is-active.is-full-page {
-    margin-left: 50%;
-  }
-</style>
-
 <script>
   import { mapActions, mapState } from 'vuex'
   import { GET_NETWORK_REPORT } from '../../store/actions'
+  import Loading from 'vue-loading-overlay'
+  import 'vue-loading-overlay/dist/vue-loading.css'
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsTable from '../report-components/ReportDetailsTable.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportSubCollection from '../report-components/ReportSubCollection'
   import { mapNetworkData, mapContactInfo } from '../../utils/templateMapper'
-  import Loading from 'vue-loading-overlay'
 
   export default {
     name: 'NetworkReportCard',
