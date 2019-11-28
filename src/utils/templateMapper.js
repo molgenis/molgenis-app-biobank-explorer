@@ -1,4 +1,4 @@
-const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
+export const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
 export const getNameOfHead = (element) => {
   let name = ''
@@ -101,7 +101,7 @@ export const mapCollectionDetailsListContent = (collection) => {
     },
     networks: mapNetworkInfo(collection),
     quality: {
-      Certification: {value: mapObjArrayToStringArrayIfExists(collection.biobank.quality), type: 'list'}
+      Certification: {value: mapObjArrayToStringArrayIfExists(collection.quality), type: 'list'}
     },
     collaboration: {
       Commercial: {value: collection.collaboration_commercial, type: 'bool'},

@@ -72,14 +72,14 @@ describe('templateMapper', () => {
     collaboration_commercial: false,
     collaboration_non_for_profit: true,
     country: {name: 'Genovia'},
+    quality: [{label: 'Order of the rose'}],
     biobank: {
       id: 'b-001',
       name: 'beautiful biobank',
       juridical_person: 'Is this even a person?',
       email: 'info@beautiful-biobank.gnv',
       url: 'https://beautiful-biobank.gnv',
-      partner_charter_signed: true,
-      quality: [{label: 'Order of the rose'}]
+      partner_charter_signed: true
     }
   }
   describe('mapDetailsTableContent', () => {
