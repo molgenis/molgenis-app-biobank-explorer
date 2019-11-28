@@ -96,11 +96,11 @@ export const mapCollectionDetailsListContent = (collection) => {
       country: {value: collection.country.name, type: 'string'},
       report: {value: `/biobank/${collection.biobank.id}`, type: 'report'},
       website: {value: mapUrl(collection.biobank.url), type: 'url'},
-      email: {value: collection.biobank.contact ? collection.biobank.contact.email : undefined, type: 'email'}
+      email: {value: collection.biobank.contact ? collection.biobank.contact.email : undefined, type: 'email'},
+      'Partner charter': {value: collection.biobank.partner_charter_signed, type: 'bool'}
     },
     networks: mapNetworkInfo(collection),
     quality: {
-      'Partner charter': {value: collection.biobank.partner_charter_signed, type: 'bool'},
       Certification: {value: mapObjArrayToStringArrayIfExists(collection.biobank.quality), type: 'list'}
     },
     collaboration: {

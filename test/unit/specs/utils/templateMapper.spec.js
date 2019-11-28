@@ -125,7 +125,6 @@ describe('templateMapper', () => {
 
     it('should generate quality of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.quality['Partner charter']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.quality.Certification).to.deep.equal({
         value: ['Order of the rose'],
         type: 'list'
