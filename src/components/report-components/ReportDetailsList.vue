@@ -15,18 +15,18 @@
       <!--Type url-->
       <td v-else-if="value.type === 'url'">
         <a :href="value.value" target="_blank" rel="noopener noreferrer">
-          <i class="fa fa-globe" aria-hidden="true"></i> Website
+          <i class="fa fa-fw fa-globe" aria-hidden="true"></i><span class="mg-icon-text">Website</span>
         </a>
       </td>
       <!--Type email-->
       <td v-else-if="value.type === 'email'">
         <a :href="'mailto:' + value.value">
-          <i class="fa fa-paper-plane" aria-hidden="true"></i> Email
+          <i class="fa fa-fw fa-paper-plane" aria-hidden="true"></i><span class="mg-icon-text">Email</span>
         </a>
       </td>
       <!--Type phone-->
       <td v-else-if="value.type === 'phone'">
-        <i class="fa fa-phone" aria-hidden="true"></i> {{value.value}}
+        <i class="fa fa-fw fa-phone" aria-hidden="true"></i><span class="mg-icon-text">{{value.value}}</span>
       </td>
       <!--Type list-->
       <td v-else-if="value.type==='list' && value.value.length > 0">
@@ -36,12 +36,18 @@
       <!--Type report-->
       <td v-else-if="value.type === 'report'">
         <router-link :to="value.value">
-          <i class="fa fa-address-card" aria-hidden="true"></i> Overview
+          <i class="fa fa-fw fa-address-card" aria-hidden="true"></i><span class="mg-icon-text">Overview</span>
         </router-link>
       </td>
     </tr>
   </table>
 </template>
+
+<style scoped>
+  .mg-icon-text {
+    margin-left: 0.2rem;
+  }
+</style>
 
 <script>
   export default {

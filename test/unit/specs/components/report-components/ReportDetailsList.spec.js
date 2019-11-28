@@ -56,34 +56,34 @@ describe('ReportDetailsList', () => {
       })
   })
   it('should initialize', () => {
-    expect(wrapper.html()).to.have.string('<table class="mg-report-details-list mb-3">')
+    expect(wrapper.html()).to.have.string('class="mg-report-details-list mb-3">')
   })
   it('should contain name as string', () => {
-    expect(wrapper.html()).to.have.string('<td>Some Name</td>')
+    expect(wrapper.html()).to.have.string('Some Name</td>')
   })
   it('should contain email as email', () => {
-    expect(wrapper.html()).to.have.string('<a href="mailto:myEmail@myWebsite.com"><i aria-hidden="true" class="fa fa-paper-plane"></i> Email')
+    expect(wrapper.html()).to.have.string('href="mailto:myEmail@myWebsite.com">')
   })
   it('should contain website as url', () => {
-    expect(wrapper.html()).to.have.string('<a href="http://myWebsite.com" target="_blank" rel="noopener noreferrer"><i aria-hidden="true" class="fa fa-globe"></i> Website')
+    expect(wrapper.html()).to.have.string('href="http://myWebsite.com" target="_blank" rel="noopener noreferrer">')
   })
   it('should contain phone number as phone type', () => {
-    expect(wrapper.html()).to.have.string('<i aria-hidden="true" class="fa fa-phone"></i> +1234567890')
+    expect(wrapper.html()).to.have.string('class="mg-icon-text">+1234567890')
   })
   it('should contain bool true value', () => {
-    expect(wrapper.html()).to.have.string('<span class="badge badge-success">yes')
+    expect(wrapper.html()).to.have.string('class="badge badge-success">yes')
   })
   it('should contain bool false value', () => {
-    expect(wrapper.html()).to.have.string('<span class="badge badge-danger">no')
+    expect(wrapper.html()).to.have.string('class="badge badge-danger">no')
   })
   it('should contain list with default color', () => {
-    expect(wrapper.html()).to.have.string('<span class="m-1 badge badge-success">val1')
+    expect(wrapper.html()).to.have.string('class="m-1 badge badge-success">val1')
   })
   it('should contain list with other color', () => {
-    expect(wrapper.html()).to.have.string('<span class="m-1 badge badge-primary">val3')
+    expect(wrapper.html()).to.have.string('class="m-1 badge badge-primary">val3')
   })
   it('should contain report', () => {
-    expect(wrapper.html()).to.have.string('<i aria-hidden="true" class="fa fa-address-card"></i>')
+    expect(wrapper.html()).to.have.string('to="somelink"><i')
   })
   it('should contain string with key', () => {
     expect(wrapper.html()).to.have.string('string_with_key:')
