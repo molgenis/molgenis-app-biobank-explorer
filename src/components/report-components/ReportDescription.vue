@@ -4,7 +4,7 @@
     <span v-if="description.length > maxLength">
       <button @click="toggleDescription" class="btn btn-link p-0">
         <span v-if="descriptionClosed">... show more <i class="fa fa-angle-down" aria-hidden="true"></i></span>
-        <span v-else> show less <i class="fa fa-angle-up"aria-hidden="true"></i></span>
+        <span v-else> show less <i class="fa fa-angle-up" aria-hidden="true"></i></span>
       </button>
     </span>
   </p>

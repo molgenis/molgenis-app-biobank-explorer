@@ -1,7 +1,7 @@
 <template>
   <table class="mg-report-details-list mb-3">
     <caption v-show="false">Details list</caption>
-    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)">
+    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)" :key="key">
       <!-- Header -->
       <th scope="row" class="pr-1" v-if="showKey(value.type)">{{key}}:</th>
 
@@ -14,7 +14,7 @@
       <td v-else-if="value.type.includes('string')">{{value.value}}</td>
       <!--Type url-->
       <td v-else-if="value.type === 'url'">
-        <a :href="value.value" target="_blank" rel="noreferrer">
+        <a :href="value.value" target="_blank" rel="noopener noreferrer">
           <i class="fa fa-globe" aria-hidden="true"></i> Website
         </a>
       </td>
@@ -30,14 +30,14 @@
       </td>
       <!--Type list-->
       <td v-else-if="value.type==='list' && value.value.length > 0">
-          <span v-for="val in value.value" class="m-1 badge"
+          <span v-for="(val, index) in value.value" class="m-1 badge" :key="index"
                 :class="'badge-'+ (value.badgeColor ? value.badgeColor : 'success')">{{val}}</span>
       </td>
       <!--Type report-->
       <td v-else-if="value.type === 'report'">
-        <a :href="value.value">
+        <router-link :to="value.value">
           <i class="fa fa-address-card" aria-hidden="true"></i> Overview
-        </a>
+        </router-link>
       </td>
     </tr>
   </table>
