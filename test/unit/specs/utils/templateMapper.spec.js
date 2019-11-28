@@ -161,7 +161,7 @@ describe('templateMapper', () => {
             Data: {
               value: ['Biological samples'],
               type: 'list',
-              badgeColor: 'primary'
+              badgeColor: 'info'
             }
           }
         },
@@ -189,7 +189,7 @@ describe('templateMapper', () => {
                 Data: {
                   value: [],
                   type: 'list',
-                  badgeColor: 'primary'
+                  badgeColor: 'info'
                 }
               }
             }
@@ -210,7 +210,7 @@ describe('templateMapper', () => {
             Data: {
               value: ['Biological samples'],
               type: 'list',
-              badgeColor: 'primary'
+              badgeColor: 'info'
             }
           }
         }

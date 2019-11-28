@@ -49,7 +49,7 @@ export const mapDetailsTableContent = (report) => {
     Data: {
       value: mapObjArrayToStringArrayIfExists(report.data_categories),
       type: 'list',
-      badgeColor: 'primary'
+      badgeColor: 'info'
     },
     Diagnosis: {
       value: mapObjArrayToStringArrayIfExists(report.diagnosis_available),
@@ -136,7 +136,7 @@ export const mapCollectionsData = (collections) => {
           Data: {
             value: mapObjArrayToStringArrayIfExists(collection.data_categories),
             type: 'list',
-            badgeColor: 'primary'
+            badgeColor: 'info'
           }
         }
       }
