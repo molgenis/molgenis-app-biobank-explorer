@@ -8,7 +8,7 @@ import {
   mapContactInfo,
   mapNetworkData,
   mapUrl,
-  getNameOfContact
+  getNameOfHead
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -313,6 +313,7 @@ describe('templateMapper', () => {
         website: {value: 'https://website.com', type: 'url'},
         email: {value: 'email@email.com', type: 'email'},
         juridical_person: {value: 'blaat', type: 'string'},
+        name: {value: undefined, type: 'string'},
         country: {value: 'Netherlands', type: 'string'}
       }
       const actual = mapContactInfo(instance)
@@ -337,14 +338,14 @@ describe('templateMapper', () => {
     })
   })
 
-  describe('getNameOfContact', () => {
+  describe('getNameOfHead', () => {
     it('should map full name', () => {
       const element = {
         head_firstname: 'first',
         head_lastname: 'last',
         head_role: 'role'
       }
-      const actual = getNameOfContact(element)
+      const actual = getNameOfHead(element)
       expect(actual).to.equal('first last (role)')
     })
 
@@ -353,7 +354,7 @@ describe('templateMapper', () => {
         head_lastname: 'last',
         head_role: 'role'
       }
-      const actual = getNameOfContact(element)
+      const actual = getNameOfHead(element)
       expect(actual).to.equal('last (role)')
     })
 
@@ -362,13 +363,13 @@ describe('templateMapper', () => {
         head_firstname: 'first',
         head_lastname: 'last'
       }
-      const actual = getNameOfContact(element)
+      const actual = getNameOfHead(element)
       expect(actual).to.equal('first last')
     })
 
     it('should return undefined', () => {
       const element = {}
-      const actual = getNameOfContact(element)
+      const actual = getNameOfHead(element)
       expect(actual).to.equal(undefined)
     })
   })

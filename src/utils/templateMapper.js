@@ -1,6 +1,6 @@
 const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
-export const getNameOfContact = (element) => {
+export const getNameOfHead = (element) => {
   let name = ''
   if (element.head_lastname) {
     if (element.head_firstname) {
@@ -78,7 +78,7 @@ export const mapCollectionDetailsListContent = (collection) => {
   return {
     contact: {
       name: {
-        value: getNameOfContact(collection),
+        value: getNameOfHead(collection),
         type: 'string'
       },
       email: {
@@ -121,6 +121,10 @@ export const mapNetworkInfo = (data) => {
 
 export const mapContactInfo = (instance) => {
   return {
+    name: {
+      value: getNameOfHead(instance),
+      type: 'string'
+    },
     website: {value: mapUrl(instance.url), type: 'url'},
     email: {value: instance.contact ? instance.contact.email : undefined, type: 'email'},
     juridical_person: {value: instance.juridical_person, type: 'string'},
