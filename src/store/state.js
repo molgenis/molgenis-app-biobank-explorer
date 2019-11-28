@@ -11,16 +11,16 @@ if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === fa
 }
 
 export default {
+  isLoading: false,
   error: null,
   showCountryFacet: INITIAL_STATE.hasOwnProperty('showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
   allBiobanks: undefined,
   collectionIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
-  biobankReport: {
-    data: {},
-    metadata: {}
-  },
+  biobankReport: undefined,
+  collectionReport: undefined,
+  networkReport: undefined,
   search: '',
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */

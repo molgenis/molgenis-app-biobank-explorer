@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-5">
           <h5>
-            <router-link :to="'/biobank/report/' + biobank.id">
+            <router-link :to="'/biobank/' + biobank.id">
               <i class="fa fa-table" aria-hidden="true" aria-labelledby="biobank-name"></i>
             </router-link>
             <span id="biobank-name">{{ biobank.name }}</span>
@@ -53,7 +53,7 @@
 
 <script>
   import CollectionsTable from '../tables/CollectionsTable.vue'
-  import utils from '../..//utils'
+  import utils from '../../utils'
   import QualityColumn from '../tables/QualityColumn'
   import 'array-flat-polyfill'
 

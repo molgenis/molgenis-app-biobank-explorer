@@ -517,26 +517,65 @@ describe('store', () => {
     describe('SET_BIOBANK_REPORT', () => {
       it('should set the biobank report value in the state with the payload', () => {
         const state = {
-          biobankReport: {
-            data: {},
-            metadata: {}
-          }
+          biobankReport: undefined
+        }
+        const payload = {id: 'biobank-1-other'}
+        mutations.__SET_BIOBANK_REPORT__(state, payload)
+        expect(state.biobankReport).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_COLLECTION_REPORT', () => {
+      it('should set the collection report value in the state with the payload', () => {
+        const state = {
+          collectionReport: undefined
         }
 
         const payload = {
-          meta: {
-            name: 'metadata'
+          _meta: {
+            name: 'meta'
           },
-          items: [
-            {id: 'biobank-1'},
-            {id: 'biobank-1-other'}
-          ]
+          id: '001',
+          name: 'beautiful collection',
+          description: 'beautiful samples'
         }
 
-        mutations.__SET_BIOBANK_REPORT__(state, payload)
+        mutations.__SET_COLLECTION_REPORT__(state, payload)
 
-        expect(state.biobankReport.data).to.deep.equal(payload.items[0])
-        expect(state.biobankReport.metadata).to.deep.equal(payload.meta)
+        expect(state.collectionReport).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_NETWORK_REPORT', () => {
+      it('should set the network report value in the state with the payload', () => {
+        const state = {
+          networkReport: undefined
+        }
+
+        const payload = {
+          _meta: {
+            name: 'meta'
+          },
+          id: '001',
+          name: 'beautiful network',
+          description: 'beautiful data'
+        }
+
+        mutations.__SET_NETWORK_REPORT__(state, payload)
+
+        expect(state.networkReport).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_LOADING', () => {
+      it('should set the loading boolean in the state', () => {
+        const state = {
+          isLoading: undefined
+        }
+
+        mutations.__SET_LOADING__(state, true)
+
+        expect(state.isLoading).to.deep.equal(true)
       })
     })
   })

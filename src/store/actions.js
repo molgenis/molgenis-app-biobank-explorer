@@ -6,11 +6,14 @@ import {
   SET_ALL_BIOBANKS,
   SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
+  SET_COLLECTION_REPORT,
+  SET_NETWORK_REPORT,
   SET_COLLECTION_TYPES,
   SET_COUNTRIES,
   SET_DATA_TYPES,
   SET_DIAGNOSIS_AVAILABLE,
   SET_ERROR,
+  SET_LOADING,
   SET_MATERIALS,
   SET_COLLECTION_QUALITY,
   SET_BIOBANK_QUALITY,
@@ -34,11 +37,14 @@ export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
+export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
+export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 const COLLECTION_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_col'
 const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_bio'
 const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
@@ -49,7 +55,8 @@ const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*))'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
+const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)'
 
 export default {
   /**
@@ -161,14 +168,16 @@ export default {
    * @param commit
    * @param biobanks
    */
-  [GET_ALL_BIOBANKS] ({commit, dispatch}) {
-    api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
-      .then(response => {
-        commit(SET_ALL_BIOBANKS, response.items)
-        dispatch(GET_COLLECTION_IDENTIFIERS)
-      }, error => {
-        commit(SET_ERROR, error)
-      })
+  [GET_ALL_BIOBANKS] ({commit, dispatch, state}) {
+    if (!state.allBiobanks) {
+      api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
+        .then(response => {
+          commit(SET_ALL_BIOBANKS, response.items)
+          dispatch(GET_COLLECTION_IDENTIFIERS)
+        }, error => {
+          commit(SET_ERROR, error)
+        })
+    }
   },
   /**
    * Retrieve biobank identifiers for rsql value
@@ -186,11 +195,38 @@ export default {
         })
     }
   },
-  [GET_BIOBANK_REPORT] ({commit}, biobankId) {
+  [GET_BIOBANK_REPORT] ({commit, state}, biobankId) {
+    if (state.allBiobanks) {
+      commit(SET_BIOBANK_REPORT, state.allBiobanks.find(it => it.id === biobankId))
+      return
+    }
+    commit(SET_LOADING, true)
     api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response)
+      commit(SET_BIOBANK_REPORT, response.items[0])
+      commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
+    })
+  },
+  [GET_COLLECTION_REPORT] ({commit}, collectionId) {
+    commit(SET_LOADING, true)
+    api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`).then(response => {
+      commit(SET_COLLECTION_REPORT, response)
+      commit(SET_LOADING, false)
+    }, error => {
+      commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
+    })
+  },
+  [GET_NETWORK_REPORT] ({commit}, networkId) {
+    commit(SET_LOADING, true)
+    api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
+      commit(SET_NETWORK_REPORT, response)
+      commit(SET_LOADING, false)
+    }, error => {
+      commit(SET_ERROR, error)
+      commit(SET_LOADING, false)
     })
   },
   /**

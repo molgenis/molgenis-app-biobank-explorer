@@ -2,11 +2,11 @@
   <table class="table table-condensed table-responsive">
     <thead>
     <tr>
-      <th>Collection</th>
-      <th>Type</th>
-      <th>Materials</th>
-      <th>Standards</th>
-      <th>#Samples</th>
+      <th scope="col">Collection</th>
+      <th scope="col">Type</th>
+      <th scope="col">Materials</th>
+      <th scope="col">Standards</th>
+      <th scope="col">#Samples</th>
     </tr>
     </thead>
     <tbody>
@@ -16,7 +16,9 @@
           :class="{'table-text-content-columns-has-sub': hasSubCollections(collection), 'table-text-content-columns': !hasSubCollections(collection)}"
           v-for="column in columns">
               <span v-if="column === 'name'">
-                <a :href="'/menu/main/dataexplorer/details/eu_bbmri_eric_collections/' + collection.id">{{collection[column]}}</a>
+                <router-link :to="'/collection/' + collection['id']">
+                  <button class="btn btn-link">{{collection[column]}}</button>
+                </router-link>
               </span>
               <span v-else-if="column === 'quality'">
               <quality-column :qualities="collection[column]" :spacing=0></quality-column>
@@ -61,7 +63,7 @@
   import QualityColumn from './QualityColumn'
 
   export default {
-    name: 'collections-table',
+    name: 'CollectionsTable',
     props: {
       collections: {
         type: Array,
