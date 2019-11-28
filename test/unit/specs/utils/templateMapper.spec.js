@@ -7,7 +7,8 @@ import {
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
-  mapUrl
+  mapUrl,
+  getNameOfContact
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -117,7 +118,7 @@ describe('templateMapper', () => {
   describe('detailsListContent', () => {
     it('should generate contact of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia) ')
+      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
       expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
       expect(actual.contact.phone.value).to.equal('+66 123456789')
     })
@@ -333,6 +334,42 @@ describe('templateMapper', () => {
     it('should do nothing if url starts with http', () => {
       const actual = mapUrl('http://molgenis.org')
       expect(actual).to.equal('http://molgenis.org')
+    })
+  })
+
+  describe('getNameOfContact', () => {
+    it('should map full name', () => {
+      const element = {
+        head_firstname: 'first',
+        head_lastname: 'last',
+        head_role: 'role'
+      }
+      const actual = getNameOfContact(element)
+      expect(actual).to.equal('first last (role)')
+    })
+
+    it('should map last name and role', () => {
+      const element = {
+        head_lastname: 'last',
+        head_role: 'role'
+      }
+      const actual = getNameOfContact(element)
+      expect(actual).to.equal('last (role)')
+    })
+
+    it('should return first and last name', () => {
+      const element = {
+        head_firstname: 'first',
+        head_lastname: 'last'
+      }
+      const actual = getNameOfContact(element)
+      expect(actual).to.equal('first last')
+    })
+
+    it('should return undefined', () => {
+      const element = {}
+      const actual = getNameOfContact(element)
+      expect(actual).to.equal(undefined)
     })
   })
 })

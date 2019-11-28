@@ -1,5 +1,20 @@
 const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
+export const getNameOfContact = (element) => {
+  let name = ''
+  if (element.head_lastname) {
+    if (element.head_firstname) {
+      name += element.head_firstname + ' '
+    }
+    name += element.head_lastname
+    if (element.head_role) {
+      name += ' (' + element.head_role + ')'
+    }
+  }
+  if (name !== '') {
+    return name
+  }
+}
 
 export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   let ageRange = ''
@@ -63,7 +78,7 @@ export const mapCollectionDetailsListContent = (collection) => {
   return {
     contact: {
       name: {
-        value: collection.head_lastname ? `${collection.head_firstname} ${collection.head_lastname} ${collection.head_role ? '(' + collection.head_role + ')' : ''} ` : undefined,
+        value: getNameOfContact(collection),
         type: 'string'
       },
       email: {
