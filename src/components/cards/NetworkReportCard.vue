@@ -27,7 +27,7 @@
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
                 <b-tabs v-if="collectionsAvailable || biobanksAvailable">
                   <b-tab id="collections" :active="collectionsAvailable" :disabled="!collectionsAvailable">
-                    <template v-slot:title>
+                    <template slot="title">
                       <h5>Collections
                         <b-badge :variant="collectionsAvailable ? 'secondary': 'dark'">
                           {{collections.length}}
@@ -40,11 +40,8 @@
                       </div>
                     </div>
                   </b-tab>
-                  <b-tab title="hallo">
-                    <p>Content</p>
-                  </b-tab>
                   <b-tab id="biobanks" :active="!collectionsAvailable" :disabled="!biobanksAvailable">
-                    <template v-slot:title>
+                    <template slot="title">
                       <h5>Biobanks
                         <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'">
                           {{biobanks.length}}
