@@ -34,7 +34,7 @@
                         </b-badge>
                       </h5>
                     </template>
-                    <div class="p-3">
+                    <div class="pt-3">
                       <div v-for="collection in collections" :key="collection.id">
                         <report-collection :collection="collection"></report-collection>
                       </div>
@@ -48,7 +48,7 @@
                         </b-badge>
                       </h5>
                     </template>
-                    <div class="p-3">
+                    <div class="pt-3">
                       <hr/>
                       <div v-for="biobank in biobanks" :key="biobank.id">
                         <h4><router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link></h4>
