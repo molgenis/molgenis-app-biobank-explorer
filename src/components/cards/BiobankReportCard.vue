@@ -35,9 +35,11 @@
                     <div class="card-text">
                       <h5>Contact Information</h5>
                       <report-details-list :reportDetails="contact"></report-details-list>
-                      <h5 v-if="this.networks && this.networks.length > 0">Networks</h5>
+                      <h5 v-if="networks && networks.length > 0">Networks</h5>
                       <report-details-list :reportDetails="network" v-for="network in networks"
                                            :key="network.id"></report-details-list>
+                      <h5 v-if="quality && quality.Certification && quality.Certification.value.length > 0">Quality</h5>
+                      <report-details-list :reportDetails="quality"></report-details-list>
                     </div>
                   </div>
                 </div>
@@ -59,7 +61,12 @@
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
-  import { mapContactInfo, mapCollectionsData, mapNetworkInfo } from '../../utils/templateMapper'
+  import {
+    mapContactInfo,
+    mapCollectionsData,
+    mapNetworkInfo,
+    mapObjArrayToStringArrayIfExists
+  } from '../../utils/templateMapper'
 
   export default {
     name: 'biobank-report-card',
@@ -94,6 +101,9 @@
       },
       collectionsData () {
         return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections).filter(it => !it.parentCollection) : []
+      },
+      quality () {
+        return {Certification: {value: mapObjArrayToStringArrayIfExists(this.biobank.quality), type: 'list'}}
       }
     },
     methods: {

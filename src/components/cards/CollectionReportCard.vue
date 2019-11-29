@@ -47,7 +47,7 @@
                       <h5 v-if="rightCardContent.networks && rightCardContent.networks.length > 0">Networks</h5>
                       <report-details-list :reportDetails="network" v-for="network in rightCardContent.networks"
                                            :key="network.id"></report-details-list>
-                      <h5>Quality</h5>
+                      <h5 v-if="rightCardContent.quality.Certification.value.length > 0">Quality</h5>
                       <report-details-list :reportDetails="rightCardContent.quality"></report-details-list>
                       <h5>Collaboration</h5>
                       <report-details-list :reportDetails="rightCardContent.collaboration"></report-details-list>

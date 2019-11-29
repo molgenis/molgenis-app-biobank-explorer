@@ -1,5 +1,20 @@
-const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
+export const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
+export const getNameOfHead = (element) => {
+  let name = ''
+  if (element.head_lastname) {
+    if (element.head_firstname) {
+      name += element.head_firstname + ' '
+    }
+    name += element.head_lastname
+    if (element.head_role) {
+      name += ' (' + element.head_role + ')'
+    }
+  }
+  if (name !== '') {
+    return name
+  }
+}
 
 export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   let ageRange = ''
@@ -49,7 +64,7 @@ export const mapDetailsTableContent = (report) => {
     Data: {
       value: mapObjArrayToStringArrayIfExists(report.data_categories),
       type: 'list',
-      badgeColor: 'primary'
+      badgeColor: 'info'
     },
     Diagnosis: {
       value: mapObjArrayToStringArrayIfExists(report.diagnosis_available),
@@ -63,7 +78,7 @@ export const mapCollectionDetailsListContent = (collection) => {
   return {
     contact: {
       name: {
-        value: collection.head_lastname ? `${collection.head_firstname} ${collection.head_lastname} ${collection.head_role ? '(' + collection.head_role + ')' : ''} ` : undefined,
+        value: getNameOfHead(collection),
         type: 'string'
       },
       email: {
@@ -81,12 +96,12 @@ export const mapCollectionDetailsListContent = (collection) => {
       country: {value: collection.country.name, type: 'string'},
       report: {value: `/biobank/${collection.biobank.id}`, type: 'report'},
       website: {value: mapUrl(collection.biobank.url), type: 'url'},
-      email: {value: collection.biobank.contact ? collection.biobank.contact.email : undefined, type: 'email'}
+      email: {value: collection.biobank.contact ? collection.biobank.contact.email : undefined, type: 'email'},
+      'Partner charter': {value: collection.biobank.partner_charter_signed, type: 'bool'}
     },
     networks: mapNetworkInfo(collection),
     quality: {
-      'Partner charter': {value: collection.biobank.partner_charter_signed, type: 'bool'},
-      Certification: {value: mapObjArrayToStringArrayIfExists(collection.biobank.quality), type: 'list'}
+      Certification: {value: mapObjArrayToStringArrayIfExists(collection.quality), type: 'list'}
     },
     collaboration: {
       Commercial: {value: collection.collaboration_commercial, type: 'bool'},
@@ -106,6 +121,10 @@ export const mapNetworkInfo = (data) => {
 
 export const mapContactInfo = (instance) => {
   return {
+    name: {
+      value: getNameOfHead(instance),
+      type: 'string'
+    },
     website: {value: mapUrl(instance.url), type: 'url'},
     email: {value: instance.contact ? instance.contact.email : undefined, type: 'email'},
     juridical_person: {value: instance.juridical_person, type: 'string'},
@@ -136,7 +155,7 @@ export const mapCollectionsData = (collections) => {
           Data: {
             value: mapObjArrayToStringArrayIfExists(collection.data_categories),
             type: 'list',
-            badgeColor: 'primary'
+            badgeColor: 'info'
           }
         }
       }

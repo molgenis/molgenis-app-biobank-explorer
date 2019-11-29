@@ -142,7 +142,7 @@ describe('CollectionReportCard', () => {
               Data: {
                 value: ['Biological samples'],
                 type: 'list',
-                badgeColor: 'primary'
+                badgeColor: 'info'
               }
 
             }
@@ -167,7 +167,7 @@ describe('CollectionReportCard', () => {
               Data: {
                 value: ['Biological samples'],
                 type: 'list',
-                badgeColor: 'primary'
+                badgeColor: 'info'
               }
             }
           }

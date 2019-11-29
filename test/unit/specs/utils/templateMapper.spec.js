@@ -7,7 +7,8 @@ import {
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
-  mapUrl
+  mapUrl,
+  getNameOfHead
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -71,14 +72,14 @@ describe('templateMapper', () => {
     collaboration_commercial: false,
     collaboration_non_for_profit: true,
     country: {name: 'Genovia'},
+    quality: [{label: 'Order of the rose'}],
     biobank: {
       id: 'b-001',
       name: 'beautiful biobank',
       juridical_person: 'Is this even a person?',
       email: 'info@beautiful-biobank.gnv',
       url: 'https://beautiful-biobank.gnv',
-      partner_charter_signed: true,
-      quality: [{label: 'Order of the rose'}]
+      partner_charter_signed: true
     }
   }
   describe('mapDetailsTableContent', () => {
@@ -117,14 +118,13 @@ describe('templateMapper', () => {
   describe('detailsListContent', () => {
     it('should generate contact of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia) ')
+      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
       expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
       expect(actual.contact.phone.value).to.equal('+66 123456789')
     })
 
     it('should generate quality of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.quality['Partner charter']).to.deep.equal({value: true, type: 'bool'})
       expect(actual.quality.Certification).to.deep.equal({
         value: ['Order of the rose'],
         type: 'list'
@@ -161,7 +161,7 @@ describe('templateMapper', () => {
             Data: {
               value: ['Biological samples'],
               type: 'list',
-              badgeColor: 'primary'
+              badgeColor: 'info'
             }
           }
         },
@@ -189,7 +189,7 @@ describe('templateMapper', () => {
                 Data: {
                   value: [],
                   type: 'list',
-                  badgeColor: 'primary'
+                  badgeColor: 'info'
                 }
               }
             }
@@ -210,7 +210,7 @@ describe('templateMapper', () => {
             Data: {
               value: ['Biological samples'],
               type: 'list',
-              badgeColor: 'primary'
+              badgeColor: 'info'
             }
           }
         }
@@ -312,6 +312,7 @@ describe('templateMapper', () => {
         website: {value: 'https://website.com', type: 'url'},
         email: {value: 'email@email.com', type: 'email'},
         juridical_person: {value: 'blaat', type: 'string'},
+        name: {value: undefined, type: 'string'},
         country: {value: 'Netherlands', type: 'string'}
       }
       const actual = mapContactInfo(instance)
@@ -333,6 +334,42 @@ describe('templateMapper', () => {
     it('should do nothing if url starts with http', () => {
       const actual = mapUrl('http://molgenis.org')
       expect(actual).to.equal('http://molgenis.org')
+    })
+  })
+
+  describe('getNameOfHead', () => {
+    it('should map full name', () => {
+      const element = {
+        head_firstname: 'first',
+        head_lastname: 'last',
+        head_role: 'role'
+      }
+      const actual = getNameOfHead(element)
+      expect(actual).to.equal('first last (role)')
+    })
+
+    it('should map last name and role', () => {
+      const element = {
+        head_lastname: 'last',
+        head_role: 'role'
+      }
+      const actual = getNameOfHead(element)
+      expect(actual).to.equal('last (role)')
+    })
+
+    it('should return first and last name', () => {
+      const element = {
+        head_firstname: 'first',
+        head_lastname: 'last'
+      }
+      const actual = getNameOfHead(element)
+      expect(actual).to.equal('first last')
+    })
+
+    it('should return undefined', () => {
+      const element = {}
+      const actual = getNameOfHead(element)
+      expect(actual).to.equal(undefined)
     })
   })
 })
