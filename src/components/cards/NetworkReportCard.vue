@@ -25,13 +25,14 @@
               <div class="col-md-8">
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
-                <b-tabs v-if="collectionsAvailable || biobanksAvailable">
+                <b-tabs v-if="collections === undefined || biobanks === undefined || collectionsAvailable || biobanksAvailable">
                   <b-tab id="collections" :active="collectionsAvailable" :disabled="!collectionsAvailable">
                     <template slot="title">
                       <h5>Collections
-                        <b-badge :variant="collectionsAvailable ? 'secondary': 'dark'">
+                        <b-badge :variant="collectionsAvailable ? 'secondary': 'dark'" v-if="collections">
                           {{collections.length}}
                         </b-badge>
+                        <i v-else class="fa fa-spin fa-spinner" aria-hidden="true"></i>
                       </h5>
                     </template>
                     <div class="pt-3">
@@ -40,12 +41,13 @@
                       </div>
                     </div>
                   </b-tab>
-                  <b-tab id="biobanks" :active="!collectionsAvailable" :disabled="!biobanksAvailable">
+                  <b-tab id="biobanks" :active="!collectionsAvailable && biobanksAvailable" :disabled="!biobanksAvailable">
                     <template slot="title">
                       <h5>Biobanks
-                        <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'">
-                          {{biobanks.length}}
+                        <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'" v-if="biobanks">
+                          {{biobanks && biobanks.length}}
                         </b-badge>
+                        <i v-else class="fa fa-spin fa-spinner" aria-hidden="true"></i>
                       </h5>
                     </template>
                     <div class="pt-3">
@@ -112,7 +114,8 @@
         return this.networkReport.network
       },
       collections () {
-        return mapCollectionsData(this.networkReport.collections)
+        return this.networkReport.collections &&
+          mapCollectionsData(this.networkReport.collections)
       },
       biobanks () {
         return this.networkReport.biobanks

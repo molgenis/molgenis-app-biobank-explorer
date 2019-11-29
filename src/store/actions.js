@@ -227,33 +227,15 @@ export default {
     commit(SET_NETWORK_COLLECTIONS, undefined)
     commit(SET_NETWORK_REPORT, undefined)
     commit(SET_LOADING, true)
-    // Check when done
-    dispatch(GET_NETWORK_MEMBERS, {networkId, apiPath: COLLECTION_API_PATH, mutation: SET_NETWORK_COLLECTIONS})
-    dispatch(GET_NETWORK_MEMBERS, {networkId, apiPath: BIOBANK_API_PATH, mutation: SET_NETWORK_BIOBANKS})
-    api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
-      commit(SET_NETWORK_REPORT, response)
-      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
-        commit(SET_LOADING, false)
-      }
-    }, error => {
-      commit(SET_ERROR, error)
-      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
-        commit(SET_LOADING, false)
-      }
-    })
-  },
-  [GET_NETWORK_MEMBERS] ({commit, state}, {networkId, apiPath, mutation}) {
-    api.get(`${apiPath}?q=network==${networkId}&num=10000`).then(response => {
-      commit(mutation, response.items)
-      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
-        commit(SET_LOADING, false)
-      }
-    }, error => {
-      commit(SET_ERROR, error)
-      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
-        commit(SET_LOADING, false)
-      }
-    })
+    const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
+      .then(response => commit(SET_NETWORK_REPORT, response))
+      .then(() => commit(SET_LOADING, false))
+    const collections = api.get(`${COLLECTION_API_PATH}?q=network==${networkId}&num=10000`)
+      .then(response => commit(SET_NETWORK_COLLECTIONS, response.items))
+    const biobanks = api.get(`${BIOBANK_API_PATH}?q=network==${networkId}&num=10000`)
+      .then(response => commit(SET_NETWORK_BIOBANKS, response.items))
+    Promise.all([collections, biobanks, networks])
+      .catch((error) => commit(SET_ERROR, error))
   },
   /**
    * Transform the state into a NegotiatorQuery object.
