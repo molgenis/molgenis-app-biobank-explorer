@@ -25,6 +25,39 @@
               <div class="col-md-8">
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
+                <b-tabs v-if="collectionsAvailable || biobanksAvailable">
+                  <b-tab id="collections" :active="collectionsAvailable" :disabled="!collectionsAvailable">
+                    <template v-slot:title>
+                      <h5>Collections
+                        <b-badge :variant="collectionsAvailable ? 'secondary': 'dark'">
+                          {{collections.length}}
+                        </b-badge>
+                      </h5>
+                    </template>
+                    <div class="p-3">
+                      <div v-for="collection in collections" :key="collection.id">
+                        <report-collection :collection="collection"></report-collection>
+                      </div>
+                    </div>
+                  </b-tab>
+                  <b-tab title="hallo">
+                    <p>Content</p>
+                  </b-tab>
+                  <b-tab id="biobanks" :active="!collectionsAvailable" :disabled="!biobanksAvailable">
+                    <template v-slot:title>
+                      <h5>Biobanks
+                        <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'">
+                          {{biobanks.length}}
+                        </b-badge>
+                      </h5>
+                    </template>
+                    <div class="p-3">
+                      <div v-for="biobank in biobanks" :key="biobank.id">
+                        {{biobank}}
+                      </div>
+                    </div>
+                  </b-tab>
+                </b-tabs>
               </div>
               <!-- Right side card -->
               <div class="col-md-4">
@@ -53,12 +86,12 @@
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import ReportSubCollection from '../report-components/ReportSubCollection'
-  import { mapNetworkData, mapContactInfo } from '../../utils/templateMapper'
+  import ReportCollection from '../report-components/ReportCollection'
+  import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
 
   export default {
     name: 'NetworkReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsList, ReportSubCollection, Loading},
+    components: {ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection},
     methods: {
       ...mapActions({
         getNetworkReport: GET_NETWORK_REPORT
@@ -68,7 +101,22 @@
       }
     },
     computed: {
-      ...mapState({network: 'networkReport', isLoading: 'isLoading'}),
+      ...mapState({networkReport: 'networkReport', isLoading: 'isLoading'}),
+      collectionsAvailable () {
+        return this.collections && this.collections.length > 0
+      },
+      biobanksAvailable () {
+        return this.biobanks && this.biobanks.length > 0
+      },
+      network () {
+        return this.networkReport.network
+      },
+      collections () {
+        return mapCollectionsData(this.networkReport.collections)
+      },
+      biobanks () {
+        return this.networkReport.biobanks
+      },
       detailsContent () {
         return mapNetworkData(this.network)
       },

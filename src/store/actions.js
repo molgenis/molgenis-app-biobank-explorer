@@ -19,7 +19,9 @@ import {
   SET_BIOBANK_QUALITY,
   MAP_QUERY_TO_STATE,
   SET_COLLECTION_QUALITY_COLLECTIONS,
-  SET_BIOBANK_QUALITY_BIOBANKS
+  SET_BIOBANK_QUALITY_BIOBANKS,
+  SET_NETWORK_COLLECTIONS,
+  SET_NETWORK_BIOBANKS
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -39,6 +41,7 @@ export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
+export const GET_NETWORK_MEMBERS = '__GET_NETWORK_MEMBERS__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
@@ -219,14 +222,37 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_NETWORK_REPORT] ({commit}, networkId) {
+  [GET_NETWORK_REPORT] ({commit, dispatch, state}, networkId) {
+    commit(SET_NETWORK_BIOBANKS, undefined)
+    commit(SET_NETWORK_COLLECTIONS, undefined)
+    commit(SET_NETWORK_REPORT, undefined)
     commit(SET_LOADING, true)
+    // Check when done
+    dispatch(GET_NETWORK_MEMBERS, {networkId, apiPath: COLLECTION_API_PATH, mutation: SET_NETWORK_COLLECTIONS})
+    dispatch(GET_NETWORK_MEMBERS, {networkId, apiPath: BIOBANK_API_PATH, mutation: SET_NETWORK_BIOBANKS})
     api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
       commit(SET_NETWORK_REPORT, response)
-      commit(SET_LOADING, false)
+      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
+        commit(SET_LOADING, false)
+      }
     }, error => {
       commit(SET_ERROR, error)
-      commit(SET_LOADING, false)
+      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
+        commit(SET_LOADING, false)
+      }
+    })
+  },
+  [GET_NETWORK_MEMBERS] ({commit, state}, {networkId, apiPath, mutation}) {
+    api.get(`${apiPath}?q=network==${networkId}&num=10000`).then(response => {
+      commit(mutation, response.items)
+      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
+        commit(SET_LOADING, false)
+      }
+    }, error => {
+      commit(SET_ERROR, error)
+      if (state.networkReport.network && state.networkReport.collections && state.networkReport.biobanks) {
+        commit(SET_LOADING, false)
+      }
     })
   },
   /**

@@ -18,7 +18,7 @@
   import ReportSubCollection from './ReportSubCollection.vue'
 
   export default {
-    name: 'BiobankReportCollection',
+    name: 'ReportCollection',
     components: {ReportDescription, ReportDetailsList, ReportSubCollection},
     props: {
       collection: {

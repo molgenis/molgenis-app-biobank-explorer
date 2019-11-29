@@ -20,7 +20,11 @@ export default {
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
   biobankReport: undefined,
   collectionReport: undefined,
-  networkReport: undefined,
+  networkReport: {
+    network: undefined,
+    collections: undefined,
+    biobanks: undefined
+  },
   search: '',
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */
