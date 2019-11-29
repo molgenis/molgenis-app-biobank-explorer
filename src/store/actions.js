@@ -229,7 +229,7 @@ export default {
     commit(SET_LOADING, true)
     const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
       .then(response => commit(SET_NETWORK_REPORT, response))
-      .then(() => commit(SET_LOADING, false))
+      .finally(() => commit(SET_LOADING, false))
     const collections = api.get(`${COLLECTION_API_PATH}?q=network==${networkId}&num=10000`)
       .then(response => commit(SET_NETWORK_COLLECTIONS, response.items))
     const biobanks = api.get(`${BIOBANK_API_PATH}?q=network==${networkId}&num=10000`)
