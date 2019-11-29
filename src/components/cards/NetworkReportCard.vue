@@ -49,8 +49,10 @@
                       </h5>
                     </template>
                     <div class="p-3">
+                      <hr/>
                       <div v-for="biobank in biobanks" :key="biobank.id">
-                        {{biobank}}
+                        <h4><router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link></h4>
+                        <report-description :description="biobank.description" :maxLength="250"></report-description>
                       </div>
                     </div>
                   </b-tab>
@@ -84,11 +86,12 @@
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
   import ReportCollection from '../report-components/ReportCollection'
+  import BiobankCard from '../cards/BiobankCard'
   import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
 
   export default {
     name: 'NetworkReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection},
+    components: {ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection, BiobankCard},
     methods: {
       ...mapActions({
         getNetworkReport: GET_NETWORK_REPORT
