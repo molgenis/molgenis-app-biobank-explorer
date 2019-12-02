@@ -6,7 +6,7 @@
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-if="biobankDataAvailable && !this.isLoading">
+    <div class="container-fluid">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-if="biobankDataAvailable && !this.isLoading">
         <div class="col">
           <report-title type="Biobank" :name="biobank.name"></report-title>
           <div class="container">
