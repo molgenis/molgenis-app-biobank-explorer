@@ -20,6 +20,8 @@ export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
 export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
+export const SET_NETWORK_COLLECTIONS = '__SET_NETWORK_COLLECTIONS__'
+export const SET_NETWORK_BIOBANKS = '__SET_NETWORK_BIOBANKS__'
 
 export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
@@ -122,7 +124,13 @@ export default {
     state.collectionReport = collection
   },
   [SET_NETWORK_REPORT] (state, network) {
-    state.networkReport = network
+    state.networkReport.network = network
+  },
+  [SET_NETWORK_COLLECTIONS] (state, collections) {
+    state.networkReport.collections = collections
+  },
+  [SET_NETWORK_BIOBANKS] (state, biobanks) {
+    state.networkReport.biobanks = biobanks
   },
   /**
    *

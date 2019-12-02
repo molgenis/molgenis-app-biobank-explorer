@@ -7,7 +7,7 @@
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-if="this.network && !this.isLoading">
+    <div class="container-fluid">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-if="this.network && !this.isLoading">
         <div class="col">
           <report-title type="Network" :name="network.name"></report-title>
           <div class="container">
@@ -25,6 +25,44 @@
               <div class="col-md-8">
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
+                <b-tabs v-if="!collections || !biobanks || collectionsAvailable || biobanksAvailable">
+                  <b-tab id="collections" :active="collectionsAvailable" :disabled="!collectionsAvailable">
+                    <template slot="title">
+                      <h5>Collections
+                        <b-badge :variant="collectionsAvailable ? 'secondary': 'dark'" v-if="collections">
+                          {{collections.length}}
+                        </b-badge>
+                        <i v-else class="fa fa-spin fa-spinner" aria-hidden="true"></i>
+                      </h5>
+                    </template>
+                    <div class="pt-3">
+                      <div v-for="(collection, index) in collections" :key="collection.id">
+                        <hr v-if="index"/>
+                        <report-collection :collection="collection"></report-collection>
+                      </div>
+                    </div>
+                  </b-tab>
+                  <b-tab id="biobanks" :active="!collectionsAvailable && biobanksAvailable"
+                         :disabled="!biobanksAvailable">
+                    <template slot="title">
+                      <h5>Biobanks
+                        <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'" v-if="biobanks">
+                          {{biobanks && biobanks.length}}
+                        </b-badge>
+                        <i v-else class="fa fa-spin fa-spinner" aria-hidden="true"></i>
+                      </h5>
+                    </template>
+                    <div class="pt-3">
+                      <div v-for="(biobank, index) in biobanks" :key="biobank.id">
+                        <hr v-if="index"/>
+                        <h4>
+                          <router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link>
+                        </h4>
+                        <report-description :description="biobank.description" :maxLength="250"></report-description>
+                      </div>
+                    </div>
+                  </b-tab>
+                </b-tabs>
               </div>
               <!-- Right side card -->
               <div class="col-md-4">
@@ -53,12 +91,13 @@
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import ReportSubCollection from '../report-components/ReportSubCollection'
-  import { mapNetworkData, mapContactInfo } from '../../utils/templateMapper'
+  import ReportCollection from '../report-components/ReportCollection'
+  import BiobankCard from '../cards/BiobankCard'
+  import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
 
   export default {
     name: 'NetworkReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsList, ReportSubCollection, Loading},
+    components: {ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection, BiobankCard},
     methods: {
       ...mapActions({
         getNetworkReport: GET_NETWORK_REPORT
@@ -68,7 +107,23 @@
       }
     },
     computed: {
-      ...mapState({network: 'networkReport', isLoading: 'isLoading'}),
+      ...mapState({networkReport: 'networkReport', isLoading: 'isLoading'}),
+      collectionsAvailable () {
+        return this.collections && this.collections.length > 0
+      },
+      biobanksAvailable () {
+        return this.biobanks && this.biobanks.length > 0
+      },
+      network () {
+        return this.networkReport.network
+      },
+      collections () {
+        return this.networkReport.collections ? mapCollectionsData(this.networkReport.collections).filter(
+          (collection) => { return !collection.parentCollection }) : []
+      },
+      biobanks () {
+        return this.networkReport.biobanks
+      },
       detailsContent () {
         return mapNetworkData(this.network)
       },

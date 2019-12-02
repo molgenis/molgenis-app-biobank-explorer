@@ -19,7 +19,9 @@ import {
   SET_BIOBANK_QUALITY,
   MAP_QUERY_TO_STATE,
   SET_COLLECTION_QUALITY_COLLECTIONS,
-  SET_BIOBANK_QUALITY_BIOBANKS
+  SET_BIOBANK_QUALITY_BIOBANKS,
+  SET_NETWORK_COLLECTIONS,
+  SET_NETWORK_BIOBANKS
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -201,8 +203,8 @@ export default {
       return
     }
     commit(SET_LOADING, true)
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response.items[0])
+    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*`).then(response => {
+      commit(SET_BIOBANK_REPORT, response)
       commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)
@@ -219,15 +221,20 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_NETWORK_REPORT] ({commit}, networkId) {
+  [GET_NETWORK_REPORT] ({commit, dispatch, state}, networkId) {
+    commit(SET_NETWORK_BIOBANKS, undefined)
+    commit(SET_NETWORK_COLLECTIONS, undefined)
+    commit(SET_NETWORK_REPORT, undefined)
     commit(SET_LOADING, true)
-    api.get(`${NETWORK_API_PATH}/${networkId}`).then(response => {
-      commit(SET_NETWORK_REPORT, response)
-      commit(SET_LOADING, false)
-    }, error => {
-      commit(SET_ERROR, error)
-      commit(SET_LOADING, false)
-    })
+    const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
+      .then(response => commit(SET_NETWORK_REPORT, response))
+      .finally(() => commit(SET_LOADING, false))
+    const collections = api.get(`${COLLECTION_API_PATH}?q=network==${networkId}&num=10000&attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)
+      .then(response => commit(SET_NETWORK_COLLECTIONS, response.items))
+    const biobanks = api.get(`${BIOBANK_API_PATH}?q=network==${networkId}&num=10000`)
+      .then(response => commit(SET_NETWORK_BIOBANKS, response.items))
+    Promise.all([collections, biobanks, networks])
+      .catch((error) => commit(SET_ERROR, error))
   },
   /**
    * Transform the state into a NegotiatorQuery object.

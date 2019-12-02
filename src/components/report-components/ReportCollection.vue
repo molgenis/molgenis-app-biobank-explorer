@@ -1,6 +1,5 @@
 <template>
   <div>
-    <hr/>
     <h4><router-link :to='"/collection/"+collection.id'>{{collection.name}}</router-link></h4>
     <report-description :description="collection.description" :maxLength="200"></report-description>
     <report-details-list :reportDetails="collection.content"></report-details-list>
@@ -18,7 +17,7 @@
   import ReportSubCollection from './ReportSubCollection.vue'
 
   export default {
-    name: 'BiobankReportCollection',
+    name: 'ReportCollection',
     components: {ReportDescription, ReportDetailsList, ReportSubCollection},
     props: {
       collection: {

@@ -6,7 +6,7 @@
       color="var(--secondary)"
       background-color="var(--light)"
     ></loading>
-    <div class="container-fluid" v-if="biobankDataAvailable && !this.isLoading">
+    <div class="container-fluid">
       <div class="row">
         <div class="col">
           <!-- Back to previous page buttons -->
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-if="biobankDataAvailable && !this.isLoading">
         <div class="col">
           <report-title type="Biobank" :name="biobank.name"></report-title>
           <div class="container">
@@ -24,8 +24,9 @@
               <div class="col-md-8">
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
                 <h3>Collections</h3>
-                <div v-for="collection in collectionsData" :key="collection.id">
-                  <biobank-report-collection :collection="collection"></biobank-report-collection>
+                <div v-for="(collection, index) in collectionsData" :key="collection.id">
+                  <hr v-if="index"/>
+                  <report-collection :collection="collection"></report-collection>
                 </div>
               </div>
               <!-- Right side card -->
@@ -60,7 +61,7 @@
   import ReportDescription from '../report-components/ReportDescription.vue'
   import ReportTitle from '../report-components/ReportTitle.vue'
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import BiobankReportCollection from '../report-components/BiobankReportCollection.vue'
+  import ReportCollection from '../report-components/ReportCollection.vue'
   import {
     mapContactInfo,
     mapCollectionsData,
@@ -74,7 +75,7 @@
       ReportTitle,
       ReportDescription,
       ReportDetailsList,
-      BiobankReportCollection,
+      ReportCollection,
       Loading
     },
     data () {

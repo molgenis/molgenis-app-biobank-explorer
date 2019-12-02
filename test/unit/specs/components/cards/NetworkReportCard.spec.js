@@ -3,7 +3,7 @@ import { shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import NetworkReportCard from '@/components/cards/NetworkReportCard'
 
-describe('CollectionReportCard', () => {
+describe('NetworkReportCard', () => {
   let store
   let stubs
   let mocks
@@ -11,27 +11,29 @@ describe('CollectionReportCard', () => {
 
   beforeEach(() => {
     networkReport = {
-      _meta: {
-        name: 'meta'
-      },
-      id: 'n-001',
-      name: 'beautiful network',
-      description: 'beautiful collections and biobanks',
-      contact: {
-        email: 'blaat@bla.nl'
-      },
-      juridical_person: 'something',
-      url: 'https://blaat.nl',
-      common_collection_focus: true,
-      common_charter: true,
-      common_sops: false,
-      common_data_access_policy: true,
-      common_sample_access_policy: false,
-      common_mta: true,
-      common_image_access_policy: false,
-      common_image_mta: false,
-      common_representation: true,
-      common_url: true
+      network: {
+        _meta: {
+          name: 'meta'
+        },
+        id: 'n-001',
+        name: 'beautiful network',
+        description: 'beautiful collections and biobanks',
+        contact: {
+          email: 'blaat@bla.nl'
+        },
+        juridical_person: 'something',
+        url: 'https://blaat.nl',
+        common_collection_focus: true,
+        common_charter: true,
+        common_sops: false,
+        common_data_access_policy: true,
+        common_sample_access_policy: false,
+        common_mta: true,
+        common_image_access_policy: false,
+        common_image_mta: false,
+        common_representation: true,
+        common_url: true
+      }
     }
 
     store = new Vuex.Store({

@@ -60,5 +60,17 @@ export default {
     }
 
     return activeFilters
+  },
+  getErrorMessage: state => {
+    if (!state.error) {
+      return undefined
+    }
+    if (state.error.errors) {
+      return state.error.errors[0].message
+    }
+    if (state.error.message) {
+      return state.error.message
+    }
+    return 'Something went wrong'
   }
 }
