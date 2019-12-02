@@ -380,5 +380,24 @@ describe('store', () => {
         expect(getters.showCountryFacet(state)).to.equal(false)
       })
     })
+
+    describe('getErrorMessage', () => {
+      it('should return undefined if no error is set', () => {
+        const state = {error: undefined}
+        expect(getters.getErrorMessage(state)).to.equal(undefined)
+      })
+      it('should return message of first error', () => {
+        const state = {error: {errors: [{message: 'this is the first error'}]}}
+        expect(getters.getErrorMessage(state)).to.equal('this is the first error')
+      })
+      it('should return message of first error', () => {
+        const state = {error: new Error('Beautiful message')}
+        expect(getters.getErrorMessage(state)).to.equal('Beautiful message')
+      })
+      it('should return that something went wrong', () => {
+        const state = {error: {}}
+        expect(getters.getErrorMessage(state)).to.equal('Something went wrong')
+      })
+    })
   })
 })
