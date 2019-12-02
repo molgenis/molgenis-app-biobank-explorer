@@ -36,7 +36,8 @@
                       </h5>
                     </template>
                     <div class="pt-3">
-                      <div v-for="collection in collections" :key="collection.id">
+                      <div v-for="(collection, index) in collections" :key="collection.id">
+                        <hr v-if="index"/>
                         <report-collection :collection="collection"></report-collection>
                       </div>
                     </div>
@@ -52,8 +53,8 @@
                       </h5>
                     </template>
                     <div class="pt-3">
-                      <hr/>
-                      <div v-for="biobank in biobanks" :key="biobank.id">
+                      <div v-for="(biobank, index) in biobanks" :key="biobank.id">
+                        <hr v-if="index"/>
                         <h4>
                           <router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link>
                         </h4>
