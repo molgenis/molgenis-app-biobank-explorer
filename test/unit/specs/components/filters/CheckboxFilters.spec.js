@@ -61,12 +61,12 @@ describe('components', () => {
 
       it('should emit an event when a checkbox is checked', () => {
         boxes.at(1).find('input').setChecked()
-        expect(wrapper.emitted().input).to.deep.eq([[['1', '2']]])
+        expect(wrapper.emitted().input).to.deep.eq([[['1', '2']], [['1', '2']]])
       })
 
       it('should emit an event when a checkbox is unchecked', () => {
         boxes.at(0).find('input').setChecked(false)
-        expect(wrapper.emitted().input).to.deep.eq([[[]]])
+        expect(wrapper.emitted().input).to.deep.eq([[[]], [[]]])
       })
 
       it('should not slice options when there are fewer than max options', () => {
@@ -103,12 +103,20 @@ describe('components', () => {
       })
 
       it('should emit an event when Select all is clicked', () => {
+        wrapper = mount(CheckboxFilters, {
+          propsData: {
+            name: 'facet',
+            label: 'Label',
+            options: [{id: '1', label: 'option 1'}, {id: '2', label: 'option 2'}],
+            value: [],
+            initiallyCollapsed: false,
+            maxVisibleOptions: 4
+          }
+        })
         const selectionToggler = wrapper.find('.toggle-select')
-        wrapper.setProps({value: []})
         expect(selectionToggler.text()).eq('Select all')
         selectionToggler.trigger('click')
-        // the empty list is emitted when setProps is called
-        expect(wrapper.emitted().input).to.deep.eq([[[]], [['1', '2']]])
+        expect(wrapper.emitted().input).to.deep.eq([[['1', '2']]])
       })
     })
   })
