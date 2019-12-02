@@ -25,7 +25,7 @@
               <div class="col-md-8">
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
-                <b-tabs v-if="collections === undefined || biobanks === undefined || collectionsAvailable || biobanksAvailable">
+                <b-tabs v-if="!collections || !biobanks || collectionsAvailable || biobanksAvailable">
                   <b-tab id="collections" :active="collectionsAvailable" :disabled="!collectionsAvailable">
                     <template slot="title">
                       <h5>Collections
@@ -41,7 +41,8 @@
                       </div>
                     </div>
                   </b-tab>
-                  <b-tab id="biobanks" :active="!collectionsAvailable && biobanksAvailable" :disabled="!biobanksAvailable">
+                  <b-tab id="biobanks" :active="!collectionsAvailable && biobanksAvailable"
+                         :disabled="!biobanksAvailable">
                     <template slot="title">
                       <h5>Biobanks
                         <b-badge :variant="biobanksAvailable ? 'secondary': 'dark'" v-if="biobanks">
@@ -53,7 +54,9 @@
                     <div class="pt-3">
                       <hr/>
                       <div v-for="biobank in biobanks" :key="biobank.id">
-                        <h4><router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link></h4>
+                        <h4>
+                          <router-link :to='`/biobank/${biobank.id}`'>{{biobank.name}}</router-link>
+                        </h4>
                         <report-description :description="biobank.description" :maxLength="250"></report-description>
                       </div>
                     </div>
@@ -114,8 +117,8 @@
         return this.networkReport.network
       },
       collections () {
-        return this.networkReport.collections &&
-          mapCollectionsData(this.networkReport.collections)
+        return this.networkReport.collections ? mapCollectionsData(this.networkReport.collections).filter(
+          (collection) => { return !collection.parentCollection }) : []
       },
       biobanks () {
         return this.networkReport.biobanks
