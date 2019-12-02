@@ -569,6 +569,44 @@ describe('store', () => {
       })
     })
 
+    describe('SET_NETWORK_COLLECTIONS', () => {
+      it('should set the network collections in the state with the payload', () => {
+        const state = {
+          networkReport: {
+            collections: undefined
+          }
+        }
+        const payload = []
+        mutations.__SET_NETWORK_COLLECTIONS__(state, payload)
+        expect(state.networkReport.collections).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_NETWORK_BIOBANKS', () => {
+      it('should set the network biobanks in the state with the payload', () => {
+        const state = {
+          networkReport: {
+            collections: undefined
+          }
+        }
+        const payload = []
+        mutations.__SET_NETWORK_BIOBANKS__(state, payload)
+        expect(state.networkReport.biobanks).to.deep.equal(payload)
+      })
+    })
+
+    describe('SET_LOADING', () => {
+      it('should set the loading boolean in the state', () => {
+        const state = {
+          isLoading: undefined
+        }
+
+        mutations.__SET_LOADING__(state, true)
+
+        expect(state.isLoading).to.deep.equal(true)
+      })
+    })
+
     describe('SET_LOADING', () => {
       it('should set the loading boolean in the state', () => {
         const state = {
