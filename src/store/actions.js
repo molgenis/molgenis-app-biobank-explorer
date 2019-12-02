@@ -41,7 +41,6 @@ export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
-export const GET_NETWORK_MEMBERS = '__GET_NETWORK_MEMBERS__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 
 /* API PATHS */
@@ -230,7 +229,7 @@ export default {
     const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
       .then(response => commit(SET_NETWORK_REPORT, response))
       .finally(() => commit(SET_LOADING, false))
-    const collections = api.get(`${COLLECTION_API_PATH}?q=network==${networkId}&num=10000&attrs=*,${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)
+    const collections = api.get(`${COLLECTION_API_PATH}?q=network==${networkId}&num=10000&attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)
       .then(response => commit(SET_NETWORK_COLLECTIONS, response.items))
     const biobanks = api.get(`${BIOBANK_API_PATH}?q=network==${networkId}&num=10000`)
       .then(response => commit(SET_NETWORK_BIOBANKS, response.items))

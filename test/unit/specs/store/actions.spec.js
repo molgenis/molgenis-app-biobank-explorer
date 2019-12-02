@@ -26,7 +26,7 @@ import {
   SET_MATERIALS,
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY
+  SET_BIOBANK_QUALITY, SET_NETWORK_BIOBANKS, SET_NETWORK_COLLECTIONS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -592,8 +592,29 @@ describe('store', () => {
     })
 
     describe('GET_NETWORK_REPORT', () => {
-      it('should retrieve a single network entity from the server based on a network id and store it in the state', done => {
-        const response = {
+      const neverReturningPromise = new Promise(() => {})
+      it('should set error', done => {
+        const collectionError = new Error('No way!')
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(neverReturningPromise)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
+        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenReject(collectionError)
+        td.replace(api, 'get', get)
+        const options = {
+          payload: '001',
+          expectedMutations: [
+            {type: SET_NETWORK_BIOBANKS, payload: undefined},
+            {type: SET_NETWORK_COLLECTIONS, payload: undefined},
+            {type: SET_NETWORK_REPORT, payload: undefined},
+            {type: SET_LOADING, payload: true},
+            {type: SET_ERROR, payload: collectionError}
+          ]
+        }
+        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
+      })
+
+      it('should load network', done => {
+        const network = {
           _meta: {
             name: 'meta'
           },
@@ -601,17 +622,42 @@ describe('store', () => {
           name: 'beautiful network',
           description: 'beautiful data'
         }
-
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenResolve(response)
-        td.replace(api, 'get', get)
+        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenResolve(network)
 
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
+        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenReturn(neverReturningPromise)
+        td.replace(api, 'get', get)
         const options = {
           payload: '001',
           expectedMutations: [
+            {type: SET_NETWORK_BIOBANKS, payload: undefined},
+            {type: SET_NETWORK_COLLECTIONS, payload: undefined},
+            {type: SET_NETWORK_REPORT, payload: undefined},
             {type: SET_LOADING, payload: true},
-            {type: SET_NETWORK_REPORT, payload: response},
+            {type: SET_NETWORK_REPORT, payload: network},
             {type: SET_LOADING, payload: false}
+          ]
+        }
+        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
+      })
+
+      it('should retrieve the collections and biobanks of a network from the server based on a network id and store them in the state', done => {
+        const get = td.function('api.get')
+        const networkPromise = new Promise(() => {})
+        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(networkPromise)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenResolve([{id: 'bb-1'}])
+        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve([{id: 'col-1'}])
+        td.replace(api, 'get', get)
+        const options = {
+          payload: '001',
+          expectedMutations: [
+            {type: SET_NETWORK_BIOBANKS, payload: undefined},
+            {type: SET_NETWORK_COLLECTIONS, payload: undefined},
+            {type: SET_NETWORK_REPORT, payload: undefined},
+            {type: SET_LOADING, payload: true},
+            {type: SET_NETWORK_COLLECTIONS, payload: [{id: 'col-1'}]},
+            {type: SET_NETWORK_BIOBANKS, payload: [{id: 'bb-1'}]}
           ]
         }
         utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
