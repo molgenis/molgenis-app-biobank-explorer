@@ -549,7 +549,9 @@ describe('store', () => {
     describe('SET_NETWORK_REPORT', () => {
       it('should set the network report value in the state with the payload', () => {
         const state = {
-          networkReport: undefined
+          networkReport: {
+            network: undefined
+          }
         }
 
         const payload = {
@@ -563,7 +565,7 @@ describe('store', () => {
 
         mutations.__SET_NETWORK_REPORT__(state, payload)
 
-        expect(state.networkReport).to.deep.equal(payload)
+        expect(state.networkReport.network).to.deep.equal(payload)
       })
     })
 
