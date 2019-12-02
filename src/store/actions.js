@@ -203,8 +203,8 @@ export default {
       return
     }
     commit(SET_LOADING, true)
-    api.get(`${BIOBANK_API_PATH}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*&q=id==${biobankId}`).then(response => {
-      commit(SET_BIOBANK_REPORT, response.items[0])
+    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*`).then(response => {
+      commit(SET_BIOBANK_REPORT, response)
       commit(SET_LOADING, false)
     }, error => {
       commit(SET_ERROR, error)

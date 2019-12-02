@@ -520,25 +520,22 @@ describe('store', () => {
 
     describe('GET_BIOBANK_REPORT', () => {
       it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', done => {
-        const response = {
-          meta: {
-            name: 'meta'
+        const biobank = {
+          _meta: {
+            name: 'biobank'
           },
-          items: [
-            {id: 'biobank-1'},
-            {id: 'biobank-2'}
-          ]
+          id: 'biobank-1'
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*&q=id==biobank-1')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks/biobank-1?attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*')).thenResolve(biobank)
         td.replace(api, 'get', get)
 
         const options = {
           payload: 'biobank-1',
           expectedMutations: [
             {type: SET_LOADING, payload: true},
-            {type: SET_BIOBANK_REPORT, payload: response.items[0]},
+            {type: SET_BIOBANK_REPORT, payload: biobank},
             {type: SET_LOADING, payload: false}
           ]
         }
