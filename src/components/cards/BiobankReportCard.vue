@@ -24,7 +24,8 @@
               <div class="col-md-8">
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
                 <h3>Collections</h3>
-                <div v-for="collection in collectionsData" :key="collection.id">
+                <div v-for="(collection, index) in collectionsData" :key="collection.id">
+                  <hr v-if="index"/>
                   <report-collection :collection="collection"></report-collection>
                 </div>
               </div>
