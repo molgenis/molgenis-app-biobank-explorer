@@ -573,7 +573,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -590,12 +590,13 @@ describe('store', () => {
 
     describe('GET_NETWORK_REPORT', () => {
       const neverReturningPromise = new Promise(() => {})
+      const collectionCall = '/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
       it('should set error', done => {
         const collectionError = new Error('No way!')
         const get = td.function('api.get')
         td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(neverReturningPromise)
         td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
-        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenReject(collectionError)
+        td.when(get(collectionCall)).thenReject(collectionError)
         td.replace(api, 'get', get)
         const options = {
           payload: '001',
@@ -623,7 +624,7 @@ describe('store', () => {
         td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenResolve(network)
 
         td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
-        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenReturn(neverReturningPromise)
+        td.when(get(collectionCall)).thenReturn(neverReturningPromise)
         td.replace(api, 'get', get)
         const options = {
           payload: '001',
@@ -644,7 +645,7 @@ describe('store', () => {
         const networkPromise = new Promise(() => {})
         td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(networkPromise)
         td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenResolve([{id: 'bb-1'}])
-        td.when(get('/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections,parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve([{id: 'col-1'}])
+        td.when(get(collectionCall)).thenResolve([{id: 'col-1'}])
         td.replace(api, 'get', get)
         const options = {
           payload: '001',

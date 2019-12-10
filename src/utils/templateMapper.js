@@ -138,12 +138,13 @@ export const mapCollectionsData = (collections) => {
       return {
         description: collection.description ? collection.description : undefined,
         parentCollection: collection.parent_collection,
-        subCollections: mapCollectionsData(collection.sub_collections),
+        // Max depth supported in current api call is sub-sub-collections, if you go deeper, you get an empty list
+        subCollections: collection.sub_collections && collection.sub_collections.length > 0 ? mapCollectionsData(collection.sub_collections) : [],
         name: collection.name,
         id: collection.id,
         content: {
           Size: {
-            value: collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
+            value: collection.order_of_magnitude && collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
             type: 'list',
             badgeColor: 'success'
           },
