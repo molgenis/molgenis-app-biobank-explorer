@@ -5,8 +5,10 @@ import ReportDetailsList from '@/components/report-components/ReportDetailsList'
 describe('ReportDetailsList', () => {
   let wrapper
   beforeEach(() => {
+    const stubs = ['router-link']
     wrapper = shallowMount(ReportDetailsList,
       {
+        stubs,
         propsData:
           {
             reportDetails: {
@@ -44,7 +46,7 @@ describe('ReportDetailsList', () => {
                 badgeColor: 'primary'
               },
               report: {
-                value: 'somelink',
+                value: '/biobank/somebiobank',
                 type: 'report'
               },
               string_with_key: {
@@ -83,7 +85,7 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('class="m-1 badge badge-primary">val3')
   })
   it('should contain report', () => {
-    expect(wrapper.html()).to.have.string('to="somelink"><i')
+    expect(wrapper.html()).to.have.string('to="/biobank/somebiobank"><i')
   })
   it('should contain string with key', () => {
     expect(wrapper.html()).to.have.string('string_with_key:')
