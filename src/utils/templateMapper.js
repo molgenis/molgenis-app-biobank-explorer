@@ -1,3 +1,6 @@
+export const getSize = (obj) => {
+  return obj.size ? [`${obj.size} samples`] : obj.order_of_magnitude && obj.order_of_magnitude.size ? [obj.order_of_magnitude.size] : []
+}
 export const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
 export const getNameOfHead = (element) => {
@@ -36,7 +39,7 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 export const mapDetailsTableContent = (report) => {
   return {
     Size: {
-      value: report.order_of_magnitude.size ? [report.order_of_magnitude.size] : [],
+      value: getSize(report),
       type: 'list',
       badgeColor: 'success'
     },
@@ -144,7 +147,7 @@ export const mapCollectionsData = (collections) => {
         id: collection.id,
         content: {
           Size: {
-            value: collection.order_of_magnitude && collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
+            value: getSize(collection),
             type: 'list',
             badgeColor: 'success'
           },
