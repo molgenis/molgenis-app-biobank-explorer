@@ -28,15 +28,16 @@
       </tr>
       <tr v-if="subCollection.sub_collections.length" :key="'subsubs-'+subCollection.id">
         <td colspan="5" class="sub-table-cell">
-          <b-button :class="visible ? null : 'collapsed'"
-                    :aria-expanded="visible ? 'true' : 'false'"
+          <b-button :class="visible[subCollection.id] ? null : 'collapsed'"
+                    :aria-expanded="visible[subCollection.id] ? 'true' : 'false'"
                     :aria-controls="'collapse-'+subCollection.id"
-                    @click="visible = !visible" class="m-1" size="sm" variant="primary">
-            <i class="fa fa-caret-down" aria-hidden="true" v-if="visible"></i>
+                    @click="toggleVisible(subCollection.id)" class="m-1" size="sm"
+                    variant="primary">
+            <i class="fa fa-caret-down" aria-hidden="true" v-if="visible[subCollection.id]"></i>
             <i class="fa fa-caret-right" aria-hidden="true" v-else></i>
             Sub collections
           </b-button>
-          <b-collapse :id="'collapse-' + subCollection.id" v-model="visible">
+          <b-collapse :id="'collapse-' + subCollection.id" v-model="visible[subCollection.id]">
             <sub-collections-table :subCollections="subCollection.sub_collections"
                                    :level="level+2"></sub-collections-table>
           </b-collapse>
@@ -85,7 +86,10 @@
     data () {
       return {
         columns: ['name', 'type', 'materials', 'quality', 'size'],
-        visible: false
+        visible: this.subCollections.reduce((result, subCollection) => {
+          result[subCollection.id] = false
+          return result
+        }, {})
       }
     },
     methods: {
@@ -94,6 +98,9 @@
       },
       getCollectionType (collection) {
         return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
+      },
+      toggleVisible (id) {
+        this.visible[id] = !this.visible[id]
       }
     },
     components: {
