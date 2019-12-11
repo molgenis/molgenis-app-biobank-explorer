@@ -1,39 +1,48 @@
 <template>
-  <table class="sub-collection-table">
+  <table class="sub-collection-table" :class="'ml-'+level">
     <thead>
-      <tr class="sub-table-row">
-        <th scope="col"></th>
-        <th scope="col">Subcollection</th>
-        <th scope="col">Type</th>
-        <th scope="col">Materials</th>
-        <th scope="col">Standards</th>
-        <th scope="col">#Samples</th>
-      </tr>
+    <tr class="sub-table-row">
+      <th scope="col">Subcollection</th>
+      <th scope="col">Type</th>
+      <th scope="col">Materials</th>
+      <th scope="col">Standards</th>
+      <th scope="col">#Samples</th>
+    </tr>
     </thead>
     <tbody>
-      <template v-for="subCollection in subCollections">
-        <tr class="sub-table-row" :key="subCollection.id">
-          <td></td>
-          <td class="table-text-content-columns-sub" v-for="column in columns" :key="column">
+    <template v-for="subCollection in subCollections">
+      <tr class="sub-table-row" :key="subCollection.id">
+        <td class="table-text-content-columns-sub" v-for="column in columns" :key="column">
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + subCollection.id">
                 {{subCollection[column]}}
               </router-link>
             </span>
-            <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
-            <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>
-            <span v-else-if="column === 'quality'">
+          <span v-else-if="column === 'type'">{{ getCollectionType(subCollection) }}</span>
+          <span v-else-if="column === 'materials'">{{ getCollectionMaterials(subCollection) }}</span>
+          <span v-else-if="column === 'quality'">
               <quality-column :qualities="subCollection[column]" :spacing=0></quality-column>
             </span>
-            <span v-else-if="column === 'size'">{{ subCollection[column] }}</span>
-          </td>
-        </tr>
-        <tr v-if="subCollection.sub_collections.length" :key="'subsubs-'+subCollection.id">
-          <td colspan="5" class="sub-table-cell">
-            <sub-collections-table :subCollections="subCollection.sub_collections"></sub-collections-table>
-          </td>
-        </tr>
-      </template>
+          <span v-else-if="column === 'size'">{{ subCollection[column] }}</span>
+        </td>
+      </tr>
+      <tr v-if="subCollection.sub_collections.length" :key="'subsubs-'+subCollection.id">
+        <td colspan="5" class="sub-table-cell">
+          <b-button :class="visible ? null : 'collapsed'"
+                    :aria-expanded="visible ? 'true' : 'false'"
+                    :aria-controls="'collapse-'+subCollection.id"
+                    @click="visible = !visible" class="m-1" size="sm" variant="primary">
+            <i class="fa fa-caret-down" aria-hidden="true" v-if="visible"></i>
+            <i class="fa fa-caret-right" aria-hidden="true" v-else></i>
+            Sub collections
+          </b-button>
+          <b-collapse :id="'collapse-' + subCollection.id" v-model="visible">
+            <sub-collections-table :subCollections="subCollection.sub_collections"
+                                   :level="level+2"></sub-collections-table>
+          </b-collapse>
+        </td>
+      </tr>
+    </template>
     </tbody>
   </table>
 </template>
@@ -67,11 +76,16 @@
       subCollections: {
         type: Array,
         required: true
+      },
+      level: {
+        default: 2,
+        type: Number
       }
     },
     data () {
       return {
-        columns: ['name', 'type', 'materials', 'quality', 'size']
+        columns: ['name', 'type', 'materials', 'quality', 'size'],
+        visible: false
       }
     },
     methods: {
