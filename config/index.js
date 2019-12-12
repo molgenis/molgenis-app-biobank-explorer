@@ -21,11 +21,15 @@ module.exports = {
       //   changeOrigin: true
       // },
       '/api': {
-        target: 'https://directory.bbmri-eric.eu',
+        target: 'https://renetrait.test.molgenis.org',
         changeOrigin: true
       },
       '/logout': {
-        target: 'https://directory.bbmri-eric.eu',
+        target: 'https://renetrait.test.molgenis.org',
+        changeOrigin: true
+      },
+      '/login': {
+        target: 'https://renetrait.test.molgenis.org',
         changeOrigin: true
       }
     },
