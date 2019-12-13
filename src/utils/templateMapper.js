@@ -1,3 +1,6 @@
+export const getSize = (obj) => {
+  return obj.size ? [`${obj.size} samples`] : obj.order_of_magnitude && obj.order_of_magnitude.size ? [obj.order_of_magnitude.size] : []
+}
 export const mapObjArrayToStringArrayIfExists = (obj) => obj ? obj.map((item) => item.label) : []
 export const mapUrl = (url) => url && (url.startsWith('http') ? url : 'http://' + url)
 export const getNameOfHead = (element) => {
@@ -36,7 +39,7 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 export const mapDetailsTableContent = (report) => {
   return {
     Size: {
-      value: report.order_of_magnitude.size ? [report.order_of_magnitude.size] : [],
+      value: getSize(report),
       type: 'list',
       badgeColor: 'success'
     },
@@ -138,12 +141,13 @@ export const mapCollectionsData = (collections) => {
       return {
         description: collection.description ? collection.description : undefined,
         parentCollection: collection.parent_collection,
-        subCollections: mapCollectionsData(collection.sub_collections),
+        // Max depth supported in current api call is sub-sub-collections, if you go deeper, you get an empty list
+        subCollections: collection.sub_collections && collection.sub_collections.length > 0 ? mapCollectionsData(collection.sub_collections) : [],
         name: collection.name,
         id: collection.id,
         content: {
           Size: {
-            value: collection.order_of_magnitude.size ? [collection.order_of_magnitude.size] : [],
+            value: getSize(collection),
             type: 'list',
             badgeColor: 'success'
           },

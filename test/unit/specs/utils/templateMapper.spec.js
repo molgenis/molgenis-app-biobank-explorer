@@ -8,6 +8,7 @@ import {
   mapContactInfo,
   mapNetworkData,
   mapUrl,
+  getSize,
   getNameOfHead
 } from '../../../../src/utils/templateMapper'
 
@@ -334,6 +335,23 @@ describe('templateMapper', () => {
     it('should do nothing if url starts with http', () => {
       const actual = mapUrl('http://molgenis.org')
       expect(actual).to.equal('http://molgenis.org')
+    })
+  })
+
+  describe('getSize', () => {
+    it('should return empty list if no size defined', () => {
+      const actual = getSize({})
+      expect(actual).to.deep.equal([])
+    })
+
+    it('should return size if size defined', () => {
+      const actual = getSize({size: '123', order_of_magnitude: {size: '100-200'}})
+      expect(actual).to.deep.equal(['123 samples'])
+    })
+
+    it('should return order_of_magnitude if size undefined', () => {
+      const actual = getSize({order_of_magnitude: {size: '100-200'}})
+      expect(actual).to.deep.equal(['100-200'])
     })
   })
 

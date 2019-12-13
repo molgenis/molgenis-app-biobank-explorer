@@ -1,10 +1,13 @@
 <template>
   <div :class="'mt-3 ml-'+(level)">
     <strong><a :href='"/collection/"+collection.id'>{{collection.name}}</a></strong>
-    <report-details-list :content="collection.content"></report-details-list>
-    <div v-if="collection.subCollections.length" class="m-3">
+    <report-details-list :reportDetails="collection.content"></report-details-list>
+    <div v-if="collection.subCollections && collection.subCollections.length > 0" class="m-3">
       <strong>Sub collections</strong>
-      <biobank-report-sub-collection :collection="collection.subCollections"></biobank-report-sub-collection>
+      <report-sub-collection v-for="subCollection in collection.subCollections"
+                                     :collection="subCollection"
+                                     :key="subCollection.id"
+                                     :level="level + 1"></report-sub-collection>
     </div>
   </div>
 </template>

@@ -12,10 +12,11 @@ module.exports = {
     assetsSubDirectory: '',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/login': {
-      //  target: 'https://bbmri.accept.molgenis.org/',
-      //  changeOrigin: true
-      //  },
+      '/login': {
+       target: 'https://directory.bbmri-eric.eu',
+       changeOrigin: true
+       },
+      // Don't do this on production
       // '/plugin/directory/export': {
       //   target: 'https://bbmri.accept.molgenis.org/',
       //   changeOrigin: true
