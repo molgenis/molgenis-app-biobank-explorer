@@ -4,10 +4,10 @@
     <report-details-list :reportDetails="collection.content"></report-details-list>
     <div v-if="collection.subCollections && collection.subCollections.length > 0" class="m-3">
       <strong>Sub collections</strong>
-      <biobank-report-sub-collection v-for="subCollection in collection.subCollections"
+      <report-sub-collection v-for="subCollection in collection.subCollections"
                                      :collection="subCollection"
                                      :key="subCollection.id"
-                                     :level="level + 1"></biobank-report-sub-collection>
+                                     :level="level + 1"></report-sub-collection>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
   import ReportDetailsList from '../report-components/ReportDetailsList.vue'
 
   export default {
-    name: 'biobank-report-sub-collection',
+    name: 'ReportSubCollection',
     components: {ReportDetailsList},
     props: {
       level: Number,
