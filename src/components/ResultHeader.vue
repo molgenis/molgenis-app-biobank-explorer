@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
-            <em>{{biobanks.length}} biobanks found</em>
+            <em>{{foundBiobanks}} biobanks found</em>
           </small>
         </div>
       </div>
@@ -44,7 +44,7 @@
   export default {
     name: 'search-box',
     computed: {
-      ...mapGetters(['biobanks', 'rsql'])
+      ...mapGetters(['foundBiobanks', 'rsql'])
     },
     components: {
       ActiveFilterList

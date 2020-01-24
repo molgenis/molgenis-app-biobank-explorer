@@ -20,7 +20,6 @@
         <small v-if="description" class="form-text text-muted">{{description}}</small>
       </div>
     </div>
-  </div>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 // Create an object type AppConfigurationException
-function AppConfigurationException (message: string) {
+function AppConfigurationException (message) {
   this.message = message
   this.name = 'ConfigurationException'
 }
@@ -16,6 +16,8 @@ export default {
   showCountryFacet: INITIAL_STATE.hasOwnProperty('showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
   allBiobanks: undefined,
+  foundBiobanks: undefined,
+  nextBiobankPage: undefined,
   collectionIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
   biobankReport: undefined,

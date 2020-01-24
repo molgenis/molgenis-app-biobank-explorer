@@ -11,6 +11,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
+    "lint:fix": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
     "debug": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --browsers=Chrome --single-run=false --auto-watch",
     "preversion": "yarn install; yarn unit",

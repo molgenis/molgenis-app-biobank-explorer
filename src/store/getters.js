@@ -1,17 +1,10 @@
-import { createRSQLQuery, filterCollectionTree } from './helpers'
-import _ from 'lodash'
+import { createRSQLQuery } from './helpers'
 
 export default {
-  loading: state => !(state.allBiobanks && state.collectionIds),
-  biobanks: (state, getters) => getters.loading ? [] : _.sortBy(
-    state.allBiobanks
-      .map(biobank => ({...biobank}))
-      .map((biobank) => {
-        biobank.collections = filterCollectionTree(state.collectionIds, biobank.collections)
-        return biobank
-      })
-      .filter(biobank => biobank.collections.length > 0),
-    'name'),
+  loading: state => !(state.allBiobanks),
+  biobanks: (state, getters) => getters.loading ? [] : state.allBiobanks
+    .map(biobank => ({...biobank})),
+  foundBiobanks: state => state.foundBiobanks,
   rsql: createRSQLQuery,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
