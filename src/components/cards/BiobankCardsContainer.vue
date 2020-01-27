@@ -58,7 +58,7 @@ import { GET_NEXT_BIOBANKS, GET_ALL_BIOBANKS } from '../../store/actions'
 
 export default {
   name: 'biobank-cards-container',
-  data () {
+  data() {
     return {
       currentPage: 1,
       pageSize: 10
@@ -78,10 +78,10 @@ export default {
       'getActiveFilters',
       'resetPage'
     ]),
-    isAnyFilterActive () {
+    isAnyFilterActive() {
       return Object.keys(this.getActiveFilters).length > 0
     },
-    currentBiobanks () {
+    currentBiobanks() {
       return this.biobanks.slice(
         this.pageSize * (this.currentPage - 1),
         this.pageSize * this.currentPage
@@ -92,11 +92,10 @@ export default {
     BiobankCard
   },
   watch: {
-    currentPage (newVal, oldVal) {
+    currentPage(newVal, oldVal) {
       const newPage = parseInt(newVal)
       const prevPage = parseInt(oldVal)
 
-      // if (!this.newResult) { // TODO: check when someone searches
       if (newPage > prevPage) {
         // user navigated a page within range
         if (newPage - 1 === prevPage || newPage - prevPage < 4) this.nextPage()
@@ -104,7 +103,7 @@ export default {
         else this.getAllBiobanks()
       }
     },
-    biobanks () {
+    biobanks() {
       if (this.resetPage) this.currentPage = 1
     }
   }

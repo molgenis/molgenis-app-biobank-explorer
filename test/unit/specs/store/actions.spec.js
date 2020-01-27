@@ -317,7 +317,7 @@ describe('store', () => {
     })
 
     describe('GET_ALL_BIOBANKS', () => {
-      it('should retrieve all biobanks from the server and store them in state', done => {
+      it('should retrieve all biobanks from the server', done => {
         const response = {
           nextHref: 'foo',
           items: [
@@ -334,7 +334,7 @@ describe('store', () => {
         const options = {
           expectedMutations: [
             {type: SET_FOUND_BIOBANKS, payload: undefined},
-            {type: SET_IS_PAGINATING, payload: false},
+            {type: SET_IS_PAGINATING, payload: true},
             {type: SET_ALL_BIOBANKS, payload: response.items},
             {type: SET_FOUND_BIOBANKS, payload: response.items.length},
             {type: SET_NEXT_PAGE, payload: response}

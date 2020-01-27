@@ -196,7 +196,7 @@ export default {
    */
   [GET_ALL_BIOBANKS] ({commit}) {
     commit(SET_FOUND_BIOBANKS, undefined)
-    commit(SET_IS_PAGINATING, false)
+    commit(SET_IS_PAGINATING, true)
     api.get(`${BIOBANK_API_PATH}?num=10000&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
       .then(response => {
         commit(SET_ALL_BIOBANKS, response.items)
