@@ -6,6 +6,7 @@ export default {
     .map(biobank => ({...biobank})),
   foundBiobanks: state => state.foundBiobanks,
   rsql: createRSQLQuery,
+  resetPage: state => !state.isPaginating,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
   getCollectionQualityOptions: state => state.collection_quality.options,

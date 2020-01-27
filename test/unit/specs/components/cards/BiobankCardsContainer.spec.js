@@ -17,6 +17,7 @@ describe('BiobankCardsContainer', () => {
       state: {},
       getters: {
         biobanks: () => biobanks,
+        resetPage: () => true,
         loading: () => true,
         getActiveFilters: () => activeFilters
       }
@@ -39,7 +40,7 @@ describe('BiobankCardsContainer', () => {
     expect(wrapper.vm.isAnyFilterActive).to.equal(false)
   })
 
-  it('should reset the currentPage to 1 if when the biobanks list changes', () => {
+  it('should reset the currentPage to 1 if when the biobanks list changes by a filter', () => {
     activeFilters = {}
     const wrapper = shallowMount(BiobankCardsContainer, {
       store,

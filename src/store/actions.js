@@ -21,10 +21,10 @@ import {
   SET_BIOBANK_QUALITY_BIOBANKS,
   SET_NETWORK_COLLECTIONS,
   SET_NETWORK_BIOBANKS,
-  SET_COLLECTION_IDS,
   SET_FOUND_BIOBANKS,
   SET_ALL_BIOBANKS,
-  SET_NEXT_PAGE
+  SET_NEXT_PAGE,
+  SET_IS_PAGINATING
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -186,7 +186,6 @@ export default {
       api.get(`${BIOBANK_API_PATH}?num=40&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
         .then(response => {
           helpers.BiobankResponseProcessor(commit, response)
-          commit(SET_COLLECTION_IDS, response.items.map(item => item.id))
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -197,6 +196,7 @@ export default {
    */
   [GET_ALL_BIOBANKS] ({commit}) {
     commit(SET_FOUND_BIOBANKS, undefined)
+    commit(SET_IS_PAGINATING, false)
     api.get(`${BIOBANK_API_PATH}?num=10000&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
       .then(response => {
         commit(SET_ALL_BIOBANKS, response.items)
@@ -209,11 +209,12 @@ export default {
   /**
    * Pagination
    */
-  [GET_NEXT_BIOBANKS] ({commit, dispatch, state}) {
+  [GET_NEXT_BIOBANKS] ({commit, state}) {
     if (state.nextBiobankPage) {
       api.get(state.nextBiobankPage)
         .then(response => {
           helpers.BiobankResponseProcessor(commit, response)
+          commit(SET_IS_PAGINATING, true)
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -224,6 +225,8 @@ export default {
    */
   [GET_COLLECTION_IDENTIFIERS] ({dispatch, commit, getters}) { // TODO: rename this function
     commit(SET_ALL_BIOBANKS, undefined)
+    commit(SET_IS_PAGINATING, false)
+
     if (!getters.rsql.length) { // when someone resets all filters, get initial again
       dispatch(GET_INITIAL_BIOBANKS)
     } else {

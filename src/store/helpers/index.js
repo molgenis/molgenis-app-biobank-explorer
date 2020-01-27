@@ -132,16 +132,6 @@ export const fixCollectionTree = (biobank) => ({
     .map(collection => fixSubCollectionTree(biobank.collections, collection.id))
 })
 
-export const filterCollectionTree = (collectionIds, collections) =>
-  collections.reduce(
-    (accumulator, collection) => {
-      const filteredSubCollections = filterCollectionTree(collectionIds, collection.sub_collections)
-      if (collectionIds.includes(collection.id) || filteredSubCollections.length) {
-        return [...accumulator, {...collection, sub_collections: filteredSubCollections}]
-      }
-      return accumulator
-    }, [])
-
 export const BiobankResponseProcessor = (commit, response) => {
   commit(APPEND_NEW_BIOBANKS, response.items) // need to append, because of lazy pagination
   commit(SET_FOUND_BIOBANKS, response.total)

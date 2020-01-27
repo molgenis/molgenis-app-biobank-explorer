@@ -71,7 +71,13 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['biobanks', 'foundBiobanks', 'loading', 'getActiveFilters']),
+    ...mapGetters([
+      'biobanks',
+      'foundBiobanks',
+      'loading',
+      'getActiveFilters',
+      'resetPage'
+    ]),
     isAnyFilterActive () {
       return Object.keys(this.getActiveFilters).length > 0
     },
@@ -97,6 +103,9 @@ export default {
         // user navigated to the end (will not work on biobanks > 10k)
         else this.getAllBiobanks()
       }
+    },
+    biobanks () {
+      if (this.resetPage) this.currentPage = 1
     }
   }
 }

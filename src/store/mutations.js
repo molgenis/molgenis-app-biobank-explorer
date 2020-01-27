@@ -19,7 +19,6 @@ export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
 export const APPEND_NEW_BIOBANKS = '__APPEND_NEW_BIOBANKS__'
 export const SET_FOUND_BIOBANKS = '__SET_FOUND_BIOBANKS__'
 export const SET_NEXT_PAGE = '__SET_NEXT_PAGE__'
-export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
 export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
@@ -30,6 +29,7 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
+export const SET_IS_PAGINATING = '__SET_IS_PAGINATING__'
 
 const combineCodeAndLabels = (diagnoses) => {
   return diagnoses.map(diagnosis => {
@@ -128,8 +128,8 @@ export default {
   [SET_NEXT_PAGE] (state, response) {
     state.nextBiobankPage = response.nextHref ? response.nextHref : undefined
   },
-  [SET_COLLECTION_IDS] (state, collectionIds) {
-    state.collectionIds = collectionIds
+  [SET_IS_PAGINATING] (state, status) {
+    state.isPaginating = status
   },
   /**
    * Store a single biobank in the state for showing a biobank report

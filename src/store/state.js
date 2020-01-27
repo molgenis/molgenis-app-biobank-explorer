@@ -18,7 +18,7 @@ export default {
   allBiobanks: undefined,
   foundBiobanks: undefined,
   nextBiobankPage: undefined,
-  collectionIds: undefined,
+  isPaginating: false,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
   biobankReport: undefined,
   collectionReport: undefined,
