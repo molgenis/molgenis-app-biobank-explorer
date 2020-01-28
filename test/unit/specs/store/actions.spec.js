@@ -2,11 +2,13 @@ import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions, {
   GET_ALL_BIOBANKS,
-  GET_COLLECTION_IDENTIFIERS,
+  FIND_BIOBANKS,
   GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
-  SEND_TO_NEGOTIATOR
+  SEND_TO_NEGOTIATOR,
+  GET_NEXT_BIOBANKS,
+  GET_INITIAL_BIOBANKS
 } from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
@@ -316,6 +318,35 @@ describe('store', () => {
       })
     })
 
+    describe('GET_INITIAL_BIOBANKS', () => {
+      it('should retrieve the first 40 biobanks from the server', done => {
+        const response = {
+          nextHref: 'foo',
+          items: [
+            {id: '1', name: 'biobank-1'},
+            {id: '2', name: 'biobank-2'},
+            {id: '3', name: 'biobank-3'}
+          ]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          getters: {
+            rsql: ''
+          },
+          expectedMutations: [
+            {type: SET_ALL_BIOBANKS, payload: response.items},
+            {type: SET_FOUND_BIOBANKS, payload: response.items.length},
+            {type: SET_NEXT_PAGE, payload: response}
+          ]
+        }
+        utils.testAction(actions[GET_INITIAL_BIOBANKS], options, done)
+      })
+    })
+
     describe('GET_ALL_BIOBANKS', () => {
       it('should retrieve all biobanks from the server', done => {
         const response = {
@@ -420,7 +451,7 @@ describe('store', () => {
       })
     })
 
-    describe('GET_COLLECTION_IDENTIFIERS', () => {
+    describe('FIND_BIOBANKS', () => {
       it('should retrieve biobanks with collections matching the filters', done => {
         const response = {
           nextHref: '',
@@ -447,7 +478,7 @@ describe('store', () => {
           ]
         }
 
-        utils.testAction(actions[GET_COLLECTION_IDENTIFIERS], options, done)
+        utils.testAction(actions[FIND_BIOBANKS], options, done)
       })
     })
 
@@ -500,6 +531,41 @@ describe('store', () => {
         }
 
         utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+      })
+    })
+
+    describe('GET_NEXT_BIOBANKS', () => {
+      it('should retrieve next biobanks and append these to the existing ones', done => {
+        const response = {
+          items: [
+            {id: 'additional-biobank1'},
+            {id: 'additional-biobank2'},
+            {id: 'additional-biobank3'},
+            {id: 'additional-biobank4'}
+          ]
+        }
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?start=40&num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=name=q="Cell%26Co";country=in=(A,B)'))
+          .thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const state = {
+          nextBiobankPage: '/api/v2/eu_bbmri_eric_biobanks?start=40&num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=name=q="Cell%26Co";country=in=(A,B)',
+          allBiobanks: [{id: 'biobank1'},
+            {id: 'biobank2'},
+            {id: 'biobank3'},
+            {id: 'biobank4'}]
+        }
+
+        const options = {
+          state: state,
+          expectedMutations: [
+            { type: APPEND_NEW_BIOBANKS, payload: response.items },
+            { type: SET_FOUND_BIOBANKS, payload: response.total },
+            { type: SET_NEXT_PAGE, payload: response }
+          ]
+        }
+        utils.testAction(actions[GET_NEXT_BIOBANKS], options, done)
       })
     })
 

@@ -36,7 +36,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import {
   GET_INITIAL_BIOBANKS,
-  GET_COLLECTION_IDENTIFIERS,
+  FIND_BIOBANKS,
   GET_QUERY
 } from '../store/actions'
 
@@ -53,13 +53,13 @@ export default {
   },
   watch: {
     rsql () {
-      this.getBiobankIdentifiers()
+      this.findBiobanks()
     }
   },
   methods: {
     ...mapActions({
       loadFirstPage: GET_INITIAL_BIOBANKS,
-      getBiobankIdentifiers: GET_COLLECTION_IDENTIFIERS,
+      findBiobanks: FIND_BIOBANKS,
       getQuery: GET_QUERY
     })
   },

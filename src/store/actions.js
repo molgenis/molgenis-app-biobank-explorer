@@ -41,7 +41,7 @@ export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
 export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
 export const GET_INITIAL_BIOBANKS = '__GET_INITIAL_BIOBANKS__'
 export const GET_NEXT_BIOBANKS = '__GET_NEXT_BIOBANKS__'
-export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
+export const FIND_BIOBANKS = '__FIND_BIOBANKS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
@@ -156,7 +156,7 @@ export default {
   /**
   * Get query
   */
-  [GET_QUERY] ({state, dispatch, commit}) { // TODO: look how it works
+  [GET_QUERY] ({state, dispatch, commit}) {
     if (Object.keys(state.route.query).length > 0) {
       if (state.route.query.diagnosis_available) {
         const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
@@ -185,7 +185,9 @@ export default {
     if (!getters.rsql.length) {
       api.get(`${BIOBANK_API_PATH}?num=40&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
         .then(response => {
-          helpers.BiobankResponseProcessor(commit, response)
+          commit(SET_ALL_BIOBANKS, response.items)
+          commit(SET_FOUND_BIOBANKS, response.total)
+          commit(SET_NEXT_PAGE, response)
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -223,7 +225,7 @@ export default {
   /**
    * Retrieve biobank identifiers for rsql value
    */
-  [GET_COLLECTION_IDENTIFIERS] ({dispatch, commit, getters}) { // TODO: rename this function
+  [FIND_BIOBANKS] ({dispatch, commit, getters}) { // TODO: rename this function
     commit(SET_ALL_BIOBANKS, undefined)
     commit(SET_IS_PAGINATING, false)
 
@@ -262,7 +264,7 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_NETWORK_REPORT] ({commit, dispatch, state}, networkId) {
+  [GET_NETWORK_REPORT] ({commit}, networkId) {
     commit(SET_NETWORK_BIOBANKS, undefined)
     commit(SET_NETWORK_COLLECTIONS, undefined)
     commit(SET_NETWORK_REPORT, undefined)
