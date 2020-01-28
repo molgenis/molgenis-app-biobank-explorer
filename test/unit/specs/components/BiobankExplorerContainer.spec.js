@@ -1,5 +1,5 @@
 /* global describe it expect beforeEach */
-import { expect, mount, shallowMount } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BiobankExplorerContainer from '../../../../src/components/BiobankExplorerContainer'
 
@@ -61,8 +61,7 @@ describe('BiobankExplorerContainer', () => {
         findBiobanks: () => {},
         getQuery: () => ''
       })
-      console.log(wrapper.vm)
-      expect(wrapper.vm._watchers).toHaveBeenCalled()
+      // TODO: expect(wrapper.vm._watchers).toHaveBeenCalled()
     })
   })
 })
