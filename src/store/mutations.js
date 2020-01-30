@@ -128,8 +128,8 @@ export default {
   [SET_NEXT_PAGE] (state, response) {
     state.nextBiobankPage = response.nextHref ? response.nextHref : undefined
   },
-  [SET_IS_PAGINATING] (state, status) {
-    state.isPaginating = status
+  [SET_IS_PAGINATING] (state, isPaginating) {
+    state.isPaginating = isPaginating
   },
   /**
    * Store a single biobank in the state for showing a biobank report

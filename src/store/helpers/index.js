@@ -23,7 +23,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('collections.type', state.type.filters),
     createInQuery('collections.data_categories', state.dataType.filters),
     createInQuery('collections.diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
-    createInQuery('collections.quality', state.collection_quality.collections),
+    createInQuery('collections', state.collection_quality.collections),
     createInQuery('id', state.biobank_quality.biobanks),
     state.search ? [{
       operator: 'OR',
@@ -118,7 +118,7 @@ const getLocationHref = () => window.location.href
 
 const fixSubCollectionTree = (collections, collectionId) => {
   const collection = collections.find(c => c.id === collectionId)
-  let subCollections = collection.sub_collections
+  const subCollections = collection.sub_collections
     .map(subCollection => fixSubCollectionTree(collections, subCollection.id))
   return {
     ...collection,

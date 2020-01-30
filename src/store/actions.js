@@ -225,10 +225,9 @@ export default {
   /**
    * Retrieve biobank identifiers for rsql value
    */
-  [FIND_BIOBANKS] ({dispatch, commit, getters}) { // TODO: rename this function
+  [FIND_BIOBANKS] ({dispatch, commit, getters}) {
     commit(SET_ALL_BIOBANKS, undefined)
     commit(SET_IS_PAGINATING, false)
-
     if (!getters.rsql.length) { // when someone resets all filters, get initial again
       dispatch(GET_INITIAL_BIOBANKS)
     } else {
