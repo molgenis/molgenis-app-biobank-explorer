@@ -115,7 +115,7 @@ describe('store', () => {
         state.collection_quality.collections.push('collection1')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'collections.quality=in=(collection1)'
+        const expected = 'collections=in=(collection1)'
 
         expect(actual).to.equal(expected)
       })
