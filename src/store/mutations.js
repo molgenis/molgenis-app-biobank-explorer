@@ -16,7 +16,9 @@ export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
 export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
-export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
+export const APPEND_NEW_BIOBANKS = '__APPEND_NEW_BIOBANKS__'
+export const SET_FOUND_BIOBANKS = '__SET_FOUND_BIOBANKS__'
+export const SET_NEXT_PAGE = '__SET_NEXT_PAGE__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
 export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
@@ -27,8 +29,7 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
-
-export const SET_LAST_URL = '__SET_LAST_URL__'
+export const SET_IS_PAGINATING = '__SET_IS_PAGINATING__'
 
 const combineCodeAndLabels = (diagnoses) => {
   return diagnoses.map(diagnosis => {
@@ -107,10 +108,28 @@ export default {
     state.dataType.filters = []
   },
   [SET_ALL_BIOBANKS] (state, biobanks) {
-    state.allBiobanks = biobanks.map(fixCollectionTree)
+    if (biobanks) {
+      state.allBiobanks = biobanks.map(fixCollectionTree)
+    } else {
+      state.allBiobanks = undefined // if a search gives no results, clear it
+    }
   },
-  [SET_COLLECTION_IDS] (state, collectionIds) {
-    state.collectionIds = collectionIds
+  [APPEND_NEW_BIOBANKS] (state, biobanks) {
+    const newFoundBiobanks = biobanks.map(fixCollectionTree)
+    if (state.allBiobanks) {
+      state.allBiobanks = state.allBiobanks.concat(newFoundBiobanks)
+    } else {
+      state.allBiobanks = newFoundBiobanks
+    }
+  },
+  [SET_FOUND_BIOBANKS] (state, total) {
+    state.foundBiobanks = total
+  },
+  [SET_NEXT_PAGE] (state, response) {
+    state.nextBiobankPage = response.nextHref ? response.nextHref : undefined
+  },
+  [SET_IS_PAGINATING] (state, isPaginating) {
+    state.isPaginating = isPaginating
   },
   /**
    * Store a single biobank in the state for showing a biobank report

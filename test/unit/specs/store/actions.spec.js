@@ -2,17 +2,19 @@ import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import actions, {
   GET_ALL_BIOBANKS,
-  GET_COLLECTION_IDENTIFIERS,
+  FIND_BIOBANKS,
   GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
-  SEND_TO_NEGOTIATOR
+  SEND_TO_NEGOTIATOR,
+  GET_NEXT_BIOBANKS,
+  GET_INITIAL_BIOBANKS
 } from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
   MAP_QUERY_TO_STATE,
   SET_ALL_BIOBANKS,
-  SET_COLLECTION_IDS,
+  SET_FOUND_BIOBANKS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_REPORT,
   SET_COLLECTION_QUALITY,
@@ -26,7 +28,7 @@ import {
   SET_MATERIALS,
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY, SET_NETWORK_BIOBANKS, SET_NETWORK_COLLECTIONS
+  SET_BIOBANK_QUALITY, SET_NETWORK_BIOBANKS, SET_NETWORK_COLLECTIONS, SET_IS_PAGINATING, SET_NEXT_PAGE, APPEND_NEW_BIOBANKS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -316,9 +318,10 @@ describe('store', () => {
       })
     })
 
-    describe('GET_ALL_BIOBANKS', () => {
-      it('should retrieve all biobanks from the server and store them in state', done => {
+    describe('GET_INITIAL_BIOBANKS', () => {
+      it('should retrieve the first 40 biobanks from the server', done => {
         const response = {
+          nextHref: 'foo',
           items: [
             {id: '1', name: 'biobank-1'},
             {id: '2', name: 'biobank-2'},
@@ -327,12 +330,45 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*')).thenResolve(response)
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          getters: {
+            rsql: ''
+          },
+          expectedMutations: [
+            {type: SET_ALL_BIOBANKS, payload: response.items},
+            {type: SET_FOUND_BIOBANKS, payload: response.items.length},
+            {type: SET_NEXT_PAGE, payload: response}
+          ]
+        }
+        utils.testAction(actions[GET_INITIAL_BIOBANKS], options, done)
+      })
+    })
+
+    describe('GET_ALL_BIOBANKS', () => {
+      it('should retrieve all biobanks from the server', done => {
+        const response = {
+          nextHref: 'foo',
+          items: [
+            {id: '1', name: 'biobank-1'},
+            {id: '2', name: 'biobank-2'},
+            {id: '3', name: 'biobank-3'}
+          ]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*')).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           expectedMutations: [
-            {type: SET_ALL_BIOBANKS, payload: response.items}
+            {type: SET_FOUND_BIOBANKS, payload: undefined},
+            {type: SET_IS_PAGINATING, payload: true},
+            {type: SET_ALL_BIOBANKS, payload: response.items},
+            {type: SET_FOUND_BIOBANKS, payload: response.items.length},
+            {type: SET_NEXT_PAGE, payload: response}
           ]
         }
 
@@ -415,9 +451,11 @@ describe('store', () => {
       })
     })
 
-    describe('GET_COLLECTION_IDENTIFIERS', () => {
-      it('should retrieve biobank ids from the server based on a set of filters', done => {
+    describe('FIND_BIOBANKS', () => {
+      it('should retrieve biobanks with collections matching the filters', done => {
         const response = {
+          nextHref: '',
+          total: 2,
           items: [
             {biobank: {id: 'biobank-1'}},
             {biobank: {id: 'biobank-2'}}
@@ -425,44 +463,22 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections?num=10000&attrs=~id&q=name=q="Cell%26Co";country=in=(A,B)'))
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=name=q="Cell%26Co";country=in=(A,B)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           getters: {rsql: 'name=q="Cell&Co";country=in=(A,B)'},
           expectedMutations: [
-            {type: SET_COLLECTION_IDS, payload: ['biobank-1', 'biobank-2']}
+            { type: SET_ALL_BIOBANKS, payload: undefined },
+            { type: SET_IS_PAGINATING, payload: false },
+            { type: APPEND_NEW_BIOBANKS, payload: response.items },
+            { type: SET_FOUND_BIOBANKS, payload: response.total },
+            { type: SET_NEXT_PAGE, payload: response }
           ]
         }
 
-        utils.testAction(actions[GET_COLLECTION_IDENTIFIERS], options, done)
-      })
-
-      it('should select all biobanks if filters are empty', done => {
-        const options = {
-          getters: {rsql: ''},
-          state: {
-            allBiobanks: [
-              {
-                id: 'biobank-1',
-                name: 'Biobank B',
-                collections: [{id: 'collection-1'}]
-
-              },
-              {
-                id: 'biobank-2',
-                name: 'Biobank A',
-                collections: [{id: 'collection-2'}]
-              }
-            ]
-          },
-          expectedMutations: [
-            {type: SET_COLLECTION_IDS, payload: ['collection-1', 'collection-2']}
-          ]
-        }
-
-        utils.testAction(actions[GET_COLLECTION_IDENTIFIERS], options, done)
+        utils.testAction(actions[FIND_BIOBANKS], options, done)
       })
     })
 
@@ -515,6 +531,41 @@ describe('store', () => {
         }
 
         utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+      })
+    })
+
+    describe('GET_NEXT_BIOBANKS', () => {
+      it('should retrieve next biobanks and append these to the existing ones', done => {
+        const response = {
+          items: [
+            {id: 'additional-biobank1'},
+            {id: 'additional-biobank2'},
+            {id: 'additional-biobank3'},
+            {id: 'additional-biobank4'}
+          ]
+        }
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_biobanks?start=40&num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=name=q="Cell%26Co";country=in=(A,B)'))
+          .thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const state = {
+          nextBiobankPage: '/api/v2/eu_bbmri_eric_biobanks?start=40&num=40&sort=name:asc&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=name=q="Cell%26Co";country=in=(A,B)',
+          allBiobanks: [{id: 'biobank1'},
+            {id: 'biobank2'},
+            {id: 'biobank3'},
+            {id: 'biobank4'}]
+        }
+
+        const options = {
+          state: state,
+          expectedMutations: [
+            { type: APPEND_NEW_BIOBANKS, payload: response.items },
+            { type: SET_FOUND_BIOBANKS, payload: response.total },
+            { type: SET_NEXT_PAGE, payload: response }
+          ]
+        }
+        utils.testAction(actions[GET_NEXT_BIOBANKS], options, done)
       })
     })
 

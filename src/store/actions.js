@@ -2,9 +2,8 @@ import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
 import utils from '../utils'
 import 'array-flat-polyfill'
+
 import {
-  SET_ALL_BIOBANKS,
-  SET_COLLECTION_IDS,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_REPORT,
   SET_NETWORK_REPORT,
@@ -21,7 +20,11 @@ import {
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
   SET_NETWORK_COLLECTIONS,
-  SET_NETWORK_BIOBANKS
+  SET_NETWORK_BIOBANKS,
+  SET_FOUND_BIOBANKS,
+  SET_ALL_BIOBANKS,
+  SET_NEXT_PAGE,
+  SET_IS_PAGINATING
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -36,12 +39,15 @@ export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OP
 export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
 export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
 export const GET_ALL_BIOBANKS = '__GET_ALL_BIOBANKS__'
-export const GET_COLLECTION_IDENTIFIERS = '__GET_COLLECTION_IDENTIFIERS__'
+export const GET_INITIAL_BIOBANKS = '__GET_INITIAL_BIOBANKS__'
+export const GET_NEXT_BIOBANKS = '__GET_NEXT_BIOBANKS__'
+export const FIND_BIOBANKS = '__FIND_BIOBANKS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
+/**/
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -56,9 +62,12 @@ const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
+/**/
 
+/* Query Parameters */
 const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
 const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
+/**/
 
 export default {
   /**
@@ -144,7 +153,9 @@ export default {
       commit(SET_BIOBANK_QUALITY_BIOBANKS, [])
     }
   },
-
+  /**
+  * Get query
+  */
   [GET_QUERY] ({state, dispatch, commit}) {
     if (Object.keys(state.route.query).length > 0) {
       if (state.route.query.diagnosis_available) {
@@ -165,17 +176,47 @@ export default {
     }
   },
   /**
-   * Retrieve biobanks with expanded collections based on a list of biobank ids
+   * Retrieve the first 40 biobanks with expanded collections
    *
    * @param commit
-   * @param biobanks
+   * @param getters
    */
-  [GET_ALL_BIOBANKS] ({commit, dispatch, state}) {
-    if (!state.allBiobanks) {
-      api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
+  [GET_INITIAL_BIOBANKS] ({commit, getters}) {
+    if (!getters.rsql.length) {
+      api.get(`${BIOBANK_API_PATH}?num=40&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
         .then(response => {
           commit(SET_ALL_BIOBANKS, response.items)
-          dispatch(GET_COLLECTION_IDENTIFIERS)
+          commit(SET_FOUND_BIOBANKS, response.total)
+          commit(SET_NEXT_PAGE, response)
+        }, error => {
+          commit(SET_ERROR, error)
+        })
+    }
+  },
+  /**
+   * Get All the Biobanks
+   */
+  [GET_ALL_BIOBANKS] ({commit}) {
+    commit(SET_FOUND_BIOBANKS, undefined)
+    commit(SET_IS_PAGINATING, true)
+    api.get(`${BIOBANK_API_PATH}?num=10000&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
+      .then(response => {
+        commit(SET_ALL_BIOBANKS, response.items)
+        commit(SET_FOUND_BIOBANKS, response.total)
+        commit(SET_NEXT_PAGE, response)
+      }, error => {
+        commit(SET_ERROR, error)
+      })
+  },
+  /**
+   * Pagination
+   */
+  [GET_NEXT_BIOBANKS] ({commit, state}) {
+    if (state.nextBiobankPage) {
+      api.get(state.nextBiobankPage)
+        .then(response => {
+          helpers.BiobankResponseProcessor(commit, response)
+          commit(SET_IS_PAGINATING, true)
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -184,14 +225,15 @@ export default {
   /**
    * Retrieve biobank identifiers for rsql value
    */
-  [GET_COLLECTION_IDENTIFIERS] ({state, commit, getters}) {
-    if (!getters.rsql.length) {
-      commit(SET_COLLECTION_IDS, state.allBiobanks.flatMap(biobank => biobank.collections.map(collection => collection.id)))
+  [FIND_BIOBANKS] ({dispatch, commit, getters}) {
+    commit(SET_ALL_BIOBANKS, undefined)
+    commit(SET_IS_PAGINATING, false)
+    if (!getters.rsql.length) { // when someone resets all filters, get initial again
+      dispatch(GET_INITIAL_BIOBANKS)
     } else {
-      commit(SET_COLLECTION_IDS, undefined)
-      api.get(`${COLLECTION_API_PATH}?num=10000&attrs=~id&q=${encodeRsqlValue(getters.rsql)}`)
+      api.get(`${BIOBANK_API_PATH}?num=40&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=${encodeRsqlValue(getters.rsql)}`) // need to fetch the collections, for filtering
         .then(response => {
-          commit(SET_COLLECTION_IDS, response.items.map(item => item.id))
+          helpers.BiobankResponseProcessor(commit, response)
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -221,7 +263,7 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_NETWORK_REPORT] ({commit, dispatch, state}, networkId) {
+  [GET_NETWORK_REPORT] ({commit}, networkId) {
     commit(SET_NETWORK_BIOBANKS, undefined)
     commit(SET_NETWORK_COLLECTIONS, undefined)
     commit(SET_NETWORK_REPORT, undefined)
