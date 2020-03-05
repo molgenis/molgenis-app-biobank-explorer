@@ -1,7 +1,8 @@
 import {
   APPEND_NEW_BIOBANKS,
   SET_NEXT_PAGE,
-  SET_FOUND_BIOBANKS
+  SET_FOUND_BIOBANKS,
+  SET_ALL_BIOBANKS
 } from '../mutations'
 
 import { createInQuery } from '../../utils'
@@ -133,6 +134,12 @@ export const fixCollectionTree = (biobank) => ({
 })
 
 export const BiobankResponseProcessor = (commit, response) => {
+  commit(SET_ALL_BIOBANKS, response.items)
+  commit(SET_FOUND_BIOBANKS, response.total)
+  commit(SET_NEXT_PAGE, response)
+}
+
+export const BiobankPagination = (commit, response) => {
   commit(APPEND_NEW_BIOBANKS, response.items) // need to append, because of lazy pagination
   commit(SET_FOUND_BIOBANKS, response.total)
   commit(SET_NEXT_PAGE, response)
@@ -148,5 +155,6 @@ export default {
   setLocationHref,
   getLocationHref,
   CODE_REGEX,
-  BiobankResponseProcessor
+  BiobankResponseProcessor,
+  BiobankPagination
 }
