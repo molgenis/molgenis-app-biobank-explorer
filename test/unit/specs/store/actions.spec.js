@@ -472,7 +472,7 @@ describe('store', () => {
           expectedMutations: [
             { type: SET_ALL_BIOBANKS, payload: undefined },
             { type: SET_IS_PAGINATING, payload: false },
-            { type: APPEND_NEW_BIOBANKS, payload: response.items },
+            { type: SET_ALL_BIOBANKS, payload: response.items },
             { type: SET_FOUND_BIOBANKS, payload: response.total },
             { type: SET_NEXT_PAGE, payload: response }
           ]

@@ -208,12 +208,10 @@ export default {
    */
   [GET_NEXT_BIOBANKS] ({commit, state}) {
     if (state.nextBiobankPage) {
-      commit(SET_LOADING, true)
       api.get(state.nextBiobankPage)
         .then(response => {
           helpers.BiobankPagination(commit, response)
           commit(SET_IS_PAGINATING, true)
-          commit(SET_LOADING, false)
         }, error => {
           commit(SET_ERROR, error)
         })
