@@ -2,8 +2,7 @@ import { createRSQLQuery } from './helpers'
 
 export default {
   loading: state => !(state.allBiobanks),
-  biobanks: (state, getters) => getters.loading ? [] : state.allBiobanks
-    .map(biobank => ({...biobank})),
+  biobanks: (state, getters) => getters.loading || !state.allBiobanks ? [] : state.allBiobanks.map(biobank => ({...biobank})),
   foundBiobanks: state => state.foundBiobanks,
   rsql: createRSQLQuery,
   resetPage: state => !state.isPaginating,
