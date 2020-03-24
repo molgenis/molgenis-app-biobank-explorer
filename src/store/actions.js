@@ -24,7 +24,8 @@ import {
   SET_FOUND_BIOBANKS,
   SET_ALL_BIOBANKS,
   SET_NEXT_PAGE,
-  SET_IS_PAGINATING
+  SET_IS_PAGINATING,
+  SET_COVID_19
 } from './mutations'
 import { encodeRsqlValue } from '@molgenis/rsql'
 
@@ -35,6 +36,7 @@ export const GET_COLLECTION_QUALITY_OPTIONS = '__GET_COLLECTION_QUALITY_OPTIONS_
 export const GET_BIOBANK_QUALITY_OPTIONS = '__GET_BIOBANK_QUALITY_OPTIONS__'
 export const GET_TYPES_OPTIONS = '__GET_TYPES_OPTIONS__'
 export const GET_DATA_TYPE_OPTIONS = '__GET_DATA_TYPE_OPTIONS__'
+export const GET_COVID_19_OPTIONS = '__GET_COVID_19_OPTIONS__'
 export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__'
 export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
 export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
@@ -62,11 +64,12 @@ const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
+const COVID_19_API_PATH = '/api/v2/eu_bbmri_eric_COVID_19'
 /**/
 
 /* Query Parameters */
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
-const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories,network(*))'
+const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories'
 /**/
 
 export default {
@@ -112,6 +115,13 @@ export default {
   [GET_BIOBANK_QUALITY_OPTIONS] ({commit}) {
     api.get(BIOBANK_QUALITY_API_PATH).then(response => {
       commit(SET_BIOBANK_QUALITY, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_COVID_19_OPTIONS] ({commit}) {
+    api.get(COVID_19_API_PATH).then(response => {
+      commit(SET_COVID_19, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })

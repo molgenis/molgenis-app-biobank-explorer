@@ -44,6 +44,10 @@ export default {
     options: [],
     collections: []
   },
+  covid19: {
+    filters: [],
+    options: []
+  },
   biobank_quality: {
     filters: [],
     options: [],
