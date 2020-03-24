@@ -28,7 +28,7 @@ import {
   SET_MATERIALS,
   SET_COLLECTION_QUALITY_COLLECTIONS,
   SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY, SET_NETWORK_BIOBANKS, SET_NETWORK_COLLECTIONS, SET_IS_PAGINATING, SET_NEXT_PAGE, APPEND_NEW_BIOBANKS
+  SET_BIOBANK_QUALITY, SET_NETWORK_BIOBANKS, SET_NETWORK_COLLECTIONS, SET_IS_PAGINATING, SET_NEXT_PAGE, APPEND_NEW_BIOBANKS, SET_COVID_19
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -192,6 +192,27 @@ describe('store', () => {
         }
 
         utils.testAction(actions.__GET_BIOBANK_QUALITY_OPTIONS__, options, done)
+      })
+    })
+
+    describe('GET_COVID_19_OPTIONS', () => {
+      it('should retrieve list of available covid19 options from the server and store them in the state', done => {
+        const response = {
+          items: [
+            {id: 'covid19', label: 'Member of the COVID-19 network'}]
+        }
+
+        const get = td.function('api.get')
+        td.when(get('/api/v2/eu_bbmri_eric_COVID_19')).thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          expectedMutations: [
+            {type: SET_COVID_19, payload: response.items}
+          ]
+        }
+
+        utils.testAction(actions.__GET_COVID_19_OPTIONS__, options, done)
       })
     })
 

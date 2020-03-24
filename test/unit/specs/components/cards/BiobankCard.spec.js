@@ -37,4 +37,13 @@ describe('BiobankCard', () => {
     const wrapper = shallowMount(BiobankCard, {propsData, stubs})
     expect(wrapper.vm.collectionTypes).to.equal('col-type-a, col-type-b')
   })
+  it('should expose a list of covid19 types if available', () => {
+    propsData.biobank.covid19biobank = [{label: 'Member of the COVID-19 network'}, {name: 'COVID-19'}]
+    const wrapper = shallowMount(BiobankCard, {propsData, stubs})
+    expect(wrapper.vm.availableCovidTypes).to.equal('Member of the COVID-19 network, COVID-19')
+  })
+  it('should return nothing if covid types are not available', () => {
+    const wrapper = shallowMount(BiobankCard, {propsData, stubs})
+    expect(wrapper.vm.availableCovidTypes).to.equal(undefined)
+  })
 })
