@@ -6,11 +6,14 @@
       :initiallyCollapsed="!$store.state.route.query.search"
       placeholder
       description="search by name, id, acronym and press enter"
-    ></string-filter><checkbox-filters
-    :key="covidFilter.name"
-    v-bind="covidFilter"
-    :value="covidFilter.filters"
-    @input="value => filterChange(covidFilter.name, value)"
+    ></string-filter>
+    <checkbox-filters
+      class="covid-filter"
+      :key="covidFilter.name"
+      v-bind="covidFilter"
+      :value="covidFilter.filters"
+      :important="true"
+      @input="value => filterChange(covidFilter.name, value)"
     />
     <diagnosis-available-filters></diagnosis-available-filters>
     <checkbox-filters
@@ -70,10 +73,10 @@ export default {
       covid19Options: 'getCovid19Options'
     }),
     search: {
-      get () {
+      get() {
         return this.$store.state.search
       },
-      set (search) {
+      set(search) {
         const updatedRouteQuery = Object.assign(
           {},
           this.$store.state.route.query,
@@ -83,7 +86,7 @@ export default {
         this.$store.commit(SET_SEARCH, search)
       }
     },
-    covidFilter () {
+    covidFilter() {
       return {
         name: 'covid19',
         label: 'COVID-19',
@@ -93,7 +96,7 @@ export default {
         maxVisibleOptions: 4
       }
     },
-    filters () {
+    filters() {
       return [
         {
           name: 'materials',
@@ -150,7 +153,7 @@ export default {
   },
   methods: {
     ...mapMutations({ updateFilter: UPDATE_FILTER }),
-    filterChange (name, filters) {
+    filterChange(name, filters) {
       this.updateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
@@ -164,7 +167,7 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.$store.dispatch(GET_COUNTRY_OPTIONS)
     this.$store.dispatch(GET_MATERIALS_OPTIONS)
     this.$store.dispatch(GET_COLLECTION_QUALITY_OPTIONS)

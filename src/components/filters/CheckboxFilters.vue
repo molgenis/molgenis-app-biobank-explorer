@@ -1,6 +1,6 @@
 <template>
   <b-card class="filter-card" no-body v-if="options.length">
-    <b-card-header class="filter-header" v-b-toggle="'filter-card-'+name">
+    <b-card-header class="filter-header" :class="important ? 'bg-warning text-white' : ''" v-b-toggle="'filter-card-'+name">
       <i class="fa fa-caret-right when-closed" aria-hidden="true"></i>
       <i class="fa fa-caret-down when-opened" aria-hidden="true"></i>
       {{label}}
@@ -37,7 +37,8 @@
       options: Array,
       value: Array,
       initiallyCollapsed: Boolean,
-      maxVisibleOptions: Number
+      maxVisibleOptions: Number,
+      important: Boolean
     },
     computed: {
       selection: {
