@@ -12,7 +12,7 @@
           <small v-if="biobank.quality && biobank.quality.length > 0">
             <quality-column :qualities="biobank.quality" :spacing="0"></quality-column>
           </small>
-          <span v-if="biobank.covid19biobank.length > 0">
+          <span v-if="biobank.covid19biobank && biobank.covid19biobank.length > 0">
             <b-img
               class="biobank-icon covid-icon"
               :src="require('../../assets/custom_icons/covid19.png')"
@@ -85,13 +85,13 @@ export default {
       default: true
     }
   },
-  data() {
+  data () {
     return {
       collapsed: this.initCollapsed
     }
   },
   computed: {
-    collectionTypes() {
+    collectionTypes () {
       const getSubCollections = collection => [
         collection,
         ...collection.sub_collections.flatMap(getSubCollections)
@@ -102,8 +102,11 @@ export default {
         .map(type => type.label)
       return utils.getUniqueIdArray(types).join(', ')
     },
-    availableCovidTypes() {
-      if (this.biobank.covid19biobank.length > 0) {
+    availableCovidTypes () {
+      if (
+        this.biobank.covid19biobank &&
+        this.biobank.covid19biobank.length > 0
+      ) {
         return this.biobank.covid19biobank
           .map(covidItem => covidItem.label || covidItem.name)
           .join(', ')

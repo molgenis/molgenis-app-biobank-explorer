@@ -188,6 +188,10 @@ describe('store', () => {
             filters: ['type'],
             options: [{id: 'type'}]
           },
+          covid19: {
+            filters: ['covid19'],
+            options: [{id: 'covid19'}]
+          },
           dataType: {
             filters: ['type'],
             options: [{id: 'type'}]
@@ -216,6 +220,10 @@ describe('store', () => {
           type: {
             filters: [],
             options: [{id: 'type'}]
+          },
+          covid19: {
+            filters: [],
+            options: [{id: 'covid19'}]
           },
           dataType: {
             filters: [],
