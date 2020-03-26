@@ -195,9 +195,7 @@ export default {
     if (!getters.rsql.length) {
       api.get(`${BIOBANK_API_PATH}?num=40&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
         .then(response => {
-          commit(SET_ALL_BIOBANKS, response.items)
-          commit(SET_FOUND_BIOBANKS, response.total)
-          commit(SET_NEXT_PAGE, response)
+          helpers.BiobankResponseProcessor(commit, response)
         }, error => {
           commit(SET_ERROR, error)
         })
@@ -211,9 +209,7 @@ export default {
     commit(SET_IS_PAGINATING, true)
     api.get(`${BIOBANK_API_PATH}?num=10000&sort=name:asc&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*`)
       .then(response => {
-        commit(SET_ALL_BIOBANKS, response.items)
-        commit(SET_FOUND_BIOBANKS, response.total)
-        commit(SET_NEXT_PAGE, response)
+        helpers.BiobankResponseProcessor(commit, response)
       }, error => {
         commit(SET_ERROR, error)
       })
@@ -225,7 +221,7 @@ export default {
     if (state.nextBiobankPage) {
       api.get(state.nextBiobankPage)
         .then(response => {
-          helpers.BiobankResponseProcessor(commit, response)
+          helpers.BiobankPagination(commit, response)
           commit(SET_IS_PAGINATING, true)
         }, error => {
           commit(SET_ERROR, error)
