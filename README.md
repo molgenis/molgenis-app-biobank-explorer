@@ -150,3 +150,59 @@ yarn build
 ```
 
 You can find the zip-file in the ```dist/molgenis-app-biobank-explorer.zip```.
+
+## Create a preview image
+To make a standalone docker image that can be run from the Rancher Cluster perform the following steps:
+
+```
+yarn preview
+```
+
+Then build the image with Docker (you have to have Docker running) with the following (tag is required):
+
+```
+docker build -t {tag} .
+```
+
+Then login to the registry
+
+```
+docker login {registry-adress}:{port}
+
+```
+
+Create a registry tag for the image
+
+```
+docker tag {tag} {registry-adress}:{port}/{imagename}:{optional tag}
+```
+
+Now login with username and password
+
+Then upload the image to the registry
+(now you need the tag)
+
+```
+docker push {registry-adress}:{port}/{imagename}:{optional tag}
+```
+
+Now it's available from Rancher.
+
+Go to Rancher, select correct cluster
+
+* workloads > deploy
+* Name > name for your workload
+* image > {registry-adress}/{imagename}:{optional tag}
+* select correct namespace
+* Add port > portname: http, publish port: 80, as a: cluster-ip
+* env variable: API {molgenis instance you want e.g. molgenis1}
+* launch
+
+* workloads > loadbalancing
+* add ingress
+* website name {description}
+* specify hostname: {logicalname}.dev.molgenis.org
+* path /, target your created workload, port 80
+* save
+
+Done!

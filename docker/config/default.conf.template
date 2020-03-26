@@ -2,7 +2,7 @@ server {
   server_name localhost;
 
   location /api {
-    proxy_pass https://${API_HOST}.gcc.rug.nl;
+    proxy_pass https://${API}.gcc.rug.nl;
     proxy_set_header  Host $http_host;
   }
   location / {
