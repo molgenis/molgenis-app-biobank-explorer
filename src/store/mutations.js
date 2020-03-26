@@ -11,6 +11,7 @@ export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const SET_SEARCH = '__SET_SEARCH__'
 export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLLECTIONS__'
 export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
+export const SET_COVID_19 = '__SET_COVID_19__'
 
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
@@ -82,6 +83,9 @@ export default {
   [SET_BIOBANK_QUALITY_BIOBANKS] (state, biobanks) {
     state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
   },
+  [SET_COVID_19] (state, covid19) {
+    state.covid19.options = covid19.map(covOption => { return { id: covOption.id, label: covOption.label || covOption.name } })
+  },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
    * so they can be used for 1) the URL and 2) retrieving biobanks based on IDs
@@ -106,6 +110,7 @@ export default {
     state.biobank_quality.biobanks = []
     state.type.filters = []
     state.dataType.filters = []
+    state.covid19.filters = []
   },
   [SET_ALL_BIOBANKS] (state, biobanks) {
     if (biobanks) {
@@ -189,6 +194,10 @@ export default {
 
     if (query.dataType) {
       state.dataType.filters = query.dataType.split(',')
+    }
+
+    if (query.covid19) {
+      state.covid19.filters = query.covid19.split(',')
     }
 
     if (query.nToken) {

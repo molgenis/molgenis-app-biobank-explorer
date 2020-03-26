@@ -15,6 +15,7 @@ describe('store', () => {
           biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []},
+          covid19: {filters: []},
           showCountryFacet: true
         }
 
@@ -32,6 +33,7 @@ describe('store', () => {
           biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []},
+          covid19: {filters: []},
           showCountryFacet: true
         }
         expect(getters.rsql(state)).to.equal('')
@@ -47,6 +49,7 @@ describe('store', () => {
           biobank_quality: {filters: [], biobanks: []},
           type: {filters: []},
           dataType: {filters: []},
+          covid19: {filters: []},
           showCountryFacet: false,
           preConfiguredCountyCode: 'BE'
         }
@@ -174,6 +177,25 @@ describe('store', () => {
       })
     })
 
+    describe('getCovid19Options', () => {
+      it('should retrieve the options that are available for the covid19 filter', () => {
+        const state = {
+          covid19: {
+            options: [
+              {id: 'covid19', label: 'Member of the COVID-19 network'}
+            ]
+          }
+        }
+
+        const actual = getters.getCovid19Options(state)
+        const expected = [
+          {id: 'covid19', label: 'Member of the COVID-19 network'}
+        ]
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
         const state = {
@@ -220,6 +242,10 @@ describe('store', () => {
               {id: 'CASE_CONTROL', label: 'Case control'}
             ]
           },
+          covid19: {
+            filters: ['covid19'],
+            options: [{id: 'covid19', label: 'Member of the COVID-19 network'}]
+          },
           dataType: {
             filters: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
             options: [
@@ -240,6 +266,12 @@ describe('store', () => {
           'type': [
             {id: 'BIRTH_COHORT', label: 'Birth cohort'},
             {id: 'CASE_CONTROL', label: 'Case control'}
+          ],
+          'covid19': [
+            {
+              id: 'covid19',
+              label: 'Member of the COVID-19 network'
+            }
           ],
           'dataType': [
             {id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples'},
@@ -291,6 +323,10 @@ describe('store', () => {
             options: []
           },
           type: {
+            filters: [],
+            options: []
+          },
+          covid19: {
             filters: [],
             options: []
           },

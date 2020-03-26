@@ -47,6 +47,10 @@ describe('FilterContainer', () => {
           dataType: {
             filters: [],
             options: []
+          },
+          covid19: {
+            filters: [],
+            options: []
           }
         },
         actions: {
@@ -107,6 +111,10 @@ describe('FilterContainer', () => {
             options: []
           },
           dataType: {
+            filters: [],
+            options: []
+          },
+          covid19: {
             filters: [],
             options: []
           }

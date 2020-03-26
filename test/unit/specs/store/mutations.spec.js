@@ -119,6 +119,26 @@ describe('store', () => {
       })
     })
 
+    describe('SET_COVID_19', () => {
+      it('should set the COVID19 options in the state with the payload', () => {
+        const state = {
+          covid19: {
+            options: []
+          }
+        }
+
+        const covidOptionsLabel = [{id: 'covid19', label: 'member of covid 19 network'}]
+        mutations.__SET_COVID_19__(state, covidOptionsLabel)
+
+        expect(state.covid19.options).to.deep.equal(covidOptionsLabel)
+
+        const covidOptionsName = [{id: 'covid19', name: 'member of covid 19 network'}]
+        mutations.__SET_COVID_19__(state, covidOptionsName)
+
+        expect(state.covid19.options).to.deep.equal(covidOptionsLabel)
+      })
+    })
+
     describe('SET_DIAGNOSIS_AVAILABLE', () => {
       it('should set the diagnosis available in the state with the payload', () => {
         const state = {
@@ -188,6 +208,10 @@ describe('store', () => {
             filters: ['type'],
             options: [{id: 'type'}]
           },
+          covid19: {
+            filters: ['covid19'],
+            options: [{id: 'covid19'}]
+          },
           dataType: {
             filters: ['type'],
             options: [{id: 'type'}]
@@ -216,6 +240,10 @@ describe('store', () => {
           type: {
             filters: [],
             options: [{id: 'type'}]
+          },
+          covid19: {
+            filters: [],
+            options: [{id: 'covid19'}]
           },
           dataType: {
             filters: [],
@@ -312,7 +340,8 @@ describe('store', () => {
               search: 'search',
               type: 'BIRTH_COHORT',
               dataType: 'BIOLOGICAL_SAMPLES',
-              nToken: '29djgCm29104958f7dLqopf92JDJKS'
+              nToken: '29djgCm29104958f7dLqopf92JDJKS',
+              covid19: 'covid19'
             }
           },
           country: {
@@ -330,6 +359,9 @@ describe('store', () => {
           type: {
             filters: []
           },
+          covid19: {
+            filters: []
+          },
           dataType: {
             filters: []
           },
@@ -342,6 +374,7 @@ describe('store', () => {
         expect(state.country.filters).to.deep.equal(['NL', 'BE'])
         expect(state.materials.filters).to.deep.equal(['RNA', 'PLASMA'])
         expect(state.type.filters).to.deep.equal(['BIRTH_COHORT'])
+        expect(state.covid19.filters).to.deep.equal(['covid19'])
         expect(state.dataType.filters).to.deep.equal(['BIOLOGICAL_SAMPLES'])
         expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
         expect(state.search).to.equal('search')
