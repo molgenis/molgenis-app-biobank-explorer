@@ -75,7 +75,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: '',
-    assetsPublicPath: '/plugin/app/' + packageJson.name,
+    assetsPublicPath: `/plugin/app/${packageJson.name}/`,
 
     /**
      * Source Maps
