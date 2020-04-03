@@ -166,7 +166,7 @@ describe('store', () => {
     describe('createNegotiatorQueryBody', () => {
       it('should generate a javascript object containing URL, collections, human readable, entityType, rsql, and an nToken', () => {
         const getters = {
-          rsql: 'long rsql string',
+          collectionRsql: 'long rsql string',
           biobanks: [
             {
               id: 'biobank-1',

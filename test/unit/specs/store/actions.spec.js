@@ -408,7 +408,7 @@ describe('store', () => {
         dataType: {filters: []}
       }
       const getters = {
-        rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
+        collectionRsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
         biobanks: [
           {id: 'biobank1', collections: [{id: 'collection1'}, {id: 'collection2'}]},
           {id: 'biobank2', collections: [{id: 'collection3'}, {id: 'collection4'}]}

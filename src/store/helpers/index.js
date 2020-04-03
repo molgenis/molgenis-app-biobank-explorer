@@ -35,6 +35,25 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
+export const createCollectionRSQLQuery = (state) => transformToRSQL({
+  operator: 'AND',
+  operands: flatten([
+    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+    createInQuery('materials', state.materials.filters),
+    createInQuery('type', state.type.filters),
+    createInQuery('data_categories', state.dataType.filters),
+    createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
+    createInQuery('id', state.collection_quality.collections),
+    createInQuery('biobank', state.biobank_quality.biobanks),
+    createInQuery('biobank.covid19biobank', state.covid19.filters),
+    state.search ? [{
+      operator: 'OR',
+      operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
+        .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
+    }] : []
+  ])
+})
+
 export const CODE_REGEX = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
 
 export const createDiagnosisLabelQuery = (query) => transformToRSQL({selector: 'label', comparison: '=q=', arguments: query})
@@ -49,7 +68,7 @@ const createNegotiatorQueryBody = (state, getters, url) => {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
     entityId: 'eu_bbmri_eric_collections',
-    rsql: getters.rsql,
+    rsql: getters.collectionRsql,
     collections: collections,
     humanReadable: humanReadable,
     nToken: state.nToken
@@ -148,6 +167,7 @@ export const BiobankPagination = (commit, response) => {
 
 export default {
   createRSQLQuery,
+  createCollectionRSQLQuery,
   createDiagnosisCodeQuery,
   createDiagnosisLabelQuery,
   createNegotiatorQueryBody,

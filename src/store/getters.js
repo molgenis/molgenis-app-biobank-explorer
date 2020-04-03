@@ -1,10 +1,11 @@
-import { createRSQLQuery } from './helpers'
+import { createRSQLQuery, createCollectionRSQLQuery } from './helpers'
 
 export default {
   loading: state => !(state.allBiobanks),
   biobanks: (state, getters) => getters.loading || !state.allBiobanks ? [] : state.allBiobanks.map(biobank => ({...biobank})),
   foundBiobanks: state => state.foundBiobanks,
   rsql: createRSQLQuery,
+  collectionRsql: createCollectionRSQLQuery,
   resetPage: state => !state.isPaginating,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,
