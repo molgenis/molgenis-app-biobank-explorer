@@ -48,7 +48,7 @@ const createNegotiatorQueryBody = (state, getters, url) => {
   return {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
-    entityId: 'eu_bbmri_eric_collections',
+    entityId: 'eu_bbmri_eric_biobanks',
     rsql: getters.rsql,
     collections: collections,
     humanReadable: humanReadable,
