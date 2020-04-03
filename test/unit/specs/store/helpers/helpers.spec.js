@@ -222,7 +222,7 @@ describe('store', () => {
           ],
           humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
           nToken: state.nToken,
-          entityId: 'eu_bbmri_eric_collections',
+          entityId: 'eu_bbmri_eric_biobanks',
           rsql: 'long rsql string'
         }
 

@@ -438,7 +438,7 @@ describe('store', () => {
             negotiatorResponse.then(() => {
               expect(JSON.parse(bodyCaptor.value.body)).to.deep.eq({
                 URL: location,
-                entityId: 'eu_bbmri_eric_collections',
+                entityId: 'eu_bbmri_eric_biobanks',
                 rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
                 collections: [
                   {collectionId: 'collection1', biobankId: 'biobank1'},
