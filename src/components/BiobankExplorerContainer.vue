@@ -13,7 +13,7 @@
             id="negotiator-disabled"
             show
             variant="danger"
-          >The negotiator link is currently in maintenance</b-alert>
+          >Requesting samples is currently unavailable</b-alert>
         </div>
       </div>
 
