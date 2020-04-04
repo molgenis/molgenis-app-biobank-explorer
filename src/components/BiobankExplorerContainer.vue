@@ -62,7 +62,7 @@ export default {
     ...mapGetters(['rsql', 'loading', 'biobanks'])
   },
   watch: {
-    rsql() {
+    rsql () {
       this.findBiobanks()
     }
   },
@@ -73,7 +73,7 @@ export default {
       getQuery: GET_QUERY
     })
   },
-  mounted() {
+  mounted () {
     this.getQuery()
     this.loadFirstPage()
   }
