@@ -8,7 +8,12 @@
       <div class="row">
         <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
-          <negotiator :disabled="!rsql.length || !biobanks.length"></negotiator>
+          <negotiator :disabled="true"></negotiator>
+          <b-alert
+            id="negotiator-disabled"
+            show
+            variant="danger"
+          >The negotiator link is currently in maintenance</b-alert>
         </div>
       </div>
 
@@ -24,6 +29,11 @@
 <style>
 .biobank-explorer-container {
   padding-top: 1rem;
+}
+
+#negotiator-disabled {
+  display: inline;
+  float:right;
 }
 </style>
 
