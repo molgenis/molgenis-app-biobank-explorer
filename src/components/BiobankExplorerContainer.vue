@@ -8,12 +8,7 @@
       <div class="row">
         <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
-          <negotiator :disabled="true"></negotiator>
-          <b-alert
-            id="negotiator-disabled"
-            show
-            variant="danger"
-          >Requesting samples is currently unavailable</b-alert>
+          <negotiator :disabled="!(rsql.length + biobankRsql.length) || !foundBiobanks"></negotiator>
         </div>
       </div>
 
@@ -29,11 +24,6 @@
 <style>
 .biobank-explorer-container {
   padding-top: 1rem;
-}
-
-#negotiator-disabled {
-  display: inline;
-  float: right;
 }
 </style>
 
@@ -58,7 +48,7 @@ export default {
     Negotiator
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'biobanks'])
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks'])
   },
   watch: {
     rsql: {

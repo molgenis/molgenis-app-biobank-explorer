@@ -49,18 +49,22 @@ export const createDiagnosisLabelQuery = (query) => transformToRSQL({selector: '
 export const createDiagnosisCodeQuery = (query) => transformToRSQL({selector: 'code', comparison: '=like=', arguments: query.toUpperCase()})
 
 const createNegotiatorQueryBody = (state, getters, url) => {
-  const collections = getNegotiatorQueryObjects(getters.biobanks)
-  const humanReadable = getHumanReadableString(state)
-
-  return {
+  // TODO: are the entity types fixed?
+  const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
     entityId: 'eu_bbmri_eric_collections',
-    rsql: getters.rsql,
-    collections: collections,
-    humanReadable: humanReadable,
+    humanReadable: getHumanReadableString(state),
     nToken: state.nToken
   }
+  if (getters.rsql) {
+    result.rsql = getters.rsql
+  }
+  if (getters.biobankRsql) {
+    result.biobankId = 'eu_bbmri_eric_biobanks'
+    result.biobankRsql = getters.biobankRsql
+  }
+  return result
 }
 
 const getHumanReadableString = (state) => {
@@ -72,6 +76,7 @@ const getHumanReadableString = (state) => {
   const types = state.type.filters
   const dataTypes = state.dataType.filters
   const diseases = state.diagnosis_available.filters.map(disease => disease.label)
+  const covid19 = state.covid19.filters
 
   if (state.search.length > 0) {
     humanReadableString += 'Free text search contains ' + state.search
@@ -107,19 +112,12 @@ const getHumanReadableString = (state) => {
     humanReadableString += 'selected disease types are ' + diseases.join(',')
   }
 
-  return humanReadableString
-}
+  if (covid19.length > 0) {
+    if (humanReadableString.length > 0) humanReadableString += ' and '
+    humanReadableString += 'biobank covid19 is one of ' + covid19.join(',')
+  }
 
-const getNegotiatorQueryObjects = (biobanks) => {
-  return biobanks.reduce((acc, biobank) => {
-    const biobankId = biobank.id
-    return acc.concat(biobank.collections.map(collection => {
-      return {
-        collectionId: collection.id,
-        biobankId: biobankId
-      }
-    }))
-  }, [])
+  return humanReadableString
 }
 
 const setLocationHref = (href) => { window.location.href = href }
@@ -157,7 +155,6 @@ export default {
   createDiagnosisLabelQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
-  getNegotiatorQueryObjects,
   setLocationHref,
   getLocationHref,
   getBiobankId,

@@ -17,10 +17,10 @@ module.exports = {
        changeOrigin: true
        },
       // Don't do this on production
-      // '/plugin/directory/export': {
-      //   target: 'https://bbmri.accept.molgenis.org/',
-      //   changeOrigin: true
-      // },
+      '/plugin/directory/export': {
+        target: 'https://bbmri.accept.molgenis.org/',
+        changeOrigin: true
+      },
       '/api': {
         target: 'https://directory.bbmri-eric.eu',
         changeOrigin: true

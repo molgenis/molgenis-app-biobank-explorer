@@ -373,7 +373,8 @@ describe('store', () => {
         collection_quality: {filters: []},
         diagnosis_available: {filters: []},
         type: {filters: []},
-        dataType: {filters: []}
+        dataType: {filters: []},
+        covid19: {filters: []}
       }
       const getters = {
         rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
@@ -408,11 +409,6 @@ describe('store', () => {
                 URL: location,
                 entityId: 'eu_bbmri_eric_collections',
                 rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
-                collections: [
-                  {collectionId: 'collection1', biobankId: 'biobank1'},
-                  {collectionId: 'collection2', biobankId: 'biobank1'},
-                  {collectionId: 'collection3', biobankId: 'biobank2'},
-                  {collectionId: 'collection4', biobankId: 'biobank2'}],
                 humanReadable: 'Free text search contains Cell&Co and selected material types are CELL_LINES'
               })
               td.verify(setLocationHref('http://example.org/negotiator'))

@@ -228,25 +228,10 @@ describe('store', () => {
     })
 
     describe('createNegotiatorQueryBody', () => {
-      it('should generate a javascript object containing URL, collections, human readable, entityType, rsql, and an nToken', () => {
+      it('should generate a negotiator query with collection and biobank filter expressions', () => {
         const getters = {
-          rsql: 'long rsql string',
-          biobanks: [
-            {
-              id: 'biobank-1',
-              collections: [
-                {id: 'collection-1'},
-                {id: 'collection-2'}
-              ]
-            },
-            {
-              id: 'biobank-2',
-              collections: [
-                {id: 'collection-3'},
-                {id: 'collection-4'}
-              ]
-            }
-          ]
+          rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
+          biobankRsql: 'name=q=\'free text search\''
         }
         const state = {
           search: 'free text search',
@@ -272,53 +257,107 @@ describe('store', () => {
               {label: 'big disease'}
             ]
           },
+          covid19: {
+            filters: ['covid19']
+          },
           nToken: '2837538B50189SR237489X14098A2374'
         }
 
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          collections: [
-            {biobankId: 'biobank-1', collectionId: 'collection-1'},
-            {biobankId: 'biobank-1', collectionId: 'collection-2'},
-            {biobankId: 'biobank-2', collectionId: 'collection-3'},
-            {biobankId: 'biobank-2', collectionId: 'collection-4'}
-          ],
-          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease',
+          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease and biobank covid19 is one of covid19',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
-          rsql: 'long rsql string'
+          rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
+          biobankId: 'eu_bbmri_eric_biobanks',
+          biobankRsql: 'name=q=\'free text search\''
         }
 
         expect(actual).to.deep.equal(expected)
       })
-    })
 
-    describe('getNegotiatorQueryObjects', () => {
-      it('should return a list of objects containing biobank and collection ids', () => {
-        const biobanks = [
-          {
-            id: 'biobank_1',
-            collections: [{id: 'collection_1'}]
+      it('should generate a negotiator query with collection filter expressions', () => {
+        const getters = {
+          rsql: 'materials=in=(RNA)'
+        }
+        const state = {
+          search: '',
+          country: {
+            filters: []
           },
-          {
-            id: 'biobank_2',
-            collections:
-              [
-                {id: 'collection_1'},
-                {id: 'collection_2'},
-                {id: 'collection_3'}
-              ]
-          }
-        ]
+          materials: {
+            filters: ['RNA']
+          },
+          collection_quality: {
+            filters: []
+          },
+          type: {
+            filters: []
+          },
+          dataType: {
+            filters: []
+          },
+          diagnosis_available: {
+            filters: []
+          },
+          covid19: {
+            filters: []
+          },
+          nToken: '2837538B50189SR237489X14098A2374'
+        }
 
-        const actual = helpers.getNegotiatorQueryObjects(biobanks)
-        const expected = [
-          {biobankId: 'biobank_1', collectionId: 'collection_1'},
-          {biobankId: 'biobank_2', collectionId: 'collection_1'},
-          {biobankId: 'biobank_2', collectionId: 'collection_2'},
-          {biobankId: 'biobank_2', collectionId: 'collection_3'}
-        ]
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const expected = {
+          URL: 'http://test.com?id=1',
+          humanReadable: 'selected material types are RNA',
+          nToken: state.nToken,
+          entityId: 'eu_bbmri_eric_collections',
+          rsql: 'materials=in=(RNA)'
+        }
+
+        expect(actual).to.deep.equal(expected)
+      })
+
+      it('should generate a negotiator query with biobank filter expressions', () => {
+        const getters = {
+          biobankRsql: 'covid19=in=(covid19)'
+        }
+        const state = {
+          search: '',
+          country: {
+            filters: []
+          },
+          materials: {
+            filters: []
+          },
+          collection_quality: {
+            filters: []
+          },
+          type: {
+            filters: []
+          },
+          dataType: {
+            filters: []
+          },
+          diagnosis_available: {
+            filters: []
+          },
+          covid19: {
+            filters: ['covid19']
+          },
+          nToken: '2837538B50189SR237489X14098A2374'
+        }
+
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const expected = {
+          URL: 'http://test.com?id=1',
+          humanReadable: 'biobank covid19 is one of covid19',
+          nToken: state.nToken,
+          entityId: 'eu_bbmri_eric_collections',
+          biobankId: 'eu_bbmri_eric_biobanks',
+          biobankRsql: 'covid19=in=(covid19)'
+        }
 
         expect(actual).to.deep.equal(expected)
       })
@@ -384,9 +423,10 @@ describe('store', () => {
           {id: '1', label: 'small disease'},
           {id: '2', label: 'big disease'}
         )
+        state.covid19.filters.push('covid19')
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 is one of covid19'
 
         expect(actual).to.equal(expected)
       })
