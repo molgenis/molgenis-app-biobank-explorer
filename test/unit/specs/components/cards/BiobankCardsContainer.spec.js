@@ -17,7 +17,6 @@ describe('BiobankCardsContainer', () => {
       state: {},
       getters: {
         biobanks: () => biobanks,
-        resetPage: () => true,
         loading: () => true,
         getActiveFilters: () => activeFilters
       }
@@ -40,7 +39,7 @@ describe('BiobankCardsContainer', () => {
     expect(wrapper.vm.isAnyFilterActive).to.equal(false)
   })
 
-  it('should reset the currentPage to 1 if when the biobanks list changes by a filter', () => {
+  it('should reset the currentPage to 1 if when the biobanks list changes', () => {
     activeFilters = {}
     const wrapper = shallowMount(BiobankCardsContainer, {
       store,
@@ -53,7 +52,7 @@ describe('BiobankCardsContainer', () => {
     wrapper.setData({currentPage: 5})
     expect(wrapper.vm.currentPage).to.equal(5)
     // see https://github.com/vuejs/vue-test-utils/issues/331 for details
-    wrapper.vm.$options.watch.biobanks.call(wrapper.vm)
+    wrapper.vm.$options.watch.biobankIds.call(wrapper.vm, ['id1'], ['id2'])
     expect(wrapper.vm.currentPage).to.equal(1)
   })
 })

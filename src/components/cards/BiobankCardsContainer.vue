@@ -10,11 +10,11 @@
         :per-page="pageSize"
       ></b-pagination>
       <biobank-card
-        v-for="(biobank, index) in currentBiobanks"
-        :key="biobank.id + index"
+        v-for="biobank in biobanksShown"
+        :key="biobank.id || biobank"
         :biobank="biobank"
-        :initCollapsed="!isAnyFilterActive"
-      ></biobank-card>
+        :initCollapsed="!isAnyFilterActive">
+      </biobank-card>
 
       <b-pagination
         v-if="foundBiobanks > pageSize"
@@ -54,7 +54,7 @@
 <script>
 import BiobankCard from './BiobankCard'
 import { mapGetters, mapActions } from 'vuex'
-import { GET_NEXT_BIOBANKS, GET_ALL_BIOBANKS } from '../../store/actions'
+import { GET_BIOBANKS } from '@/store/actions'
 
 export default {
   name: 'biobank-cards-container',
@@ -66,8 +66,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      nextPage: GET_NEXT_BIOBANKS,
-      getAllBiobanks: GET_ALL_BIOBANKS
+      getBiobanks: GET_BIOBANKS
     })
   },
   computed: {
@@ -75,36 +74,35 @@ export default {
       'biobanks',
       'foundBiobanks',
       'loading',
-      'getActiveFilters',
-      'resetPage'
+      'getActiveFilters'
     ]),
     isAnyFilterActive () {
       return Object.keys(this.getActiveFilters).length > 0
     },
-    currentBiobanks () {
-      return this.biobanks.slice(
-        this.pageSize * (this.currentPage - 1),
-        this.pageSize * this.currentPage
-      )
+    biobanksShown () {
+      return this.loading ? [] : this.biobanks.slice(this.pageSize * (this.currentPage - 1), this.pageSize * this.currentPage)
+    },
+    biobankIds () {
+      return this.loading ? [] : this.biobanks.map(it => it.id || it)
+    },
+    biobankIdsToFetch () {
+      return this.biobanksShown.filter(it => typeof it === 'string')
     }
   },
   components: {
     BiobankCard
   },
   watch: {
-    currentPage (newVal, oldVal) {
-      const newPage = parseInt(newVal)
-      const prevPage = parseInt(oldVal)
-
-      if (newPage > prevPage) {
-        // user navigated a page within range
-        if (newPage - 1 === prevPage || newPage - prevPage < 4) this.nextPage()
-        // user navigated to the end (will not work on biobanks > 10k)
-        else this.getAllBiobanks()
+    biobankIds (newValue, oldValue) {
+      if (newValue.length !== oldValue.length ||
+        !newValue.every((element, index) => element === oldValue[index])) {
+        this.currentPage = 1
       }
     },
-    biobanks () {
-      if (this.resetPage) this.currentPage = 1
+    biobankIdsToFetch (value) {
+      if (value.length) {
+        this.getBiobanks(value)
+      }
     }
   }
 }

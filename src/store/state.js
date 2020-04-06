@@ -15,10 +15,12 @@ export default {
   error: null,
   showCountryFacet: INITIAL_STATE.hasOwnProperty('showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
-  allBiobanks: undefined,
-  foundBiobanks: undefined,
-  nextBiobankPage: undefined,
-  isPaginating: false,
+  // Map ID to biobank
+  biobanks: {},
+  // IDs of biobanks matching the biobank filters
+  biobankIds: undefined,
+  // IDs of collections matching the collection filters
+  collectionIds: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
   biobankReport: undefined,
   collectionReport: undefined,

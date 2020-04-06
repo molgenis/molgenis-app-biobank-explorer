@@ -1,10 +1,30 @@
-import { createRSQLQuery } from './helpers'
+import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
 
 export default {
-  loading: state => !(state.allBiobanks),
-  biobanks: (state, getters) => getters.loading || !state.allBiobanks ? [] : state.allBiobanks.map(biobank => ({...biobank})),
-  foundBiobanks: state => state.foundBiobanks,
+  loading: ({collectionIds, biobankIds}) => !(biobankIds && collectionIds),
+  biobanks: ({collectionIds, biobankIds, biobanks}, {loading}) =>
+    loading
+      ? []
+      : collectionIds
+        // biobank IDs present in collectionIds
+        .map(({biobankId}) => biobankId)
+        // also present in biobankIds
+        .filter(biobankId => biobankIds.includes(biobankId))
+        // first occurrence of ID only
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .map(biobankId => {
+          if (!biobanks.hasOwnProperty(biobankId)) {
+            return biobankId
+          }
+          const biobank = biobanks[biobankId]
+          return {
+            ...biobank,
+            collections: filterCollectionTree(collectionIds.map(it => it.collectionId), biobank.collections)
+          }
+        }),
+  foundBiobanks: (_, { biobanks }) => biobanks.length,
   rsql: createRSQLQuery,
+  biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,
   getCountryOptions: state => state.country.options,
   getMaterialOptions: state => state.materials.options,

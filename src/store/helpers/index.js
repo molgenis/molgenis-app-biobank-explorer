@@ -1,10 +1,3 @@
-import {
-  APPEND_NEW_BIOBANKS,
-  SET_NEXT_PAGE,
-  SET_FOUND_BIOBANKS,
-  SET_ALL_BIOBANKS
-} from '../mutations'
-
 import { createInQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
@@ -20,20 +13,34 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
-    createInQuery('collections.materials', state.materials.filters),
-    createInQuery('collections.type', state.type.filters),
-    createInQuery('collections.data_categories', state.dataType.filters),
-    createInQuery('collections.diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
-    createInQuery('collections', state.collection_quality.collections),
-    createInQuery('id', state.biobank_quality.biobanks),
-    createInQuery('covid19biobank', state.covid19.filters),
+    createInQuery('materials', state.materials.filters),
+    createInQuery('type', state.type.filters),
+    createInQuery('data_categories', state.dataType.filters),
+    createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
+    createInQuery('id', state.collection_quality.collections),
     state.search ? [{
       operator: 'OR',
-      operands: ['name', 'id', 'acronym', 'collections.name', 'collections.id', 'collections.acronym']
+      operands: ['name', 'id', 'acronym']
         .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
     }] : []
   ])
 })
+
+export const createBiobankRSQLQuery = (state) => transformToRSQL({
+  operator: 'AND',
+  operands: flatten([
+    createInQuery('id', state.biobank_quality.biobanks),
+    createInQuery('covid19biobank', state.covid19.filters),
+    state.search ? [{
+      operator: 'OR',
+      operands: ['name', 'id', 'acronym']
+        .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
+    }] : []
+  ])
+})
+
+const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
+export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
 
 export const CODE_REGEX = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
 
@@ -134,17 +141,15 @@ export const fixCollectionTree = (biobank) => ({
     .map(collection => fixSubCollectionTree(biobank.collections, collection.id))
 })
 
-export const BiobankResponseProcessor = (commit, response) => {
-  commit(SET_ALL_BIOBANKS, response.items)
-  commit(SET_FOUND_BIOBANKS, response.total)
-  commit(SET_NEXT_PAGE, response)
-}
-
-export const BiobankPagination = (commit, response) => {
-  commit(APPEND_NEW_BIOBANKS, response.items) // need to append, because of lazy pagination
-  commit(SET_FOUND_BIOBANKS, response.total)
-  commit(SET_NEXT_PAGE, response)
-}
+export const filterCollectionTree = (collectionIds, collections) =>
+  collections.reduce(
+    (accumulator, collection) => {
+      const filteredSubCollections = filterCollectionTree(collectionIds, collection.sub_collections)
+      if (collectionIds.includes(collection.id) || filteredSubCollections.length) {
+        return [...accumulator, {...collection, sub_collections: filteredSubCollections}]
+      }
+      return accumulator
+    }, [])
 
 export default {
   createRSQLQuery,
@@ -155,7 +160,6 @@ export default {
   getNegotiatorQueryObjects,
   setLocationHref,
   getLocationHref,
-  CODE_REGEX,
-  BiobankResponseProcessor,
-  BiobankPagination
+  getBiobankId,
+  CODE_REGEX
 }

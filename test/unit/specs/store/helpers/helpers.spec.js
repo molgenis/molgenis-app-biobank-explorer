@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import helpers, {
-  CODE_REGEX
+  CODE_REGEX,
+  filterCollectionTree
 } from '../../../../../src/store/helpers'
 
 const getInitialState = () => {
@@ -38,6 +39,69 @@ const getInitialState = () => {
 
 describe('store', () => {
   describe('Vuex store helper functions', () => {
+    describe('filterCollectionTree', () => {
+      it('should filter collections with matching IDs', () => {
+        const collections = [
+          {id: 1, sub_collections: []},
+          {id: 2, sub_collections: []},
+          {id: 3, sub_collections: []},
+          {id: 4, sub_collections: []},
+          {id: 5, sub_collections: []}
+        ]
+        const expected = [
+          {id: 2, sub_collections: []},
+          {id: 4, sub_collections: []}
+        ]
+        expect(filterCollectionTree([2, 4], collections)).to.deep.eq(expected)
+      })
+      it('should filter subcollections', () => {
+        expect(filterCollectionTree([2, 4], [{
+          id: 1,
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 3, sub_collections: []},
+            {id: 4, sub_collections: []},
+            {id: 5, sub_collections: []}
+          ]
+        }])).to.deep.eq([{
+          id: 1,
+          sub_collections: [
+            {id: 2, sub_collections: []},
+            {id: 4, sub_collections: []}
+          ]
+        }])
+      })
+      it('should filter deeply nested tree of collections', () => {
+        expect(filterCollectionTree([2, 4], [{
+          id: 1,
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: [{
+                  id: 5, sub_collections: []
+                }]
+              }]
+            }]
+          }]
+        }])).to.deep.eq([{
+          id: 1,
+          sub_collections: [{
+            id: 2,
+            sub_collections: [{
+              id: 3,
+              sub_collections: [{
+                id: 4,
+                sub_collections: []
+              }]
+            }]
+          }]
+        }])
+      })
+    })
+
     describe('Code regex', () => {
       it('should match single uppercase character', () => {
         expect(CODE_REGEX.test('A')).to.eq(true)
@@ -109,7 +173,7 @@ describe('store', () => {
         state.materials.filters.push('RNA', 'DNA')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'collections.materials=in=(RNA,DNA)'
+        const expected = 'materials=in=(RNA,DNA)'
 
         expect(actual).to.equal(expected)
       })
@@ -118,7 +182,7 @@ describe('store', () => {
         state.collection_quality.collections.push('collection1')
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'collections=in=(collection1)'
+        const expected = 'id=in=(collection1)'
 
         expect(actual).to.equal(expected)
       })
@@ -131,7 +195,7 @@ describe('store', () => {
         )
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'collections.diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3)'
+        const expected = 'diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3)'
 
         expect(actual).to.equal(expected)
       })
@@ -147,7 +211,7 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',collections.name=q=\'test search\',collections.id=q=\'test search\',collections.acronym=q=\'test search\''
+        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\''
 
         expect(actual).to.equal(expected)
       })
@@ -157,8 +221,8 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        // const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\')'
-        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',collections.name=q=\'test search\',collections.id=q=\'test search\',collections.acronym=q=\'test search\')'
+        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\')'
+
         expect(actual).to.equal(expected)
       })
     })

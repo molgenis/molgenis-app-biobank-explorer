@@ -33,7 +33,7 @@
 
 #negotiator-disabled {
   display: inline;
-  float:right;
+  float: right;
 }
 </style>
 
@@ -43,10 +43,9 @@ import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import Negotiator from './negotiator/Negotiator'
 import { mapGetters, mapActions } from 'vuex'
-
 import {
-  GET_INITIAL_BIOBANKS,
-  FIND_BIOBANKS,
+  GET_COLLECTION_IDS,
+  GET_BIOBANK_IDS,
   GET_QUERY
 } from '../store/actions'
 
@@ -59,23 +58,27 @@ export default {
     Negotiator
   },
   computed: {
-    ...mapGetters(['rsql', 'loading', 'biobanks'])
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'biobanks'])
   },
   watch: {
-    rsql () {
-      this.findBiobanks()
+    rsql: {
+      immediate: true,
+      handler: 'getCollectionIds'
+    },
+    biobankRsql: {
+      immediate: true,
+      handler: 'getBiobankIds'
     }
   },
   methods: {
     ...mapActions({
-      loadFirstPage: GET_INITIAL_BIOBANKS,
-      findBiobanks: FIND_BIOBANKS,
+      getCollectionIds: GET_COLLECTION_IDS,
+      getBiobankIds: GET_BIOBANK_IDS,
       getQuery: GET_QUERY
     })
   },
   mounted () {
     this.getQuery()
-    this.loadFirstPage()
   }
 }
 </script>
