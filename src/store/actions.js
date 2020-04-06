@@ -214,7 +214,7 @@ export default {
   },
   [GET_BIOBANK_IDS] ({commit, getters}) {
     commit(SET_BIOBANK_IDS, undefined)
-    let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000'
+    let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
     if (getters.biobankRsql) {
       url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`
     }

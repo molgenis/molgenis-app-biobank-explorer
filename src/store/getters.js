@@ -2,26 +2,31 @@ import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from '.
 
 export default {
   loading: ({collectionIds, biobankIds}) => !(biobankIds && collectionIds),
-  biobanks: ({collectionIds, biobankIds, biobanks}, {loading}) =>
-    loading
-      ? []
-      : collectionIds
+  biobanks: ({collectionIds, biobankIds, biobanks}, {loading, rsql}) => {
+    if (loading) {
+      return []
+    }
+    let ids = biobankIds
+    if (rsql && rsql.length) {
+      ids = collectionIds
         // biobank IDs present in collectionIds
         .map(({biobankId}) => biobankId)
         // also present in biobankIds
         .filter(biobankId => biobankIds.includes(biobankId))
         // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
-        .map(biobankId => {
-          if (!biobanks.hasOwnProperty(biobankId)) {
-            return biobankId
-          }
-          const biobank = biobanks[biobankId]
-          return {
-            ...biobank,
-            collections: filterCollectionTree(collectionIds.map(it => it.collectionId), biobank.collections)
-          }
-        }),
+    }
+    return ids.map(biobankId => {
+      if (!biobanks.hasOwnProperty(biobankId)) {
+        return biobankId
+      }
+      const biobank = biobanks[biobankId]
+      return {
+        ...biobank,
+        collections: filterCollectionTree(collectionIds.map(it => it.collectionId), biobank.collections)
+      }
+    })
+  },
   foundBiobanks: (_, { biobanks }) => biobanks.length,
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,

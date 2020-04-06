@@ -68,9 +68,23 @@ describe('store', () => {
           biobankIds: ['1', '2'],
           collectionIds: [{collectionId: 'col-2', biobankId: '2'}]
         }
-        expect(getters.biobanks(state, {loading: false})).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}]}])
+        const otherGetters = {loading: false, rsql: 'type=in=(type1)'}
+        expect(getters.biobanks(state, otherGetters)).to.deep.equal([{id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}]}])
       })
-
+      it('should return all biobanks if the collections are not filtered', () => {
+        const state = {
+          biobanks: {
+            '2': {id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}]}
+          },
+          biobankIds: ['1', '2'],
+          collectionIds: [{collectionId: 'col-2', biobankId: '2'}]
+        }
+        const otherGetters = {loading: false, rsql: ''}
+        expect(getters.biobanks(state, otherGetters)).to.deep.equal([
+          '1',
+          {id: '2', name: 'two', collections: [{id: 'col-2', sub_collections: []}]}
+        ])
+      })
       it('should not filter out collections with matching subcollections',
         () => {
           const biobank1 = {
@@ -90,7 +104,8 @@ describe('store', () => {
             biobankIds: ['1', '2'],
             collectionIds: [{collectionId: 'col-4', biobankId: '2'}]
           }
-          expect(getters.biobanks(state, {loading: false})).to.deep.equal([{
+          const otherGetters = {loading: false, rsql: 'type=in=(type1)'}
+          expect(getters.biobanks(state, otherGetters)).to.deep.equal([{
             id: '2',
             name: 'two',
             collections: [{id: 'col-3', sub_collections: [{id: 'col-4', sub_collections: []}]}]}])
@@ -108,7 +123,8 @@ describe('store', () => {
             {collectionId: 'col-2', biobankId: '1'}
           ]
         }
-        expect(getters.biobanks(state, {loading: false})).to.deep.equal([
+        const otherGetters = {loading: false, rsql: 'type=in=(type1)'}
+        expect(getters.biobanks(state, otherGetters)).to.deep.equal([
           {id: '2', name: 'A', collections: [{id: 'col-2', sub_collections: []}]},
           {id: '1', name: 'B', collections: [{id: 'col-1', sub_collections: []}]}
         ])
