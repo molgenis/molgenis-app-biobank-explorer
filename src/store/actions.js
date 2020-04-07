@@ -273,7 +273,7 @@ export default {
     const options = {
       body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }
-    api.post('/plugin/directory/export', options)
+    return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit(SET_ERROR, error))
   }
 }
