@@ -1,5 +1,6 @@
 import { getUniqueIdArray } from '../utils'
 import { fixCollectionTree } from './helpers'
+import Vue from 'vue'
 
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
 export const SET_MATERIALS = '__SET_MATERIALS__'
@@ -16,10 +17,9 @@ export const SET_COVID_19 = '__SET_COVID_19__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
-export const SET_ALL_BIOBANKS = '__SET_ALL_BIOBANKS__'
-export const APPEND_NEW_BIOBANKS = '__APPEND_NEW_BIOBANKS__'
-export const SET_FOUND_BIOBANKS = '__SET_FOUND_BIOBANKS__'
-export const SET_NEXT_PAGE = '__SET_NEXT_PAGE__'
+export const SET_BIOBANKS = '__SET_BIOBANKS__'
+export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
+export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
 export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
@@ -30,7 +30,8 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
-export const SET_IS_PAGINATING = '__SET_IS_PAGINATING__'
+
+export const SET_LAST_URL = '__SET_LAST_URL__'
 
 const combineCodeAndLabels = (diagnoses) => {
   return diagnoses.map(diagnosis => {
@@ -112,29 +113,16 @@ export default {
     state.dataType.filters = []
     state.covid19.filters = []
   },
-  [SET_ALL_BIOBANKS] (state, biobanks) {
-    if (biobanks) {
-      state.allBiobanks = biobanks.map(fixCollectionTree)
-    } else {
-      state.allBiobanks = undefined // if a search gives no results, clear it
-    }
+  [SET_BIOBANKS] (state, biobanks) {
+    biobanks.forEach(biobank => {
+      Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
+    })
   },
-  [APPEND_NEW_BIOBANKS] (state, biobanks) {
-    const newFoundBiobanks = biobanks.map(fixCollectionTree)
-    if (state.allBiobanks) {
-      state.allBiobanks = state.allBiobanks.concat(newFoundBiobanks)
-    } else {
-      state.allBiobanks = newFoundBiobanks
-    }
+  [SET_BIOBANK_IDS] (state, biobankIds) {
+    state.biobankIds = biobankIds
   },
-  [SET_FOUND_BIOBANKS] (state, total) {
-    state.foundBiobanks = total
-  },
-  [SET_NEXT_PAGE] (state, response) {
-    state.nextBiobankPage = response.nextHref ? response.nextHref : undefined
-  },
-  [SET_IS_PAGINATING] (state, isPaginating) {
-    state.isPaginating = isPaginating
+  [SET_COLLECTION_IDS] (state, collectionIds) {
+    state.collectionIds = collectionIds
   },
   /**
    * Store a single biobank in the state for showing a biobank report

@@ -8,12 +8,7 @@
       <div class="row">
         <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
-          <negotiator :disabled="true"></negotiator>
-          <b-alert
-            id="negotiator-disabled"
-            show
-            variant="danger"
-          >Requesting samples is currently unavailable</b-alert>
+          <negotiator :disabled="!(rsql.length + biobankRsql.length) || !foundBiobanks"></negotiator>
         </div>
       </div>
 
@@ -30,11 +25,6 @@
 .biobank-explorer-container {
   padding-top: 1rem;
 }
-
-#negotiator-disabled {
-  display: inline;
-  float:right;
-}
 </style>
 
 <script>
@@ -43,10 +33,9 @@ import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import Negotiator from './negotiator/Negotiator'
 import { mapGetters, mapActions } from 'vuex'
-
 import {
-  GET_INITIAL_BIOBANKS,
-  FIND_BIOBANKS,
+  GET_COLLECTION_IDS,
+  GET_BIOBANK_IDS,
   GET_QUERY
 } from '../store/actions'
 
@@ -59,23 +48,27 @@ export default {
     Negotiator
   },
   computed: {
-    ...mapGetters(['rsql', 'loading', 'biobanks'])
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks'])
   },
   watch: {
-    rsql () {
-      this.findBiobanks()
+    rsql: {
+      immediate: true,
+      handler: 'getCollectionIds'
+    },
+    biobankRsql: {
+      immediate: true,
+      handler: 'getBiobankIds'
     }
   },
   methods: {
     ...mapActions({
-      loadFirstPage: GET_INITIAL_BIOBANKS,
-      findBiobanks: FIND_BIOBANKS,
+      getCollectionIds: GET_COLLECTION_IDS,
+      getBiobankIds: GET_BIOBANK_IDS,
       getQuery: GET_QUERY
     })
   },
   mounted () {
     this.getQuery()
-    this.loadFirstPage()
   }
 }
 </script>

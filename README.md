@@ -107,8 +107,6 @@ module.exports = {
     assetsPublicPath: '/',
     // Beginning of block
     proxyTable: {
-      # we usually develop against a MOLGENIS instance on the k8 cluster
-      # eg bbmri.accept.molgenis.org
       '/login': {
         target: 'http://localhost:8080'
       },

@@ -2,7 +2,7 @@
   <div class="card biobank-card">
     <div class="card-header biobank-card-header" @click.prevent="collapsed = !collapsed">
       <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-5" v-if="!loading">
           <h5>
             <router-link :to="'/biobank/' + biobank.id">
               <i class="fa fa-table" aria-hidden="true" aria-labelledby="biobank-name"></i>
@@ -20,7 +20,7 @@
             />
           </span>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7" v-if="!loading">
           <p>
             <small>
               <strong>Collection types:</strong>
@@ -33,10 +33,13 @@
             <small>{{ biobank['juridical_person'] }}</small>
           </p>
         </div>
+        <div v-else class="col-md-12 text-center">
+          <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </div>
       </div>
     </div>
 
-    <div class="card-body table-card" v-if="!collapsed">
+    <div class="card-body table-card" v-if="!collapsed && !loading">
       <collections-table v-if="biobank.collections.length > 0" :collections="biobank.collections"></collections-table>
     </div>
   </div>
@@ -78,7 +81,9 @@ import 'array-flat-polyfill'
 export default {
   name: 'biobank-card',
   props: {
-    biobank: Object,
+    biobank: {
+      type: [Object, String]
+    },
     initCollapsed: {
       type: Boolean,
       required: false,
@@ -91,6 +96,9 @@ export default {
     }
   },
   computed: {
+    loading () {
+      return typeof this.biobank === 'string'
+    },
     collectionTypes () {
       const getSubCollections = collection => [
         collection,
