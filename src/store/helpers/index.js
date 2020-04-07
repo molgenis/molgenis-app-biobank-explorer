@@ -20,7 +20,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('id', state.collection_quality.collections),
     state.search ? [{
       operator: 'OR',
-      operands: ['name', 'id', 'acronym']
+      operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
         .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
     }] : []
   ])
@@ -31,12 +31,7 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
     createInQuery('id', state.biobank_quality.biobanks),
-    createInQuery('covid19biobank', state.covid19.filters),
-    state.search ? [{
-      operator: 'OR',
-      operands: ['name', 'id', 'acronym']
-        .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
-    }] : []
+    createInQuery('covid19biobank', state.covid19.filters)
   ])
 })
 

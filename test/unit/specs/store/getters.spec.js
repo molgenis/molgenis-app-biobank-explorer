@@ -18,7 +18,7 @@ describe('store', () => {
           covid19: {filters: ['covid19']},
           showCountryFacet: true
         }
-        expect(getters.rsql(state)).to.equal('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co)')
+        expect(getters.rsql(state)).to.equal('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
       })
       it('should return the empty string if no filters are selected', () => {
         const state = {
@@ -63,7 +63,7 @@ describe('store', () => {
           covid19: {filters: ['covid19']},
           showCountryFacet: true
         }
-        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank=in=(covid19);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co)')
+        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank=in=(covid19)')
       })
       it('should return the empty string if no filters are selected', () => {
         const state = {
