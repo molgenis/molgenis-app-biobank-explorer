@@ -59,7 +59,8 @@ describe('FilterContainer', () => {
           __GET_COLLECTION_QUALITY_OPTIONS__: () => '',
           __GET_BIOBANK_QUALITY_OPTIONS__: () => '',
           __GET_TYPES_OPTIONS__: () => '',
-          __GET_DATA_TYPE_OPTIONS__: () => ''
+          __GET_DATA_TYPE_OPTIONS__: () => '',
+          __GET_COVID_19_OPTIONS__: () => ''
         },
         mutations: {},
         getters: {
@@ -69,7 +70,8 @@ describe('FilterContainer', () => {
           getCollectionQualityOptions: () => [],
           getTypesOptions: () => [],
           getDataTypeOptions: () => [],
-          showCountryFacet: () => true
+          showCountryFacet: () => true,
+          getCovid19Options: () => []
         }
       })
       wrapper = shallowMount(FilterContainer, {store})
@@ -125,7 +127,8 @@ describe('FilterContainer', () => {
           __GET_COLLECTION_QUALITY_OPTIONS__: () => '',
           __GET_BIOBANK_QUALITY_OPTIONS__: () => '',
           __GET_TYPES_OPTIONS__: () => '',
-          __GET_DATA_TYPE_OPTIONS__: () => ''
+          __GET_DATA_TYPE_OPTIONS__: () => '',
+          __GET_COVID_19_OPTIONS__: () => ''
         },
         mutations: {},
         getters: {
@@ -135,7 +138,8 @@ describe('FilterContainer', () => {
           getCollectionQualityOptions: () => [],
           getTypesOptions: () => [],
           getDataTypeOptions: () => [],
-          showCountryFacet: () => false
+          showCountryFacet: () => false,
+          getCovid19Options: () => []
         }
       })
       wrapper = shallowMount(FilterContainer, {store})
