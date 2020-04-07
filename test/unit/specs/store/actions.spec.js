@@ -6,7 +6,8 @@ import actions, {
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
   SEND_TO_NEGOTIATOR,
-  GET_BIOBANK_IDS
+  GET_BIOBANK_IDS,
+  GET_COLLECTION_IDS
 } from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
@@ -29,7 +30,8 @@ import {
   SET_BIOBANK_QUALITY,
   SET_NETWORK_BIOBANKS,
   SET_NETWORK_COLLECTIONS,
-  SET_COVID_19
+  SET_COVID_19,
+  SET_COLLECTION_IDS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 
@@ -462,27 +464,48 @@ describe('store', () => {
     })
 
     describe('GET_COLLECTION_IDS', () => {
-      it('should retrieve collection and biobank IDs from the server based on collection filters', done => {
-        const response = {
-          items: [
-            {data: {id: 'biobank-1'}},
-            {data: {id: 'biobank-2'}}
-          ]
-        }
+      const response = {
+        items: [
+          {data: {id: 'c1', biobank: { links: { self: 'https://directory.bbmri-eric.eu/api/data/eu_bbmri_eric_biobanks/b1' } }}},
+          {data: {id: 'c2', biobank: { links: { self: 'https://directory.bbmri-eric.eu/api/data/eu_bbmri_eric_biobanks/b2' } }}}
+        ]
+      }
 
+      it('should retrieve collection and biobank ids from the server based on collection filters', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&q=material=in=(mat1)'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
-          getters: { rsql: 'material=in=(mat1)' },
-          expectedMutations: [
-            {type: SET_BIOBANK_IDS, payload: ['biobank-1', 'biobank-2']}
-          ]
+          getters: { rsql: 'country=in=(NL,BE)' },
+          expectedMutations: [{
+            type: SET_COLLECTION_IDS,
+            payload: [
+              {biobankId: 'b1', collectionId: 'c1'},
+              {biobankId: 'b2', collectionId: 'c2'}]
+          }]
         }
 
-        utils.testAction(actions[GET_BIOBANK_IDS], options, done)
+        utils.testAction(actions[GET_COLLECTION_IDS], options, done)
+      })
+
+      it('should retrieve all collection and biobank ids if there is no collection filter', done => {
+        const get = td.function('api.get')
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'))
+          .thenResolve(response)
+        td.replace(api, 'get', get)
+
+        const options = {
+          getters: { rsql: '' },
+          expectedMutations: [{
+            type: SET_COLLECTION_IDS,
+            payload: [
+              {biobankId: 'b1', collectionId: 'c1'},
+              {biobankId: 'b2', collectionId: 'c2'}]}]
+        }
+
+        utils.testAction(actions[GET_COLLECTION_IDS], options, done)
       })
     })
 
