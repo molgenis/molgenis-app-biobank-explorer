@@ -29,6 +29,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
 export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
+    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
     createInQuery('id', state.biobank_quality.biobanks),
     createInQuery('covid19biobank', state.covid19.filters),
     state.search ? [{

@@ -54,6 +54,45 @@ describe('store', () => {
         expect(getters.rsql(state)).to.equal('country=in=BE')
       })
     })
+    describe('biobankRsql', () => {
+      it('should transform the biobank filters to rsql', () => {
+        const state = {
+          search: 'Cell&Co',
+          country: {filters: ['AT', 'BE']},
+          biobank_quality: {filters: [], biobanks: []},
+          covid19: {filters: ['covid19']},
+          showCountryFacet: true
+        }
+        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank=in=(covid19);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co)')
+      })
+      it('should return the empty string if no filters are selected', () => {
+        const state = {
+          search: '',
+          country: {filters: []},
+          biobank_quality: {filters: [], biobanks: []},
+          covid19: {filters: []},
+          showCountryFacet: true
+        }
+        expect(getters.biobankRsql(state)).to.equal('')
+      })
+      it('should include the default country code if showCountryFacet is set to false', () => {
+        const state = {
+          search: '',
+          country: {filters: []},
+          materials: {filters: []},
+          standards: {filters: []},
+          diagnosis_available: {filters: []},
+          collection_quality: {filters: [], collections: []},
+          biobank_quality: {filters: [], biobanks: []},
+          type: {filters: []},
+          dataType: {filters: []},
+          covid19: {filters: []},
+          showCountryFacet: false,
+          preConfiguredCountyCode: 'BE'
+        }
+        expect(getters.biobankRsql(state)).to.equal('country=in=BE')
+      })
+    })
     describe('biobanks', () => {
       it('should return empty list when loading', () => {
         const state = {}
