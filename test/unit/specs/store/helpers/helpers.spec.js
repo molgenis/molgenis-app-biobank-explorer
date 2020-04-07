@@ -211,7 +211,7 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\''
+        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\''
 
         expect(actual).to.equal(expected)
       })
@@ -221,7 +221,7 @@ describe('store', () => {
         state.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\')'
+        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\')'
 
         expect(actual).to.equal(expected)
       })
