@@ -448,7 +448,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&q=covid19=in=(covid19)'))
+        td.when(get('/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name&q=covid19=in=(covid19)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
