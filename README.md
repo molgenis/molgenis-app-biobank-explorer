@@ -35,7 +35,7 @@ to your index.html or freemarker template to start tracking your Biobank Explore
 
 ### Configuring Negotiator
 
-This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 7.0.0.
+This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 8.3.10.
 
 ### Pre-selection a country
 
