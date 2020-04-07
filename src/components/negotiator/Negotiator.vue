@@ -1,7 +1,7 @@
 <template>
   <button type="button" class="btn btn-warning negotiator-btn" data-toggle="tooltip" data-placement="bottom"
           title="Send to the negotiator" @click="sendToNegotiator" :disabled="disabled">
-          REQUEST SAMPLES
+          REQUEST SAMPLES <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="loading"></i>
   </button>
 </template>
 
@@ -23,9 +23,18 @@
         default: true
       }
     },
+    data () {
+      return {
+        loading: false
+      }
+    },
     methods: {
+      done () {
+        this.loading = false
+      },
       sendToNegotiator () {
-        this.$store.dispatch(SEND_TO_NEGOTIATOR)
+        this.loading = true
+        this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
       }
     }
 
