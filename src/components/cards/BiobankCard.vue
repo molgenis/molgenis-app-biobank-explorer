@@ -23,12 +23,12 @@
         <div class="col-md-7" v-if="!loading">
           <p>
             <small>
-              <strong>Collection types:</strong>
+              <b>Collection types:</b>
             </small>
             <small>{{ collectionTypes }}</small>
             <br />
             <small>
-              <strong>Juridical person:</strong>
+              <b>Juridical person:</b>
             </small>
             <small>{{ biobank['juridical_person'] }}</small>
           </p>

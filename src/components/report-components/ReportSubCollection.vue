@@ -1,11 +1,11 @@
 <template>
   <div :class="'mt-3 ml-'+(level)">
-    <strong>
+    <b>
       <router-link :to='"/collection/"+collection.id'>{{collection.name}}</router-link>
-    </strong>
+    </b>
     <report-details-list :reportDetails="collection.content"></report-details-list>
     <div v-if="collection.subCollections && collection.subCollections.length > 0" class="m-3">
-      <strong>Sub collections</strong>
+      <b>Sub collections</b>
       <report-sub-collection
         v-for="subCollection in collection.subCollections"
         :collection="subCollection"

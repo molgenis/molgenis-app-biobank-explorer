@@ -22,6 +22,7 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
+                <p><b>Id: </b>{{ biobank.id }}</p>
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
                 <h3>Collections</h3>
                 <div v-for="(collection, index) in collectionsData" :key="collection.id">
