@@ -23,7 +23,7 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p><strong>Id: </strong>{{ network.id }}</p>         
+                <p><b>Id: </b>{{ network.id }}</p>         
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
                 <b-tabs v-if="!collections || !biobanks || collectionsAvailable || biobanksAvailable">

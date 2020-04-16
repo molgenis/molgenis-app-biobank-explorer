@@ -24,7 +24,7 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p><strong>Id: </strong>{{ collection.id }}</p>
+                <p><b>Id: </b>{{ collection.id }}</p>
                 <report-description :description="collection.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="mainContent"></report-details-list>
                 <div v-if="collection.sub_collections && collection.sub_collections.length" class="mt-2">
