@@ -61,7 +61,7 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('class="mg-report-details-list mb-3">')
   })
   it('should contain name as string', () => {
-    expect(wrapper.html()).to.have.string('Some Name</td>')
+    expect(wrapper.html()).to.have.string('Some Name')
   })
   it('should contain email as email', () => {
     expect(wrapper.html()).to.have.string('href="mailto:myEmail@myWebsite.com">')
