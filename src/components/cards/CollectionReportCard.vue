@@ -19,22 +19,17 @@
 
       <div class="row" v-if="this.collection && !this.isLoading">
         <div class="col">
-          <report-title
-            type="Collection"
-            :name="collection.name"
-          ></report-title>
+          <report-title type="Collection" :name="collection.name"></report-title>
 
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p><b>Id: </b>{{ collection.id }}</p>
-                <report-description
-                  :description="collection.description"
-                  :maxLength="500"
-                ></report-description>
-                <report-details-list
-                  :reportDetails="mainContent"
-                ></report-details-list>
+                <p>
+                  <b>Id:</b>
+                  {{ collection.id }}
+                </p>
+                <report-description :description="collection.description" :maxLength="500"></report-description>
+                <report-details-list :reportDetails="mainContent"></report-details-list>
                 <div
                   v-if="
                     collection.sub_collections &&
@@ -58,21 +53,23 @@
                   <div class="card-body">
                     <div class="card-text">
                       <h5>Contact Information</h5>
-                      <report-details-list
-                        :reportDetails="rightCardContent.contact"
-                      ></report-details-list>
+                      <report-details-list :reportDetails="rightCardContent.contact"></report-details-list>
                       <h5>Biobank</h5>
-                      <report-details-list
-                        :reportDetails="rightCardContent.biobank"
-                      ></report-details-list>
+                      <report-details-list :reportDetails="rightCardContent.biobank"></report-details-list>
+                      <table>
+                        <tr>
+                          <th colspan="2">Biobank id:</th>
+                        </tr>
+                        <tr>
+                          <td class="biobank-id" colspan="2">{{collection.biobank.id}}</td>
+                        </tr>
+                      </table>
                       <h5
                         v-if="
                           rightCardContent.networks &&
                             rightCardContent.networks.length > 0
                         "
-                      >
-                        Networks
-                      </h5>
+                      >Networks</h5>
                       <report-details-list
                         :reportDetails="network"
                         v-for="network in rightCardContent.networks"
@@ -83,16 +80,10 @@
                           rightCardContent.quality.Certification.value.length >
                             0
                         "
-                      >
-                        Quality
-                      </h5>
-                      <report-details-list
-                        :reportDetails="rightCardContent.quality"
-                      ></report-details-list>
+                      >Quality</h5>
+                      <report-details-list :reportDetails="rightCardContent.quality"></report-details-list>
                       <h5>Collaboration</h5>
-                      <report-details-list
-                        :reportDetails="rightCardContent.collaboration"
-                      ></report-details-list>
+                      <report-details-list :reportDetails="rightCardContent.collaboration"></report-details-list>
                     </div>
                   </div>
                 </div>
@@ -172,3 +163,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.biobank-id {
+  word-break: break-all;
+}
+</style>
