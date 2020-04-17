@@ -24,12 +24,12 @@
         </a>
       </td>
       <!--Type email-->
-      <th v-else-if="value.type === 'email'" colspan="2">
+      <td v-else-if="value.type === 'email'" colspan="2">
         <a :href="'mailto:' + value.value">
           <i class="fa fa-fw fa-paper-plane" aria-hidden="true"></i
           ><span class="mg-icon-text">Email</span>
         </a>
-      </th>
+      </td>
       <!--Type phone-->
       <td v-else-if="value.type === 'phone'">
         <i class="fa fa-fw fa-phone" aria-hidden="true"></i
