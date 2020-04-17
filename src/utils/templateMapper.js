@@ -117,7 +117,7 @@ export const mapCollectionDetailsListContent = collection => {
           : undefined,
         type: 'email'
       },
-      'Biobank id': { value: collection.biobank.id, type: 'string-with-key' },
+      // 'Biobank id': { value: collection.biobank.id, type: 'string-with-header' },
       'Partner charter': {
         value: collection.biobank.partner_charter_signed,
         type: 'bool'
