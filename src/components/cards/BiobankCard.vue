@@ -16,7 +16,6 @@
             <b-img
               class="biobank-icon covid-icon"
               :src="require('../../assets/custom_icons/covid19.png')"
-              :title="availableCovidTypes"
             />
           </span>
         </div>
@@ -31,6 +30,12 @@
               <b>Juridical person:</b>
             </small>
             <small>{{ biobank['juridical_person'] }}</small>
+            <small>
+              <b>Covid-19 features:</b>
+            </small>
+            <template v-for="(type, index) of availableCovidTypes">
+              <small :key="type + index">{{type}}</small>
+            </template>
           </p>
         </div>
         <div v-else class="col-md-12 text-center">
