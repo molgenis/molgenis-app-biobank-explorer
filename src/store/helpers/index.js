@@ -1,4 +1,4 @@
-import { createInQuery, createANDQuery } from '../../utils'
+import { createInQuery, createComparisons } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 
@@ -26,18 +26,14 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-export const createBiobankRSQLQuery = (state) => {
-  const filters = transformToRSQL({
-    operator: 'AND',
-    operands: flatten([
-      createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
-      createInQuery('id', state.biobank_quality.biobanks)
-    ])
-  })
-  const covidfilter = createANDQuery('covid19biobank', state.covid19.filters)
-
-  if (filters !== '' && covidfilter !== '') { return `${filters};${covidfilter}` } else return filters || covidfilter
-}
+export const createBiobankRSQLQuery = (state) => transformToRSQL({
+  operator: 'AND',
+  operands: flatten([
+    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+    createInQuery('id', state.biobank_quality.biobanks),
+    createComparisons('covid19biobank', state.covid19.filters)
+  ])
+})
 
 const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
 export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]

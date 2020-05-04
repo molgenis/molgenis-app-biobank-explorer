@@ -1,5 +1,3 @@
-import { encodeRsqlValue } from '@molgenis/rsql'
-
 /**
  * Generate the attribute selector for quality parameters (can be either for collection or for biobank)
  * */
@@ -17,15 +15,12 @@ export const createInQuery = (attribute, filters) => filters.length > 0
   ? [{selector: attribute, comparison: '=in=', arguments: filters}]
   : []
 
-export const createANDQuery = (attribute, filters) => {
-  if (filters.length > 0) {
-    let andQueryParts = []
-    for (let filter of filters) {
-      andQueryParts.push(`${attribute}==${filter}`)
-    }
-    return encodeRsqlValue(`(${andQueryParts.join(';')})`)
-  } else return ''
-}
+/**
+ * Create an array of == comparisons for each filter value
+ */
+export const createComparisons = (attribute, filters) =>
+  filters.map(filterValue => ({ selector: attribute, comparison: '==', arguments: filterValue }))
+
 /**
  * Return an Array of unique identifiers
  *
@@ -46,6 +41,7 @@ export const removeFilterFromFilterArrayById = (filters, selectedFilterId) => {
 export default {
   getUniqueIdArray,
   createInQuery,
+  createComparisons,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector
 }

@@ -63,7 +63,17 @@ describe('store', () => {
           covid19: {filters: ['covid19']},
           showCountryFacet: true
         }
-        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);(covid19biobank==covid19)')
+        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank==covid19')
+      })
+      it('should create AND filter for covid19 biobank filter values', () => {
+        const state = {
+          search: 'Cell&Co',
+          country: {filters: []},
+          biobank_quality: {filters: [], biobanks: []},
+          covid19: {filters: ['covid19', 'covid19a']},
+          showCountryFacet: true
+        }
+        expect(getters.biobankRsql(state)).to.equal('covid19biobank==covid19;covid19biobank==covid19a')
       })
       it('should return the empty string if no filters are selected', () => {
         const state = {
