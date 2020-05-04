@@ -63,7 +63,7 @@ describe('store', () => {
           covid19: {filters: ['covid19']},
           showCountryFacet: true
         }
-        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank=in=(covid19)')
+        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);(covid19biobank==covid19)')
       })
       it('should return the empty string if no filters are selected', () => {
         const state = {
