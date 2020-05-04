@@ -63,6 +63,12 @@ describe('BiobankReportCard', () => {
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
         expect(wrapper.vm.query).to.equal('some-query')
       })
+
+      it('should expose a list of covid19 types if available', () => {
+        biobankReport.covid19biobank = [{label: 'Member of the COVID-19 network'}, {name: 'COVID-19'}]
+        const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
+        expect(wrapper.vm.availableCovidTypes).to.equal('Member of the COVID-19 network, COVID-19')
+      })
     })
 
     describe('collectionsData', () => {
