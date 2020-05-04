@@ -24,6 +24,7 @@
               <div class="col-md-8">
                 <p><b>Id: </b>{{ biobank.id }}</p>
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
+                    <p v-if="hasCovidFeatures"><b>Covid-19: </b>{{ availableCovidTypes() }}</p>
                 <h3>Collections</h3>
                 <div v-for="(collection, index) in collectionsData" :key="collection.id">
                   <hr v-if="index"/>
@@ -114,6 +115,19 @@
       }),
       back () {
         this.$router.go(-1)
+      },
+      availableCovidTypes () {
+        if (
+          this.biobank.covid19biobank &&
+          this.biobank.covid19biobank.length > 0
+        ) {
+          return this.biobank.covid19biobank
+            .map(covidItem => covidItem.label || covidItem.name)
+            .join(', ')
+        } else return ''
+      },
+      hasCovidFeatures () {
+        return this.biobank.covid19biobank && this.biobank.covid19biobank.length > 0
       }
     },
     mounted () {
