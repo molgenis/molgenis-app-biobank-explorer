@@ -9,10 +9,10 @@
             </router-link>
             <span id="biobank-name">{{ biobank.name }}</span>
           </h5>
-          <small v-if="hasCovidFeatures()">
+          <small v-if="availableCovidTypes">
             <quality-column :qualities="biobank.quality" :spacing="0"></quality-column>
           </small>
-          <span v-if="biobank.covid19biobank && biobank.covid19biobank.length > 0">
+          <span v-if="availableCovidTypes">
             <b-img
               class="biobank-icon covid-icon"
               :src="require('../../assets/custom_icons/covid19.png')"
@@ -33,7 +33,7 @@
             <small>
               <b>Covid-19:</b>
             </small>
-            <template v-if="hasCovidFeatures()">
+            <template v-if="availableCovidTypes">
               <small :key="type + index" v-for="(type, index) of availableCovidTypes">{{type}}</small>
             </template>
           </p>
@@ -124,9 +124,6 @@ export default {
           .map(covidItem => covidItem.label || covidItem.name)
           .join(', ')
       } else return ''
-    },
-    hasCovidFeatures () {
-      return this.biobank.covid19biobank && this.biobank.covid19biobank.length > 0
     }
   },
   components: {
