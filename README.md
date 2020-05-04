@@ -193,7 +193,7 @@ Go to Rancher, select correct cluster
 * image > {registry-adress}/{imagename}:{optional tag}
 * select correct namespace
 * Add port > portname: http, publish port: 80, as a: cluster-ip
-* env variable: API {molgenis instance you want e.g. molgenis1}
+* env variable: API {molgenis instance url you want e.g. molgenis1.example.org}
 * launch
 
 * workloads > loadbalancing
