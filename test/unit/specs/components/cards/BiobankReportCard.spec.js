@@ -67,7 +67,16 @@ describe('BiobankReportCard', () => {
       it('should expose a list of covid19 types if available', () => {
         biobankReport.covid19biobank = [{label: 'Member of the COVID-19 network'}, {name: 'COVID-19'}]
         const wrapper = shallowMount(BiobankReportCard, {mocks, stubs, store})
-        expect(wrapper.vm.availableCovidTypes).to.equal('Member of the COVID-19 network, COVID-19')
+        expect(wrapper.vm.availableCovidTypes).to.deep.equal({
+          Covid19: {
+            badgeColor: 'warning',
+            type: 'list',
+            value: [
+              'Member of the COVID-19 network',
+              'COVID-19'
+            ]
+          }
+        })
       })
     })
 
