@@ -110,7 +110,7 @@ const getHumanReadableString = (state) => {
 
   if (covid19.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'biobank covid19 is one of ' + covid19.join(',')
+    humanReadableString += 'biobank covid19 features are ' + covid19.join(',')
   }
 
   return humanReadableString
