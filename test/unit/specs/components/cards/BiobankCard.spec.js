@@ -44,6 +44,6 @@ describe('BiobankCard', () => {
   })
   it('should return nothing if covid types are not available', () => {
     const wrapper = shallowMount(BiobankCard, {propsData, stubs})
-    expect(wrapper.vm.availableCovidTypes).to.equal(undefined)
+    expect(wrapper.vm.availableCovidTypes).to.equal('')
   })
 })

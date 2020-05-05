@@ -16,6 +16,12 @@ export const createInQuery = (attribute, filters) => filters.length > 0
   : []
 
 /**
+ * Create an array of == comparisons for each filter value
+ */
+export const createComparisons = (attribute, filters) =>
+  filters.map(filterValue => ({ selector: attribute, comparison: '==', arguments: filterValue }))
+
+/**
  * Return an Array of unique identifiers
  *
  * @param list List of strings
@@ -35,6 +41,7 @@ export const removeFilterFromFilterArrayById = (filters, selectedFilterId) => {
 export default {
   getUniqueIdArray,
   createInQuery,
+  createComparisons,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector
 }

@@ -1,4 +1,4 @@
-import { createInQuery } from '../../utils'
+import { createInQuery, createComparisons } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 
@@ -31,7 +31,7 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
     createInQuery('id', state.biobank_quality.biobanks),
-    createInQuery('covid19biobank', state.covid19.filters)
+    createComparisons('covid19biobank', state.covid19.filters)
   ])
 })
 
@@ -110,7 +110,7 @@ const getHumanReadableString = (state) => {
 
   if (covid19.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'biobank covid19 is one of ' + covid19.join(',')
+    humanReadableString += 'biobank covid19 features are ' + covid19.join(',')
   }
 
   return humanReadableString

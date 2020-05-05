@@ -266,7 +266,7 @@ describe('store', () => {
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease and biobank covid19 is one of covid19',
+          humanReadable: 'Free text search contains free text search and selected countries are NL,BE and selected material types are RNA and selected collection quality standards are eric and selected collection types are type and selected data types are dataType and selected disease types are small disease,medium disease,big disease and biobank covid19 features are covid19',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
@@ -321,7 +321,7 @@ describe('store', () => {
 
       it('should generate a negotiator query with biobank filter expressions', () => {
         const getters = {
-          biobankRsql: 'covid19=in=(covid19)'
+          biobankRsql: 'covid19==covid19'
         }
         const state = {
           search: '',
@@ -352,11 +352,11 @@ describe('store', () => {
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'biobank covid19 is one of covid19',
+          humanReadable: 'biobank covid19 features are covid19',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           biobankId: 'eu_bbmri_eric_biobanks',
-          biobankRsql: 'covid19=in=(covid19)'
+          biobankRsql: 'covid19==covid19'
         }
 
         expect(actual).to.deep.equal(expected)
@@ -426,7 +426,7 @@ describe('store', () => {
         state.covid19.filters.push('covid19')
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 is one of covid19'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19'
 
         expect(actual).to.equal(expected)
       })

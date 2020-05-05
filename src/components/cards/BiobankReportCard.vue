@@ -24,6 +24,9 @@
               <div class="col-md-8">
                 <p><b>Id: </b>{{ biobank.id }}</p>
                 <report-description :description="biobank.description" :maxLength="500"></report-description>
+                    <p v-if="availableCovidTypes">
+                      <report-details-list :reportDetails="availableCovidTypes"></report-details-list>
+                   </p>
                 <h3>Collections</h3>
                 <div v-for="(collection, index) in collectionsData" :key="collection.id">
                   <hr v-if="index"/>
@@ -106,6 +109,21 @@
       },
       quality () {
         return {Certification: {value: mapObjArrayToStringArrayIfExists(this.biobank.quality), type: 'list'}}
+      },
+      availableCovidTypes () {
+        if (
+          this.biobank.covid19biobank &&
+          this.biobank.covid19biobank.length > 0
+        ) {
+          return {
+            Covid19: {
+              badgeColor: 'warning',
+              type: 'list',
+              value: this.biobank.covid19biobank
+                .map(covidItem => covidItem.label || covidItem.name)
+            }
+          }
+        } else return ''
       }
     },
     methods: {
