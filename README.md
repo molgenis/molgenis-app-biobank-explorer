@@ -175,8 +175,6 @@ Create a registry tag for the image
 docker tag {tag} {registry-adress}:{port}/{imagename}:{optional tag}
 ```
 
-Now login with username and password
-
 Then upload the image to the registry
 (now you need the tag)
 
