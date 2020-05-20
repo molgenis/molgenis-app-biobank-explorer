@@ -89,11 +89,11 @@ export default {
     covidFilter () {
       return {
         name: 'covid19',
-        label: 'COVID-19',
+        label: 'COVID-19 ',
         options: this.covid19Options,
         initiallyCollapsed: !this.$store.state.route.query.covid19,
         filters: this.$store.state.covid19.filters,
-        maxVisibleOptions: 4
+        maxVisibleOptions: 25
       }
     },
     filters () {
@@ -104,7 +104,7 @@ export default {
           options: this.materialOptions,
           initiallyCollapsed: !this.$store.state.route.query.materials,
           filters: this.$store.state.materials.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'country',
@@ -119,7 +119,7 @@ export default {
           options: this.biobankQualityOptions,
           initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
           filters: this.$store.state.biobank_quality.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'collection_quality',
@@ -127,7 +127,7 @@ export default {
           options: this.collectionQualityOptions,
           initiallyCollapsed: !this.$store.state.route.query.collection_quality,
           filters: this.$store.state.collection_quality.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'type',
@@ -135,7 +135,7 @@ export default {
           options: this.typesOptions,
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'dataType',
@@ -143,7 +143,7 @@ export default {
           options: this.dataTypeOptions,
           initiallyCollapsed: !this.$store.state.route.query.dataType,
           filters: this.$store.state.dataType.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         }
       ].filter(facet => {
         // config option showCountryFacet is used to toggle Country facet
