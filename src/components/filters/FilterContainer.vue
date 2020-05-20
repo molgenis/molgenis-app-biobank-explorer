@@ -9,6 +9,14 @@
     ></string-filter>
     <checkbox-filters
       class="covid-filter"
+      :key="covidNetworkFilter.name"
+      v-bind="covidNetworkFilter"
+      :value="covidNetworkFilter.filters"
+      :important="true"
+      @input="value => filterChange(covidNetworkFilter.name, value)"
+    />
+    <checkbox-filters
+      class="covid-filter"
       :key="covidFilter.name"
       v-bind="covidFilter"
       :value="covidFilter.filters"
@@ -70,7 +78,8 @@ export default {
       typesOptions: 'getTypesOptions',
       dataTypeOptions: 'getDataTypeOptions',
       showCountryFacet: 'showCountryFacet',
-      covid19Options: 'getCovid19Options'
+      covid19Options: 'getCovid19Options',
+      covid19NetworkOptions: 'getCovid19NetworkOptions'
     }),
     search: {
       get () {
@@ -86,10 +95,20 @@ export default {
         this.$store.commit(SET_SEARCH, search)
       }
     },
+    covidNetworkFilter () {
+      return {
+        name: 'covid19-network',
+        label: 'COVID-19',
+        options: this.covid19NetworkOptions,
+        initiallyCollapsed: !this.$store.state.route.query.covid19network,
+        filters: this.$store.state.covid19network.filters,
+        maxVisibleOptions: 25
+      }
+    },
     covidFilter () {
       return {
         name: 'covid19',
-        label: 'COVID-19 ',
+        label: 'COVID-19 Services',
         options: this.covid19Options,
         initiallyCollapsed: !this.$store.state.route.query.covid19,
         filters: this.$store.state.covid19.filters,

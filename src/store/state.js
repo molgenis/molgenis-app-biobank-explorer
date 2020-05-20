@@ -50,6 +50,13 @@ export default {
     filters: [],
     options: []
   },
+  covid19network: {
+    filters: [],
+    options: [
+      { id: 'covid19-biobank-network', label: 'Biobanks providing COVID-19 services' },
+      { id: 'covid19-collection-network', label: 'Collections with COVID-19 samples' }
+    ]
+  },
   biobank_quality: {
     filters: [],
     options: [],

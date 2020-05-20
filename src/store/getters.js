@@ -40,6 +40,8 @@ export default {
   getDiagnosisAvailableOptions: state => state.diagnosis_available.options,
   showCountryFacet: state => state.showCountryFacet,
   getCovid19Options: state => state.covid19.options,
+  getCovid19NetworkOptions: state => state.covid19network.options,
+
   /**
    * Get map of active filters
    */

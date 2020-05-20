@@ -112,6 +112,7 @@ export default {
     state.type.filters = []
     state.dataType.filters = []
     state.covid19.filters = []
+    state.covid19network.filters = []
   },
   [SET_BIOBANKS] (state, biobanks) {
     biobanks.forEach(biobank => {
@@ -186,6 +187,10 @@ export default {
 
     if (query.covid19) {
       state.covid19.filters = query.covid19.split(',')
+    }
+
+    if (query.covid19network) {
+      state.covid19network.filters = query.covid19network.split(',')
     }
 
     if (query.nToken) {

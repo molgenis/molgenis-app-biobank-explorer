@@ -13,7 +13,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/login': {
-       target: 'https://directory.bbmri-eric.eu',
+       target: 'http://molgenis85.gcc.rug.nl',
        changeOrigin: true
        },
       // Don't do this on production
@@ -22,11 +22,11 @@ module.exports = {
         changeOrigin: true
       },
       '/api': {
-        target: 'https://directory.bbmri-eric.eu',
+        target: 'http://molgenis85.gcc.rug.nl',
         changeOrigin: true
       },
       '/logout': {
-        target: 'https://directory.bbmri-eric.eu',
+        target: 'http://molgenis85.gcc.rug.nl',
         changeOrigin: true
       }
     },
