@@ -53,7 +53,7 @@
 <script>
 import StringFilter from './StringFilter'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
-import { UPDATE_FILTER, SET_SEARCH } from '../../store/mutations'
+import { UPDATE_FILTER, SET_SEARCH, SET_COVID_19_NETWORK } from '../../store/mutations'
 import {
   GET_COUNTRY_OPTIONS,
   GET_MATERIALS_OPTIONS,
@@ -97,7 +97,7 @@ export default {
     },
     covidNetworkFilter () {
       return {
-        name: 'covid19-network',
+        name: 'covid19network',
         label: 'COVID-19',
         options: this.covid19NetworkOptions,
         initiallyCollapsed: !this.$store.state.route.query.covid19network,
@@ -171,9 +171,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ updateFilter: UPDATE_FILTER }),
+    ...mapMutations({ updateFilter: UPDATE_FILTER, setCovid19Network: SET_COVID_19_NETWORK }),
+
     filterChange (name, filters) {
-      this.updateFilter({ name, filters })
+      if (name === 'covid19network') this.setCovid19Network(filters)
+      // this.updateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [name]: value }

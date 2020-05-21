@@ -1,3 +1,4 @@
+import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 // Create an object type AppConfigurationException
@@ -53,9 +54,17 @@ export default {
   covid19network: {
     filters: [],
     options: [
-      { id: 'covid19-biobank-network', label: 'Biobanks providing COVID-19 services' },
-      { id: 'covid19-collection-network', label: 'Collections with COVID-19 samples' }
+      { id: covid19BiobankNetworkSelectionId, label: 'Biobanks providing COVID-19 services' },
+      { id: covid19CollectionNetworkSelectionId, label: 'Collections with COVID-19 samples' }
     ]
+  },
+  // this is a shadow facet, used to filter out biobanks on network id for covid19.
+  biobank_network: {
+    filters: []
+  },
+  // this is a shadow facet, used to filter out collections on network id for covid19.
+  collection_network: {
+    filters: []
   },
   biobank_quality: {
     filters: [],
