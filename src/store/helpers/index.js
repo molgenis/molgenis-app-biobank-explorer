@@ -18,6 +18,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('data_categories', state.dataType.filters),
     createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
     createInQuery('id', state.collection_quality.collections),
+    createInQuery('network', state.collection_network.filters),
     state.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
@@ -26,15 +27,19 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-export const createBiobankRSQLQuery = (state) => transformToRSQL({
-  operator: 'AND',
-  operands: flatten([
-    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
-    createInQuery('id', state.biobank_quality.biobanks),
-    createComparisons('covid19biobank', state.covid19.filters)
-  ])
-})
+export const createBiobankRSQLQuery = (state) => {
+  console.log(state.biobank_network.filters)
+  return transformToRSQL({
+    operator: 'AND',
+    operands: flatten([
+      createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+      createInQuery('id', state.biobank_quality.biobanks),
+      createInQuery('network', state.biobank_network.filters),
+      createComparisons('covid19biobank', state.covid19.filters)
+    ])
 
+  })
+}
 const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
 export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
 
@@ -73,6 +78,8 @@ const getHumanReadableString = (state) => {
   const dataTypes = state.dataType.filters
   const diseases = state.diagnosis_available.filters.map(disease => disease.label)
   const covid19 = state.covid19.filters
+  const biobankNetwork = state.biobank_network.filters
+  const collectionNetwork = state.collection_network.filters
 
   if (state.search.length > 0) {
     humanReadableString += 'Free text search contains ' + state.search
@@ -111,6 +118,16 @@ const getHumanReadableString = (state) => {
   if (covid19.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
     humanReadableString += 'biobank covid19 features are ' + covid19.join(',')
+  }
+
+  if (biobankNetwork.length > 0) {
+    if (humanReadableString.length > 0) humanReadableString += ' and '
+    humanReadableString += 'biobank is part of network' + biobankNetwork.join(',')
+  }
+
+  if (collectionNetwork.length > 0) {
+    if (humanReadableString.length > 0) humanReadableString += ' and '
+    humanReadableString += 'collection is part of network ' + collectionNetwork.join(',')
   }
 
   return humanReadableString

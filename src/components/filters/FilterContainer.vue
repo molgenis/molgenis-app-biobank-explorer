@@ -53,7 +53,7 @@
 <script>
 import StringFilter from './StringFilter'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
-import { UPDATE_FILTER, SET_SEARCH, SET_COVID_19_NETWORK } from '../../store/mutations'
+import { UPDATE_FILTER, SET_SEARCH } from '../../store/mutations'
 import {
   GET_COUNTRY_OPTIONS,
   GET_MATERIALS_OPTIONS,
@@ -67,6 +67,7 @@ import {
 } from '../../store/actions'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
+import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
 
 export default {
   computed: {
@@ -97,7 +98,7 @@ export default {
     },
     covidNetworkFilter () {
       return {
-        name: 'covid19network',
+        name: covid19NetworkFacetName,
         label: 'COVID-19',
         options: this.covid19NetworkOptions,
         initiallyCollapsed: !this.$store.state.route.query.covid19network,
@@ -171,11 +172,10 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ updateFilter: UPDATE_FILTER, setCovid19Network: SET_COVID_19_NETWORK }),
+    ...mapMutations({ updateFilter: UPDATE_FILTER }),
 
     filterChange (name, filters) {
-      if (name === 'covid19network') this.setCovid19Network(filters)
-      // this.updateFilter({ name, filters })
+      this.updateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [name]: value }

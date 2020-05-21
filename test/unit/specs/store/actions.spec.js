@@ -34,6 +34,7 @@ import {
   SET_COLLECTION_IDS
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
+import { mockState } from '../mockState'
 
 describe('store', () => {
   describe('actions', () => {
@@ -368,16 +369,11 @@ describe('store', () => {
     })
 
     describe('SEND_TO_NEGOTIATOR', () => {
-      const state = {
-        search: 'Cell&Co',
-        country: {filters: []},
-        materials: {filters: ['CELL_LINES']},
-        collection_quality: {filters: []},
-        diagnosis_available: {filters: []},
-        type: {filters: []},
-        dataType: {filters: []},
-        covid19: {filters: []}
-      }
+      let state = mockState()
+
+      state.search = 'Cell&Co'
+      state.materials.filters = ['CELL_LINES']
+
       const getters = {
         rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
         biobanks: [
@@ -411,6 +407,7 @@ describe('store', () => {
                 URL: location,
                 entityId: 'eu_bbmri_eric_collections',
                 rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
+                nToken: null,
                 humanReadable: 'Free text search contains Cell&Co and selected material types are CELL_LINES'
               })
               td.verify(setLocationHref('http://example.org/negotiator'))
