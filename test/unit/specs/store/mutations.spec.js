@@ -6,6 +6,7 @@ import mutations, {
   SET_BIOBANKS
 } from '../../../../src/store/mutations'
 import { mockState } from '../mockState'
+import { covid19CollectionNetworkSelectionId, covid19NetworkId, covid19BiobankNetworkSelectionId } from '../../../../src/store/helpers/covid19Helper'
 
 let state
 
@@ -129,6 +130,31 @@ describe('store', () => {
         mutations.__UPDATE_FILTER__(state, {name: 'country', filters: countries})
 
         expect(state.country.filters).to.deep.equal(countries)
+      })
+
+      it('should only set covid19networkId to biobank_network filter when covid19network biobank checkbox has been selected', () => {
+        mutations.__SET_COVID_19_NETWORK__(state, [covid19BiobankNetworkSelectionId])
+        expect(state.biobank_network.filters).to.deep.equal([covid19NetworkId])
+        expect(state.collection_network.filters).to.deep.equal([])
+      })
+
+      it('should only set covid19networkId to collection_network filter when covid19network collection checkbox has been selected', () => {
+        mutations.__SET_COVID_19_NETWORK__(state, [covid19CollectionNetworkSelectionId])
+        expect(state.collection_network.filters).to.deep.equal([covid19NetworkId])
+        expect(state.biobank_network.filters).to.deep.equal([])
+      })
+
+      it('should clear biobank covid19network id if not selected', () => {
+        state.biobank_network.filters = ['networkA', covid19NetworkId, 'networkB']
+        state.collection_network.filters = [covid19NetworkId]
+        mutations.__SET_COVID_19_NETWORK__(state, [covid19CollectionNetworkSelectionId])
+        expect(state.biobank_network.filters).to.deep.equal(['networkA', 'networkB'])
+      })
+
+      it('should only set the covid19 network id once, even if already present', () => {
+        state.collection_network.filters = [covid19NetworkId]
+        mutations.__SET_COVID_19_NETWORK__(state, [covid19CollectionNetworkSelectionId])
+        expect(state.collection_network.filters).to.deep.equal([covid19NetworkId])
       })
     })
 

@@ -27,19 +27,16 @@ export const createRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-export const createBiobankRSQLQuery = (state) => {
-  console.log(state.biobank_network.filters)
-  return transformToRSQL({
-    operator: 'AND',
-    operands: flatten([
-      createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
-      createInQuery('id', state.biobank_quality.biobanks),
-      createInQuery('network', state.biobank_network.filters),
-      createComparisons('covid19biobank', state.covid19.filters)
-    ])
+export const createBiobankRSQLQuery = (state) => transformToRSQL({
+  operator: 'AND',
+  operands: flatten([
+    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+    createInQuery('id', state.biobank_quality.biobanks),
+    createInQuery('network', state.biobank_network.filters),
+    createComparisons('covid19biobank', state.covid19.filters)
+  ])
+})
 
-  })
-}
 const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
 export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
 
