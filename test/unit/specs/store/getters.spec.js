@@ -260,6 +260,15 @@ describe('store', () => {
       })
     })
 
+    describe('getCovid19NetworkOptions', () => {
+      it('should retrieve the options that are available for the covid19network filter', () => {
+        const actual = getters.getCovid19NetworkOptions(state)
+        const expected = mockState().covid19network.options
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
         const state = {
