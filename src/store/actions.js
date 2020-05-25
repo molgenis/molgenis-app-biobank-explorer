@@ -24,6 +24,7 @@ import {
   SET_NETWORK_COLLECTIONS,
   SET_NETWORK_BIOBANKS,
   SET_COVID_19,
+  SET_NETWORK_OPTIONS,
   SET_BIOBANK_IDS
 } from './mutations'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
@@ -47,6 +48,7 @@ export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
 export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
+export const GET_NETWORK_OPTIONS = '__GET_BIOBANK_NETWORK_OPTIONS__'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -119,6 +121,13 @@ export default {
   [GET_COVID_19_OPTIONS] ({commit}) {
     api.get(COVID_19_API_PATH).then(response => {
       commit(SET_COVID_19, response.items)
+    }, error => {
+      commit(SET_ERROR, error)
+    })
+  },
+  [GET_NETWORK_OPTIONS] ({commit}) {
+    api.get(NETWORK_API_PATH).then(response => {
+      commit(SET_NETWORK_OPTIONS, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })

@@ -14,6 +14,7 @@ export const SET_SEARCH = '__SET_SEARCH__'
 export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLLECTIONS__'
 export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
 export const SET_COVID_19 = '__SET_COVID_19__'
+export const SET_NETWORK_OPTIONS = '__SET_NETWORK_OPTIONS__'
 
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
@@ -89,7 +90,11 @@ export default {
     state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
   },
   [SET_COVID_19] (state, covid19) {
-    state.covid19.options = covid19.map(covOption => { return { id: covOption.id, label: covOption.label || covOption.name } })
+    state.covid19.options = covid19.map(option => { return { id: option.id, label: option.label || option.name } })
+  },
+  [SET_NETWORK_OPTIONS] (state, network) {
+    state.biobank_network.options = network.map(option => { return { id: option.id, label: option.label || option.name } })
+    state.collection_network.options = network.map(option => { return { id: option.id, label: option.label || option.name } })
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -210,6 +215,14 @@ export default {
 
     if (query.covid19) {
       state.covid19.filters = query.covid19.split(',')
+    }
+
+    if (query.biobank_network) {
+      state.biobank_network.filters = query.biobank_network.split(',')
+    }
+
+    if (query.collection_network) {
+      state.collection_network.filters = query.collection_network.split(',')
     }
 
     if (query.covid19network) {

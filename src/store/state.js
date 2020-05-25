@@ -60,11 +60,13 @@ export default {
   },
   // this is a shadow facet, used to filter out biobanks on network id for covid19.
   biobank_network: {
-    filters: []
+    filters: [],
+    options: []
   },
   // this is a shadow facet, used to filter out collections on network id for covid19.
   collection_network: {
-    filters: []
+    filters: [],
+    options: []
   },
   biobank_quality: {
     filters: [],
