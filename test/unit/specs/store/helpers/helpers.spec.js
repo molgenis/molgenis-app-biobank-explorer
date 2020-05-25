@@ -3,41 +3,18 @@ import helpers, {
   CODE_REGEX,
   filterCollectionTree
 } from '../../../../../src/store/helpers'
+import { mockState } from '../../mockState'
+import { covid19NetworkId } from '../../../../../src/store/helpers/covid19Helper'
 
 const getInitialState = () => {
-  return {
-    search: '',
-    country: {
-      filters: []
-    },
-    materials: {
-      filters: []
-    },
-    collection_quality: {
-      filters: [],
-      collections: []
-    },
-    biobank_quality: {
-      filters: [],
-      biobanks: []
-    },
-    diagnosis_available: {
-      filters: []
-    },
-    type: {
-      filters: []
-    },
-    covid19: {
-      filters: []
-    },
-    dataType: {
-      filters: []
-    },
-    showCountryFacet: true
-  }
+  return mockState()
 }
+let state
 
 describe('store', () => {
+  beforeEach(() => {
+    state = getInitialState()
+  })
   describe('Vuex store helper functions', () => {
     describe('filterCollectionTree', () => {
       it('should filter collections with matching IDs', () => {
@@ -157,7 +134,6 @@ describe('store', () => {
     })
 
     describe('createRSQLQuery', () => {
-      let state = getInitialState()
       afterEach(() => { state = getInitialState() })
 
       it('should create a query with only a country filter', () => {
@@ -233,35 +209,21 @@ describe('store', () => {
           rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
           biobankRsql: 'name=q=\'free text search\''
         }
-        const state = {
-          search: 'free text search',
-          country: {
-            filters: ['NL', 'BE']
-          },
-          materials: {
-            filters: ['RNA']
-          },
-          collection_quality: {
-            filters: ['eric']
-          },
-          type: {
-            filters: ['type']
-          },
-          dataType: {
-            filters: ['dataType']
-          },
-          diagnosis_available: {
-            filters: [
-              {label: 'small disease'},
-              {label: 'medium disease'},
-              {label: 'big disease'}
-            ]
-          },
-          covid19: {
-            filters: ['covid19']
-          },
-          nToken: '2837538B50189SR237489X14098A2374'
-        }
+
+        state.search = 'free text search'
+        state.country.filters = ['NL', 'BE']
+        state.materials.filters = ['RNA']
+        state.collection_quality.filters = ['eric']
+        state.type.filters = ['type']
+        state.dataType.filters = ['dataType']
+        state.diagnosis_available.filters = [
+          {label: 'small disease'},
+          {label: 'medium disease'},
+          {label: 'big disease'}
+        ]
+
+        state.covid19.filters = ['covid19']
+        state.nToken = '2837538B50189SR237489X14098A2374'
 
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
@@ -281,31 +243,9 @@ describe('store', () => {
         const getters = {
           rsql: 'materials=in=(RNA)'
         }
-        const state = {
-          search: '',
-          country: {
-            filters: []
-          },
-          materials: {
-            filters: ['RNA']
-          },
-          collection_quality: {
-            filters: []
-          },
-          type: {
-            filters: []
-          },
-          dataType: {
-            filters: []
-          },
-          diagnosis_available: {
-            filters: []
-          },
-          covid19: {
-            filters: []
-          },
-          nToken: '2837538B50189SR237489X14098A2374'
-        }
+
+        state.materials.filters = ['RNA']
+        state.nToken = '2837538B50189SR237489X14098A2374'
 
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
@@ -323,31 +263,8 @@ describe('store', () => {
         const getters = {
           biobankRsql: 'covid19==covid19'
         }
-        const state = {
-          search: '',
-          country: {
-            filters: []
-          },
-          materials: {
-            filters: []
-          },
-          collection_quality: {
-            filters: []
-          },
-          type: {
-            filters: []
-          },
-          dataType: {
-            filters: []
-          },
-          diagnosis_available: {
-            filters: []
-          },
-          covid19: {
-            filters: ['covid19']
-          },
-          nToken: '2837538B50189SR237489X14098A2374'
-        }
+        state.covid19.filters = ['covid19']
+        state.nToken = '2837538B50189SR237489X14098A2374'
 
         const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
@@ -424,9 +341,11 @@ describe('store', () => {
           {id: '2', label: 'big disease'}
         )
         state.covid19.filters.push('covid19')
+        state.biobank_network.filters.push(covid19NetworkId)
+        state.collection_network.filters.push(covid19NetworkId)
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19 and biobank is part of networkbbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19 and collection is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
 
         expect(actual).to.equal(expected)
       })

@@ -2,6 +2,7 @@
 import FilterContainer from '@/components/filters/FilterContainer'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { mockState } from '../../mockState'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -13,46 +14,7 @@ describe('FilterContainer', () => {
   describe('filters', () => {
     it('should include the country filters if showCountryFacet is set to true', () => {
       store = new Vuex.Store({
-        state: {
-          route: {
-            query: ''
-          },
-          items: [],
-          country: {
-            filters: [],
-            options: []
-          },
-          materials: {
-            filters: [],
-            options: []
-          },
-          collection_quality: {
-            filters: [],
-            options: [],
-            collections: []
-          },
-          biobank_quality: {
-            filters: [],
-            options: [],
-            biobanks: []
-          },
-          diagnosis_available: {
-            filters: [],
-            options: []
-          },
-          type: {
-            filters: [],
-            options: []
-          },
-          dataType: {
-            filters: [],
-            options: []
-          },
-          covid19: {
-            filters: [],
-            options: []
-          }
-        },
+        state: mockState,
         actions: {
           __GET_COUNTRY_OPTIONS__: () => '',
           __GET_MATERIALS_OPTIONS__: () => '',
@@ -81,46 +43,7 @@ describe('FilterContainer', () => {
 
     it('should exclude the country filters if showCountryFacet is set to false', () => {
       store = new Vuex.Store({
-        state: {
-          route: {
-            query: ''
-          },
-          items: [],
-          country: {
-            filters: [],
-            options: []
-          },
-          materials: {
-            filters: [],
-            options: []
-          },
-          collection_quality: {
-            filters: [],
-            options: [],
-            collections: []
-          },
-          biobank_quality: {
-            filters: [],
-            options: [],
-            biobanks: []
-          },
-          diagnosis_available: {
-            filters: [],
-            options: []
-          },
-          type: {
-            filters: [],
-            options: []
-          },
-          dataType: {
-            filters: [],
-            options: []
-          },
-          covid19: {
-            filters: [],
-            options: []
-          }
-        },
+        state: mockState,
         actions: {
           __GET_COUNTRY_OPTIONS__: () => '',
           __GET_MATERIALS_OPTIONS__: () => '',

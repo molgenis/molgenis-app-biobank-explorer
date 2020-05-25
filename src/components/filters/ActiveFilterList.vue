@@ -48,15 +48,15 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'active-filter-list',
   methods: {
-    removeFilter (filterType, selectedFilterId) {
+    removeFilter (filterName, selectedFilterId) {
       const filters = utils.removeFilterFromFilterArrayById(
-        this.activeFilters[filterType],
+        this.activeFilters[filterName],
         selectedFilterId
       )
-      this.$store.commit(UPDATE_FILTER, { name: filterType, filters: filters })
+      this.$store.commit(UPDATE_FILTER, { name: filterName, filters: filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
-        query: { ...this.$store.state.route.query, [filterType]: value }
+        query: { ...this.$store.state.route.query, [filterName]: value }
       })
     },
     resetAllFilters () {

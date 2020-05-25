@@ -1,5 +1,6 @@
 import { getUniqueIdArray } from '../utils'
 import { fixCollectionTree } from './helpers'
+import { covid19NetworkFacetName, covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 import Vue from 'vue'
 
 export const SET_COUNTRIES = '__SET_COUNTRIES__'
@@ -20,9 +21,12 @@ export const RESET_FILTERS = '__RESET_FILTERS__'
 export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
 export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
+export const SET_COVID_19_NETWORK = '__SET_COVID_19_NETWORK__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
 export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
+
+// these are not network, but networkreport
 export const SET_NETWORK_COLLECTIONS = '__SET_NETWORK_COLLECTIONS__'
 export const SET_NETWORK_BIOBANKS = '__SET_NETWORK_BIOBANKS__'
 
@@ -96,6 +100,7 @@ export default {
    * @param filters an array of values
    */
   [UPDATE_FILTER] (state, {name, filters}) {
+    if (name === covid19NetworkFacetName) this.commit(SET_COVID_19_NETWORK, filters)
     state[name].filters = filters
   },
   /**
@@ -112,6 +117,9 @@ export default {
     state.type.filters = []
     state.dataType.filters = []
     state.covid19.filters = []
+    state.covid19network.filters = []
+    state.biobank_network.filters = []
+    state.collection_network.filters = []
   },
   [SET_BIOBANKS] (state, biobanks) {
     biobanks.forEach(biobank => {
@@ -123,6 +131,22 @@ export default {
   },
   [SET_COLLECTION_IDS] (state, collectionIds) {
     state.collectionIds = collectionIds
+  },
+  [SET_COVID_19_NETWORK] (state, covid19FacetSelectionIds) {
+    const biobankNetwork = state.biobank_network.filters
+    const collectionNetwork = state.collection_network.filters
+    const addForBiobank = covid19FacetSelectionIds.includes(covid19BiobankNetworkSelectionId)
+    const addForNetwork = covid19FacetSelectionIds.includes(covid19CollectionNetworkSelectionId)
+
+    // clear state
+    if (biobankNetwork.includes(covid19NetworkId)) biobankNetwork.splice(biobankNetwork.indexOf(covid19NetworkId), 1)
+    if (collectionNetwork.includes(covid19NetworkId)) collectionNetwork.splice(collectionNetwork.indexOf(covid19NetworkId), 1)
+
+    if (addForBiobank) Vue.set(state.biobank_network, 'filters', [...biobankNetwork, covid19NetworkId])
+    else Vue.set(state.biobank_network, 'filters', biobankNetwork)
+
+    if (addForNetwork) Vue.set(state.collection_network, 'filters', [...collectionNetwork, covid19NetworkId])
+    else Vue.set(state.collection_network, 'filters', collectionNetwork)
   },
   /**
    * Store a single biobank in the state for showing a biobank report
@@ -186,6 +210,12 @@ export default {
 
     if (query.covid19) {
       state.covid19.filters = query.covid19.split(',')
+    }
+
+    if (query.covid19network) {
+      const selectedCovid19NetworkIds = query.covid19network.split(',')
+      state.covid19network.filters = selectedCovid19NetworkIds
+      this.commit(SET_COVID_19_NETWORK, selectedCovid19NetworkIds)
     }
 
     if (query.nToken) {

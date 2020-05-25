@@ -9,6 +9,14 @@
     ></string-filter>
     <checkbox-filters
       class="covid-filter"
+      :key="covidNetworkFilter.name"
+      v-bind="covidNetworkFilter"
+      :value="covidNetworkFilter.filters"
+      :important="true"
+      @input="value => filterChange(covidNetworkFilter.name, value)"
+    />
+    <checkbox-filters
+      class="covid-filter"
       :key="covidFilter.name"
       v-bind="covidFilter"
       :value="covidFilter.filters"
@@ -59,6 +67,7 @@ import {
 } from '../../store/actions'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
+import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
 
 export default {
   computed: {
@@ -70,7 +79,8 @@ export default {
       typesOptions: 'getTypesOptions',
       dataTypeOptions: 'getDataTypeOptions',
       showCountryFacet: 'showCountryFacet',
-      covid19Options: 'getCovid19Options'
+      covid19Options: 'getCovid19Options',
+      covid19NetworkOptions: 'getCovid19NetworkOptions'
     }),
     search: {
       get () {
@@ -86,14 +96,24 @@ export default {
         this.$store.commit(SET_SEARCH, search)
       }
     },
+    covidNetworkFilter () {
+      return {
+        name: covid19NetworkFacetName,
+        label: 'COVID-19',
+        options: this.covid19NetworkOptions,
+        initiallyCollapsed: !this.$store.state.route.query.covid19network,
+        filters: this.$store.state.covid19network.filters,
+        maxVisibleOptions: 25
+      }
+    },
     covidFilter () {
       return {
         name: 'covid19',
-        label: 'COVID-19',
+        label: 'COVID-19 Services',
         options: this.covid19Options,
         initiallyCollapsed: !this.$store.state.route.query.covid19,
         filters: this.$store.state.covid19.filters,
-        maxVisibleOptions: 4
+        maxVisibleOptions: 25
       }
     },
     filters () {
@@ -104,7 +124,7 @@ export default {
           options: this.materialOptions,
           initiallyCollapsed: !this.$store.state.route.query.materials,
           filters: this.$store.state.materials.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'country',
@@ -119,7 +139,7 @@ export default {
           options: this.biobankQualityOptions,
           initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
           filters: this.$store.state.biobank_quality.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'collection_quality',
@@ -127,7 +147,7 @@ export default {
           options: this.collectionQualityOptions,
           initiallyCollapsed: !this.$store.state.route.query.collection_quality,
           filters: this.$store.state.collection_quality.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'type',
@@ -135,7 +155,7 @@ export default {
           options: this.typesOptions,
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         },
         {
           name: 'dataType',
@@ -143,7 +163,7 @@ export default {
           options: this.dataTypeOptions,
           initiallyCollapsed: !this.$store.state.route.query.dataType,
           filters: this.$store.state.dataType.filters,
-          maxVisibleOptions: 4
+          maxVisibleOptions: 25
         }
       ].filter(facet => {
         // config option showCountryFacet is used to toggle Country facet
@@ -153,6 +173,7 @@ export default {
   },
   methods: {
     ...mapMutations({ updateFilter: UPDATE_FILTER }),
+
     filterChange (name, filters) {
       this.updateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
