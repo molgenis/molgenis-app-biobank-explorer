@@ -9,8 +9,8 @@
 
       <!--Type bool-->
       <td v-if="value.type === 'bool'">
-        <span v-if="value.value" class="badge badge-success">yes</span>
-        <span v-else class="badge badge-danger">no</span>
+        <span v-if="value.value" class="badge badge-info">yes</span>
+        <span v-else class="badge badge-info">no</span>
       </td>
       <!--Type string-->
       <td v-else-if="value.type.includes('string')" colspan="2">

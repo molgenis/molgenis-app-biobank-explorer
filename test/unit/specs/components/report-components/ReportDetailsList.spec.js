@@ -73,10 +73,10 @@ describe('ReportDetailsList', () => {
     expect(wrapper.html()).to.have.string('class="mg-icon-text">+1234567890')
   })
   it('should contain bool true value', () => {
-    expect(wrapper.html()).to.have.string('class="badge badge-success">yes')
+    expect(wrapper.html()).to.have.string('class="badge badge-info">yes')
   })
   it('should contain bool false value', () => {
-    expect(wrapper.html()).to.have.string('class="badge badge-danger">no')
+    expect(wrapper.html()).to.have.string('class="badge badge-info">no')
   })
   it('should contain list with default color', () => {
     expect(wrapper.html()).to.have.string('class="m-1 badge badge-success">val1')
