@@ -179,7 +179,7 @@ describe('store', () => {
         const expected = ['RNA', 'DNA']
         const state = {
           materials: {
-            options: ['RNA', 'DNA']
+            options: expected
           }
         }
 
