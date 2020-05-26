@@ -93,8 +93,9 @@ export default {
     state.covid19.options = covid19.map(option => { return { id: option.id, label: option.label || option.name } })
   },
   [SET_NETWORK_OPTIONS] (state, network) {
-    state.biobank_network.options = network.map(option => { return { id: option.id, label: option.label || option.name } })
-    state.collection_network.options = network.map(option => { return { id: option.id, label: option.label || option.name } })
+    const networkOptionsWithoutCovid19 = network.map(option => { return { id: option.id, label: option.label || option.name } }).filter(network => network.id !== covid19NetworkId)
+    state.biobank_network.options = networkOptionsWithoutCovid19
+    state.collection_network.options = networkOptionsWithoutCovid19
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
