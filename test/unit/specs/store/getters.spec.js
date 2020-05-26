@@ -259,6 +259,38 @@ describe('store', () => {
       })
     })
 
+    describe('getBiobankNetworkOptions', () => {
+      it('should retrieve the options that are available for the BiobankNetwork filter', () => {
+        const expected = [
+          {test: 'getBiobankNetworkOptions'}
+        ]
+        const state = {
+          biobank_network: {
+            options: expected
+          }
+        }
+        const actual = getters.getBiobankNetworkOptions(state)
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
+    describe('getCollectionNetworkOptions', () => {
+      it('should retrieve the options that are available for the CollectionNetwork filter', () => {
+        const expected = [
+          {test: 'getCollectionNetworkOptions'}
+        ]
+        const state = {
+          collection_network: {
+            options: expected
+          }
+        }
+        const actual = getters.getCollectionNetworkOptions(state)
+
+        expect(actual).to.deep.equal(expected)
+      })
+    })
+
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
         const state = {
