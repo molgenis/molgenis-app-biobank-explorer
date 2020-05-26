@@ -66,11 +66,11 @@
       visibleOptions () {
         // make it so that importants always start above the cut
         const allOptions = this.options.map(o => ({value: o.id, text: o.label || o.name, id: o.id, important: o.important})).sort((a, b) => {
-          if (!a.important && !b.important) return -1
-          else if (a.important && !b.important) return -1
+          if (!a.important && !b.important) return 0
+          else if (a.important && !b.important) return 0
           else return 1
         })
-        return this.sliceOptions ? allOptions.slice(0, visibleOptions) : allOptions
+        return this.sliceOptions ? allOptions.slice(0, this.maxVisibleOptions) : allOptions
       },
       showToggleSlice () {
         return this.maxVisibleOptions && this.maxVisibleOptions < this.options.length
