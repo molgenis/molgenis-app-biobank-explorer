@@ -8,10 +8,14 @@
     <b-collapse :visible='!collapsed' :id="'filter-card-'+name">
       <b-card-body>
         <b-form-group class="pt-2">
-          <!--  :class="{'text-decoration-underline':option.important}" -->
           <b-form-checkbox-group stacked  :name="name" v-model="selection" >
-            <b-form-checkbox v-for="(option,index) in optionsInternal" :value="option.id" :key="index + option.text" >{{option.text}}
-              <span v-if="option.important" class="text-warning">*</span>
+              <div v-if="importantOptions.length > 0" class="important bg-warning text-white">            
+            <b-form-checkbox  v-for="(option,index) in importantOptions" :value="option.id" :key="index + option.text" >
+                  {{option.text}}
+            </b-form-checkbox>
+            </div>
+                 <b-form-checkbox  v-for="(option,index) in normalOptions" :value="option.id" :key="index + option.text" >
+                  {{option.text}}
             </b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -53,11 +57,20 @@
           this.$emit('input', value)
         }
       },
-      optionsInternal () {
-        return this.visibleOptions.map(o => ({value: o.id, text: o.label || o.name, important: o.important, id: o.id}))
+      importantOptions () {
+        return this.visibleOptions.filter(o => o.important)
+      },
+      normalOptions () {
+        return this.visibleOptions.filter(o => !o.important)
       },
       visibleOptions () {
-        return this.sliceOptions ? this.options.slice(0, this.maxVisibleOptions) : this.options
+        // make it so that importants always start above the cut
+        const allOptions = this.options.map(o => ({value: o.id, text: o.label || o.name, id: o.id, important: o.important})).sort((a, b) => {
+          if (!a.important && !b.important) return -1
+          else if (a.important && !b.important) return -1
+          else return 1
+        })
+        return this.sliceOptions ? allOptions.slice(0, visibleOptions) : allOptions
       },
       showToggleSlice () {
         return this.maxVisibleOptions && this.maxVisibleOptions < this.options.length
@@ -87,3 +100,14 @@
     }
   }
 </script>
+
+<style scoped>
+.important{
+    position: relative;
+    height: calc(124%);
+    width: calc(100% + 2.50rem);
+    padding:1.25rem;
+    left:-1.25rem;
+    top: -1.75rem;
+}
+</style>
