@@ -60,7 +60,7 @@ export default {
    * Update the options for the different filters available in the biobank explorer
    */
   [SET_COUNTRIES] (state, countries) {
-    state.country.options = countries.map(country => ({...country, label: country.name}))
+    state.country.options = countries
   },
   [SET_MATERIALS] (state, materials) {
     state.materials.options = materials
@@ -90,10 +90,10 @@ export default {
     state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
   },
   [SET_COVID_19] (state, covid19) {
-    state.covid19.options = covid19.map(option => { return { id: option.id, label: option.label || option.name } })
+    state.covid19.options = covid19
   },
   [SET_NETWORK_OPTIONS] (state, network) {
-    const networkOptionsWithoutCovid19 = network.map(option => { return { id: option.id, label: option.label || option.name } }).filter(network => network.id !== covid19NetworkId)
+    const networkOptionsWithoutCovid19 = network.filter(network => network.id !== covid19NetworkId)
     state.biobank_network.options = networkOptionsWithoutCovid19
     state.collection_network.options = networkOptionsWithoutCovid19
   },

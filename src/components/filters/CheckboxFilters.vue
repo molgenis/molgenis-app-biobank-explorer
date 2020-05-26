@@ -3,12 +3,16 @@
     <b-card-header class="filter-header" :class="important ? 'bg-warning text-white' : ''" v-b-toggle="'filter-card-'+name">
       <i class="fa fa-caret-right when-closed" aria-hidden="true"></i>
       <i class="fa fa-caret-down when-opened" aria-hidden="true"></i>
-      {{label}}
+      {{ label }}
     </b-card-header>
     <b-collapse :visible='!collapsed' :id="'filter-card-'+name">
       <b-card-body>
         <b-form-group class="pt-2">
-          <b-form-checkbox-group stacked v-model="selection" :name="name" :options="optionsInternal">
+          <!--  :class="{'text-decoration-underline':option.important}" -->
+          <b-form-checkbox-group stacked  :name="name" v-model="selection" >
+            <b-form-checkbox v-for="(option,index) in optionsInternal" :value="option.id" :key="index + option.text" >{{option.text}}
+              <span v-if="option.important" class="text-warning">*</span>
+            </b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
         <b-link class="toggle-slice card-link" @click.prevent="toggleSlice" v-if="showToggleSlice">{{toggleSliceText}}</b-link>
@@ -50,7 +54,7 @@
         }
       },
       optionsInternal () {
-        return this.visibleOptions.map(o => ({value: o.id, text: o.label}))
+        return this.visibleOptions.map(o => ({value: o.id, text: o.label || o.name, important: o.important, id: o.id}))
       },
       visibleOptions () {
         return this.sliceOptions ? this.options.slice(0, this.maxVisibleOptions) : this.options
