@@ -166,10 +166,9 @@ describe('store', () => {
 
     describe('getCountryOptions', () => {
       it('should retrieve the options that are available for the country filter', () => {
-        state.country.options = ['AT', 'BE']
-
-        const actual = getters.getCountryOptions(state)
         const expected = ['AT', 'BE']
+        state.country.options = expected
+        const actual = getters.getCountryOptions(state)
 
         expect(actual).to.deep.equal(expected)
       })
@@ -177,6 +176,7 @@ describe('store', () => {
 
     describe('getMaterialOptions', () => {
       it('should retrieve the options that are available for the material type filter', () => {
+        const expected = ['RNA', 'DNA']
         const state = {
           materials: {
             options: ['RNA', 'DNA']
@@ -184,7 +184,6 @@ describe('store', () => {
         }
 
         const actual = getters.getMaterialOptions(state)
-        const expected = ['RNA', 'DNA']
 
         expect(actual).to.deep.equal(expected)
       })
@@ -192,14 +191,13 @@ describe('store', () => {
 
     describe('getCollectionQualityOptions', () => {
       it('should retrieve the options that are available for the collection standards filter', () => {
+        const expected = ['self', 'eric']
         const state = {
           collection_quality: {
-            options: ['self', 'eric']
+            options: expected
           }
         }
-
         const actual = getters.getCollectionQualityOptions(state)
-        const expected = ['self', 'eric']
 
         expect(actual).to.deep.equal(expected)
       })
@@ -207,14 +205,13 @@ describe('store', () => {
 
     describe('getBiobankQualityOptions', () => {
       it('should retrieve the options that are available for the biobank standards filter', () => {
+        const expected = ['accredited', 'eric']
         const state = {
           biobank_quality: {
-            options: ['accredited', 'eric']
+            options: expected
           }
         }
-
         const actual = getters.getBiobankQualityOptions(state)
-        const expected = ['accredited', 'eric']
 
         expect(actual).to.deep.equal(expected)
       })
@@ -222,20 +219,16 @@ describe('store', () => {
 
     describe('getDiagnosisAvailableOptions', () => {
       it('should retrieve the options that are available for the disease type filter', () => {
-        const state = {
-          diagnosis_available: {
-            options: [
-              {id: '1', label: 'small disease'},
-              {id: '2', label: 'big disease'}
-            ]
-          }
-        }
-
-        const actual = getters.getDiagnosisAvailableOptions(state)
         const expected = [
           {id: '1', label: 'small disease'},
           {id: '2', label: 'big disease'}
         ]
+        const state = {
+          diagnosis_available: {
+            options: expected
+          }
+        }
+        const actual = getters.getDiagnosisAvailableOptions(state)
 
         expect(actual).to.deep.equal(expected)
       })
@@ -243,18 +236,15 @@ describe('store', () => {
 
     describe('getCovid19Options', () => {
       it('should retrieve the options that are available for the covid19 filter', () => {
-        const state = {
-          covid19: {
-            options: [
-              {id: 'covid19', label: 'Member of the COVID-19 network'}
-            ]
-          }
-        }
-
-        const actual = getters.getCovid19Options(state)
         const expected = [
           {id: 'covid19', label: 'Member of the COVID-19 network'}
         ]
+        const state = {
+          covid19: {
+            options: expected
+          }
+        }
+        const actual = getters.getCovid19Options(state)
 
         expect(actual).to.deep.equal(expected)
       })
@@ -364,6 +354,17 @@ describe('store', () => {
       })
 
       it('should retrieve an object of filters with diagnosis_available in it', () => {
+        const expected = {
+          diagnosis_available: [
+            {
+              '_href': '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
+              'id': 'urn:miriam:icd:C00-C97',
+              'code': 'C00-C97',
+              'label': 'C00-C97 - Malignant neoplasms',
+              'ontology': 'ICD-10'
+            }
+          ]
+        }
         const state = {
           country: {
             filters: [],
@@ -374,15 +375,7 @@ describe('store', () => {
             options: []
           },
           diagnosis_available: {
-            filters: [
-              {
-                '_href': '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
-                'id': 'urn:miriam:icd:C00-C97',
-                'code': 'C00-C97',
-                'label': 'C00-C97 - Malignant neoplasms',
-                'ontology': 'ICD-10'
-              }
-            ],
+            filters: expected.diagnosis_available,
             options: []
           },
           collection_quality: {
@@ -409,17 +402,6 @@ describe('store', () => {
           }
         }
         const actual = getters.getActiveFilters(state)
-        const expected = {
-          diagnosis_available: [
-            {
-              '_href': '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
-              'id': 'urn:miriam:icd:C00-C97',
-              'code': 'C00-C97',
-              'label': 'C00-C97 - Malignant neoplasms',
-              'ontology': 'ICD-10'
-            }
-          ]
-        }
         expect(actual).to.deep.equal(expected)
       })
     })
