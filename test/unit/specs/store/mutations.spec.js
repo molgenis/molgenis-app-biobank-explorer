@@ -104,6 +104,16 @@ describe('store', () => {
         expect(state.covid19.options).to.deep.equal(covidOptionsLabel)
       })
     })
+    describe('SET_NETWORK_OPTIONS', () => {
+      it('should set the network options for biobank and collections without covid19', () => {
+        const testCase = [{id: 'test_network', label: 'My awesome test network'}]
+        const covidOptionsLabel = [{id: covid19NetworkId, name: 'member of covid 19 network'}, testCase[0]]
+        mutations.__SET_NETWORK_OPTIONS__(state, covidOptionsLabel)
+
+        expect(state.biobank_network.options).to.deep.equal(testCase)
+        expect(state.collection_network.options).to.deep.equal(testCase)
+      })
+    })
 
     describe('SET_DIAGNOSIS_AVAILABLE', () => {
       it('should set the diagnosis available in the state with the payload', () => {
@@ -289,6 +299,8 @@ describe('store', () => {
             type: 'BIRTH_COHORT',
             dataType: 'BIOLOGICAL_SAMPLES',
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
+            biobank_network: 'networkA,networkB',
+            collection_network: 'networkC,networkD',
             covid19: 'covid19'
           }
         }
@@ -301,6 +313,8 @@ describe('store', () => {
         expect(state.covid19.filters).to.deep.equal(['covid19'])
         expect(state.dataType.filters).to.deep.equal(['BIOLOGICAL_SAMPLES'])
         expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
+        expect(state.covid19.filters).to.deep.equal(['covid19'])
+        expect(state.biobank_network.filters).to.deep.equal(['networkA', 'networkB'])
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
       })
