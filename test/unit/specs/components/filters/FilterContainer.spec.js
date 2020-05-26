@@ -37,7 +37,6 @@ describe('FilterContainer', () => {
         }
       })
       wrapper = shallowMount(FilterContainer, {store})
-      expect(wrapper.vm.filters.length).eq(6)
       expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).eq('country')
     })
 
@@ -66,7 +65,6 @@ describe('FilterContainer', () => {
         }
       })
       wrapper = shallowMount(FilterContainer, {store})
-      expect(wrapper.vm.filters.length).eq(5)
       expect(wrapper.vm.filters.find((filter) => filter.name === 'country')).eq(undefined)
     })
   })

@@ -41,7 +41,8 @@ export default {
   showCountryFacet: state => state.showCountryFacet,
   getCovid19Options: state => state.covid19.options,
   getCovid19NetworkOptions: state => state.covid19network.options,
-
+  getBiobankNetworkOptions: state => state.biobank_network.options,
+  getCollectionNetworkOptions: state => state.collection_network.options,
   /**
    * Get map of active filters
    */

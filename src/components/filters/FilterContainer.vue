@@ -63,7 +63,8 @@ import {
   GET_DATA_TYPE_OPTIONS,
   GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_BIOBANK_QUALITY_BIOBANKS,
-  GET_COVID_19_OPTIONS
+  GET_COVID_19_OPTIONS,
+  GET_NETWORK_OPTIONS
 } from '../../store/actions'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
@@ -77,6 +78,8 @@ export default {
       collectionQualityOptions: 'getCollectionQualityOptions',
       biobankQualityOptions: 'getBiobankQualityOptions',
       typesOptions: 'getTypesOptions',
+      biobankNetworkOptions: 'getBiobankNetworkOptions',
+      collectionNetworkOptions: 'getCollectionNetworkOptions',
       dataTypeOptions: 'getDataTypeOptions',
       showCountryFacet: 'showCountryFacet',
       covid19Options: 'getCovid19Options',
@@ -151,10 +154,26 @@ export default {
         },
         {
           name: 'type',
-          label: 'Collection Types',
+          label: 'Collection types',
           options: this.typesOptions,
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
+          maxVisibleOptions: 25
+        },
+        {
+          name: 'biobank_network',
+          label: 'Biobank network',
+          options: this.biobankNetworkOptions,
+          initiallyCollapsed: !this.$store.state.route.query.biobank_network,
+          filters: this.$store.state.biobank_network.filters,
+          maxVisibleOptions: 25
+        },
+        {
+          name: 'collection_network',
+          label: 'Collection network',
+          options: this.collectionNetworkOptions,
+          initiallyCollapsed: !this.$store.state.route.query.collection_network,
+          filters: this.$store.state.collection_network.filters,
           maxVisibleOptions: 25
         },
         {
@@ -196,6 +215,7 @@ export default {
     this.$store.dispatch(GET_TYPES_OPTIONS)
     this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
     this.$store.dispatch(GET_COVID_19_OPTIONS)
+    this.$store.dispatch(GET_NETWORK_OPTIONS)
   },
   components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
 }
