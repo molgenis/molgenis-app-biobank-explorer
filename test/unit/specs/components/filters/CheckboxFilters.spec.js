@@ -124,7 +124,7 @@ describe('components', () => {
           propsData: {
             name: 'facet',
             label: 'Label',
-            options: [{id: 'testA', label: 'testLabelA'}, {id: 'testB', label: 'testLabelB', important: false},
+            options: [{id: 'testA', label: 'testLabelA'}, {id: 'testB', label: 'testLabelB', important: true},
               {id: 'testC', label: 'testLabelC', important: true}, {id: 'testD', label: 'testLabelD'}],
             value: [],
             initiallyCollapsed: false,
@@ -132,8 +132,10 @@ describe('components', () => {
           }
         })
 
-        expect(wrapper.vm.visibleOptions).to.deep.eq([{id: 'testC', value: 'testC', text: 'testLabelC', important: true}, {id: 'testA', value: 'testA', text: 'testLabelA', important: undefined},
-          {id: 'testB', value: 'testB', text: 'testLabelB', important: false}, {id: 'testD', value: 'testD', text: 'testLabelD', important: undefined}])
+        expect(wrapper.vm.visibleOptions).to.deep.eq([ {id: 'testB', value: 'testB', text: 'testLabelB', important: true},
+          {id: 'testC', value: 'testC', text: 'testLabelC', important: true},
+          {id: 'testA', value: 'testA', text: 'testLabelA', important: undefined},
+          {id: 'testD', value: 'testD', text: 'testLabelD', important: undefined}])
       })
     })
   })
