@@ -118,6 +118,23 @@ describe('components', () => {
         selectionToggler.trigger('click')
         expect(wrapper.emitted().input).to.deep.eq([[['1', '2']]])
       })
+
+      it('moves important options to the top of the list and leaves the order of the other options intact', () => {
+        wrapper = mount(CheckboxFilters, {
+          propsData: {
+            name: 'facet',
+            label: 'Label',
+            options: [{id: 'testA', label: 'testLabelA'}, {id: 'testB', label: 'testLabelB', important: false},
+              {id: 'testC', label: 'testLabelC', important: true}, {id: 'testD', label: 'testLabelD'}],
+            value: [],
+            initiallyCollapsed: false,
+            maxVisibleOptions: 10
+          }
+        })
+
+        expect(wrapper.vm.visibleOptions).to.deep.eq([{id: 'testC', value: 'testC', text: 'testLabelC', important: true}, {id: 'testA', value: 'testA', text: 'testLabelA', important: undefined},
+          {id: 'testB', value: 'testB', text: 'testLabelB', important: false}, {id: 'testD', value: 'testD', text: 'testLabelD', important: undefined}])
+      })
     })
   })
 })
