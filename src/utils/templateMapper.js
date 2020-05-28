@@ -87,7 +87,7 @@ export const mapDetailsTableContent = report => {
 }
 
 export const mapCollectionDetailsListContent = collection => {
-  return {
+  const collectionDetailList = {
     contact: {
       name: {
         value: getNameOfHead(collection),
@@ -129,15 +129,16 @@ export const mapCollectionDetailsListContent = collection => {
         value: mapObjArrayToStringArrayIfExists(collection.quality),
         type: 'list'
       }
-    },
-    collaboration: {
-      Commercial: { value: collection.collaboration_commercial, type: 'bool' },
-      'Not for profit': {
-        value: collection.collaboration_non_for_profit,
-        type: 'bool'
-      }
     }
   }
+  collectionDetailList.collaboration = {}
+  if (collection.collaboration_commercial) {
+    collectionDetailList.collaboration.Commercial = { value: collection.collaboration_commercial, type: 'bool' }
+  }
+  if (collection.collaboration_non_for_profit) {
+    collectionDetailList.collaboration['Not for profit'] = { value: collection.collaboration_non_for_profit, type: 'bool' }
+  }
+  return collectionDetailList
 }
 
 export const mapNetworkInfo = data => {

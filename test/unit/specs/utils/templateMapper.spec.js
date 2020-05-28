@@ -135,7 +135,14 @@ describe('templateMapper', () => {
     it('should generate collaboration of rightCardContent', () => {
       const actual = mapCollectionDetailsListContent(collectionsReport)
       expect(actual.collaboration['Not for profit']).to.deep.equal({value: true, type: 'bool'})
-      expect(actual.collaboration.Commercial).to.deep.equal({value: false, type: 'bool'})
+      expect(actual.collaboration.Commercial).to.deep.equal(undefined)
+    })
+
+    it('should generate both properties in collaboration', () => {
+      collectionsReport.collaboration_commercial = true
+      const actual = mapCollectionDetailsListContent(collectionsReport)
+      expect(actual.collaboration['Not for profit']).to.deep.equal({value: true, type: 'bool'})
+      expect(actual.collaboration.Commercial).to.deep.equal({value: true, type: 'bool'})
     })
   })
 
