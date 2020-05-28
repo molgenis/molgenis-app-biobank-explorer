@@ -51,7 +51,7 @@
 </style>
 <script>
 export default {
-  data() {
+  data () {
     return {
       collapsed: this.initiallyCollapsed,
       sliceOptions:
@@ -69,20 +69,20 @@ export default {
   },
   computed: {
     selection: {
-      get() {
+      get () {
         return this.value
       },
-      set(value) {
+      set (value) {
         this.$emit('input', value)
       }
     },
-    importantOptions() {
+    importantOptions () {
       return this.visibleOptions.filter(o => o.important)
     },
-    normalOptions() {
+    normalOptions () {
       return this.visibleOptions.filter(o => !o.important)
     },
-    visibleOptions() {
+    visibleOptions () {
       // make it so that importants always start above the cut
       const allOptions = this.options
         .map(o => ({
@@ -100,36 +100,36 @@ export default {
         ? allOptions.slice(0, this.maxVisibleOptions)
         : allOptions
     },
-    showToggleSlice() {
+    showToggleSlice () {
       return (
         this.maxVisibleOptions && this.maxVisibleOptions < this.options.length
       )
     },
-    toggleSelectText() {
+    toggleSelectText () {
       return this.selection.length ? 'Deselect all' : 'Select all'
     },
-    toggleSliceText() {
+    toggleSliceText () {
       return this.sliceOptions
         ? `Show ${this.options.length - this.maxVisibleOptions} more`
         : 'Show less'
     }
   },
   methods: {
-    toggleSelect() {
+    toggleSelect () {
       this.selection =
         this.selection && this.selection.length
           ? []
           : this.options.map(option => option.id)
     },
-    toggleSlice() {
+    toggleSlice () {
       this.sliceOptions = !this.sliceOptions
     }
   },
   watch: {
-    options() {
+    options () {
       this.sliceOptions = this.showToggleSlice
     },
-    maxVisibleOptions() {
+    maxVisibleOptions () {
       this.sliceOptions = this.showToggleSlice
     }
   }
