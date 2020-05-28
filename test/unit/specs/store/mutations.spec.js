@@ -17,11 +17,11 @@ describe('store', () => {
   describe('mutations', () => {
     describe('SET_COUNTRIES', () => {
       it('should set the countries in the state with the payload', () => {
-        const countries = [{id: 'NL', name: 'Nederland'}, {id: 'BE', name: 'Belgie'}, {id: 'DE', name: 'Duitsland'}]
+        const countries = [{id: 'NL', name: 'Nederland'}, {id: 'BE', name: 'Belgie', label: 'Belgie'}, {id: 'DE', label: 'Duitsland'}]
         mutations.__SET_COUNTRIES__(state, countries)
 
-        expect(state.country.options).to.deep.equal([{id: 'NL', name: 'Nederland', label: 'Nederland'},
-          {id: 'BE', name: 'Belgie', label: 'Belgie'}, {id: 'DE', name: 'Duitsland', label: 'Duitsland'}])
+        expect(state.country.options).to.deep.equal([{id: 'NL', name: 'Nederland'},
+          {id: 'BE', name: 'Belgie', label: 'Belgie'}, {id: 'DE', label: 'Duitsland'}])
       })
     })
 
@@ -101,7 +101,7 @@ describe('store', () => {
         const covidOptionsName = [{id: 'covid19', name: 'member of covid 19 network'}]
         mutations.__SET_COVID_19__(state, covidOptionsName)
 
-        expect(state.covid19.options).to.deep.equal(covidOptionsLabel)
+        expect(state.covid19.options).to.deep.equal(covidOptionsName)
       })
     })
     describe('SET_NETWORK_OPTIONS', () => {
