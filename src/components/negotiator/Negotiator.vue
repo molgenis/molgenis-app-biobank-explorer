@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="btn btn-warning negotiator-btn" data-toggle="tooltip" data-placement="bottom"
+  <button type="button" class="btn btn-secondary negotiator-btn" data-toggle="tooltip" data-placement="bottom"
           title="Send to the negotiator" @click="sendToNegotiator" :disabled="disabled">
           REQUEST SAMPLES <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="loading"></i>
   </button>
