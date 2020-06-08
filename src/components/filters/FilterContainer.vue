@@ -116,7 +116,8 @@ export default {
         options: this.covid19Options,
         initiallyCollapsed: !this.$store.state.route.query.covid19,
         filters: this.$store.state.covid19.filters,
-        maxVisibleOptions: 25
+        maxVisibleOptions: 25,
+        all: true
       }
     },
     filters () {
