@@ -11,6 +11,12 @@
     </b-card-header>
     <b-collapse :visible="!collapsed" :id="'filter-card-'+name">
       <b-card-body>
+        <div class="query-type-selector">
+          <label class="label-disabled">
+            Satisfy all
+            <input type="checkbox" :checked="all" disabled/>
+          </label>
+        </div>
         <b-form-group class="pt-2">
           <b-form-checkbox-group stacked :name="name" v-model="selection">
             <div v-if="importantOptions.length > 0" class="important bg-warning text-white">
@@ -65,7 +71,8 @@ export default {
     value: Array,
     initiallyCollapsed: Boolean,
     maxVisibleOptions: Number,
-    important: Boolean
+    important: Boolean,
+    all: Boolean
   },
   computed: {
     selection: {
@@ -144,5 +151,30 @@ export default {
   ); /* to adjust for the bootstrap width of the column */
   left: -1.25rem; /* To offset the background to occupy the entire width */
   padding-left: 1.25rem; /* adjust checkbox to be inline */
+}
+
+.query-type-selector {
+  text-align: right;
+}
+
+.query-type-selector label {
+  position: relative;
+  margin: 0;
+  top: -0.5rem;
+}
+
+.query-type-selector label:hover {
+  cursor:not-allowed;
+}
+
+.query-type-selector input {
+  margin-left: 0.5rem;
+  background-color: black;
+}
+
+.query-type-selector input::checked {
+   color: #fff !important;
+    background-color: #28a745 !important;
+    border-color: #28a745 !important;
 }
 </style>

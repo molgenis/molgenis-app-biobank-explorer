@@ -17,7 +17,7 @@ describe('components', () => {
             maxVisibleOptions: 4
           }
         })
-        boxes = wrapper.findAll('input')
+        boxes = wrapper.find('fieldset').findAll('input')
       })
 
       it('should render the label', () => {
@@ -49,7 +49,7 @@ describe('components', () => {
       })
 
       it('should render the option labels', () => {
-        const labels = wrapper.findAll('label')
+        const labels = wrapper.find('fieldset').findAll('label')
         expect(labels.at(0).text()).eq('option 1')
         expect(labels.at(1).text()).eq('option 2')
       })
@@ -70,13 +70,13 @@ describe('components', () => {
       })
 
       it('should not slice options when there are fewer than max options', () => {
-        expect(wrapper.findAll('label').length).eq(2)
+        expect(wrapper.find('fieldset').findAll('label').length).eq(2)
         expect(wrapper.vm.$data.sliceOptions).eq(false)
       })
 
       it('should slice options when there are more than max options', () => {
         wrapper.setProps({maxVisibleOptions: 1})
-        expect(wrapper.findAll('label').length).eq(1)
+        expect(wrapper.find('fieldset').findAll('label').length).eq(1)
         expect(wrapper.vm.$data.sliceOptions).eq(true)
       })
 
@@ -92,7 +92,7 @@ describe('components', () => {
         const toggler = wrapper.find('.toggle-slice')
         toggler.trigger('click')
         expect(toggler.text()).eq('Show less')
-        expect(wrapper.findAll('label').length).eq(2)
+        expect(wrapper.find('fieldset').findAll('label').length).eq(2)
       })
 
       it('should emit an event when Deselect all is clicked', () => {
