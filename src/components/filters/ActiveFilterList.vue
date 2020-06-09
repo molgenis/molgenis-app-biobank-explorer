@@ -8,7 +8,7 @@
           @click="removeFilter(filter, value.id)"
           aria-label="Remove filter"
         >
-          {{ value.label }}
+          {{ value.label || value.name }}
           <i class="fa fa-times" aria-hidden="true"></i>
         </button>
       </li>

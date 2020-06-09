@@ -293,61 +293,54 @@ describe('store', () => {
 
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
-        const state = {
-          country: {
-            filters: ['AT'],
-            options: [{id: 'AT', name: 'Austria'}]
-          },
-          materials: {
-            filters: ['PLASMA'],
-            options: [{id: 'PLASMA', label: 'Plasma'}]
-          },
-          diagnosis_available: {
-            filters: [],
-            options: []
-          },
-          collection_quality: {
-            filters: ['eric'],
-            collections: [],
-            options: [{
-              'id': 'eric',
-              'label': 'BBMRI-ERIC audited'
-            }, {
-              'id': 'self',
-              'label': 'Self assessment (BBMRI-ERIC remote audited)'
-            }, {
-              'id': 'self_dev',
-              'label': 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
-            }]
-          },
-          biobank_quality: {
-            filters: ['eric'],
-            options: [{
-              'id': 'eric',
-              'label': 'BBMRI-ERIC audited'
-            }, {
-              'id': 'accredited',
-              'label': 'Certified by accredited body'
-            }]
-          },
-          type: {
-            filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
-            options: [
-              {id: 'BIRTH_COHORT', label: 'Birth cohort'},
-              {id: 'CASE_CONTROL', label: 'Case control'}
-            ]
-          },
-          covid19: {
-            filters: ['covid19'],
-            options: [{id: 'covid19', label: 'Member of the COVID-19 network'}]
-          },
-          dataType: {
-            filters: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
-            options: [
-              {id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples'},
-              {id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records'}
-            ]
-          }
+        state.country = {
+          filters: ['AT'],
+          options: [{id: 'AT', name: 'Austria'}]
+        }
+        state.materials = {
+          filters: ['PLASMA'],
+          options: [{id: 'PLASMA', label: 'Plasma'}]
+        }
+        state.collection_quality = {
+          filters: ['eric'],
+          options: [{
+            'id': 'eric',
+            'label': 'BBMRI-ERIC audited'
+          }, {
+            'id': 'self',
+            'label': 'Self assessment (BBMRI-ERIC remote audited)'
+          }, {
+            'id': 'self_dev',
+            'label': 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
+          }]
+        }
+        state.biobank_quality = {
+          filters: ['eric'],
+          options: [{
+            'id': 'eric',
+            'label': 'BBMRI-ERIC audited'
+          }, {
+            'id': 'accredited',
+            'label': 'Certified by accredited body'
+          }]
+        }
+        state.type = {
+          filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
+          options: [
+            {id: 'BIRTH_COHORT', label: 'Birth cohort'},
+            {id: 'CASE_CONTROL', label: 'Case control'}
+          ]
+        }
+        state.covid19 = {
+          filters: ['covid19'],
+          options: [{id: 'covid19', label: 'Member of the COVID-19 network'}]
+        }
+        state.dataType = {
+          filters: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
+          options: [
+            {id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples'},
+            {id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records'}
+          ]
         }
 
         const actual = getters.getActiveFilters(state)
@@ -397,42 +390,7 @@ describe('store', () => {
             }
           ]
         }
-        const state = {
-          country: {
-            filters: [],
-            options: []
-          },
-          materials: {
-            filters: [],
-            options: []
-          },
-          diagnosis_available: {
-            filters: expected.diagnosis_available,
-            options: []
-          },
-          collection_quality: {
-            filters: [],
-            collections: [],
-            options: []
-          },
-          biobank_quality: {
-            filters: [],
-            biobanks: [],
-            options: []
-          },
-          type: {
-            filters: [],
-            options: []
-          },
-          covid19: {
-            filters: [],
-            options: []
-          },
-          dataType: {
-            filters: [],
-            options: []
-          }
-        }
+        state.diagnosis_available.filters = expected.diagnosis_available
         const actual = getters.getActiveFilters(state)
         expect(actual).to.deep.equal(expected)
       })
