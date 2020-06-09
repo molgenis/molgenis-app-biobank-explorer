@@ -80,8 +80,13 @@ export default {
     if (state.dataType.filters.length > 0) {
       activeFilters.dataType = state.dataType.options.filter(option => state.dataType.filters.includes(option.id))
     }
+
     if (state.covid19.filters.length > 0) {
       activeFilters.covid19 = state.covid19.options.filter(option => state.covid19.filters.includes(option.id))
+    }
+
+    if (state.covid19network.filters.length > 0) {
+      activeFilters.covid19network = state.covid19network.options.filter(option => state.covid19network.filters.includes(option.id))
     }
 
     return activeFilters
