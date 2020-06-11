@@ -31,7 +31,17 @@
       </tr>
       <tr v-if="hasSubCollections(collection)">
         <td colspan="5" class="sub-table-cell">
-          <sub-collections-table :subCollections="collection.sub_collections"></sub-collections-table>
+          <b-link v-b-toggle="'collapse-'+collection.id" class="text-muted">
+            <span class="when-hidden">
+              Show {{collection.sub_collections.length}} subcollections <i class="fa fa-caret-down"></i>
+            </span>
+            <span class="when-visible">
+              Hide subcollections <i class="fa fa-caret-up"></i>
+            </span>
+          </b-link>
+          <b-collapse :id="'collapse-'+collection.id">
+            <sub-collections-table :subCollections="collection.sub_collections"></sub-collections-table>
+          </b-collapse>
         </td>
       </tr>
     </template>
@@ -40,6 +50,13 @@
 </template>
 
 <style>
+  .collapsed > .when-visible {
+    display: none;
+  }
+  :not(.collapsed) > .when-hidden {
+    display: none;
+  }
+
   .table-text-content-columns {
     font-size: 13px;
     font-weight: bold;
