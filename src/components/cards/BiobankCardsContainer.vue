@@ -32,7 +32,7 @@
 
     <div v-else class="status-text">
       <h4>
-        Loading Biobanks...
+        Loading data...
         <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
       </h4>
     </div>
