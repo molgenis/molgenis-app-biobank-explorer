@@ -55,7 +55,7 @@ export default {
     filters: [],
     options: [
       { id: covid19BiobankNetworkSelectionId, label: 'Biobanks providing COVID-19 services' },
-      { id: covid19CollectionNetworkSelectionId, label: 'Collections with COVID-19 samples' }
+      { id: covid19CollectionNetworkSelectionId, label: 'COVID-19 collections' }
     ]
   },
   // this is a shadow facet, used to filter out biobanks on network id for covid19.
