@@ -36,7 +36,18 @@
 
   .multiselect__content-wrapper {
     width: 250%;
+    border: none;
+    border-left:1px solid #e8e8e8;
   }
+
+  .multiselect__select::before {
+  display: none;
+  }
+
+  .multiselect--above .multiselect__content-wrapper{
+    border-top:none;
+  }
+
 </style>
 
 <script>
