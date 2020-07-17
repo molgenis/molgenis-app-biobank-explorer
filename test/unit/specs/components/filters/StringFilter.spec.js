@@ -19,4 +19,9 @@ describe('Stringfilter', () => {
     wrapper.setProps({value: 'hello world'})
     expect(wrapper.vm.$data.model).to.eq('hello world')
   })
+  it('should reset model to empty string when user resets', () => {
+    wrapper.setData({model: 'hello world'})
+    wrapper.find('button').trigger('click')
+    expect(wrapper.vm.$data.model).to.eq('')
+  })
 })
