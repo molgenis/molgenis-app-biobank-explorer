@@ -107,7 +107,10 @@ export default {
    */
   [UPDATE_FILTER] (state, {name, filters}) {
     if (name === covid19NetworkFacetName) this.commit(SET_COVID_19_NETWORK, filters)
-    state[name].filters = filters
+    if (name === 'search') state.search = ''
+    else {
+      state[name].filters = filters
+    }
   },
   /**
    * Reset all filters in the state

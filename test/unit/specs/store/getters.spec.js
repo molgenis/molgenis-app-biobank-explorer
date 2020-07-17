@@ -375,7 +375,7 @@ describe('store', () => {
             id: 'eric',
             label: 'BBMRI-ERIC audited'
           }],
-          'search': [{label: state.search}]
+          'search': [{id: 'search', label: state.search}]
         }
 
         expect(actual).to.deep.equal(expected)
