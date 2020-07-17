@@ -48,6 +48,10 @@ export default {
    */
   getActiveFilters: state => {
     const activeFilters = {}
+    if (state.search !== '') {
+      activeFilters.search = [{ id: 'search', label: state.search }]
+    }
+
     if (state.diagnosis_available.filters.length > 0) {
       activeFilters.diagnosis_available = state.diagnosis_available.filters
     }
