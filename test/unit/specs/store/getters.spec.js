@@ -293,6 +293,8 @@ describe('store', () => {
 
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
+        state.search = 'test searchterm'
+
         state.country = {
           filters: ['AT'],
           options: [{id: 'AT', name: 'Austria'}]
@@ -372,7 +374,8 @@ describe('store', () => {
           'biobank_quality': [{
             id: 'eric',
             label: 'BBMRI-ERIC audited'
-          }]
+          }],
+          'search': [{label: state.search}]
         }
 
         expect(actual).to.deep.equal(expected)
