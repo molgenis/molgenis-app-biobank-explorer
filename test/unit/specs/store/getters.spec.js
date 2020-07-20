@@ -124,6 +124,15 @@ describe('store', () => {
         ])
       })
     })
+    it('should return the total amount of collections for biobanks available', () => {
+      const biobanks = [
+        {id: '1', name: 'Biobank 1', collections: [{id: 'col-1', sub_collections: []}]},
+        {id: '2', name: 'Biobank 2', collections: [{id: 'col-2', sub_collections: []}]},
+        {id: '3', name: 'Biobank 3', collections: [{id: 'col-3', sub_collections: []}, {id: 'col-4', sub_collections: []}]}
+      ]
+      const otherGetters = { biobanks }
+      expect(getters.foundCollections(state, otherGetters)).to.eq(4)
+    })
     describe('loading', () => {
       it('should be false if both biobankIds and collectionIds are present', () => {
         const state = {
