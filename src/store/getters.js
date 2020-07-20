@@ -28,6 +28,9 @@ export default {
     })
   },
   foundBiobanks: (_, { biobanks }) => biobanks.length,
+  foundCollections: (_, { biobanks }) => {
+    if (biobanks.length > 0 && typeof biobanks[0] !== 'string') return biobanks.map(b => b.collections).flat().length
+  },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,
