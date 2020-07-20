@@ -225,6 +225,10 @@ export default {
       state.biobank_network.filters = query.biobank_network.split(',')
     }
 
+    if (query.biobank_quality) {
+      state.biobank_quality.filters = query.biobank_quality.split(',')
+    }
+
     if (query.collection_network) {
       state.collection_network.filters = query.collection_network.split(',')
     }
