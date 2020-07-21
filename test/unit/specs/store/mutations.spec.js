@@ -300,6 +300,7 @@ describe('store', () => {
             dataType: 'BIOLOGICAL_SAMPLES',
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
             biobank_network: 'networkA,networkB',
+            biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
             covid19: 'covid19'
           }
@@ -315,6 +316,7 @@ describe('store', () => {
         expect(state.collection_quality.filters).to.deep.equal(['eric', 'self'])
         expect(state.covid19.filters).to.deep.equal(['covid19'])
         expect(state.biobank_network.filters).to.deep.equal(['networkA', 'networkB'])
+        expect(state.biobank_quality.filters).to.deep.equal(['qualityA'])
         expect(state.search).to.equal('search')
         expect(state.nToken).to.equal('29djgCm29104958f7dLqopf92JDJKS')
       })
