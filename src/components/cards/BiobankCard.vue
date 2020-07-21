@@ -47,7 +47,7 @@
     </div>
 
     <div class="card-body table-card" v-if="!collapsed && !loading">
-      <collections-table v-if="biobank.collections.length > 0" :collections="biobank.collections"></collections-table>
+      <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
     </div>
   </div>
 </template>
@@ -103,6 +103,17 @@ export default {
     }
   },
   computed: {
+    sortedCollections () {
+      return this.biobank.collections.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1
+        }
+        if (a.name > b.name) {
+          return 1
+        }
+        return 0
+      })
+    },
     loading () {
       return typeof this.biobank === 'string'
     },
