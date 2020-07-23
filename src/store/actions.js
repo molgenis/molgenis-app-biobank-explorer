@@ -204,7 +204,7 @@ export default {
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
-  [GET_COLLECTION_IDS] ({commit, getters}) {
+  [GET_COLLECTION_IDS] ({commit, dispatch, getters}) {
     commit(SET_COLLECTION_IDS, undefined)
     let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'
     if (getters.rsql) {
@@ -217,6 +217,7 @@ export default {
           biobankId: helpers.getBiobankId(item.data.biobank.links.self)
         }))
         commit(SET_COLLECTION_IDS, collectionIds)
+        dispatch(GET_QUERY)
       }, error => {
         commit(SET_ERROR, error)
       })

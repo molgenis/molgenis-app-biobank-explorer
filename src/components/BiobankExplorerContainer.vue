@@ -35,8 +35,7 @@ import Negotiator from './negotiator/Negotiator'
 import { mapGetters, mapActions } from 'vuex'
 import {
   GET_COLLECTION_IDS,
-  GET_BIOBANK_IDS,
-  GET_QUERY
+  GET_BIOBANK_IDS
 } from '../store/actions'
 
 export default {
@@ -63,12 +62,8 @@ export default {
   methods: {
     ...mapActions({
       getCollectionIds: GET_COLLECTION_IDS,
-      getBiobankIds: GET_BIOBANK_IDS,
-      getQuery: GET_QUERY
+      getBiobankIds: GET_BIOBANK_IDS
     })
-  },
-  mounted () {
-    this.getQuery()
   }
 }
 </script>

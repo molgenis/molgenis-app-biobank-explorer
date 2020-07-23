@@ -217,6 +217,7 @@ export default {
     this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
     this.$store.dispatch(GET_COVID_19_OPTIONS)
     this.$store.dispatch(GET_NETWORK_OPTIONS)
+    this.$store.dispatch(GET_BIOBANK_QUALITY_BIOBANKS)
   },
   components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
 }
