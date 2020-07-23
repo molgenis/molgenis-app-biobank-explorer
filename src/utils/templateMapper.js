@@ -1,3 +1,5 @@
+import { sortCollectionsByName } from './sorting'
+
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]
@@ -170,7 +172,7 @@ export const mapContactInfo = instance => {
 }
 
 export const mapCollectionsData = collections => {
-  return collections.map(collection => {
+  return sortCollectionsByName(collections.map(collection => {
     return {
       description: collection.description ? collection.description : undefined,
       parentCollection: collection.parent_collection,
@@ -199,15 +201,7 @@ export const mapCollectionsData = collections => {
         }
       }
     }
-  }).sort((a, b) => {
-    if (a.name < b.name) {
-      return -1
-    }
-    if (a.name > b.name) {
-      return 1
-    }
-    return 0
-  })
+  }))
 }
 
 export const mapNetworkData = network => {
