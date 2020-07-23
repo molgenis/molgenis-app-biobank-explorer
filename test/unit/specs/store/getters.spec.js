@@ -130,7 +130,9 @@ describe('store', () => {
         {id: '2', name: 'Biobank 2', collections: [{id: 'col-2', sub_collections: []}]},
         {id: '3', name: 'Biobank 3', collections: [{id: 'col-3', sub_collections: []}, {id: 'col-4', sub_collections: []}]}
       ]
-      const otherGetters = { biobanks }
+      const getActiveFilters = {'activeFilter': 'a'}
+
+      const otherGetters = { biobanks, getActiveFilters }
       expect(getters.foundCollections(state, otherGetters)).to.eq(4)
     })
     describe('loading', () => {
