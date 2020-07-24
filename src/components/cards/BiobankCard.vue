@@ -82,6 +82,7 @@
 <script>
 import CollectionsTable from '../tables/CollectionsTable.vue'
 import utils from '../../utils'
+import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
 import 'array-flat-polyfill'
 
@@ -104,15 +105,7 @@ export default {
   },
   computed: {
     sortedCollections () {
-      return this.biobank.collections.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1
-        }
-        if (a.name > b.name) {
-          return 1
-        }
-        return 0
-      })
+      return sortCollectionsByName(this.biobank.collections)
     },
     loading () {
       return typeof this.biobank === 'string'

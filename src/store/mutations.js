@@ -205,10 +205,6 @@ export default {
       state.materials.filters = query.materials.split(',')
     }
 
-    if (query.collection_quality) {
-      state.collection_quality.filters = query.collection_quality.split(',')
-    }
-
     if (query.type) {
       state.type.filters = query.type.split(',')
     }
