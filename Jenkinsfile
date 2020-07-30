@@ -70,7 +70,7 @@ pipeline {
         branch 'master'
       }
       environment {
-        REPOSITORY = 'molgenis/molgenis-app-biobank-explorer-vue-cli4'
+        REPOSITORY = 'molgenis/molgenis-app-biobank-explorer'
       }
       steps {
         timeout(time: 30, unit: 'MINUTES') {
