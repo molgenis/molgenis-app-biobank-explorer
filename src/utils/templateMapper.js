@@ -1,5 +1,4 @@
 import { sortCollectionsByName } from './sorting'
-
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]

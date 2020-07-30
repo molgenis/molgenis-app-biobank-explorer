@@ -82,7 +82,9 @@
                         "
                       >Quality</h5>
                       <report-details-list :reportDetails="rightCardContent.quality"></report-details-list>
-                      <h5 v-if="Object.keys(rightCardContent.collaboration).length > 0">Collaboration</h5>
+                      <h5
+                        v-if="Object.keys(rightCardContent.collaboration).length > 0"
+                      >Collaboration</h5>
                       <report-details-list :reportDetails="rightCardContent.collaboration"></report-details-list>
                     </div>
                   </div>

@@ -19,8 +19,8 @@ if (INITIAL_STATE.GA_KEY) {
     router,
     // TODO Use MOLGENIS settings for this
     set: [
-      {field: 'forceSSL', value: true},
-      {field: 'anonymizeIp', value: true}
+      { field: 'forceSSL', value: true },
+      { field: 'anonymizeIp', value: true }
     ],
     autoTracking: {
       transformQueryString: true
@@ -43,12 +43,11 @@ Vue.use(i18n, {
   callback () {
     /* eslint-disable no-new */
     new Vue({
-      el: '#app',
+      render: h => h(App),
       store,
       router,
-      template: '<App />',
-      components: {App}
-    })
+      components: { App }
+    }).$mount('#app')
   }
 })
 

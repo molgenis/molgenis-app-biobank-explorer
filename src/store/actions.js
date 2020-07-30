@@ -76,63 +76,63 @@ export default {
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.
    */
-  [GET_DATA_TYPE_OPTIONS] ({commit}) {
+  [GET_DATA_TYPE_OPTIONS] ({ commit }) {
     api.get(DATA_TYPES_API_PATH).then(response => {
       commit(SET_DATA_TYPES, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_TYPES_OPTIONS] ({commit}) {
+  [GET_TYPES_OPTIONS] ({ commit }) {
     api.get(COLLECTION_TYPES_API_PATH).then(response => {
       commit(SET_COLLECTION_TYPES, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_COUNTRY_OPTIONS] ({commit}) {
+  [GET_COUNTRY_OPTIONS] ({ commit }) {
     api.get(COUNTRY_API_PATH).then(response => {
       commit(SET_COUNTRIES, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_MATERIALS_OPTIONS] ({commit}) {
+  [GET_MATERIALS_OPTIONS] ({ commit }) {
     api.get(MATERIALS_API_PATH).then(response => {
       commit(SET_MATERIALS, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_COLLECTION_QUALITY_OPTIONS] ({commit}) {
+  [GET_COLLECTION_QUALITY_OPTIONS] ({ commit }) {
     api.get(COLLECTION_QUALITY_API_PATH).then(response => {
       commit(SET_COLLECTION_QUALITY, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_BIOBANK_QUALITY_OPTIONS] ({commit}) {
+  [GET_BIOBANK_QUALITY_OPTIONS] ({ commit }) {
     api.get(BIOBANK_QUALITY_API_PATH).then(response => {
       commit(SET_BIOBANK_QUALITY, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_COVID_19_OPTIONS] ({commit}) {
+  [GET_COVID_19_OPTIONS] ({ commit }) {
     api.get(COVID_19_API_PATH).then(response => {
       commit(SET_COVID_19, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [GET_NETWORK_OPTIONS] ({commit}) {
+  [GET_NETWORK_OPTIONS] ({ commit }) {
     api.get(NETWORK_API_PATH).then(response => {
       commit(SET_NETWORK_OPTIONS, response.items)
     }, error => {
       commit(SET_ERROR, error)
     })
   },
-  [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({commit}, query) {
+  [QUERY_DIAGNOSIS_AVAILABLE_OPTIONS] ({ commit }, query) {
     if (query) {
       const isCodeQuery = helpers.CODE_REGEX.test(query)
       const url = isCodeQuery
@@ -148,7 +148,7 @@ export default {
       commit(SET_DIAGNOSIS_AVAILABLE, [])
     }
   },
-  [GET_COLLECTION_QUALITY_COLLECTIONS] ({state, commit}) {
+  [GET_COLLECTION_QUALITY_COLLECTIONS] ({ state, commit }) {
     if (state.route.query.collection_quality) {
       const collectionQualityIds = state.route.query.collection_quality.split(',')
       api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?q=assess_level_col=in=(${collectionQualityIds})`).then(response => {
@@ -159,7 +159,7 @@ export default {
     }
   },
 
-  [GET_BIOBANK_QUALITY_BIOBANKS] ({state, commit}) {
+  [GET_BIOBANK_QUALITY_BIOBANKS] ({ state, commit }) {
     if (state.route.query.biobank_quality) {
       const biobankQualityIds = state.route.query.biobank_quality.split(',')
       api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?q=assess_level_bio=in=(${biobankQualityIds})`).then(response => {
@@ -170,13 +170,13 @@ export default {
     }
   },
 
-  [GET_QUERY] ({state, dispatch, commit}) {
+  [GET_QUERY] ({ state, dispatch, commit }) {
     if (Object.keys(state.route.query).length > 0) {
       if (state.route.query.diagnosis_available) {
         const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
 
         api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
-          commit(MAP_QUERY_TO_STATE, {diagnoses: response.items})
+          commit(MAP_QUERY_TO_STATE, { diagnoses: response.items })
         })
       } else {
         commit(MAP_QUERY_TO_STATE)
@@ -192,8 +192,8 @@ export default {
   /*
    * Retrieves biobanks and stores them in the cache
    */
-  [GET_BIOBANKS] ({commit}, biobankIds) {
-    const q = encodeRsqlValue(transformToRSQL({selector: 'id', comparison: '=in=', arguments: biobankIds}))
+  [GET_BIOBANKS] ({ commit }, biobankIds) {
+    const q = encodeRsqlValue(transformToRSQL({ selector: 'id', comparison: '=in=', arguments: biobankIds }))
     api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=${q}`)
       .then(response => {
         commit(SET_BIOBANKS, response.items)
@@ -204,7 +204,8 @@ export default {
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
-  [GET_COLLECTION_IDS] ({commit, dispatch, getters}) {
+  // actually this should be GET_COLLECTION_AND_BIOBANK_IDS
+  [GET_COLLECTION_IDS] ({ commit, dispatch, getters }) {
     commit(SET_COLLECTION_IDS, undefined)
     let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'
     if (getters.rsql) {
@@ -222,7 +223,7 @@ export default {
         commit(SET_ERROR, error)
       })
   },
-  [GET_BIOBANK_IDS] ({commit, getters}) {
+  [GET_BIOBANK_IDS] ({ commit, getters }) {
     commit(SET_BIOBANK_IDS, undefined)
     let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
     if (getters.biobankRsql) {
@@ -235,7 +236,7 @@ export default {
         commit(SET_ERROR, error)
       })
   },
-  [GET_BIOBANK_REPORT] ({commit, state}, biobankId) {
+  [GET_BIOBANK_REPORT] ({ commit, state }, biobankId) {
     if (state.allBiobanks) {
       commit(SET_BIOBANK_REPORT, state.allBiobanks.find(it => it.id === biobankId))
       return
@@ -249,7 +250,7 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_COLLECTION_REPORT] ({commit}, collectionId) {
+  [GET_COLLECTION_REPORT] ({ commit }, collectionId) {
     commit(SET_LOADING, true)
     api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`).then(response => {
       commit(SET_COLLECTION_REPORT, response)
@@ -259,7 +260,7 @@ export default {
       commit(SET_LOADING, false)
     })
   },
-  [GET_NETWORK_REPORT] ({commit, dispatch, state}, networkId) {
+  [GET_NETWORK_REPORT] ({ commit }, networkId) {
     commit(SET_NETWORK_BIOBANKS, undefined)
     commit(SET_NETWORK_COLLECTIONS, undefined)
     commit(SET_NETWORK_REPORT, undefined)
@@ -279,7 +280,7 @@ export default {
    * Calls the DirectoryController method '/export' which answers with a URL
    * that redirects to a Negotiator server specified in the Directory settings
    */
-  [SEND_TO_NEGOTIATOR] ({state, getters, commit}) {
+  [SEND_TO_NEGOTIATOR] ({ state, getters, commit }) {
     const options = {
       body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }

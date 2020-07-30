@@ -24,20 +24,20 @@
 </template>
 
 <script>
-  export default {
-    name: 'quality-column',
-    props: ['qualities', 'spacing'],
-    computed: {
-      margin () {
-        return `margin-top:${this.spacing}rem;margin-bottom:${this.spacing};`
-      }
-    },
-    methods: {
-      generateQualityLabel (quality) {
-        return quality.label !== 'Others' ? quality.label : quality.certification_number
-      }
+export default {
+  name: 'quality-column',
+  props: ['qualities', 'spacing'],
+  computed: {
+    margin () {
+      return `margin-top:${this.spacing}rem;margin-bottom:${this.spacing};`
+    }
+  },
+  methods: {
+    generateQualityLabel (quality) {
+      return quality.label !== 'Others' ? quality.label : quality.certification_number
     }
   }
+}
 </script>
 
 <style scoped>

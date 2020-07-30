@@ -105,7 +105,7 @@ export default {
    * @param name name of the state entry e.g. country, materials, standards, or diagnosis_available
    * @param filters an array of values
    */
-  [UPDATE_FILTER] (state, {name, filters}) {
+  [UPDATE_FILTER] (state, { name, filters }) {
     if (name === covid19NetworkFacetName) this.commit(SET_COVID_19_NETWORK, filters)
     if (name === 'search') state.search = ''
     else {

@@ -5,7 +5,7 @@
         <div class="col-md-5" v-if="!loading">
           <h5>
             <router-link :to="'/biobank/' + biobank.id">
-              <i class="fa fa-table" aria-hidden="true" aria-labelledby="biobank-name"></i>
+              <i class="fa fa-table mr-1" aria-hidden="true" aria-labelledby="biobank-name"></i>
             </router-link>
             <span id="biobank-name">{{ biobank.name }}</span>
           </h5>
@@ -47,7 +47,7 @@
     </div>
 
     <div class="card-body table-card" v-if="!collapsed && !loading">
-      <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
+   <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'node-carbon'
+      label 'node-erbium'
     }
   }
   stages {
@@ -14,7 +14,7 @@ pipeline {
           script {
             env.TUNNEL_IDENTIFIER = sh(script: 'echo ${GIT_COMMIT}-${BUILD_NUMBER}', returnStdout: true)
             env.GITHUB_TOKEN = sh(script: 'vault read -field=value secret/ops/token/github', returnStdout: true)
-            env.CODECOV_TOKEN = sh(script: 'vault read -field=molgenis-app-biobank-explorer secret/ops/token/codecov', returnStdout: true)
+            env.CODECOV_TOKEN = sh(script: 'vault read -field=molgenis-app-biobank-explorer-vue-cli4 secret/ops/token/codecov', returnStdout: true)
             env.SAUCE_CRED_USR = sh(script: 'vault read -field=username secret/ops/token/saucelabs', returnStdout: true)
             env.SAUCE_CRED_PSW = sh(script: 'vault read -field=value secret/ops/token/saucelabs', returnStdout: true)
             env.REGISTRY_CRED_USR = sh(script: 'vault read -field=username secret/ops/account/nexus', returnStdout: true)
@@ -33,8 +33,8 @@ pipeline {
       steps {
         container('node') {
           sh "yarn install"
-          sh "yarn unit"
-          sh "yarn e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
+          sh "yarn test:unit"
+         // sh "yarn test:e2e --env chrome,firefox"
         }
       }
       post {
@@ -53,8 +53,8 @@ pipeline {
         milestone 1
         container('node') {
           sh "yarn install"
-          sh "yarn unit"
-          sh "yarn e2e --env ci_chrome,ci_safari,ci_ie11,ci_firefox"
+          sh "yarn test:unit"
+         // sh "yarn test:e2e --env chrome,firefox"
         }
       }
       post {
@@ -70,7 +70,7 @@ pipeline {
         branch 'master'
       }
       environment {
-        REPOSITORY = 'molgenis/molgenis-app-biobank-explorer'
+        REPOSITORY = 'molgenis/molgenis-app-biobank-explorer-vue-cli4'
       }
       steps {
         timeout(time: 30, unit: 'MINUTES') {

@@ -68,43 +68,43 @@
 </style>
 
 <script>
-  import utils from '../../utils'
-  import QualityColumn from './QualityColumn'
+import utils from '../../utils'
+import QualityColumn from './QualityColumn'
 
-  export default {
-    name: 'sub-collections-table',
-    props: {
-      subCollections: {
-        type: Array,
-        required: true
-      },
-      level: {
-        default: 2,
-        type: Number
-      }
+export default {
+  name: 'sub-collections-table',
+  props: {
+    subCollections: {
+      type: Array,
+      required: true
     },
-    data () {
-      return {
-        columns: ['name', 'type', 'materials', 'quality', 'size'],
-        visible: this.subCollections.reduce((result, subCollection) => {
-          result[subCollection.id] = false
-          return result
-        }, {})
-      }
-    },
-    methods: {
-      getCollectionMaterials (collection) {
-        return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
-      },
-      getCollectionType (collection) {
-        return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
-      },
-      toggleVisible (id) {
-        this.visible[id] = !this.visible[id]
-      }
-    },
-    components: {
-      QualityColumn
+    level: {
+      default: 2,
+      type: Number
     }
+  },
+  data () {
+    return {
+      columns: ['name', 'type', 'materials', 'quality', 'size'],
+      visible: this.subCollections.reduce((result, subCollection) => {
+        result[subCollection.id] = false
+        return result
+      }, {})
+    }
+  },
+  methods: {
+    getCollectionMaterials (collection) {
+      return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
+    },
+    getCollectionType (collection) {
+      return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
+    },
+    toggleVisible (id) {
+      this.visible[id] = !this.visible[id]
+    }
+  },
+  components: {
+    QualityColumn
   }
+}
 </script>

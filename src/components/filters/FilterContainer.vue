@@ -7,7 +7,7 @@
       placeholder
       description="search by name, id, acronym and press enter"
     ></string-filter>
-    <checkbox-filters
+   <checkbox-filters
       class="covid-filter"
       :key="covidNetworkFilter.name"
       v-bind="covidNetworkFilter"
@@ -48,7 +48,6 @@
   cursor: pointer;
 }
 </style>
-
 
 <script>
 import StringFilter from './StringFilter'
@@ -193,7 +192,6 @@ export default {
   },
   methods: {
     ...mapMutations({ updateFilter: UPDATE_FILTER }),
-
     filterChange (name, filters) {
       this.updateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')

@@ -12,7 +12,7 @@ const qualityAttributeSelector = (type) => {
  * country=in=(NL,BE,DE)
  */
 export const createInQuery = (attribute, filters) => filters.length > 0
-  ? [{selector: attribute, comparison: '=in=', arguments: filters}]
+  ? [{ selector: attribute, comparison: '=in=', arguments: filters }]
   : []
 
 /**

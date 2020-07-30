@@ -1,23 +1,23 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
 
 export default {
-  loading: ({collectionIds, biobankIds}) => !(biobankIds && collectionIds),
-  biobanks: ({collectionIds, biobankIds, biobanks}, {loading, rsql}) => {
+  loading: ({ collectionIds, biobankIds }) => !(biobankIds && collectionIds),
+  biobanks: ({ collectionIds, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
       return []
     }
     let ids = biobankIds
     if (rsql && rsql.length) {
       ids = collectionIds
-        // biobank IDs present in collectionIds
-        .map(({biobankId}) => biobankId)
-        // also present in biobankIds
+      // biobank IDs present in collectionIds
+        .map(({ biobankId }) => biobankId)
+      // also present in biobankIds
         .filter(biobankId => biobankIds.includes(biobankId))
-        // first occurrence of ID only
+      // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
     }
     return ids.map(biobankId => {
-      if (!biobanks.hasOwnProperty(biobankId)) {
+      if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
         return biobankId
       }
       const biobank = biobanks[biobankId]
@@ -27,10 +27,12 @@ export default {
       }
     })
   },
-  foundBiobanks: (_, { biobanks }) => biobanks.length,
-  foundCollections: (state, { biobanks, getActiveFilters }) => {
-    if (Object.keys(getActiveFilters).length === 0) return state.collectionIds.length
-    else if (biobanks.length > 0 && typeof biobanks[0] !== 'string') return biobanks.map(b => b.collections).flat().length
+  getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
+  foundBiobanks: (_, { biobanks }) => {
+    return biobanks.length
+  },
+  getCollectionsWithBiobankId: (state) => {
+    return state.collectionIds
   },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,

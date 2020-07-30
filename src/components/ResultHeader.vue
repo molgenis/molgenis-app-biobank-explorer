@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
-            <em>{{foundBiobanks}} organisations with {{foundCollections}} collections matching the search criteria</em>
+          <em>{{foundBiobanks}} organisations with {{foundCollections}} collections matching the search criteria</em>
           </small>
         </div>
       </div>
@@ -38,16 +38,27 @@
 </style>
 
 <script>
-  import ActiveFilterList from './filters/ActiveFilterList'
-  import { mapGetters } from 'vuex'
+import ActiveFilterList from './filters/ActiveFilterList'
+import { mapGetters } from 'vuex'
+import { groupCollectionsByBiobankId } from '../utils/grouping'
 
-  export default {
-    name: 'search-box',
-    computed: {
-      ...mapGetters(['foundBiobanks', 'foundCollections', 'rsql'])
-    },
-    components: {
-      ActiveFilterList
+export default {
+  computed: {
+    ...mapGetters(['foundBiobanks', 'getCollectionsWithBiobankId', 'getFoundBiobankIds', 'rsql']),
+    foundCollections () {
+      if (this.getFoundBiobankIds.length) {
+        const biobanksWithCollections = groupCollectionsByBiobankId(this.getCollectionsWithBiobankId)
+        let collectionCount = 0
+        for (const id of this.getFoundBiobankIds) {
+          const collectionsInBiobank = biobanksWithCollections[id]
+          if (collectionsInBiobank) collectionCount += collectionsInBiobank.length
+        }
+        return collectionCount
+      } else return this.getCollectionsWithBiobankId.length
     }
+  },
+  components: {
+    ActiveFilterList
   }
+}
 </script>

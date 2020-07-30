@@ -1,7 +1,6 @@
-[![codecov](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer)
-
-# BBMRI-ERIC Biobank Explorer
-Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data
+[![codecov](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer-vue-cli4/branch/master/graph/badge.svg)](https://codecov.io/gh/molgenis/molgenis-app-biobank-explorer-vue-cli4)
+# BBMRI-ERIC Biobank Explorer Version 2
+Vue CLI 4 application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data
 
 ## Preparing your MOLGENIS instance
 The biobank explorer is built on a specific data model. 
@@ -68,7 +67,7 @@ For local testing you can execute the following commands:
 yarn install
 
 # To run develop mode
-yarn dev
+yarn serve
 ```
 
 It will render a local version of the core variable catalogue.
@@ -78,7 +77,7 @@ You can run unit tests by executing this command:
 
 ```bash
 # Run once
-yarn unit
+yarn test:unit
 
 # Run in watch-mode
 yarn debug
@@ -88,8 +87,9 @@ yarn debug
 You can run end-to-end test locally by running the following command:
 
 ```bash
-yarn e2e
+yarn test:e2e
 ```
+
 
 ### Test with a running MOLGENIS instance
 For local testing with a running MOLGENIS instance you have to alter the config of the app:
@@ -147,13 +147,17 @@ You can now create a working application that can be imported in MOLGENIS direct
 yarn build
 ```
 
-You can find the zip-file in the ```dist/molgenis-app-biobank-explorer.zip```.
+You can find the zip-file in the ```dist/molgenis-app-biobank-explorer_v2.zip```.
 
-## Create a preview image
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+## Create a docker image | Molgenis Dev Team
 To make a standalone docker image that can be run from the Rancher Cluster perform the following steps:
 
 ```
-yarn preview
+yarn build:preview
 ```
 
 Then build the image with Docker (you have to have Docker running) with the following (tag is required):

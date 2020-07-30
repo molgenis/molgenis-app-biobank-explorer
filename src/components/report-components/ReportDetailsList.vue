@@ -1,58 +1,55 @@
 <template>
   <table class="mg-report-details-list mb-3">
-    <caption v-show="false">
-      Details list
-    </caption>
-    <tr v-for="(value, key) in reportDetails" v-if="showRow(value)" :key="key">
-      <!-- Header -->
-      <th scope="row" class="pr-1" v-if="showKey(value.type)">{{ key }}:</th>
+    <caption v-show="false">Details list</caption>
+    <template v-for="(value, key) in reportDetails">
+      <tr v-if="showRow(value)" :key="key">
+        <!-- Header -->
+        <th scope="row" class="pr-1" v-if="showKey(value.type)">{{ key }}:</th>
 
-      <!--Type bool-->
-      <td v-if="value.type === 'bool'">
-        <span v-if="value.value" class="badge badge-info">yes</span>
-        <span v-else class="badge badge-info">no</span>
-      </td>
-      <!--Type string-->
-      <td v-else-if="value.type.includes('string')" colspan="2">
-        {{ value.value }}
-      </td>
-      <!--Type url-->
-      <td v-else-if="value.type === 'url'">
-        <a :href="value.value" target="_blank" rel="noopener noreferrer">
-          <i class="fa fa-fw fa-globe" aria-hidden="true"></i
-          ><span class="mg-icon-text">Website</span>
-        </a>
-      </td>
-      <!--Type email-->
-      <td v-else-if="value.type === 'email'" colspan="2">
-        <a :href="'mailto:' + value.value">
-          <i class="fa fa-fw fa-paper-plane" aria-hidden="true"></i
-          ><span class="mg-icon-text">Email</span>
-        </a>
-      </td>
-      <!--Type phone-->
-      <td v-else-if="value.type === 'phone'">
-        <i class="fa fa-fw fa-phone" aria-hidden="true"></i
-        ><span class="mg-icon-text">{{ value.value }}</span>
-      </td>
-      <!--Type list-->
-      <td v-else-if="value.type === 'list' && value.value.length > 0">
-        <span
-          v-for="(val, index) in value.value"
-          class="m-1 badge"
-          :key="index"
-          :class="'badge-' + (value.badgeColor ? value.badgeColor : 'success')"
-          >{{ val }}</span
-        >
-      </td>
-      <!--Type report-->
-      <td v-else-if="value.type === 'report'" colspan="2">
-        <router-link :to="value.value">
-          <i class="fa fa-fw fa-address-card" aria-hidden="true"></i
-          ><span class="mg-icon-text">Overview</span>
-        </router-link>
-      </td>
-    </tr>
+        <!--Type bool-->
+        <td v-if="value.type === 'bool'">
+          <span v-if="value.value" class="badge badge-info">yes</span>
+          <span v-else class="badge badge-info">no</span>
+        </td>
+        <!--Type string-->
+        <td v-else-if="value.type.includes('string')" colspan="2">{{ value.value }}</td>
+        <!--Type url-->
+        <td v-else-if="value.type === 'url'">
+          <a :href="value.value" target="_blank" rel="noopener noreferrer">
+            <i class="fa fa-fw fa-globe" aria-hidden="true"></i>
+            <span class="mg-icon-text">Website</span>
+          </a>
+        </td>
+        <!--Type email-->
+        <td v-else-if="value.type === 'email'" colspan="2">
+          <a :href="'mailto:' + value.value">
+            <i class="fa fa-fw fa-paper-plane" aria-hidden="true"></i>
+            <span class="mg-icon-text">Email</span>
+          </a>
+        </td>
+        <!--Type phone-->
+        <td v-else-if="value.type === 'phone'">
+          <i class="fa fa-fw fa-phone" aria-hidden="true"></i>
+          <span class="mg-icon-text">{{ value.value }}</span>
+        </td>
+        <!--Type list-->
+        <td v-else-if="value.type === 'list' && value.value.length > 0">
+          <span
+            v-for="(val, index) in value.value"
+            class="m-1 badge"
+            :key="index"
+            :class="'badge-' + (value.badgeColor ? value.badgeColor : 'success')"
+          >{{ val }}</span>
+        </td>
+        <!--Type report-->
+        <td v-else-if="value.type === 'report'" colspan="2">
+          <router-link :to="value.value">
+            <i class="fa fa-fw fa-address-card" aria-hidden="true"></i>
+            <span class="mg-icon-text">Overview</span>
+          </router-link>
+        </td>
+      </tr>
+    </template>
   </table>
 </template>
 

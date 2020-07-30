@@ -34,6 +34,9 @@ export default new VueRouter({
       name: 'network',
       component: NetworkReportCard
     },
-    { path: '/', redirect: '/biobankexplorer' }
+    {
+      path: '/',
+      component: BiobankExplorerContainer
+    }
   ]
 })

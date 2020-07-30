@@ -14,7 +14,7 @@ if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === fa
 export default {
   isLoading: false,
   error: null,
-  showCountryFacet: INITIAL_STATE.hasOwnProperty('showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
+  showCountryFacet: Object.hasOwnProperty.call(INITIAL_STATE, 'showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
   // Map ID to biobank
   biobanks: {},

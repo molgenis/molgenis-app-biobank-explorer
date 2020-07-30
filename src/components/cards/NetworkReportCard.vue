@@ -23,7 +23,7 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p><b>Id: </b>{{ network.id }}</p>         
+                <p><b>Id: </b>{{ network.id }}</p>
                 <report-description :description="network.description" :maxLength="500"></report-description>
                 <report-details-list :reportDetails="detailsContent"></report-details-list>
                 <b-tabs v-if="!collections || !biobanks || collectionsAvailable || biobanksAvailable">
@@ -85,59 +85,58 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
-  import { GET_NETWORK_REPORT } from '../../store/actions'
-  import Loading from 'vue-loading-overlay'
-  import 'vue-loading-overlay/dist/vue-loading.css'
-  import ReportDescription from '../report-components/ReportDescription.vue'
-  import ReportTitle from '../report-components/ReportTitle.vue'
-  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import ReportCollection from '../report-components/ReportCollection'
-  import BiobankCard from '../cards/BiobankCard'
-  import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
+import { mapActions, mapState } from 'vuex'
+import { GET_NETWORK_REPORT } from '../../store/actions'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import ReportDescription from '../report-components/ReportDescription.vue'
+import ReportTitle from '../report-components/ReportTitle.vue'
+import ReportDetailsList from '../report-components/ReportDetailsList.vue'
+import ReportCollection from '../report-components/ReportCollection'
+import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
 
-  export default {
-    name: 'NetworkReportCard',
-    components: {ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection, BiobankCard},
-    methods: {
-      ...mapActions({
-        getNetworkReport: GET_NETWORK_REPORT
-      }),
-      back () {
-        this.$router.go(-1)
-      }
-    },
-    computed: {
-      ...mapState({networkReport: 'networkReport', isLoading: 'isLoading'}),
-      collectionsAvailable () {
-        return this.collections && this.collections.length > 0
-      },
-      biobanksAvailable () {
-        return this.biobanks && this.biobanks.length > 0
-      },
-      network () {
-        return this.networkReport.network
-      },
-      collections () {
-        return this.networkReport.collections ? mapCollectionsData(this.networkReport.collections).filter(
-          (collection) => { return !collection.parentCollection }) : []
-      },
-      biobanks () {
-        return this.networkReport.biobanks
-      },
-      detailsContent () {
-        return mapNetworkData(this.network)
-      },
-      contact () {
-        return mapContactInfo(this.network)
-      },
-      networkId () {
-        const splittedUrl = this.$route.fullPath.split('/')
-        return splittedUrl[splittedUrl.length - 1]
-      }
-    },
-    mounted () {
-      this.getNetworkReport([this.networkId])
+export default {
+  name: 'NetworkReportCard',
+  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection },
+  methods: {
+    ...mapActions({
+      getNetworkReport: GET_NETWORK_REPORT
+    }),
+    back () {
+      this.$router.go(-1)
     }
+  },
+  computed: {
+    ...mapState({ networkReport: 'networkReport', isLoading: 'isLoading' }),
+    collectionsAvailable () {
+      return this.collections && this.collections.length > 0
+    },
+    biobanksAvailable () {
+      return this.biobanks && this.biobanks.length > 0
+    },
+    network () {
+      return this.networkReport.network
+    },
+    collections () {
+      return this.networkReport.collections ? mapCollectionsData(this.networkReport.collections).filter(
+        (collection) => { return !collection.parentCollection }) : []
+    },
+    biobanks () {
+      return this.networkReport.biobanks
+    },
+    detailsContent () {
+      return mapNetworkData(this.network)
+    },
+    contact () {
+      return mapContactInfo(this.network)
+    },
+    networkId () {
+      const splittedUrl = this.$route.fullPath.split('/')
+      return splittedUrl[splittedUrl.length - 1]
+    }
+  },
+  mounted () {
+    this.getNetworkReport([this.networkId])
   }
+}
 </script>

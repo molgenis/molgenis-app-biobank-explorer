@@ -12,40 +12,40 @@
 </template>
 
 <script>
-  import ReportDescription from '../report-components/ReportDescription.vue'
-  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import ReportSubCollection from './ReportSubCollection.vue'
+import ReportDescription from '../report-components/ReportDescription.vue'
+import ReportDetailsList from '../report-components/ReportDetailsList.vue'
+import ReportSubCollection from './ReportSubCollection.vue'
 
-  export default {
-    name: 'ReportCollection',
-    components: {ReportDescription, ReportDetailsList, ReportSubCollection},
-    props: {
-      collection: {
-        description: String,
-        parentCollection: Object,
-        subCollections: Array,
-        name: String,
-        id: String,
-        content: {
-          stringValues: Object,
-          listValues: {
-            Size: {
-              values: Array,
-              badgeColor: String
-            },
-            Materials: {
-              values: Array,
-              badgeColor: String
-            },
-            Data: {
-              values: Array,
-              badgeColor: String
-            }
+export default {
+  name: 'ReportCollection',
+  components: { ReportDescription, ReportDetailsList, ReportSubCollection },
+  props: {
+    collection: {
+      description: String,
+      parentCollection: Object,
+      subCollections: Array,
+      name: String,
+      id: String,
+      content: {
+        stringValues: Object,
+        listValues: {
+          Size: {
+            values: Array,
+            badgeColor: String
+          },
+          Materials: {
+            values: Array,
+            badgeColor: String
+          },
+          Data: {
+            values: Array,
+            badgeColor: String
           }
         }
       }
     }
   }
+}
 </script>
 
 <style scoped>

@@ -22,7 +22,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     state.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
-        .map(attr => ({selector: attr, comparison: '=q=', arguments: state.search}))
+        .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.search }))
     }] : []
   ])
 })
@@ -42,9 +42,9 @@ export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
 
 export const CODE_REGEX = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
 
-export const createDiagnosisLabelQuery = (query) => transformToRSQL({selector: 'label', comparison: '=q=', arguments: query})
+export const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 'label', comparison: '=q=', arguments: query })
 
-export const createDiagnosisCodeQuery = (query) => transformToRSQL({selector: 'code', comparison: '=like=', arguments: query.toUpperCase()})
+export const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   // TODO: are the entity types fixed?
@@ -154,7 +154,7 @@ export const filterCollectionTree = (collectionIds, collections) =>
     (accumulator, collection) => {
       const filteredSubCollections = filterCollectionTree(collectionIds, collection.sub_collections)
       if (collectionIds.includes(collection.id) || filteredSubCollections.length) {
-        return [...accumulator, {...collection, sub_collections: filteredSubCollections}]
+        return [...accumulator, { ...collection, sub_collections: filteredSubCollections }]
       }
       return accumulator
     }, [])

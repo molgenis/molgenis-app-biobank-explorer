@@ -11,31 +11,31 @@
 </template>
 
 <script>
-  export default {
-    name: 'ReportDescription',
-    props: {
-      description: String,
-      maxLength: Number
-    },
-    methods: {
-      toggleDescription () {
-        this.descriptionClosed = !this.descriptionClosed
-      }
-    },
-    computed: {
-      descriptionToDisplay () {
-        if (this.descriptionClosed && this.maxLength < this.description.length) {
-          const shortDescription = this.description.substr(0, this.maxLength)
-          return shortDescription.substr(0, Math.min(shortDescription.length, shortDescription.lastIndexOf(' ')))
-        } else {
-          return this.description
-        }
-      }
-    },
-    data () {
-      return {
-        descriptionClosed: true
+export default {
+  name: 'ReportDescription',
+  props: {
+    description: String,
+    maxLength: Number
+  },
+  methods: {
+    toggleDescription () {
+      this.descriptionClosed = !this.descriptionClosed
+    }
+  },
+  computed: {
+    descriptionToDisplay () {
+      if (this.descriptionClosed && this.maxLength < this.description.length) {
+        const shortDescription = this.description.substr(0, this.maxLength)
+        return shortDescription.substr(0, Math.min(shortDescription.length, shortDescription.lastIndexOf(' ')))
+      } else {
+        return this.description
       }
     }
+  },
+  data () {
+    return {
+      descriptionClosed: true
+    }
   }
+}
 </script>

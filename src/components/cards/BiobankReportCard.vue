@@ -58,84 +58,84 @@
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
-  import { GET_BIOBANK_REPORT } from '../../store/actions'
-  import Loading from 'vue-loading-overlay'
-  import 'vue-loading-overlay/dist/vue-loading.css'
-  import ReportDescription from '../report-components/ReportDescription.vue'
-  import ReportTitle from '../report-components/ReportTitle.vue'
-  import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-  import ReportCollection from '../report-components/ReportCollection.vue'
-  import {
-    mapContactInfo,
-    mapCollectionsData,
-    mapNetworkInfo,
-    mapObjArrayToStringArrayIfExists
-  } from '../../utils/templateMapper'
+import { mapState, mapActions } from 'vuex'
+import { GET_BIOBANK_REPORT } from '../../store/actions'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import ReportDescription from '../report-components/ReportDescription.vue'
+import ReportTitle from '../report-components/ReportTitle.vue'
+import ReportDetailsList from '../report-components/ReportDetailsList.vue'
+import ReportCollection from '../report-components/ReportCollection.vue'
+import {
+  mapContactInfo,
+  mapCollectionsData,
+  mapNetworkInfo,
+  mapObjArrayToStringArrayIfExists
+} from '../../utils/templateMapper'
 
-  export default {
-    name: 'biobank-report-card',
-    components: {
-      ReportTitle,
-      ReportDescription,
-      ReportDetailsList,
-      ReportCollection,
-      Loading
-    },
-    data () {
-      return {
-        collapsed: true
-      }
-    },
-    computed: {
-      ...mapState({
-        biobank: 'biobankReport',
-        isLoading: 'isLoading'
-      }),
-      biobankDataAvailable () {
-        return this.biobank && this.biobank
-      },
-      query () {
-        return this.$route.query
-      },
-      networks () {
-        return this.biobankDataAvailable && this.biobank.network ? mapNetworkInfo(this.biobank) : []
-      },
-      contact () {
-        return this.biobankDataAvailable && this.biobank.contact ? mapContactInfo(this.biobank) : {}
-      },
-      collectionsData () {
-        return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections).filter(it => !it.parentCollection) : []
-      },
-      quality () {
-        return {Certification: {value: mapObjArrayToStringArrayIfExists(this.biobank.quality), type: 'list'}}
-      },
-      availableCovidTypes () {
-        if (
-          this.biobank.covid19biobank &&
-          this.biobank.covid19biobank.length > 0
-        ) {
-          return {
-            Covid19: {
-              badgeColor: 'warning',
-              type: 'list',
-              value: this.biobank.covid19biobank
-                .map(covidItem => covidItem.label || covidItem.name)
-            }
-          }
-        } else return ''
-      }
-    },
-    methods: {
-      ...mapActions({
-        getBiobankReport: GET_BIOBANK_REPORT
-      }),
-      back () {
-        this.$router.go(-1)
-      }
-    },
-    mounted () {
-      this.getBiobankReport(this.$store.state.route.params.id)
+export default {
+  name: 'biobank-report-card',
+  components: {
+    ReportTitle,
+    ReportDescription,
+    ReportDetailsList,
+    ReportCollection,
+    Loading
+  },
+  data () {
+    return {
+      collapsed: true
     }
+  },
+  computed: {
+    ...mapState({
+      biobank: 'biobankReport',
+      isLoading: 'isLoading'
+    }),
+    biobankDataAvailable () {
+      return this.biobank && this.biobank
+    },
+    query () {
+      return this.$route.query
+    },
+    networks () {
+      return this.biobankDataAvailable && this.biobank.network ? mapNetworkInfo(this.biobank) : []
+    },
+    contact () {
+      return this.biobankDataAvailable && this.biobank.contact ? mapContactInfo(this.biobank) : {}
+    },
+    collectionsData () {
+      return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections).filter(it => !it.parentCollection) : []
+    },
+    quality () {
+      return { Certification: { value: mapObjArrayToStringArrayIfExists(this.biobank.quality), type: 'list' } }
+    },
+    availableCovidTypes () {
+      if (
+        this.biobank.covid19biobank &&
+          this.biobank.covid19biobank.length > 0
+      ) {
+        return {
+          Covid19: {
+            badgeColor: 'warning',
+            type: 'list',
+            value: this.biobank.covid19biobank
+              .map(covidItem => covidItem.label || covidItem.name)
+          }
+        }
+      } else return ''
+    }
+  },
+  methods: {
+    ...mapActions({
+      getBiobankReport: GET_BIOBANK_REPORT
+    }),
+    back () {
+      this.$router.go(-1)
+    }
+  },
+  mounted () {
+    this.getBiobankReport(this.$store.state.route.params.id)
   }
+}
 </script>

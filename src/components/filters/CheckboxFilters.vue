@@ -14,7 +14,7 @@
         <div class="query-type-selector">
           <label class="label-disabled">
             Satisfy all
-            <input type="checkbox" :checked="all" disabled/>
+            <input type="checkbox" :checked="all" disabled />
           </label>
         </div>
         <b-form-group class="pt-2">
@@ -164,7 +164,7 @@ export default {
 }
 
 .query-type-selector label:hover {
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 
 .query-type-selector input {
@@ -173,8 +173,8 @@ export default {
 }
 
 .query-type-selector input::checked {
-   color: #fff !important;
-    background-color: #28a745 !important;
-    border-color: #28a745 !important;
+  color: #fff !important;
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
 }
 </style>

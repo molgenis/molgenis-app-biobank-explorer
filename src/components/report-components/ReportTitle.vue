@@ -6,11 +6,11 @@
 </template>
 
 <script>
-  export default {
-    name: 'ReportTitle',
-    props: {
-      type: String,
-      name: String
-    }
+export default {
+  name: 'ReportTitle',
+  props: {
+    type: String,
+    name: String
   }
+}
 </script>
