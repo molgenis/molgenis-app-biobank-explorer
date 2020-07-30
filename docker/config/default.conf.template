@@ -1,0 +1,15 @@
+server {
+  server_name localhost;
+
+  location /api {
+    proxy_pass https://${API}.gcc.rug.nl;
+    proxy_set_header  Host $http_host;
+  }
+  location / {
+    root /usr/share/nginx/html;
+    autoindex on;
+    index       index.html;
+    try_files   $uri $uri/ /index.html;
+  }
+  include /etc/nginx/sites-enabled/*;
+}

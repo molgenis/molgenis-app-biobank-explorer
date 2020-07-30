@@ -1,0 +1,139 @@
+const webpack = require('webpack')
+const BannerPlugin = require('webpack').BannerPlugin
+const ZipPlugin = require('zip-webpack-plugin')
+const packageJson = require('./package.json')
+const GenerateJsonWebpackPlugin = require('generate-json-webpack-plugin')
+const pkgVersion = packageJson.version
+const pkgName = packageJson.name
+
+const now = new Date()
+const buildDate = now.toUTCString()
+const bannerText = `package-name: ${pkgName}
+package-version: ${pkgVersion}
+build-date: ${buildDate}`
+
+const PROXY_TARGET = 'https://molgenis85.gcc.rug.nl' // 'https://directory.bbmri-eric.eu'
+
+const apiDevServerProxyConf = {
+  target: PROXY_TARGET,
+  keepOrigin: true
+}
+
+if (process.env.DATA_EXPLORER_DEV_PW) {
+  apiDevServerProxyConf.auth = 'admin:' + process.env.DATA_EXPLORER_DEV_PW
+}
+
+module.exports = {
+  runtimeCompiler: true,
+  outputDir: 'dist',
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/plugin/app/' + packageJson.name
+    : '/',
+  chainWebpack: config => {
+    config
+      .plugin('html')
+      .tap(args => {
+        args[0].template = process.env.NODE_ENV === 'production' ? 'apptemplate/app-template.html' : 'public/index.html'
+        return args
+      })
+  },
+  configureWebpack: config => {
+    config.plugins.push(
+      new BannerPlugin({
+        banner: bannerText
+      }),
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        Popper: ['popper.js', 'default']
+      }),
+      new GenerateJsonWebpackPlugin('config.json', {
+        name: packageJson.name,
+        label: packageJson.name,
+        description: packageJson.description,
+        version: packageJson.version,
+        apiDependency: 'v2',
+        includeMenuAndFooter: true,
+        runtimeOptions: {
+          language: 'en',
+          showCountryFacet: true,
+          preConfiguredCountyCode: ''
+        }
+      }),
+      new ZipPlugin({
+        filename: packageJson.name
+      })
+    )
+  },
+  devServer: {
+    // In CI mode, Safari cannot contact "localhost", so as a workaround, run the dev server using the jenkins agent pod dns instead.
+    host: process.env.JENKINS_AGENT_NAME || 'localhost',
+    // Used to proxy a external API server to have someone to talk to during development
+    proxy: process.env.NODE_ENV !== 'development' ? undefined : {
+      '/login': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
+      // Don't do this on production
+      '/plugin/directory/export': {
+        target: 'https://bbmri.accept.molgenis.org/',
+        changeOrigin: true
+      },
+      '/api': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
+      '/logout': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      }
+    },
+    // Used as mock in e2e tests
+    before: process.env.NODE_ENV !== 'test' ? undefined : function (app) {
+      app.get('/app-ui-context', function (req, res) {
+        res.json(require('./tests/e2e/resources/uiContext.js'))
+      })
+      app.get('/api/metadata/root_hospital_diagnosis', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_hospital_diagnosis.js'))
+      })
+      app.get('/api/metadata/root_hospital_lab_results', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_hospital_lab_results.js'))
+      })
+      app.get('/api/metadata/root_cities', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_cities.js'))
+      })
+      app.get('/api/metadata/root_gender', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_gender.js'))
+      })
+      app.get('/api/metadata/root_hospital_users', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_hospital_users.js'))
+      })
+      app.get('/api/metadata/root_hospital_patients', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_hospital_patients_flat.js'))
+      })
+      app.get('/api/metadata/TableWithCustomCard', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/metadata_root_hospital_patients_flat.js'))
+      })
+      app.get('/api/data/root_hospital_patients/p000000001', function (req, res) {
+        res.json(require('./tests/e2e/resources/v3/data_p00001'))
+      })
+
+      app.get('/api/data/root_hospital_patients', function (req, res) {
+        res.json(require('./tests/e2e/resources/typeTestData.js'))
+      })
+      app.get('/api/data/de_dataexplorer_table_settings', function (req, res) {
+        if (req.url.includes('TableWithMoreColumns')) {
+          res.json({ items: [] })
+        } else if (req.url.includes('TableWithCustomCard')) {
+          res.json(require('./tests/e2e/resources/tableSettingsWithCustom'))
+        } else {
+          res.json(require('./tests/e2e/resources/tableSettings.js'))
+        }
+      })
+      app.get('/api/data/TableWithCustomCard', function (req, res) {
+        res.json(require('./tests/e2e/resources/tableWithMoreColumns.js'))
+      })
+    }
+  }
+}
