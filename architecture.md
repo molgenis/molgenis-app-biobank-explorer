@@ -99,10 +99,16 @@ note right of Negotiator.vue: Button to Request data
 ### Spinner
 - vue-loading-overlay
 
-### Tools used to create this document
+## Tools used to create this document
 
 - Visual Studio Code
 
 - https://mermaid-js.github.io/mermaid/#/README
 
 - https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid
+
+### Create SVG for diagram
+
+Copy the diagram with the code block to an mmd file, then run the mermaid cli
+
+- https://github.com/mermaidjs/mermaid.cli
