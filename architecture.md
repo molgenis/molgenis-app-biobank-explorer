@@ -60,7 +60,7 @@ ResultHeader.vue --> ActiveFilterList.vue
 
 BiobankCardsContainer.vue --> BiobankCard.vue 
 
-BiobankCard.vue --> BiobankReport : Vue Router Link
+BiobankCard.vue --> BiobankReportCard.vue : Vue Router Link
 BiobankCard.vue --> CollectionsTable.vue
 
 
