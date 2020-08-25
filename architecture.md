@@ -1,5 +1,5 @@
 
-# Main architecture
+# Component architecture
 
 ```mermaid
 stateDiagram-v2
@@ -20,7 +20,6 @@ stateDiagram-v2
     Negotiator.vue
     BiobankCard.vue
     BiobankCardsContainer.vue
-    BiobankReportCard.Vue
     CollectionsTable.vue
     CollectionReportCard.vue
     QualityColumn.vue
@@ -65,9 +64,9 @@ BiobankCard.vue --> CollectionsTable.vue
 
 
 BiobankReportCard.vue --> ReportComponents
-BiobankReportCard.vue --> NetworkReportCard.vue : Vue Router
+BiobankReportCard.vue --> NetworkReportCard.vue : Vue Router Link
 CollectionReportCard.vue --> ReportComponents
-CollectionReportCard.vue --> NetworkReportCard.vue : Vue Router
+CollectionReportCard.vue --> NetworkReportCard.vue : Vue Router Link
 NetworkReportCard.vue --> ReportComponents
 
 ReportCollection.vue --> ReportSubCollection.vue
@@ -93,13 +92,39 @@ note left of BiobankCardsContainer.vue: Renders biobanks as BiobankCard
 note right of Negotiator.vue: Button to Request data
 
 ```
+# Store architecture
 
-## 3rd party components
+## Getters
 
-### Spinner
-- vue-loading-overlay
 
-## Tools used to create this document
+### Biobank
+The biobank getter has two return types:
+First it returns a string array with biobank ids, which then can be accessed in the biobankcardscontainer.vue
+which triggers loading of the biobank objects.
+
+## State
+
+### collectionIds
+
+This is actually a form of dictionary that has object with a collectionId and a biobankId
+which is being filtered, based on what the user has selected
+
+
+### biobankIds
+
+Some specific filters are on biobanks, this property is being used for that.
+e.g. covid19
+
+
+# 3rd party components
+
+- vue-loading-overlay { spinner }
+- vue-multiselect
+- vue-analytics
+- bootstrap-vu
+- array-flat-polyfill
+
+# Tools used to create this document
 
 - Visual Studio Code
 
@@ -107,8 +132,8 @@ note right of Negotiator.vue: Button to Request data
 
 - https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid
 
-### Create SVG for diagram
+## Create SVG for diagram
 
-Copy the diagram with the code block to an mmd file, then run the mermaid cli
+Copy the diagram without the code block to an mmd file, then run the mermaid cli
 
 - https://github.com/mermaidjs/mermaid.cli
