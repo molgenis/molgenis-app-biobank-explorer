@@ -4,6 +4,9 @@ pipeline {
       label 'node-erbium'
     }
   }
+  environment {
+      REPOSITORY = 'molgenis/molgenis-app-biobank-explorer'
+  }
   stages {
     stage('Prepare') {
       steps {
@@ -61,7 +64,7 @@ pipeline {
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
                     sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
-                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${env.REPOSITORY}:${TAG}"
+                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${REPOSITORY}:${TAG}"
                 }
             }
         }
