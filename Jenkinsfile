@@ -61,7 +61,7 @@ pipeline {
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
                     sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
-                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${LOCAL_REGISTRY}:${TAG}"
+                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${env.LOCAL_REPOSITORY}:${TAG}"
                 }
             }
         }
@@ -87,7 +87,7 @@ pipeline {
                     "--no-prompt " +
                     "--set environment=dev " +
                     "--set image.tag=${TAG} " +
-                    "--set image.repository=${LOCAL_REGISTRY} " +
+                    "--set image.repository=${env.LOCAL_REGISTRY} " +
                     "--set proxy.backend.service.targetNamespace=molgenis-abcde " +
                     "--set proxy.backend.service.targetRelease=master " +
                     "--set image.pullPolicy=Always " +
