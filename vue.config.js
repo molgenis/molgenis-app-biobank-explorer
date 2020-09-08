@@ -8,9 +8,16 @@ const pkgName = packageJson.name
 
 const now = new Date()
 const buildDate = now.toUTCString()
-const bannerText = `package-name: ${pkgName}
+const bannerText = `
+package-name: ${pkgName}
 package-version: ${pkgVersion}
 build-date: ${buildDate}`
+
+const previewText = `
+package-name: ${pkgName}
+build-date: ${buildDate}
+PR: ${process.env.CHANGE_ID}
+BUILD: ${process.env.BUILD_NUMBER}`
 
 const PROXY_TARGET = 'https://molgenis85.gcc.rug.nl' // 'https://directory.bbmri-eric.eu'
 
@@ -34,6 +41,7 @@ module.exports = {
       .plugin('html')
       .tap(args => {
         args[0].template = process.env.NODE_ENV === 'production' ? 'apptemplate/app-template.html' : 'public/index.html'
+        args[0].version = process.env.NODE_ENV === 'preview-mode' ? previewText : ''
         return args
       })
   },
