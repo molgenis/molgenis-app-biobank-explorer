@@ -41,7 +41,7 @@ module.exports = {
       .plugin('html')
       .tap(args => {
         args[0].template = process.env.NODE_ENV === 'production' ? 'apptemplate/app-template.html' : 'public/index.html'
-        args[0].version = process.env.NODE_ENV === 'preview' ? previewText : ''
+        args[0].version = process.env.NODE_ENV !== 'production' ? previewText : 'test'
         return args
       })
   },
