@@ -4,6 +4,9 @@ pipeline {
       label 'node-erbium'
     }
   }
+  environment {
+    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/molgenis-frontend"
+  }
   stages {
     stage('Prepare') {
       steps {
@@ -19,6 +22,7 @@ pipeline {
             env.SAUCE_CRED_PSW = sh(script: 'vault read -field=value secret/ops/token/saucelabs', returnStdout: true)
             env.REGISTRY_CRED_USR = sh(script: 'vault read -field=username secret/ops/account/nexus', returnStdout: true)
             env.REGISTRY_CRED_PSW = sh(script: 'vault read -field=password secret/ops/account/nexus', returnStdout: true)
+            env.NEXUS_AUTH = sh(script: 'vault read -field=base64 secret/ops/account/nexus', returnStdout: true)
           }
         }
         container('node') {
@@ -44,6 +48,65 @@ pipeline {
           }
         }
       }
+    }
+    stage('Build container serving the artifacts [ PR ]') {
+            when {
+                changeRequest()
+            }
+            environment {
+                TAG = "PR-${CHANGE_ID}"
+                DOCKER_CONFIG="/root/.docker"
+            }
+            steps {
+                container('node') {
+                    sh "yarn build:preview"
+                }
+                container (name: 'kaniko', shell: '/busybox/sh') {
+                    sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
+                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
+                    sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${LOCAL_REPOSITORY}:${TAG}"
+                }
+            }
+        }
+    stage('Deploy preview [ PR ]') {
+        when {
+            changeRequest()
+        }
+        environment {
+            TAG = "PR-${CHANGE_ID}"
+            NAME = "preview-bbmri-${TAG.toLowerCase()}"
+        }
+        steps {
+            container('vault') {
+                sh "mkdir ${JENKINS_AGENT_WORKDIR}/.rancher"
+                sh "vault read -field=value secret/ops/jenkins/rancher/cli2.json > ${JENKINS_AGENT_WORKDIR}/.rancher/cli2.json"
+            }
+            container('rancher') {
+                sh "rancher apps delete ${NAME} || true" 
+                sh "sleep 5s" // wait for deletion
+                sh "rancher apps install " +
+                    "cattle-global-data:molgenis-helm-molgenis-frontend " +
+                    "${NAME} " +
+                    "--no-prompt " +
+                    "--set environment=dev " +
+                    "--set image.tag=${TAG} " +
+                    "--set image.repository=${env.LOCAL_REGISTRY} " +
+                    "--set proxy.backend.service.targetNamespace=molgenis-abcde " +
+                    "--set proxy.backend.service.targetRelease=master " +
+                    "--set image.pullPolicy=Always " +
+                    "--set readinessPath=/index.html"
+            }
+        }
+        post {
+            success {
+                hubotSend(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', site: 'slack-pr-app-team')
+                container('node') {
+                    sh "set +x; curl -X POST -H 'Content-Type: application/json' -H 'Authorization: token ${GITHUB_TOKEN}' " +
+                        "--data '{\"body\":\":star: PR Preview available on https://${NAME}.dev.molgenis.org\"}' " +
+                        "https://api.github.com/repos/molgenis/molgenis-app-biobank-explorer/issues/${CHANGE_ID}/comments"
+                }
+            }
+        }
     }
     stage('Build: [ master ]') {
       when {
