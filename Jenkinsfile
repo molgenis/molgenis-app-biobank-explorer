@@ -55,7 +55,7 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "build:preview"
+                    sh "yarn build:preview"
                 }
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
