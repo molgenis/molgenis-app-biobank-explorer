@@ -19,6 +19,12 @@ build-date: ${buildDate}
 PR: ${process.env.CHANGE_ID}
 BUILD: ${process.env.BUILD_NUMBER}`
 
+const htmlTemplate = () => {
+  if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
+  if (process.env.NODE_ENV === 'development') return 'public/index.html'
+  if (process.env.NODE_ENV === 'test') return 'public/preview.html'
+}
+
 const PROXY_TARGET = 'https://molgenis85.gcc.rug.nl' // 'https://directory.bbmri-eric.eu'
 
 const apiDevServerProxyConf = {
@@ -40,7 +46,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].template = process.env.NODE_ENV === 'production' ? 'apptemplate/app-template.html' : 'public/index.html'
+        args[0].template = htmlTemplate()
         args[0].version = process.env.NODE_ENV !== 'production' ? previewText : ''
         return args
       })
