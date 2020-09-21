@@ -10,7 +10,7 @@
     "test:unit": "vue-cli-service test:unit --collectCoverage",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "build:preview": "yarn build --mode preview",
+    "build:preview": "yarn build --mode test",
     "preversion": "yarn install; yarn test:unit",
     "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
   },
