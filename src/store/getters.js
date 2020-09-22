@@ -36,7 +36,7 @@ export default {
     return biobanks.length
   },
   foundCollections (_, { getFoundBiobankIds, getCollectionsWithBiobankId }) {
-    if (getFoundBiobankIds.length) {
+    if (getFoundBiobankIds.length && getCollectionsWithBiobankId.length) {
       const biobanksWithCollections = groupCollectionsByBiobankId(getCollectionsWithBiobankId)
       let collectionCount = 0
       for (const id of getFoundBiobankIds) {
@@ -44,7 +44,11 @@ export default {
         if (collectionsInBiobank) collectionCount += collectionsInBiobank.length
       }
       return collectionCount
-    } else return getCollectionsWithBiobankId.length
+    }
+
+    if (getCollectionsWithBiobankId) return getCollectionsWithBiobankId.length
+
+    return 0
   },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,

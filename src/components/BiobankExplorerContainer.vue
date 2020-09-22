@@ -18,7 +18,7 @@
       </div>
     </div>
     <cart-selection-toast
-      v-if="(rsql.length + biobankRsql.length) || !foundBiobanks"
+      v-if="!loading && rsql || biobankRsql"
       :cartSelectionText="`${foundCollections} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       title="Send to the negotiator"
