@@ -35,6 +35,12 @@
 .biobank-explorer-container {
   padding-top: 1rem;
 }
+
+/* this needs to be fixed in components library */
+.b-toast-info .toast {
+    background-color: #ec6707 !important;
+    color: #ffffff !important;
+}
 </style>
 
 <script>
