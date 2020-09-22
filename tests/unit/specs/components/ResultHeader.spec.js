@@ -27,22 +27,4 @@ describe('BiobankCardsContainer', () => {
     const wrapper = shallowMount(ResultHeader, { store, localVue })
     expect(wrapper.html()).toContain('<div class="search-box-container">')
   })
-
-  it('should return the total amount of collections for found biobanks', () => {
-    const wrapper = shallowMount(ResultHeader, { store, localVue })
-    expect(wrapper.vm.foundCollections).toEqual(collectionsWithBiobank.filter(b => b.biobankId === 'B').map(cb => cb.collectionId).length)
-  })
-  it('should return the total amount of found collections biobank ids are empty', () => {
-    store = new Vuex.Store({
-      state: {},
-      getters: {
-        rsql: () => '',
-        getFoundBiobankIds: () => [],
-        getCollectionsWithBiobankId: () => collectionsWithBiobank,
-        foundBiobanks: () => biobanks
-      }
-    })
-    const wrapper = shallowMount(ResultHeader, { store, localVue })
-    expect(wrapper.vm.foundCollections).toEqual(collectionsWithBiobank.length)
-  })
 })
