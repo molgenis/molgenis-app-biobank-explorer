@@ -40,22 +40,10 @@
 <script>
 import ActiveFilterList from './filters/ActiveFilterList'
 import { mapGetters } from 'vuex'
-import { groupCollectionsByBiobankId } from '../utils/grouping'
 
 export default {
   computed: {
-    ...mapGetters(['foundBiobanks', 'getCollectionsWithBiobankId', 'getFoundBiobankIds', 'rsql']),
-    foundCollections () {
-      if (this.getFoundBiobankIds.length) {
-        const biobanksWithCollections = groupCollectionsByBiobankId(this.getCollectionsWithBiobankId)
-        let collectionCount = 0
-        for (const id of this.getFoundBiobankIds) {
-          const collectionsInBiobank = biobanksWithCollections[id]
-          if (collectionsInBiobank) collectionCount += collectionsInBiobank.length
-        }
-        return collectionCount
-      } else return this.getCollectionsWithBiobankId.length
-    }
+    ...mapGetters(['foundBiobanks', 'foundCollections'])
   },
   components: {
     ActiveFilterList

@@ -8,7 +8,6 @@
       <div class="row">
         <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
-          <negotiator :disabled="!(rsql.length + biobankRsql.length) || !foundBiobanks"></negotiator>
         </div>
       </div>
 
@@ -18,6 +17,17 @@
         </div>
       </div>
     </div>
+    <cart-selection-toast
+      v-if="!loading && rsql || biobankRsql"
+      :cartSelectionText="`${foundCollections} collection(s) selected`"
+      :clickHandler="sendToNegotiator"
+      title="Send to the negotiator"
+    >
+      <template v-slot:buttonText>
+        REQUEST SAMPLES
+        <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="request"></i>
+      </template>
+    </cart-selection-toast>
   </div>
 </template>
 
@@ -25,17 +35,24 @@
 .biobank-explorer-container {
   padding-top: 1rem;
 }
+
+/* this needs to be fixed in components library */
+.b-toast-info .toast {
+    background-color: #ec6707 !important;
+    color: #ffffff !important;
+}
 </style>
 
 <script>
+import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
-import Negotiator from './negotiator/Negotiator'
 import { mapGetters, mapActions } from 'vuex'
 import {
   GET_COLLECTION_IDS,
-  GET_BIOBANK_IDS
+  GET_BIOBANK_IDS,
+  SEND_TO_NEGOTIATOR
 } from '../store/actions'
 
 export default {
@@ -44,10 +61,21 @@ export default {
     BiobankCardsContainer,
     FilterContainer,
     ResultHeader,
-    Negotiator
+    CartSelectionToast
+  },
+  data: () => {
+    return {
+      request: false
+    }
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks'])
+    ...mapGetters([
+      'rsql',
+      'biobankRsql',
+      'loading',
+      'foundBiobanks',
+      'foundCollections'
+    ])
   },
   watch: {
     rsql: {
@@ -63,7 +91,14 @@ export default {
     ...mapActions({
       getCollectionIds: GET_COLLECTION_IDS,
       getBiobankIds: GET_BIOBANK_IDS
-    })
+    }),
+    done () {
+      this.request = false
+    },
+    sendToNegotiator () {
+      this.request = true
+      this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
+    }
   }
 }
 </script>

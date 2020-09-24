@@ -1,4 +1,5 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
+import { groupCollectionsByBiobankId } from '../utils/grouping'
 
 export default {
   loading: ({ collectionIds, biobankIds }) => !(biobankIds && collectionIds),
@@ -28,11 +29,26 @@ export default {
     })
   },
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
+  getCollectionsWithBiobankId: (state) => {
+    return state.collectionIds
+  },
   foundBiobanks: (_, { biobanks }) => {
     return biobanks.length
   },
-  getCollectionsWithBiobankId: (state) => {
-    return state.collectionIds
+  foundCollections (_, { getFoundBiobankIds, getCollectionsWithBiobankId }) {
+    if (getFoundBiobankIds.length && getCollectionsWithBiobankId.length) {
+      const biobanksWithCollections = groupCollectionsByBiobankId(getCollectionsWithBiobankId)
+      let collectionCount = 0
+      for (const id of getFoundBiobankIds) {
+        const collectionsInBiobank = biobanksWithCollections[id]
+        if (collectionsInBiobank) collectionCount += collectionsInBiobank.length
+      }
+      return collectionCount
+    }
+
+    if (getCollectionsWithBiobankId) return getCollectionsWithBiobankId.length
+
+    return 0
   },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
