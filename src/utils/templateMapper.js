@@ -101,6 +101,10 @@ export const mapCollectionDetailsListContent = collection => {
       phone: {
         value: collection.contact ? collection.contact.phone : undefined,
         type: 'phone'
+      },
+      website: {
+        value: collection.id_card ? collection.id_card : undefined,
+        type: 'url'
       }
     },
     biobank: {
