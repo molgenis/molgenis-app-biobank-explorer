@@ -103,7 +103,7 @@ export const mapCollectionDetailsListContent = collection => {
         type: 'phone'
       },
       website: {
-        value: collection.id_card ? collection.id_card : undefined,
+        value: collection.url ? collection.url : undefined,
         type: 'url'
       }
     },
