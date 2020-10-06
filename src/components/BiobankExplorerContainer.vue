@@ -22,6 +22,7 @@
       :cartSelectionText="`${foundCollections} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       title="Send to the negotiator"
+      toastClass="bg-warning text-white"
     >
       <template v-slot:buttonText>
         REQUEST SAMPLES
@@ -34,12 +35,6 @@
 <style>
 .biobank-explorer-container {
   padding-top: 1rem;
-}
-
-/* this needs to be fixed in components library */
-.b-toast-info .toast {
-    background-color: #ec6707 !important;
-    color: #ffffff !important;
 }
 </style>
 
