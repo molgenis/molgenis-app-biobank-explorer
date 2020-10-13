@@ -2,14 +2,14 @@ import { expect } from 'chai'
 import {
   mapDetailsTableContent,
   mapAgeRange,
-  mapCollectionDetailsListContent,
   mapCollectionsData,
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
   mapUrl,
   getSize,
-  getNameOfHead
+  getNameOfHead,
+  collectionReportInformation
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -37,6 +37,9 @@ describe('templateMapper', () => {
     head_firstname: 'Amelia Mignonette',
     head_role: 'Princess of Genovia',
     contact: {
+      title_before_name: 'Princess of Genovia',
+      last_name: 'Thermopolis Renaldi',
+      first_name: 'Amelia Mignonette',
       email: 'mia@genovia.gnv',
       phone: '+66 123456789'
     },
@@ -116,33 +119,32 @@ describe('templateMapper', () => {
     })
   })
 
-  describe('detailsListContent', () => {
-    it('should generate contact of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
-      expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
-      expect(actual.contact.phone.value).to.equal('+66 123456789')
+  describe('Collection Report Information', () => {
+    it('should create a readable form for contact information', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.head).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
+    })
+    it('should create a readable form for contact', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.contact.name).to.equal('Princess of Genovia Amelia Mignonette Thermopolis Renaldi')
+      expect(actual.contact.email).to.equal('mia@genovia.gnv')
+      expect(actual.contact.phone).to.equal('+66 123456789')
     })
 
-    it('should generate quality of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.quality.Certification).to.deep.equal({
-        value: ['Order of the rose'],
-        type: 'list'
-      })
+    it('should generate a certification array', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.certifications).to.deep.equal(['Order of the rose'])
     })
 
-    it('should generate collaboration of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.collaboration['Not for profit']).to.deep.equal({ value: true, type: 'bool' })
-      expect(actual.collaboration.Commercial).to.deep.equal(undefined)
+    it('should only add collaboration items that are true', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.collaboration).to.deep.equal([{ name: 'Not for profit', value: 'yes' }])
     })
 
-    it('should generate both properties in collaboration', () => {
+    it('should generate an array if all items are true', () => {
       collectionsReport.collaboration_commercial = true
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.collaboration['Not for profit']).to.deep.equal({ value: true, type: 'bool' })
-      expect(actual.collaboration.Commercial).to.deep.equal({ value: true, type: 'bool' })
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.collaboration).to.deep.equal([{ name: 'Commercial', value: 'yes' }, { name: 'Not for profit', value: 'yes' }])
     })
   })
 

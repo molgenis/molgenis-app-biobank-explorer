@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BiobankExplorerContainer from '../components/BiobankExplorerContainer'
 import BiobankReportCard from '../components/cards/BiobankReportCard'
-import CollectionReportCard from '../components/cards/CollectionReportCard'
+import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
 import { INITIAL_STATE } from '../store/state'
 
@@ -27,7 +27,7 @@ export default new VueRouter({
     {
       path: '/collection/:id',
       name: 'collection',
-      component: CollectionReportCard
+      component: CollectionReport
     },
     {
       path: '/network/:id',
