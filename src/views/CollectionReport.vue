@@ -27,22 +27,33 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p>
-                  <b>Id:</b>
-                  {{ collection.id }}
-                </p>
                 <report-description
                   :description="collection.description"
                   :maxLength="500"
                 ></report-description>
-                <report-details-list
-                  :reportDetails="mainContent"
-                ></report-details-list>
+
+                <!-- main collection information -->
+                <table class="mg-report-details-list mb-3">
+                  <tr>
+                    <th scope="row" class="pr-1">Id:</th>
+                    <td>{{ collection.id }}</td>
+                  </tr>
+                  <report-list :data="mainContent.Size">Size</report-list>
+                  <tr v-if="mainContent.Age">
+                    <th scope="row" class="pr-1">Age:</th>
+                    <td colspan="2">{{ mainContent.Age.value }}</td>
+                  </tr>
+                  <report-list :data="mainContent.Type">Type:</report-list>
+                  <report-list :data="mainContent.Sex">Sex:</report-list>
+                  <report-list :data="mainContent.Materials">Materials:</report-list>
+                  <report-list :data="mainContent.Storage">Storage:</report-list>
+                  <report-list :data="mainContent.Data">Data:</report-list>
+                  <report-list :data="mainContent.Diagnosis">Diagnosis:</report-list>
+                </table>
+
+                <!-- Recursive set of subcollections -->
                 <div
-                  v-if="
-                    collection.sub_collections &&
-                    collection.sub_collections.length
-                  "
+                  v-if="collection.sub_collections && collection.sub_collections.length"
                   class="mt-2"
                 >
                   <h5>Sub collections</h5>
@@ -56,7 +67,7 @@
               </div>
 
               <!-- Right side card -->
-              <CollectionReportInfoCard :info="info"></CollectionReportInfoCard>
+              <collection-report-info-card :info="info"></collection-report-info-card>
             </div>
           </div>
         </div>
@@ -70,9 +81,9 @@ import { mapActions, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import { GET_COLLECTION_REPORT } from '@/store/actions'
-import ReportDescription from '@/components/report-components/ReportDescription.vue'
-import ReportTitle from '@/components/report-components/ReportTitle.vue'
-import ReportDetailsList from '@/components/report-components/ReportDetailsList.vue'
+import ReportDescription from '@/components/report-components/ReportDescription'
+import ReportTitle from '@/components/report-components/ReportTitle'
+import ReportList from '@/components/report-components/ReportList'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
 
@@ -85,9 +96,9 @@ import {
 export default {
   name: 'CollectionReport',
   components: {
+    ReportList,
     ReportTitle,
     ReportDescription,
-    ReportDetailsList,
     ReportSubCollection,
     CollectionReportInfoCard,
     Loading

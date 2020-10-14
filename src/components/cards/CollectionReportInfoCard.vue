@@ -15,18 +15,18 @@
                 {{ info.contact.name }}
               </li>
               <li v-if="info.contact.email">
-                            <span
-                              class="fa fa-fw fa-paper-plane mr-2"
-                              aria-hidden="true"
-                            ></span>
+                <span
+                  class="fa fa-fw fa-paper-plane mr-2"
+                  aria-hidden="true"
+                ></span>
                 <a :href="'mailto:' + info.contact.email">
                   <span>Email</span>
                 </a>
                 <div v-if="info.contact.phone">
-                              <span
-                                class="fa fa-fw fa-phone mr-1"
-                                aria-hidden="true"
-                              ></span>
+                  <span
+                    class="fa fa-fw fa-phone mr-1"
+                    aria-hidden="true"
+                  ></span>
                   <a :href="'tel:' + info.contact.phone">
                     <span> {{ info.contact.phone }}</span></a
                   >
@@ -50,19 +50,19 @@
               </li>
               <li>
                 <div v-if="info.biobank.report">
-                              <span
-                                class="fa fa-fw fa-address-card mr-2"
-                                aria-hidden="true"
-                              ></span>
+                  <span
+                    class="fa fa-fw fa-address-card mr-2"
+                    aria-hidden="true"
+                  ></span>
                   <router-link :to="info.biobank.report">
                     <span>View {{ info.biobank.name }}</span>
                   </router-link>
                 </div>
                 <div v-if="info.biobank.website">
-                              <span
-                                class="fa fa-fw fa-globe mr-2"
-                                aria-hidden="true"
-                              ></span>
+                  <span
+                    class="fa fa-fw fa-globe mr-2"
+                    aria-hidden="true"
+                  ></span>
                   <a
                     :href="info.biobank.website"
                     target="_blank"
@@ -72,10 +72,10 @@
                   </a>
                 </div>
                 <div v-if="info.biobank.email">
-                              <span
-                                class="fa fa-fw fa-paper-plane mr-2"
-                                aria-hidden="true"
-                              ></span>
+                  <span
+                    class="fa fa-fw fa-paper-plane mr-2"
+                    aria-hidden="true"
+                  ></span>
                   <a :href="'mailto:' + info.biobank.email">
                     <span>Email</span>
                   </a>
@@ -85,22 +85,22 @@
                 <div class="container p-0">
                   <div class="row">
                     <div class="col pr-0">
-                                  <span class="font-weight-bold"
-                                  >Partner charter:</span
-                                  >
+                    <span class="font-weight-bold"
+                    >Partner charter:</span
+                    >
                     </div>
                     <div class="col p-0">
-                                  <span class="badge badge-info">
-                                    {{ info.biobank.partnerCharter }}</span
-                                  >
+                      <span class="badge badge-info">
+                        {{ info.biobank.partnerCharter }}</span
+                      >
                     </div>
                   </div>
                 </div>
               </li>
               <li>
-                            <span class="font-weight-bold mr-2"
-                            >Biobank id:</span
-                            >
+                <span class="font-weight-bold mr-2"
+                >Biobank id:</span
+                >
                 <span class="biobank-id">{{ info.biobank.id }}</span>
               </li>
             </ul>
@@ -119,10 +119,10 @@
                   <span class="font-weight-bold mr-2">Name:</span>
                   <span>{{ network.name }}</span>
                   <div>
-                                <span
-                                  class="fa fa-fw fa-address-card mr-2"
-                                  aria-hidden="true"
-                                ></span>
+                    <span
+                      class="fa fa-fw fa-address-card mr-2"
+                      aria-hidden="true"
+                    ></span>
                     <router-link :to="network.report">
                       <span>View {{ network.name }} network</span>
                     </router-link>
@@ -132,24 +132,22 @@
             </ul>
           </template>
           <template
-            v-if="
-                          info.certifications && info.certifications.length > 0
-                        "
+            v-if="info.certifications && info.certifications.length > 0"
           >
             <h5>Quality</h5>
             <ul class="right-content-list">
               <li>
-                            <span class="font-weight-bold mr-2"
-                            >Certification(s):</span
-                            >
+                <span class="font-weight-bold mr-2"
+                >Certification(s):</span
+                >
                 <span
                   v-for="(cert, index) in info.certifications"
                   :key="`${cert}-${index}`"
                 >
-                              <span class="cert-badge badge badge-success">
-                                {{ cert }}
-                              </span>
-                            </span>
+                  <span class="cert-badge badge badge-success">
+                    {{ cert }}
+                  </span>
+                </span>
               </li>
             </ul>
           </template>
@@ -162,14 +160,14 @@
                 :key="`${collab.name}-${index}`"
               >
                 <div class="col pr-0">
-                              <span class="font-weight-bold"
-                              >{{ collab.name }}:</span
-                              >
+                  <span class="font-weight-bold"
+                  >{{ collab.name }}:</span
+                  >
                 </div>
                 <div class="col p-0">
-                              <span class="badge badge-info">{{
-                                collab.value
-                              }}</span>
+                  <span class="badge badge-info">{{
+                    collab.value
+                  }}</span>
                 </div>
               </div>
             </div>
