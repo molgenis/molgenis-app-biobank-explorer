@@ -14,19 +14,15 @@ export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
 
 export const getNameOfHead = element => {
+  const { head_firstname, head_lastname, head_role } = element
+
   let name = ''
-  if (element.head_lastname) {
-    if (element.head_firstname) {
-      name += element.head_firstname + ' '
-    }
-    name += element.head_lastname
-    if (element.head_role) {
-      name += ' (' + element.head_role + ')'
-    }
-  }
-  if (name !== '') {
-    return name
-  }
+
+  if (head_firstname) name += `${head_firstname} `
+  if (head_lastname) name += `${head_lastname} `
+  if (head_role) name += `(${head_role})`
+
+  return name !== '' ? name.trim() : undefined
 }
 
 export const getName = contact => {
