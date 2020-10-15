@@ -39,7 +39,6 @@
                     <td>{{ collection.id }}</td>
                   </tr>
                   <report-list
-                    v-if="hasItems(mainContent.Size)"
                     :data="mainContent.Size"
                     >Size:</report-list
                   >
@@ -48,32 +47,26 @@
                     <td colspan="2">{{ mainContent.Age.value }}</td>
                   </tr>
                   <report-list
-                    v-if="hasItems(mainContent.Type)"
                     :data="mainContent.Type"
                     >Type:</report-list
                   >
                   <report-list
-                    v-if="hasItems(mainContent.Sex)"
                     :data="mainContent.Sex"
                     >Sex:</report-list
                   >
                   <report-list
-                    v-if="hasItems(mainContent.Materials)"
                     :data="mainContent.Materials"
                     >Materials:</report-list
                   >
                   <report-list
-                    v-if="hasItems(mainContent.Storage)"
                     :data="mainContent.Storage"
                     >Storage:</report-list
                   >
                   <report-list
-                    v-if="hasItems(mainContent.Data)"
                     :data="mainContent.Data"
                     >Data:</report-list
                   >
                   <report-list
-                    v-if="hasItems(mainContent.Diagnosis)"
                     :data="mainContent.Diagnosis"
                     >Diagnosis:</report-list
                   >
@@ -142,9 +135,6 @@ export default {
     }),
     back () {
       this.$router.go(-1)
-    },
-    hasItems (array) {
-      return array.value.length
     }
   },
   computed: {

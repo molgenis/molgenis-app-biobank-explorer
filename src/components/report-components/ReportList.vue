@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="data">
+  <tr v-if="data.value.length > 0">
     <th scope="row" class="pr-1"><slot></slot></th>
     <td>
       <span
