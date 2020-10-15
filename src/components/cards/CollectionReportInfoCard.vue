@@ -3,16 +3,18 @@
     <div class="card">
       <div class="card-body">
         <div class="card-text">
-          <template v-if="info.head">
-            <div class="mb-2">
-              <span>{{ info.head }}</span>
-            </div>
-          </template>
           <template v-if="info.contact">
             <h5>Contact Information</h5>
             <ul class="right-content-list">
+              <template v-if="info.head">
+                <li>
+                  <span class="font-weight-bold mr-1">Head/PI:</span>
+                  <span>{{ info.head }}</span>
+                </li>
+              </template>
               <li v-if="info.contact.name">
-                {{ info.contact.name }}
+                <span class="font-weight-bold mr-1">Contact:</span>
+                <span>{{ info.contact.name }}</span>
               </li>
               <li v-if="info.contact.email">
                 <span
@@ -85,9 +87,7 @@
                 <div class="container p-0">
                   <div class="row">
                     <div class="col pr-0">
-                    <span class="font-weight-bold"
-                    >Partner charter:</span
-                    >
+                      <span class="font-weight-bold">Partner charter:</span>
                     </div>
                     <div class="col p-0">
                       <span class="badge badge-info">
@@ -98,16 +98,12 @@
                 </div>
               </li>
               <li>
-                <span class="font-weight-bold mr-2"
-                >Biobank id:</span
-                >
+                <span class="font-weight-bold mr-2">Biobank id:</span>
                 <span class="biobank-id">{{ info.biobank.id }}</span>
               </li>
             </ul>
           </template>
-          <template
-            v-if="info.networks && info.networks.length > 0"
-          >
+          <template v-if="info.networks && info.networks.length > 0">
             <h5>Networks</h5>
             <ul class="right-content-list">
               <li>
@@ -137,9 +133,7 @@
             <h5>Quality</h5>
             <ul class="right-content-list">
               <li>
-                <span class="font-weight-bold mr-2"
-                >Certification(s):</span
-                >
+                <span class="font-weight-bold mr-2">Certification(s):</span>
                 <span
                   v-for="(cert, index) in info.certifications"
                   :key="`${cert}-${index}`"
@@ -160,14 +154,10 @@
                 :key="`${collab.name}-${index}`"
               >
                 <div class="col pr-0">
-                  <span class="font-weight-bold"
-                  >{{ collab.name }}:</span
-                  >
+                  <span class="font-weight-bold">{{ collab.name }}:</span>
                 </div>
                 <div class="col p-0">
-                  <span class="badge badge-info">{{
-                    collab.value
-                  }}</span>
+                  <span class="badge badge-info">{{ collab.value }}</span>
                 </div>
               </div>
             </div>
@@ -191,27 +181,27 @@ export default {
 </script>
 
 <style scoped>
-  .biobank-id {
-    word-break: break-all;
-  }
+.biobank-id {
+  word-break: break-all;
+}
 
-  .right-content-list {
-    list-style-type: none;
-    margin-left: -2.5rem;
-  }
-  .right-content-list:not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
+.right-content-list {
+  list-style-type: none;
+  margin-left: -2.5rem;
+}
+.right-content-list:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
 
-  .right-content-list li {
-    margin-bottom: 0.5rem;
-  }
+.right-content-list li {
+  margin-bottom: 0.5rem;
+}
 
-  .info-list {
-    margin-bottom: 1rem;
-  }
+.info-list {
+  margin-bottom: 1rem;
+}
 
-  .cert-badge:not(:last-child) {
-    margin-right: 1rem;
-  }
+.cert-badge:not(:last-child) {
+  margin-right: 1rem;
+}
 </style>

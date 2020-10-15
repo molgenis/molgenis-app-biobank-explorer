@@ -38,22 +38,53 @@
                     <th scope="row" class="pr-1">Id:</th>
                     <td>{{ collection.id }}</td>
                   </tr>
-                  <report-list :data="mainContent.Size">Size</report-list>
+                  <report-list
+                    v-if="hasItems(mainContent.Size)"
+                    :data="mainContent.Size"
+                    >Size:</report-list
+                  >
                   <tr v-if="mainContent.Age">
                     <th scope="row" class="pr-1">Age:</th>
                     <td colspan="2">{{ mainContent.Age.value }}</td>
                   </tr>
-                  <report-list :data="mainContent.Type">Type:</report-list>
-                  <report-list :data="mainContent.Sex">Sex:</report-list>
-                  <report-list :data="mainContent.Materials">Materials:</report-list>
-                  <report-list :data="mainContent.Storage">Storage:</report-list>
-                  <report-list :data="mainContent.Data">Data:</report-list>
-                  <report-list :data="mainContent.Diagnosis">Diagnosis:</report-list>
+                  <report-list
+                    v-if="hasItems(mainContent.Type)"
+                    :data="mainContent.Type"
+                    >Type:</report-list
+                  >
+                  <report-list
+                    v-if="hasItems(mainContent.Sex)"
+                    :data="mainContent.Sex"
+                    >Sex:</report-list
+                  >
+                  <report-list
+                    v-if="hasItems(mainContent.Materials)"
+                    :data="mainContent.Materials"
+                    >Materials:</report-list
+                  >
+                  <report-list
+                    v-if="hasItems(mainContent.Storage)"
+                    :data="mainContent.Storage"
+                    >Storage:</report-list
+                  >
+                  <report-list
+                    v-if="hasItems(mainContent.Data)"
+                    :data="mainContent.Data"
+                    >Data:</report-list
+                  >
+                  <report-list
+                    v-if="hasItems(mainContent.Diagnosis)"
+                    :data="mainContent.Diagnosis"
+                    >Diagnosis:</report-list
+                  >
                 </table>
 
                 <!-- Recursive set of subcollections -->
                 <div
-                  v-if="collection.sub_collections && collection.sub_collections.length"
+                  v-if="
+                    collection.sub_collections &&
+                    collection.sub_collections.length
+                  "
                   class="mt-2"
                 >
                   <h5>Sub collections</h5>
@@ -67,7 +98,9 @@
               </div>
 
               <!-- Right side card -->
-              <collection-report-info-card :info="info"></collection-report-info-card>
+              <collection-report-info-card
+                :info="info"
+              ></collection-report-info-card>
             </div>
           </div>
         </div>
@@ -109,6 +142,9 @@ export default {
     }),
     back () {
       this.$router.go(-1)
+    },
+    hasItems (array) {
+      return array.value.length
     }
   },
   computed: {
@@ -146,7 +182,7 @@ export default {
 </script>
 
 <style scoped>
->>> .mg-report-details-list th{
+>>> .mg-report-details-list th {
   vertical-align: top;
 }
 </style>
