@@ -5,9 +5,9 @@
     </b>
 
     <table class="mg-report-details-list mb-3">
-      <report-list :data="collection.content.Size">Size:</report-list>
-      <report-list :data="collection.content.Materials">Materials:</report-list>
-      <report-list :data="collection.content.Data">Data:</report-list>
+      <report-list-row :data="collection.content.Size">Size:</report-list-row>
+      <report-list-row :data="collection.content.Materials">Materials:</report-list-row>
+      <report-list-row :data="collection.content.Data">Data:</report-list-row>
     </table>
 
     <div v-if="collection.subCollections && collection.subCollections.length > 0" class="m-3">
@@ -23,12 +23,12 @@
 </template>
 
 <script>
-import ReportList from '@/components/report-components/ReportList'
+import ReportListRow from '@/components/report-components/ReportListRow'
 
 export default {
   name: 'ReportSubCollection',
   components: {
-    ReportList
+    ReportListRow
   },
   props: {
     level: Number,

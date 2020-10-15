@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: 'ReportList',
+  name: 'ReportListRow',
   props: {
     data: Object
   }

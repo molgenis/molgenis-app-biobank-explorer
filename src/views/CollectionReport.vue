@@ -24,17 +24,17 @@
                     <th scope="row" class="pr-1">Id:</th>
                     <td>{{ collection.id }}</td>
                   </tr>
-                  <report-list :data="mainContent.Size">Size:</report-list>
+                  <report-list-row :data="mainContent.Size">Size:</report-list-row>
                   <tr v-if="mainContent.Age">
                     <th scope="row" class="pr-1">Age:</th>
                     <td colspan="2">{{ mainContent.Age.value }}</td>
                   </tr>
-                  <report-list :data="mainContent.Type">Type:</report-list>
-                  <report-list :data="mainContent.Sex">Sex:</report-list>
-                  <report-list :data="mainContent.Materials">Materials:</report-list>
-                  <report-list :data="mainContent.Storage">Storage:</report-list>
-                  <report-list :data="mainContent.Data">Data:</report-list>
-                  <report-list :data="mainContent.Diagnosis">Diagnosis:</report-list>
+                  <report-list-row :data="mainContent.Type">Type:</report-list-row>
+                  <report-list-row :data="mainContent.Sex">Sex:</report-list-row>
+                  <report-list-row :data="mainContent.Materials">Materials:</report-list-row>
+                  <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
+                  <report-list-row :data="mainContent.Data">Data:</report-list-row>
+                  <report-list-row :data="mainContent.Diagnosis">Diagnosis:</report-list-row>
                 </table>
 
                 <!-- Recursive set of subcollections -->
@@ -61,7 +61,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import { GET_COLLECTION_REPORT } from '@/store/actions'
 import ReportDescription from '@/components/report-components/ReportDescription'
 import ReportTitle from '@/components/report-components/ReportTitle'
-import ReportList from '@/components/report-components/ReportList'
+import ReportListRow from '@/components/report-components/ReportListRow'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
 
@@ -70,7 +70,7 @@ import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation
 export default {
   name: 'CollectionReport',
   components: {
-    ReportList,
+    ReportListRow,
     ReportTitle,
     ReportDescription,
     ReportSubCollection,
