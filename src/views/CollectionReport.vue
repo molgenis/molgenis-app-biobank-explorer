@@ -24,7 +24,7 @@
             :name="collection.name"
           ></report-title>
 
-          <div class="container">
+          <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
                 <report-description
@@ -146,5 +146,7 @@ export default {
 </script>
 
 <style scoped>
-
+>>> .mg-report-details-list th{
+  vertical-align: top;
+}
 </style>
