@@ -13,6 +13,7 @@ if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === fa
 
 export default {
   isLoading: false,
+  isPodium: false,
   error: null,
   showCountryFacet: Object.hasOwnProperty.call(INITIAL_STATE, 'showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,

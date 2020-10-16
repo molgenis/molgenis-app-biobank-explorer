@@ -35,7 +35,7 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
-
+export const SET_PODIUM = '__SET_PODIUM__'
 export const SET_LAST_URL = '__SET_LAST_URL__'
 
 const combineCodeAndLabels = (diagnoses) => {
@@ -244,5 +244,8 @@ export default {
   },
   [SET_LOADING] (state, loading) {
     state.isLoading = loading
+  },
+  [SET_PODIUM] (state, podium) {
+    state.isPodium = podium
   }
 }

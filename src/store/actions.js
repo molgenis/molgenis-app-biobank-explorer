@@ -25,6 +25,7 @@ import {
   SET_NETWORK_BIOBANKS,
   SET_COVID_19,
   SET_NETWORK_OPTIONS,
+  SET_PODIUM,
   SET_BIOBANK_IDS
 } from './mutations'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
@@ -49,8 +50,11 @@ export const GET_COLLECTION_REPORT = '__GET_COLLECTION_REPORT__'
 export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 export const GET_NETWORK_OPTIONS = '__GET_BIOBANK_NETWORK_OPTIONS__'
+export const GET_NEGOTIATOR_TYPE = '__GET_NEGOTIATOR_TYPE__'
 
 /* API PATHS */
+
+const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
@@ -258,6 +262,15 @@ export default {
     }, error => {
       commit(SET_ERROR, error)
       commit(SET_LOADING, false)
+    })
+  },
+  [GET_NEGOTIATOR_TYPE] ({ commit }) {
+    api.get(`${NEGOTIATOR_API_PATH}`).then(response => {
+      commit(SET_PODIUM, true)
+      // TODO: Test to get prop via server
+      // commit(SET_PODIUM, response.items.map(item => item.id).some(id => id.includes('podium')))
+    }, error => {
+      commit(SET_ERROR, error)
     })
   },
   [GET_NETWORK_REPORT] ({ commit }, networkId) {
