@@ -51,7 +51,8 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import {
   GET_COLLECTION_IDS,
   GET_BIOBANK_IDS,
-  SEND_TO_NEGOTIATOR
+  SEND_TO_NEGOTIATOR,
+  GET_PODIUM_COLLECTIONS
 } from '../store/actions'
 
 export default {
@@ -94,7 +95,8 @@ export default {
   methods: {
     ...mapActions({
       getCollectionIds: GET_COLLECTION_IDS,
-      getBiobankIds: GET_BIOBANK_IDS
+      getBiobankIds: GET_BIOBANK_IDS,
+      getPodiumCollections: GET_PODIUM_COLLECTIONS
     }),
     done () {
       this.request = false
@@ -106,6 +108,7 @@ export default {
       this.request = true
       if (this.isPodium) {
         this.$bvModal.show('podium-modal')
+        this.getPodiumCollections()
       } else {
         this.sendRequest()
       }

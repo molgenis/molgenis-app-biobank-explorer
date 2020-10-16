@@ -15,7 +15,7 @@ export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLL
 export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
 export const SET_COVID_19 = '__SET_COVID_19__'
 export const SET_NETWORK_OPTIONS = '__SET_NETWORK_OPTIONS__'
-
+export const SET_PODIUM_COLLECTIONS = '__SET_PODIUM_COLLECTIONS__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
@@ -247,5 +247,8 @@ export default {
   },
   [SET_PODIUM] (state, podium) {
     state.isPodium = podium
+  },
+  SET_PODIUM_COLLECTIONS (state, podiumCollection) {
+    state.podiumCollectionIds = podiumCollection
   }
 }

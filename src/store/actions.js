@@ -26,6 +26,7 @@ import {
   SET_COVID_19,
   SET_NETWORK_OPTIONS,
   SET_PODIUM,
+  SET_PODIUM_COLLECTIONS,
   SET_BIOBANK_IDS
 } from './mutations'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
@@ -51,6 +52,7 @@ export const GET_NETWORK_REPORT = '__GET_NETWORK_REPORT__'
 export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 export const GET_NETWORK_OPTIONS = '__GET_BIOBANK_NETWORK_OPTIONS__'
 export const GET_NEGOTIATOR_TYPE = '__GET_NEGOTIATOR_TYPE__'
+export const GET_PODIUM_COLLECTIONS = '__GET_PODIUM_COLLECTIONS__'
 
 /* API PATHS */
 
@@ -287,6 +289,12 @@ export default {
       .then(response => commit(SET_NETWORK_BIOBANKS, response.items))
     Promise.all([collections, biobanks, networks])
       .catch((error) => commit(SET_ERROR, error))
+  },
+  [GET_PODIUM_COLLECTIONS] ({ commit }) {
+    // TODO: get podium
+    fetch("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
+      commit(SET_PODIUM_COLLECTIONS, response.items)
+    })
   },
   /**
    * Transform the state into a NegotiatorQuery object.
