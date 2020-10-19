@@ -18,8 +18,8 @@
       </div>
     </div>
     <cart-selection-toast
-      v-if="(!loading && rsql || biobankRsql) && !podiumModalShown"
-      :cartSelectionText="`${foundCollections} collection(s) selected`"
+      v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown"
+      :cartSelectionText="`${foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       title="Send to the negotiator"
       toastClass="bg-warning text-white"
@@ -30,9 +30,12 @@
       </template>
     </cart-selection-toast>
 
-    <b-modal id="podium-modal" centered title="Podium" @ok="sendRequest" @cancel="request = false">
-      <p class="my-4">Hello podium!</p>
-      <p>Todo: podium tellingen vs niet podium tellingen?</p>
+    <b-modal id="podium-modal" centered :title="`${collectionsInPodium.length} selection(s) present in Podium`" @ok="sendRequest" @close="request = false" @cancel="request = false">
+      <div class="overflow-auto overflow-max-300">
+        <ul>
+          <li :key="cip" v-for="cip in collectionsInPodium">{{ cip }}</li>
+        </ul>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -48,12 +51,7 @@ import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import {
-  GET_COLLECTION_IDS,
-  GET_BIOBANK_IDS,
-  SEND_TO_NEGOTIATOR,
-  GET_PODIUM_COLLECTIONS
-} from '../store/actions'
+import { GET_COLLECTION_INFO, GET_BIOBANK_IDS, SEND_TO_NEGOTIATOR, GET_PODIUM_COLLECTIONS } from '../store/actions'
 
 export default {
   name: 'biobank-explorer-container',
@@ -69,13 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'rsql',
-      'biobankRsql',
-      'loading',
-      'foundBiobanks',
-      'foundCollections'
-    ]),
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium']),
     ...mapState(['isPodium']),
     podiumModalShown () {
       if (this.isPodium) return this.request
@@ -85,16 +77,20 @@ export default {
   watch: {
     rsql: {
       immediate: true,
-      handler: 'getCollectionIds'
+      handler: 'getCollectionInfo'
     },
     biobankRsql: {
       immediate: true,
       handler: 'getBiobankIds'
+    },
+    isPodium: {
+      immediate: true,
+      handler: 'getPodiumCollections'
     }
   },
   methods: {
     ...mapActions({
-      getCollectionIds: GET_COLLECTION_IDS,
+      getCollectionInfo: GET_COLLECTION_INFO,
       getBiobankIds: GET_BIOBANK_IDS,
       getPodiumCollections: GET_PODIUM_COLLECTIONS
     }),
@@ -108,7 +104,6 @@ export default {
       this.request = true
       if (this.isPodium) {
         this.$bvModal.show('podium-modal')
-        this.getPodiumCollections()
       } else {
         this.sendRequest()
       }
@@ -116,3 +111,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.overflow-max-300 {
+  max-height: 300px;
+}
+</style>

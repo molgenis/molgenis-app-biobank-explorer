@@ -18,6 +18,7 @@ describe('BiobankCardsContainer', () => {
         rsql: () => '',
         getFoundBiobankIds: () => ['B'],
         getCollectionsWithBiobankId: () => collectionsWithBiobank,
+        foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         foundBiobanks: () => biobanks
       }
     })

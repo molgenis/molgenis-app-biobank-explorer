@@ -5,7 +5,7 @@ import 'array-flat-polyfill'
 
 import {
   SET_BIOBANKS,
-  SET_COLLECTION_IDS,
+  SET_COLLECTION_INFO,
   SET_BIOBANK_REPORT,
   SET_COLLECTION_REPORT,
   SET_NETWORK_REPORT,
@@ -43,7 +43,7 @@ export const QUERY_DIAGNOSIS_AVAILABLE_OPTIONS = '__QUERY_DIAGNOSIS_AVAILABLE_OP
 export const GET_COLLECTION_QUALITY_COLLECTIONS = '__GET_COLLECTION_QUALITY_COLLECTIONS__'
 export const GET_BIOBANK_QUALITY_BIOBANKS = '__GET_BIOBANK_QUALITY_BIOBANKS__'
 export const GET_BIOBANKS = '__GET_BIOBANKS__'
-export const GET_COLLECTION_IDS = '__GET_COLLECTION_IDS__'
+export const GET_COLLECTION_INFO = '__GET_COLLECTION_INFO__'
 export const GET_BIOBANK_IDS = '__GET_BIOBANK_IDS__'
 export const GET_QUERY = '__GET_QUERY__'
 export const GET_BIOBANK_REPORT = '__GET_BIOBANK_REPORT__'
@@ -210,20 +210,20 @@ export default {
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
-  // actually this should be GET_COLLECTION_AND_BIOBANK_IDS
-  [GET_COLLECTION_IDS] ({ commit, dispatch, getters }) {
-    commit(SET_COLLECTION_IDS, undefined)
-    let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'
+  [GET_COLLECTION_INFO] ({ commit, dispatch, getters }) {
+    commit(SET_COLLECTION_INFO, undefined)
+    let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'
     if (getters.rsql) {
       url = `${url}&q=${encodeRsqlValue(getters.rsql)}`
     }
     api.get(url)
       .then(response => {
-        const collectionIds = response.items.map(item => ({
+        const collectionInfo = response.items.map(item => ({
           collectionId: item.data.id,
+          collectionName: item.data.label || item.data.name,
           biobankId: helpers.getBiobankId(item.data.biobank.links.self)
         }))
-        commit(SET_COLLECTION_IDS, collectionIds)
+        commit(SET_COLLECTION_INFO, collectionInfo)
         dispatch(GET_QUERY)
       }, error => {
         commit(SET_ERROR, error)
@@ -290,11 +290,12 @@ export default {
     Promise.all([collections, biobanks, networks])
       .catch((error) => commit(SET_ERROR, error))
   },
-  [GET_PODIUM_COLLECTIONS] ({ commit }) {
-    // TODO: get podium
-    fetch("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
-      commit(SET_PODIUM_COLLECTIONS, response.items)
-    })
+  [GET_PODIUM_COLLECTIONS] ({ state, commit }) {
+    if (state.podiumCollectionIds.length === 0) { // only fetch once.
+      api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
+        commit(SET_PODIUM_COLLECTIONS, response.items)
+      })
+    }
   },
   /**
    * Transform the state into a NegotiatorQuery object.

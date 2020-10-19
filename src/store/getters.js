@@ -2,14 +2,14 @@ import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from '.
 import { groupCollectionsByBiobankId } from '../utils/grouping'
 
 export default {
-  loading: ({ collectionIds, biobankIds }) => !(biobankIds && collectionIds),
-  biobanks: ({ collectionIds, biobankIds, biobanks }, { loading, rsql }) => {
+  loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
+  biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
       return []
     }
     let ids = biobankIds
     if (rsql && rsql.length) {
-      ids = collectionIds
+      ids = collectionInfo
       // biobank IDs present in collectionIds
         .map(({ biobankId }) => biobankId)
       // also present in biobankIds
@@ -24,31 +24,42 @@ export default {
       const biobank = biobanks[biobankId]
       return {
         ...biobank,
-        collections: filterCollectionTree(collectionIds.map(it => it.collectionId), biobank.collections)
+        collections: filterCollectionTree(collectionInfo.map(it => it.collectionId), biobank.collections)
       }
     })
   },
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   getCollectionsWithBiobankId: (state) => {
-    return state.collectionIds
+    return state.collectionInfo.map(colInfo => {
+      return {
+        collectionId: colInfo.collectionId,
+        biobankId: colInfo.biobankId
+      }
+    })
   },
   foundBiobanks: (_, { biobanks }) => {
     return biobanks.length
   },
-  foundCollections (_, { getFoundBiobankIds, getCollectionsWithBiobankId }) {
+  foundCollectionIds (_, { getFoundBiobankIds, getCollectionsWithBiobankId }) {
+    // only if there are biobanks, then there are collections. we can't have rogue collections :)
     if (getFoundBiobankIds.length && getCollectionsWithBiobankId.length) {
       const biobanksWithCollections = groupCollectionsByBiobankId(getCollectionsWithBiobankId)
-      let collectionCount = 0
+      let collectionIds = []
       for (const id of getFoundBiobankIds) {
         const collectionsInBiobank = biobanksWithCollections[id]
-        if (collectionsInBiobank) collectionCount += collectionsInBiobank.length
+        if (collectionsInBiobank) collectionIds = collectionIds.concat(collectionsInBiobank.map(colBio => colBio.collectionId))
       }
-      return collectionCount
+      return collectionIds
     }
-
-    if (getCollectionsWithBiobankId) return getCollectionsWithBiobankId.length
-
-    return 0
+    return []
+  },
+  collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }) {
+    if (isPodium && podiumCollectionIds && collectionInfo) {
+      const collectionNames = collectionInfo.filter(colInfo => podiumCollectionIds
+        .includes(colInfo.collectionId))
+        .map(podCols => podCols.collectionName) // Returns only collection names.
+      return collectionNames
+    } else return []
   },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,

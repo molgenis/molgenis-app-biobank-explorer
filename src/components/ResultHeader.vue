@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
-          <em>{{foundBiobanks}} organisations with {{foundCollections}} collections matching the search criteria</em>
+          <em>{{foundBiobanks}} organisations with {{foundCollectionIds.length}} collections matching the search criteria</em>
           </small>
         </div>
       </div>
@@ -43,7 +43,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['foundBiobanks', 'foundCollections'])
+    ...mapGetters(['foundBiobanks', 'foundCollectionIds'])
   },
   components: {
     ActiveFilterList

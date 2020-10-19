@@ -33,7 +33,7 @@ import {
   SET_NETWORK_BIOBANKS,
   SET_NETWORK_COLLECTIONS,
   SET_COVID_19,
-  SET_COLLECTION_IDS
+  SET_COLLECTION_INFO
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 import { mockState } from '../mockState'
@@ -466,7 +466,7 @@ describe('store', () => {
       })
     })
 
-    describe('GET_COLLECTION_IDS', () => {
+    describe('GET_COLLECTION_INFO', () => {
       const response = {
         items: [
           { data: { id: 'c1', biobank: { links: { self: 'https://directory.bbmri-eric.eu/api/data/eu_bbmri_eric_biobanks/b1' } } } },
@@ -476,7 +476,7 @@ describe('store', () => {
 
       it('should retrieve collection and biobank ids from the server based on collection filters', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -484,11 +484,11 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.__GET_COLLECTION_INFO__({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
+          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_INFO, [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
 
           sinon.assert.calledWith(dispatch, '__GET_QUERY__')
           done()
@@ -497,7 +497,7 @@ describe('store', () => {
 
       it('should retrieve all collection and biobank ids if there is no collection filter', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -505,11 +505,11 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.__GET_COLLECTION_INFO__({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
+          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_INFO, [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
           sinon.assert.calledWith(dispatch, '__GET_QUERY__')
           done()
         }, 300)

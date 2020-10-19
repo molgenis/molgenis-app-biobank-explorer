@@ -55,7 +55,6 @@ export default {
     },
     sendToNegotiator () {
       this.loading = true
-      console.log('hello negotiator click')
       if (this.isPodium) {
         this.$bvModal.show('podium-modal')
       } else {
