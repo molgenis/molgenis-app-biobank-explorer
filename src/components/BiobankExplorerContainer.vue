@@ -35,7 +35,7 @@
       id="podium-modal"
       scrollable centered
       footer-bg-variant="warning"
-      @hide="request = false">
+      @hide="done">
       <ul
         :class="{'mb-0': collectionsInPodium.length === 1}"
         v-if="hasPodiumCollections">
@@ -46,8 +46,8 @@
       <span v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</span>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
-        <b-button class="btn btn-dark" @click="hideModal()">Cancel</b-button>
-        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
+        <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
+        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ requestButtonTitle}}</b-button>
       </template>
     </b-modal>
   </div>
