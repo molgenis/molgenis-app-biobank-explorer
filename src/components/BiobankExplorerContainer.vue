@@ -43,7 +43,7 @@
           {{ cip }}
         </li>
       </ul>
-      <span class="mb-1" v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</span>
+      <p v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
