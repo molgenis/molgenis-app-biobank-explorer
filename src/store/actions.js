@@ -268,9 +268,7 @@ export default {
   },
   [GET_NEGOTIATOR_TYPE] ({ commit }) {
     api.get(`${NEGOTIATOR_API_PATH}`).then(response => {
-      commit(SET_PODIUM, true)
-      // TODO: Test to get prop via server
-      // commit(SET_PODIUM, response.items.map(item => item.id).some(id => id.includes('podium')))
+      commit(SET_PODIUM, response)
     }, error => {
       commit(SET_ERROR, error)
     })
