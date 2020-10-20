@@ -35,6 +35,7 @@
       id="podium-modal"
       scrollable centered
       footer-bg-variant="warning"
+      body-class="pb-0"
       @hide="done">
       <ul
         :class="{'mb-0': collectionsInPodium.length === 1}"
