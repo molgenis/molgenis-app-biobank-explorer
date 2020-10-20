@@ -38,13 +38,12 @@
       body-class="pb-0"
       @hide="done">
       <ul
-        :class="{'mb-0': collectionsInPodium.length === 1}"
         v-if="hasPodiumCollections">
         <li :key="cip" v-for="cip in collectionsInPodium">
           {{ cip }}
         </li>
       </ul>
-      <span v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</span>
+      <span class="mb-1" v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</span>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
