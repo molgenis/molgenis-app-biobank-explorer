@@ -18,10 +18,10 @@
       </div>
     </div>
     <cart-selection-toast
-      v-if="!loading && rsql || biobankRsql"
-      :cartSelectionText="`${foundCollections} collection(s) selected`"
+      v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown && this.foundCollectionIds.length"
+      :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
-      title="Send to the negotiator"
+      :title="requestButtonTitle"
       toastClass="bg-warning text-white"
     >
       <template v-slot:buttonText>
@@ -29,6 +29,27 @@
         <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="request"></i>
       </template>
     </cart-selection-toast>
+
+    <b-modal
+      hide-header
+      id="podium-modal"
+      scrollable centered
+      footer-bg-variant="warning"
+      body-class="pb-0"
+      @hide="done">
+      <ul
+        v-if="hasPodiumCollections">
+        <li :key="cip" v-for="cip in collectionsInPodium">
+          {{ cip }}
+        </li>
+      </ul>
+      <p v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
+      <template v-slot:modal-footer>
+        <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
+        <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
+        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ requestButtonTitle}}</b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -37,18 +58,13 @@
   padding-top: 1rem;
 }
 </style>
-
 <script>
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
-import { mapGetters, mapActions } from 'vuex'
-import {
-  GET_COLLECTION_IDS,
-  GET_BIOBANK_IDS,
-  SEND_TO_NEGOTIATOR
-} from '../store/actions'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import { GET_COLLECTION_INFO, GET_BIOBANK_IDS, SEND_TO_NEGOTIATOR, GET_PODIUM_COLLECTIONS } from '../store/actions'
 
 export default {
   name: 'biobank-explorer-container',
@@ -60,39 +76,59 @@ export default {
   },
   data: () => {
     return {
-      request: false
+      request: false,
+      requestButtonTitle: 'Send to the negotiator'
     }
   },
   computed: {
-    ...mapGetters([
-      'rsql',
-      'biobankRsql',
-      'loading',
-      'foundBiobanks',
-      'foundCollections'
-    ])
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium']),
+    ...mapState(['isPodium']),
+    podiumModalShown () {
+      if (this.isPodium) return this.request
+      else return false
+    },
+    hasPodiumCollections () {
+      return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
+    }
   },
   watch: {
     rsql: {
       immediate: true,
-      handler: 'getCollectionIds'
+      handler: 'getCollectionInfo'
     },
     biobankRsql: {
       immediate: true,
       handler: 'getBiobankIds'
+    },
+    isPodium: {
+      immediate: true,
+      handler: 'getPodiumCollections'
     }
   },
   methods: {
     ...mapActions({
-      getCollectionIds: GET_COLLECTION_IDS,
-      getBiobankIds: GET_BIOBANK_IDS
+      getCollectionInfo: GET_COLLECTION_INFO,
+      getBiobankIds: GET_BIOBANK_IDS,
+      getPodiumCollections: GET_PODIUM_COLLECTIONS
     }),
+    hideModal () {
+      this.$bvModal.hide('podium-modal')
+    },
     done () {
       this.request = false
     },
+    sendRequest () {
+      this.$bvModal.hide('podium-modal')
+      this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
+    },
     sendToNegotiator () {
       this.request = true
-      this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
+      if (this.isPodium) {
+        this.$bvModal.show('podium-modal')
+      } else {
+        this.$bvModal.hide('podium-modal')
+        this.sendRequest()
+      }
     }
   }
 }

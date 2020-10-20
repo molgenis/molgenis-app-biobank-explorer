@@ -15,13 +15,13 @@ export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLL
 export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
 export const SET_COVID_19 = '__SET_COVID_19__'
 export const SET_NETWORK_OPTIONS = '__SET_NETWORK_OPTIONS__'
-
+export const SET_PODIUM_COLLECTIONS = '__SET_PODIUM_COLLECTIONS__'
 export const UPDATE_FILTER = '__UPDATE_FILTER__'
 export const RESET_FILTERS = '__RESET_FILTERS__'
 
 export const SET_BIOBANKS = '__SET_BIOBANKS__'
 export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
-export const SET_COLLECTION_IDS = '__SET_COLLECTION_IDS__'
+export const SET_COLLECTION_INFO = '__SET_COLLECTION_INFO__'
 export const SET_COVID_19_NETWORK = '__SET_COVID_19_NETWORK__'
 export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
 export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
@@ -35,7 +35,7 @@ export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
 
 export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
-
+export const SET_PODIUM = '__SET_PODIUM__'
 export const SET_LAST_URL = '__SET_LAST_URL__'
 
 const combineCodeAndLabels = (diagnoses) => {
@@ -138,8 +138,8 @@ export default {
   [SET_BIOBANK_IDS] (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  [SET_COLLECTION_IDS] (state, collectionIds) {
-    state.collectionIds = collectionIds
+  [SET_COLLECTION_INFO] (state, collectionInfo) {
+    state.collectionInfo = collectionInfo
   },
   [SET_COVID_19_NETWORK] (state, covid19FacetSelectionIds) {
     const biobankNetwork = state.biobank_network.filters
@@ -244,5 +244,11 @@ export default {
   },
   [SET_LOADING] (state, loading) {
     state.isLoading = loading
+  },
+  [SET_PODIUM] (state, response) {
+    state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
+  },
+  [SET_PODIUM_COLLECTIONS] (state, podiumCollections) {
+    state.podiumCollectionIds = podiumCollections.map(pc => pc.data.id)
   }
 }

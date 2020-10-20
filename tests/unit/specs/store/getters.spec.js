@@ -50,6 +50,21 @@ describe('store', () => {
         expect(getters.biobankRsql(state)).toEqual('country=in=BE')
       })
     })
+
+    describe('podium', () => {
+      it('should return an array of names of collection that are present in podium', () => {
+        state.isPodium = true
+        state.podiumCollectionIds = ['A', 'B']
+        state.collectionInfo = [{ collectionId: 'A', collectionName: 'Collection A', biobankId: 'A-1' },
+          { collectionId: 'B', collectionName: 'Collection B', biobankId: 'B-1' },
+          { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
+          { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
+        const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
+
+        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual(['Collection A', 'Collection B'])
+      })
+    })
+
     describe('biobanks', () => {
       it('should return empty list when loading', () => {
         state = {}
@@ -61,7 +76,7 @@ describe('store', () => {
           2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }, { id: 'col-3', sub_collections: [] }] }
         }
         state.biobankIds = ['1', '2']
-        state.collectionIds = [{ collectionId: 'col-2', biobankId: '2' }]
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
         const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
         expect(getters.biobanks(state, otherGetters)).toStrictEqual([{ id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }])
       })
@@ -70,7 +85,7 @@ describe('store', () => {
           2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }
         }
         state.biobankIds = ['1', '2']
-        state.collectionIds = [{ collectionId: 'col-2', biobankId: '2' }]
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
 
         const otherGetters = { loading: false, rsql: '' }
         expect(getters.biobanks(state, otherGetters)).toStrictEqual([
@@ -95,7 +110,7 @@ describe('store', () => {
           const state = {
             biobanks: { 1: biobank1, 2: biobank2 },
             biobankIds: ['1', '2'],
-            collectionIds: [{ collectionId: 'col-4', biobankId: '2' }]
+            collectionInfo: [{ collectionId: 'col-4', biobankId: '2' }]
           }
           const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
           expect(getters.biobanks(state, otherGetters)).toStrictEqual([{
@@ -105,14 +120,14 @@ describe('store', () => {
           }])
         })
 
-      it('should return the biobanks in the order they appear in collectionIds', () => {
+      it('should return the biobanks in the order they appear in collectionInfo', () => {
         const state = {
           biobanks: {
             1: { id: '1', name: 'B', collections: [{ id: 'col-1', sub_collections: [] }] },
             2: { id: '2', name: 'A', collections: [{ id: 'col-2', sub_collections: [] }] }
           },
           biobankIds: ['1', '2'],
-          collectionIds: [
+          collectionInfo: [
             { collectionId: 'col-1', biobankId: '2' },
             { collectionId: 'col-2', biobankId: '1' }
           ]
@@ -129,7 +144,8 @@ describe('store', () => {
       const getFoundBiobankIds = ['B']
       const getCollectionsWithBiobankId = [{ collectionId: 'A', biobankId: 'B' }, { collectionId: 'C', biobankId: 'B' }, { collectionId: 'D', biobankId: 'E' }]
       const otherGetters = { getFoundBiobankIds, getCollectionsWithBiobankId }
-      expect(getters.foundCollections(state, otherGetters)).toEqual(2)
+      const ids = getters.foundCollectionIds(state, otherGetters)
+      expect(ids.length).toEqual(2)
     })
 
     it('should return an array of biobank Ids', () => {
@@ -150,10 +166,10 @@ describe('store', () => {
     })
 
     describe('loading', () => {
-      it('should be false if both biobankIds and collectionIds are present', () => {
+      it('should be false if both biobankIds and collectionInfo are present', () => {
         const state = {
           biobankIds: ['biobank1'],
-          collectionIds: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
         }
         expect(getters.loading(state)).toBe(false)
       })
@@ -161,15 +177,15 @@ describe('store', () => {
       it('should be true if biobankIds are missing', () => {
         const state = {
           biobankIds: undefined,
-          collectionIds: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
         }
         expect(getters.loading(state)).toBe(true)
       })
 
-      it('should be true if collectionIds are missing', () => {
+      it('should be true if collectionInfo is missing', () => {
         const state = {
           biobankIds: ['biobank1'],
-          collectionIds: undefined
+          collectionInfo: undefined
         }
         expect(getters.loading(state)).toBe(true)
       })

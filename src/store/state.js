@@ -13,6 +13,8 @@ if (window.__INITIAL_STATE__ && window.__INITIAL_STATE__.showCountryFacet === fa
 
 export default {
   isLoading: false,
+  isPodium: false,
+  podiumCollectionIds: [],
   error: null,
   showCountryFacet: Object.hasOwnProperty.call(INITIAL_STATE, 'showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
   preConfiguredCountyCode: INITIAL_STATE.preConfiguredCountyCode,
@@ -21,7 +23,7 @@ export default {
   // IDs of biobanks matching the biobank filters
   biobankIds: undefined,
   // IDs of collections matching the collection filters
-  collectionIds: undefined,
+  collectionInfo: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
   biobankReport: undefined,
   collectionReport: undefined,
