@@ -50,6 +50,21 @@ describe('store', () => {
         expect(getters.biobankRsql(state)).toEqual('country=in=BE')
       })
     })
+
+    describe('podium', () => {
+      it('should return an array of names of collection that are present in podium', () => {
+        state.isPodium = true
+        state.podiumCollectionIds = ['A', 'B']
+        state.collectionInfo = [{ collectionId: 'A', collectionName: 'Collection A', biobankId: 'A-1' },
+          { collectionId: 'B', collectionName: 'Collection B', biobankId: 'B-1' },
+          { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
+          { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
+        const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
+
+        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual(['Collection A', 'Collection B'])
+      })
+    })
+
     describe('biobanks', () => {
       it('should return empty list when loading', () => {
         state = {}
