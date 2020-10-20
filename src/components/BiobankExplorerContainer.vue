@@ -33,15 +33,14 @@
     <b-modal hide-header id="podium-modal"
       scrollable centered
       footer-bg-variant="warning"
-      :title="`${collectionsInPodium.length} selection(s) present in Podium`"
       @hide="request = false">
       <ul>
         <li :key="cip" v-for="cip in collectionsInPodium">{{ cip }}</li>
       </ul>
       <template v-slot:modal-footer>
-        <span class="text-white mr-auto">{{ `${collectionsInPodium.length} collection(s) selected` }}</span>
+        <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal()">Cancel</b-button>
-        <b-button class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
+        <b-button :disabled="collectionsInPodium.length === 0" class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
       </template>
     </b-modal>
   </div>

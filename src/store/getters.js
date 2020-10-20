@@ -30,12 +30,14 @@ export default {
   },
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   getCollectionsWithBiobankId: (state) => {
-    return state.collectionInfo.map(colInfo => {
-      return {
-        collectionId: colInfo.collectionId,
-        biobankId: colInfo.biobankId
-      }
-    })
+    if (state.collectionInfo) {
+      return state.collectionInfo.map(colInfo => {
+        return {
+          collectionId: colInfo.collectionId,
+          biobankId: colInfo.biobankId
+        }
+      })
+    }
   },
   foundBiobanks: (_, { biobanks }) => {
     return biobanks.length
@@ -47,15 +49,16 @@ export default {
       let collectionIds = []
       for (const id of getFoundBiobankIds) {
         const collectionsInBiobank = biobanksWithCollections[id]
-        if (collectionsInBiobank) collectionIds = collectionIds.concat(collectionsInBiobank.map(colBio => colBio.collectionId))
+        if (collectionsInBiobank) collectionIds = collectionIds.concat(collectionsInBiobank)
       }
       return collectionIds
     }
     return []
   },
-  collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }) {
-    if (isPodium && podiumCollectionIds && collectionInfo) {
-      const collectionNames = collectionInfo.filter(colInfo => podiumCollectionIds
+  collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds }) {
+    if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {
+      const collectionInfoInSelection = collectionInfo.filter(colInfo => foundCollectionIds.includes(colInfo.collectionId))
+      const collectionNames = collectionInfoInSelection.filter(colInfo => podiumCollectionIds
         .includes(colInfo.collectionId))
         .map(podCols => podCols.collectionName) // Returns only collection names.
       return collectionNames
