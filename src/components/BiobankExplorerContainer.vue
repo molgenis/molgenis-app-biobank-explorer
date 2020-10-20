@@ -19,9 +19,9 @@
     </div>
     <cart-selection-toast
       v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown"
-      :cartSelectionText="`${foundCollectionIds.length} collection(s) selected`"
+      :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
-      title="Send to the negotiator"
+      :title="requestButtonTitle"
       toastClass="bg-warning text-white"
     >
       <template v-slot:buttonText>
@@ -30,12 +30,19 @@
       </template>
     </cart-selection-toast>
 
-    <b-modal id="podium-modal" centered :title="`${collectionsInPodium.length} selection(s) present in Podium`" @ok="sendRequest" @close="request = false" @cancel="request = false">
-      <div class="overflow-auto overflow-max-300">
-        <ul>
-          <li :key="cip" v-for="cip in collectionsInPodium">{{ cip }}</li>
-        </ul>
-      </div>
+    <b-modal hide-header id="podium-modal"
+      scrollable centered
+      footer-bg-variant="warning"
+      :title="`${collectionsInPodium.length} selection(s) present in Podium`"
+      @hide="request = false">
+      <ul>
+        <li :key="cip" v-for="cip in collectionsInPodium">{{ cip }}</li>
+      </ul>
+      <template v-slot:modal-footer>
+        <span class="text-white mr-auto">{{ `${collectionsInPodium.length} collection(s) selected` }}</span>
+        <b-button class="btn btn-dark" @click="hideModal()">Cancel</b-button>
+        <b-button class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
+      </template>
     </b-modal>
   </div>
 </template>
@@ -63,7 +70,8 @@ export default {
   },
   data: () => {
     return {
-      request: false
+      request: false,
+      requestButtonTitle: 'Send to the negotiator'
     }
   },
   computed: {
@@ -94,10 +102,14 @@ export default {
       getBiobankIds: GET_BIOBANK_IDS,
       getPodiumCollections: GET_PODIUM_COLLECTIONS
     }),
+    hideModal () {
+      this.$bvModal.hide('podium-modal')
+    },
     done () {
       this.request = false
     },
     sendRequest () {
+      this.$bvModal.hide('podium-modal')
       this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
     },
     sendToNegotiator () {
@@ -105,15 +117,10 @@ export default {
       if (this.isPodium) {
         this.$bvModal.show('podium-modal')
       } else {
+        this.$bvModal.hide('podium-modal')
         this.sendRequest()
       }
     }
   }
 }
 </script>
-
-<style scoped>
-.overflow-max-300 {
-  max-height: 300px;
-}
-</style>
