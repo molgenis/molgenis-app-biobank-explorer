@@ -25,8 +25,7 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-// const PROXY_TARGET = 'https://molgenis85.gcc.rug.nl/' // 'https://directory.bbmri-eric.eu'
-const PROXY_TARGET = 'https://molgenis72.gcc.rug.nl'
+const PROXY_TARGET = 'https://master.dev.molgenis.org'
 
 const apiDevServerProxyConf = {
   target: PROXY_TARGET,

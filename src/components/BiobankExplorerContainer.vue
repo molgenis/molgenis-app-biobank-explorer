@@ -18,7 +18,7 @@
       </div>
     </div>
     <cart-selection-toast
-      v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown"
+      v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       :title="requestButtonTitle"
@@ -30,17 +30,24 @@
       </template>
     </cart-selection-toast>
 
-    <b-modal hide-header id="podium-modal"
+    <b-modal
+      hide-header
+      id="podium-modal"
       scrollable centered
       footer-bg-variant="warning"
       @hide="request = false">
-      <ul>
-        <li :key="cip" v-for="cip in collectionsInPodium">{{ cip }}</li>
+      <ul
+        :class="{'mb-0': collectionsInPodium.length === 1}"
+        v-if="hasPodiumCollections">
+        <li :key="cip" v-for="cip in collectionsInPodium">
+          {{ cip }}
+        </li>
       </ul>
+      <span v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</span>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal()">Cancel</b-button>
-        <b-button :disabled="collectionsInPodium.length === 0" class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
+        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest()">{{ requestButtonTitle}}</b-button>
       </template>
     </b-modal>
   </div>
@@ -79,6 +86,9 @@ export default {
     podiumModalShown () {
       if (this.isPodium) return this.request
       else return false
+    },
+    hasPodiumCollections () {
+      return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
     }
   },
   watch: {
