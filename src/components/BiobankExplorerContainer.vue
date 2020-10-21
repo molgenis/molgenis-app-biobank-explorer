@@ -17,8 +17,9 @@
         </div>
       </div>
     </div>
+
     <cart-selection-toast
-      v-if="((!loading && rsql) || biobankRsql) && !podiumModalShown && this.foundCollectionIds.length"
+      v-if="(!loading && hasSelection) && !podiumModalShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       :title="requestButtonTitle"
@@ -82,13 +83,21 @@ export default {
   },
   computed: {
     ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium']),
-    ...mapState(['isPodium']),
+    ...mapState(['isPodium', 'preConfiguredCountyCode']),
     podiumModalShown () {
       if (this.isPodium) return this.request
       else return false
     },
     hasPodiumCollections () {
       return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
+    },
+    hasSelection () {
+      // Optionally removes the country check from the rsql and biobankRsql to see if there are other terms left
+      // if there are other terms left we want to see a selection
+      return (
+        this.rsql.replace(`country=in=${this.preConfiguredCountyCode}`, '') !== '' ||
+        this.biobankRsql.replace(`country=in=${this.preConfiguredCountyCode}`, '') !== ''
+      )
     }
   },
   watch: {

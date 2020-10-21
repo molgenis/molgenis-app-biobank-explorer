@@ -1,7 +1,7 @@
 <template>
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
-      <li class="list-inline-item" v-for="value in values" v-bind:key="value.id">
+      <li class="list-inline-item mb-2" v-for="value in values" v-bind:key="value.id">
         <button
           type="button"
           class="btn btn-sm btn-outline-secondary"
