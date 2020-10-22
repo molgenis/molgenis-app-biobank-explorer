@@ -43,12 +43,9 @@ This setting can be toggled using the runtimeOptions section in the webpack.prod
 
 `runtimeOptions.showCountryFacet` should contain a boolean value indicating if the country facet needs to be shown.
 
-`runtimeOptions.preConfiguredCountyCode` should contain a valid country code if the showCountryFacet options is set to `false`.
-
 ```js
 "appOptions": {
-    "showCountryFacet": true,
-    "preConfiguredCountyCode": ""
+    "showCountryFacet": true
   }
 ```
 

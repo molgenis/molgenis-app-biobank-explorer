@@ -19,7 +19,7 @@
     </div>
 
     <cart-selection-toast
-      v-if="(!loading && hasSelection) && !podiumModalShown && this.foundCollectionIds.length"
+      v-if="!loading && hasSelection && !podiumModalShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       :title="requestButtonTitle"
@@ -31,15 +31,8 @@
       </template>
     </cart-selection-toast>
 
-    <b-modal
-      hide-header
-      id="podium-modal"
-      scrollable centered
-      footer-bg-variant="warning"
-      body-class="pb-0"
-      @hide="done">
-      <ul
-        v-if="hasPodiumCollections">
+    <b-modal hide-header id="podium-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="done">
+      <ul v-if="hasPodiumCollections">
         <li :key="cip" v-for="cip in collectionsInPodium">
           {{ cip }}
         </li>
@@ -48,7 +41,7 @@
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ requestButtonTitle}}</b-button>
+        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ requestButtonTitle }}</b-button>
       </template>
     </b-modal>
   </div>
@@ -83,21 +76,19 @@ export default {
   },
   computed: {
     ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium']),
-    ...mapState(['isPodium', 'preConfiguredCountyCode']),
+    ...mapState(['isPodium']),
     podiumModalShown () {
       if (this.isPodium) return this.request
-      else return false
+
+      return false
     },
     hasPodiumCollections () {
       return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
     },
     hasSelection () {
-      // Optionally removes the country check from the rsql and biobankRsql to see if there are other terms left
-      // if there are other terms left we want to see a selection
-      return (
-        this.rsql.replace(`country=in=${this.preConfiguredCountyCode}`, '') !== '' ||
-        this.biobankRsql.replace(`country=in=${this.preConfiguredCountyCode}`, '') !== ''
-      )
+      if ((this.rsql && this.rsql !== '') || (this.biobankRsql && this.biobankRsql !== '')) return true
+
+      return false
     }
   },
   watch: {

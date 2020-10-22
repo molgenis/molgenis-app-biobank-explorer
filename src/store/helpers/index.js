@@ -12,7 +12,7 @@ import { transformToRSQL } from '@molgenis/rsql'
 export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+    createInQuery('country', state.country.filters),
     createInQuery('materials', state.materials.filters),
     createInQuery('type', state.type.filters),
     createInQuery('data_categories', state.dataType.filters),
@@ -30,7 +30,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
 export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createInQuery('country', state.showCountryFacet ? state.country.filters : state.preConfiguredCountyCode),
+    createInQuery('country', state.country.filters),
     createInQuery('id', state.biobank_quality.biobanks),
     createInQuery('network', state.biobank_network.filters),
     createComparisons('covid19biobank', state.covid19.filters)
