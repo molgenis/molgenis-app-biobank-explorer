@@ -2,12 +2,8 @@
   <div class="container mg-collection-report-card">
     <loading :active="isLoading" loader="dots" :is-full-page="true" color="var(--secondary)" background-color="var(--light)"></loading>
     <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <!-- Back to previous page buttons -->
-          <button class="btn btn-link" @click="back"><i class="fa fa-angle-left" aria-hidden="true"></i> Back</button>
-        </div>
-      </div>
+      <!-- Back to previous page buttons -->
+      <button class="btn btn-link pl-0" @click="back"><i class="fa fa-angle-left" aria-hidden="true"></i> Back</button>
 
       <div class="row" v-if="this.collection && !this.isLoading">
         <div class="col">
