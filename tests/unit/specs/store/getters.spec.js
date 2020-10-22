@@ -21,11 +21,6 @@ describe('store', () => {
       it('should return the empty string if no filters are selected', () => {
         expect(getters.rsql(state)).toEqual('')
       })
-      it('should include the default country code if showCountryFacet is set to false', () => {
-        state.preConfiguredCountyCode = 'BE'
-        state.showCountryFacet = false
-        expect(getters.rsql(state)).toEqual('country=in=BE')
-      })
     })
     describe('biobankRsql', () => {
       it('should transform the biobank filters to rsql', () => {
@@ -42,12 +37,6 @@ describe('store', () => {
       })
       it('should return an empty string if no filters are selected', () => {
         expect(getters.biobankRsql(state)).toEqual('')
-      })
-      it('should include the default country code if showCountryFacet is set to false', () => {
-        state.showCountryFacet = false
-        state.preConfiguredCountyCode = 'BE'
-
-        expect(getters.biobankRsql(state)).toEqual('country=in=BE')
       })
     })
 

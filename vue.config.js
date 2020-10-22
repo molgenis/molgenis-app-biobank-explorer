@@ -71,8 +71,7 @@ module.exports = {
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',
-          showCountryFacet: true,
-          preConfiguredCountyCode: ''
+          showCountryFacet: true
         }
       }),
       new ZipPlugin({

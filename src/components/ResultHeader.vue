@@ -1,7 +1,7 @@
 <template>
   <div class="search-box-container">
     <div class="row>">
-      <div class="col-md-12">
+      <div class="col-md-12 p-0">
         <active-filter-list></active-filter-list>
       </div>
     </div>
