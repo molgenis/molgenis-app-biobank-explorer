@@ -5,4 +5,3 @@
 - [ ] User documentation updated
 - [ ] Clean commits
 - [ ] No warnings during install
-- [ ] Updated flow typing
