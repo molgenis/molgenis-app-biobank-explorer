@@ -1,8 +1,8 @@
 <template>
   <div class="card filter-card">
     <div class="card-header filter-header" @click.prevent="collapsed = !collapsed">
-      <i class="fa fa-caret-right" aria-hidden="true" v-if="collapsed"></i>
-      <i class="fa fa-caret-down" aria-hidden="true" v-else></i>
+      <span class="fa fa-caret-right mr-2" aria-hidden="true" v-if="collapsed"></span>
+      <span class="fa fa-caret-down mr-2" aria-hidden="true" v-else></span>
       {{label}}
     </div>
     <div class="card-body" v-if="!collapsed">
