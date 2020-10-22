@@ -1,7 +1,7 @@
 {
   "name": "molgenis-app-biobank-explorer",
   "license": "LGPL-3.0",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "author": "mkslofstra <mariska-karina@hotmail.com>, Jelmer Veen <https://github.com/jelmerveen/>",
   "scripts": {
