@@ -47,7 +47,6 @@ export const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 
 export const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 
 const createNegotiatorQueryBody = (state, getters, url) => {
-  // TODO: are the entity types fixed?
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
