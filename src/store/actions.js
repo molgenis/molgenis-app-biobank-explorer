@@ -27,7 +27,8 @@ import {
   SET_NETWORK_OPTIONS,
   SET_PODIUM,
   SET_PODIUM_COLLECTIONS,
-  SET_BIOBANK_IDS
+  SET_BIOBANK_IDS,
+  SET_NEGOTIATOR_ENTITIES
 } from './mutations'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 
@@ -53,6 +54,7 @@ export const SEND_TO_NEGOTIATOR = '__SEND_TO_NEGOTIATOR__'
 export const GET_NETWORK_OPTIONS = '__GET_BIOBANK_NETWORK_OPTIONS__'
 export const GET_NEGOTIATOR_TYPE = '__GET_NEGOTIATOR_TYPE__'
 export const GET_PODIUM_COLLECTIONS = '__GET_PODIUM_COLLECTIONS__'
+export const GET_NEGOTIATOR_ENTITIES = '__GET_NEGOTIATOR_ENTITIES__'
 
 /* API PATHS */
 
@@ -70,6 +72,7 @@ const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 const COVID_19_API_PATH = '/api/v2/eu_bbmri_eric_COVID_19'
+const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig'
 /**/
 
 /* Query Parameters */
@@ -78,6 +81,11 @@ export const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label
 /**/
 
 export default {
+  [GET_NEGOTIATOR_ENTITIES] ({ commit }) {
+    api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
+      commit(SET_NEGOTIATOR_ENTITIES, response)
+    })
+  },
   /**
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.

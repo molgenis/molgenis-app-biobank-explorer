@@ -376,6 +376,7 @@ describe('store', () => {
     describe('SEND_TO_NEGOTIATOR', () => {
       const state = mockState()
 
+      state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
       state.search = 'Cell&Co'
       state.materials.filters = ['CELL_LINES']
 

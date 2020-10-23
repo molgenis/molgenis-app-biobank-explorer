@@ -2,6 +2,8 @@ import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId }
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
+  negotiatorCollectionEntityId: '',
+  negotiatorBiobankEntityId: '',
   isLoading: false,
   isPodium: false,
   podiumCollectionIds: [],
