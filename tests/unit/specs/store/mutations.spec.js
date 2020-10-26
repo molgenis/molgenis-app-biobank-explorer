@@ -497,6 +497,19 @@ describe('store', () => {
         expect(state.isPodium).toStrictEqual(true)
       })
 
+      it('should map podium collection ids from response', () => {
+        const response = {
+          items: [
+            { data: { id: 'A' } },
+            { data: { id: 'B' } },
+            { data: { id: 'C' } }
+          ]
+        }
+
+        mutations.__SET_PODIUM_COLLECTIONS__(state, response)
+        expect(state.podiumCollectionIds).toStrictEqual(['A', 'B', 'C'])
+      })
+
       it('should set the should get the correct tables from the negotiator config', () => {
         const response = {
           items: [{
@@ -519,3 +532,19 @@ describe('store', () => {
     })
   })
 })
+
+// [SET_PODIUM] (state, response) {
+//   state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
+// },
+// [SET_PODIUM_COLLECTIONS] (state, podiumCollections) {
+//   state.podiumCollectionIds = podiumCollections.map(pc => pc.data.id)
+// },
+// [SET_NEGOTIATOR_ENTITIES] (state, negotiatorConfig) {
+//   const negotiatorEntities = negotiatorConfig.items.map(nci => {
+//     return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table
+//   }).filter(ne => negotiatorConfigIds.includes(ne.id))[0]
+
+//   if (negotiatorEntities) {
+//     state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
+//     state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
+//   }

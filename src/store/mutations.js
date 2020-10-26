@@ -251,8 +251,8 @@ export default {
   [SET_PODIUM] (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
   },
-  [SET_PODIUM_COLLECTIONS] (state, podiumCollections) {
-    state.podiumCollectionIds = podiumCollections.map(pc => pc.data.id)
+  [SET_PODIUM_COLLECTIONS] (state, response) {
+    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   },
   [SET_NEGOTIATOR_ENTITIES] (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {

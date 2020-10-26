@@ -299,7 +299,7 @@ export default {
   [GET_PODIUM_COLLECTIONS] ({ state, commit }) {
     if (state.podiumCollectionIds.length === 0) { // only fetch once.
       api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
-        commit(SET_PODIUM_COLLECTIONS, response.items)
+        commit(SET_PODIUM_COLLECTIONS, response)
       })
     }
   },
