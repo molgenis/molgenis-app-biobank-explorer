@@ -256,7 +256,7 @@ export default {
   },
   [SET_NEGOTIATOR_ENTITIES] (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {
-      return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.id }
+      return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table
     }).filter(ne => negotiatorConfigIds.includes(ne.id))[0]
 
     if (negotiatorEntities) {
