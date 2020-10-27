@@ -210,6 +210,8 @@ describe('store', () => {
           biobankRsql: 'name=q=\'free text search\''
         }
 
+        state.negotiatorBiobankEntityId = 'eu_bbmri_eric_biobanks'
+        state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.search = 'free text search'
         state.country.filters = ['NL', 'BE']
         state.materials.filters = ['RNA']
@@ -244,6 +246,7 @@ describe('store', () => {
           rsql: 'materials=in=(RNA)'
         }
 
+        state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.materials.filters = ['RNA']
         state.nToken = '2837538B50189SR237489X14098A2374'
 
@@ -263,6 +266,9 @@ describe('store', () => {
         const getters = {
           biobankRsql: 'covid19==covid19'
         }
+
+        state.negotiatorBiobankEntityId = 'eu_bbmri_eric_biobanks'
+        state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.covid19.filters = ['covid19']
         state.nToken = '2837538B50189SR237489X14098A2374'
 
@@ -345,7 +351,7 @@ describe('store', () => {
         state.collection_network.filters.push(covid19NetworkId)
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19 and biobank is part of networkbbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19 and collection is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19 and biobank is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19 and collection is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
 
         expect(actual).to.equal(expected)
       })

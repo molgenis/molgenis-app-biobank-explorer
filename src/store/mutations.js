@@ -11,6 +11,7 @@ export const SET_COLLECTION_TYPES = '__SET_COLLECTION_TYPES__'
 export const SET_DATA_TYPES = '__SET_DATA_TYPES__'
 export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
 export const SET_SEARCH = '__SET_SEARCH__'
+export const SET_NEGOTIATOR_ENTITIES = '__SET_NEGOTIATOR_ENTITIES__'
 export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLLECTIONS__'
 export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
 export const SET_COVID_19 = '__SET_COVID_19__'
@@ -37,6 +38,8 @@ export const SET_ERROR = '__SET_ERROR__'
 export const SET_LOADING = '__SET_LOADING__'
 export const SET_PODIUM = '__SET_PODIUM__'
 export const SET_LAST_URL = '__SET_LAST_URL__'
+
+const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 const combineCodeAndLabels = (diagnoses) => {
   return diagnoses.map(diagnosis => {
@@ -248,7 +251,17 @@ export default {
   [SET_PODIUM] (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
   },
-  [SET_PODIUM_COLLECTIONS] (state, podiumCollections) {
-    state.podiumCollectionIds = podiumCollections.map(pc => pc.data.id)
+  [SET_PODIUM_COLLECTIONS] (state, response) {
+    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
+  },
+  [SET_NEGOTIATOR_ENTITIES] (state, negotiatorConfig) {
+    const negotiatorEntities = negotiatorConfig.items.map(nci => {
+      return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table
+    }).filter(ne => negotiatorConfigIds.includes(ne.id))[0]
+
+    if (negotiatorEntities) {
+      state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
+      state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
+    }
   }
 }

@@ -47,11 +47,10 @@ export const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 
 export const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 
 const createNegotiatorQueryBody = (state, getters, url) => {
-  // TODO: are the entity types fixed?
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
-    entityId: 'eu_bbmri_eric_collections',
+    entityId: state.negotiatorCollectionEntityId,
     humanReadable: getHumanReadableString(state),
     nToken: state.nToken
   }
@@ -59,7 +58,7 @@ const createNegotiatorQueryBody = (state, getters, url) => {
     result.rsql = getters.rsql
   }
   if (getters.biobankRsql) {
-    result.biobankId = 'eu_bbmri_eric_biobanks'
+    result.biobankId = state.negotiatorBiobankEntityId
     result.biobankRsql = getters.biobankRsql
   }
   return result
@@ -119,7 +118,7 @@ const getHumanReadableString = (state) => {
 
   if (biobankNetwork.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'biobank is part of network' + biobankNetwork.join(',')
+    humanReadableString += 'biobank is part of network ' + biobankNetwork.join(',')
   }
 
   if (collectionNetwork.length > 0) {
