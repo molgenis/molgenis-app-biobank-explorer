@@ -121,8 +121,7 @@ export const collectionReportInformation = collection => {
       report: `/biobank/${collection.biobank.id}`,
       website: mapUrl(collection.biobank.url),
       email: collection.biobank.contact ? collection.biobank.contact.email : undefined,
-      partnerCharter: collection.biobank.partner_charter_signed ? 'yes' : 'no',
-      url: collection.url ? collection.url : undefined
+      partnerCharter: collection.biobank.partner_charter_signed ? 'yes' : 'no'
     }
   }
 

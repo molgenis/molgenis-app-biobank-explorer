@@ -20,6 +20,10 @@
                     <th scope="row" class="pr-1">Id:</th>
                     <td>{{ collection.id }}</td>
                   </tr>
+                  <tr v-if="collection.url">
+                    <th scope="row" class="pr-1">Url:</th>
+                    <td colspan="2"><span><a :href="collection.url">{{ collection.url }}</a></span></td>
+                  </tr>
                   <report-list-row :data="mainContent.Size">Size:</report-list-row>
                   <tr v-if="mainContent.Age">
                     <th scope="row" class="pr-1">Age:</th>
