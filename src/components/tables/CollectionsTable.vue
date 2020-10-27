@@ -19,7 +19,7 @@
           >
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + collection['id']">
-                <button class="btn btn-link">{{collection[column]}}</button>
+                <button class="btn btn-link collection-link text-left pt-0 border-0">{{collection[column]}}</button>
               </router-link>
             </span>
             <span v-else-if="column === 'quality'">
@@ -52,31 +52,6 @@
     </tbody>
   </table>
 </template>
-
-<style>
-  .collapsed > .when-visible {
-    display: none;
-  }
-  :not(.collapsed) > .when-hidden {
-    display: none;
-  }
-
-.table-text-content-columns {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.table-text-content-columns-has-sub {
-  font-size: 13px;
-  font-weight: bold;
-  border-style: hidden;
-  border-width: 0px;
-}
-
-.sub-table-cell {
-  padding-top: 0px;
-}
-</style>
 
 <script>
 import utils from '../../utils'
@@ -137,3 +112,33 @@ export default {
   }
 }
 </script>
+
+<style>
+  .collapsed > .when-visible {
+    display: none;
+  }
+  :not(.collapsed) > .when-hidden {
+    display: none;
+  }
+
+  .table-text-content-columns {
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .table-text-content-columns-has-sub {
+    font-size: 13px;
+    font-weight: bold;
+    border-style: hidden;
+    border-width: 0px;
+  }
+
+  .sub-table-cell {
+    padding-top: 0px;
+  }
+
+  .collection-link{
+    white-space: normal !important;
+    line-height: normal;
+  }
+</style>

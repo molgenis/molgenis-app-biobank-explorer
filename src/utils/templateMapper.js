@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { sortCollectionsByName } from './sorting'
 export const getSize = obj => {
   return obj.size
@@ -8,22 +9,33 @@ export const getSize = obj => {
 }
 export const mapObjArrayToStringArrayIfExists = obj =>
   obj ? obj.map(item => item.label) : []
+
 export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
+
 export const getNameOfHead = element => {
+  const { head_firstname, head_lastname, head_role } = element
+
   let name = ''
-  if (element.head_lastname) {
-    if (element.head_firstname) {
-      name += element.head_firstname + ' '
-    }
-    name += element.head_lastname
-    if (element.head_role) {
-      name += ' (' + element.head_role + ')'
-    }
-  }
-  if (name !== '') {
-    return name
-  }
+
+  if (head_firstname) name += `${head_firstname} `
+  if (head_lastname) name += `${head_lastname} `
+  if (head_role) name += `(${head_role})`
+
+  return name !== '' ? name.trim() : undefined
+}
+
+export const getName = contact => {
+  const { title_before_name, first_name, last_name, title_after_name } = contact
+
+  let name = ''
+
+  if (title_before_name) name += `${title_before_name} `
+  if (first_name) name += `${first_name} `
+  if (last_name) name += `${last_name} `
+  if (title_after_name) name += ` ${title_after_name}`
+
+  return name !== '' ? name.trim() : undefined
 }
 
 export const mapAgeRange = (minAge, maxAge, ageUnit) => {
@@ -87,63 +99,50 @@ export const mapDetailsTableContent = report => {
   }
 }
 
-export const mapCollectionDetailsListContent = collection => {
-  const collectionDetailList = {
-    contact: {
-      name: {
-        value: getNameOfHead(collection),
-        type: 'string'
-      },
-      email: {
-        value: collection.contact ? collection.contact.email : undefined,
-        type: 'email'
-      },
-      phone: {
-        value: collection.contact ? collection.contact.phone : undefined,
-        type: 'phone'
-      },
-      website: {
-        value: collection.url ? collection.url : undefined,
-        type: 'url'
-      }
-    },
-    biobank: {
-      name: { value: collection.biobank.name, type: 'string' },
-      juridical_person: {
-        value: collection.biobank.juridical_person,
-        type: 'string'
-      },
-      country: { value: collection.country.name, type: 'string' },
-      report: { value: `/biobank/${collection.biobank.id}`, type: 'report' },
-      website: { value: mapUrl(collection.biobank.url), type: 'url' },
-      email: {
-        value: collection.biobank.contact
-          ? collection.biobank.contact.email
-          : undefined,
-        type: 'email'
-      },
-      // 'Biobank id': { value: collection.biobank.id, type: 'string-with-header' },
-      'Partner charter': {
-        value: collection.biobank.partner_charter_signed,
-        type: 'bool'
-      }
-    },
-    networks: mapNetworkInfo(collection),
-    quality: {
-      Certification: {
-        value: mapObjArrayToStringArrayIfExists(collection.quality),
-        type: 'list'
-      }
+export const collectionReportInformation = collection => {
+  const collectionReport = {}
+
+  collectionReport.head = getNameOfHead(collection) || undefined
+
+  if (collection.contact) {
+    collectionReport.contact = {
+      name: getName(collection.contact),
+      email: collection.contact.email ? collection.contact.email : undefined,
+      phone: collection.contact.phone ? collection.contact.phone : undefined
     }
   }
-  collectionDetailList.collaboration = {}
-  if (collection.collaboration_commercial) {
-    collectionDetailList.collaboration.Commercial = { value: collection.collaboration_commercial, type: 'bool' }
+
+  if (collection.biobank) {
+    collectionReport.biobank = {
+      id: collection.biobank.id,
+      name: collection.biobank.name,
+      juridical_person: collection.biobank.juridical_person,
+      country: collection.country.name,
+      report: `/biobank/${collection.biobank.id}`,
+      website: mapUrl(collection.biobank.url),
+      email: collection.biobank.contact ? collection.biobank.contact.email : undefined,
+      partnerCharter: collection.biobank.partner_charter_signed ? 'yes' : 'no',
+      url: collection.url ? collection.url : undefined
+    }
   }
-  if (collection.collaboration_non_for_profit) {
-    collectionDetailList.collaboration['Not for profit'] = { value: collection.collaboration_non_for_profit, type: 'bool' }
+
+  if (collection.network) {
+    collectionReport.networks = collection.network.map(network => {
+      return {
+        name: network.name,
+        report: `/network/${network.id}`
+      }
+    })
   }
-  return collectionDetailList
+
+  collectionReport.certifications = mapObjArrayToStringArrayIfExists(collection.quality)
+
+  collectionReport.collaboration = []
+
+  if (collection.collaboration_commercial) { collectionReport.collaboration.push({ name: 'Commercial', value: 'yes' }) }
+  if (collection.collaboration_non_for_profit) { collectionReport.collaboration.push({ name: 'Not for profit', value: 'yes' }) }
+
+  return collectionReport
 }
 
 export const mapNetworkInfo = data => {

@@ -8,7 +8,8 @@ import actions, {
   GET_COLLECTION_QUALITY_COLLECTIONS,
   GET_DATA_TYPE_OPTIONS,
   GET_TYPES_OPTIONS,
-  SEND_TO_NEGOTIATOR
+  SEND_TO_NEGOTIATOR,
+  COLLECTION_REPORT_ATTRIBUTE_SELECTOR
 } from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import {
@@ -32,7 +33,7 @@ import {
   SET_NETWORK_BIOBANKS,
   SET_NETWORK_COLLECTIONS,
   SET_COVID_19,
-  SET_COLLECTION_IDS
+  SET_COLLECTION_INFO
 } from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 import { mockState } from '../mockState'
@@ -375,6 +376,7 @@ describe('store', () => {
     describe('SEND_TO_NEGOTIATOR', () => {
       const state = mockState()
 
+      state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
       state.search = 'Cell&Co'
       state.materials.filters = ['CELL_LINES']
 
@@ -465,7 +467,7 @@ describe('store', () => {
       })
     })
 
-    describe('GET_COLLECTION_IDS', () => {
+    describe('GET_COLLECTION_INFO', () => {
       const response = {
         items: [
           { data: { id: 'c1', biobank: { links: { self: 'https://directory.bbmri-eric.eu/api/data/eu_bbmri_eric_biobanks/b1' } } } },
@@ -475,7 +477,7 @@ describe('store', () => {
 
       it('should retrieve collection and biobank ids from the server based on collection filters', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -483,11 +485,11 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.__GET_COLLECTION_INFO__({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
+          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_INFO, [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
 
           sinon.assert.calledWith(dispatch, '__GET_QUERY__')
           done()
@@ -496,7 +498,7 @@ describe('store', () => {
 
       it('should retrieve all collection and biobank ids if there is no collection filter', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -504,11 +506,11 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.__GET_COLLECTION_INFO__({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
+          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_INFO, [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
           sinon.assert.calledWith(dispatch, '__GET_QUERY__')
           done()
         }, 300)
@@ -622,7 +624,8 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve(response)
+
+        td.when(get(`/api/v2/eu_bbmri_eric_collections/001?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -639,7 +642,7 @@ describe('store', () => {
 
     describe('GET_NETWORK_REPORT', () => {
       const neverReturningPromise = new Promise(() => {})
-      const collectionCall = '/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
+      const collectionCall = `/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`
       it('should set error', done => {
         const collectionError = new Error('No way!')
         const get = td.function('api.get')

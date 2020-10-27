@@ -14,11 +14,22 @@
 </style>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { GET_NEGOTIATOR_ENTITIES, GET_NEGOTIATOR_TYPE } from './store/actions'
 
 export default {
   computed: {
     ...mapGetters({ errorMessage: 'getErrorMessage' })
+  },
+  methods: {
+    ...mapActions({
+      getNegotiatorType: GET_NEGOTIATOR_TYPE,
+      getNegotiatorEntities: GET_NEGOTIATOR_ENTITIES
+    })
+  },
+  mounted () {
+    this.getNegotiatorType()
+    this.getNegotiatorEntities()
   },
   name: 'biobank-explorer'
 }
