@@ -22,12 +22,12 @@
                   </tr>
                   <tr v-if="collection.url">
                     <th scope="row" class="pr-1">Website:</th>
-                    <td colspan="2"><span><a target="_blank" :href="collection.url">{{ collection.url }}</a></span></td>
+                    <td><span><a target="_blank" :href="collection.url">{{ collection.url }}</a></span></td>
                   </tr>
                   <report-list-row :data="mainContent.Size">Size:</report-list-row>
                   <tr v-if="mainContent.Age">
                     <th scope="row" class="pr-1">Age:</th>
-                    <td colspan="2">{{ mainContent.Age.value }}</td>
+                    <td>{{ mainContent.Age.value }}</td>
                   </tr>
                   <report-list-row :data="mainContent.Type">Type:</report-list-row>
                   <report-list-row :data="mainContent.Sex">Sex:</report-list-row>
