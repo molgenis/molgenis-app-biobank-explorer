@@ -54,7 +54,6 @@
 <script>
 import BiobankCard from './BiobankCard'
 import { mapGetters, mapActions } from 'vuex'
-import { GET_BIOBANKS } from '@/store/actions'
 
 export default {
   name: 'biobank-cards-container',
@@ -65,9 +64,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getBiobanks: GET_BIOBANKS
-    })
+    ...mapActions(['GetBiobanks'])
   },
   computed: {
     ...mapGetters([
@@ -101,7 +98,7 @@ export default {
     },
     biobankIdsToFetch (value) {
       if (value.length) {
-        this.getBiobanks(value)
+        this.GetBiobanks(value)
       }
     }
   }

@@ -41,7 +41,6 @@
 </style>
 
 <script>
-import { UPDATE_FILTER, RESET_FILTERS, SET_SEARCH } from '../../store/mutations'
 import utils from '../../utils'
 import { mapGetters } from 'vuex'
 
@@ -53,15 +52,15 @@ export default {
         this.activeFilters[filterName],
         selectedFilterId
       )
-      this.$store.commit(UPDATE_FILTER, { name: filterName, filters: filters })
+      this.$store.commit('UpdateFilter', { name: filterName, filters: filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [filterName]: value }
       })
     },
     resetAllFilters () {
-      this.$store.commit(RESET_FILTERS)
-      this.$store.commit(SET_SEARCH, '')
+      this.$store.commit('ResetFilters')
+      this.$store.commit('SetSearch', '')
       this.$router.push({ query: {} })
     }
   },

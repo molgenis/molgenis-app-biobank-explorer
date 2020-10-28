@@ -54,7 +54,6 @@
 import { mapActions, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import { GET_COLLECTION_REPORT } from '@/store/actions'
 import ReportDescription from '@/components/report-components/ReportDescription'
 import ReportTitle from '@/components/report-components/ReportTitle'
 import ReportListRow from '@/components/report-components/ReportListRow'
@@ -74,9 +73,7 @@ export default {
     Loading
   },
   methods: {
-    ...mapActions({
-      getCollectionReport: GET_COLLECTION_REPORT
-    }),
+    ...mapActions(['GetCollectionReport']),
     back () {
       this.$router.go(-1)
     }
@@ -106,7 +103,7 @@ export default {
     }
   },
   mounted () {
-    this.getCollectionReport([this.collectionId])
+    this.GetCollectionReport([this.collectionId])
   }
 }
 </script>

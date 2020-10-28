@@ -58,7 +58,6 @@ import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { GET_COLLECTION_INFO, GET_BIOBANK_IDS, SEND_TO_NEGOTIATOR, GET_PODIUM_COLLECTIONS } from '../store/actions'
 
 export default {
   name: 'biobank-explorer-container',
@@ -94,23 +93,23 @@ export default {
   watch: {
     rsql: {
       immediate: true,
-      handler: 'getCollectionInfo'
+      handler: 'GetCollectionInfo'
     },
     biobankRsql: {
       immediate: true,
-      handler: 'getBiobankIds'
+      handler: 'GetBiobankIds'
     },
     isPodium: {
       immediate: true,
-      handler: 'getPodiumCollections'
+      handler: 'GetPodiumCollections'
     }
   },
   methods: {
-    ...mapActions({
-      getCollectionInfo: GET_COLLECTION_INFO,
-      getBiobankIds: GET_BIOBANK_IDS,
-      getPodiumCollections: GET_PODIUM_COLLECTIONS
-    }),
+    ...mapActions([
+      'GetCollectionInfo',
+      'GetBiobankIds',
+      'GetPodiumCollections'
+    ]),
     hideModal () {
       this.$bvModal.hide('podium-modal')
     },
@@ -119,7 +118,7 @@ export default {
     },
     sendRequest () {
       this.$bvModal.hide('podium-modal')
-      this.$store.dispatch(SEND_TO_NEGOTIATOR).finally(this.done)
+      this.$store.dispatch('SendToNegotiator').finally(this.done)
     },
     sendToNegotiator () {
       this.request = true
