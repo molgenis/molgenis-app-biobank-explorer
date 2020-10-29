@@ -82,7 +82,7 @@ export default {
           { search: search.length === 0 ? undefined : search }
         )
         this.$router.push({ query: updatedRouteQuery })
-        this.$store.commit('SetSearch', search)
+        this.SetSearch(search)
       }
     },
     covidNetworkFilter () {
@@ -178,9 +178,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ updateFilter: 'UpdateFilter' }),
+    ...mapMutations(['UpdateFilter', 'SetSearch']),
     filterChange (name, filters) {
-      this.updateFilter({ name, filters })
+      this.UpdateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [name]: value }
