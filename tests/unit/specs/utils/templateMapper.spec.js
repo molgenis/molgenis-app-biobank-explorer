@@ -1,15 +1,14 @@
-import { expect } from 'chai'
 import {
   mapDetailsTableContent,
   mapAgeRange,
-  mapCollectionDetailsListContent,
   mapCollectionsData,
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
   mapUrl,
   getSize,
-  getNameOfHead
+  getNameOfHead,
+  collectionReportInformation
 } from '../../../../src/utils/templateMapper'
 
 describe('templateMapper', () => {
@@ -37,6 +36,9 @@ describe('templateMapper', () => {
     head_firstname: 'Amelia Mignonette',
     head_role: 'Princess of Genovia',
     contact: {
+      title_before_name: 'Princess of Genovia',
+      last_name: 'Thermopolis Renaldi',
+      first_name: 'Amelia Mignonette',
       email: 'mia@genovia.gnv',
       phone: '+66 123456789'
     },
@@ -87,62 +89,61 @@ describe('templateMapper', () => {
     it('should generate stringValues of details table content', () => {
       const actual = mapDetailsTableContent(collectionsReport)
       const expectedSize = ['666']
-      expect(actual.Size.value).to.deep.equal(expectedSize)
+      expect(actual.Size.value).toStrictEqual(expectedSize)
     })
 
     it('should generate listValues of details table content', () => {
       const actual = mapDetailsTableContent(collectionsReport)
-      expect(actual.Type.value).to.deep.equal(['type1', 'type2'])
-      expect(actual.Storage.value).to.deep.equal(['10 degrees'])
-      expect(actual.Data.value).to.deep.equal(['One type'])
-      expect(actual.Diagnosis.value).to.deep.equal(['Common cold', 'Mysterious illness', 'Instaneous death'])
+      expect(actual.Type.value).toStrictEqual(['type1', 'type2'])
+      expect(actual.Storage.value).toStrictEqual(['10 degrees'])
+      expect(actual.Data.value).toStrictEqual(['One type'])
+      expect(actual.Diagnosis.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
     })
   })
 
   describe('mapAgeRange', () => {
     it('should age range below max age', () => {
       const actual = mapAgeRange(undefined, 20, [{ label: 'years' }])
-      expect(actual).to.equal('< 20 years')
+      expect(actual).toBe('< 20 years')
     })
 
     it('should age range above min age', () => {
       const actual = mapAgeRange(0, undefined, [{ label: 'years' }])
-      expect(actual).to.equal('> 0 years')
+      expect(actual).toBe('> 0 years')
     })
 
     it('should age range between ages', () => {
       const actual = mapAgeRange(0, 20, [{ label: 'years' }])
-      expect(actual).to.equal('0-20 years')
+      expect(actual).toBe('0-20 years')
     })
   })
 
-  describe('detailsListContent', () => {
-    it('should generate contact of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.contact.name.value).to.equal('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
-      expect(actual.contact.email.value).to.equal('mia@genovia.gnv')
-      expect(actual.contact.phone.value).to.equal('+66 123456789')
+  describe('Collection Report Information', () => {
+    it('should create a readable form for contact information', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.head).toBe('Amelia Mignonette Thermopolis Renaldi (Princess of Genovia)')
+    })
+    it('should create a readable form for contact', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.contact.name).toBe('Princess of Genovia Amelia Mignonette Thermopolis Renaldi')
+      expect(actual.contact.email).toBe('mia@genovia.gnv')
+      expect(actual.contact.phone).toBe('+66 123456789')
     })
 
-    it('should generate quality of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.quality.Certification).to.deep.equal({
-        value: ['Order of the rose'],
-        type: 'list'
-      })
+    it('should generate a certification array', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.certifications).toStrictEqual(['Order of the rose'])
     })
 
-    it('should generate collaboration of rightCardContent', () => {
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.collaboration['Not for profit']).to.deep.equal({ value: true, type: 'bool' })
-      expect(actual.collaboration.Commercial).to.deep.equal(undefined)
+    it('should only add collaboration items that are true', () => {
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.collaboration).toStrictEqual([{ name: 'Not for profit', value: 'yes' }])
     })
 
-    it('should generate both properties in collaboration', () => {
+    it('should generate an array if all items are true', () => {
       collectionsReport.collaboration_commercial = true
-      const actual = mapCollectionDetailsListContent(collectionsReport)
-      expect(actual.collaboration['Not for profit']).to.deep.equal({ value: true, type: 'bool' })
-      expect(actual.collaboration.Commercial).to.deep.equal({ value: true, type: 'bool' })
+      const actual = collectionReportInformation(collectionsReport)
+      expect(actual.collaboration).toStrictEqual([{ name: 'Commercial', value: 'yes' }, { name: 'Not for profit', value: 'yes' }])
     })
   })
 
@@ -224,7 +225,7 @@ describe('templateMapper', () => {
         }
       ]
       const actual = mapCollectionsData(collectionsReport.sub_collections)
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
@@ -285,7 +286,7 @@ describe('templateMapper', () => {
         }
       }
       const actual = mapNetworkData(network)
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
@@ -302,7 +303,7 @@ describe('templateMapper', () => {
         report: { value: '/network/n', type: 'report' }
       }]
       const actual = mapNetworkInfo(data)
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
@@ -324,41 +325,41 @@ describe('templateMapper', () => {
         country: { value: 'Netherlands', type: 'string' }
       }
       const actual = mapContactInfo(instance)
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
   describe('mapUrl', () => {
     it('should do nothing if url is undefined', () => {
       const actual = mapUrl(undefined)
-      expect(actual).to.equal(undefined)
+      expect(actual).toBe(undefined)
     })
 
     it('should add http:// if url doesnt start with http', () => {
       const actual = mapUrl('www.somewebsite.com')
-      expect(actual).to.equal('http://www.somewebsite.com')
+      expect(actual).toBe('http://www.somewebsite.com')
     })
 
     it('should do nothing if url starts with http', () => {
       const actual = mapUrl('http://molgenis.org')
-      expect(actual).to.equal('http://molgenis.org')
+      expect(actual).toBe('http://molgenis.org')
     })
   })
 
   describe('getSize', () => {
     it('should return empty list if no size defined', () => {
       const actual = getSize({})
-      expect(actual).to.deep.equal([])
+      expect(actual).toStrictEqual([])
     })
 
     it('should return size if size defined', () => {
       const actual = getSize({ size: '123', order_of_magnitude: { size: '100-200' } })
-      expect(actual).to.deep.equal(['123 samples'])
+      expect(actual).toStrictEqual(['123 samples'])
     })
 
     it('should return order_of_magnitude if size undefined', () => {
       const actual = getSize({ order_of_magnitude: { size: '100-200' } })
-      expect(actual).to.deep.equal(['100-200'])
+      expect(actual).toStrictEqual(['100-200'])
     })
   })
 
@@ -370,7 +371,7 @@ describe('templateMapper', () => {
         head_role: 'role'
       }
       const actual = getNameOfHead(element)
-      expect(actual).to.equal('first last (role)')
+      expect(actual).toBe('first last (role)')
     })
 
     it('should map last name and role', () => {
@@ -379,7 +380,7 @@ describe('templateMapper', () => {
         head_role: 'role'
       }
       const actual = getNameOfHead(element)
-      expect(actual).to.equal('last (role)')
+      expect(actual).toBe('last (role)')
     })
 
     it('should return first and last name', () => {
@@ -388,13 +389,13 @@ describe('templateMapper', () => {
         head_lastname: 'last'
       }
       const actual = getNameOfHead(element)
-      expect(actual).to.equal('first last')
+      expect(actual).toBe('first last')
     })
 
     it('should return undefined', () => {
       const element = {}
       const actual = getNameOfHead(element)
-      expect(actual).to.equal(undefined)
+      expect(actual).toBe(undefined)
     })
   })
 })

@@ -2,7 +2,7 @@ server {
   server_name localhost;
 
   location /api {
-    proxy_pass https://molgenis85.gcc.rug.nl;
+    proxy_pass https://molgenis72.gcc.rug.nl;
     proxy_set_header  Host $http_host;
   }
   location / {

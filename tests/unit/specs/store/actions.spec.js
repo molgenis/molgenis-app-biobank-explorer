@@ -3,39 +3,10 @@ import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
-import actions, {
-  GET_BIOBANKS,
-  GET_COLLECTION_QUALITY_COLLECTIONS,
-  GET_DATA_TYPE_OPTIONS,
-  GET_TYPES_OPTIONS,
-  SEND_TO_NEGOTIATOR
-} from '../../../../src/store/actions'
 import utils from '@molgenis/molgenis-vue-test-utils'
-import {
-  MAP_QUERY_TO_STATE,
-  SET_BIOBANKS,
-  SET_BIOBANK_IDS,
-  SET_BIOBANK_REPORT,
-  SET_COLLECTION_REPORT,
-  SET_COLLECTION_QUALITY,
-  SET_COLLECTION_TYPES,
-  SET_COUNTRIES,
-  SET_DATA_TYPES,
-  SET_DIAGNOSIS_AVAILABLE,
-  SET_ERROR,
-  SET_LOADING,
-  SET_NETWORK_REPORT,
-  SET_MATERIALS,
-  SET_COLLECTION_QUALITY_COLLECTIONS,
-  SET_BIOBANK_QUALITY_BIOBANKS,
-  SET_BIOBANK_QUALITY,
-  SET_NETWORK_BIOBANKS,
-  SET_NETWORK_COLLECTIONS,
-  SET_COVID_19,
-  SET_COLLECTION_IDS
-} from '../../../../src/store/mutations'
 import helpers from '../../../../src/store/helpers'
 import { mockState } from '../mockState'
+import actions, { COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from '../../../../src/store/actions'
 
 chai.use(sinonChai)
 
@@ -43,7 +14,7 @@ describe('store', () => {
   describe('actions', () => {
     afterEach(() => td.reset())
 
-    describe('GET_COUNTRIES', () => {
+    describe('GetCountryOptions', () => {
       it('should retrieve list of available countries from the server and store them in the state', done => {
         const response = {
           items: [
@@ -58,15 +29,15 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_COUNTRIES, payload: response.items }
+            { type: 'SetCountries', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_COUNTRY_OPTIONS__, options, done)
+        utils.testAction(actions.GetCountryOptions, options, done)
       })
     })
 
-    describe('GET_TYPES_OPTIONS', () => {
+    describe('GetTypesOptions', () => {
       it('should retrieve list of available collection types from the server and store them in the state', done => {
         const response = {
           items: [
@@ -91,11 +62,11 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_COLLECTION_TYPES, payload: response.items }
+            { type: 'SetCollectionTypes', payload: response.items }
           ]
         }
 
-        utils.testAction(actions[GET_TYPES_OPTIONS], options, done)
+        utils.testAction(actions.GetTypesOptions, options, done)
       })
     })
 
@@ -125,15 +96,15 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_DATA_TYPES, payload: response.items }
+            { type: 'SetDataTypes', payload: response.items }
           ]
         }
 
-        utils.testAction(actions[GET_DATA_TYPE_OPTIONS], options, done)
+        utils.testAction(actions.GetDataTypeOptions, options, done)
       })
     })
 
-    describe('GET_MATERIALS', () => {
+    describe('GetMaterialsOptions', () => {
       it('should retrieve list of available material types from the server and store them in the state', done => {
         const response = {
           items: [
@@ -148,15 +119,15 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_MATERIALS, payload: response.items }
+            { type: 'SetMaterials', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_MATERIALS_OPTIONS__, options, done)
+        utils.testAction(actions.GetMaterialsOptions, options, done)
       })
     })
 
-    describe('GET_COLLECTION_QUALITY_OPTIONS', () => {
+    describe('GetCollectionQualityOptions', () => {
       it('should retrieve list of available collection quality standards from the server and store them in the state', done => {
         const response = {
           items: [
@@ -171,15 +142,15 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_COLLECTION_QUALITY, payload: response.items }
+            { type: 'SetCollectionQuality', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_COLLECTION_QUALITY_OPTIONS__, options, done)
+        utils.testAction(actions.GetCollectionQualityOptions, options, done)
       })
     })
 
-    describe('GET_BIOBANK_QUALITY_OPTIONS', () => {
+    describe('GetBiobankQualityOptions', () => {
       it('should retrieve list of available biobank quality standards from the server and store them in the state', done => {
         const response = {
           items: [
@@ -194,15 +165,15 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_BIOBANK_QUALITY, payload: response.items }
+            { type: 'SetBiobankQuality', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_QUALITY_OPTIONS__, options, done)
+        utils.testAction(actions.GetBiobankQualityOptions, options, done)
       })
     })
 
-    describe('GET_COVID_19_OPTIONS', () => {
+    describe('GetCovid19Options', () => {
       it('should retrieve list of available covid19 options from the server and store them in the state', done => {
         const response = {
           items: [
@@ -215,11 +186,11 @@ describe('store', () => {
 
         const options = {
           expectedMutations: [
-            { type: SET_COVID_19, payload: response.items }
+            { type: 'SetCovid19', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_COVID_19_OPTIONS__, options, done)
+        utils.testAction(actions.GetCovid19Options, options, done)
       })
     })
 
@@ -228,11 +199,11 @@ describe('store', () => {
         const options = {
           payload: '',
           expectedMutations: [
-            { type: SET_DIAGNOSIS_AVAILABLE, payload: [] }
+            { type: 'SetDiagnosisAvailable', payload: [] }
           ]
         }
 
-        utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
+        utils.testAction(actions.QueryDiagnosisAvailableOptions, options, done)
       })
 
       it('should retrieve a list of disease types based on a search query from the server and store them in the state', done => {
@@ -247,11 +218,11 @@ describe('store', () => {
         const options = {
           payload: 'search',
           expectedMutations: [
-            { type: SET_DIAGNOSIS_AVAILABLE, payload: response.items }
+            { type: 'SetDiagnosisAvailable', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
+        utils.testAction(actions.QueryDiagnosisAvailableOptions, options, done)
       })
 
       it('should retrieve a list of disease types based on a code query from the server and store them in the state', done => {
@@ -266,11 +237,11 @@ describe('store', () => {
         const options = {
           payload: 'a01',
           expectedMutations: [
-            { type: SET_DIAGNOSIS_AVAILABLE, payload: response.items }
+            { type: 'SetDiagnosisAvailable', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__QUERY_DIAGNOSIS_AVAILABLE_OPTIONS__, options, done)
+        utils.testAction(actions.QueryDiagnosisAvailableOptions, options, done)
       })
     })
 
@@ -295,10 +266,10 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_QUERY__({ state, dispatch, commit })
+        actions.GetQuery({ state, dispatch, commit })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit, MAP_QUERY_TO_STATE, { diagnoses: [{ code: 'L40' }] })
+          sinon.assert.calledWithMatch(commit, 'MapQueryToState', { diagnoses: [{ code: 'L40' }] })
           done()
         }, 300)
       })
@@ -325,8 +296,8 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_QUERY__({ state, dispatch, commit })
-        expect(commit).to.have.been.calledWith(MAP_QUERY_TO_STATE)
+        actions.GetQuery({ state, dispatch, commit })
+        expect(commit).to.have.been.calledWith('MapQueryToState')
       })
 
       it('should trigger the action to get the collections matching the applied quality standards and map result + URL query to state', () => {
@@ -341,9 +312,9 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_QUERY__({ state, dispatch, commit })
-        expect(dispatch).to.have.been.calledWith(GET_COLLECTION_QUALITY_COLLECTIONS)
-        expect(commit).to.have.been.calledWith(MAP_QUERY_TO_STATE)
+        actions.GetQuery({ state, dispatch, commit })
+        expect(dispatch).to.have.been.calledWith('GetCollectionQualityCollections')
+        expect(commit).to.have.been.calledWith('MapQueryToState')
       })
     })
 
@@ -364,17 +335,18 @@ describe('store', () => {
         const options = {
           payload: ['id1', 'id2'],
           expectedMutations: [
-            { type: SET_BIOBANKS, payload: response.items }
+            { type: 'SetBiobanks', payload: response.items }
           ]
         }
 
-        utils.testAction(actions[GET_BIOBANKS], options, done)
+        utils.testAction(actions.GetBiobanks, options, done)
       })
     })
 
-    describe('SEND_TO_NEGOTIATOR', () => {
+    describe('SendToNegotiator', () => {
       const state = mockState()
 
+      state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
       state.search = 'Cell&Co'
       state.materials.filters = ['CELL_LINES']
 
@@ -401,7 +373,7 @@ describe('store', () => {
         const negotiatorResponse = Promise.resolve('http://example.org/negotiator')
         td.when(post('/plugin/directory/export', bodyCaptor.capture())).thenReturn(negotiatorResponse)
 
-        utils.testAction(actions[SEND_TO_NEGOTIATOR], { state, getters }, (arg) => {
+        utils.testAction(actions.SendToNegotiator, { state, getters }, (arg) => {
           if (arg) {
             // testAction found an error
             done(arg)
@@ -431,15 +403,15 @@ describe('store', () => {
         const error = { errors: [{ message: 'Negotiator not configured' }] }
         td.when(post('/plugin/directory/export', td.matchers.anything())).thenReject(error)
 
-        utils.testAction(actions[SEND_TO_NEGOTIATOR], {
+        utils.testAction(actions.SendToNegotiator, {
           state,
           getters,
-          expectedMutations: [{ type: SET_ERROR, payload: error }]
+          expectedMutations: [{ type: 'SetError', payload: error }]
         }, done)
       })
     })
 
-    describe('GET_BIOBANK_IDS', () => {
+    describe('GetBiobankIds', () => {
       it('should retrieve biobank ids from the server based on biobank filters', done => {
         const response = {
           items: [
@@ -456,16 +428,16 @@ describe('store', () => {
         const getters = { biobankRsql: 'covid19=in=(covid19)' }
         const commit = sinon.spy()
 
-        actions.__GET_BIOBANK_IDS__({ commit, getters })
+        actions.GetBiobankIds({ commit, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_BIOBANK_IDS, ['biobank-1', 'biobank-2'])
+          sinon.assert.calledWithMatch(commit.secondCall, 'SetBiobankIds', ['biobank-1', 'biobank-2'])
           done()
         }, 300)
       })
     })
 
-    describe('GET_COLLECTION_IDS', () => {
+    describe('GetCollectionInfo', () => {
       const response = {
         items: [
           { data: { id: 'c1', biobank: { links: { self: 'https://directory.bbmri-eric.eu/api/data/eu_bbmri_eric_biobanks/b1' } } } },
@@ -475,7 +447,7 @@ describe('store', () => {
 
       it('should retrieve collection and biobank ids from the server based on collection filters', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label&q=country=in=(NL,BE)'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -483,20 +455,20 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.GetCollectionInfo({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
+          sinon.assert.calledWithMatch(commit.secondCall, 'SetCollectionInfo', [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
 
-          sinon.assert.calledWith(dispatch, '__GET_QUERY__')
+          sinon.assert.calledWith(dispatch, 'GetQuery')
           done()
         }, 300)
       })
 
       it('should retrieve all collection and biobank ids if there is no collection filter', done => {
         const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank&size=10000&sort=biobank_label'))
+        td.when(get('/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'))
           .thenResolve(response)
         td.replace(api, 'get', get)
 
@@ -504,18 +476,18 @@ describe('store', () => {
         const commit = sinon.spy()
         const dispatch = sinon.spy()
 
-        actions.__GET_COLLECTION_IDS__({ commit, dispatch, getters })
+        actions.GetCollectionInfo({ commit, dispatch, getters })
 
         setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, SET_COLLECTION_IDS, [{ biobankId: 'b1', collectionId: 'c1' },
-            { biobankId: 'b2', collectionId: 'c2' }])
-          sinon.assert.calledWith(dispatch, '__GET_QUERY__')
+          sinon.assert.calledWithMatch(commit.secondCall, 'SetCollectionInfo', [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
+            { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }])
+          sinon.assert.calledWith(dispatch, 'GetQuery')
           done()
         }, 300)
       })
     })
 
-    describe('GET_COLLECTION_QUALITY_COLLECTIONS', () => {
+    describe('GetCollectionQualityCollections', () => {
       it('should retrieve the collections for which certain level of assessment is applied for the quality standards', done => {
         const response = {
           meta: {
@@ -542,11 +514,11 @@ describe('store', () => {
         const options = {
           state: state,
           expectedMutations: [
-            { type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: response.items }
+            { type: 'SetCollectionQualityCollections', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+        utils.testAction(actions.GetCollectionQualityCollections, options, done)
       })
 
       it('should pass empty array to mutation when no quality standards are selected', done => {
@@ -559,15 +531,15 @@ describe('store', () => {
         const options = {
           state: state,
           expectedMutations: [
-            { type: SET_COLLECTION_QUALITY_COLLECTIONS, payload: [] }
+            { type: 'SetCollectionQualityCollections', payload: [] }
           ]
         }
 
-        utils.testAction(actions.__GET_COLLECTION_QUALITY_COLLECTIONS__, options, done)
+        utils.testAction(actions.GetCollectionQualityCollections, options, done)
       })
     })
 
-    describe('GET_BIOBANK_REPORT', () => {
+    describe('GetBiobankReport', () => {
       it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', done => {
         const biobank = {
           _meta: {
@@ -583,13 +555,13 @@ describe('store', () => {
         const options = {
           payload: 'biobank-1',
           expectedMutations: [
-            { type: SET_LOADING, payload: true },
-            { type: SET_BIOBANK_REPORT, payload: biobank },
-            { type: SET_LOADING, payload: false }
+            { type: 'SetLoading', payload: true },
+            { type: 'SetBiobankReport', payload: biobank },
+            { type: 'SetLoading', payload: false }
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_REPORT__, options, done)
+        utils.testAction(actions.GetBiobankReport, options, done)
       })
 
       it('should return biobank from state if it is already there', done => {
@@ -603,14 +575,14 @@ describe('store', () => {
           state,
           payload: 'biobank',
           expectedMutations: [
-            { type: SET_BIOBANK_REPORT, payload: { id: 'biobank' } }
+            { type: 'SetBiobankReport', payload: { id: 'biobank' } }
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_REPORT__, options, done)
+        utils.testAction(actions.GetBiobankReport, options, done)
       })
     })
-    describe('GET_COLLECTION_REPORT', () => {
+    describe('GetCollectionReport', () => {
       it('should retrieve a single collection entity from the server based on a collection id and store it in the state', done => {
         const response = {
           _meta: {
@@ -622,24 +594,25 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_collections/001?attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)')).thenResolve(response)
+
+        td.when(get(`/api/v2/eu_bbmri_eric_collections/001?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
           payload: '001',
           expectedMutations: [
-            { type: SET_LOADING, payload: true },
-            { type: SET_COLLECTION_REPORT, payload: response },
-            { type: SET_LOADING, payload: false }
+            { type: 'SetLoading', payload: true },
+            { type: 'SetCollectionReport', payload: response },
+            { type: 'SetLoading', payload: false }
           ]
         }
-        utils.testAction(actions.__GET_COLLECTION_REPORT__, options, done)
+        utils.testAction(actions.GetCollectionReport, options, done)
       })
     })
 
-    describe('GET_NETWORK_REPORT', () => {
+    describe('GetNetworkReport', () => {
       const neverReturningPromise = new Promise(() => {})
-      const collectionCall = '/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
+      const collectionCall = `/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`
       it('should set error', done => {
         const collectionError = new Error('No way!')
         const get = td.function('api.get')
@@ -650,14 +623,14 @@ describe('store', () => {
         const options = {
           payload: '001',
           expectedMutations: [
-            { type: SET_NETWORK_BIOBANKS, payload: undefined },
-            { type: SET_NETWORK_COLLECTIONS, payload: undefined },
-            { type: SET_NETWORK_REPORT, payload: undefined },
-            { type: SET_LOADING, payload: true },
-            { type: SET_ERROR, payload: collectionError }
+            { type: 'SetNetworkBiobanks', payload: undefined },
+            { type: 'SetNetworkCollections', payload: undefined },
+            { type: 'SetNetworkReport', payload: undefined },
+            { type: 'SetLoading', payload: true },
+            { type: 'SetError', payload: collectionError }
           ]
         }
-        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
+        utils.testAction(actions.GetNetworkReport, options, done)
       })
 
       it('should load network', done => {
@@ -678,15 +651,15 @@ describe('store', () => {
         const options = {
           payload: '001',
           expectedMutations: [
-            { type: SET_NETWORK_BIOBANKS, payload: undefined },
-            { type: SET_NETWORK_COLLECTIONS, payload: undefined },
-            { type: SET_NETWORK_REPORT, payload: undefined },
-            { type: SET_LOADING, payload: true },
-            { type: SET_NETWORK_REPORT, payload: network },
-            { type: SET_LOADING, payload: false }
+            { type: 'SetNetworkBiobanks', payload: undefined },
+            { type: 'SetNetworkCollections', payload: undefined },
+            { type: 'SetNetworkReport', payload: undefined },
+            { type: 'SetLoading', payload: true },
+            { type: 'SetNetworkReport', payload: network },
+            { type: 'SetLoading', payload: false },
           ]
         }
-        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
+        utils.testAction(actions.GetNetworkReport, options, done)
       })
 
       it('should retrieve the collections and biobanks of a network from the server based on a network id and store them in the state', done => {
@@ -699,19 +672,19 @@ describe('store', () => {
         const options = {
           payload: '001',
           expectedMutations: [
-            { type: SET_NETWORK_BIOBANKS, payload: undefined },
-            { type: SET_NETWORK_COLLECTIONS, payload: undefined },
-            { type: SET_NETWORK_REPORT, payload: undefined },
-            { type: SET_LOADING, payload: true },
-            { type: SET_NETWORK_COLLECTIONS, payload: [{ id: 'col-1' }] },
-            { type: SET_NETWORK_BIOBANKS, payload: [{ id: 'bb-1' }] }
+            { type: 'SetNetworkBiobanks', payload: undefined },
+            { type: 'SetNetworkCollections', payload: undefined },
+            { type: 'SetNetworkReport', payload: undefined },
+            { type: 'SetLoading', payload: true },
+            { type: 'SetNetworkCollections', payload: [{ id: 'col-1' }] },
+            { type: 'SetNetworkBiobanks', payload: [{ id: 'bb-1' }] }
           ]
         }
-        utils.testAction(actions.__GET_NETWORK_REPORT__, options, done)
+        utils.testAction(actions.GetNetworkReport, options, done)
       })
     })
 
-    describe('GET_BIOBANK_QUALITY_BIOBANKS', () => {
+    describe('GetBiobankQualityBiobanks', () => {
       it('should retrieve the biobanks for which certain level of assessment is applied for the quality standards', done => {
         const response = {
           meta: {
@@ -736,11 +709,11 @@ describe('store', () => {
         const options = {
           state: state,
           expectedMutations: [
-            { type: SET_BIOBANK_QUALITY_BIOBANKS, payload: response.items }
+            { type: 'SetBiobankQualityBiobanks', payload: response.items }
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+        utils.testAction(actions.GetBiobankQualityBiobanks, options, done)
       })
 
       it('should pass empty array to mutation when no quality standards are selected', (done) => {
@@ -753,11 +726,11 @@ describe('store', () => {
         const options = {
           state: state,
           expectedMutations: [
-            { type: SET_BIOBANK_QUALITY_BIOBANKS, payload: [] }
+            { type: 'SetBiobankQualityBiobanks', payload: [] }
           ]
         }
 
-        utils.testAction(actions.__GET_BIOBANK_QUALITY_BIOBANKS__, options, done)
+        utils.testAction(actions.GetBiobankQualityBiobanks, options, done)
       })
     })
   })

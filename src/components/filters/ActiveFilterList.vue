@@ -1,7 +1,7 @@
 <template>
   <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
     <template v-for="(values, filter) in activeFilters">
-      <li class="list-inline-item" v-for="value in values" v-bind:key="value.id">
+      <li class="list-inline-item mb-2" v-for="value in values" v-bind:key="value.id">
         <button
           type="button"
           class="btn btn-sm btn-outline-secondary"
@@ -41,7 +41,6 @@
 </style>
 
 <script>
-import { UPDATE_FILTER, RESET_FILTERS, SET_SEARCH } from '../../store/mutations'
 import utils from '../../utils'
 import { mapGetters } from 'vuex'
 
@@ -53,15 +52,15 @@ export default {
         this.activeFilters[filterName],
         selectedFilterId
       )
-      this.$store.commit(UPDATE_FILTER, { name: filterName, filters: filters })
+      this.$store.commit('UpdateFilter', { name: filterName, filters: filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [filterName]: value }
       })
     },
     resetAllFilters () {
-      this.$store.commit(RESET_FILTERS)
-      this.$store.commit(SET_SEARCH, '')
+      this.$store.commit('ResetFilters')
+      this.$store.commit('SetSearch', '')
       this.$router.push({ query: {} })
     }
   },

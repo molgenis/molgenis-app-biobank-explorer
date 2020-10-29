@@ -16,15 +16,15 @@ describe('FilterContainer', () => {
       store = new Vuex.Store({
         state: mockState,
         actions: {
-          __GET_COUNTRY_OPTIONS__: () => '',
-          __GET_MATERIALS_OPTIONS__: () => '',
-          __GET_COLLECTION_QUALITY_OPTIONS__: () => '',
-          __GET_BIOBANK_QUALITY_OPTIONS__: () => '',
-          __GET_TYPES_OPTIONS__: () => '',
-          __GET_DATA_TYPE_OPTIONS__: () => '',
-          __GET_COVID_19_OPTIONS__: () => '',
-          __GET_BIOBANK_NETWORK_OPTIONS__: () => '',
-          __GET_BIOBANK_QUALITY_BIOBANKS__: () => ''
+          GetCountryOptions: () => '',
+          GetMaterialsOptions: () => '',
+          GetCollectionQualityOptions: () => '',
+          GetBiobankQualityOptions: () => '',
+          GetTypesOptions: () => '',
+          GetDataTypeOptions: () => '',
+          GetCovid19Options: () => '',
+          GetBiobankNetworkOptions: () => '',
+          GetBiobankQualityBiobanks: () => ''
         },
         mutations: {},
         getters: {
@@ -49,15 +49,15 @@ describe('FilterContainer', () => {
       store = new Vuex.Store({
         state: mockState,
         actions: {
-          __GET_COUNTRY_OPTIONS__: () => '',
-          __GET_MATERIALS_OPTIONS__: () => '',
-          __GET_COLLECTION_QUALITY_OPTIONS__: () => '',
-          __GET_BIOBANK_QUALITY_OPTIONS__: () => '',
-          __GET_TYPES_OPTIONS__: () => '',
-          __GET_DATA_TYPE_OPTIONS__: () => '',
-          __GET_COVID_19_OPTIONS__: () => '',
-          __GET_BIOBANK_NETWORK_OPTIONS__: () => '',
-          __GET_BIOBANK_QUALITY_BIOBANKS__: () => ''
+          GetCountryOptions: () => '',
+          GetMaterialsOptions: () => '',
+          GetCollectionQualityOptions: () => '',
+          GetBiobankQualityOptions: () => '',
+          GetTypesOptions: () => '',
+          GetDataTypeOptions: () => '',
+          GetCovid19Options: () => '',
+          GetBiobankNetworkOptions: () => '',
+          GetBiobankQualityBiobanks: () => ''
         },
         mutations: {},
         getters: {

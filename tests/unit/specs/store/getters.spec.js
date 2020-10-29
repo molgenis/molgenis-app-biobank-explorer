@@ -1,5 +1,4 @@
 
-import { expect } from 'chai'
 import getters from '../../../../src/store/getters'
 import { mockState } from '../mockState'
 
@@ -17,15 +16,10 @@ describe('store', () => {
         state.country.filters = ['AT', 'BE']
         state.covid19.filters = ['covid19']
 
-        expect(getters.rsql(state)).to.equal('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
+        expect(getters.rsql(state)).toEqual('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
       })
       it('should return the empty string if no filters are selected', () => {
-        expect(getters.rsql(state)).to.equal('')
-      })
-      it('should include the default country code if showCountryFacet is set to false', () => {
-        state.preConfiguredCountyCode = 'BE'
-        state.showCountryFacet = false
-        expect(getters.rsql(state)).to.equal('country=in=BE')
+        expect(getters.rsql(state)).toEqual('')
       })
     })
     describe('biobankRsql', () => {
@@ -33,28 +27,37 @@ describe('store', () => {
         state.country.filters = ['AT', 'BE']
         state.covid19.filters = ['covid19']
 
-        expect(getters.biobankRsql(state)).to.equal('country=in=(AT,BE);covid19biobank==covid19')
+        expect(getters.biobankRsql(state)).toEqual('country=in=(AT,BE);covid19biobank==covid19')
       })
       it('should create AND filter for covid19 biobank filter values', () => {
         state.search = 'Cell&Co'
         state.covid19.filters = ['covid19', 'covid19a']
 
-        expect(getters.biobankRsql(state)).to.equal('covid19biobank==covid19;covid19biobank==covid19a')
+        expect(getters.biobankRsql(state)).toEqual('covid19biobank==covid19;covid19biobank==covid19a')
       })
       it('should return an empty string if no filters are selected', () => {
-        expect(getters.biobankRsql(state)).to.equal('')
-      })
-      it('should include the default country code if showCountryFacet is set to false', () => {
-        state.showCountryFacet = false
-        state.preConfiguredCountyCode = 'BE'
-
-        expect(getters.biobankRsql(state)).to.equal('country=in=BE')
+        expect(getters.biobankRsql(state)).toEqual('')
       })
     })
+
+    describe('podium', () => {
+      it('should return an array of names of collection that are present in podium', () => {
+        state.isPodium = true
+        state.podiumCollectionIds = ['A', 'B']
+        state.collectionInfo = [{ collectionId: 'A', collectionName: 'Collection A', biobankId: 'A-1' },
+          { collectionId: 'B', collectionName: 'Collection B', biobankId: 'B-1' },
+          { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
+          { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
+        const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
+
+        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual(['Collection A', 'Collection B'])
+      })
+    })
+
     describe('biobanks', () => {
       it('should return empty list when loading', () => {
         state = {}
-        expect(getters.biobanks(state, { loading: true })).to.deep.equal([])
+        expect(getters.biobanks(state, { loading: true })).toStrictEqual([])
       })
       it('should look up the biobanks for matching collection ids and filter the biobank\'s collections', () => {
         state.biobanks = {
@@ -62,19 +65,19 @@ describe('store', () => {
           2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }, { id: 'col-3', sub_collections: [] }] }
         }
         state.biobankIds = ['1', '2']
-        state.collectionIds = [{ collectionId: 'col-2', biobankId: '2' }]
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
         const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
-        expect(getters.biobanks(state, otherGetters)).to.deep.equal([{ id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }])
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([{ id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }])
       })
       it('should return all biobanks if the collections are not filtered', () => {
         state.biobanks = {
           2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }
         }
         state.biobankIds = ['1', '2']
-        state.collectionIds = [{ collectionId: 'col-2', biobankId: '2' }]
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
 
         const otherGetters = { loading: false, rsql: '' }
-        expect(getters.biobanks(state, otherGetters)).to.deep.equal([
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([
           '1',
           { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }
         ])
@@ -96,34 +99,42 @@ describe('store', () => {
           const state = {
             biobanks: { 1: biobank1, 2: biobank2 },
             biobankIds: ['1', '2'],
-            collectionIds: [{ collectionId: 'col-4', biobankId: '2' }]
+            collectionInfo: [{ collectionId: 'col-4', biobankId: '2' }]
           }
           const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
-          expect(getters.biobanks(state, otherGetters)).to.deep.equal([{
+          expect(getters.biobanks(state, otherGetters)).toStrictEqual([{
             id: '2',
             name: 'two',
             collections: [{ id: 'col-3', sub_collections: [{ id: 'col-4', sub_collections: [] }] }]
           }])
         })
 
-      it('should return the biobanks in the order they appear in collectionIds', () => {
+      it('should return the biobanks in the order they appear in collectionInfo', () => {
         const state = {
           biobanks: {
             1: { id: '1', name: 'B', collections: [{ id: 'col-1', sub_collections: [] }] },
             2: { id: '2', name: 'A', collections: [{ id: 'col-2', sub_collections: [] }] }
           },
           biobankIds: ['1', '2'],
-          collectionIds: [
+          collectionInfo: [
             { collectionId: 'col-1', biobankId: '2' },
             { collectionId: 'col-2', biobankId: '1' }
           ]
         }
         const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
-        expect(getters.biobanks(state, otherGetters)).to.deep.equal([
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([
           { id: '2', name: 'A', collections: [{ id: 'col-2', sub_collections: [] }] },
           { id: '1', name: 'B', collections: [{ id: 'col-1', sub_collections: [] }] }
         ])
       })
+    })
+
+    it('should return the total amount of collections for found biobanks', () => {
+      const getFoundBiobankIds = ['B']
+      const getCollectionsWithBiobankId = [{ collectionId: 'A', biobankId: 'B' }, { collectionId: 'C', biobankId: 'B' }, { collectionId: 'D', biobankId: 'E' }]
+      const otherGetters = { getFoundBiobankIds, getCollectionsWithBiobankId }
+      const ids = getters.foundCollectionIds(state, otherGetters)
+      expect(ids.length).toEqual(2)
     })
 
     it('should return an array of biobank Ids', () => {
@@ -134,52 +145,52 @@ describe('store', () => {
       ]
 
       const otherGetters = { biobanks }
-      expect(getters.getFoundBiobankIds(state, otherGetters)).to.deep.equal(['1', '2', '3'])
+      expect(getters.getFoundBiobankIds(state, otherGetters)).toStrictEqual(['1', '2', '3'])
     })
     it('should return an array of biobank Ids when only ids are present', () => {
       const biobanks = ['1', '2', '3']
 
       const otherGetters = { biobanks }
-      expect(getters.getFoundBiobankIds(state, otherGetters)).to.deep.equal(['1', '2', '3'])
+      expect(getters.getFoundBiobankIds(state, otherGetters)).toStrictEqual(['1', '2', '3'])
     })
 
     describe('loading', () => {
-      it('should be false if both biobankIds and collectionIds are present', () => {
+      it('should be false if both biobankIds and collectionInfo are present', () => {
         const state = {
           biobankIds: ['biobank1'],
-          collectionIds: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
         }
-        expect(getters.loading(state)).to.eq(false)
+        expect(getters.loading(state)).toBe(false)
       })
 
       it('should be true if biobankIds are missing', () => {
         const state = {
           biobankIds: undefined,
-          collectionIds: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
         }
-        expect(getters.loading(state)).to.eq(true)
+        expect(getters.loading(state)).toBe(true)
       })
 
-      it('should be true if collectionIds are missing', () => {
+      it('should be true if collectionInfo is missing', () => {
         const state = {
           biobankIds: ['biobank1'],
-          collectionIds: undefined
+          collectionInfo: undefined
         }
-        expect(getters.loading(state)).to.eq(true)
+        expect(getters.loading(state)).toBe(true)
       })
     })
 
     describe('getTypesOptions', () => {
       it('should retrieve the type options', () => {
         const state = { type: { options: [{ id: 'id', label: 'label' }] } }
-        expect(state.type.options).to.deep.equal(getters.getTypesOptions(state))
+        expect(state.type.options).toStrictEqual(getters.getTypesOptions(state))
       })
     })
 
     describe('getDataTypeOptions', () => {
       it('should retrieve the type options', () => {
         const state = { dataType: { options: [{ id: 'id', label: 'label' }] } }
-        expect(state.dataType.options).to.deep.equal(getters.getDataTypeOptions(state))
+        expect(state.dataType.options).toStrictEqual(getters.getDataTypeOptions(state))
       })
     })
 
@@ -189,7 +200,7 @@ describe('store', () => {
         state.country.options = expected
         const actual = getters.getCountryOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -204,7 +215,7 @@ describe('store', () => {
 
         const actual = getters.getMaterialOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -218,7 +229,7 @@ describe('store', () => {
         }
         const actual = getters.getCollectionQualityOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -232,7 +243,7 @@ describe('store', () => {
         }
         const actual = getters.getBiobankQualityOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -249,7 +260,7 @@ describe('store', () => {
         }
         const actual = getters.getDiagnosisAvailableOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -265,7 +276,7 @@ describe('store', () => {
         }
         const actual = getters.getCovid19Options(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -274,7 +285,7 @@ describe('store', () => {
         const actual = getters.getCovid19NetworkOptions(state)
         const expected = mockState().covid19network.options
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -290,7 +301,7 @@ describe('store', () => {
         }
         const actual = getters.getBiobankNetworkOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -306,7 +317,7 @@ describe('store', () => {
         }
         const actual = getters.getCollectionNetworkOptions(state)
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -397,7 +408,7 @@ describe('store', () => {
           search: [{ id: 'search', label: state.search }]
         }
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
 
       it('should retrieve an object of filters with diagnosis_available in it', () => {
@@ -414,37 +425,37 @@ describe('store', () => {
         }
         state.diagnosis_available.filters = expected.diagnosis_available
         const actual = getters.getActiveFilters(state)
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
     describe('showCountryFacet', () => {
       it('should return true if showCountryFacet setting is set to true', () => {
         const state = { showCountryFacet: true }
-        expect(getters.showCountryFacet(state)).to.equal(true)
+        expect(getters.showCountryFacet(state)).toEqual(true)
       })
       it('should return false if showCountryFacet setting is set to false', () => {
         const state = { showCountryFacet: false }
-        expect(getters.showCountryFacet(state)).to.equal(false)
+        expect(getters.showCountryFacet(state)).toEqual(false)
       })
     })
 
     describe('getErrorMessage', () => {
       it('should return undefined if no error is set', () => {
         const state = { error: undefined }
-        expect(getters.getErrorMessage(state)).to.equal(undefined)
+        expect(getters.getErrorMessage(state)).toEqual(undefined)
       })
       it('should return message of first error', () => {
         const state = { error: { errors: [{ message: 'this is the first error' }] } }
-        expect(getters.getErrorMessage(state)).to.equal('this is the first error')
+        expect(getters.getErrorMessage(state)).toEqual('this is the first error')
       })
       it('should return message of first error', () => {
         const state = { error: new Error('Beautiful message') }
-        expect(getters.getErrorMessage(state)).to.equal('Beautiful message')
+        expect(getters.getErrorMessage(state)).toEqual('Beautiful message')
       })
       it('should return that something went wrong', () => {
         const state = { error: {} }
-        expect(getters.getErrorMessage(state)).to.equal('Something went wrong')
+        expect(getters.getErrorMessage(state)).toEqual('Something went wrong')
       })
     })
   })

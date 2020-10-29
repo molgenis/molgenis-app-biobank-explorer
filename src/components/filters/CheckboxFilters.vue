@@ -5,8 +5,8 @@
       :class="important ? 'bg-warning text-white' : ''"
       v-b-toggle="'filter-card-'+name"
     >
-      <i class="fa fa-caret-right when-closed" aria-hidden="true"></i>
-      <i class="fa fa-caret-down when-opened" aria-hidden="true"></i>
+      <span class="fa fa-caret-right when-closed mr-2" aria-hidden="true"></span>
+      <span class="fa fa-caret-down when-opened mr-2" aria-hidden="true"></span>
       {{ label }}
     </b-card-header>
     <b-collapse :visible="!collapsed" :id="'filter-card-'+name">
@@ -55,6 +55,7 @@
   font-size: small;
 }
 </style>
+
 <script>
 export default {
   data () {

@@ -1,7 +1,7 @@
 {
   "name": "molgenis-app-biobank-explorer",
   "license": "LGPL-3.0",
-  "version": "3.0.0",
+  "version": "3.1.2",
   "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "author": "mkslofstra <mariska-karina@hotmail.com>, Jelmer Veen <https://github.com/jelmerveen/>",
   "scripts": {
@@ -10,11 +10,12 @@
     "test:unit": "vue-cli-service test:unit --collectCoverage",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "build:preview": "yarn build --mode preview",
+    "build:preview": "yarn build --mode test",
     "preversion": "yarn install; yarn test:unit",
     "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
   },
   "dependencies": {
+    "@molgenis-ui/components-library": "^0.6.0",
     "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
     "@molgenis/rsql": "^0.1.1",
