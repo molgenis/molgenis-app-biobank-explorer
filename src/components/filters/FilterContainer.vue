@@ -52,19 +52,6 @@
 <script>
 import StringFilter from './StringFilter'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
-import { UPDATE_FILTER, SET_SEARCH } from '../../store/mutations'
-import {
-  GET_COUNTRY_OPTIONS,
-  GET_MATERIALS_OPTIONS,
-  GET_COLLECTION_QUALITY_OPTIONS,
-  GET_BIOBANK_QUALITY_OPTIONS,
-  GET_TYPES_OPTIONS,
-  GET_DATA_TYPE_OPTIONS,
-  GET_COLLECTION_QUALITY_COLLECTIONS,
-  GET_BIOBANK_QUALITY_BIOBANKS,
-  GET_COVID_19_OPTIONS,
-  GET_NETWORK_OPTIONS
-} from '../../store/actions'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
 import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
@@ -95,7 +82,7 @@ export default {
           { search: search.length === 0 ? undefined : search }
         )
         this.$router.push({ query: updatedRouteQuery })
-        this.$store.commit(SET_SEARCH, search)
+        this.SetSearch(search)
       }
     },
     covidNetworkFilter () {
@@ -191,31 +178,30 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({ updateFilter: UPDATE_FILTER }),
+    ...mapMutations(['UpdateFilter', 'SetSearch']),
     filterChange (name, filters) {
-      this.updateFilter({ name, filters })
+      this.UpdateFilter({ name, filters })
       const value = filters.length === 0 ? undefined : filters.join(',')
       this.$router.push({
         query: { ...this.$store.state.route.query, [name]: value }
       })
       if (name === 'collection_quality') {
-        this.$store.dispatch(GET_COLLECTION_QUALITY_COLLECTIONS)
+        this.$store.dispatch('GetCollectionQualityCollections')
       }
       if (name === 'biobank_quality') {
-        this.$store.dispatch(GET_BIOBANK_QUALITY_BIOBANKS)
+        this.$store.dispatch('GetBiobankQualityBiobanks')
       }
     }
   },
   mounted () {
-    this.$store.dispatch(GET_COUNTRY_OPTIONS)
-    this.$store.dispatch(GET_MATERIALS_OPTIONS)
-    this.$store.dispatch(GET_COLLECTION_QUALITY_OPTIONS)
-    this.$store.dispatch(GET_BIOBANK_QUALITY_OPTIONS)
-    this.$store.dispatch(GET_TYPES_OPTIONS)
-    this.$store.dispatch(GET_DATA_TYPE_OPTIONS)
-    this.$store.dispatch(GET_COVID_19_OPTIONS)
-    this.$store.dispatch(GET_NETWORK_OPTIONS)
-    this.$store.dispatch(GET_BIOBANK_QUALITY_BIOBANKS)
+    this.$store.dispatch('GetCountryOptions')
+    this.$store.dispatch('GetMaterialsOptions')
+    this.$store.dispatch('GetCollectionQualityOptions')
+    this.$store.dispatch('GetBiobankQualityOptions')
+    this.$store.dispatch('GetTypesOptions')
+    this.$store.dispatch('GetDataTypeOptions')
+    this.$store.dispatch('GetCovid19Options')
+    this.$store.dispatch('GetNetworkOptions')
   },
   components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
 }

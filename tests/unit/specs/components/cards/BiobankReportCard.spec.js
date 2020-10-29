@@ -44,7 +44,7 @@ describe('BiobankReportCard', () => {
         }
       },
       actions: {
-        __GET_BIOBANK_REPORT__: () => {}
+        GetBiobankReport: () => {}
       }
     })
     mocks = {

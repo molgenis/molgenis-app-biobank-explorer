@@ -15,21 +15,20 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { GET_NEGOTIATOR_ENTITIES, GET_NEGOTIATOR_TYPE } from './store/actions'
 
 export default {
   computed: {
     ...mapGetters({ errorMessage: 'getErrorMessage' })
   },
   methods: {
-    ...mapActions({
-      getNegotiatorType: GET_NEGOTIATOR_TYPE,
-      getNegotiatorEntities: GET_NEGOTIATOR_ENTITIES
-    })
+    ...mapActions([
+      'GetNegotiatorType',
+      'GetNegotiatorEntities'
+    ])
   },
   mounted () {
-    this.getNegotiatorType()
-    this.getNegotiatorEntities()
+    this.GetNegotiatorType()
+    this.GetNegotiatorEntities()
   },
   name: 'biobank-explorer'
 }

@@ -55,6 +55,7 @@
   font-size: small;
 }
 </style>
+
 <script>
 export default {
   data () {

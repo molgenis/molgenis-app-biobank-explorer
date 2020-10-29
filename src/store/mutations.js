@@ -3,42 +3,6 @@ import { fixCollectionTree } from './helpers'
 import { covid19NetworkFacetName, covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 import Vue from 'vue'
 
-export const SET_COUNTRIES = '__SET_COUNTRIES__'
-export const SET_MATERIALS = '__SET_MATERIALS__'
-export const SET_COLLECTION_QUALITY = '__SET_COLLECTION_QUALITY__'
-export const SET_BIOBANK_QUALITY = '__SET_BIOBANK_QUALITY__'
-export const SET_COLLECTION_TYPES = '__SET_COLLECTION_TYPES__'
-export const SET_DATA_TYPES = '__SET_DATA_TYPES__'
-export const SET_DIAGNOSIS_AVAILABLE = '__SET_DIAGNOSIS_AVAILABLE__'
-export const SET_SEARCH = '__SET_SEARCH__'
-export const SET_NEGOTIATOR_ENTITIES = '__SET_NEGOTIATOR_ENTITIES__'
-export const SET_COLLECTION_QUALITY_COLLECTIONS = '__SET_COLLECTION_QUALITY_COLLECTIONS__'
-export const SET_BIOBANK_QUALITY_BIOBANKS = '__SET_BIOBANK_QUALITY_BIOBANKS__'
-export const SET_COVID_19 = '__SET_COVID_19__'
-export const SET_NETWORK_OPTIONS = '__SET_NETWORK_OPTIONS__'
-export const SET_PODIUM_COLLECTIONS = '__SET_PODIUM_COLLECTIONS__'
-export const UPDATE_FILTER = '__UPDATE_FILTER__'
-export const RESET_FILTERS = '__RESET_FILTERS__'
-
-export const SET_BIOBANKS = '__SET_BIOBANKS__'
-export const SET_BIOBANK_IDS = '__SET_BIOBANK_IDS__'
-export const SET_COLLECTION_INFO = '__SET_COLLECTION_INFO__'
-export const SET_COVID_19_NETWORK = '__SET_COVID_19_NETWORK__'
-export const SET_BIOBANK_REPORT = '__SET_BIOBANK_REPORT__'
-export const SET_COLLECTION_REPORT = '__SET_COLLECTION_REPORT__'
-export const SET_NETWORK_REPORT = '__SET_NETWORK_REPORT__'
-
-// these are not network, but networkreport
-export const SET_NETWORK_COLLECTIONS = '__SET_NETWORK_COLLECTIONS__'
-export const SET_NETWORK_BIOBANKS = '__SET_NETWORK_BIOBANKS__'
-
-export const MAP_QUERY_TO_STATE = '__MAP_QUERY_TO_STATE__'
-
-export const SET_ERROR = '__SET_ERROR__'
-export const SET_LOADING = '__SET_LOADING__'
-export const SET_PODIUM = '__SET_PODIUM__'
-export const SET_LAST_URL = '__SET_LAST_URL__'
-
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 const combineCodeAndLabels = (diagnoses) => {
@@ -62,40 +26,40 @@ export default {
   /**
    * Update the options for the different filters available in the biobank explorer
    */
-  [SET_COUNTRIES] (state, countries) {
+  SetCountries (state, countries) {
     state.country.options = countries
   },
-  [SET_MATERIALS] (state, materials) {
+  SetMaterials (state, materials) {
     state.materials.options = materials
   },
-  [SET_COLLECTION_QUALITY] (state, collectionQuality) {
+  SetCollectionQuality (state, collectionQuality) {
     state.collection_quality.options = collectionQuality
   },
-  [SET_BIOBANK_QUALITY] (state, biobankQuality) {
+  SetBiobankQuality (state, biobankQuality) {
     state.biobank_quality.options = biobankQuality
   },
-  [SET_COLLECTION_TYPES] (state, types) {
+  SetCollectionTypes (state, types) {
     state.type.options = types
   },
-  [SET_DATA_TYPES] (state, dataTypes) {
+  SetDataTypes (state, dataTypes) {
     state.dataType.options = dataTypes
   },
-  [SET_DIAGNOSIS_AVAILABLE] (state, diagnoses) {
+  SetDiagnosisAvailable (state, diagnoses) {
     state.diagnosis_available.options = combineCodeAndLabels(diagnoses)
   },
-  [SET_SEARCH] (state, search) {
+  SetSearch (state, search) {
     state.search = search
   },
-  [SET_COLLECTION_QUALITY_COLLECTIONS] (state, collections) {
+  SetCollectionQualityCollections (state, collections) {
     state.collection_quality.collections = hasFilterWithoutMatches(state.collection_quality.filters, collections) ? ['invalid_collection'] : getUniqueFilterMatches(collections, 'collection')
   },
-  [SET_BIOBANK_QUALITY_BIOBANKS] (state, biobanks) {
+  SetBiobankQualityBiobanks (state, biobanks) {
     state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
   },
-  [SET_COVID_19] (state, covid19) {
+  SetCovid19 (state, covid19) {
     state.covid19.options = covid19
   },
-  [SET_NETWORK_OPTIONS] (state, network) {
+  SetNetworkOptions (state, network) {
     const networkOptionsWithoutCovid19 = network.filter(network => network.id !== covid19NetworkId)
     state.biobank_network.options = networkOptionsWithoutCovid19
     state.collection_network.options = networkOptionsWithoutCovid19
@@ -108,8 +72,8 @@ export default {
    * @param name name of the state entry e.g. country, materials, standards, or diagnosis_available
    * @param filters an array of values
    */
-  [UPDATE_FILTER] (state, { name, filters }) {
-    if (name === covid19NetworkFacetName) this.commit(SET_COVID_19_NETWORK, filters)
+  UpdateFilter (state, { name, filters }) {
+    if (name === covid19NetworkFacetName) this.commit('SetCovid19Network', filters)
     if (name === 'search') state.search = ''
     else {
       state[name].filters = filters
@@ -118,7 +82,7 @@ export default {
   /**
    * Reset all filters in the state
    */
-  [RESET_FILTERS] (state) {
+  ResetFilters (state) {
     state.diagnosis_available.filters = []
     state.materials.filters = []
     state.country.filters = []
@@ -133,18 +97,18 @@ export default {
     state.biobank_network.filters = []
     state.collection_network.filters = []
   },
-  [SET_BIOBANKS] (state, biobanks) {
+  SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
       Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
     })
   },
-  [SET_BIOBANK_IDS] (state, biobankIds) {
+  SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  [SET_COLLECTION_INFO] (state, collectionInfo) {
+  SetCollectionInfo (state, collectionInfo) {
     state.collectionInfo = collectionInfo
   },
-  [SET_COVID_19_NETWORK] (state, covid19FacetSelectionIds) {
+  SetCovid19Network (state, covid19FacetSelectionIds) {
     const biobankNetwork = state.biobank_network.filters
     const collectionNetwork = state.collection_network.filters
     const addForBiobank = covid19FacetSelectionIds.includes(covid19BiobankNetworkSelectionId)
@@ -165,19 +129,19 @@ export default {
    * @param state
    * @param biobank response object from the server containing meta and items for a single biobank
    */
-  [SET_BIOBANK_REPORT] (state, biobank) {
+  SetBiobankReport (state, biobank) {
     state.biobankReport = biobank
   },
-  [SET_COLLECTION_REPORT] (state, collection) {
+  SetCollectionReport (state, collection) {
     state.collectionReport = collection
   },
-  [SET_NETWORK_REPORT] (state, network) {
+  SetNetworkReport (state, network) {
     state.networkReport.network = network
   },
-  [SET_NETWORK_COLLECTIONS] (state, collections) {
+  SetNetworkCollections (state, collections) {
     state.networkReport.collections = collections
   },
-  [SET_NETWORK_BIOBANKS] (state, biobanks) {
+  SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
   },
   /**
@@ -185,7 +149,7 @@ export default {
    * @param state
    * @param params
    */
-  [MAP_QUERY_TO_STATE] (state, params) {
+  MapQueryToState (state, params) {
     const query = state.route.query
 
     if (params && params.diagnoses) {
@@ -235,26 +199,26 @@ export default {
     if (query.covid19network) {
       const selectedCovid19NetworkIds = query.covid19network.split(',')
       state.covid19network.filters = selectedCovid19NetworkIds
-      this.commit(SET_COVID_19_NETWORK, selectedCovid19NetworkIds)
+      this.commit('SetCovid19Network', selectedCovid19NetworkIds)
     }
 
     if (query.nToken) {
       state.nToken = query.nToken
     }
   },
-  [SET_ERROR] (state, error) {
+  SetError (state, error) {
     state.error = error
   },
-  [SET_LOADING] (state, loading) {
+  SetLoading (state, loading) {
     state.isLoading = loading
   },
-  [SET_PODIUM] (state, response) {
+  SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
   },
-  [SET_PODIUM_COLLECTIONS] (state, response) {
+  SetPodiumCollections (state, response) {
     state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   },
-  [SET_NEGOTIATOR_ENTITIES] (state, negotiatorConfig) {
+  SetNegotiatorEntities (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {
       return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table
     }).filter(ne => negotiatorConfigIds.includes(ne.id))[0]

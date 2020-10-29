@@ -27,6 +27,7 @@
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <style>
 .multiselect__tag {
   max-width: 10em;
@@ -50,10 +51,7 @@
 </style>
 
 <script>
-import { QUERY_DIAGNOSIS_AVAILABLE_OPTIONS } from '../../store/actions'
-import { UPDATE_FILTER } from '../../store/mutations'
 import { mapGetters } from 'vuex'
-
 import Multiselect from 'vue-multiselect'
 
 export default {
@@ -65,7 +63,7 @@ export default {
   },
   methods: {
     getDiagnosisOptions (query) {
-      this.$store.dispatch(QUERY_DIAGNOSIS_AVAILABLE_OPTIONS, query)
+      this.$store.dispatch('QueryDiagnosisAvailableOptions', query)
     },
     getLimitText (count) {
       return `and ${count} more`
@@ -80,7 +78,7 @@ export default {
         return this.$store.state.diagnosis_available.filters
       },
       set (filters) {
-        this.$store.commit(UPDATE_FILTER, {
+        this.$store.commit('UpdateFilter', {
           name: 'diagnosis_available',
           filters: filters
         })
