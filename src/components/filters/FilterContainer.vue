@@ -1,6 +1,10 @@
 <template>
   <div id="filter-container">
-    <FilterCard name="search" label="Search" description="Search by name, id, acronym and press enter" :collapsed="false">
+    <FilterCard
+    name="search"
+    label="Search"
+    description="Search by name, id, acronym and press enter"
+    :collapsed="!this.$store.state.route.query.search" >
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
 
