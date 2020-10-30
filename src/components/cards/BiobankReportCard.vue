@@ -59,7 +59,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { GET_BIOBANK_REPORT } from '../../store/actions'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../report-components/ReportDescription.vue'
@@ -127,15 +126,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      getBiobankReport: GET_BIOBANK_REPORT
-    }),
+    ...mapActions(['GetBiobankReport']),
     back () {
       this.$router.go(-1)
     }
   },
   mounted () {
-    this.getBiobankReport(this.$store.state.route.params.id)
+    this.GetBiobankReport(this.$store.state.route.params.id)
   }
 }
 </script>

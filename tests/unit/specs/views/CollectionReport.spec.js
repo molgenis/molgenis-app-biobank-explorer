@@ -56,7 +56,7 @@ describe('CollectionReport', () => {
         }
       },
       actions: {
-        __GET_COLLECTION_REPORT__: () => {}
+        GetCollectionReport: () => {}
       }
     })
     mocks = {

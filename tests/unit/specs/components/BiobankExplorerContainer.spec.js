@@ -33,9 +33,9 @@ describe('BiobankExplorerContainer', () => {
         collectionsInPodium: podiumCollectionsMock
       },
       actions: {
-        __GET_BIOBANK_IDS__: jest.fn(),
-        __GET_PODIUM_COLLECTIONS__: jest.fn(),
-        __GET_COLLECTION_INFO__: jest.fn()
+        GetBiobankIds: jest.fn(),
+        GetPodiumCollections: jest.fn(),
+        GetCollectionInfo: jest.fn()
       }
     })
   })

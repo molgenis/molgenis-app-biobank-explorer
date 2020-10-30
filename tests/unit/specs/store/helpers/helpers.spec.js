@@ -351,7 +351,7 @@ describe('store', () => {
         state.collection_network.filters.push(covid19NetworkId)
 
         const actual = helpers.getHumanReadableString(state)
-        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19 and biobank is part of networkbbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19 and collection is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
+        const expected = 'Free text search contains this is a free text search and selected countries are NL,BE and selected material types are PLASMA,RNA and selected collection quality standards are eric and selected disease types are small disease,big disease and biobank covid19 features are covid19 and biobank is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19 and collection is part of network bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
 
         expect(actual).to.equal(expected)
       })

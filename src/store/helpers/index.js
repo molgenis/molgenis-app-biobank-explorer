@@ -118,7 +118,7 @@ const getHumanReadableString = (state) => {
 
   if (biobankNetwork.length > 0) {
     if (humanReadableString.length > 0) humanReadableString += ' and '
-    humanReadableString += 'biobank is part of network' + biobankNetwork.join(',')
+    humanReadableString += 'biobank is part of network ' + biobankNetwork.join(',')
   }
 
   if (collectionNetwork.length > 0) {

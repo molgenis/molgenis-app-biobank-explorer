@@ -20,10 +20,14 @@
                     <th scope="row" class="pr-1">Id:</th>
                     <td>{{ collection.id }}</td>
                   </tr>
+                  <tr v-if="collection.url">
+                    <th scope="row" class="pr-1">Website:</th>
+                    <td><span><a target="_blank" :href="collection.url">{{ collection.url }}</a></span></td>
+                  </tr>
                   <report-list-row :data="mainContent.Size">Size:</report-list-row>
                   <tr v-if="mainContent.Age">
                     <th scope="row" class="pr-1">Age:</th>
-                    <td colspan="2">{{ mainContent.Age.value }}</td>
+                    <td>{{ mainContent.Age.value }}</td>
                   </tr>
                   <report-list-row :data="mainContent.Type">Type:</report-list-row>
                   <report-list-row :data="mainContent.Sex">Sex:</report-list-row>
@@ -54,7 +58,6 @@
 import { mapActions, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import { GET_COLLECTION_REPORT } from '@/store/actions'
 import ReportDescription from '@/components/report-components/ReportDescription'
 import ReportTitle from '@/components/report-components/ReportTitle'
 import ReportListRow from '@/components/report-components/ReportListRow'
@@ -74,9 +77,7 @@ export default {
     Loading
   },
   methods: {
-    ...mapActions({
-      getCollectionReport: GET_COLLECTION_REPORT
-    }),
+    ...mapActions(['GetCollectionReport']),
     back () {
       this.$router.go(-1)
     }
@@ -106,7 +107,7 @@ export default {
     }
   },
   mounted () {
-    this.getCollectionReport([this.collectionId])
+    this.GetCollectionReport([this.collectionId])
   }
 }
 </script>
