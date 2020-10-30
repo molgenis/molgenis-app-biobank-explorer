@@ -1,19 +1,16 @@
 <template>
   <div id="filter-container">
-    <string-filter
-      label="Search"
-      v-model="search"
-      :initiallyCollapsed="!$store.state.route.query.search"
-      placeholder
-      description="search by name, id, acronym and press enter"
-    ></string-filter>
-   <checkbox-filters
+    <FilterCard name="search" label="Search" description="Search by name, id, acronym and press enter" :collapsed="false">
+      <StringFilter name="Search" v-model="search"> </StringFilter>
+    </FilterCard>
+
+    <checkbox-filters
       class="covid-filter"
       :key="covidNetworkFilter.name"
       v-bind="covidNetworkFilter"
       :value="covidNetworkFilter.filters"
       :important="true"
-      @input="value => filterChange(covidNetworkFilter.name, value)"
+      @input="(value) => filterChange(covidNetworkFilter.name, value)"
     />
     <checkbox-filters
       class="covid-filter"
@@ -21,7 +18,7 @@
       v-bind="covidFilter"
       :value="covidFilter.filters"
       :important="true"
-      @input="value => filterChange(covidFilter.name, value)"
+      @input="(value) => filterChange(covidFilter.name, value)"
     />
     <diagnosis-available-filters></diagnosis-available-filters>
     <checkbox-filters
@@ -29,7 +26,7 @@
       :key="filter.name"
       v-bind="filter"
       :value="filter.filters"
-      @input="value => filterChange(filter.name, value)"
+      @input="(value) => filterChange(filter.name, value)"
     />
   </div>
 </template>
@@ -50,13 +47,19 @@
 </style>
 
 <script>
-import StringFilter from './StringFilter'
+import { StringFilter, FilterCard } from '@molgenis-ui/components-library'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
 import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
 
 export default {
+  components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters, FilterCard },
+  data () {
+    return {
+      debounce: undefined
+    }
+  },
   computed: {
     ...mapGetters({
       countryOptions: 'getCountryOptions',
@@ -76,13 +79,18 @@ export default {
         return this.$store.state.search
       },
       set (search) {
-        const updatedRouteQuery = Object.assign(
-          {},
-          this.$store.state.route.query,
-          { search: search.length === 0 ? undefined : search }
-        )
-        this.$router.push({ query: updatedRouteQuery })
-        this.SetSearch(search)
+        if (this.debounce) {
+          clearTimeout(this.debounce)
+        }
+
+        this.debounce = setTimeout(async () => {
+          clearTimeout(this.debounce)
+          const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {
+            search
+          })
+          this.$router.push({ query: updatedRouteQuery })
+          this.SetSearch(search || '')
+        }, 500)
       }
     },
     covidNetworkFilter () {
@@ -171,7 +179,7 @@ export default {
           filters: this.$store.state.dataType.filters,
           maxVisibleOptions: 25
         }
-      ].filter(facet => {
+      ].filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       })
@@ -202,7 +210,6 @@ export default {
     this.$store.dispatch('GetDataTypeOptions')
     this.$store.dispatch('GetCovid19Options')
     this.$store.dispatch('GetNetworkOptions')
-  },
-  components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
+  }
 }
 </script>

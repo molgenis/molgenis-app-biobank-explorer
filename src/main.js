@@ -13,6 +13,15 @@ import VueAnalytics from 'vue-analytics'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faCaretRight,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCaretRight, faTimes)
+
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {
     id: INITIAL_STATE.GA_KEY,
@@ -35,6 +44,8 @@ if (window.__webpack_public_path__) {
   __webpack_public_path__ = window.__webpack_public_path__ // NOSONAR
   /* eslint-enable */
 }
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(i18n, {
   lng: INITIAL_STATE.lng,

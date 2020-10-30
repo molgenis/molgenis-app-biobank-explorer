@@ -15,6 +15,10 @@
     "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^2.0.0",
     "@molgenis-ui/components-library": "^1.0.1",
     "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
