@@ -3,7 +3,7 @@
     <FilterCard
     name="search"
     label="Search"
-    description="Search by name, id, acronym and press enter"
+    description="Search by name, id, acronym"
     :collapsed="!this.$store.state.route.query.search" >
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
