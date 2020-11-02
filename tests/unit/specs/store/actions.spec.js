@@ -656,7 +656,7 @@ describe('store', () => {
             { type: 'SetNetworkReport', payload: undefined },
             { type: 'SetLoading', payload: true },
             { type: 'SetNetworkReport', payload: network },
-            { type: 'SetLoading', payload: false },
+            { type: 'SetLoading', payload: false }
           ]
         }
         utils.testAction(actions.GetNetworkReport, options, done)

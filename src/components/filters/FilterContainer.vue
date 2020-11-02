@@ -1,13 +1,11 @@
 <template>
   <div id="filter-container">
-    <FilterCard
-    name="search"
-    label="Search"
-    description="Search by name, id, acronym"
-    :collapsed="!this.$store.state.route.query.search" >
+    <FilterCard name="search" label="Search" description="Search by name, id, acronym" :collapsed="!this.$store.state.route.query.search">
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
 
+    <!-- <FilterCard :name="covidNetworkFilter.name" :label="covidNetworkFilter.label"
+              :collapsed="!this.$store.state.route.query.covid19network">
     <checkbox-filters
       class="covid-filter"
       :key="covidNetworkFilter.name"
@@ -16,6 +14,19 @@
       :important="true"
       @input="(value) => filterChange(covidNetworkFilter.name, value)"
     />
+    </FilterCard> -->
+
+    <FilterCard :name="covidFilter.name" :label="covidFilter.label" :collapsed="!this.$store.state.route.query.covid19network">
+      <CheckboxFilter
+        :options="genericFilterOptions('eu_bbmri_eric_COVID_19')"
+        :maxVisibleOptions="25"
+        :bulkOperation="true"
+        :value="covidFilter.filters"
+        @input="(value) => filterChange(covidFilter.name, value)"
+      >
+      </CheckboxFilter>
+    </FilterCard>
+
     <checkbox-filters
       class="covid-filter"
       :key="covidFilter.name"
@@ -51,14 +62,15 @@
 </style>
 
 <script>
-import { StringFilter, FilterCard } from '@molgenis-ui/components-library'
+import { StringFilter, FilterCard, CheckboxFilter } from '@molgenis-ui/components-library'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import CheckboxFilters from './CheckboxFilters'
 import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
+import { genericFilterOptions } from '../../utils/filterOptions'
 
 export default {
-  components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters, FilterCard },
+  components: { StringFilter, CheckboxFilters, CheckboxFilter, DiagnosisAvailableFilters, FilterCard },
   data () {
     return {
       debounce: undefined
@@ -190,6 +202,7 @@ export default {
     }
   },
   methods: {
+    genericFilterOptions,
     ...mapMutations(['UpdateFilter', 'SetSearch']),
     filterChange (name, filters) {
       this.UpdateFilter({ name, filters })
