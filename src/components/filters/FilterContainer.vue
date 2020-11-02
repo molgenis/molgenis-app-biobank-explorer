@@ -36,13 +36,18 @@
       @input="(value) => filterChange(covidFilter.name, value)"
     />
     <diagnosis-available-filters></diagnosis-available-filters>
-    <checkbox-filters
-      v-for="filter in filters"
-      :key="filter.name"
-      v-bind="filter"
-      :value="filter.filters"
-      @input="(value) => filterChange(filter.name, value)"
-    />
+
+    <FilterCard v-for="filter in filters" :key="filter.name" :name="filter.name" :label="filter.label" :collapsed="false">
+      <!-- TODO GENERIC QUERY CHECK -->
+      <CheckboxFilter
+        :options="genericFilterOptions(filter.table)"
+        :value="filter.filters"
+        :maxVisibleOptions="25"
+        :bulkOperation="true"
+        @input="(value) => filterChange(filter.name, value)"
+      >
+      </CheckboxFilter>
+    </FilterCard>
   </div>
 </template>
 
@@ -135,7 +140,7 @@ export default {
         {
           name: 'materials',
           label: 'Materials',
-          options: this.materialOptions,
+          table: 'eu_bbmri_eric_material_types',
           initiallyCollapsed: !this.$store.state.route.query.materials,
           filters: this.$store.state.materials.filters,
           maxVisibleOptions: 25
@@ -143,14 +148,14 @@ export default {
         {
           name: 'country',
           label: 'Countries',
-          options: this.countryOptions,
+          table: 'eu_bbmri_eric_countries',
           initiallyCollapsed: !this.$store.state.route.query.country,
           filters: this.$store.state.country.filters
         },
         {
           name: 'biobank_quality',
           label: 'Biobank quality marks',
-          options: this.biobankQualityOptions,
+          table: 'eu_bbmri_eric_assess_level_bio',
           initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
           filters: this.$store.state.biobank_quality.filters,
           maxVisibleOptions: 25
@@ -158,7 +163,7 @@ export default {
         {
           name: 'collection_quality',
           label: 'Collection quality marks',
-          options: this.collectionQualityOptions,
+          table: 'eu_bbmri_eric_assess_level_col',
           initiallyCollapsed: !this.$store.state.route.query.collection_quality,
           filters: this.$store.state.collection_quality.filters,
           maxVisibleOptions: 25
@@ -166,7 +171,7 @@ export default {
         {
           name: 'type',
           label: 'Collection types',
-          options: this.typesOptions,
+          table: 'eu_bbmri_eric_collection_types',
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
           maxVisibleOptions: 25
@@ -174,7 +179,7 @@ export default {
         {
           name: 'biobank_network',
           label: 'Biobank network',
-          options: this.biobankNetworkOptions,
+          table: 'eu_bbmri_eric_networks',
           initiallyCollapsed: !this.$store.state.route.query.biobank_network,
           filters: this.$store.state.biobank_network.filters,
           maxVisibleOptions: 25
@@ -182,7 +187,7 @@ export default {
         {
           name: 'collection_network',
           label: 'Collection network',
-          options: this.collectionNetworkOptions,
+          table: 'eu_bbmri_eric_networks',
           initiallyCollapsed: !this.$store.state.route.query.collection_network,
           filters: this.$store.state.collection_network.filters,
           maxVisibleOptions: 25
@@ -190,7 +195,7 @@ export default {
         {
           name: 'dataType',
           label: 'Data types',
-          options: this.dataTypeOptions,
+          table: 'eu_bbmri_eric_data_types',
           initiallyCollapsed: !this.$store.state.route.query.dataType,
           filters: this.$store.state.dataType.filters,
           maxVisibleOptions: 25

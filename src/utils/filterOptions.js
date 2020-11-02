@@ -4,6 +4,7 @@ import api from '@molgenis/molgenis-api-client'
 export const genericFilterOptions = (tableName) => {
   return () => new Promise((resolve) => {
     api.get(`/api/v2/${tableName}`).then(response => {
+      console.log(response.items)
       resolve(response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } }))
     })
   })
