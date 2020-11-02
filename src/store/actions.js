@@ -9,12 +9,6 @@ import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
-const COLLECTION_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_col'
-const BIOBANK_QUALITY_API_PATH = '/api/v2/eu_bbmri_eric_assess_level_bio'
-const COUNTRY_API_PATH = '/api/v2/eu_bbmri_eric_countries'
-const MATERIALS_API_PATH = '/api/v2/eu_bbmri_eric_material_types'
-const COLLECTION_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_collection_types'
-const DATA_TYPES_API_PATH = '/api/v2/eu_bbmri_eric_data_types'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
@@ -38,58 +32,9 @@ export default {
    * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
    * diagnosis_available is queried asynchronously when an option is being searched for.
    */
-  GetDataTypeOptions ({ commit }) {
-    api.get(DATA_TYPES_API_PATH).then(response => {
-      commit('SetDataTypes', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetTypesOptions ({ commit }) {
-    api.get(COLLECTION_TYPES_API_PATH).then(response => {
-      commit('SetCollectionTypes', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetCountryOptions ({ commit }) {
-    api.get(COUNTRY_API_PATH).then(response => {
-      commit('SetCountries', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetMaterialsOptions ({ commit }) {
-    api.get(MATERIALS_API_PATH).then(response => {
-      commit('SetMaterials', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetCollectionQualityOptions ({ commit }) {
-    api.get(COLLECTION_QUALITY_API_PATH).then(response => {
-      commit('SetCollectionQuality', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetBiobankQualityOptions ({ commit }) {
-    api.get(BIOBANK_QUALITY_API_PATH).then(response => {
-      commit('SetBiobankQuality', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
   GetCovid19Options ({ commit }) {
     api.get(COVID_19_API_PATH).then(response => {
       commit('SetCovid19', response.items)
-    }, error => {
-      commit('SetError', error)
-    })
-  },
-  GetNetworkOptions ({ commit }) {
-    api.get(NETWORK_API_PATH).then(response => {
-      commit('SetNetworkOptions', response.items)
     }, error => {
       commit('SetError', error)
     })
