@@ -4,39 +4,6 @@
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
 
-    <!-- <FilterCard :name="covidNetworkFilter.name" :label="covidNetworkFilter.label"
-              :collapsed="!this.$store.state.route.query.covid19network">
-    <checkbox-filters
-      class="covid-filter"
-      :key="covidNetworkFilter.name"
-      v-bind="covidNetworkFilter"
-      :value="covidNetworkFilter.filters"
-      :important="true"
-      @input="(value) => filterChange(covidNetworkFilter.name, value)"
-    />
-    </FilterCard> -->
-
-    <FilterCard :name="covidFilter.name" :label="covidFilter.label" :collapsed="!this.$store.state.route.query.covid19network">
-      <CheckboxFilter
-        :options="genericFilterOptions('eu_bbmri_eric_COVID_19')"
-        :maxVisibleOptions="25"
-        :bulkOperation="true"
-        :value="covidFilter.filters"
-        @input="(value) => filterChange(covidFilter.name, value)"
-      >
-      </CheckboxFilter>
-    </FilterCard>
-
-    <checkbox-filters
-      class="covid-filter"
-      :key="covidFilter.name"
-      v-bind="covidFilter"
-      :value="covidFilter.filters"
-      :important="true"
-      @input="(value) => filterChange(covidFilter.name, value)"
-    />
-    <diagnosis-available-filters></diagnosis-available-filters>
-
     <FilterCard
       v-for="filter in filters"
       :key="filter.name"
@@ -44,15 +11,15 @@
       :label="filter.label"
       :collapsed="filter.initiallyCollapsed"
     >
-      <CheckboxFilter
-        :options="genericFilterOptions(filter.table)"
+      <component
+        :is="filter.component"
         :value="$store.state.filters.selections[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
         :maxVisibleOptions="25"
         :bulkOperation="true"
       >
-      </CheckboxFilter>
+      </component>
     </FilterCard>
   </div>
 </template>
@@ -76,12 +43,11 @@
 import { StringFilter, FilterCard, CheckboxFilter } from '@molgenis-ui/components-library'
 import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
 import { mapGetters, mapMutations } from 'vuex'
-import CheckboxFilters from './CheckboxFilters'
 import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
-import { genericFilterOptions } from '../../utils/filterOptions'
+import { genericFilterOptions, covid19NetworkFilterOptions } from '../../utils/filterOptions'
 
 export default {
-  components: { StringFilter, CheckboxFilters, CheckboxFilter, DiagnosisAvailableFilters, FilterCard },
+  components: { StringFilter, CheckboxFilter, DiagnosisAvailableFilters, FilterCard },
   data () {
     return {
       debounce: undefined
@@ -112,88 +78,100 @@ export default {
         }, 500)
       }
     },
-    covidNetworkFilter () {
-      return {
-        name: covid19NetworkFacetName,
-        label: 'COVID-19',
-        options: this.covid19NetworkOptions,
-        initiallyCollapsed: !this.$store.state.route.query.covid19network,
-        filters: this.$store.state.covid19network.filters,
-        maxVisibleOptions: 25
-      }
-    },
-    covidFilter () {
-      return {
-        name: 'covid19',
-        label: 'COVID-19 Services',
-        options: this.covid19Options,
-        initiallyCollapsed: !this.$store.state.route.query.covid19,
-        filters: this.$store.state.covid19.filters,
-        maxVisibleOptions: 25,
-        all: true
-      }
-    },
     filters () {
       return [
         {
+          component: 'CheckboxFilter',
+          name: covid19NetworkFacetName,
+          label: 'COVID-19',
+          options: covid19NetworkFilterOptions,
+          initiallyCollapsed: !this.$store.state.route.query.covid19network,
+          filters: this.$store.state.covid19network.filters,
+          maxVisibleOptions: 25
+        },
+        {
+          component: 'CheckboxFilter',
+          name: 'covid19',
+          label: 'COVID-19 Services',
+          options: genericFilterOptions('eu_bbmri_eric_COVID_19'),
+          initiallyCollapsed: !this.$store.state.route.query.covid19,
+          filters: this.$store.state.covid19.filters,
+          maxVisibleOptions: 25,
+          all: true
+        },
+        {
+          component: 'diagnosis-available-filters',
+          name: 'diagnosis_available',
+          label: 'Diagnosis available',
+          initiallyCollapsed: false
+        },
+        {
+          component: 'CheckboxFilter',
           name: 'materials',
           label: 'Materials',
-          table: 'eu_bbmri_eric_material_types',
+          options: genericFilterOptions('eu_bbmri_eric_material_types'),
           initiallyCollapsed: !this.$store.state.route.query.materials,
           filters: this.$store.state.materials.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'country',
           label: 'Countries',
-          table: 'eu_bbmri_eric_countries',
+          options: genericFilterOptions('eu_bbmri_eric_countries'),
           initiallyCollapsed: !this.$store.state.route.query.country,
           filters: this.$store.state.country.filters
         },
         {
+          component: 'CheckboxFilter',
           name: 'biobank_quality',
           label: 'Biobank quality marks',
-          table: 'eu_bbmri_eric_assess_level_bio',
+          options: genericFilterOptions('eu_bbmri_eric_assess_level_bio'),
           initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
           filters: this.$store.state.biobank_quality.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'collection_quality',
           label: 'Collection quality marks',
-          table: 'eu_bbmri_eric_assess_level_col',
+          options: genericFilterOptions('eu_bbmri_eric_assess_level_col'),
           initiallyCollapsed: !this.$store.state.route.query.collection_quality,
           filters: this.$store.state.collection_quality.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'type',
           label: 'Collection types',
-          table: 'eu_bbmri_eric_collection_types',
+          options: genericFilterOptions('eu_bbmri_eric_collection_types'),
           initiallyCollapsed: !this.$store.state.route.query.type,
           filters: this.$store.state.type.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'biobank_network',
           label: 'Biobank network',
-          table: 'eu_bbmri_eric_networks',
+          options: genericFilterOptions('eu_bbmri_eric_networks'),
           initiallyCollapsed: !this.$store.state.route.query.biobank_network,
           filters: this.$store.state.biobank_network.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'collection_network',
           label: 'Collection network',
-          table: 'eu_bbmri_eric_networks',
+          options: genericFilterOptions('eu_bbmri_eric_networks'),
           initiallyCollapsed: !this.$store.state.route.query.collection_network,
           filters: this.$store.state.collection_network.filters,
           maxVisibleOptions: 25
         },
         {
+          component: 'CheckboxFilter',
           name: 'dataType',
           label: 'Data types',
-          table: 'eu_bbmri_eric_data_types',
+          options: genericFilterOptions('eu_bbmri_eric_data_types'),
           initiallyCollapsed: !this.$store.state.route.query.dataType,
           filters: this.$store.state.dataType.filters,
           maxVisibleOptions: 25

@@ -1,11 +1,4 @@
 <template>
-  <div class="card filter-card">
-    <div class="card-header filter-header" @click.prevent="collapsed = !collapsed">
-      <span class="fa fa-caret-right mr-2" aria-hidden="true" v-if="collapsed"></span>
-      <span class="fa fa-caret-down mr-2" aria-hidden="true" v-else></span>
-      Diagnosis available
-    </div>
-    <div class="card-body" v-if="!collapsed">
       <multiselect
         id="disease-type-select"
         :internalSearch="false"
@@ -22,8 +15,6 @@
         label="label"
         selectLabel
       ></multiselect>
-    </div>
-  </div>
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
@@ -56,11 +47,6 @@ import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'diagnosis-available-filters',
-  data () {
-    return {
-      collapsed: false
-    }
-  },
   methods: {
     getDiagnosisOptions (query) {
       this.$store.dispatch('QueryDiagnosisAvailableOptions', query)
