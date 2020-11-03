@@ -26,24 +26,6 @@ export default {
   /**
    * Update the options for the different filters available in the biobank explorer
    */
-  SetCountries (state, countries) {
-    state.country.options = countries
-  },
-  SetMaterials (state, materials) {
-    state.materials.options = materials
-  },
-  SetCollectionQuality (state, collectionQuality) {
-    state.collection_quality.options = collectionQuality
-  },
-  SetBiobankQuality (state, biobankQuality) {
-    state.biobank_quality.options = biobankQuality
-  },
-  SetCollectionTypes (state, types) {
-    state.type.options = types
-  },
-  SetDataTypes (state, dataTypes) {
-    state.dataType.options = dataTypes
-  },
   SetDiagnosisAvailable (state, diagnoses) {
     state.diagnosis_available.options = combineCodeAndLabels(diagnoses)
   },

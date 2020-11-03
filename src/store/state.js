@@ -31,16 +31,13 @@ export default {
     selections: {}
   },
   country: {
-    filters: [],
-    options: []
+    filters: []
   },
   materials: {
-    filters: [],
-    options: []
+    filters: []
   },
   collection_quality: {
     filters: [],
-    options: [],
     collections: []
   },
   covid19: {
@@ -55,16 +52,13 @@ export default {
     ]
   },
   biobank_network: {
-    filters: [],
-    options: []
+    filters: []
   },
   collection_network: {
-    filters: [],
-    options: []
+    filters: []
   },
   biobank_quality: {
     filters: [],
-    options: [],
     biobanks: []
   },
   diagnosis_available: {
@@ -72,11 +66,9 @@ export default {
     options: []
   },
   type: {
-    filters: [],
-    options: []
+    filters: []
   },
   dataType: {
-    filters: [],
-    options: []
+    filters: []
   }
 }
