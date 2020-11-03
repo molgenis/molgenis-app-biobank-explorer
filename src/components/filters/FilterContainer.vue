@@ -37,14 +37,20 @@
     />
     <diagnosis-available-filters></diagnosis-available-filters>
 
-    <FilterCard v-for="filter in filters" :key="filter.name" :name="filter.name" :label="filter.label" :collapsed="false">
-      <!-- TODO GENERIC QUERY CHECK -->
+    <FilterCard
+      v-for="filter in filters"
+      :key="filter.name"
+      :name="filter.name"
+      :label="filter.label"
+      :collapsed="filter.initiallyCollapsed"
+    >
       <CheckboxFilter
         :options="genericFilterOptions(filter.table)"
-        :value="filter.filters"
+        :value="$store.state.filters.selections[filter.name]"
+        v-bind="filter"
+        @input="(value) => filterChange(filter.name, value)"
         :maxVisibleOptions="25"
         :bulkOperation="true"
-        @input="(value) => filterChange(filter.name, value)"
       >
       </CheckboxFilter>
     </FilterCard>
@@ -83,14 +89,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      countryOptions: 'getCountryOptions',
-      materialOptions: 'getMaterialOptions',
-      collectionQualityOptions: 'getCollectionQualityOptions',
-      biobankQualityOptions: 'getBiobankQualityOptions',
-      typesOptions: 'getTypesOptions',
-      biobankNetworkOptions: 'getBiobankNetworkOptions',
-      collectionNetworkOptions: 'getCollectionNetworkOptions',
-      dataTypeOptions: 'getDataTypeOptions',
       showCountryFacet: 'showCountryFacet',
       covid19Options: 'getCovid19Options',
       covid19NetworkOptions: 'getCovid19NetworkOptions'
@@ -224,14 +222,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('GetCountryOptions')
-    this.$store.dispatch('GetMaterialsOptions')
-    this.$store.dispatch('GetCollectionQualityOptions')
-    this.$store.dispatch('GetBiobankQualityOptions')
-    this.$store.dispatch('GetTypesOptions')
-    this.$store.dispatch('GetDataTypeOptions')
     this.$store.dispatch('GetCovid19Options')
-    this.$store.dispatch('GetNetworkOptions')
   }
 }
 </script>
