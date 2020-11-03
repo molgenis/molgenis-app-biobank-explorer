@@ -51,8 +51,7 @@ export default {
   components: { StringFilter, CheckboxFilter, DiagnosisAvailableFilters, FilterCard },
   data () {
     return {
-      debounce: undefined,
-      filterDefinitions: filterDefinitions(this.$store.state)
+      debounce: undefined
     }
   },
   computed: {
@@ -81,7 +80,7 @@ export default {
       }
     },
     filters () {
-      return this.filterDefinitions.filter((facet) => {
+      return filterDefinitions(this.$store.state).filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       })
