@@ -24,21 +24,6 @@
   </div>
 </template>
 
-<style>
-.filter-card {
-  margin-bottom: 1rem;
-}
-
-.filter-header {
-  /* Same color as BiobankCard */
-  background-color: #f5f5f5;
-}
-
-.filter-header:hover {
-  cursor: pointer;
-}
-</style>
-
 <script>
 /** Components used for filters */
 import { StringFilter, FilterCard, CheckboxFilter } from '@molgenis-ui/components-library'
