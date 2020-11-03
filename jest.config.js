@@ -3,6 +3,5 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/(?!@molgenis/molgenis-api-client|@molgenis/molgenis-vue-test-utils)'],
   moduleNameMapper: {
     '\\.(css)$': '<rootDir>/tests/stylemock/styleMock.js'
-  },
-  testPathIgnorePatterns: ['/src/utils/filter*.js']
+  }
 }

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import api from '@molgenis/molgenis-api-client'
 import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from '../store/helpers/covid19Helper'
 

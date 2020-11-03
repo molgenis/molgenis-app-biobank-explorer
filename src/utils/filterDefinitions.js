@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { covid19NetworkFacetName } from '../store/helpers/covid19Helper'
 import { covid19NetworkFilterOptions, genericFilterOptions } from './filterOptions'
 
