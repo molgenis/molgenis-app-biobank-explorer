@@ -9,6 +9,7 @@
       :key="filter.name"
       :name="filter.name"
       :label="filter.label"
+      :headerClass="filter.headerClass"
       :collapsed="filter.initiallyCollapsed"
     >
       <component

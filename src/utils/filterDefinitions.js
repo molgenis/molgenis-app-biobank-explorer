@@ -3,6 +3,7 @@ import { covid19NetworkFilterOptions, genericFilterOptions } from './filterOptio
 
 const filterDefinitions = (state) => [
   {
+    headerClass: 'bg-warning text-white',
     component: 'CheckboxFilter',
     name: covid19NetworkFacetName,
     label: 'COVID-19',
@@ -11,6 +12,7 @@ const filterDefinitions = (state) => [
     filters: state.covid19network.filters
   },
   {
+    headerClass: 'bg-warning text-white',
     component: 'CheckboxFilter',
     name: 'covid19',
     label: 'COVID-19 Services',
