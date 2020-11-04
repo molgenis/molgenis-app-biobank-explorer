@@ -12,17 +12,17 @@ import { transformToRSQL } from '@molgenis/rsql'
 export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createInQuery('country', state.country.filters),
-    createInQuery('materials', state.materials.filters),
-    createInQuery('type', state.type.filters),
-    createInQuery('data_categories', state.dataType.filters),
-    createInQuery('diagnosis_available', state.diagnosis_available.filters.map(filter => filter.id)),
-    createInQuery('id', state.collection_quality.collections),
-    createInQuery('network', state.collection_network.filters),
-    state.search ? [{
+    createInQuery('country', state.filters.selections.country || []),
+    createInQuery('materials', state.filters.selections.materials || []),
+    createInQuery('type', state.filters.selections.type || []),
+    createInQuery('data_categories', state.filters.selections.dataType || []),
+    createInQuery('diagnosis_available', state.filters.selections.diagnosis_available ? state.filters.selections.diagnosis_available.map(filter => filter.id) : []),
+    createInQuery('id', state.filters.selections.collection_quality ? state.filters.selections.collection_quality.collections : ''),
+    createInQuery('network', state.filters.selections.collection_network || []),
+    state.filters.selections.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
-        .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.search }))
+        .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.filters.selections.search || '' }))
     }] : []
   ])
 })
@@ -30,10 +30,10 @@ export const createRSQLQuery = (state) => transformToRSQL({
 export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createInQuery('country', state.country.filters),
-    createInQuery('id', state.biobank_quality.biobanks),
-    createInQuery('network', state.biobank_network.filters),
-    createComparisons('covid19biobank', state.covid19.filters)
+    createInQuery('country', state.filters.selections.country || []),
+    createInQuery('id', state.filters.selections.biobank_quality ? state.filters.selections.biobank_quality.biobanks : ''),
+    createInQuery('network', state.filters.selections.biobank_network || []),
+    createComparisons('covid19biobank', state.filters.selections.covid19 || [])
   ])
 })
 

@@ -3,7 +3,7 @@
     <FilterCard name="search" label="Search" description="Search by name, id, acronym" :collapsed="!this.$store.state.route.query.search">
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
-
+    {{getActiveFilters}}
     <FilterCard
       v-for="filter in filters"
       :key="filter.name"
@@ -14,7 +14,7 @@
     >
       <component
         :is="filter.component"
-        :value="$store.state.filters.selections[filter.name]"
+        :value="getActiveFilters[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
         :maxVisibleOptions="25"
@@ -41,14 +41,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      showCountryFacet: 'showCountryFacet',
-      covid19Options: 'getCovid19Options',
-      covid19NetworkOptions: 'getCovid19NetworkOptions'
-    }),
+    ...mapGetters(['showCountryFacet', 'getActiveFilters']),
     search: {
       get () {
-        return this.$store.state.search
+        return this.getActiveFilters.search
       },
       set (search) {
         if (this.debounce) {
@@ -61,7 +57,7 @@ export default {
             search
           })
           this.$router.push({ query: updatedRouteQuery })
-          this.SetSearch(search || '')
+          this.UpdateFilter({ name: 'search', value: search })
         }, 500)
       }
     },
@@ -69,27 +65,18 @@ export default {
       return filterDefinitions(this.$store.state).filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
-      })
+      }).filter((item) => item.component)
     }
   },
   methods: {
     ...mapMutations(['UpdateFilter', 'SetSearch']),
-    filterChange (name, filters) {
-      this.UpdateFilter({ name, filters })
-      const value = filters.length === 0 ? undefined : filters.join(',')
+    filterChange (name, value) {
+      this.UpdateFilter({ name, value })
+      const filter = value.length === 0 ? undefined : value.join(',')
       this.$router.push({
-        query: { ...this.$store.state.route.query, [name]: value }
+        query: { ...this.$store.state.route.query, [name]: filter }
       })
-      if (name === 'collection_quality') {
-        this.$store.dispatch('GetCollectionQualityCollections')
-      }
-      if (name === 'biobank_quality') {
-        this.$store.dispatch('GetBiobankQualityBiobanks')
-      }
     }
-  },
-  mounted () {
-    this.$store.dispatch('GetCovid19Options')
   }
 }
 </script>

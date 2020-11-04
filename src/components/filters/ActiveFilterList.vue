@@ -1,71 +1,42 @@
 <template>
-  <ul class="list-inline" v-if="Object.keys(activeFilters).length > 0">
-    <template v-for="(values, filter) in activeFilters">
-      <li class="list-inline-item mb-2" v-for="value in values" v-bind:key="value.id">
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-secondary"
-          @click="removeFilter(filter, value.id)"
-          aria-label="Remove filter"
-        >
-          {{ value.label || value.name }}
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </button>
-      </li>
-    </template>
-    <li class="list-inline-item">
-      <button
-        type="button"
-        class="btn btn-sm btn-outline-danger reset-all-filters-btn"
-        @click="resetAllFilters"
-      >Reset all filters</button>
-    </li>
-  </ul>
+  <ActiveFilters
+    :value="getActiveFilters"
+    @input="changeAllFilters"
+    :filters="filters">
+  </ActiveFilters>
 </template>
 
-<style>
-.active-filter {
-  padding: 0.1em 0.3em 0.3em;
-  border: solid 1px;
-  margin-bottom: 0.2em;
-}
-
-.active-filter:hover {
-  cursor: pointer;
-  color: red;
-}
-
-.reset-all-filters-btn {
-  cursor: pointer;
-}
-</style>
-
 <script>
-import utils from '../../utils'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { ActiveFilters } from '@molgenis-ui/components-library'
+import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
+  components: { ActiveFilters },
   name: 'active-filter-list',
   methods: {
-    removeFilter (filterName, selectedFilterId) {
-      const filters = utils.removeFilterFromFilterArrayById(
-        this.activeFilters[filterName],
-        selectedFilterId
-      )
-      this.$store.commit('UpdateFilter', { name: filterName, filters: filters })
-      const value = filters.length === 0 ? undefined : filters.join(',')
+    ...mapMutations(['UpdateAllFilters']),
+    changeAllFilters (value) {
+      this.UpdateAllFilters(value)
       this.$router.push({
-        query: { ...this.$store.state.route.query, [filterName]: value }
+        query: value
       })
     },
     resetAllFilters () {
+      // TODO: add 'reset all filters' to component library
       this.$store.commit('ResetFilters')
       this.$store.commit('SetSearch', '')
       this.$router.push({ query: {} })
     }
   },
   computed: {
-    ...mapGetters({ activeFilters: 'getActiveFilters' })
+    ...mapGetters(['getActiveFilters']),
+    filters () {
+      return filterDefinitions(this.$store.state).filter((facet) => {
+        // config option showCountryFacet is used to toggle Country facet
+        return !(this.showCountryFacet === false && facet.name === 'country')
+      })
+    }
   }
 }
 </script>

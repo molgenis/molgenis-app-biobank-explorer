@@ -1,6 +1,5 @@
-import { getUniqueIdArray } from '../utils'
 import { fixCollectionTree } from './helpers'
-import { covid19NetworkFacetName, covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
+import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 import Vue from 'vue'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
@@ -13,39 +12,7 @@ const combineCodeAndLabels = (diagnoses) => {
   })
 }
 
-const getUniqueFilterMatches = (filter, selector) => {
-  const matches = filter.map((match) => { return match[selector].id })
-  return getUniqueIdArray(matches)
-}
-
-const hasFilterWithoutMatches = (filter, matches) => {
-  return filter.length && !matches.length
-}
-
 export default {
-  /**
-   * Update the options for the different filters available in the biobank explorer
-   */
-  SetDiagnosisAvailable (state, diagnoses) {
-    state.diagnosis_available.options = combineCodeAndLabels(diagnoses)
-  },
-  SetSearch (state, search) {
-    state.search = search
-  },
-  SetCollectionQualityCollections (state, collections) {
-    state.collection_quality.collections = hasFilterWithoutMatches(state.collection_quality.filters, collections) ? ['invalid_collection'] : getUniqueFilterMatches(collections, 'collection')
-  },
-  SetBiobankQualityBiobanks (state, biobanks) {
-    state.biobank_quality.biobanks = hasFilterWithoutMatches(state.biobank_quality.filters, biobanks) ? ['invalid_biobank'] : getUniqueFilterMatches(biobanks, 'biobank')
-  },
-  SetCovid19 (state, covid19) {
-    state.covid19.options = covid19
-  },
-  SetNetworkOptions (state, network) {
-    const networkOptionsWithoutCovid19 = network.filter(network => network.id !== covid19NetworkId)
-    state.biobank_network.options = networkOptionsWithoutCovid19
-    state.collection_network.options = networkOptionsWithoutCovid19
-  },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
    * so they can be used for 1) the URL and 2) retrieving biobanks based on IDs
@@ -54,30 +21,20 @@ export default {
    * @param name name of the state entry e.g. country, materials, standards, or diagnosis_available
    * @param filters an array of values
    */
-  UpdateFilter (state, { name, filters }) {
-    if (name === covid19NetworkFacetName) this.commit('SetCovid19Network', filters)
-    if (name === 'search') state.search = ''
-    else {
-      state[name].filters = filters
+  UpdateFilter (state, { name, value }) {
+    Vue.set(state.filters.selections, name, value)
+  },
+  UpdateAllFilters (state, selections) {
+    state.filters.selections = {}
+    for (const [key, value] of Object.entries(selections)) {
+      Vue.set(state.filters.selections, key, value)
     }
   },
   /**
    * Reset all filters in the state
    */
   ResetFilters (state) {
-    state.diagnosis_available.filters = []
-    state.materials.filters = []
-    state.country.filters = []
-    state.collection_quality.filters = []
-    state.collection_quality.collections = []
-    state.biobank_quality.filters = []
-    state.biobank_quality.biobanks = []
-    state.type.filters = []
-    state.dataType.filters = []
-    state.covid19.filters = []
-    state.covid19network.filters = []
-    state.biobank_network.filters = []
-    state.collection_network.filters = []
+    state.filters.selections = {}
   },
   SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
@@ -135,52 +92,52 @@ export default {
     const query = state.route.query
 
     if (params && params.diagnoses) {
-      state.diagnosis_available.filters = combineCodeAndLabels(params.diagnoses)
+      state.filters.selections.diagnosis_available = combineCodeAndLabels(params.diagnoses)
     }
 
     if (query.collection_quality) {
-      state.collection_quality.filters = query.collection_quality.split(',')
+      state.filters.selections.collection_quality = query.collection_quality.split(',')
     }
 
     if (query.search) {
-      state.search = query.search
+      state.filters.selections.search = query.search
     }
 
     if (query.country) {
-      state.country.filters = query.country.split(',')
+      state.filters.selections.country = query.country.split(',')
     }
 
     if (query.materials) {
-      state.materials.filters = query.materials.split(',')
+      state.filters.selections.materials = query.materials.split(',')
     }
 
     if (query.type) {
-      state.type.filters = query.type.split(',')
+      state.filters.selections.type = query.type.split(',')
     }
 
     if (query.dataType) {
-      state.dataType.filters = query.dataType.split(',')
+      state.filters.selections.dataType = query.dataType.split(',')
     }
 
     if (query.covid19) {
-      state.covid19.filters = query.covid19.split(',')
+      state.filters.selections.covid19 = query.covid19.split(',')
     }
 
     if (query.biobank_network) {
-      state.biobank_network.filters = query.biobank_network.split(',')
+      state.filters.selections.biobank_network = query.biobank_network.split(',')
     }
 
     if (query.biobank_quality) {
-      state.biobank_quality.filters = query.biobank_quality.split(',')
+      state.filters.selections.biobank_quality = query.biobank_quality.split(',')
     }
 
     if (query.collection_network) {
-      state.collection_network.filters = query.collection_network.split(',')
+      state.filters.selections.collection_network = query.collection_network.split(',')
     }
 
     if (query.covid19network) {
       const selectedCovid19NetworkIds = query.covid19network.split(',')
-      state.covid19network.filters = selectedCovid19NetworkIds
+      state.filters.selections.covid19network = selectedCovid19NetworkIds
       this.commit('SetCovid19Network', selectedCovid19NetworkIds)
     }
 

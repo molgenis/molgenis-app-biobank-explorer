@@ -1,20 +1,23 @@
 <template>
-      <multiselect
-        id="disease-type-select"
-        :internalSearch="false"
-        v-model="filters"
-        :options="options"
-        :multiple="true"
-        :searchable="true"
-        :hideSelected="true"
-        track-by="code"
-        @search-change="getDiagnosisOptions"
-        placeholder="Type to search"
-        :limit="10"
-        :limitText="getLimitText"
-        label="label"
-        selectLabel
-      ></multiselect>
+  <div></div>
+  <!--
+  <multiselect
+    id="disease-type-select"
+    :internalSearch="false"
+    v-model="filters"
+    :options="options"
+    :multiple="true"
+    :searchable="true"
+    :hideSelected="true"
+    track-by="code"
+    @search-change="getDiagnosisOptions"
+    placeholder="Type to search"
+    :limit="10"
+    :limitText="getLimitText"
+    label="label"
+    selectLabel
+  ></multiselect>
+  -->
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
@@ -43,7 +46,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Multiselect from 'vue-multiselect'
+// import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'diagnosis-available-filters',
@@ -61,12 +64,12 @@ export default {
     }),
     filters: {
       get () {
-        return this.$store.state.diagnosis_available.filters
+        return this.$store.state.filters.selections.diagnosis_available
       },
-      set (filters) {
+      set (value) {
         this.$store.commit('UpdateFilter', {
           name: 'diagnosis_available',
-          filters: filters
+          filters: value
         })
       }
     }
@@ -87,7 +90,7 @@ export default {
     }
   },
   components: {
-    Multiselect
+    // Multiselect
   }
 }
 </script>

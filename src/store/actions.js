@@ -10,9 +10,6 @@ const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
-const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
-const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
-const COVID_19_API_PATH = '/api/v2/eu_bbmri_eric_COVID_19'
 const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig?attrs=*,biobankId(refEntityType)'
 /**/
@@ -26,17 +23,6 @@ export default {
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)
-    })
-  },
-  /**
-   * Filter actions, used to retrieve country, standards, and materials data on the beforeCreate phase of the Vue component
-   * diagnosis_available is queried asynchronously when an option is being searched for.
-   */
-  GetCovid19Options ({ commit }) {
-    api.get(COVID_19_API_PATH).then(response => {
-      commit('SetCovid19', response.items)
-    }, error => {
-      commit('SetError', error)
     })
   },
   QueryDiagnosisAvailableOptions ({ commit }, query) {
@@ -53,27 +39,6 @@ export default {
       })
     } else {
       commit('SetDiagnosisAvailable', [])
-    }
-  },
-  GetCollectionQualityCollections ({ state, commit }) {
-    if (state.route.query.collection_quality) {
-      const collectionQualityIds = state.route.query.collection_quality.split(',')
-      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?q=assess_level_col=in=(${collectionQualityIds})`).then(response => {
-        commit('SetCollectionQualityCollections', response.items)
-      })
-    } else {
-      commit('SetCollectionQualityCollections', [])
-    }
-  },
-
-  GetBiobankQualityBiobanks ({ state, commit }) {
-    if (state.route.query.biobank_quality) {
-      const biobankQualityIds = state.route.query.biobank_quality.split(',')
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?q=assess_level_bio=in=(${biobankQualityIds})`).then(response => {
-        commit('SetBiobankQualityBiobanks', response.items)
-      })
-    } else {
-      commit('SetBiobankQualityBiobanks', [])
     }
   },
 
