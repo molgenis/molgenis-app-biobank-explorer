@@ -2,6 +2,7 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
+  filterCreatedBookmark: false, // Boolean to stop pushing new events when triggering filter.
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
   isLoading: false,

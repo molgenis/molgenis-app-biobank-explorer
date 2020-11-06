@@ -90,55 +90,54 @@ export default {
    */
   MapQueryToState (state, params) {
     const query = state.route.query
-    console.log(query)
 
     if (params && params.diagnoses) {
-      state.filters.selections.diagnosis_available = combineCodeAndLabels(params.diagnoses)
+      Vue.set(state.filters.selections, 'diagnosis_available', combineCodeAndLabels(params.diagnoses))
     }
 
     if (query.collection_quality) {
-      state.filters.selections.collection_quality = query.collection_quality.split(',')
+      Vue.set(state.filters.selections, 'collection_quality', query.collection_quality.split(','))
     }
 
     if (query.search) {
-      state.filters.selections.search = query.search
+      Vue.set(state.filters.selections, 'search', query.search)
     }
 
     if (query.country) {
-      state.filters.selections.country = query.country.split(',')
+      Vue.set(state.filters.selections, 'country', query.country.split(','))
     }
 
     if (query.materials) {
-      state.filters.selections.materials = query.materials.split(',')
+      Vue.set(state.filters.selections, 'materials', query.materials.split(','))
     }
 
     if (query.type) {
-      state.filters.selections.type = query.type.split(',')
+      Vue.set(state.filters.selections, 'type', query.type.split(','))
     }
 
     if (query.dataType) {
-      state.filters.selections.dataType = query.dataType.split(',')
+      Vue.set(state.filters.selections, 'dataType', query.dataType.split(','))
     }
 
     if (query.covid19) {
-      state.filters.selections.covid19 = query.covid19.split(',')
+      Vue.set(state.filters.selections, 'covid19', query.covid19.split(','))
     }
 
     if (query.biobank_network) {
-      state.filters.selections.biobank_network = query.biobank_network.split(',')
+      Vue.set(state.filters.selections, 'biobank_network', query.biobank_network.split(','))
     }
 
     if (query.biobank_quality) {
-      state.filters.selections.biobank_quality = query.biobank_quality.split(',')
+      Vue.set(state.filters.selections, 'biobank_quality', query.biobank_quality.split(','))
     }
 
     if (query.collection_network) {
-      state.filters.selections.collection_network = query.collection_network.split(',')
+      Vue.set(state.filters.selections, 'collection_network', query.collection_network.split(','))
     }
 
     if (query.covid19network) {
       const selectedCovid19NetworkIds = query.covid19network.split(',')
-      state.filters.selections.covid19network = selectedCovid19NetworkIds
+      Vue.set(state.filters.selections, 'covid19network', selectedCovid19NetworkIds)
       this.commit('SetCovid19Network', selectedCovid19NetworkIds)
     }
 

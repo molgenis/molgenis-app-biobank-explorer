@@ -18,9 +18,7 @@ export default {
   methods: {
     ...mapMutations(['UpdateAllFilters']),
     changeAllFilters (value) {
-      console.log('act', value)
       this.UpdateAllFilters(value)
-
       createBookmark(this.$router, value)
     },
     resetAllFilters () {
