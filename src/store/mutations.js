@@ -90,6 +90,7 @@ export default {
    */
   MapQueryToState (state, params) {
     const query = state.route.query
+    console.log(query)
 
     if (params && params.diagnoses) {
       state.filters.selections.diagnosis_available = combineCodeAndLabels(params.diagnoses)

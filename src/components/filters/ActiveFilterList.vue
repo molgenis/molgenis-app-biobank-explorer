@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { createBookmark } from '../../utils/bookmarkMapper'
 import { mapGetters, mapMutations } from 'vuex'
 import { ActiveFilters } from '@molgenis-ui/components-library'
 import filterDefinitions from '../../utils/filterDefinitions'
@@ -17,10 +18,10 @@ export default {
   methods: {
     ...mapMutations(['UpdateAllFilters']),
     changeAllFilters (value) {
+      console.log('act', value)
       this.UpdateAllFilters(value)
-      this.$router.push({
-        query: value
-      })
+
+      createBookmark(this.$router, value)
     },
     resetAllFilters () {
       // TODO: add 'reset all filters' to component library
