@@ -17,7 +17,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: covid19NetworkFilterOptions,
     initiallyCollapsed: !state.route.query.covid19network,
-    filters: state.filters.selections.covid19network
+    filters: state.filters.selections.covid19network,
+    maxVisibleOptions: 25
   },
   {
     headerClass: 'bg-warning text-white',
@@ -28,7 +29,8 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_COVID_19'),
     initiallyCollapsed: !state.route.query.covid19,
     filters: state.filters.selections.covid19,
-    all: true
+    all: true,
+    maxVisibleOptions: 25
   },
   {
     component: 'MultiFilter',
@@ -47,7 +49,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_material_types'),
     initiallyCollapsed: !state.route.query.materials,
-    filters: state.filters.selections.materials
+    filters: state.filters.selections.materials,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -56,7 +59,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_countries'),
     initiallyCollapsed: !state.route.query.country,
-    filters: state.filters.selections.country
+    filters: state.filters.selections.country,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -65,7 +69,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_assess_level_bio'),
     initiallyCollapsed: !state.route.query.biobank_quality,
-    filters: state.filters.selections.biobank_quality
+    filters: state.filters.selections.biobank_quality,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -74,7 +79,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_assess_level_col'),
     initiallyCollapsed: !state.route.query.collection_quality,
-    filters: state.filters.selections.collection_quality
+    filters: state.filters.selections.collection_quality,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -83,7 +89,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_collection_types'),
     initiallyCollapsed: !state.route.query.type,
-    filters: state.filters.selections.type
+    filters: state.filters.selections.type,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -92,7 +99,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_networks'),
     initiallyCollapsed: !state.route.query.biobank_network,
-    filters: state.filters.selections.biobank_network
+    filters: state.filters.selections.biobank_network,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -101,7 +109,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_networks'),
     initiallyCollapsed: !state.route.query.collection_network,
-    filters: state.filters.selections.collection_network
+    filters: state.filters.selections.collection_network,
+    maxVisibleOptions: 25
   },
   {
     component: 'CheckboxFilter',
@@ -110,7 +119,8 @@ const filterDefinitions = (state) => [
     type: 'checkbox-filter',
     options: genericFilterOptions('eu_bbmri_eric_data_types'),
     initiallyCollapsed: !state.route.query.dataType,
-    filters: state.filters.selections.dataType
+    filters: state.filters.selections.dataType,
+    maxVisibleOptions: 25
   }
 ]
 

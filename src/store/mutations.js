@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
+import filterDefinitions from '../utils/filterDefinitions'
 import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
@@ -84,59 +85,22 @@ export default {
    */
   MapQueryToState (state) {
     const query = state.route.query
-
-    if (query.diagnosis_available) {
-      Vue.set(state.filters.selections, 'diagnosis_available', query.diagnosis_available.split(','))
-    }
-
-    if (query.collection_quality) {
-      Vue.set(state.filters.selections, 'collection_quality', query.collection_quality.split(','))
-    }
+    const keysInQuery = Object.keys(query)
+    // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
+    const filters = filterDefinitions(state).map(fd => fd.name).filter(name => keysInQuery.includes(name))
 
     if (query.search) {
       Vue.set(state.filters.selections, 'search', query.search)
     }
 
-    if (query.country) {
-      Vue.set(state.filters.selections, 'country', query.country.split(','))
-    }
-
-    if (query.materials) {
-      Vue.set(state.filters.selections, 'materials', query.materials.split(','))
-    }
-
-    if (query.type) {
-      Vue.set(state.filters.selections, 'type', query.type.split(','))
-    }
-
-    if (query.dataType) {
-      Vue.set(state.filters.selections, 'dataType', query.dataType.split(','))
-    }
-
-    if (query.covid19) {
-      Vue.set(state.filters.selections, 'covid19', query.covid19.split(','))
-    }
-
-    if (query.biobank_network) {
-      Vue.set(state.filters.selections, 'biobank_network', query.biobank_network.split(','))
-    }
-
-    if (query.biobank_quality) {
-      Vue.set(state.filters.selections, 'biobank_quality', query.biobank_quality.split(','))
-    }
-
-    if (query.collection_network) {
-      Vue.set(state.filters.selections, 'collection_network', query.collection_network.split(','))
-    }
-
-    if (query.covid19network) {
-      const selectedCovid19NetworkIds = query.covid19network.split(',')
-      Vue.set(state.filters.selections, 'covid19network', selectedCovid19NetworkIds)
-      this.commit('SetCovid19Network', selectedCovid19NetworkIds)
-    }
-
     if (query.nToken) {
       state.nToken = query.nToken
+    }
+
+    for (const filterName of filters) {
+      if (query[filterName]) {
+        Vue.set(state.filters.selections, filterName, query[filterName].split(','))
+      }
     }
   },
   SetError (state, error) {

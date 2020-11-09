@@ -17,7 +17,6 @@
         :value="getActiveFilters[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
-        :maxVisibleOptions="25"
         :bulkOperation="true"
       >
       </component>
