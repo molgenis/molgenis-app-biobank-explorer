@@ -3,20 +3,29 @@
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from '../store/helpers/covid19Helper'
+import state from '../store/state'
 
-// Generic filter option (' table' ): Promise
+// we need this dictionary for human readable string
+function createIdLabelDictionary (filterOptions) {
+  for (const option of filterOptions) {
+    if (!state.idLabelDictionary[option.value]) {
+      state.idLabelDictionary[option.value] = option.text
+    }
+  }
+}
 
 export const genericFilterOptions = (tableName) => {
   return () => new Promise((resolve) => {
     api.get(`/api/v2/${tableName}`).then(response => {
-      resolve(response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } }))
+      const filterOptions = response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } })
+      createIdLabelDictionary(filterOptions)
+      resolve(filterOptions)
     })
   })
 }
 
 /** Specific logic for diagnosis available filter */
 const isCodeRegex = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
-const createDiagnosisIdQuery = (query) => encodeRsqlValue(transformToRSQL({ selector: 'id', comparison: '=q=', arguments: query }))
 const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 'label', comparison: '=like=', arguments: query })
 const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 /** */
@@ -36,7 +45,7 @@ export const diagnosisAvailableFilterOptions = (tableName) => {
     if (query) {
       // initial load, values are ids
       if (queryType === 'in') {
-        url = `${url}?q=${encodeRsqlValue(createDiagnosisIdQuery(query))}`
+        url = `${url}?q=${encodeRsqlValue(`id=in=(${query})`)}`
       } else if (isCodeRegex.test(query)) {
         url = `${url}?q=${encodeRsqlValue(createDiagnosisCodeQuery(query))}&sort=code`
       } else {
@@ -45,7 +54,9 @@ export const diagnosisAvailableFilterOptions = (tableName) => {
     }
 
     api.get(url).then(response => {
-      resolve(response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } }))
+      const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
+      createIdLabelDictionary(filterOptions)
+      resolve(filterOptions)
     })
   })
 }
