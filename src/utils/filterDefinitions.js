@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { covid19NetworkFacetName } from '../store/helpers/covid19Helper'
-import { covid19NetworkFilterOptions, genericFilterOptions } from './filterOptions'
+import { covid19NetworkFilterOptions, genericFilterOptions, diagnosisAvailableFilterOptions } from './filterOptions'
 
 const filterDefinitions = (state) => [
   {
@@ -31,10 +31,14 @@ const filterDefinitions = (state) => [
     all: true
   },
   {
-    component: 'diagnosis-available-filters',
+    component: 'MultiFilter',
     name: 'diagnosis_available',
     label: 'Diagnosis available',
-    initiallyCollapsed: false
+    type: 'multi-filter',
+    initialDisplayItems: 10,
+    maxVisibleOptions: 10,
+    options: diagnosisAvailableFilterOptions('eu_bbmri_eric_disease_types'),
+    initiallyCollapsed: !state.route.query.diagnosis_available
   },
   {
     component: 'CheckboxFilter',

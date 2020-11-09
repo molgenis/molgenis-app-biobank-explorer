@@ -5,14 +5,6 @@ import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNe
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
-const combineCodeAndLabels = (diagnoses) => {
-  return diagnoses.map(diagnosis => {
-    diagnosis.originalLabel = diagnosis.label
-    diagnosis.label = diagnosis.code + ' - ' + diagnosis.label
-    return diagnosis
-  })
-}
-
 export default {
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -23,7 +15,6 @@ export default {
    * @param filters an array of values
    */
   UpdateFilter (state, { name, value, router }) {
-    console.log(name, value, router)
     Vue.set(state.filters.selections, name, value)
     createBookmark(router, state.filters.selections)
   },
@@ -91,11 +82,11 @@ export default {
    * @param state
    * @param params
    */
-  MapQueryToState (state, params) {
+  MapQueryToState (state) {
     const query = state.route.query
 
-    if (params && params.diagnoses) {
-      Vue.set(state.filters.selections, 'diagnosis_available', combineCodeAndLabels(params.diagnoses))
+    if (query.diagnosis_available) {
+      Vue.set(state.filters.selections, 'diagnosis_available', query.diagnosis_available.split(','))
     }
 
     if (query.collection_quality) {

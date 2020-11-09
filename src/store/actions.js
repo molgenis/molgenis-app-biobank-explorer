@@ -9,7 +9,6 @@ import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
-const DISEASE_API_PATH = '/api/v2/eu_bbmri_eric_disease_types'
 const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig?attrs=*,biobankId(refEntityType)'
 /**/
@@ -24,42 +23,6 @@ export default {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)
     })
-  },
-  QueryDiagnosisAvailableOptions ({ commit }, query) {
-    if (query) {
-      const isCodeQuery = helpers.CODE_REGEX.test(query)
-      const url = isCodeQuery
-        ? `${DISEASE_API_PATH}?q=${encodeRsqlValue(helpers.createDiagnosisCodeQuery(query))}&sort=code`
-        : `${DISEASE_API_PATH}?q=${encodeRsqlValue(helpers.createDiagnosisLabelQuery(query))}`
-
-      api.get(url).then(response => {
-        commit('SetDiagnosisAvailable', response.items)
-      }, error => {
-        commit('SetError', error)
-      })
-    } else {
-      commit('SetDiagnosisAvailable', [])
-    }
-  },
-
-  GetQuery ({ state, dispatch, commit }) {
-    if (Object.keys(state.route.query).length > 0) {
-      if (state.route.query.diagnosis_available) {
-        const diseaseTypeIds = state.route.query.diagnosis_available.split(',')
-
-        api.get(`${DISEASE_API_PATH}?q=code=in=(${diseaseTypeIds})`).then(response => {
-          commit('MapQueryToState', { diagnoses: response.items })
-        })
-      } else {
-        commit('MapQueryToState')
-      }
-      if (state.route.query.collection_quality) {
-        dispatch('GetCollectionQualityCollections')
-        commit('MapQueryToState')
-      } else {
-        commit('MapQueryToState')
-      }
-    }
   },
   /*
    * Retrieves biobanks and stores them in the cache
@@ -90,7 +53,7 @@ export default {
           biobankId: helpers.getBiobankId(item.data.biobank.links.self)
         }))
         commit('SetCollectionInfo', collectionInfo)
-        dispatch('GetQuery')
+        commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })

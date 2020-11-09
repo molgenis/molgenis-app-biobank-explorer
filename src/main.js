@@ -18,10 +18,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faCaretRight,
+  faExclamationTriangle,
+  faSpinner,
   faTimes
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCaretRight, faTimes)
+library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle)
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {

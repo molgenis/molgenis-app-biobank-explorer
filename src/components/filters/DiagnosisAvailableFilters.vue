@@ -1,23 +1,22 @@
 <template>
-  <div></div>
-  <!--
-  <multiselect
-    id="disease-type-select"
-    :internalSearch="false"
-    v-model="filters"
-    :options="options"
-    :multiple="true"
-    :searchable="true"
-    :hideSelected="true"
-    track-by="code"
-    @search-change="getDiagnosisOptions"
-    placeholder="Type to search"
-    :limit="10"
-    :limitText="getLimitText"
-    label="label"
-    selectLabel
-  ></multiselect>
-  -->
+  <div>
+    <multiselect
+      id="disease-type-select"
+      :internalSearch="false"
+      v-model="filters"
+      :options="options"
+      :multiple="true"
+      :searchable="true"
+      :hideSelected="true"
+      track-by="code"
+      @search-change="getDiagnosisOptions"
+      placeholder="Type to search"
+      :limit="10"
+      :limitText="getLimitText"
+      label="label"
+      selectLabel
+    ></multiselect>
+  </div>
 </template>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
@@ -76,16 +75,9 @@ export default {
   },
   watch: {
     filters (filters) {
-      const updatedRouteQuery = Object.assign(
-        {},
-        this.$store.state.route.query,
-        {
-          diagnosis_available:
-            filters.length === 0
-              ? undefined
-              : filters.map(filter => filter.code).join(',')
-        }
-      )
+      const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {
+        diagnosis_available: filters.length === 0 ? undefined : filters.map((filter) => filter.code).join(',')
+      })
       this.$router.push({ query: updatedRouteQuery })
     }
   },

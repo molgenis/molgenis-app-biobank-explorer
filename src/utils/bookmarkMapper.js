@@ -12,8 +12,6 @@ function setBookmark (router, bookmark) {
 
 export const createBookmark = (router, selections) => {
   const bookmark = {}
-  console.log(selections)
-
   if (Object.keys(selections).length > 0) {
     for (const property in selections) {
       const value = selections[property]

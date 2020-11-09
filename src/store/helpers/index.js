@@ -16,7 +16,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('materials', state.filters.selections.materials || []),
     createInQuery('type', state.filters.selections.type || []),
     createInQuery('data_categories', state.filters.selections.dataType || []),
-    createInQuery('diagnosis_available', state.filters.selections.diagnosis_available ? state.filters.selections.diagnosis_available.map(filter => filter.id) : []),
+    createInQuery('diagnosis_available', state.filters.selections.diagnosis_available || []),
     createInQuery('id', state.filters.selections.collection_quality ? state.filters.selections.collection_quality.collections : ''),
     createInQuery('network', state.filters.selections.collection_network || []),
     state.filters.selections.search ? [{
@@ -39,12 +39,6 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
 
 const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
 export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
-
-export const CODE_REGEX = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
-
-export const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 'label', comparison: '=q=', arguments: query })
-
-export const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   const result = {
@@ -160,12 +154,9 @@ export const filterCollectionTree = (collectionIds, collections) =>
 
 export default {
   createRSQLQuery,
-  createDiagnosisCodeQuery,
-  createDiagnosisLabelQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
   setLocationHref,
   getLocationHref,
-  getBiobankId,
-  CODE_REGEX
+  getBiobankId
 }

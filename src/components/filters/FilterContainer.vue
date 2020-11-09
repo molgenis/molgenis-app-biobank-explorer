@@ -27,14 +27,15 @@
 
 <script>
 /** Components used for filters */
-import { StringFilter, FilterCard, CheckboxFilter } from '@molgenis-ui/components-library'
-import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
+import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
+
 /** */
 import { mapGetters, mapMutations } from 'vuex'
 import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
-  components: { StringFilter, CheckboxFilter, DiagnosisAvailableFilters, FilterCard },
+  // Import filters that are used dynamically
+  components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard },
   data () {
     return {
       debounce: undefined
