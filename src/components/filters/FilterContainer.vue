@@ -53,11 +53,7 @@ export default {
 
         this.debounce = setTimeout(async () => {
           clearTimeout(this.debounce)
-          const updatedRouteQuery = Object.assign({}, this.$store.state.route.query, {
-            search
-          })
-          this.$router.push({ query: updatedRouteQuery })
-          this.UpdateFilter({ name: 'search', value: search })
+          this.UpdateFilter({ name: 'search', value: search, router: this.$router }) // passing router so we can set bookmark
         }, 500)
       }
     },
@@ -71,11 +67,7 @@ export default {
   methods: {
     ...mapMutations(['UpdateFilter', 'SetSearch']),
     filterChange (name, value) {
-      this.UpdateFilter({ name, value })
-      const filter = value.length === 0 ? undefined : value.join(',')
-      this.$router.push({
-        query: { ...this.$store.state.route.query, [name]: filter }
-      })
+      this.UpdateFilter({ name, value, router: this.$router })
     }
   }
 }

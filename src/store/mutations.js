@@ -1,6 +1,7 @@
+import Vue from 'vue'
+import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
-import Vue from 'vue'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
@@ -21,8 +22,10 @@ export default {
    * @param name name of the state entry e.g. country, materials, standards, or diagnosis_available
    * @param filters an array of values
    */
-  UpdateFilter (state, { name, value }) {
+  UpdateFilter (state, { name, value, router }) {
+    console.log(name, value, router)
     Vue.set(state.filters.selections, name, value)
+    createBookmark(router, state.filters.selections)
   },
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
