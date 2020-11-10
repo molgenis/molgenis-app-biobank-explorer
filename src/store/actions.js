@@ -70,6 +70,7 @@ export default {
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
   GetCollectionInfo ({ commit, dispatch, getters }) {
+    dispatch('GetCollectionIdsForQuality')
     commit('SetCollectionInfo', undefined)
     let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'
     if (getters.rsql) {
@@ -83,16 +84,14 @@ export default {
           biobankId: helpers.getBiobankId(item.data.biobank.links.self)
         }))
         commit('SetCollectionInfo', collectionInfo)
-        dispatch('GetCollectionIdsForQuality')
-        dispatch('GetBiobankIdsForQuality')
-
         commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })
   },
-  GetBiobankIds ({ commit, getters }) {
+  GetBiobankIds ({ commit, getters, dispatch }) {
     commit('SetBiobankIds', undefined)
+    dispatch('GetBiobankIdsForQuality')
     let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
     if (getters.biobankRsql) {
       url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`

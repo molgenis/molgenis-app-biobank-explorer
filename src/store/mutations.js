@@ -79,17 +79,24 @@ export default {
     state.networkReport.biobanks = biobanks
   },
   SetCollectionIdsWithSelectedQuality (state, response) {
-    if (response.items) {
+    if (response.items && response.items.length > 0) {
       state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
     } else {
-      state.collectionIdsWithSelectedQuality = []
+      const collectionQualityFilter = state.filters.selections.collection_quality
+      const isCollectionQualityFilterActive = (collectionQualityFilter && collectionQualityFilter.length > 0) || state.route.query.collection_quality
+
+      state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
     }
   },
   SetBiobankIdsWithSelectedQuality (state, response) {
-    if (response.items) {
+    if (response.items && response.items.length > 0) {
+      console.log('hello', response.items)
       state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
     } else {
-      state.biobankIdsWithSelectedQuality = []
+      const biobankQualityFilter = state.filters.selections.biobank_quality
+      const isBiobankQualityFilterActive = (biobankQualityFilter && biobankQualityFilter.length > 0) || state.route.query.biobank_quality
+
+      state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
   /**
