@@ -27,7 +27,9 @@ export default {
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */
   nToken: null,
-  idLabelDictionary: {},
+  collectionIdsWithSelectedQuality: [],
+  biobankIdsWithSelectedQuality: [],
+  filterIdLabelDictionary: {},
   filters: {
     selections: {}
   }

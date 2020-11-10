@@ -3,22 +3,11 @@
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from '../store/helpers/covid19Helper'
-import state from '../store/state'
-
-// we need this dictionary for human readable string
-function createIdLabelDictionary (filterOptions) {
-  for (const option of filterOptions) {
-    if (!state.idLabelDictionary[option.value]) {
-      state.idLabelDictionary[option.value] = option.text
-    }
-  }
-}
 
 export const genericFilterOptions = (tableName) => {
   return () => new Promise((resolve) => {
     api.get(`/api/v2/${tableName}`).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } })
-      createIdLabelDictionary(filterOptions)
       resolve(filterOptions)
     })
   })
@@ -55,7 +44,6 @@ export const diagnosisAvailableFilterOptions = (tableName) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
-      createIdLabelDictionary(filterOptions)
       resolve(filterOptions)
     })
   })

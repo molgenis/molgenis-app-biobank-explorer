@@ -78,6 +78,20 @@ export default {
   SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
   },
+  SetCollectionIdsWithSelectedQuality (state, response) {
+    if (response.items) {
+      state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
+    } else {
+      state.collectionIdsWithSelectedQuality = []
+    }
+  },
+  SetBiobankIdsWithSelectedQuality (state, response) {
+    if (response.items) {
+      state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
+    } else {
+      state.biobankIdsWithSelectedQuality = []
+    }
+  },
   /**
    *
    * @param state

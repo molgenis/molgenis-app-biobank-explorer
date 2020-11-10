@@ -29,7 +29,7 @@
 import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
 /** */
 
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
@@ -64,8 +64,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['GetCollectionIdsForQuality', 'GetBiobankIdsForQuality']),
     ...mapMutations(['UpdateFilter', 'SetSearch']),
     filterChange (name, value) {
+      console.log(name, value)
+      if (name === 'biobank_quality') this.GetBiobankIdsForQuality(value)
+      if (name === 'collection_quality') this.GetCollectionIdsForQuality(value)
+
       this.UpdateFilter({ name, value, router: this.$router })
     }
   }

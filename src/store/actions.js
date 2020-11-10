@@ -8,6 +8,10 @@ import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+
+const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
+const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
+
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig?attrs=*,biobankId(refEntityType)'
@@ -36,6 +40,32 @@ export default {
         commit('SetError', error)
       })
   },
+  // We need to get id's to use in RSQL later, because we can't do a join on this table
+  GetCollectionIdsForQuality ({ state, commit }, filterValue) {
+    const collectionQuality = state.route.query.collection_quality ? state.route.query.collection_quality : null
+    const qualityIds = filterValue || collectionQuality
+
+    if (qualityIds && qualityIds.length > 0) {
+      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q=assess_level_col=in=(${qualityIds})`).then(response => {
+        commit('SetCollectionIdsWithSelectedQuality', response)
+      })
+    } else {
+      commit('SetCollectionIdsWithSelectedQuality', [])
+    }
+  },
+  // Same as collections above
+  GetBiobankIdsForQuality ({ state, commit }, filterValue) {
+    const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
+    const qualityIds = filterValue || biobankQuality
+
+    if (qualityIds && qualityIds.length > 0) {
+      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=assess_level_bio=in=(${qualityIds})`).then(response => {
+        commit('SetBiobankIdsWithSelectedQuality', response)
+      })
+    } else {
+      commit('SetBiobankIdsWithSelectedQuality', [])
+    }
+  },
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
@@ -53,6 +83,9 @@ export default {
           biobankId: helpers.getBiobankId(item.data.biobank.links.self)
         }))
         commit('SetCollectionInfo', collectionInfo)
+        dispatch('GetCollectionIdsForQuality')
+        dispatch('GetBiobankIdsForQuality')
+
         commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
