@@ -17,7 +17,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('type', state.filters.selections.type || []),
     createInQuery('data_categories', state.filters.selections.dataType || []),
     createInQuery('diagnosis_available', state.filters.selections.diagnosis_available || []),
-    createInQuery('id', state.collectionIdsWithSelectedQuality ? state.collectionIdsWithSelectedQuality : []),
+    createInQuery('id', state.collectionIdsWithSelectedQuality),
     createInQuery('network', state.filters.selections.collection_network || []),
     state.filters.selections.search ? [{
       operator: 'OR',
@@ -31,7 +31,7 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
-    createInQuery('id', state.biobankIdsWithSelectedQuality ? state.biobankIdsWithSelectedQuality : []),
+    createInQuery('id', state.biobankIdsWithSelectedQuality),
     createInQuery('network', state.filters.selections.biobank_network || []),
     createComparisons('covid19biobank', state.filters.selections.covid19 || [])
   ])

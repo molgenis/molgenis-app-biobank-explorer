@@ -24,7 +24,6 @@ export default {
     resetAllFilters () {
       // TODO: add 'reset all filters' to component library
       this.$store.commit('ResetFilters')
-      this.$store.commit('SetSearch', '')
       this.$router.push({ query: {} })
     }
   },

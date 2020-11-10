@@ -65,9 +65,8 @@ export default {
   },
   methods: {
     ...mapActions(['GetCollectionIdsForQuality', 'GetBiobankIdsForQuality']),
-    ...mapMutations(['UpdateFilter', 'SetSearch']),
+    ...mapMutations(['UpdateFilter']),
     filterChange (name, value) {
-      console.log(name, value)
       if (name === 'biobank_quality') this.GetBiobankIdsForQuality(value)
       if (name === 'collection_quality') this.GetCollectionIdsForQuality(value)
 
