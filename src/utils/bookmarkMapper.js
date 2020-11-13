@@ -12,12 +12,13 @@ function setBookmark (router, bookmark) {
 
 export const createBookmark = (router, selections) => {
   const bookmark = {}
+  console.log(selections)
   if (Object.keys(selections).length > 0) {
     for (const property in selections) {
       const value = selections[property]
-      if (value === '' || value === null || value === undefined || value.length === 0) { break } // can't do if(!value) because that would also trigger if value === 0
+      if (value === '' || value === null || value === undefined || value.length === 0) { continue } // can't do if(!value) because that would also trigger if value === 0
 
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && value.length > 0) {
         bookmark[property] = encodeURI(value.join(','))
       } else {
         bookmark[property] = encodeURI(value)

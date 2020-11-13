@@ -1,7 +1,7 @@
 <template>
   <div id="filter-container">
     <FilterCard name="search" label="Search" description="Search by name, id, acronym" :collapsed="!this.$store.state.route.query.search">
-      <StringFilter name="Search" v-model="search"> </StringFilter>
+      <StringFilter name="Search" v-model="search"></StringFilter>
     </FilterCard>
     <FilterCard
       v-for="filter in filters"
@@ -16,6 +16,7 @@
         :value="getActiveFilters[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
+        :returnObject="true"
         :bulkOperation="true"
       >
       </component>
@@ -28,7 +29,7 @@
 import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
 /** */
 
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
@@ -63,8 +64,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['GetBiobankIdsForQuality']),
-    ...mapMutations(['UpdateFilter', 'SetQualityIds']),
+    ...mapMutations(['UpdateFilter']),
     filterChange (name, value) {
       this.UpdateFilter({ name, value, router: this.$router })
     }
