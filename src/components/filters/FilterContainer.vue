@@ -30,7 +30,6 @@ import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis
 /** */
 
 import { mapGetters, mapMutations } from 'vuex'
-import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
   components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard },
@@ -40,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'getActiveFilters']),
+    ...mapGetters(['showCountryFacet', 'getActiveFilters', 'filterDefinitions']),
     search: {
       get () {
         return this.getActiveFilters.search
@@ -57,7 +56,7 @@ export default {
       }
     },
     filters () {
-      return filterDefinitions(this.$store.state).filter((facet) => {
+      return this.filterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       }).filter((item) => item.component)

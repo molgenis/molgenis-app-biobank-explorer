@@ -10,7 +10,6 @@
 import { createBookmark } from '../../utils/bookmarkMapper'
 import { mapGetters, mapMutations } from 'vuex'
 import { ActiveFilters } from '@molgenis-ui/components-library'
-import filterDefinitions from '../../utils/filterDefinitions'
 
 export default {
   components: { ActiveFilters },
@@ -28,9 +27,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getActiveFilters']),
+    ...mapGetters(['getActiveFilters', 'filterDefinitions']),
     filters () {
-      return filterDefinitions(this.$store.state).filter((facet) => {
+      return this.filterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       })

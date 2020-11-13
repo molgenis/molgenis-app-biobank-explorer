@@ -1,7 +1,9 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
+import filterDefinitions from '../utils/filterDefinitions'
 
 export default {
+  filterDefinitions,
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
@@ -66,7 +68,6 @@ export default {
   },
   selectedBiobankQuality: state => state.filters.selections.biobank_quality,
   selectedCollectionQuality: state => {
-    console.log(state.filters.selections.collection_quality)
     return state.filters.selections.collection_quality
   },
   rsql: createRSQLQuery,

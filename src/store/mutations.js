@@ -16,12 +16,16 @@ export default {
    * @param filters an array of values
    */
   UpdateFilter (state, { name, value, router }) {
-    let filterValues = []
+    const filterValues = []
+    const filterTexts = []
+
     for (const item of value) {
-      filterValues = filterValues.concat(item.value)
+      filterValues.push(item.value)
+      filterTexts.push(item.text)
     }
 
     Vue.set(state.filters.selections, name, filterValues)
+    Vue.set(state.filters.labels, name, filterTexts)
     createBookmark(router, state.filters.selections)
   },
   UpdateAllFilters (state, selections) {

@@ -31,6 +31,7 @@ export default {
   biobankIdsWithSelectedQuality: [],
   filterIdLabelDictionary: {},
   filters: {
-    selections: {}
+    selections: {},
+    labels: {} // for human readable url
   }
 }
