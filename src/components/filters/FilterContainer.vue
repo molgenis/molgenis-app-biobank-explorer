@@ -3,7 +3,6 @@
     <FilterCard name="search" label="Search" description="Search by name, id, acronym" :collapsed="!this.$store.state.route.query.search">
       <StringFilter name="Search" v-model="search"> </StringFilter>
     </FilterCard>
-    {{getActiveFilters}}
     <FilterCard
       v-for="filter in filters"
       :key="filter.name"
@@ -64,12 +63,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['GetCollectionIdsForQuality', 'GetBiobankIdsForQuality']),
-    ...mapMutations(['UpdateFilter']),
+    ...mapActions(['GetBiobankIdsForQuality']),
+    ...mapMutations(['UpdateFilter', 'SetQualityIds']),
     filterChange (name, value) {
-      if (name === 'biobank_quality') this.GetBiobankIdsForQuality(value)
-      if (name === 'collection_quality') this.GetCollectionIdsForQuality(value)
-
       this.UpdateFilter({ name, value, router: this.$router })
     }
   }

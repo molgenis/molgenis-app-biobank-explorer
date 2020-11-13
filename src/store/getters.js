@@ -64,6 +64,11 @@ export default {
       return collectionNames
     } else return []
   },
+  selectedBiobankQuality: state => state.filters.selections.biobank_quality,
+  selectedCollectionQuality: state => {
+    console.log(state.filters.selections.collection_quality)
+    return state.filters.selections.collection_quality
+  },
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,

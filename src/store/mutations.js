@@ -78,8 +78,10 @@ export default {
   SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
   },
+  // methods for rehydrating bookmark
   SetCollectionIdsWithSelectedQuality (state, response) {
     if (response.items && response.items.length > 0) {
+      state.collectionIdsWithSelectedQuality = []
       state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
     } else {
       const collectionQualityFilter = state.filters.selections.collection_quality
@@ -90,7 +92,7 @@ export default {
   },
   SetBiobankIdsWithSelectedQuality (state, response) {
     if (response.items && response.items.length > 0) {
-      console.log('hello', response.items)
+      state.biobankIdsWithSelectedQuality = []
       state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
     } else {
       const biobankQualityFilter = state.filters.selections.biobank_quality
