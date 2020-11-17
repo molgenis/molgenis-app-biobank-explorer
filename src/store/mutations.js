@@ -16,6 +16,11 @@ export default {
    * @param filters an array of values
    */
   UpdateFilter (state, { name, value, router }) {
+    if (name === 'search') {
+      Vue.set(state.filters.selections, name, value)
+      return
+    }
+
     const filterValues = []
     const filterTexts = []
 

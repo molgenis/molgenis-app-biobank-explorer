@@ -23,7 +23,7 @@ const filterDefinitions = (state) => [
   },
   {
     headerClass: 'bg-warning text-white',
-    component: 'CheckboxFilter',
+    component: 'CovidFilter',
     name: 'covid19',
     label: 'COVID-19 Services',
     type: 'checkbox-filter',
