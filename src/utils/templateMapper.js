@@ -8,7 +8,7 @@ export const getSize = obj => {
       : []
 }
 export const mapObjArrayToStringArrayIfExists = obj =>
-  obj ? obj.map(item => item.label || item.id) : []
+  obj ? obj.map(item => item.label) : []
 
 export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
