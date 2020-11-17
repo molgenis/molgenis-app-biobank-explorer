@@ -136,6 +136,7 @@ export default {
         Vue.set(state.filters.selections, filterName, query[filterName].split(','))
       }
     }
+    state.bookmarkMappedToState = true
   },
   SetError (state, error) {
     state.error = error

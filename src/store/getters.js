@@ -4,6 +4,7 @@ import filterDefinitions from '../utils/filterDefinitions'
 
 export default {
   filterDefinitions,
+  bookmarkMappedToState: state => state.bookmarkMappedToState,
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {

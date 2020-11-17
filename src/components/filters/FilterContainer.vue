@@ -12,11 +12,12 @@
       :collapsed="filter.initiallyCollapsed"
     >
       <component
+        v-if="bookmarkMappedToState"
         :is="filter.component"
         :value="getActiveFilters[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
-        :returnObject="true"
+        :returnTypeAsObject="true"
         :bulkOperation="true"
       >
       </component>
@@ -39,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'getActiveFilters', 'filterDefinitions']),
+    ...mapGetters(['showCountryFacet', 'getActiveFilters', 'filterDefinitions', 'bookmarkMappedToState']),
     search: {
       get () {
         return this.getActiveFilters.search

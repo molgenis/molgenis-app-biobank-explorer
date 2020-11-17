@@ -160,9 +160,9 @@ export default {
    * Calls the DirectoryController method '/export' which answers with a URL
    * that redirects to a Negotiator server specified in the Directory settings
    */
-  SendToNegotiator ({ state, getters, commit }) {
+  async SendToNegotiator ({ state, getters, commit }) {
     const options = {
-      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
+      body: JSON.stringify(await helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))

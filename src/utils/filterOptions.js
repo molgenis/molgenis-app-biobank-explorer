@@ -26,6 +26,7 @@ export const covid19NetworkFilterOptions = () => {
     resolve(covid19NetworkData)
   })
 }
+
 export const diagnosisAvailableFilterOptions = (tableName) => {
   // destructure the query part from the multi-filter
   return ({ query, queryType }) => new Promise((resolve) => {
