@@ -6,7 +6,7 @@ import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
 import { mockState } from '../mockState'
-import actions, { COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from '../../../../src/store/actions'
+import actions, { COLLECTION_ATTRIBUTE_SELECTOR, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from '../../../../src/store/actions'
 
 chai.use(sinonChai)
 
@@ -170,7 +170,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),*&q=id=in=(id1,id2)')).thenResolve(response)
+        td.when(get(`/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(id1,id2)`)).thenResolve(response)
         td.replace(api, 'get', get)
 
         const options = {
@@ -390,7 +390,7 @@ describe('store', () => {
         }
 
         const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks/biobank-1?attrs=collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories),quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*')).thenResolve(biobank)
+        td.when(get(`/api/v2/eu_bbmri_eric_biobanks/biobank-1?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*`)).thenResolve(biobank)
         td.replace(api, 'get', get)
 
         const options = {
