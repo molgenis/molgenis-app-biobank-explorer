@@ -8,7 +8,7 @@ export const getSize = obj => {
       : []
 }
 export const mapObjArrayToStringArrayIfExists = obj =>
-  obj ? obj.map(item => item.label) : []
+  obj ? obj.map(item => item.label || item.id) : []
 
 export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
@@ -55,46 +55,51 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   return ageRange
 }
 
-export const mapDetailsTableContent = report => {
+export const mapDetailsTableContent = collection => {
   return {
     Size: {
-      value: getSize(report),
+      value: getSize(collection),
       type: 'list',
       badgeColor: 'success'
     },
     Age: {
-      value: mapAgeRange(report.age_low, report.age_high, report.age_unit),
+      value: mapAgeRange(collection.age_low, collection.age_high, collection.age_unit),
       type: 'string-with-key'
     },
     Type: {
-      value: mapObjArrayToStringArrayIfExists(report.type),
+      value: mapObjArrayToStringArrayIfExists(collection.type),
       type: 'list',
       badgeColor: 'info'
     },
     Sex: {
-      value: mapObjArrayToStringArrayIfExists(report.sex),
+      value: mapObjArrayToStringArrayIfExists(collection.sex),
       type: 'list',
       badgeColor: 'secondary'
     },
     Materials: {
-      value: mapObjArrayToStringArrayIfExists(report.materials),
+      value: mapObjArrayToStringArrayIfExists(collection.materials),
       type: 'list',
       badgeColor: 'danger'
     },
     Storage: {
-      value: mapObjArrayToStringArrayIfExists(report.storage_temperatures),
+      value: mapObjArrayToStringArrayIfExists(collection.storage_temperatures),
       type: 'list',
       badgeColor: 'warning'
     },
     Data: {
-      value: mapObjArrayToStringArrayIfExists(report.data_categories),
+      value: mapObjArrayToStringArrayIfExists(collection.data_categories),
       type: 'list',
       badgeColor: 'info'
     },
     Diagnosis: {
-      value: mapObjArrayToStringArrayIfExists(report.diagnosis_available),
+      value: mapObjArrayToStringArrayIfExists(collection.diagnosis_available),
       type: 'list',
       badgeColor: 'primary'
+    },
+    DataUse: {
+      value: mapObjArrayToStringArrayIfExists(collection.data_use),
+      type: 'list',
+      badgeColor: 'success'
     }
   }
 }

@@ -24,7 +24,7 @@ const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfi
 /**/
 
 /* Query Parameters */
-const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
+export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,data_use,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
 export const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
 /**/
 
@@ -245,7 +245,7 @@ export default {
       .catch((error) => commit('SetError', error))
   },
   GetPodiumCollections ({ state, commit }) {
-    if (state.podiumCollectionIds.length === 0) { // only fetch once.
+    if (state.podiumCollectionIds.length === 0 && state.isPodium) { // only fetch once.
       api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
         commit('SetPodiumCollections', response)
       })

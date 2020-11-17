@@ -25,7 +25,7 @@
                     <td><span><a target="_blank" :href="collection.url">{{ collection.url }}</a></span></td>
                   </tr>
                   <report-list-row :data="mainContent.Size">Size:</report-list-row>
-                  <tr v-if="mainContent.Age">
+                  <tr v-if="mainContent.Age && mainContent.Age.value">
                     <th scope="row" class="pr-1">Age:</th>
                     <td>{{ mainContent.Age.value }}</td>
                   </tr>
@@ -35,6 +35,7 @@
                   <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
                   <report-list-row :data="mainContent.Data">Data:</report-list-row>
                   <report-list-row :data="mainContent.Diagnosis">Diagnosis:</report-list-row>
+                  <report-list-row :data="mainContent.DataUse">Data use:</report-list-row>
                 </table>
 
                 <!-- Recursive set of subcollections -->
