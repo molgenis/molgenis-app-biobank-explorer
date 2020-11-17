@@ -27,13 +27,14 @@
 
 <script>
 /** Components used for filters */
+import CovidFilter from '../filters/CovidFilter'
 import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
 /** */
 
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard },
+  components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard, CovidFilter },
   data () {
     return {
       debounce: undefined

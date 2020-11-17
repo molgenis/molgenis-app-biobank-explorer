@@ -68,7 +68,7 @@ const getHumanReadableString = async (state, { filterDefinitions, getActiveFilte
 
   for (const fd of filterDefinitions) {
     filterNegotiatorLabelsDictionary[fd.name] = fd.humanReadableString
-    if (!filterLabels[fd.name] && getActiveFilters[fd.name]) {
+    if (!filterLabels[fd.name] && getActiveFilters[fd.name] && fd.name !== 'search') {
       const url = `/api/v2/${fd.table}?attrs=*&q=${encodeRsqlValue(`id=in=(${getActiveFilters[fd.name].join(',')})`)}`
       const { items } = await api.get(url)
 
