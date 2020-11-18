@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'CheckboxFilter',
+  name: 'CovidFilter',
   props: {
     /**
      * Toggle to switch between returning an array with values or an array with the full option

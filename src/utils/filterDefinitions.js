@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import { covid19NetworkFacetName } from '../store/helpers/covid19Helper'
-import { covid19NetworkFilterOptions, genericFilterOptions, diagnosisAvailableFilterOptions } from './filterOptions'
+import { genericFilterOptions, diagnosisAvailableFilterOptions } from './filterOptions'
 
 const filterDefinitions = (state) => [
   {
@@ -12,14 +12,10 @@ const filterDefinitions = (state) => [
   },
   {
     headerClass: 'bg-warning text-white',
-    component: 'CheckboxFilter',
+    component: 'CovidNetworkFilter',
     name: covid19NetworkFacetName,
     label: 'COVID-19',
-    type: 'checkbox-filter',
-    options: covid19NetworkFilterOptions,
-    initiallyCollapsed: !state.route.query.covid19network,
-    filters: state.filters.selections.covid19network,
-    maxVisibleOptions: 25
+    initiallyCollapsed: !state.route.query.collection_network || !state.route.query.biobank_network
   },
   {
     headerClass: 'bg-warning text-white',
