@@ -19,11 +19,6 @@ export default {
     changeAllFilters (value) {
       this.UpdateAllFilters(value)
       createBookmark(this.$router, value)
-    },
-    resetAllFilters () {
-      // TODO: add 'reset all filters' to component library
-      this.$store.commit('ResetFilters')
-      this.$router.push({ query: {} })
     }
   },
   computed: {
