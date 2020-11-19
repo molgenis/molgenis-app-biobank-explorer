@@ -8,6 +8,33 @@ describe('store', () => {
     state = mockState()
   })
   describe('mutations', () => {
+    describe('CovidNetworkFilter', () => {
+      it('should set covid19 network filter for biobank if it is not present already', () => {
+        expect(state.filters.selections.biobank_network).toBe(undefined)
+
+        mutations.SetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
+        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+      })
+      it('should not set covid19 network filter again for biobank if it is present already', () => {
+        state.filters.selections.biobank_network = ['COVID_19']
+        state.filters.labels.biobank_network = ['Covid-19']
+
+        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+
+        mutations.SetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
+        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+      })
+
+      it('should remove covid19 network filter for biobank if it is present already', () => {
+        state.filters.selections.biobank_network = ['COVID_19']
+        state.filters.labels.biobank_network = ['Covid-19']
+
+        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+
+        mutations.UnsetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
+        expect(state.filters.selections.biobank_network).toStrictEqual([])
+      })
+    })
     describe('UpdateFilter', () => {
       it('should update the list of filters for a specific state key and map its text as label', () => {
         const countries = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }]
