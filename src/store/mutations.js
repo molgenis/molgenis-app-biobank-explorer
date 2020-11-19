@@ -43,6 +43,9 @@ export default {
     for (const item of value) {
       filterValues.push(item.value)
       filterTexts.push(item.text)
+      if (!state.filterLabelCache.filter(flc => flc.value === item.value).length) {
+        state.filterLabelCache.push(item) // will be fixed when components-library returns options always.
+      }
     }
 
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
@@ -53,6 +56,8 @@ export default {
     state.filters.selections = {}
     for (const [key, value] of Object.entries(selections)) {
       Vue.set(state.filters.selections, key, value)
+      const leftoverLabels = [...new Set(state.filterLabelCache.filter(flc => value.includes(flc.value)).map(flc => flc.text))]
+      Vue.set(state.filters.labels, key, leftoverLabels)
     }
   },
   /**
@@ -138,7 +143,7 @@ export default {
 
     for (const filterName of filters) {
       if (query[filterName]) {
-        Vue.set(state.filters.selections, filterName, query[filterName].split(','))
+        Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
       }
     }
     state.bookmarkMappedToState = true

@@ -43,6 +43,22 @@ describe('store', () => {
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.labels.country).toStrictEqual(['Netherlands', 'Belgium'])
       })
+
+      it('should treat the search filter value as a string', () => {
+        mutations.UpdateFilter(state, { name: 'search', value: 'free text search', router: [] })
+
+        expect(state.filters.selections.search).toBe('free text search')
+        expect(state.filters.labels.search).toBe(undefined)
+      })
+    })
+
+    describe('UpdateAllFilters', () => {
+      it('can set all filters', () => {
+        state.filters.selections = {
+          search: 'Free text search',
+          country: ['BE', 'NL']
+        }
+      })
     })
 
     describe('ResetFilters', () => {
