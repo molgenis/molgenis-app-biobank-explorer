@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import CollectionReport from '@/views/CollectionReport'
@@ -69,7 +68,7 @@ describe('CollectionReport', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-    expect(wrapper.html()).to.have.string('class="container mg-collection-report-card"')
+    expect(wrapper.html()).toContain('class="container mg-collection-report-card"')
   })
 
   describe('computed', () => {
@@ -77,21 +76,21 @@ describe('CollectionReport', () => {
       it('should return empty object', () => {
         store.state.collectionReport = undefined
         const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.mainContent).to.deep.equal({})
+        expect(wrapper.vm.mainContent).toStrictEqual({})
       })
     })
 
     describe('collectionId', () => {
       it('computes the collection id based on URL', () => {
         const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.collectionId).to.equal('c-001')
+        expect(wrapper.vm.collectionId).toBe('c-001')
       })
     })
 
     describe('subCollections', () => {
       it('computes empty array for empty subCollections', () => {
         const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.subCollections).to.deep.equal([])
+        expect(wrapper.vm.subCollections).toStrictEqual([])
       })
       it('computes array with subCollections', () => {
         store.state.collectionReport.sub_collections = [
@@ -167,7 +166,7 @@ describe('CollectionReport', () => {
             }
           }
         ]
-        expect(wrapper.vm.subCollections).to.deep.equal(expected)
+        expect(wrapper.vm.subCollections).toStrictEqual(expected)
       })
     })
   })
