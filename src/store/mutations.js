@@ -2,7 +2,6 @@ import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
-import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
@@ -72,22 +71,6 @@ export default {
   },
   SetCollectionInfo (state, collectionInfo) {
     state.collectionInfo = collectionInfo
-  },
-  SetCovid19Network (state, covid19FacetSelectionIds) {
-    const biobankNetwork = state.biobank_network.filters
-    const collectionNetwork = state.collection_network.filters
-    const addForBiobank = covid19FacetSelectionIds.includes(covid19BiobankNetworkSelectionId)
-    const addForNetwork = covid19FacetSelectionIds.includes(covid19CollectionNetworkSelectionId)
-
-    // clear state
-    if (biobankNetwork.includes(covid19NetworkId)) biobankNetwork.splice(biobankNetwork.indexOf(covid19NetworkId), 1)
-    if (collectionNetwork.includes(covid19NetworkId)) collectionNetwork.splice(collectionNetwork.indexOf(covid19NetworkId), 1)
-
-    if (addForBiobank) Vue.set(state.biobank_network, 'filters', [...biobankNetwork, covid19NetworkId])
-    else Vue.set(state.biobank_network, 'filters', biobankNetwork)
-
-    if (addForNetwork) Vue.set(state.collection_network, 'filters', [...collectionNetwork, covid19NetworkId])
-    else Vue.set(state.collection_network, 'filters', collectionNetwork)
   },
   /**
    * Store a single biobank in the state for showing a biobank report

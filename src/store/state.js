@@ -1,4 +1,3 @@
-// import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {

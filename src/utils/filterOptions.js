@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
-import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from '../store/helpers/covid19Helper'
 import { isCodeRegex } from '../../src/store/helpers'
 
 export const genericFilterOptions = (tableName) => {
@@ -17,14 +16,6 @@ export const genericFilterOptions = (tableName) => {
 const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 'label', comparison: '=like=', arguments: query })
 const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 /** */
-
-export const covid19NetworkFilterOptions = () => {
-  return new Promise((resolve) => {
-    const covid19NetworkData = [{ value: covid19BiobankNetworkSelectionId, text: 'Biobanks providing COVID-19 services' },
-      { value: covid19CollectionNetworkSelectionId, text: 'COVID-19 collections' }]
-    resolve(covid19NetworkData)
-  })
-}
 
 export const diagnosisAvailableFilterOptions = (tableName) => {
   // destructure the query part from the multi-filter
