@@ -3,6 +3,8 @@ import { createInQuery, createComparisons } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
 
+export const isCodeRegex = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
+
 /**
  * @example queries
  * q=country.id=in=(NL,BE)
@@ -79,7 +81,6 @@ const getHumanReadableString = async (state, { filterDefinitions, getActiveFilte
   for (const [filterName, filterValue] of Object.entries(state.filters.selections)) {
     if (!filterValue) continue
     humanReadableString += filterNegotiatorLabelsDictionary[filterName]
-
     if (filterName === 'search') {
       humanReadableString += ` ${filterValue}`
     } else {

@@ -8,7 +8,7 @@ const filterDefinitions = (state) => [
     name: 'search',
     label: 'Search',
     type: 'string-filter',
-    humanReadableString: 'Text search is '
+    humanReadableString: 'Text search is'
   },
   {
     headerClass: 'bg-warning text-white',

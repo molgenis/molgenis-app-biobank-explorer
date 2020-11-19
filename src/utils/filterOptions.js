@@ -1,8 +1,8 @@
 /* istanbul ignore file */
-
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from '../store/helpers/covid19Helper'
+import { isCodeRegex } from '../../src/store/helpers'
 
 export const genericFilterOptions = (tableName) => {
   return () => new Promise((resolve) => {
@@ -14,7 +14,6 @@ export const genericFilterOptions = (tableName) => {
 }
 
 /** Specific logic for diagnosis available filter */
-const isCodeRegex = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
 const createDiagnosisLabelQuery = (query) => transformToRSQL({ selector: 'label', comparison: '=like=', arguments: query })
 const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 /** */

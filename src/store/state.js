@@ -32,6 +32,6 @@ export default {
   filterIdLabelDictionary: {},
   filters: {
     selections: {},
-    labels: {} // for human readable url
+    labels: {} // for human readable string
   }
 }
