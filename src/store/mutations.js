@@ -55,6 +55,11 @@ export default {
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
     for (const [key, value] of Object.entries(selections)) {
+      if (key === 'search') {
+        Vue.set(state.filters.selections, key, value)
+        continue
+      }
+
       Vue.set(state.filters.selections, key, value)
       const leftoverLabels = [...new Set(state.filterLabelCache.filter(flc => value.includes(flc.value)).map(flc => flc.text))]
       Vue.set(state.filters.labels, key, leftoverLabels)

@@ -54,10 +54,27 @@ describe('store', () => {
 
     describe('UpdateAllFilters', () => {
       it('can set all filters', () => {
+        state.filterLabelCache = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }, { value: 'FR', text: 'France' }]
+        state.filters.labels.country = ['Netherlands', 'Belgium', 'France']
+
         state.filters.selections = {
+          search: 'Free text search',
+          country: ['BE', 'NL', 'FR']
+        }
+
+        const newSelections = {
           search: 'Free text search',
           country: ['BE', 'NL']
         }
+
+        mutations.UpdateAllFilters(state, newSelections)
+
+        expect(state.filters.selections).toStrictEqual({
+          search: 'Free text search',
+          country: ['BE', 'NL']
+        })
+
+        expect(state.filters.labels).toStrictEqual({ country: ['Netherlands', 'Belgium'] })
       })
     })
 
