@@ -1,15 +1,9 @@
-import chai from 'chai'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
-import td from 'testdouble'
 import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
 import { mockState } from '../mockState'
-import actions, { COLLECTION_ATTRIBUTE_SELECTOR, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from '../../../../src/store/actions'
+import actions from '../../../../src/store/actions'
 import filterDefinitions from '../../../../src//utils/filterDefinitions'
-
-chai.use(sinonChai)
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -20,8 +14,6 @@ jest.mock('@molgenis/molgenis-api-client', () => {
 
 describe('store', () => {
   describe('actions', () => {
-    afterEach(() => td.reset())
-
     describe('GetBiobanks', () => {
       it('should retrieve biobanks from the server and store them in state', (done) => {
         const response = {
@@ -32,10 +24,7 @@ describe('store', () => {
           ]
         }
 
-        const get = td.function('api.get')
-        td.when(get(`/api/v2/eu_bbmri_eric_biobanks?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=id=in=(id1,id2)`)).thenResolve(response)
-        td.replace(api, 'get', get)
-
+        api.get.mockResolvedValueOnce(response)
         const options = {
           payload: ['id1', 'id2'],
           expectedMutations: [
@@ -83,28 +72,20 @@ describe('store', () => {
     })
 
     describe('GetBiobankIds', () => {
-      it('should retrieve biobank ids from the server based on biobank filters', done => {
+      it('should retrieve biobank ids from the server based on biobank filters', async () => {
         const response = {
           items: [
             { data: { id: 'biobank-1' } },
             { data: { id: 'biobank-2' } }
           ]
         }
-
-        const get = td.function('api.get')
-        td.when(get('/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name&q=covid19=in=(covid19)'))
-          .thenResolve(response)
-        td.replace(api, 'get', get)
+        api.get.mockResolvedValueOnce(response)
 
         const getters = { biobankRsql: 'covid19=in=(covid19)' }
-        const commit = sinon.spy()
+        const commit = jest.fn()
 
-        actions.GetBiobankIds({ commit, getters })
-
-        setTimeout(function () {
-          sinon.assert.calledWithMatch(commit.secondCall, 'SetBiobankIds', ['biobank-1', 'biobank-2'])
-          done()
-        }, 300)
+        await actions.GetBiobankIds({ commit, getters })
+        expect(commit.mock.calls[1]).toEqual(['SetBiobankIds', ['biobank-1', 'biobank-2']])
       })
     })
 
@@ -156,9 +137,7 @@ describe('store', () => {
           id: 'biobank-1'
         }
 
-        const get = td.function('api.get')
-        td.when(get(`/api/v2/eu_bbmri_eric_biobanks/biobank-1?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label),contact(*),*`)).thenResolve(biobank)
-        td.replace(api, 'get', get)
+        api.get.mockResolvedValueOnce(biobank)
 
         const options = {
           payload: 'biobank-1',
@@ -201,10 +180,7 @@ describe('store', () => {
           description: 'beautiful samples'
         }
 
-        const get = td.function('api.get')
-
-        td.when(get(`/api/v2/eu_bbmri_eric_collections/001?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`)).thenResolve(response)
-        td.replace(api, 'get', get)
+        api.get.mockResolvedValueOnce(response)
 
         const options = {
           payload: '001',
@@ -220,14 +196,12 @@ describe('store', () => {
 
     describe('GetNetworkReport', () => {
       const neverReturningPromise = new Promise(() => {})
-      const collectionCall = `/api/v2/eu_bbmri_eric_collections?q=network==001&num=10000&attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR}`
+      const collectionError = new Error('No way!')
       it('should set error', done => {
-        const collectionError = new Error('No way!')
-        const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(neverReturningPromise)
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
-        td.when(get(collectionCall)).thenReject(collectionError)
-        td.replace(api, 'get', get)
+        api.get.mockResolvedValueOnce(neverReturningPromise)
+        api.get.mockResolvedValueOnce(neverReturningPromise)
+        api.get.mockRejectedValueOnce(collectionError)
+
         const options = {
           payload: '001',
           expectedMutations: [
@@ -250,12 +224,10 @@ describe('store', () => {
           name: 'beautiful network',
           description: 'beautiful data'
         }
-        const get = td.function('api.get')
-        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenResolve(network)
+        api.get.mockResolvedValueOnce(network)
+        api.get.mockResolvedValueOnce(neverReturningPromise)
+        api.get.mockResolvedValueOnce(neverReturningPromise)
 
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenReturn(neverReturningPromise)
-        td.when(get(collectionCall)).thenReturn(neverReturningPromise)
-        td.replace(api, 'get', get)
         const options = {
           payload: '001',
           expectedMutations: [
@@ -271,12 +243,11 @@ describe('store', () => {
       })
 
       it('should retrieve the collections and biobanks of a network from the server based on a network id and store them in the state', done => {
-        const get = td.function('api.get')
         const networkPromise = new Promise(() => {})
-        td.when(get('/api/v2/eu_bbmri_eric_networks/001')).thenReturn(networkPromise)
-        td.when(get('/api/v2/eu_bbmri_eric_biobanks?q=network==001&num=10000')).thenResolve([{ id: 'bb-1' }])
-        td.when(get(collectionCall)).thenResolve([{ id: 'col-1' }])
-        td.replace(api, 'get', get)
+        api.get.mockResolvedValueOnce(networkPromise)
+        api.get.mockResolvedValueOnce([{ id: 'bb-1' }])
+        api.get.mockResolvedValueOnce([{ id: 'col-1' }])
+
         const options = {
           payload: '001',
           expectedMutations: [
