@@ -74,7 +74,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium', 'selectedBiobankQuality', 'selectedCollectionQuality']),
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium', 'selectedBiobankQuality', 'selectedCollectionQuality']),
     ...mapState(['isPodium']),
     podiumModalShown () {
       if (this.isPodium) return this.request
