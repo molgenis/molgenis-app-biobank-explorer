@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import helpers, {
   filterCollectionTree,
   isCodeRegex
@@ -29,7 +28,7 @@ describe('store', () => {
           { id: 2, sub_collections: [] },
           { id: 4, sub_collections: [] }
         ]
-        expect(filterCollectionTree([2, 4], collections)).to.deep.eq(expected)
+        expect(filterCollectionTree([2, 4], collections)).toStrictEqual(expected)
       })
       it('should filter subcollections', () => {
         expect(filterCollectionTree([2, 4], [{
@@ -40,7 +39,7 @@ describe('store', () => {
             { id: 4, sub_collections: [] },
             { id: 5, sub_collections: [] }
           ]
-        }])).to.deep.eq([{
+        }])).toStrictEqual([{
           id: 1,
           sub_collections: [
             { id: 2, sub_collections: [] },
@@ -63,7 +62,7 @@ describe('store', () => {
               }]
             }]
           }]
-        }])).to.deep.eq([{
+        }])).toStrictEqual([{
           id: 1,
           sub_collections: [{
             id: 2,
@@ -81,27 +80,27 @@ describe('store', () => {
 
     describe('Code regex', () => {
       it('should match single uppercase character', () => {
-        expect(isCodeRegex.test('A')).to.eq(true)
+        expect(isCodeRegex.test('A')).toEqual(true)
       })
 
       it('should be case-insensitive', () => {
-        expect(isCodeRegex.flags).to.eq('i')
+        expect(isCodeRegex.flags).toEqual('i')
       })
 
       it('should match chapter code', () => {
-        expect(isCodeRegex.test('A10-A12')).to.eq(true)
+        expect(isCodeRegex.test('A10-A12')).toEqual(true)
       })
 
       it('should match top level chapter code', () => {
-        expect(isCodeRegex.test('XIX')).to.eq(true)
+        expect(isCodeRegex.test('XIX')).toEqual(true)
       })
 
       it('should match disease code', () => {
-        expect(isCodeRegex.test('A10.001')).to.eq(true)
+        expect(isCodeRegex.test('A10.001')).toEqual(true)
       })
 
       it('should not match other query string', () => {
-        expect(isCodeRegex.test('he')).to.eq(false)
+        expect(isCodeRegex.test('he')).toEqual(false)
       })
     })
 
@@ -114,7 +113,7 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'country=in=(NL,BE)'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with only a materials filter', () => {
@@ -123,7 +122,7 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'materials=in=(RNA,DNA)'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with only a collection quality filter', () => {
@@ -133,7 +132,7 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'id=in=(collection1)'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with only a disease type filter', () => {
@@ -142,14 +141,14 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3)'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with no filters and no search', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = ''
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with only a search', () => {
@@ -158,7 +157,7 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\''
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
 
       it('should create a query with filters and a search', () => {
@@ -168,7 +167,7 @@ describe('store', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\')'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
     })
 
@@ -217,7 +216,7 @@ describe('store', () => {
           biobankRsql: 'name=q=\'free text search\''
         }
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
 
       it('should generate a negotiator query with collection filter expressions', async () => {
@@ -241,7 +240,7 @@ describe('store', () => {
           rsql: 'materials=in=(RNA)'
         }
 
-        expect(actual).to.deep.equal(expected)
+        expect(actual).toStrictEqual(expected)
       })
     })
 
@@ -264,7 +263,7 @@ describe('store', () => {
         const actual = await helpers.getHumanReadableString(state, getters)
         const expected = 'Text search is this is a free text search and Material type(s): PLASMA, RNA'
 
-        expect(actual).to.equal(expected)
+        expect(actual).toBe(expected)
       })
     })
   })
