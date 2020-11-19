@@ -69,7 +69,7 @@ export default {
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
-  GetCollectionInfo ({ commit, dispatch, getters }) {
+  GetCollectionInfo ({ commit, getters }) {
     commit('SetCollectionInfo', undefined)
     let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'
     if (getters.rsql) {
@@ -88,7 +88,7 @@ export default {
         commit('SetError', error)
       })
   },
-  GetBiobankIds ({ commit, getters, dispatch }) {
+  GetBiobankIds ({ commit, getters }) {
     commit('SetBiobankIds', undefined)
     let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
     if (getters.biobankRsql) {
