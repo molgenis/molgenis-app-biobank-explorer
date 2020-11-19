@@ -1,9 +1,8 @@
-import { expect } from 'chai'
 import FilterContainer from '@/components/filters/FilterContainer'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { mockState } from '../../mockState'
-
+import filterDefinitions from '../../../../../src/utils/filterDefinitions'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -14,7 +13,7 @@ describe('FilterContainer', () => {
   describe('filters', () => {
     it('should include the country filters if showCountryFacet is set to true', () => {
       store = new Vuex.Store({
-        state: mockState,
+        state: mockState(),
         actions: {
           GetCountryOptions: () => '',
           GetMaterialsOptions: () => '',
@@ -38,16 +37,19 @@ describe('FilterContainer', () => {
           getCovid19Options: () => [],
           getCollectionNetworkOptions: () => [],
           getCovid19NetworkOptions: () => [],
-          getBiobankNetworkOptions: () => []
+          getBiobankNetworkOptions: () => [],
+          getActiveFilters: () => [],
+          bookmarkMappedToState: () => true,
+          filterDefinitions
         }
       })
       wrapper = shallowMount(FilterContainer, { store, localVue })
-      expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).eq('country')
+      expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).toEqual('country')
     })
 
     it('should exclude the country filters if showCountryFacet is set to false', () => {
       store = new Vuex.Store({
-        state: mockState,
+        state: mockState(),
         actions: {
           GetCountryOptions: () => '',
           GetMaterialsOptions: () => '',
@@ -71,11 +73,14 @@ describe('FilterContainer', () => {
           getCovid19Options: () => [],
           getCollectionNetworkOptions: () => [],
           getCovid19NetworkOptions: () => [],
-          getBiobankNetworkOptions: () => []
+          getBiobankNetworkOptions: () => [],
+          getActiveFilters: () => [],
+          bookmarkMappedToState: () => true,
+          filterDefinitions
         }
       })
       wrapper = shallowMount(FilterContainer, { store, localVue })
-      expect(wrapper.vm.filters.find((filter) => filter.name === 'country')).eq(undefined)
+      expect(wrapper.vm.filters.find((filter) => filter.name === 'country')).toEqual(undefined)
     })
   })
 })

@@ -44,7 +44,6 @@ describe('store', () => {
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.filters.selections.search = 'Cell&Co'
         state.filters.selections.materials = ['CELL_LINES']
-        state.route = { query: {} }
         getters = {
           rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
           filterDefinitions: filterDefinitions(state),
