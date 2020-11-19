@@ -7,7 +7,7 @@ import { covid19NetworkId, covid19BiobankNetworkSelectionId, covid19CollectionNe
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
-  SetCheckboxFilter (state, { name, value, router }) {
+  SetCovidNetworkFilter (state, { name, value, router }) {
     if (state.filters.selections[name]) {
       Vue.set(state.filters.selections, name, [...new Set([...state.filters.selections[name], value.value])])
       Vue.set(state.filters.labels, name, [...new Set([...state.filters.labels[name], value.text])])
@@ -17,14 +17,13 @@ export default {
     }
     createBookmark(router, state.filters.selections)
   },
-  UnsetCheckboxFilter (state, { name, value, router }) {
+  UnsetCovidNetworkFilter (state, { name, value, router }) {
     if (state.filters.selections[name]) {
       Vue.set(state.filters.selections, name, [...state.filters.selections[name].filter(item => item !== value.value)])
       Vue.set(state.filters.labels, name, [...state.filters.labels[name].filter(item => item !== value.text)])
     }
     createBookmark(router, state.filters.selections)
   },
-
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
    * so they can be used for 1) the URL and 2) retrieving biobanks based on IDs

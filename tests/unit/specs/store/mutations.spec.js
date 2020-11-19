@@ -260,41 +260,41 @@ describe('store', () => {
 
     describe('SetBiobankQualityBiobanks', () => {
       it('should set the biobanks that match the applied quality standards filter', () => {
-        const payload = [
-          {
-            biobank: { id: 'biobank-1' },
-            quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
-            assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-          },
-          {
-            biobank: { id: 'biobank-1' },
-            quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-            assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
-          },
-          {
-            biobank: { id: 'biobank-2' },
-            quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-            assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-          }
-        ]
+        const payload = {
+          items: [
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
+            },
+            {
+              biobank: { id: 'biobank-2' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            }
+          ]
+        }
 
         const expected = ['biobank-1', 'biobank-2']
 
-        mutations.SetBiobankQualityBiobanks(state, payload)
+        mutations.SetBiobankIdsWithSelectedQuality(state, payload)
 
-        expect(state.biobank_quality.biobanks).toStrictEqual(expected)
+        expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
       })
 
-      it('should set an invalid collection id when the filter applied on the biobank quality standards returns no matching biobanks', () => {
-        state.biobank_quality.filters = ['eric']
+      it('should set an invalid biobank id when the filter applied on the biobank quality standards returns no matching biobanks', () => {
+        state.filters.selections.biobank_quality = ['eric']
+        const payload = {}
+        const expected = ['no-biobank-found']
 
-        const payload = []
+        mutations.SetBiobankIdsWithSelectedQuality(state, payload)
 
-        const expected = ['invalid_biobank']
-
-        mutations.SetBiobankQualityBiobanks(state, payload)
-
-        expect(state.biobank_quality.biobanks).toStrictEqual(expected)
+        expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
       })
     })
 

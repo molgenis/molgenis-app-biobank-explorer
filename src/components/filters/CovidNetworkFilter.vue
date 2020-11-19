@@ -24,7 +24,7 @@ import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'CovidNetworkFilter',
   methods: {
-    ...mapMutations(['SetCheckboxFilter', 'UnsetCheckboxFilter'])
+    ...mapMutations(['SetCovidNetworkFilter', 'UnsetCovidNetworkFilter'])
   },
   computed: {
     ...mapState(['filters']),
@@ -38,9 +38,9 @@ export default {
       },
       set (value) {
         if (value) {
-          this.SetCheckboxFilter({ name: 'biobank_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
+          this.SetCovidNetworkFilter({ name: 'biobank_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
         } else {
-          this.UnsetCheckboxFilter({ name: 'biobank_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
+          this.UnsetCovidNetworkFilter({ name: 'biobank_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
         }
       }
     },
@@ -54,9 +54,9 @@ export default {
       },
       set (value) {
         if (value) {
-          this.SetCheckboxFilter({ name: 'collection_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
+          this.SetCovidNetworkFilter({ name: 'collection_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
         } else {
-          this.UnsetCheckboxFilter({ name: 'collection_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
+          this.UnsetCovidNetworkFilter({ name: 'collection_network', value: { text: 'COVID_19', value: covid19NetworkId }, router: this.$router })
         }
       }
     }

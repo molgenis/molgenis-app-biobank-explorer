@@ -9,6 +9,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "unit": "vue-cli-service test:unit --collectCoverage",
     "test:unit": "vue-cli-service test:unit --collectCoverage",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
