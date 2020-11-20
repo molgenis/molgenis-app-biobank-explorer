@@ -20,8 +20,8 @@
 <script>
 /* istanbul ignore file */
 
-import { covid19NetworkId } from '../../store/helpers/covid19Helper'
 import { mapState, mapMutations } from 'vuex'
+const covid19NetworkId = 'bbmri-eric:networkID:EU_BBMRI-ERIC:networks:COVID19'
 
 export default {
   name: 'CovidNetworkFilter',

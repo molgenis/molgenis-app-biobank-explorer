@@ -1,6 +1,4 @@
 /* istanbul ignore file */
-
-import { covid19NetworkFacetName } from '../store/helpers/covid19Helper'
 import { genericFilterOptions, diagnosisAvailableFilterOptions } from './filterOptions'
 
 const filterDefinitions = (state) => [
@@ -13,7 +11,7 @@ const filterDefinitions = (state) => [
   {
     headerClass: 'bg-warning text-white',
     component: 'CovidNetworkFilter',
-    name: covid19NetworkFacetName,
+    name: 'covid19network',
     label: 'COVID-19',
     initiallyCollapsed: !state.route.query.collection_network || !state.route.query.biobank_network
   },
