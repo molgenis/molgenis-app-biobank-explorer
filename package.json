@@ -75,7 +75,7 @@
   },
   "browserslist": [
     "> 1%",
-    "Explorer",
+    "ie 11",
     "last 2 versions",
     "not dead"
   ]
