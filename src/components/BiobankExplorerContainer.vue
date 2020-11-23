@@ -22,7 +22,7 @@
       v-if="!loading && hasSelection && !podiumModalShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
-      :title="requestButtonTitle"
+      :title="negotiatorButtonText"
       toastClass="bg-warning text-white"
     >
       <template v-slot:buttonText>
@@ -41,7 +41,7 @@
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ requestButtonTitle }}</b-button>
+        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ negotiatorButtonText }}</b-button>
       </template>
     </b-modal>
   </div>
@@ -69,13 +69,15 @@ export default {
   },
   data: () => {
     return {
-      request: false,
-      requestButtonTitle: 'Send to the negotiator'
+      request: false
     }
   },
   computed: {
     ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium', 'selectedBiobankQuality', 'selectedCollectionQuality']),
     ...mapState(['isPodium']),
+    negotiatorButtonText () {
+      return this.isPodium ? 'Send to Podium' : 'Send to the negotiator'
+    },
     podiumModalShown () {
       if (this.isPodium) return this.request
 
