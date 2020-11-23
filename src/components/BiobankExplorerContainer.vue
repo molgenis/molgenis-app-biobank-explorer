@@ -74,7 +74,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundBiobanks', 'foundCollectionIds', 'collectionsInPodium']),
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium', 'selectedBiobankQuality', 'selectedCollectionQuality']),
     ...mapState(['isPodium']),
     podiumModalShown () {
       if (this.isPodium) return this.request
@@ -91,6 +91,14 @@ export default {
     }
   },
   watch: {
+    selectedBiobankQuality: {
+      immediate: true,
+      handler: 'GetBiobankIdsForQuality'
+    },
+    selectedCollectionQuality: {
+      immediate: true,
+      handler: 'GetCollectionIdsForQuality'
+    },
     rsql: {
       immediate: true,
       handler: 'GetCollectionInfo'
@@ -108,7 +116,9 @@ export default {
     ...mapActions([
       'GetCollectionInfo',
       'GetBiobankIds',
-      'GetPodiumCollections'
+      'GetPodiumCollections',
+      'GetBiobankIdsForQuality',
+      'GetCollectionIdsForQuality'
     ]),
     hideModal () {
       this.$bvModal.hide('podium-modal')

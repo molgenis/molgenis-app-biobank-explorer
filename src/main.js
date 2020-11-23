@@ -1,5 +1,5 @@
 import 'es6-promise/auto'
-
+import 'regenerator-runtime'
 import Vue from 'vue'
 import store from './store'
 import router from './router'
@@ -12,6 +12,18 @@ import App from './App'
 import VueAnalytics from 'vue-analytics'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@molgenis-ui/components-library/dist/components-library.css'
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import {
+  faCaretRight,
+  faExclamationTriangle,
+  faSpinner,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle)
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {
@@ -35,6 +47,8 @@ if (window.__webpack_public_path__) {
   __webpack_public_path__ = window.__webpack_public_path__ // NOSONAR
   /* eslint-enable */
 }
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(i18n, {
   lng: INITIAL_STATE.lng,

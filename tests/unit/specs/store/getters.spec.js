@@ -1,4 +1,3 @@
-
 import getters from '../../../../src/store/getters'
 import { mockState } from '../mockState'
 
@@ -12,9 +11,9 @@ describe('store', () => {
   describe('getters', () => {
     describe('rsql', () => {
       it('should transform the collection filters to rsql', () => {
-        state.search = 'Cell&Co'
-        state.country.filters = ['AT', 'BE']
-        state.covid19.filters = ['covid19']
+        state.filters.selections.search = 'Cell&Co'
+        state.filters.selections.country = ['AT', 'BE']
+        state.filters.selections.covid19 = ['covid19']
 
         expect(getters.rsql(state)).toEqual('country=in=(AT,BE);(name=q=Cell&Co,id=q=Cell&Co,acronym=q=Cell&Co,biobank.name=q=Cell&Co,biobank.id=q=Cell&Co,biobank.acronym=q=Cell&Co)')
       })
@@ -24,14 +23,14 @@ describe('store', () => {
     })
     describe('biobankRsql', () => {
       it('should transform the biobank filters to rsql', () => {
-        state.country.filters = ['AT', 'BE']
-        state.covid19.filters = ['covid19']
+        state.filters.selections.country = ['AT', 'BE']
+        state.filters.selections.covid19 = ['covid19']
 
         expect(getters.biobankRsql(state)).toEqual('country=in=(AT,BE);covid19biobank==covid19')
       })
       it('should create AND filter for covid19 biobank filter values', () => {
-        state.search = 'Cell&Co'
-        state.covid19.filters = ['covid19', 'covid19a']
+        state.filters.selections.search = 'Cell&Co'
+        state.filters.selections.covid19 = ['covid19', 'covid19a']
 
         expect(getters.biobankRsql(state)).toEqual('covid19biobank==covid19;covid19biobank==covid19a')
       })
@@ -180,232 +179,29 @@ describe('store', () => {
       })
     })
 
-    describe('getTypesOptions', () => {
-      it('should retrieve the type options', () => {
-        const state = { type: { options: [{ id: 'id', label: 'label' }] } }
-        expect(state.type.options).toStrictEqual(getters.getTypesOptions(state))
-      })
-    })
-
-    describe('getDataTypeOptions', () => {
-      it('should retrieve the type options', () => {
-        const state = { dataType: { options: [{ id: 'id', label: 'label' }] } }
-        expect(state.dataType.options).toStrictEqual(getters.getDataTypeOptions(state))
-      })
-    })
-
-    describe('getCountryOptions', () => {
-      it('should retrieve the options that are available for the country filter', () => {
-        const expected = ['AT', 'BE']
-        state.country.options = expected
-        const actual = getters.getCountryOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getMaterialOptions', () => {
-      it('should retrieve the options that are available for the material type filter', () => {
-        const expected = ['RNA', 'DNA']
-        const state = {
-          materials: {
-            options: expected
-          }
-        }
-
-        const actual = getters.getMaterialOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getCollectionQualityOptions', () => {
-      it('should retrieve the options that are available for the collection standards filter', () => {
-        const expected = ['self', 'eric']
-        const state = {
-          collection_quality: {
-            options: expected
-          }
-        }
-        const actual = getters.getCollectionQualityOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getBiobankQualityOptions', () => {
-      it('should retrieve the options that are available for the biobank standards filter', () => {
-        const expected = ['accredited', 'eric']
-        const state = {
-          biobank_quality: {
-            options: expected
-          }
-        }
-        const actual = getters.getBiobankQualityOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getDiagnosisAvailableOptions', () => {
-      it('should retrieve the options that are available for the disease type filter', () => {
-        const expected = [
-          { id: '1', label: 'small disease' },
-          { id: '2', label: 'big disease' }
-        ]
-        const state = {
-          diagnosis_available: {
-            options: expected
-          }
-        }
-        const actual = getters.getDiagnosisAvailableOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getCovid19Options', () => {
-      it('should retrieve the options that are available for the covid19 filter', () => {
-        const expected = [
-          { id: 'covid19', label: 'Member of the COVID-19 network' }
-        ]
-        const state = {
-          covid19: {
-            options: expected
-          }
-        }
-        const actual = getters.getCovid19Options(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getCovid19NetworkOptions', () => {
-      it('should retrieve the options that are available for the covid19network filter', () => {
-        const actual = getters.getCovid19NetworkOptions(state)
-        const expected = mockState().covid19network.options
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getBiobankNetworkOptions', () => {
-      it('should retrieve the options that are available for the BiobankNetwork filter', () => {
-        const expected = [
-          { test: 'getBiobankNetworkOptions' }
-        ]
-        const state = {
-          biobank_network: {
-            options: expected
-          }
-        }
-        const actual = getters.getBiobankNetworkOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
-    describe('getCollectionNetworkOptions', () => {
-      it('should retrieve the options that are available for the CollectionNetwork filter', () => {
-        const expected = [
-          { test: 'getCollectionNetworkOptions' }
-        ]
-        const state = {
-          collection_network: {
-            options: expected
-          }
-        }
-        const actual = getters.getCollectionNetworkOptions(state)
-
-        expect(actual).toStrictEqual(expected)
-      })
-    })
-
     describe('getActiveFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
-        state.search = 'test searchterm'
-
-        state.country = {
-          filters: ['AT'],
-          options: [{ id: 'AT', name: 'Austria' }]
-        }
-        state.materials = {
-          filters: ['PLASMA'],
-          options: [{ id: 'PLASMA', label: 'Plasma' }]
-        }
-        state.collection_quality = {
-          filters: ['eric'],
-          options: [{
-            id: 'eric',
-            label: 'BBMRI-ERIC audited'
-          }, {
-            id: 'self',
-            label: 'Self assessment (BBMRI-ERIC remote audited)'
-          }, {
-            id: 'self_dev',
-            label: 'Self assessment (BBMRI-ERIC remote audited) with documented deviations'
-          }]
-        }
-        state.biobank_quality = {
-          filters: ['eric'],
-          options: [{
-            id: 'eric',
-            label: 'BBMRI-ERIC audited'
-          }, {
-            id: 'accredited',
-            label: 'Certified by accredited body'
-          }]
-        }
-        state.type = {
-          filters: ['BIRTH_COHORT', 'CASE_CONTROL'],
-          options: [
-            { id: 'BIRTH_COHORT', label: 'Birth cohort' },
-            { id: 'CASE_CONTROL', label: 'Case control' }
-          ]
-        }
-        state.covid19 = {
-          filters: ['covid19'],
-          options: [{ id: 'covid19', label: 'Member of the COVID-19 network' }]
-        }
-        state.dataType = {
-          filters: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
-          options: [
-            { id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' },
-            { id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records' }
-          ]
+        state.filters.selections = {
+          search: 'test searchterm',
+          country: ['AT'],
+          materials: ['PLASMA'],
+          collection_quality: ['eric'],
+          biobank_quality: ['eric'],
+          type: ['BIRTH_COHORT', 'CASE_CONTROL'],
+          covid19: ['covid19'],
+          dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS']
         }
 
         const actual = getters.getActiveFilters(state)
         const expected = {
-          materials: [
-            { id: 'PLASMA', label: 'Plasma' }
-          ],
-          country: [
-            { id: 'AT', label: 'Austria' }
-          ],
-          type: [
-            { id: 'BIRTH_COHORT', label: 'Birth cohort' },
-            { id: 'CASE_CONTROL', label: 'Case control' }
-          ],
-          covid19: [
-            {
-              id: 'covid19',
-              label: 'Member of the COVID-19 network'
-            }
-          ],
-          dataType: [
-            { id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' },
-            { id: 'GENEALOGICAL_RECORDS', label: 'Genealogical records' }
-          ],
-          collection_quality: [{
-            id: 'eric',
-            label: 'BBMRI-ERIC audited'
-          }],
-          biobank_quality: [{
-            id: 'eric',
-            label: 'BBMRI-ERIC audited'
-          }],
-          search: [{ id: 'search', label: state.search }]
+          materials: ['PLASMA'],
+          country: ['AT'],
+          type: ['BIRTH_COHORT', 'CASE_CONTROL'],
+          covid19: ['covid19'],
+          dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
+          collection_quality: ['eric'],
+          biobank_quality: ['eric'],
+          search: 'test searchterm'
         }
 
         expect(actual).toStrictEqual(expected)
@@ -413,17 +209,9 @@ describe('store', () => {
 
       it('should retrieve an object of filters with diagnosis_available in it', () => {
         const expected = {
-          diagnosis_available: [
-            {
-              _href: '/api/v2/eu_bbmri_eric_disease_types/urn:miriam:icd:C00-C97',
-              id: 'urn:miriam:icd:C00-C97',
-              code: 'C00-C97',
-              label: 'C00-C97 - Malignant neoplasms',
-              ontology: 'ICD-10'
-            }
-          ]
+          diagnosis_available: ['urn:miriam:icd:C00-C97']
         }
-        state.diagnosis_available.filters = expected.diagnosis_available
+        state.filters.selections = expected
         const actual = getters.getActiveFilters(state)
         expect(actual).toStrictEqual(expected)
       })

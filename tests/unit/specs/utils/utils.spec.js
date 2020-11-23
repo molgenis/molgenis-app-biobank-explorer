@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import utils from '../../../../src/utils'
 
 describe('Utilities', () => {
@@ -9,7 +8,7 @@ describe('Utilities', () => {
       const actual = utils.qualityAttributeSelector(type)
       const expected = 'quality(id,standards(*),assess_level_bio(*),certification_number,certification_image_link,certification_report,label)'
 
-      expect(actual).to.equal(expected)
+      expect(actual).toBe(expected)
     })
 
     it('should build correct quality attributes selector for collections', () => {
@@ -18,7 +17,7 @@ describe('Utilities', () => {
       const actual = utils.qualityAttributeSelector(type)
       const expected = 'quality(id,standards(*),assess_level_col(*),certification_number,certification_image_link,certification_report,label)'
 
-      expect(actual).to.equal(expected)
+      expect(actual).toBe(expected)
     })
   })
 
@@ -29,7 +28,7 @@ describe('Utilities', () => {
       const actual = utils.getUniqueIdArray(list)
       const expected = ['1', '2', '3', '4', '5']
 
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
@@ -38,14 +37,14 @@ describe('Utilities', () => {
       const actual = utils.createInQuery('country', [])
       const expected = []
 
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
 
     it('should transform (country, [AT,BE]) to country=in=(AT,BE)', () => {
       const actual = utils.createInQuery('country', ['AT', 'BE'])
       const expected = [{ selector: 'country', comparison: '=in=', arguments: ['AT', 'BE'] }]
 
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 
@@ -61,7 +60,7 @@ describe('Utilities', () => {
       const actual = utils.removeFilterFromFilterArrayById(filters, 'filter3')
       const expected = ['filter1', 'filter2', 'filter4', 'filter5']
 
-      expect(actual).to.deep.equal(expected)
+      expect(actual).toStrictEqual(expected)
     })
   })
 })

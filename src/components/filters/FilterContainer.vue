@@ -1,208 +1,75 @@
 <template>
   <div id="filter-container">
-    <string-filter
-      label="Search"
-      v-model="search"
-      :initiallyCollapsed="!$store.state.route.query.search"
-      placeholder
-      description="search by name, id, acronym and press enter"
-    ></string-filter>
-   <checkbox-filters
-      class="covid-filter"
-      :key="covidNetworkFilter.name"
-      v-bind="covidNetworkFilter"
-      :value="covidNetworkFilter.filters"
-      :important="true"
-      @input="value => filterChange(covidNetworkFilter.name, value)"
-    />
-    <checkbox-filters
-      class="covid-filter"
-      :key="covidFilter.name"
-      v-bind="covidFilter"
-      :value="covidFilter.filters"
-      :important="true"
-      @input="value => filterChange(covidFilter.name, value)"
-    />
-    <diagnosis-available-filters></diagnosis-available-filters>
-    <checkbox-filters
+    <FilterCard name="search" label="Search" description="Search by name, id, acronym" :collapsed="!this.$store.state.route.query.search">
+      <StringFilter name="Search" v-model="search"></StringFilter>
+    </FilterCard>
+    <FilterCard
       v-for="filter in filters"
       :key="filter.name"
-      v-bind="filter"
-      :value="filter.filters"
-      @input="value => filterChange(filter.name, value)"
-    />
+      :name="filter.name"
+      :label="filter.label"
+      :headerClass="filter.headerClass"
+      :collapsed="filter.initiallyCollapsed"
+    >
+      <component
+        v-if="bookmarkMappedToState"
+        :is="filter.component"
+        :value="getActiveFilters[filter.name]"
+        v-bind="filter"
+        @input="(value) => filterChange(filter.name, value)"
+        :returnTypeAsObject="true"
+        :bulkOperation="true"
+      >
+      </component>
+    </FilterCard>
   </div>
 </template>
 
-<style>
-.filter-card {
-  margin-bottom: 1rem;
-}
-
-.filter-header {
-  /* Same color as BiobankCard */
-  background-color: #f5f5f5;
-}
-
-.filter-header:hover {
-  cursor: pointer;
-}
-</style>
-
 <script>
-import StringFilter from './StringFilter'
-import DiagnosisAvailableFilters from './DiagnosisAvailableFilters.vue'
+/** Components used for filters */
+import CovidFilter from '../filters/CovidFilter'
+import CovidNetworkFilter from '../filters/CovidNetworkFilter'
+import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
+/** */
+
 import { mapGetters, mapMutations } from 'vuex'
-import CheckboxFilters from './CheckboxFilters'
-import { covid19NetworkFacetName } from '../../store/helpers/covid19Helper'
 
 export default {
+  components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard, CovidFilter, CovidNetworkFilter },
+  data () {
+    return {
+      debounce: undefined
+    }
+  },
   computed: {
-    ...mapGetters({
-      countryOptions: 'getCountryOptions',
-      materialOptions: 'getMaterialOptions',
-      collectionQualityOptions: 'getCollectionQualityOptions',
-      biobankQualityOptions: 'getBiobankQualityOptions',
-      typesOptions: 'getTypesOptions',
-      biobankNetworkOptions: 'getBiobankNetworkOptions',
-      collectionNetworkOptions: 'getCollectionNetworkOptions',
-      dataTypeOptions: 'getDataTypeOptions',
-      showCountryFacet: 'showCountryFacet',
-      covid19Options: 'getCovid19Options',
-      covid19NetworkOptions: 'getCovid19NetworkOptions'
-    }),
+    ...mapGetters(['showCountryFacet', 'getActiveFilters', 'filterDefinitions', 'bookmarkMappedToState']),
     search: {
       get () {
-        return this.$store.state.search
+        return this.getActiveFilters.search
       },
       set (search) {
-        const updatedRouteQuery = Object.assign(
-          {},
-          this.$store.state.route.query,
-          { search: search.length === 0 ? undefined : search }
-        )
-        this.$router.push({ query: updatedRouteQuery })
-        this.SetSearch(search)
-      }
-    },
-    covidNetworkFilter () {
-      return {
-        name: covid19NetworkFacetName,
-        label: 'COVID-19',
-        options: this.covid19NetworkOptions,
-        initiallyCollapsed: !this.$store.state.route.query.covid19network,
-        filters: this.$store.state.covid19network.filters,
-        maxVisibleOptions: 25
-      }
-    },
-    covidFilter () {
-      return {
-        name: 'covid19',
-        label: 'COVID-19 Services',
-        options: this.covid19Options,
-        initiallyCollapsed: !this.$store.state.route.query.covid19,
-        filters: this.$store.state.covid19.filters,
-        maxVisibleOptions: 25,
-        all: true
+        if (this.debounce) {
+          clearTimeout(this.debounce)
+        }
+
+        this.debounce = setTimeout(async () => {
+          clearTimeout(this.debounce)
+          this.UpdateFilter({ name: 'search', value: search, router: this.$router }) // passing router so we can set bookmark
+        }, 500)
       }
     },
     filters () {
-      return [
-        {
-          name: 'materials',
-          label: 'Materials',
-          options: this.materialOptions,
-          initiallyCollapsed: !this.$store.state.route.query.materials,
-          filters: this.$store.state.materials.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'country',
-          label: 'Countries',
-          options: this.countryOptions,
-          initiallyCollapsed: !this.$store.state.route.query.country,
-          filters: this.$store.state.country.filters
-        },
-        {
-          name: 'biobank_quality',
-          label: 'Biobank quality marks',
-          options: this.biobankQualityOptions,
-          initiallyCollapsed: !this.$store.state.route.query.biobank_quality,
-          filters: this.$store.state.biobank_quality.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'collection_quality',
-          label: 'Collection quality marks',
-          options: this.collectionQualityOptions,
-          initiallyCollapsed: !this.$store.state.route.query.collection_quality,
-          filters: this.$store.state.collection_quality.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'type',
-          label: 'Collection types',
-          options: this.typesOptions,
-          initiallyCollapsed: !this.$store.state.route.query.type,
-          filters: this.$store.state.type.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'biobank_network',
-          label: 'Biobank network',
-          options: this.biobankNetworkOptions,
-          initiallyCollapsed: !this.$store.state.route.query.biobank_network,
-          filters: this.$store.state.biobank_network.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'collection_network',
-          label: 'Collection network',
-          options: this.collectionNetworkOptions,
-          initiallyCollapsed: !this.$store.state.route.query.collection_network,
-          filters: this.$store.state.collection_network.filters,
-          maxVisibleOptions: 25
-        },
-        {
-          name: 'dataType',
-          label: 'Data types',
-          options: this.dataTypeOptions,
-          initiallyCollapsed: !this.$store.state.route.query.dataType,
-          filters: this.$store.state.dataType.filters,
-          maxVisibleOptions: 25
-        }
-      ].filter(facet => {
+      return this.filterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
-      })
+      }).filter((item) => item.component)
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter', 'SetSearch']),
-    filterChange (name, filters) {
-      this.UpdateFilter({ name, filters })
-      const value = filters.length === 0 ? undefined : filters.join(',')
-      this.$router.push({
-        query: { ...this.$store.state.route.query, [name]: value }
-      })
-      if (name === 'collection_quality') {
-        this.$store.dispatch('GetCollectionQualityCollections')
-      }
-      if (name === 'biobank_quality') {
-        this.$store.dispatch('GetBiobankQualityBiobanks')
-      }
+    ...mapMutations(['UpdateFilter']),
+    filterChange (name, value) {
+      this.UpdateFilter({ name, value, router: this.$router })
     }
-  },
-  mounted () {
-    this.$store.dispatch('GetCountryOptions')
-    this.$store.dispatch('GetMaterialsOptions')
-    this.$store.dispatch('GetCollectionQualityOptions')
-    this.$store.dispatch('GetBiobankQualityOptions')
-    this.$store.dispatch('GetTypesOptions')
-    this.$store.dispatch('GetDataTypeOptions')
-    this.$store.dispatch('GetCovid19Options')
-    this.$store.dispatch('GetNetworkOptions')
-  },
-  components: { StringFilter, CheckboxFilters, DiagnosisAvailableFilters }
+  }
 }
 </script>

@@ -13,7 +13,6 @@ localVue.use(Vuex)
  */
 describe('BiobankExplorerContainer', () => {
   let store
-  const biobanks = []
   const collectionsWithBiobank = [{ collectionId: 'A', biobankId: 'B', collectionName: 'Collection A' },
     { collectionId: 'C', biobankId: 'B', collectionName: 'Collection C' }, { collectionId: 'D', biobankId: 'E', collectionName: 'Collection D' }]
   const rsqlMock = jest.fn()
@@ -25,17 +24,18 @@ describe('BiobankExplorerContainer', () => {
       getters: {
         rsql: rsqlMock,
         biobankRsql: () => '',
-        getFoundBiobankIds: () => ['B'],
-        getCollectionsWithBiobankId: () => collectionsWithBiobank,
+        selectedBiobankQuality: () => [],
+        selectedCollectionQuality: () => [],
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
-        foundBiobanks: () => biobanks,
         loading: () => false,
         collectionsInPodium: podiumCollectionsMock
       },
       actions: {
         GetBiobankIds: jest.fn(),
         GetPodiumCollections: jest.fn(),
-        GetCollectionInfo: jest.fn()
+        GetCollectionInfo: jest.fn(),
+        GetBiobankIdsForQuality: jest.fn(),
+        GetCollectionIdsForQuality: jest.fn()
       }
     })
   })

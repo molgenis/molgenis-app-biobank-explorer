@@ -1,7 +1,7 @@
-import { covid19BiobankNetworkSelectionId, covid19CollectionNetworkSelectionId } from './helpers/covid19Helper'
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
+  bookmarkMappedToState: false,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
   isLoading: false,
@@ -23,57 +23,15 @@ export default {
     collections: undefined,
     biobanks: undefined
   },
-  search: '',
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */
   nToken: null,
-  country: {
-    filters: [],
-    options: []
+  collectionIdsWithSelectedQuality: [],
+  biobankIdsWithSelectedQuality: [],
+  filterIdLabelDictionary: {},
+  filters: {
+    selections: {},
+    labels: {} // for human readable string
   },
-  materials: {
-    filters: [],
-    options: []
-  },
-  collection_quality: {
-    filters: [],
-    options: [],
-    collections: []
-  },
-  covid19: {
-    filters: [],
-    options: []
-  },
-  covid19network: {
-    filters: [],
-    options: [
-      { id: covid19BiobankNetworkSelectionId, label: 'Biobanks providing COVID-19 services' },
-      { id: covid19CollectionNetworkSelectionId, label: 'COVID-19 collections' }
-    ]
-  },
-  biobank_network: {
-    filters: [],
-    options: []
-  },
-  collection_network: {
-    filters: [],
-    options: []
-  },
-  biobank_quality: {
-    filters: [],
-    options: [],
-    biobanks: []
-  },
-  diagnosis_available: {
-    filters: [],
-    options: []
-  },
-  type: {
-    filters: [],
-    options: []
-  },
-  dataType: {
-    filters: [],
-    options: []
-  }
+  filterLabelCache: []
 }
