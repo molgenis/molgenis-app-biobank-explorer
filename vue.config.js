@@ -37,6 +37,7 @@ if (process.env.DATA_EXPLORER_DEV_PW) {
 }
 
 module.exports = {
+  transpileDependencies: ['/node_modules/@molgenis-ui/components-library/'],
   runtimeCompiler: true,
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
