@@ -34,6 +34,7 @@ export default {
   UpdateFilter (state, { name, value, router }) {
     if (name === 'search') {
       Vue.set(state.filters.selections, name, value)
+      createBookmark(router, state.filters.selections)
       return
     }
 
