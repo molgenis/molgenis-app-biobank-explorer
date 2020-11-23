@@ -1,5 +1,6 @@
 import 'es6-promise/auto'
 import 'regenerator-runtime'
+import 'core-js/stable'
 import Vue from 'vue'
 import store from './store'
 import router from './router'
