@@ -83,7 +83,15 @@ describe('templateMapper', () => {
       email: 'info@beautiful-biobank.gnv',
       url: 'https://beautiful-biobank.gnv',
       partner_charter_signed: true
-    }
+    },
+    data_use: [{
+      label: 'DUO Testlabel',
+      uri: 'https://external-link-to-duo-item'
+    },
+    {
+      label: 'DUO Testlabel',
+      uri: ''
+    }]
   }
   describe('mapDetailsTableContent', () => {
     it('should generate stringValues of details table content', () => {
