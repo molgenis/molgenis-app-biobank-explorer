@@ -35,7 +35,7 @@
                   <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
                   <report-list-row :data="mainContent.Data">Data:</report-list-row>
                   <report-list-row :data="mainContent.Diagnosis">Diagnosis:</report-list-row>
-                  <report-list-row :data="mainContent.DataUse">Data use:</report-list-row>
+                  <report-list-row :data="mainContent.DataUse">Data use conditions:</report-list-row>
                 </table>
 
                 <!-- Recursive set of subcollections -->
