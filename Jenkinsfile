@@ -60,6 +60,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "yarn build:preview"
+                    sh "yarn check-ie"
                 }
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
