@@ -44,6 +44,7 @@ module.exports = {
     ? '/plugin/app/' + packageJson.name
     : '/',
   chainWebpack: config => {
+    config.resolve.symlinks(false)
     config
       .plugin('html')
       .tap(args => {
