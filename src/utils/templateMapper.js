@@ -7,8 +7,11 @@ export const getSize = obj => {
       ? [obj.order_of_magnitude.size]
       : []
 }
-export const mapObjArrayToStringArrayIfExists = obj =>
-  obj ? obj.map(item => item.label) : []
+export const mapObjArray = (objects) => {
+  if (!objects) return []
+  if (!objects.some(o => o.uri)) return objects.map(item => item.label)
+  else return objects.map(item => ({ label: item.label, uri: item.uri || '#' }))
+}
 
 export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
@@ -67,37 +70,37 @@ export const mapDetailsTableContent = collection => {
       type: 'string-with-key'
     },
     Type: {
-      value: mapObjArrayToStringArrayIfExists(collection.type),
+      value: mapObjArray(collection.type),
       type: 'list',
       badgeColor: 'info'
     },
     Sex: {
-      value: mapObjArrayToStringArrayIfExists(collection.sex),
+      value: mapObjArray(collection.sex),
       type: 'list',
       badgeColor: 'secondary'
     },
     Materials: {
-      value: mapObjArrayToStringArrayIfExists(collection.materials),
+      value: mapObjArray(collection.materials),
       type: 'list',
       badgeColor: 'danger'
     },
     Storage: {
-      value: mapObjArrayToStringArrayIfExists(collection.storage_temperatures),
+      value: mapObjArray(collection.storage_temperatures),
       type: 'list',
       badgeColor: 'warning'
     },
     Data: {
-      value: mapObjArrayToStringArrayIfExists(collection.data_categories),
+      value: mapObjArray(collection.data_categories),
       type: 'list',
       badgeColor: 'info'
     },
     Diagnosis: {
-      value: mapObjArrayToStringArrayIfExists(collection.diagnosis_available),
+      value: mapObjArray(collection.diagnosis_available),
       type: 'list',
       badgeColor: 'primary'
     },
     DataUse: {
-      value: mapObjArrayToStringArrayIfExists(collection.data_use),
+      value: mapObjArray(collection.data_use),
       type: 'list',
       badgeColor: 'success'
     }
@@ -139,7 +142,7 @@ export const collectionReportInformation = collection => {
     })
   }
 
-  collectionReport.certifications = mapObjArrayToStringArrayIfExists(collection.quality)
+  collectionReport.certifications = mapObjArray(collection.quality)
 
   collectionReport.collaboration = []
 
@@ -196,12 +199,12 @@ export const mapCollectionsData = collections => {
           badgeColor: 'success'
         },
         Materials: {
-          value: mapObjArrayToStringArrayIfExists(collection.materials),
+          value: mapObjArray(collection.materials),
           type: 'list',
           badgeColor: 'danger'
         },
         Data: {
-          value: mapObjArrayToStringArrayIfExists(collection.data_categories),
+          value: mapObjArray(collection.data_categories),
           type: 'list',
           badgeColor: 'info'
         }

@@ -69,7 +69,7 @@ import {
   mapContactInfo,
   mapCollectionsData,
   mapNetworkInfo,
-  mapObjArrayToStringArrayIfExists
+  mapObjArray
 } from '../../utils/templateMapper'
 
 export default {
@@ -107,7 +107,7 @@ export default {
       return this.biobankDataAvailable && this.biobank.collections ? mapCollectionsData(this.biobank.collections).filter(it => !it.parentCollection) : []
     },
     quality () {
-      return { Certification: { value: mapObjArrayToStringArrayIfExists(this.biobank.quality), type: 'list' } }
+      return { Certification: { value: mapObjArray(this.biobank.quality), type: 'list' } }
     },
     availableCovidTypes () {
       if (
