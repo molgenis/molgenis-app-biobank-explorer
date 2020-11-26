@@ -7,7 +7,7 @@
         <th scope="col">Materials</th>
         <th scope="col">Standards</th>
         <th scope="col">#Samples</th>
-        <th scope="col" class="pr-2"><input type="checkbox" /></th>
+        <th scope="col" class="pr-2"><input ref="header_checkbox" type="checkbox" v-model="selectedAllCollections" /></th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
             <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
           </td>
-          <td class="pr-1"><input type="checkbox" /></td>
+          <td class="pr-1"><input type="checkbox" v-model="selectedCollection" :value="{label: collection.label || collection.name, value: collection.id}" /></td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
           <td colspan="5" class="sub-table-cell">
@@ -60,6 +60,7 @@
 <script>
 import utils from '../../utils'
 import SubCollectionsTable from './SubCollectionsTable'
+import { mapGetters, mapMutations } from 'vuex'
 import QualityColumn from './QualityColumn'
 
 export default {
@@ -76,6 +77,30 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['selectedCollections']),
+    selectedCollection: {
+      get () {
+        return this.selectedCollections
+      },
+      set (value) {
+        this.AddCollectionToSelection(value)
+      }
+    },
+    selectedAllCollections: {
+      get () {
+        return this.parentCollections.map(pc => pc.value).every(id => this.selectedCollection.map(sc => sc.value).includes(id))
+      },
+      set (newValue) {
+        if (newValue === true) {
+          this.AddCollectionToSelection(this.parentCollections)
+        } else {
+          this.RemoveCollectionFromSelection(this.parentCollections)
+        }
+      }
+    },
+    parentCollections () {
+      return this.topLevelElements.map(tle => ({ label: tle.label || tle.name, value: tle.id }))
+    },
     topLevelElements () {
       return this.collections.filter(
         collection => !collection.parent_collection
@@ -89,6 +114,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
     getCollectionMaterials (collection) {
       return utils
         .getUniqueIdArray(collection.materials.map(material => material.label))

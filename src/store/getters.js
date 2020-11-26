@@ -67,6 +67,7 @@ export default {
       return collectionNames
     } else return []
   },
+  selectedCollections: state => state.selectedCollections,
   selectedBiobankQuality: state => state.filters.selections.biobank_quality,
   selectedCollectionQuality: state => {
     return state.filters.selections.collection_quality

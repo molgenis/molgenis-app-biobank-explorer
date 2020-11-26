@@ -29,6 +29,7 @@ export default {
   collectionIdsWithSelectedQuality: [],
   biobankIdsWithSelectedQuality: [],
   filterIdLabelDictionary: {},
+  selectedCollections: [],
   filters: {
     selections: {},
     labels: {} // for human readable string

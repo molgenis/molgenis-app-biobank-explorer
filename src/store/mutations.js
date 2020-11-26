@@ -123,6 +123,18 @@ export default {
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
+  AddCollectionToSelection (state, collection) {
+    if (Array.isArray(collection)) {
+      state.selectedCollections = [...new Set(state.selectedCollections.concat(collection))]
+      return
+    }
+    state.selectedCollections.push(collection)
+  },
+  RemoveCollectionFromSelection (state, collection) {
+    const collectionsToRemove = Array.isArray(collection) ? collection.map(c => c.value) : [collection.value]
+    console.log(collectionsToRemove)
+    state.selectedCollections = [...new Set(state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value)))]
+  },
   /**
    *
    * @param state

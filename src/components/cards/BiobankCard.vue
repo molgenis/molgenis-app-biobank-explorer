@@ -37,14 +37,13 @@
           </p>
         </div>
         <div class="col-md-1 text-right pr-1" @click.stop v-if="!loading">
-          <input type="checkbox"/>
+          <input type="checkbox" v-model="biobankSelected"/>
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
         </div>
       </div>
     </div>
-
     <div class="card-body table-card" v-if="!collapsed && !loading">
       <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
     </div>
@@ -53,6 +52,7 @@
 
 <script>
 import CollectionsTable from '../tables/CollectionsTable.vue'
+import { mapMutations } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -60,6 +60,10 @@ import 'array-flat-polyfill'
 
 export default {
   name: 'biobank-card',
+  components: {
+    CollectionsTable,
+    QualityColumn
+  },
   props: {
     biobank: {
       type: [Object, String]
@@ -72,10 +76,23 @@ export default {
   },
   data () {
     return {
+      biobankSelected: false,
       collapsed: this.initCollapsed
     }
   },
+  watch: {
+    biobankSelected (newValue) {
+      if (newValue === true) {
+        this.AddCollectionToSelection(this.biobankCollectionSelection)
+      } else {
+        this.RemoveCollectionFromSelection(this.biobankCollectionSelection)
+      }
+    }
+  },
   computed: {
+    biobankCollectionSelection () {
+      return this.biobank.collections.map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+    },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)
     },
@@ -104,9 +121,8 @@ export default {
       } else return ''
     }
   },
-  components: {
-    CollectionsTable,
-    QualityColumn
+  methods: {
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection'])
   }
 }
 </script>
