@@ -32,6 +32,5 @@ export default {
   filters: {
     selections: {},
     labels: {} // for human readable string
-  },
-  filterLabelCache: []
+  }
 }

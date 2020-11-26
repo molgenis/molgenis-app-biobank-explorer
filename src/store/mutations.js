@@ -44,9 +44,6 @@ export default {
     for (const item of value) {
       filterValues.push(item.value)
       filterTexts.push(item.text)
-      if (!state.filterLabelCache.filter(flc => flc.value === item.value).length) {
-        state.filterLabelCache.push(item) // will be fixed when components-library returns options always.
-      }
     }
 
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])

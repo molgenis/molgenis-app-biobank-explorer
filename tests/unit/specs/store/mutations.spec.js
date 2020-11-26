@@ -54,7 +54,6 @@ describe('store', () => {
 
     describe('UpdateAllFilters', () => {
       it('can set all filters', () => {
-        state.filterLabelCache = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }, { value: 'FR', text: 'France' }]
         state.filters.labels.country = ['Netherlands', 'Belgium', 'France']
 
         state.filters.selections = {
