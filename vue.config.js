@@ -77,7 +77,7 @@ module.exports = {
         }
       }),
       new ZipPlugin({
-        filename: packageJson.name
+        filename: `${packageJson.name}.v${packageJson.version}`
       })
     )
   },
