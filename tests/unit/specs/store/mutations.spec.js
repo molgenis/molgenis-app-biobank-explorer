@@ -55,6 +55,7 @@ describe('store', () => {
     describe('UpdateAllFilters', () => {
       it('can set all filters', () => {
         state.filters.labels.country = ['Netherlands', 'Belgium', 'France']
+        state.filterLabelCache = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }, { value: 'FR', text: 'France' }]
 
         state.filters.selections = {
           search: 'Free text search',

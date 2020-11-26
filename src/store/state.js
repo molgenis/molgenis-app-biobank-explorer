@@ -33,5 +33,6 @@ export default {
   filters: {
     selections: {},
     labels: {} // for human readable string
-  }
+  },
+  filterLabelCache: [] // needed to filter human readable string
 }
