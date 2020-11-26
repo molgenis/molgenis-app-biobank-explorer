@@ -1,6 +1,10 @@
 import { expect } from 'chai'
 import CollectionsTable from '@/components/tables/CollectionsTable'
 import { shallowMount } from '@vue/test-utils'
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
 
 describe('components', () => {
   describe('CollectionsTable', () => {
@@ -62,10 +66,21 @@ describe('components', () => {
       }]
     }, { parent_collection: { id: 5 } }]
 
-    let wrapper
+    let wrapper, store
 
     beforeEach(() => {
-      wrapper = shallowMount(CollectionsTable, { propsData: { collections }, stubs: ['router-link'] })
+      store = new Vuex.Store({
+        state: {},
+        getters: {
+          selectedCollections: jest.fn(() => [])
+        },
+        mutations: {
+          RemoveCollectionFromSelection: jest.fn(),
+          AddCollectionToSelection: jest.fn()
+        }
+      })
+
+      wrapper = shallowMount(CollectionsTable, { store, propsData: { collections }, stubs: ['router-link'] })
     })
 
     describe('html', () => {
