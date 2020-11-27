@@ -132,7 +132,6 @@ export default {
   },
   RemoveCollectionFromSelection (state, collection) {
     const collectionsToRemove = Array.isArray(collection) ? collection.map(c => c.value) : [collection.value]
-    console.log(collectionsToRemove)
     state.selectedCollections = [...new Set(state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value)))]
   },
   /**
