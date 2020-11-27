@@ -1,12 +1,22 @@
 import { expect } from 'chai'
 import { shallowMount } from '@vue/test-utils'
 import BiobankCard from '@/components/cards/BiobankCard'
+import Vuex from 'vuex'
+import Vue from 'vue'
+
+Vue.use(Vuex)
 
 describe('BiobankCard', () => {
-  let propsData
-  let stubs
+  let propsData, stubs, store
 
   beforeEach(() => {
+    store = new Vuex.Store({
+      state: {},
+      getters: {
+        selectedCollections: () => []
+      }
+    })
+
     propsData = {
       biobank: {
         id: 'biobank-1',
@@ -32,27 +42,27 @@ describe('BiobankCard', () => {
   })
 
   it('should initialize the collapsed prop to true if none is passed', () => {
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.props().initCollapsed).to.equal(true)
   })
 
   it('should use the passed collapsed setting if passed', () => {
     propsData.initCollapsed = false
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.props().initCollapsed).to.equal(false)
   })
 
   it('should expose a list of collectionTypes', () => {
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.vm.collectionTypes).to.equal('col-type-a, col-type-b, col-type-d, col-type-e')
   })
   it('should expose a list of covid19 types if available', () => {
     propsData.biobank.covid19biobank = [{ label: 'Member of the COVID-19 network' }, { name: 'COVID-19' }]
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.vm.availableCovidTypes).to.equal('Member of the COVID-19 network, COVID-19')
   })
   it('should return nothing if covid types are not available', () => {
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.vm.availableCovidTypes).to.equal('')
   })
   it('should sort collections based by name alphabeticaly', () => {
@@ -73,7 +83,7 @@ describe('BiobankCard', () => {
       }]
     }]
 
-    const wrapper = shallowMount(BiobankCard, { propsData, stubs })
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.vm.sortedCollections).to.deep.equal(result)
   })
 })

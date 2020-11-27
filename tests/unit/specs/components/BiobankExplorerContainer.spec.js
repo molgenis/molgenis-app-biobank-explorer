@@ -18,7 +18,10 @@ describe('BiobankExplorerContainer', () => {
   const rsqlMock = jest.fn()
   const podiumCollectionsMock = jest.fn()
 
+  let selectedCollectionMock = jest.fn()
+
   beforeEach(() => {
+    selectedCollectionMock = jest.fn().mockReturnValue([])
     store = new Vuex.Store({
       state: {},
       getters: {
@@ -26,6 +29,7 @@ describe('BiobankExplorerContainer', () => {
         biobankRsql: () => '',
         selectedBiobankQuality: () => [],
         selectedCollectionQuality: () => [],
+        selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,
         collectionsInPodium: podiumCollectionsMock
@@ -45,8 +49,8 @@ describe('BiobankExplorerContainer', () => {
     expect(wrapper.html()).not.toContain('cart-selection-toast')
   })
 
-  it('should render cart when one more more items are selected', () => {
-    rsqlMock.mockReturnValueOnce('rsql-query')
+  it('should render cart when one more more items are selected', async () => {
+    selectedCollectionMock.mockReturnValueOnce(['a', 'b', 'c'])
     const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
     expect(wrapper.html()).toContain('3 collection(s) selected')
   })
