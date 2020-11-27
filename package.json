@@ -17,7 +17,7 @@
     "lint": "vue-cli-service lint",
     "build:preview": "yarn build --mode test",
     "preversion": "yarn install; yarn test:unit",
-    "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.v$npm_package_version.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.zip"
+    "postversion": "yarn build; curl -v --user ${REGISTRY_CRED_USR}:${REGISTRY_CRED_PSW} --upload-file dist/$npm_package_name.v$npm_package_version.zip  https://${LOCAL_REGISTRY}/repository/appstore/$npm_package_name/$npm_package_version/$npm_package_name.v$npm_package_version.zip"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
