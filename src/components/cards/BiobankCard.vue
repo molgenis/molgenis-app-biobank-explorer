@@ -37,7 +37,7 @@
           </p>
         </div>
         <div class="col-md-1 text-right pr-1" @click.stop v-if="!loading">
-          <input type="checkbox" v-model="biobankSelected"/>
+          <input type="checkbox" v-if="biobankCollectionSelection.length > 0" v-model="selectedAllCollections" :indeterminate.prop="indeterminateState"/>
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
@@ -52,7 +52,7 @@
 
 <script>
 import CollectionsTable from '../tables/CollectionsTable.vue'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -80,18 +80,25 @@ export default {
       collapsed: this.initCollapsed
     }
   },
-  watch: {
-    biobankSelected (newValue) {
-      if (newValue === true) {
-        this.AddCollectionToSelection(this.biobankCollectionSelection)
-      } else {
-        this.RemoveCollectionFromSelection(this.biobankCollectionSelection)
-      }
-    }
-  },
   computed: {
+    ...mapGetters(['selectedCollections']),
+    selectedAllCollections: {
+      get () {
+        return this.biobankCollectionSelection.map(pc => pc.value).every(id => this.selectedCollections.map(sc => sc.value).includes(id))
+      },
+      set (newValue) {
+        if (newValue === true) {
+          this.AddCollectionToSelection(this.biobankCollectionSelection)
+        } else {
+          this.RemoveCollectionFromSelection(this.biobankCollectionSelection)
+        }
+      }
+    },
+    indeterminateState () {
+      return this.selectedCollections.map(sc => sc.value).some(id => this.biobankCollectionSelection.map(pc => pc.value).includes(id)) && !this.selectedAllCollections
+    },
     biobankCollectionSelection () {
-      return this.biobank.collections.map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+      return this.biobank.collections.filter(bcf => !bcf.parent_collection).map(bc => ({ label: bc.label || bc.name, value: bc.id }))
     },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)

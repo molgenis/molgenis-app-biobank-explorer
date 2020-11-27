@@ -20,13 +20,13 @@
 
     <cart-selection-toast
       v-if="!loading && hasSelection && !podiumModalShown && this.foundCollectionIds.length"
-      :cartSelectionText="`${this.foundCollectionIds.length} collection(s) selected`"
+      :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
       :clickHandler="sendToNegotiator"
       :title="negotiatorButtonText"
       toastClass="bg-warning text-white"
     >
       <template v-slot:buttonText>
-        REQUEST SAMPLES
+        Show selection
         <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="request"></i>
       </template>
     </cart-selection-toast>
@@ -73,7 +73,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium', 'selectedBiobankQuality', 'selectedCollectionQuality']),
+    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium',
+      'selectedBiobankQuality', 'selectedCollectionQuality', 'selectedCollections']),
     ...mapState(['isPodium']),
     negotiatorButtonText () {
       return this.isPodium ? 'Send to Podium' : 'Send to the negotiator'
@@ -87,9 +88,7 @@ export default {
       return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
     },
     hasSelection () {
-      if ((this.rsql && this.rsql !== '') || (this.biobankRsql && this.biobankRsql !== '')) return true
-
-      return false
+      return this.selectedCollections.length > 0
     }
   },
   watch: {

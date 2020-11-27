@@ -33,7 +33,14 @@
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
             <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
           </td>
-          <td class="pr-1"><input type="checkbox" v-model="selectedCollection" :value="{label: collection.label || collection.name, value: collection.id}" /></td>
+          <td class="pr-1">
+            <input
+              type="checkbox"
+              @input="handleCollectionStatus"
+              :checked="collectionSelected(collection.id)"
+              :value="{ label: collection.label || collection.name, value: collection.id }"
+            />
+          </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
           <td colspan="5" class="sub-table-cell">
@@ -65,6 +72,10 @@ import QualityColumn from './QualityColumn'
 
 export default {
   name: 'CollectionsTable',
+  components: {
+    SubCollectionsTable,
+    QualityColumn
+  },
   props: {
     collections: {
       type: Array,
@@ -78,17 +89,9 @@ export default {
   },
   computed: {
     ...mapGetters(['selectedCollections']),
-    selectedCollection: {
-      get () {
-        return this.selectedCollections
-      },
-      set (value) {
-        this.AddCollectionToSelection(value)
-      }
-    },
     selectedAllCollections: {
       get () {
-        return this.parentCollections.map(pc => pc.value).every(id => this.selectedCollection.map(sc => sc.value).includes(id))
+        return this.parentCollections.map(pc => pc.value).every(id => this.selectedCollections.map(sc => sc.value).includes(id))
       },
       set (newValue) {
         if (newValue === true) {
@@ -102,9 +105,7 @@ export default {
       return this.topLevelElements.map(tle => ({ label: tle.label || tle.name, value: tle.id }))
     },
     topLevelElements () {
-      return this.collections.filter(
-        collection => !collection.parent_collection
-      )
+      return this.collections.filter(collection => !collection.parent_collection)
     }
   },
   data () {
@@ -115,30 +116,29 @@ export default {
   },
   methods: {
     ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
+    collectionSelected (collectionId) {
+      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
+    },
+    handleCollectionStatus (event) {
+      const checkbox = event.target
+      if (checkbox.checked === true) {
+        this.AddCollectionToSelection(checkbox._value)
+      } else {
+        this.RemoveCollectionFromSelection(checkbox._value)
+      }
+    },
     getCollectionMaterials (collection) {
-      return utils
-        .getUniqueIdArray(collection.materials.map(material => material.label))
-        .join(', ')
+      return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
     },
     getCollectionType (collection) {
-      return utils
-        .getUniqueIdArray(collection.type.map(type => type.label))
-        .join(', ')
+      return utils.getUniqueIdArray(collection.type.map(type => type.label)).join(', ')
     },
     hasSubCollections (collection) {
-      return (
-        collection &&
-        collection.sub_collections &&
-        collection.sub_collections.length > 0
-      )
+      return collection && collection.sub_collections && collection.sub_collections.length > 0
     },
     getCollectionSize (collection) {
       return collection.size || collection.order_of_magnitude.size
     }
-  },
-  components: {
-    SubCollectionsTable,
-    QualityColumn
   }
 }
 </script>
