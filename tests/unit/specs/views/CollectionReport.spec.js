@@ -56,6 +56,9 @@ describe('CollectionReport', () => {
       },
       actions: {
         GetCollectionReport: () => {}
+      },
+      getters: {
+        selectedCollections: jest.fn().mockReturnValue([])
       }
     })
     mocks = {

@@ -12,6 +12,25 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
+                <div class="mb-2" v-if="isTopLevelCollection">
+                  <input
+                    type="checkbox"
+                    id="add-to-cart"
+                    name="add-to-cart"
+                    @input="handleCollectionStatus"
+                    :checked="collectionSelected(collection.id)"
+                    :value="{ label: collection.label || collection.name, value: collection.id }"
+                    hidden
+                  />
+
+                  <label id="add-to-cart-label" class="btn btn-success" for="add-to-cart"
+                    >Add collection<span class="ml-2 fa fa-plus"></span
+                  ></label>
+                  <label id="remove-from-cart-label" class="btn btn-danger" for="add-to-cart"
+                    >Remove collection<span class="ml-2 fa fa-times"></span
+                  ></label>
+                </div>
+
                 <report-description :description="collection.description" :maxLength="500"></report-description>
 
                 <!-- main collection information -->
@@ -22,7 +41,11 @@
                   </tr>
                   <tr v-if="collection.url">
                     <th scope="row" class="pr-1">Website:</th>
-                    <td><span><a target="_blank" :href="collection.url">{{ collection.url }}</a></span></td>
+                    <td>
+                      <span
+                        ><a target="_blank" :href="collection.url">{{ collection.url }}</a></span
+                      >
+                    </td>
                   </tr>
                   <report-list-row :data="mainContent.Size">Size:</report-list-row>
                   <tr v-if="mainContent.Age && mainContent.Age.value">
@@ -41,7 +64,12 @@
                 <!-- Recursive set of subcollections -->
                 <div v-if="collection.sub_collections && collection.sub_collections.length" class="mt-2">
                   <h5>Sub collections</h5>
-                  <report-sub-collection v-for="subCollection in subCollections" :collection="subCollection" :key="subCollection.id" :level="1"></report-sub-collection>
+                  <report-sub-collection
+                    v-for="subCollection in subCollections"
+                    :collection="subCollection"
+                    :key="subCollection.id"
+                    :level="1"
+                  ></report-sub-collection>
                 </div>
               </div>
 
@@ -56,7 +84,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '@/components/report-components/ReportDescription'
@@ -79,20 +107,38 @@ export default {
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
+    collectionSelected (collectionId) {
+      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
+    },
+    handleCollectionStatus (event) {
+      const checkbox = event.target
+      if (checkbox.checked === true) {
+        this.AddCollectionToSelection(checkbox._value)
+      } else {
+        this.RemoveCollectionFromSelection(checkbox._value)
+      }
+    },
     back () {
       this.$router.go(-1)
     }
   },
   computed: {
     ...mapState({ collection: 'collectionReport', isLoading: 'isLoading' }),
+    ...mapGetters(['selectedCollections']),
     mainContent () {
       return this.collection ? mapDetailsTableContent(this.collection) : {}
+    },
+    isTopLevelCollection () {
+      return this.collection.parent_collection === undefined
     },
     info () {
       return collectionReportInformation(this.collection)
     },
     subCollections () {
-      return this.collection && this.collection.sub_collections && this.collection.sub_collections.length ? mapCollectionsData(this.collection.sub_collections) : []
+      return this.collection && this.collection.sub_collections && this.collection.sub_collections.length
+        ? mapCollectionsData(this.collection.sub_collections)
+        : []
     },
     collectionId () {
       const splittedUrl = this.$route.fullPath.split('/')
@@ -114,6 +160,22 @@ export default {
 </script>
 
 <style scoped>
+.btn:hover {
+  cursor: pointer;
+}
+
+#add-to-cart:checked ~ #add-to-cart-label {
+  display: none;
+}
+
+#remove-from-cart-label {
+  display: none;
+}
+
+#add-to-cart:checked ~ #remove-from-cart-label {
+  display: inline-block;
+}
+
 >>> .mg-report-details-list th {
   vertical-align: top;
 }
