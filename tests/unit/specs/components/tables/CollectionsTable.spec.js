@@ -85,19 +85,19 @@ describe('components', () => {
 
     describe('html', () => {
       it('should render collection name', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(0).text()).eq('Short Term Storage Collection')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(1).text()).eq('Short Term Storage Collection')
       })
 
       it('should render collection type', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(1).text()).eq('Hospital')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(2).text()).eq('Hospital')
       })
 
       it('should render available material types', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(2).text()).eq('Serum, Tissue (frozen)')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(3).text()).eq('Serum, Tissue (frozen)')
       })
 
       it('should render collection\'s size', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(4).text()).eq('46000')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(5).text()).eq('46000')
       })
     })
 

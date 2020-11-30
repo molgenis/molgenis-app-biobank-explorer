@@ -2,17 +2,25 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
+        <th scope="col" class="pr-2"><input ref="header_checkbox" type="checkbox" v-model="selectedAllCollections" /></th>
         <th scope="col">Collection</th>
         <th scope="col">Type</th>
         <th scope="col">Materials</th>
         <th scope="col">Standards</th>
         <th scope="col">#Samples</th>
-        <th scope="col" class="pr-2"><input ref="header_checkbox" type="checkbox" v-model="selectedAllCollections" /></th>
       </tr>
     </thead>
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
+          <td class="pr-1">
+            <input
+              type="checkbox"
+              @input="handleCollectionStatus"
+              :checked="collectionSelected(collection.id)"
+              :value="{ label: collection.label || collection.name, value: collection.id }"
+            />
+          </td>
           <td
             :class="{
               'table-text-content-columns-has-sub': hasSubCollections(collection),
@@ -32,14 +40,6 @@
             <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
             <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
             <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
-          </td>
-          <td class="pr-1">
-            <input
-              type="checkbox"
-              @input="handleCollectionStatus"
-              :checked="collectionSelected(collection.id)"
-              :value="{ label: collection.label || collection.name, value: collection.id }"
-            />
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">

@@ -37,7 +37,8 @@
           </p>
         </div>
         <div class="col-md-1 text-right pr-1" @click.stop v-if="!loading">
-          <input type="checkbox" v-if="biobankCollectionSelection.length > 0" v-model="selectedAllCollections" :indeterminate.prop="indeterminateState"/>
+            <span v-if="biobankInSelection" class="fa fa-check text-success" aria-hidden="true"></span>
+
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
@@ -82,20 +83,8 @@ export default {
   },
   computed: {
     ...mapGetters(['selectedCollections']),
-    selectedAllCollections: {
-      get () {
-        return this.biobankCollectionSelection.map(pc => pc.value).every(id => this.selectedCollections.map(sc => sc.value).includes(id))
-      },
-      set (newValue) {
-        if (newValue === true) {
-          this.AddCollectionToSelection(this.biobankCollectionSelection)
-        } else {
-          this.RemoveCollectionFromSelection(this.biobankCollectionSelection)
-        }
-      }
-    },
-    indeterminateState () {
-      return this.selectedCollections.map(sc => sc.value).some(id => this.biobankCollectionSelection.map(pc => pc.value).includes(id)) && !this.selectedAllCollections
+    biobankInSelection () {
+      return this.selectedCollections.map(sc => sc.value).some(id => this.biobankCollectionSelection.map(pc => pc.value).includes(id))
     },
     biobankCollectionSelection () {
       return this.biobank.collections.filter(bcf => !bcf.parent_collection).map(bc => ({ label: bc.label || bc.name, value: bc.id }))
