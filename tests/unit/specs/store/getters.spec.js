@@ -49,7 +49,7 @@ describe('store', () => {
           { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
         const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
 
-        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual(['Collection A', 'Collection B'])
+        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual([{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }])
       })
     })
 

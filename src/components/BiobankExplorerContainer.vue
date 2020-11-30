@@ -19,9 +19,9 @@
     </div>
 
     <cart-selection-toast
-      v-if="!loading && hasSelection && !podiumModalShown && this.foundCollectionIds.length"
+      v-if="!loading && hasSelection && !collectionCartShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
-      :clickHandler="sendToNegotiator"
+      :clickHandler="showSelection"
       :title="negotiatorButtonText"
       toastClass="bg-warning text-white"
     >
@@ -31,17 +31,17 @@
       </template>
     </cart-selection-toast>
 
-    <b-modal hide-header id="podium-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="done">
-      <ul v-if="hasPodiumCollections">
-        <li :key="cip" v-for="cip in collectionsInPodium">
-          {{ cip }}
+    <b-modal hide-header id="collectioncart-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="closeModal">
+      <ul v-if="collectionCart.length > 0">
+        <li :key="cc.label" v-for="cc in collectionCart">
+          {{ cc.label }}
         </li>
       </ul>
-      <p v-if="!hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
+      <p v-if="isPodium && !hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
       <template v-slot:modal-footer>
-        <span class="text-white font-weight-bold mr-auto">{{ `${collectionsInPodium.length} collection(s) present in Podium` }}</span>
+        <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button :disabled="!hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ negotiatorButtonText }}</b-button>
+        <b-button :disabled="isPodium && !hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ negotiatorButtonText }}</b-button>
       </template>
     </b-modal>
   </div>
@@ -69,23 +69,33 @@ export default {
   },
   data: () => {
     return {
-      request: false
+      modalEnabled: false
     }
   },
   computed: {
-    ...mapGetters(['rsql', 'biobankRsql', 'loading', 'foundCollectionIds', 'collectionsInPodium',
-      'selectedBiobankQuality', 'selectedCollectionQuality', 'selectedCollections']),
+    ...mapGetters([
+      'rsql',
+      'biobankRsql',
+      'loading',
+      'foundCollectionIds',
+      'collectionsInPodium',
+      'selectedBiobankQuality',
+      'selectedCollectionQuality',
+      'selectedCollections'
+    ]),
     ...mapState(['isPodium']),
+    modalFooterText () {
+      const collectionCount = this.isPodium ? this.collectionsInPodium.length : this.selectedCollections.length
+      return this.isPodium ? `${collectionCount} collection(s) present in Podium` : `${collectionCount} collection(s) selected`
+    },
     negotiatorButtonText () {
       return this.isPodium ? 'Send to Podium' : 'Send to the negotiator'
     },
-    podiumModalShown () {
-      if (this.isPodium) return this.request
-
-      return false
+    collectionCartShown () {
+      return this.modalEnabled
     },
-    hasPodiumCollections () {
-      return this.collectionsInPodium ? this.collectionsInPodium.length > 0 : false
+    collectionCart () {
+      return this.isPodium ? this.collectionsInPodium : this.selectedCollections
     },
     hasSelection () {
       return this.selectedCollections.length > 0
@@ -114,31 +124,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'GetCollectionInfo',
-      'GetBiobankIds',
-      'GetPodiumCollections',
-      'GetBiobankIdsForQuality',
-      'GetCollectionIdsForQuality'
-    ]),
+    ...mapActions(['GetCollectionInfo', 'GetBiobankIds', 'GetPodiumCollections', 'GetBiobankIdsForQuality', 'GetCollectionIdsForQuality']),
     hideModal () {
-      this.$bvModal.hide('podium-modal')
+      this.$bvModal.hide('collectioncart-modal')
+      this.closeModal()
     },
-    done () {
-      this.request = false
+    closeModal () {
+      this.modalEnabled = false
     },
     sendRequest () {
-      this.$bvModal.hide('podium-modal')
-      this.$store.dispatch('SendToNegotiator').finally(this.done)
+      this.$bvModal.hide('collectioncart-modal')
+      this.$store.dispatch('SendToNegotiator').finally(this.closeModal)
     },
-    sendToNegotiator () {
-      this.request = true
-      if (this.isPodium) {
-        this.$bvModal.show('podium-modal')
-      } else {
-        this.$bvModal.hide('podium-modal')
-        this.sendRequest()
-      }
+    showSelection () {
+      this.modalEnabled = true
+      this.$bvModal.show('collectioncart-modal')
     }
   }
 }

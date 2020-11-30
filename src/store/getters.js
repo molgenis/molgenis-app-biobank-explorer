@@ -63,7 +63,7 @@ export default {
       const collectionInfoInSelection = collectionInfo.filter(colInfo => foundCollectionIds.includes(colInfo.collectionId))
       const collectionNames = collectionInfoInSelection.filter(colInfo => podiumCollectionIds
         .includes(colInfo.collectionId))
-        .map(podCols => podCols.collectionName) // Returns only collection names.
+        .map(podCols => ({ label: podCols.collectionName, value: podCols.collectionId }))
       return collectionNames
     } else return []
   },

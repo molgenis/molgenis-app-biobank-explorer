@@ -16,12 +16,10 @@ describe('BiobankExplorerContainer', () => {
   const collectionsWithBiobank = [{ collectionId: 'A', biobankId: 'B', collectionName: 'Collection A' },
     { collectionId: 'C', biobankId: 'B', collectionName: 'Collection C' }, { collectionId: 'D', biobankId: 'E', collectionName: 'Collection D' }]
   const rsqlMock = jest.fn()
-  const podiumCollectionsMock = jest.fn()
-
-  let selectedCollectionMock = jest.fn()
+  const podiumCollectionsMock = jest.fn().mockReturnValue([])
+  const selectedCollectionMock = jest.fn().mockReturnValue([])
 
   beforeEach(() => {
-    selectedCollectionMock = jest.fn().mockReturnValue([])
     store = new Vuex.Store({
       state: {},
       getters: {
@@ -35,6 +33,7 @@ describe('BiobankExplorerContainer', () => {
         collectionsInPodium: podiumCollectionsMock
       },
       actions: {
+        SendToNegotiator: jest.fn(),
         GetBiobankIds: jest.fn(),
         GetPodiumCollections: jest.fn(),
         GetCollectionInfo: jest.fn(),
@@ -55,26 +54,26 @@ describe('BiobankExplorerContainer', () => {
     expect(wrapper.html()).toContain('3 collection(s) selected')
   })
 
-  it('should show modal when request button on cart is clicked when podium is true', () => {
-    rsqlMock.mockReturnValueOnce('rsql-query')
+  it('should show "no podium collections" message when there are no podium collections and isPodium is true', () => {
     store.state.isPodium = true
+    selectedCollectionMock.mockReturnValueOnce(['a', 'b', 'c'])
+    rsqlMock.mockReturnValueOnce('rsql-query')
 
     const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-    wrapper.vm.sendToNegotiator()
+    wrapper.vm.showSelection()
     wrapper.vm.$nextTick()
 
-    expect(wrapper.html()).toContain('podium-modal')
     expect(wrapper.html()).toContain('Sorry, none of the samples are currently in Podium.')
   })
 
   it('should render a list of names of collections which are in podium', () => {
     rsqlMock.mockReturnValueOnce('rsql-query')
     store.state.isPodium = true
-    podiumCollectionsMock.mockReturnValueOnce(['Collection A', 'Collection D'])
+    podiumCollectionsMock.mockReturnValueOnce([{ label: 'Collection A', value: 'A' }, { label: 'Collection D', value: 'D' }])
 
     const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
 
-    wrapper.vm.sendToNegotiator()
+    wrapper.vm.sendRequest()
     wrapper.vm.$nextTick()
     expect(wrapper.html()).toContain('Collection A')
     expect(wrapper.html()).toContain('Collection D')
