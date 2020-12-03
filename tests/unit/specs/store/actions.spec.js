@@ -96,34 +96,16 @@ describe('store', () => {
         ]
       }
 
-      it('should retrieve collection and biobank ids from the server based on collection filters', async () => {
+      it('should set the collection info, create a dictionary and map query to the state', async () => {
         api.get.mockResolvedValueOnce(response)
         const getters = { rsql: 'country=in=(NL,BE)' }
         const commit = jest.fn()
 
         await actions.GetCollectionInfo({ commit, getters })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
-        expect(commit.mock.calls[1]).toEqual(
-          ['SetCollectionInfo',
-            [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
-              { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }]
-          ])
-        expect(commit.mock.calls[2]).toEqual(['MapQueryToState'])
-      })
-
-      it('should retrieve all collection and biobank ids if there is no collection filter', async () => {
-        api.get.mockResolvedValueOnce(response)
-        const getters = { rsql: '' }
-        const commit = jest.fn()
-
-        await actions.GetCollectionInfo({ commit, getters })
-        expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
-        expect(commit.mock.calls[1]).toEqual(
-          ['SetCollectionInfo',
-            [{ biobankId: 'b1', collectionId: 'c1', collectionName: undefined },
-              { biobankId: 'b2', collectionId: 'c2', collectionName: undefined }]
-          ])
-        expect(commit.mock.calls[2]).toEqual(['MapQueryToState'])
+        expect(commit.mock.calls[1]).toEqual(['SetCollectionInfo', response])
+        expect(commit.mock.calls[2]).toEqual(['SetCollectionBiobankDictionary', response])
+        expect(commit.mock.calls[3]).toEqual(['MapQueryToState'])
       })
     })
 
