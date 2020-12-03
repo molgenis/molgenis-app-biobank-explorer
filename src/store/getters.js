@@ -31,25 +31,7 @@ export default {
       }
     })
   },
-  biobankLabelDictionary: (_, { biobanks }) => {
-    if (typeof biobanks[0] === 'string') return {}
-    const biobankLabelDictionary = {}
-
-    biobanks.forEach(biobank => {
-      biobankLabelDictionary[biobank.id] = biobank.label || biobank.name
-    })
-
-    return biobankLabelDictionary
-  },
-  collectionBiobankDictionary: (_, { biobankLabelDictionary, getCollectionsWithBiobankId }) => {
-    if (Object.keys(biobankLabelDictionary).length === 0) return {}
-    const collectionBiobankDictionary = {}
-
-    getCollectionsWithBiobankId.forEach(colBio => {
-      collectionBiobankDictionary[colBio.collectionId] = biobankLabelDictionary[colBio.biobankId]
-    })
-    return collectionBiobankDictionary
-  },
+  collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   getCollectionsWithBiobankId: (state) => {
     if (state.collectionInfo) {
@@ -68,6 +50,7 @@ export default {
     // only if there are biobanks, then there are collections. we can't have rogue collections :)
     if (getFoundBiobankIds.length && getCollectionsWithBiobankId.length) {
       const biobanksWithCollections = groupCollectionsByBiobankId(getCollectionsWithBiobankId)
+
       let collectionIds = []
       for (const id of getFoundBiobankIds) {
         const collectionsInBiobank = biobanksWithCollections[id]

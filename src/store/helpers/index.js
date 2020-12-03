@@ -40,9 +40,6 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
-export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
-
 const createNegotiatorQueryBody = async (state, getters, url) => {
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
@@ -128,6 +125,5 @@ export default {
   createNegotiatorQueryBody,
   getHumanReadableString,
   setLocationHref,
-  getLocationHref,
-  getBiobankId
+  getLocationHref
 }

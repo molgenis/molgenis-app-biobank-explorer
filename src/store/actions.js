@@ -71,18 +71,14 @@ export default {
    */
   GetCollectionInfo ({ commit, getters }) {
     commit('SetCollectionInfo', undefined)
-    let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank,name,label&size=10000&sort=biobank_label'
+    let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank(id,name,label),name,label&expand=biobank&size=10000&sort=biobank_label'
     if (getters.rsql) {
       url = `${url}&q=${encodeRsqlValue(getters.rsql)}`
     }
     api.get(url)
       .then(response => {
-        const collectionInfo = response.items.map(item => ({
-          collectionId: item.data.id,
-          collectionName: item.data.label || item.data.name,
-          biobankId: helpers.getBiobankId(item.data.biobank.links.self)
-        }))
-        commit('SetCollectionInfo', collectionInfo)
+        commit('SetCollectionInfo', response)
+        commit('SetCollectionBiobankDictionary', response)
         commit('MapQueryToState')
       }, error => {
         commit('SetError', error)

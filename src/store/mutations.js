@@ -77,7 +77,28 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  SetCollectionInfo (state, collectionInfo) {
+  SetCollectionBiobankDictionary (state, response) {
+    const collections = response.items.map(item => (
+      {
+        id: item.data.id,
+        biobankName: item.data.biobank.data.label || item.data.biobank.data.name
+      }))
+
+    collections.forEach(collection => {
+      Vue.set(state.collectionBiobankDictionary, collection.id, collection.biobankName)
+    })
+  },
+  SetCollectionInfo (state, response) {
+    if (response === undefined) {
+      state.collectionInfo = response
+      return
+    }
+
+    const collectionInfo = response.items.map(item => ({
+      collectionId: item.data.id,
+      collectionName: item.data.label || item.data.name,
+      biobankId: item.data.biobank.data.id
+    }))
     state.collectionInfo = collectionInfo
   },
   /**
