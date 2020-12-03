@@ -22,12 +22,11 @@
                     :value="{ label: collection.label || collection.name, value: collection.id }"
                     hidden
                   />
-
                   <label id="add-to-cart-label" class="btn btn-success" for="add-to-cart"
-                    >Add collection<span class="ml-2 fa fa-plus"></span
+                    >Add to selection<span class="ml-2 fa fa-plus"></span
                   ></label>
                   <label id="remove-from-cart-label" class="btn btn-danger" for="add-to-cart"
-                    >Remove collection<span class="ml-2 fa fa-times"></span
+                    >Remove from selection<span class="ml-2 fa fa-times"></span
                   ></label>
                 </div>
 

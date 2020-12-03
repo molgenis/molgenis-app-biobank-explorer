@@ -25,23 +25,27 @@
       :title="negotiatorButtonText"
       toastClass="bg-warning text-white"
     >
-      <template v-slot:buttonText>
-        Show selection
-        <i class="fa fa-spin fa-spinner" aria-hidden="true" v-if="request"></i>
-      </template>
+      <template v-slot:buttonText> Show selection </template>
     </cart-selection-toast>
 
     <b-modal hide-header id="collectioncart-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="closeModal">
-      <ul v-if="collectionCart.length > 0">
-        <li :key="cc.label" v-for="cc in collectionCart">
-          {{ cc.label }}
-        </li>
-      </ul>
+      <template v-if="collectionCart.length > 0">
+        <div :key="cart.biobankLabel" v-for="cart in collectionCart">
+          <h4 >{{ cart.biobankLabel }}</h4>
+          <ul>
+            <li :key="collection.label" v-for="collection in cart.collections">
+              {{ collection.label }}
+            </li>
+          </ul>
+        </div>
+      </template>
       <p v-if="isPodium && !hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button :disabled="isPodium && !hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{ negotiatorButtonText }}</b-button>
+        <b-button :disabled="isPodium && !hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{
+          negotiatorButtonText
+        }}</b-button>
       </template>
     </b-modal>
   </div>
@@ -81,7 +85,8 @@ export default {
       'collectionsInPodium',
       'selectedBiobankQuality',
       'selectedCollectionQuality',
-      'selectedCollections'
+      'selectedCollections',
+      'collectionBiobankDictionary'
     ]),
     ...mapState(['isPodium']),
     modalFooterText () {
@@ -95,7 +100,8 @@ export default {
       return this.modalEnabled
     },
     collectionCart () {
-      return this.isPodium ? this.collectionsInPodium : this.selectedCollections
+      const collections = this.isPodium ? this.collectionsInPodium : this.selectedCollections
+      return this.groupCollectionsByBiobank(collections)
     },
     hasSelection () {
       return this.selectedCollections.length > 0
@@ -125,6 +131,23 @@ export default {
   },
   methods: {
     ...mapActions(['GetCollectionInfo', 'GetBiobankIds', 'GetPodiumCollections', 'GetBiobankIdsForQuality', 'GetCollectionIdsForQuality']),
+    groupCollectionsByBiobank (collectionSelectionArray) {
+      const biobankWithSelectedCollections = []
+      collectionSelectionArray.forEach(cs => {
+        const biobankLabel = this.collectionBiobankDictionary[cs.value]
+        const biobankPresent = biobankWithSelectedCollections.find(bsc => bsc.biobankLabel === biobankLabel)
+
+        if (biobankPresent) {
+          biobankPresent.collections.push(cs)
+        } else {
+          biobankWithSelectedCollections.push({
+            biobankLabel,
+            collections: [cs]
+          })
+        }
+      })
+      return biobankWithSelectedCollections
+    },
     hideModal () {
       this.$bvModal.hide('collectioncart-modal')
       this.closeModal()

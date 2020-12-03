@@ -30,7 +30,8 @@ describe('BiobankExplorerContainer', () => {
         selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,
-        collectionsInPodium: podiumCollectionsMock
+        collectionsInPodium: podiumCollectionsMock,
+        collectionBiobankDictionary: () => []
       },
       actions: {
         SendToNegotiator: jest.fn(),

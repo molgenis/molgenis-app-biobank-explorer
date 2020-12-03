@@ -31,6 +31,25 @@ export default {
       }
     })
   },
+  biobankLabelDictionary: (_, { biobanks }) => {
+    if (typeof biobanks[0] === 'string') return {}
+    const biobankLabelDictionary = {}
+
+    biobanks.forEach(biobank => {
+      biobankLabelDictionary[biobank.id] = biobank.label || biobank.name
+    })
+
+    return biobankLabelDictionary
+  },
+  collectionBiobankDictionary: (_, { biobankLabelDictionary, getCollectionsWithBiobankId }) => {
+    if (Object.keys(biobankLabelDictionary).length === 0) return {}
+    const collectionBiobankDictionary = {}
+
+    getCollectionsWithBiobankId.forEach(colBio => {
+      collectionBiobankDictionary[colBio.collectionId] = biobankLabelDictionary[colBio.biobankId]
+    })
+    return collectionBiobankDictionary
+  },
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   getCollectionsWithBiobankId: (state) => {
     if (state.collectionInfo) {
