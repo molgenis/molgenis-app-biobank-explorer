@@ -12,23 +12,7 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
-                <div class="mb-2" v-if="isTopLevelCollection">
-                  <input
-                    type="checkbox"
-                    id="add-to-cart"
-                    name="add-to-cart"
-                    @input="handleCollectionStatus"
-                    :checked="collectionSelected(collection.id)"
-                    :value="{ label: collection.label || collection.name, value: collection.id }"
-                    hidden
-                  />
-                  <label id="add-to-cart-label" class="btn btn-success" for="add-to-cart"
-                    >Add to selection<span class="ml-2 fa fa-plus"></span
-                  ></label>
-                  <label id="remove-from-cart-label" class="btn btn-danger" for="add-to-cart"
-                    >Remove from selection<span class="ml-2 fa fa-times"></span
-                  ></label>
-                </div>
+                <collection-selector class="mb-2" v-if="isTopLevelCollection" :collection="collection" />
 
                 <report-description :description="collection.description" :maxLength="500"></report-description>
 
@@ -83,7 +67,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '@/components/report-components/ReportDescription'
@@ -91,6 +75,7 @@ import ReportTitle from '@/components/report-components/ReportTitle'
 import ReportListRow from '@/components/report-components/ReportListRow'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
+import CollectionSelector from '@/components/filters/CollectionSelector'
 
 import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation } from '@/utils/templateMapper'
 
@@ -102,29 +87,17 @@ export default {
     ReportDescription,
     ReportSubCollection,
     CollectionReportInfoCard,
-    Loading
+    Loading,
+    CollectionSelector
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
-    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
-    collectionSelected (collectionId) {
-      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
-    },
-    handleCollectionStatus (event) {
-      const checkbox = event.target
-      if (checkbox.checked === true) {
-        this.AddCollectionToSelection(checkbox._value)
-      } else {
-        this.RemoveCollectionFromSelection(checkbox._value)
-      }
-    },
     back () {
       this.$router.go(-1)
     }
   },
   computed: {
     ...mapState({ collection: 'collectionReport', isLoading: 'isLoading' }),
-    ...mapGetters(['selectedCollections']),
     mainContent () {
       return this.collection ? mapDetailsTableContent(this.collection) : {}
     },
@@ -159,22 +132,6 @@ export default {
 </script>
 
 <style scoped>
-.btn:hover {
-  cursor: pointer;
-}
-
-#add-to-cart:checked ~ #add-to-cart-label {
-  display: none;
-}
-
-#remove-from-cart-label {
-  display: none;
-}
-
-#add-to-cart:checked ~ #remove-from-cart-label {
-  display: inline-block;
-}
-
 >>> .mg-report-details-list th {
   vertical-align: top;
 }

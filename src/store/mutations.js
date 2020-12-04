@@ -84,8 +84,8 @@ export default {
         biobankName: item.data.biobank.data.label || item.data.biobank.data.name
       }))
 
-    collections.forEach(collection => {
-      Vue.set(state.collectionBiobankDictionary, collection.id, collection.biobankName)
+    collections.forEach(function (collection) {
+      state.collectionBiobankDictionary[collection.id] = collection.biobankName
     })
   },
   SetCollectionInfo (state, response) {
