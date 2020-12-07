@@ -45,10 +45,10 @@
 
     <b-modal hide-header id="collectioncart-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="closeModal">
       <template v-if="collectionCart.length > 0">
-        <div :key="cart.biobankLabel + index" v-for="(cart, index) in collectionCart">
+        <div :key="`${cart.biobankLabel}-${index}`" v-for="(cart, index) in collectionCart">
           <h4>{{ cart.biobankLabel }}</h4>
           <ul>
-            <li :key="collection.label + index" v-for="(collection, index) in cart.collections">
+            <li :key="`${collection.label}-${index}`" v-for="(collection, index) in cart.collections">
               {{ collection.label }}
             </li>
           </ul>
