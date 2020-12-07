@@ -31,7 +31,7 @@ export default {
       }
     })
   },
-  isParentCollection (_, { biobanks }) {
+  parentCollections (_, { biobanks }) {
     if (biobanks && typeof biobanks[0] !== 'string') {
       const allParentCollections = biobanks.map(biobank => biobank.collections.filter(collection => !collection.parent_collection).map(fc => fc.id))
       let flattenedCollections = []
@@ -72,8 +72,8 @@ export default {
     }
     return []
   },
-  foundCollectionsAsSelection: (_, { isParentCollection, foundCollectionIds, collectionDictionary }) => {
-    const parentCollectionIds = foundCollectionIds.filter(fci => isParentCollection.includes(fci))
+  foundCollectionsAsSelection: (_, { parentCollections, foundCollectionIds, collectionDictionary }) => {
+    const parentCollectionIds = foundCollectionIds.filter(fci => parentCollections.includes(fci))
     return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
   },
   collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds }) {

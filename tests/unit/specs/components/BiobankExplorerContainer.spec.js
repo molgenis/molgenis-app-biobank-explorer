@@ -15,7 +15,7 @@ describe('BiobankExplorerContainer', () => {
   let store
   const collectionsWithBiobank = [{ collectionId: 'A', biobankId: 'B', collectionName: 'Collection A' },
     { collectionId: 'C', biobankId: 'B', collectionName: 'Collection C' }, { collectionId: 'D', biobankId: 'E', collectionName: 'Collection D' }]
-  const rsqlMock = jest.fn()
+  const rsqlMock = jest.fn().mockRejectedValue('')
   const podiumCollectionsMock = jest.fn().mockReturnValue([])
   const selectedCollectionMock = jest.fn().mockReturnValue([])
 
