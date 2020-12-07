@@ -31,7 +31,19 @@ export default {
       }
     })
   },
+  isParentCollection (_, { biobanks }) {
+    if (biobanks && typeof biobanks[0] !== 'string') {
+      const allParentCollections = biobanks.map(biobank => biobank.collections.filter(collection => !collection.parent_collection).map(fc => fc.id))
+      let flattenedCollections = []
+      allParentCollections.forEach(function (apc) {
+        flattenedCollections = flattenedCollections.concat(apc)
+      })
+      return flattenedCollections
+    }
+    return []
+  },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
+  collectionDictionary: state => state.collectionDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   getCollectionsWithBiobankId: (state) => {
     if (state.collectionInfo) {
@@ -60,8 +72,9 @@ export default {
     }
     return []
   },
-  foundCollectionsAsSelection: (_, { foundCollectionIds }) => {
-    return foundCollectionIds.map(colId => ({ value: colId }))
+  foundCollectionsAsSelection: (_, { isParentCollection, foundCollectionIds, collectionDictionary }) => {
+    const parentCollectionIds = foundCollectionIds.filter(fci => isParentCollection.includes(fci))
+    return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
   },
   collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds }) {
     if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {

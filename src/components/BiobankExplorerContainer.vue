@@ -12,9 +12,16 @@
       </div>
       <div class="row mb-3">
         <div class="col-md-8"></div>
-        <div class="col-md-4 text-right" v-if="!loading">
-          <label for="select-all-collections">{{ collectionSelectionLabel }}</label>
-          <b-form-checkbox class="d-inline ml-4" id="select-all-collections" v-model="selectAllCollections" name="check-button" switch>
+        <div class="col-md-4 text-right" v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)">
+          <label id="select-all-label" for="select-all-collections">{{ collectionSelectionLabel }}</label>
+          <b-form-checkbox
+            class="d-inline ml-4"
+            id="select-all-collections"
+            v-model="selectAllCollections"
+            name="check-button"
+            size="lg"
+            switch
+          >
           </b-form-checkbox>
         </div>
       </div>
@@ -38,10 +45,10 @@
 
     <b-modal hide-header id="collectioncart-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="closeModal">
       <template v-if="collectionCart.length > 0">
-        <div :key="cart.biobankLabel" v-for="cart in collectionCart">
+        <div :key="cart.biobankLabel + index" v-for="(cart, index) in collectionCart">
           <h4>{{ cart.biobankLabel }}</h4>
           <ul>
-            <li :key="collection.label" v-for="collection in cart.collections">
+            <li :key="collection.label + index" v-for="(collection, index) in cart.collections">
               {{ collection.label }}
             </li>
           </ul>
@@ -63,13 +70,16 @@
 .biobank-explorer-container {
   padding-top: 1rem;
 }
+#select-all-label {
+  line-height: 2;
+}
 </style>
 <script>
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'biobank-explorer-container',
@@ -95,7 +105,8 @@ export default {
       'selectedBiobankQuality',
       'selectedCollectionQuality',
       'selectedCollections',
-      'collectionBiobankDictionary'
+      'collectionBiobankDictionary',
+      'foundCollectionsAsSelection'
     ]),
     ...mapState(['isPodium']),
     modalFooterText () {
@@ -139,9 +150,13 @@ export default {
     isPodium: {
       immediate: true,
       handler: 'GetPodiumCollections'
+    },
+    selectAllCollections (newValue) {
+      this.handleCollectionStatus(newValue)
     }
   },
   methods: {
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
     ...mapActions(['GetCollectionInfo', 'GetBiobankIds', 'GetPodiumCollections', 'GetBiobankIdsForQuality', 'GetCollectionIdsForQuality']),
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
@@ -174,6 +189,16 @@ export default {
     showSelection () {
       this.modalEnabled = true
       this.$bvModal.show('collectioncart-modal')
+    },
+    collectionSelected (collectionId) {
+      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
+    },
+    handleCollectionStatus (allCollections) {
+      if (allCollections === true) {
+        this.AddCollectionToSelection(this.foundCollectionsAsSelection)
+      } else {
+        this.RemoveCollectionFromSelection(this.foundCollectionsAsSelection)
+      }
     }
   }
 }
