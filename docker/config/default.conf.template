@@ -2,8 +2,7 @@ server {
   server_name localhost;
 
   location /api {
-    proxy_pass https://master.dev.molgenis.org;
-    proxy_set_header Host master.dev.molgenis.org;
+    proxy_pass https://bbmri-test.gcc.rug.nl;
   }
   location / {
     root /usr/share/nginx/html;
