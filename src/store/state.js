@@ -30,6 +30,7 @@ export default {
   biobankIdsWithSelectedQuality: [],
   filterIdLabelDictionary: {},
   collectionBiobankDictionary: {},
+  collectionDictionary: {},
   selectedCollections: [],
   filters: {
     selections: {},

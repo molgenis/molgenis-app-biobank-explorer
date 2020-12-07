@@ -60,6 +60,9 @@ export default {
     }
     return []
   },
+  foundCollectionsAsSelection: (_, { foundCollectionIds }) => {
+    return foundCollectionIds.map(colId => ({ value: colId }))
+  },
   collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds }) {
     if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {
       const collectionInfoInSelection = collectionInfo.filter(colInfo => foundCollectionIds.includes(colInfo.collectionId))

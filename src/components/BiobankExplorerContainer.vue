@@ -10,6 +10,14 @@
           <result-header></result-header>
         </div>
       </div>
+      <div class="row mb-3">
+        <div class="col-md-8"></div>
+        <div class="col-md-4 text-right" v-if="!loading">
+          <label for="select-all-collections">{{ collectionSelectionLabel }}</label>
+          <b-form-checkbox class="d-inline ml-4" id="select-all-collections" v-model="selectAllCollections" name="check-button" switch>
+          </b-form-checkbox>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-md-12">
@@ -31,7 +39,7 @@
     <b-modal hide-header id="collectioncart-modal" scrollable centered footer-bg-variant="warning" body-class="pb-0" @hide="closeModal">
       <template v-if="collectionCart.length > 0">
         <div :key="cart.biobankLabel" v-for="cart in collectionCart">
-          <h4 >{{ cart.biobankLabel }}</h4>
+          <h4>{{ cart.biobankLabel }}</h4>
           <ul>
             <li :key="collection.label" v-for="collection in cart.collections">
               {{ collection.label }}
@@ -73,6 +81,7 @@ export default {
   },
   data: () => {
     return {
+      selectAllCollections: false,
       modalEnabled: false
     }
   },
@@ -105,6 +114,9 @@ export default {
     },
     hasSelection () {
       return this.selectedCollections.length > 0
+    },
+    collectionSelectionLabel () {
+      return this.selectAllCollections ? 'Remove all collections' : 'Add all collections'
     }
   },
   watch: {

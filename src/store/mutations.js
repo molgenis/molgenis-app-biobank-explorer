@@ -77,15 +77,17 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  SetCollectionBiobankDictionary (state, response) {
+  SetDictionaries (state, response) {
     const collections = response.items.map(item => (
       {
         id: item.data.id,
+        label: item.data.label || item.data.name,
         biobankName: item.data.biobank.data.label || item.data.biobank.data.name
       }))
 
     collections.forEach(function (collection) {
       state.collectionBiobankDictionary[collection.id] = collection.biobankName
+      state.collectionDictionary[collection.id] = collection.label
     })
   },
   SetCollectionInfo (state, response) {

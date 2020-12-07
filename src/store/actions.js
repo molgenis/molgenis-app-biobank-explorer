@@ -78,7 +78,7 @@ export default {
     api.get(url)
       .then(response => {
         commit('SetCollectionInfo', response)
-        commit('SetCollectionBiobankDictionary', response)
+        commit('SetDictionaries', response)
         commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
