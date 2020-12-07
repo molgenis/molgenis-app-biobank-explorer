@@ -32,7 +32,7 @@ export default {
     })
   },
   parentCollections (_, { biobanks }) {
-    if (biobanks && biobanks.length > 0 && typeof biobanks[0] !== 'string') {
+    if (biobanks && typeof biobanks[0] !== 'string' && biobanks[0].collections) {
       const allParentCollections = biobanks.map(biobank => biobank.collections.filter(collection => !collection.parent_collection).map(fc => fc.id))
       let flattenedCollections = []
       allParentCollections.forEach(function (apc) {
