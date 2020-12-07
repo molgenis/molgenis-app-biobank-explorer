@@ -1,4 +1,5 @@
-FROM nginx:1.16.0
+# FROM nginx:1.16.0
+FROM ewoutp/docker-nginx-curl
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm -rf /etc/nginx/conf.d/default.conf 
 RUN mkdir -p /usr/share/nginx/html/js/
