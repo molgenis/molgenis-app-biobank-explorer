@@ -2,7 +2,14 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
-        <th scope="col" class="pr-2"><input ref="header_checkbox" type="checkbox" v-model="selectedAllCollections" /></th>
+        <th scope="col" class="pr-2">
+          <input
+            ref="header_checkbox"
+            type="checkbox"
+            v-model="selectedAllCollections"
+            :indeterminate.prop="someCollectionsSelected"
+          />
+        </th>
         <th scope="col">Collection</th>
         <th scope="col">Type</th>
         <th scope="col">Materials</th>
@@ -18,35 +25,59 @@
               type="checkbox"
               @input="handleCollectionStatus"
               :checked="collectionSelected(collection.id)"
-              :value="{ label: collection.label || collection.name, value: collection.id }"
+              :value="{
+                label: collection.label || collection.name,
+                value: collection.id,
+              }"
             />
           </td>
           <td
             :class="{
-              'table-text-content-columns-has-sub': hasSubCollections(collection),
-              'table-text-content-columns': !hasSubCollections(collection),
+              'table-text-content-columns-has-sub': hasSubCollections(
+                collection
+              ),
+              'table-text-content-columns': !hasSubCollections(
+                collection
+              ),
             }"
             v-for="(column, index) in columns"
             :key="index"
           >
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + collection['id']">
-                <button class="btn btn-link collection-link text-left pt-0 border-0">{{ collection[column] }}</button>
+                <button
+                  class="btn btn-link collection-link text-left pt-0 border-0"
+                >
+                  {{ collection[column] }}
+                </button>
               </router-link>
             </span>
             <span v-else-if="column === 'quality'">
-              <quality-column :qualities="collection[column]" :spacing="0"></quality-column>
+              <quality-column
+                :qualities="collection[column]"
+                :spacing="0"
+              ></quality-column>
             </span>
-            <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
-            <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
-            <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
+            <span v-else-if="column === 'type'">{{
+              getCollectionType(collection)
+            }}</span>
+            <span v-else-if="column === 'materials'">{{
+              getCollectionMaterials(collection)
+            }}</span>
+            <span v-else-if="column === 'size'">{{
+              getCollectionSize(collection)
+            }}</span>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
           <td colspan="5" class="sub-table-cell">
-            <b-link v-b-toggle="'collapse-' + collection.id" class="text-muted">
+            <b-link
+              v-b-toggle="'collapse-' + collection.id"
+              class="text-muted"
+            >
               <span class="when-hidden">
-                Show {{ collection.sub_collections.length }} subcollections
+                Show
+                {{ collection.sub_collections.length }} subcollections
                 <i class="fa fa-caret-down"></i>
               </span>
               <span class="when-visible">
@@ -55,7 +86,9 @@
               </span>
             </b-link>
             <b-collapse :id="'collapse-' + collection.id">
-              <sub-collections-table :subCollections="collection.sub_collections"></sub-collections-table>
+              <sub-collections-table
+                :subCollections="collection.sub_collections"
+              ></sub-collections-table>
             </b-collapse>
           </td>
         </tr>
@@ -100,6 +133,9 @@ export default {
           this.RemoveCollectionFromSelection(this.parentCollections)
         }
       }
+    },
+    someCollectionsSelected () {
+      return (this.parentCollections.map(pc => pc.value).some(id => this.selectedCollections.map(sc => sc.value).includes(id)) && !this.selectedAllCollections)
     },
     parentCollections () {
       return this.topLevelElements.map(tle => ({ label: tle.label || tle.name, value: tle.id }))
