@@ -31,16 +31,13 @@ export default {
       }
     })
   },
-  parentCollections (_, { biobanks }) {
-    if (biobanks && typeof biobanks[0] !== 'string' && biobanks[0].collections) {
-      const allParentCollections = biobanks.map(biobank => biobank.collections.filter(collection => !collection.parent_collection).map(fc => fc.id))
-      let flattenedCollections = []
-      allParentCollections.forEach(function (apc) {
-        flattenedCollections = flattenedCollections.concat(apc)
-      })
-      return flattenedCollections
-    }
-    return []
+  parentCollections: (state) => {
+    const allParentCollections = state.collectionInfo.filter(colInfo => !colInfo.isSubcollection).map(fci => fci.collectionId)
+    let flattenedCollections = []
+    allParentCollections.forEach(function (apc) {
+      flattenedCollections = flattenedCollections.concat(apc)
+    })
+    return flattenedCollections
   },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   collectionDictionary: state => state.collectionDictionary,

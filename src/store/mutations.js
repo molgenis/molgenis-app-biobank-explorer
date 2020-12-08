@@ -99,7 +99,8 @@ export default {
     const collectionInfo = response.items.map(item => ({
       collectionId: item.data.id,
       collectionName: item.data.label || item.data.name,
-      biobankId: item.data.biobank.data.id
+      biobankId: item.data.biobank.data.id,
+      isSubcollection: item.data.parent_collection !== undefined
     }))
     state.collectionInfo = collectionInfo
   },
