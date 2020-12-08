@@ -246,5 +246,26 @@ describe('store', () => {
         expect(getters.getErrorMessage(state)).toEqual('Something went wrong')
       })
     })
+
+    describe('Collection Selection Getters', () => {
+      const state = {}
+      state.collectionInfo = [
+        { collectionId: 'col-1', biobankId: '2', isSubcollection: false },
+        { collectionId: 'col-2', biobankId: '1', isSubcollection: true }
+      ]
+
+      it('should return only parent collection ids', () => {
+        const result = getters.parentCollections(state)
+        expect(result).toStrictEqual(['col-1'])
+      })
+      it('Should return filters as label + value objects', () => {
+        const parentCollections = ['col-1']
+        const foundCollectionIds = ['col-1', 'col-2']
+        const collectionDictionary = { 'col-1': 'Collection A', 'col-2': 'Collection B' }
+        const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds, collectionDictionary })
+
+        expect(result).toStrictEqual([{ label: 'Collection A', value: 'col-1' }])
+      })
+    })
   })
 })
