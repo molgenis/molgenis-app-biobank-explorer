@@ -129,9 +129,16 @@ describe('store', () => {
     })
 
     it('should return the total amount of collections for found biobanks', () => {
+      const state = {
+        collectionInfo: [
+          { collectionId: 'col-1', biobankId: 'A' },
+          { collectionId: 'col-2', biobankId: 'B' },
+          { collectionId: 'col-3', biobankId: 'B' }
+        ]
+      }
+
       const getFoundBiobankIds = ['B']
-      const getCollectionsWithBiobankId = [{ collectionId: 'A', biobankId: 'B' }, { collectionId: 'C', biobankId: 'B' }, { collectionId: 'D', biobankId: 'E' }]
-      const otherGetters = { getFoundBiobankIds, getCollectionsWithBiobankId }
+      const otherGetters = { getFoundBiobankIds }
       const ids = getters.foundCollectionIds(state, otherGetters)
       expect(ids.length).toEqual(2)
     })

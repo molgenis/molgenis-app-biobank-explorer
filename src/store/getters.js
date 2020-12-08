@@ -42,23 +42,13 @@ export default {
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   collectionDictionary: state => state.collectionDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
-  getCollectionsWithBiobankId: (state) => {
-    if (state.collectionInfo) {
-      return state.collectionInfo.map(colInfo => {
-        return {
-          collectionId: colInfo.collectionId,
-          biobankId: colInfo.biobankId
-        }
-      })
-    }
-  },
   foundBiobanks: (_, { biobanks }) => {
     return biobanks.length
   },
-  foundCollectionIds (_, { getFoundBiobankIds, getCollectionsWithBiobankId }) {
+  foundCollectionIds (state, { getFoundBiobankIds }) {
     // only if there are biobanks, then there are collections. we can't have rogue collections :)
-    if (getFoundBiobankIds.length && getCollectionsWithBiobankId.length) {
-      const biobanksWithCollections = groupCollectionsByBiobankId(getCollectionsWithBiobankId)
+    if (getFoundBiobankIds.length && state.collectionInfo.length) {
+      const biobanksWithCollections = groupCollectionsByBiobankId(state.collectionInfo)
 
       let collectionIds = []
       for (const id of getFoundBiobankIds) {
