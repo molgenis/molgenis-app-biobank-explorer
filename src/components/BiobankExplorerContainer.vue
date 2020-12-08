@@ -54,11 +54,11 @@
           </ul>
         </div>
       </template>
-      <p v-if="isPodium && !hasPodiumCollections">Sorry, none of the samples are currently in Podium.</p>
+      <p v-if="isPodium && !collectionsInPodium">Sorry, none of the samples are currently in Podium.</p>
       <template v-slot:modal-footer>
         <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button :disabled="isPodium && !hasPodiumCollections" class="btn btn-secondary" @click="sendRequest">{{
+        <b-button :disabled="isPodium && !collectionsInPodium" class="btn btn-secondary" @click="sendRequest">{{
           negotiatorButtonText
         }}</b-button>
       </template>

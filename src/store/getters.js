@@ -63,12 +63,16 @@ export default {
     const parentCollectionIds = foundCollectionIds.filter(fci => parentCollections.includes(fci))
     return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
   },
-  collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds }) {
+  collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds, selectedCollections }) {
     if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {
+      const selectedCollectionIds = selectedCollections.map(sc => sc.value)
       const collectionInfoInSelection = collectionInfo.filter(colInfo => foundCollectionIds.includes(colInfo.collectionId))
+
       const collectionNames = collectionInfoInSelection.filter(colInfo => podiumCollectionIds
         .includes(colInfo.collectionId))
         .map(podCols => ({ label: podCols.collectionName, value: podCols.collectionId }))
+        .filter(cn => selectedCollectionIds.includes(cn.value))
+
       return collectionNames
     } else return []
   },

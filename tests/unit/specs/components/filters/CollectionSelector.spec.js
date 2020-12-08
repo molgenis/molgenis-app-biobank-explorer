@@ -41,7 +41,7 @@ describe('CollectionSelector.vue', () => {
       }
     })
     const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
-    console.log(wrapper.vm.collectionSelected('A'))
+
     await wrapper.find('input[type=checkbox]').trigger('click')
     expect(RemoveCollectionFromSelection).toHaveBeenCalledTimes(1)
     expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
