@@ -127,7 +127,7 @@ export default {
       return this.selectedCollections.length > 0
     },
     collectionSelectionLabel () {
-      return this.selectAllCollections ? 'Remove all collections' : 'Add all collections'
+      return this.selectAllCollections ? 'Deselect all collections' : 'Select all collections'
     }
   },
   watch: {

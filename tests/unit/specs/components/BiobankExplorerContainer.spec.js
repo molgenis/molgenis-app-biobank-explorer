@@ -100,7 +100,7 @@ describe('BiobankExplorerContainer', () => {
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
       wrapper.setData({ selectAllCollections: true })
 
-      expect(wrapper.vm.collectionSelectionLabel).toEqual('Remove all collections')
+      expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
     })
   })
 })
