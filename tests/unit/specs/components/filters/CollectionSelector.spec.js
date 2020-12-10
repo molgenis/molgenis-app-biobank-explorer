@@ -21,7 +21,7 @@ describe('CollectionSelector.vue', () => {
     }
   })
   it('can set a value on the state when clicked', async () => {
-    const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
+    const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } }, stubs: { RouterLink: 'test' } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
     expect(AddCollectionToSelection).toHaveBeenCalledTimes(1)

@@ -1,6 +1,5 @@
-import { expect } from 'chai'
 import CollectionsTable from '@/components/tables/CollectionsTable'
-import { shallowMount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -68,15 +67,19 @@ describe('components', () => {
 
     let wrapper, store
 
+    const AddCollectionToSelection = jest.fn()
+    const RemoveCollectionFromSelection = jest.fn()
+    const selectedCollections = jest.fn(() => [])
+
     beforeEach(() => {
       store = new Vuex.Store({
         state: {},
         getters: {
-          selectedCollections: jest.fn(() => [])
+          selectedCollections
         },
         mutations: {
-          RemoveCollectionFromSelection: jest.fn(),
-          AddCollectionToSelection: jest.fn()
+          RemoveCollectionFromSelection,
+          AddCollectionToSelection
         }
       })
 
@@ -85,19 +88,19 @@ describe('components', () => {
 
     describe('html', () => {
       it('should render collection name', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(1).text()).eq('Short Term Storage Collection')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(1).text()).toEqual('Short Term Storage Collection')
       })
 
       it('should render collection type', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(2).text()).eq('Hospital')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(2).text()).toEqual('Hospital')
       })
 
       it('should render available material types', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(3).text()).eq('Serum, Tissue (frozen)')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(3).text()).toEqual('Serum, Tissue (frozen)')
       })
 
       it('should render collection\'s size', () => {
-        expect(wrapper.findAll('tr').at(2).findAll('td').at(5).text()).eq('46000')
+        expect(wrapper.findAll('tr').at(2).findAll('td').at(5).text()).toEqual('46000')
       })
     })
 
@@ -109,15 +112,24 @@ describe('components', () => {
 
     describe('getCollectionSize', () => {
       it('should return size if size is present', () => {
-        expect(CollectionsTable.methods.getCollectionSize({ size: 3, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).eq(3)
+        expect(CollectionsTable.methods.getCollectionSize({ size: 3, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).toEqual(3)
       })
 
       it('should return order of magnitude if size is null', () => {
-        expect(CollectionsTable.methods.getCollectionSize({ size: null, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).eq('10.000 - 100.000 Samples')
+        expect(CollectionsTable.methods.getCollectionSize({ size: null, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).toEqual('10.000 - 100.000 Samples')
       })
 
       it('should return order of magnitude if size is 0', () => {
-        expect(CollectionsTable.methods.getCollectionSize({ size: 0, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).eq('10.000 - 100.000 Samples')
+        expect(CollectionsTable.methods.getCollectionSize({ size: 0, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).toEqual('10.000 - 100.000 Samples')
+      })
+    })
+
+    describe('Selecting collections', () => {
+      it('can set all collections when header checkbox is checked', async () => {
+        const wrapper = mount(CollectionsTable, { store, propsData: { collections }, stubs: ['router-link'] })
+        await wrapper.find('input[type=checkbox]').trigger('click')
+        expect(AddCollectionToSelection).toHaveBeenCalledTimes(1)
+        expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), [{ label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' }, { label: 'Short Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:STS' }])
       })
     })
   })
