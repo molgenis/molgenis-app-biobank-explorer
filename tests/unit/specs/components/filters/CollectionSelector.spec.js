@@ -24,7 +24,6 @@ describe('CollectionSelector.vue', () => {
     const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } }, stubs: { RouterLink: 'test' } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
-    expect(AddCollectionToSelection).toHaveBeenCalledTimes(1)
     expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
   })
 
@@ -43,7 +42,6 @@ describe('CollectionSelector.vue', () => {
     const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
-    expect(RemoveCollectionFromSelection).toHaveBeenCalledTimes(1)
     expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
   })
 })

@@ -128,8 +128,16 @@ describe('components', () => {
       it('can set all collections when header checkbox is checked', async () => {
         const wrapper = mount(CollectionsTable, { store, propsData: { collections }, stubs: ['router-link'] })
         await wrapper.find('input[type=checkbox]').trigger('click')
-        expect(AddCollectionToSelection).toHaveBeenCalledTimes(1)
         expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), [{ label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' }, { label: 'Short Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:STS' }])
+      })
+
+      it('can set / remove a single collection when collection checkbox is clicked', async () => {
+        const wrapper = mount(CollectionsTable, { store, propsData: { collections }, stubs: ['router-link'] })
+        await wrapper.find('td').find('input[type=checkbox]').trigger('click')
+        expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' })
+        // Remove //
+        await wrapper.find('td').find('input[type=checkbox]').trigger('click')
+        expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' })
       })
     })
   })
