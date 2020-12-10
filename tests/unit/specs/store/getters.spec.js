@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockState } from '../mockState'
+import { mockState } from '../mockData'
 
 let state
 

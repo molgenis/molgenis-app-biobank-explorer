@@ -3,7 +3,7 @@ import helpers, {
   isCodeRegex
 } from '../../../../../src/store/helpers'
 import filterDefinitions from '../../../../../src/utils/filterDefinitions'
-import { mockState } from '../../mockState'
+import { mockState } from '../../mockData'
 
 const getInitialState = () => {
   return mockState()

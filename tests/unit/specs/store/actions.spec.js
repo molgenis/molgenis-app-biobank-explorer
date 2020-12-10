@@ -1,7 +1,7 @@
 import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
-import { mockState } from '../mockState'
+import { mockState } from '../mockData'
 import actions from '../../../../src/store/actions'
 import filterDefinitions from '../../../../src//utils/filterDefinitions'
 

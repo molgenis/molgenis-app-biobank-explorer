@@ -1,7 +1,7 @@
 import CollectionSelector from '../../../../../src/components/filters/CollectionSelector'
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
-import { mockState } from '../../mockState'
+import { mockState } from '../../mockData'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
@@ -21,7 +21,7 @@ describe('CollectionSelector.vue', () => {
     }
   })
   it('can set a value on the state when clicked', async () => {
-    const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } }, stubs: { RouterLink: 'test' } })
+    const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
     expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
