@@ -84,10 +84,8 @@ export default {
   computed: {
     ...mapGetters(['selectedCollections']),
     biobankInSelection () {
-      return this.selectedCollections.map(sc => sc.value).some(id => this.biobankCollectionSelection.map(pc => pc.value).includes(id))
-    },
-    biobankCollectionSelection () {
-      return this.biobank.collections.filter(bcf => !bcf.parent_collection).map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+      const biobankCollectionSelection = this.biobank.collections.filter(bcf => !bcf.parent_collection).map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+      return this.selectedCollections.map(sc => sc.value).some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
     },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)
