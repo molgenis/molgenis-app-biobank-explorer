@@ -48,6 +48,7 @@ describe('store', () => {
           rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
           filterDefinitions: filterDefinitions(state),
           getActiveFilters: state.filters.selections,
+          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           biobanks: [
             { id: 'biobank1', collections: [{ id: 'collection1' }, { id: 'collection2' }] },
             { id: 'biobank2', collections: [{ id: 'collection3' }, { id: 'collection4' }] }

@@ -49,19 +49,10 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
     nToken: state.nToken
   }
 
-  if (getters.selectedCollections.length > 0) {
-    const collections = state.isPodium ? getters.collectionsInPodium : getters.selectedCollections
-    result.rsql = transformToRSQL({ operator: 'AND', operands: createInQuery('id', collections.map(sc => sc.value)) })
-    result.humanReadable += result.humanReadable.length ? ' and with custom collection selection.' : 'Custom collection selection.'
-  } else {
-    if (getters.rsql) {
-      result.rsql = getters.rsql
-    }
-    if (getters.biobankRsql) {
-      result.biobankId = state.negotiatorBiobankEntityId
-      result.biobankRsql = getters.biobankRsql
-    }
-  }
+  const collections = state.isPodium ? getters.collectionsInPodium : getters.selectedCollections
+  result.rsql = transformToRSQL({ operator: 'AND', operands: createInQuery('id', collections.map(sc => sc.value)) })
+  result.humanReadable += result.humanReadable.length ? ' and with custom collection selection.' : 'Custom collection selection.'
+
   return result
 }
 

@@ -64,11 +64,11 @@ describe('BiobankExplorerContainer', () => {
 
   describe('Podium logic', () => {
     it('should show "no podium collections" message when there are no podium collections and isPodium is true', () => {
-      store.state.isPodium = true
       selectedCollectionMock.mockReturnValueOnce(['a', 'b', 'c'])
-      rsqlMock.mockReturnValueOnce('rsql-query')
+      store.state.isPodium = true
 
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
+
       wrapper.vm.showSelection()
       wrapper.vm.$nextTick()
 

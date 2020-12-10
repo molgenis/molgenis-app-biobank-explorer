@@ -48,8 +48,9 @@ describe('store', () => {
           { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
           { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
         const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
+        const selectedCollections = [{ label: 'Collection A', value: 'A' }, { text: 'Collection B', value: 'B' }]
 
-        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual([{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }])
+        expect(getters.collectionsInPodium(state, { foundCollectionIds, selectedCollections })).toStrictEqual([{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }])
       })
     })
 

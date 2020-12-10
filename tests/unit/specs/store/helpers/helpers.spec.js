@@ -202,18 +202,17 @@ describe('store', () => {
           rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
           biobankRsql: 'name=q=\'free text search\'',
           filterDefinitions: filterDefinitions(state),
+          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           getActiveFilters: () => state.filters.selections
         }
 
         const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Text search is free text search and Countries: Netherlands,Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease,medium disease,big disease and Covid-19 service(s): covid19',
+          humanReadable: 'Text search is free text search and Countries: Netherlands,Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease,medium disease,big disease and Covid-19 service(s): covid19 and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
-          rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
-          biobankId: 'eu_bbmri_eric_biobanks',
-          biobankRsql: 'name=q=\'free text search\''
+          rsql: 'id=in=(collection1,collection4)'
         }
 
         expect(actual).toStrictEqual(expected)
@@ -228,16 +227,17 @@ describe('store', () => {
         const getters = {
           rsql: 'materials=in=(RNA)',
           filterDefinitions: filterDefinitions(state),
-          getActiveFilters: () => state.filters.selections
+          getActiveFilters: () => state.filters.selections,
+          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
 
         const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Material type(s): RNA',
+          humanReadable: 'Material type(s): RNA and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
-          rsql: 'materials=in=(RNA)'
+          rsql: 'id=in=(collection1,collection4)'
         }
 
         expect(actual).toStrictEqual(expected)
@@ -255,7 +255,8 @@ describe('store', () => {
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
           filterDefinitions: filterDefinitions(state),
-          getActiveFilters: () => state.filters.selections
+          getActiveFilters: () => state.filters.selections,
+          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
       })
 
