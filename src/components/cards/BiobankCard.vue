@@ -36,9 +36,8 @@
             </template>
           </p>
         </div>
-        <div class="col-md-1 text-right pr-1" @click.stop v-if="!loading">
+        <div v-if="!loading" class="col-md-1 text-right pr-1">
             <span v-if="biobankInSelection" class="fa fa-check text-success" aria-hidden="true"></span>
-
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>

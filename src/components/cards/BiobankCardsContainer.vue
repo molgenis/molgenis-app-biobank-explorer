@@ -70,8 +70,7 @@ export default {
     ...mapGetters([
       'biobanks',
       'foundBiobanks',
-      'loading',
-      'getActiveFilters'
+      'loading'
     ]),
     biobanksShown () {
       return this.loading ? [] : this.biobanks.slice(this.pageSize * (this.currentPage - 1), this.pageSize * this.currentPage)
