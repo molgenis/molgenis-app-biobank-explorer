@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockState } from '../mockState'
+import { mockState } from '../mockData'
 
 let state
 
@@ -48,8 +48,9 @@ describe('store', () => {
           { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
           { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
         const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
+        const selectedCollections = [{ label: 'Collection A', value: 'A' }, { text: 'Collection B', value: 'B' }]
 
-        expect(getters.collectionsInPodium(state, { foundCollectionIds })).toStrictEqual(['Collection A', 'Collection B'])
+        expect(getters.collectionsInPodium(state, { foundCollectionIds, selectedCollections })).toStrictEqual([{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }])
       })
     })
 
@@ -129,9 +130,16 @@ describe('store', () => {
     })
 
     it('should return the total amount of collections for found biobanks', () => {
+      const state = {
+        collectionInfo: [
+          { collectionId: 'col-1', biobankId: 'A' },
+          { collectionId: 'col-2', biobankId: 'B' },
+          { collectionId: 'col-3', biobankId: 'B' }
+        ]
+      }
+
       const getFoundBiobankIds = ['B']
-      const getCollectionsWithBiobankId = [{ collectionId: 'A', biobankId: 'B' }, { collectionId: 'C', biobankId: 'B' }, { collectionId: 'D', biobankId: 'E' }]
-      const otherGetters = { getFoundBiobankIds, getCollectionsWithBiobankId }
+      const otherGetters = { getFoundBiobankIds }
       const ids = getters.foundCollectionIds(state, otherGetters)
       expect(ids.length).toEqual(2)
     })
@@ -244,6 +252,27 @@ describe('store', () => {
       it('should return that something went wrong', () => {
         const state = { error: {} }
         expect(getters.getErrorMessage(state)).toEqual('Something went wrong')
+      })
+    })
+
+    describe('Collection Selection Getters', () => {
+      const state = {}
+      state.collectionInfo = [
+        { collectionId: 'col-1', biobankId: '2', isSubcollection: false },
+        { collectionId: 'col-2', biobankId: '1', isSubcollection: true }
+      ]
+
+      it('should return only parent collection ids', () => {
+        const result = getters.parentCollections(state)
+        expect(result).toStrictEqual(['col-1'])
+      })
+      it('Should return filters as label + value objects', () => {
+        const parentCollections = ['col-1']
+        const foundCollectionIds = ['col-1', 'col-2']
+        const collectionDictionary = { 'col-1': 'Collection A', 'col-2': 'Collection B' }
+        const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds, collectionDictionary })
+
+        expect(result).toStrictEqual([{ label: 'Collection A', value: 'col-1' }])
       })
     })
   })

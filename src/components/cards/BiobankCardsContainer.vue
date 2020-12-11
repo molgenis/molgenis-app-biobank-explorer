@@ -13,7 +13,7 @@
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
         :biobank="biobank"
-        :initCollapsed="!isAnyFilterActive">
+        :initCollapsed="(biobanksShown[0].id !== biobank.id || biobanksShown[0] !== biobank)">
       </biobank-card>
 
       <b-pagination
@@ -70,12 +70,8 @@ export default {
     ...mapGetters([
       'biobanks',
       'foundBiobanks',
-      'loading',
-      'getActiveFilters'
+      'loading'
     ]),
-    isAnyFilterActive () {
-      return Object.keys(this.getActiveFilters).length > 0
-    },
     biobanksShown () {
       return this.loading ? [] : this.biobanks.slice(this.pageSize * (this.currentPage - 1), this.pageSize * this.currentPage)
     },

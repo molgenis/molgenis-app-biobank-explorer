@@ -44,9 +44,6 @@ export default {
     for (const item of value) {
       filterValues.push(item.value)
       filterTexts.push(item.text)
-      if (!state.filterLabelCache.filter(flc => flc.value === item.value).length) {
-        state.filterLabelCache.push(item) // will be fixed when components-library returns options always.
-      }
     }
 
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
@@ -80,7 +77,31 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  SetCollectionInfo (state, collectionInfo) {
+  SetDictionaries (state, response) {
+    const collections = response.items.map(item => (
+      {
+        id: item.data.id,
+        label: item.data.label || item.data.name,
+        biobankName: item.data.biobank.data.label || item.data.biobank.data.name
+      }))
+
+    collections.forEach(function (collection) {
+      state.collectionBiobankDictionary[collection.id] = collection.biobankName
+      state.collectionDictionary[collection.id] = collection.label
+    })
+  },
+  SetCollectionInfo (state, response) {
+    if (response === undefined) {
+      state.collectionInfo = response
+      return
+    }
+
+    const collectionInfo = response.items.map(item => ({
+      collectionId: item.data.id,
+      collectionName: item.data.label || item.data.name,
+      biobankId: item.data.biobank.data.id,
+      isSubcollection: item.data.parent_collection !== undefined
+    }))
     state.collectionInfo = collectionInfo
   },
   /**
@@ -125,6 +146,17 @@ export default {
 
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
+  },
+  AddCollectionToSelection (state, collection) {
+    if (Array.isArray(collection)) {
+      state.selectedCollections = [...new Set(state.selectedCollections.concat(collection))]
+      return
+    }
+    state.selectedCollections.push(collection)
+  },
+  RemoveCollectionFromSelection (state, collection) {
+    const collectionsToRemove = Array.isArray(collection) ? collection.map(c => c.value) : [collection.value]
+    state.selectedCollections = [...new Set(state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value)))]
   },
   /**
    *

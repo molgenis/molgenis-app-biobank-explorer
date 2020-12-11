@@ -40,9 +40,6 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-const BIOBANK_ID_REGEX = /api\/data\/eu_bbmri_eric_biobanks\/([^/]+)$/
-export const getBiobankId = (link) => link.match(BIOBANK_ID_REGEX)[1]
-
 const createNegotiatorQueryBody = async (state, getters, url) => {
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
@@ -51,13 +48,11 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
     humanReadable: await getHumanReadableString(state, getters),
     nToken: state.nToken
   }
-  if (getters.rsql) {
-    result.rsql = getters.rsql
-  }
-  if (getters.biobankRsql) {
-    result.biobankId = state.negotiatorBiobankEntityId
-    result.biobankRsql = getters.biobankRsql
-  }
+
+  const collections = state.isPodium ? getters.collectionsInPodium : getters.selectedCollections
+  result.rsql = transformToRSQL({ operator: 'AND', operands: createInQuery('id', collections.map(sc => sc.value)) })
+  result.humanReadable += result.humanReadable.length ? ' and with custom collection selection.' : 'Custom collection selection.'
+
   return result
 }
 
@@ -128,6 +123,5 @@ export default {
   createNegotiatorQueryBody,
   getHumanReadableString,
   setLocationHref,
-  getLocationHref,
-  getBiobankId
+  getLocationHref
 }

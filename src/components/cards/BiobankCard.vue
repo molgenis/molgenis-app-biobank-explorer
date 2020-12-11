@@ -13,14 +13,10 @@
             <quality-column :qualities="biobank.quality" :spacing="0"></quality-column>
           </small>
           <span v-if="availableCovidTypes">
-            <b-img
-              class="biobank-icon covid-icon"
-              :src="require('../../assets/custom_icons/covid19.png')"
-              title="Covid-19"
-            />
+            <b-img class="biobank-icon covid-icon" :src="require('../../assets/custom_icons/covid19.png')" title="Covid-19" />
           </span>
         </div>
-        <div class="col-md-7" v-if="!loading">
+        <div class="col-md-6" v-if="!loading">
           <p>
             <small class="mr-2">
               <span class="font-weight-bold">Collection types:</span>
@@ -36,24 +32,27 @@
               <small class="mr-2">
                 <span class="font-weight-bold">Covid-19:</span>
               </small>
-              <small :key="type + index" v-for="(type, index) of availableCovidTypes">{{type}}</small>
+              <small :key="type + index" v-for="(type, index) of availableCovidTypes">{{ type }}</small>
             </template>
           </p>
+        </div>
+        <div v-if="!loading" class="col-md-1 text-right pr-1">
+            <span v-if="biobankInSelection" class="fa fa-check text-success" aria-hidden="true"></span>
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
         </div>
       </div>
     </div>
-
     <div class="card-body table-card" v-if="!collapsed && !loading">
-   <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
+      <collections-table v-if="biobank.collections.length > 0" :collections="sortedCollections"></collections-table>
     </div>
   </div>
 </template>
 
 <script>
 import CollectionsTable from '../tables/CollectionsTable.vue'
+import { mapGetters, mapMutations } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -61,6 +60,10 @@ import 'array-flat-polyfill'
 
 export default {
   name: 'biobank-card',
+  components: {
+    CollectionsTable,
+    QualityColumn
+  },
   props: {
     biobank: {
       type: [Object, String]
@@ -73,10 +76,16 @@ export default {
   },
   data () {
     return {
+      biobankSelected: false,
       collapsed: this.initCollapsed
     }
   },
   computed: {
+    ...mapGetters(['selectedCollections']),
+    biobankInSelection () {
+      const biobankCollectionSelection = this.biobank.collections.filter(bcf => !bcf.parent_collection).map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+      return this.selectedCollections.map(sc => sc.value).some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
+    },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)
     },
@@ -105,41 +114,40 @@ export default {
       } else return ''
     }
   },
-  components: {
-    CollectionsTable,
-    QualityColumn
+  methods: {
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection'])
   }
 }
 </script>
 
 <style>
-  .table-card {
-    padding: 0.1rem;
-  }
+.table-card {
+  padding: 0.1rem;
+}
 
-  .biobank-card {
-    margin-bottom: 1em;
-  }
+.biobank-card {
+  margin-bottom: 1em;
+}
 
-  .biobank-card-header {
-    background-color: #f5f5f5;
-  }
+.biobank-card-header {
+  background-color: #f5f5f5;
+}
 
-  .biobank-card-header:hover {
-    cursor: pointer;
-    background-color: #e4e4e4;
-  }
-  .biobank-icon:hover {
-    cursor: pointer;
-  }
+.biobank-card-header:hover {
+  cursor: pointer;
+  background-color: #e4e4e4;
+}
+.biobank-icon:hover {
+  cursor: pointer;
+}
 
-  .covid-icon {
-    height: 1.5rem;
-    width: auto;
-  }
+.covid-icon {
+  height: 1.5rem;
+  width: auto;
+}
 
-  .icon-alignment{
-    position: relative;
-    top:1px;
-  }
+.icon-alignment {
+  position: relative;
+  top: 1px;
+}
 </style>

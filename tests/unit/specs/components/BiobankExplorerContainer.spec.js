@@ -15,8 +15,12 @@ describe('BiobankExplorerContainer', () => {
   let store
   const collectionsWithBiobank = [{ collectionId: 'A', biobankId: 'B', collectionName: 'Collection A' },
     { collectionId: 'C', biobankId: 'B', collectionName: 'Collection C' }, { collectionId: 'D', biobankId: 'E', collectionName: 'Collection D' }]
-  const rsqlMock = jest.fn()
-  const podiumCollectionsMock = jest.fn()
+
+  const rsqlMock = jest.fn().mockReturnValue('')
+  const podiumCollectionsMock = jest.fn().mockReturnValue([])
+  const selectedCollectionMock = jest.fn().mockReturnValue([])
+  const foundCollectionsAsSelectionMock = jest.fn()
+  const AddCollectionToSelectionMock = jest.fn()
 
   beforeEach(() => {
     store = new Vuex.Store({
@@ -26,11 +30,18 @@ describe('BiobankExplorerContainer', () => {
         biobankRsql: () => '',
         selectedBiobankQuality: () => [],
         selectedCollectionQuality: () => [],
+        selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,
-        collectionsInPodium: podiumCollectionsMock
+        collectionsInPodium: podiumCollectionsMock,
+        foundCollectionsAsSelection: foundCollectionsAsSelectionMock,
+        collectionBiobankDictionary: () => []
+      },
+      mutations: {
+        AddCollectionToSelection: AddCollectionToSelectionMock
       },
       actions: {
+        SendToNegotiator: jest.fn(),
         GetBiobankIds: jest.fn(),
         GetPodiumCollections: jest.fn(),
         GetCollectionInfo: jest.fn(),
@@ -45,34 +56,51 @@ describe('BiobankExplorerContainer', () => {
     expect(wrapper.html()).not.toContain('cart-selection-toast')
   })
 
-  it('should render cart when one more more items are selected', () => {
-    rsqlMock.mockReturnValueOnce('rsql-query')
+  it('should render cart when one more more items are selected', async () => {
+    selectedCollectionMock.mockReturnValueOnce(['a', 'b', 'c'])
     const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
     expect(wrapper.html()).toContain('3 collection(s) selected')
   })
 
-  it('should show modal when request button on cart is clicked when podium is true', () => {
-    rsqlMock.mockReturnValueOnce('rsql-query')
-    store.state.isPodium = true
+  describe('Podium logic', () => {
+    it('should show "no podium collections" message when there are no podium collections and isPodium is true', () => {
+      selectedCollectionMock.mockReturnValueOnce(['a', 'b', 'c'])
+      store.state.isPodium = true
 
-    const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-    wrapper.vm.sendToNegotiator()
-    wrapper.vm.$nextTick()
+      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
 
-    expect(wrapper.html()).toContain('podium-modal')
-    expect(wrapper.html()).toContain('Sorry, none of the samples are currently in Podium.')
+      wrapper.vm.showSelection()
+      wrapper.vm.$nextTick()
+
+      expect(wrapper.html()).toContain('Sorry, none of the samples are currently in Podium.')
+    })
+
+    it('should render a list of names of collections which are in podium', () => {
+      rsqlMock.mockReturnValueOnce('rsql-query')
+      store.state.isPodium = true
+      podiumCollectionsMock.mockReturnValueOnce([{ label: 'Collection A', value: 'A' }, { label: 'Collection D', value: 'D' }])
+
+      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
+
+      wrapper.vm.sendRequest()
+      wrapper.vm.$nextTick()
+      expect(wrapper.html()).toContain('Collection A')
+      expect(wrapper.html()).toContain('Collection D')
+    })
+
+    it('should render podium specific modal footer when podium is active', () => {
+      store.state.isPodium = true
+      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
+      expect(wrapper.vm.modalFooterText).toEqual('0 collection(s) present in Podium')
+    })
   })
 
-  it('should render a list of names of collections which are in podium', () => {
-    rsqlMock.mockReturnValueOnce('rsql-query')
-    store.state.isPodium = true
-    podiumCollectionsMock.mockReturnValueOnce(['Collection A', 'Collection D'])
+  describe('Selection logic', () => {
+    it('should toggle label text when everything is selected', () => {
+      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
+      wrapper.setData({ selectAllCollections: true })
 
-    const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-
-    wrapper.vm.sendToNegotiator()
-    wrapper.vm.$nextTick()
-    expect(wrapper.html()).toContain('Collection A')
-    expect(wrapper.html()).toContain('Collection D')
+      expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
+    })
   })
 })
