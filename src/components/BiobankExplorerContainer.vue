@@ -28,11 +28,11 @@
           >
           </b-form-checkbox>
         </div>
+        </div>
         <div class="row">
           <div class="col-md-12" v-if="!loading">
             <result-header></result-header>
           </div>
-        </div>
       </div>
 
       <div class="row">
