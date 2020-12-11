@@ -10,9 +10,7 @@
         <div
           class="col-md-4 text-right"
           v-if="
-            !loading &&
-            foundCollectionIds.length &&
-            (rsql.length || biobankRsql.length)
+            !loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)
           "
         >
           <label id="select-all-label" for="select-all-collections">
@@ -44,10 +42,7 @@
 
     <cart-selection-toast
       v-if="
-        !loading &&
-        hasSelection &&
-        !collectionCartShown &&
-        this.foundCollectionIds.length
+        !loading && hasSelection && !collectionCartShown && this.foundCollectionIds.length
       "
       :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
       :clickHandler="showSelection"
@@ -81,7 +76,11 @@
               <span> {{ collection.label }}</span>
             </div>
             <div class="col-md-1">
-              <span class="fa fa-times text-danger remove-collection" title="Remove collection" @click="RemoveCollectionFromSelection(collection)"></span>
+              <span
+                class="fa fa-times text-danger remove-collection"
+                title="Remove collection"
+                @click="RemoveCollectionFromSelection(collection)"
+              ></span>
             </div>
           </div>
         </div>
@@ -90,12 +89,8 @@
         Sorry, none of the samples are currently in Podium.
       </p>
       <template v-slot:modal-footer>
-        <span class="text-white font-weight-bold mr-auto">{{
-          modalFooterText
-        }}</span>
-        <b-button class="btn btn-dark" @click="hideModal"
-          >Cancel</b-button
-        >
+        <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
+        <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
         <b-button
           :disabled="isPodium && !collectionsInPodium.length"
           class="btn btn-secondary"
@@ -167,9 +162,7 @@ export default {
         : `${collectionCount} collection(s) selected`
     },
     negotiatorButtonText () {
-      return this.isPodium
-        ? 'Send to Podium'
-        : 'Send to the negotiator'
+      return this.isPodium ? 'Send to Podium' : 'Send to the negotiator'
     },
     collectionCartShown () {
       return this.modalEnabled
@@ -215,10 +208,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      'AddCollectionToSelection',
-      'RemoveCollectionFromSelection'
-    ]),
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
     ...mapActions([
       'GetCollectionInfo',
       'GetBiobankIds',
@@ -229,9 +219,7 @@ export default {
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
       collectionSelectionArray.forEach(cs => {
-        const biobankLabel = this.collectionBiobankDictionary[
-          cs.value
-        ]
+        const biobankLabel = this.collectionBiobankDictionary[cs.value]
         const biobankPresent = biobankWithSelectedCollections.find(
           bsc => bsc.biobankLabel === biobankLabel
         )
@@ -256,30 +244,20 @@ export default {
     },
     sendRequest () {
       this.$bvModal.hide('collectioncart-modal')
-      this.$store
-        .dispatch('SendToNegotiator')
-        .finally(this.closeModal)
+      this.$store.dispatch('SendToNegotiator').finally(this.closeModal)
     },
     showSelection () {
       this.$bvModal.show('collectioncart-modal')
       this.modalEnabled = true
     },
     collectionSelected (collectionId) {
-      return (
-        this.selectedCollections
-          .map(sc => sc.value)
-          .indexOf(collectionId) >= 0
-      )
+      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
     },
     handleCollectionStatus (allCollections) {
       if (allCollections === true) {
-        this.AddCollectionToSelection(
-          this.foundCollectionsAsSelection
-        )
+        this.AddCollectionToSelection(this.foundCollectionsAsSelection)
       } else {
-        this.RemoveCollectionFromSelection(
-          this.foundCollectionsAsSelection
-        )
+        this.RemoveCollectionFromSelection(this.foundCollectionsAsSelection)
       }
     }
   }
