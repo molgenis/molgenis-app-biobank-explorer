@@ -28,11 +28,11 @@
           >
           </b-form-checkbox>
         </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" v-if="!loading">
+          <result-header></result-header>
         </div>
-        <div class="row">
-          <div class="col-md-12" v-if="!loading">
-            <result-header></result-header>
-          </div>
       </div>
 
       <div class="row">
@@ -71,15 +71,19 @@
           :key="`${cart.biobankLabel}-${index}`"
           v-for="(cart, index) in collectionCart"
         >
-          <h4>{{ cart.biobankLabel }}</h4>
-          <ul>
-            <li
-              :key="`${collection.label}-${index}`"
-              v-for="(collection, index) in cart.collections"
-            >
-              {{ collection.label }}
-            </li>
-          </ul>
+          <h4 class="mt-2 ml-2">{{ cart.biobankLabel }}</h4>
+          <div
+            class="row ml-3 my-2"
+            :key="`${collection.label}-${index}`"
+            v-for="(collection, index) in cart.collections"
+          >
+            <div class="col-md-11 p-0">
+              <span> {{ collection.label }}</span>
+            </div>
+            <div class="col-md-1">
+              <span class="fa fa-times text-danger remove-collection" title="Remove collection" @click="RemoveCollectionFromSelection(collection)"></span>
+            </div>
+          </div>
         </div>
       </template>
       <p v-if="isPodium && !collectionsInPodium.length">
@@ -112,6 +116,10 @@
 }
 
 #select-all-label:hover {
+  cursor: pointer;
+}
+
+.remove-collection:hover {
   cursor: pointer;
 }
 </style>
