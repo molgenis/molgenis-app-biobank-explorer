@@ -13,7 +13,7 @@ function setBookmark (router, bookmark) {
 export const createBookmark = (router, filters, selection) => {
   const bookmark = {}
 
-  if (Object.keys(filters).length > 0) {
+  if (filters && Object.keys(filters).length > 0) {
     for (const property in filters) {
       const value = filters[property]
       if (value === '' || value === null || value === undefined || value.length === 0) { continue } // can't do if(!value) because that would also trigger if value === 0
@@ -25,11 +25,12 @@ export const createBookmark = (router, filters, selection) => {
       }
     }
   }
-  if (selection.length) {
+  if (selection && selection.length) {
     bookmark.cart = encodeURI(btoa(JSON.stringify({ selection })))
   }
-
-  setBookmark(router, bookmark)
+  if (router) {
+    setBookmark(router, bookmark)
+  }
 }
 
 export default {

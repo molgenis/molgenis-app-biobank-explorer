@@ -28,6 +28,7 @@ describe('BiobankExplorerContainer', () => {
       state: {},
       getters: {
         rsql: rsqlMock,
+        activeFilters: () => {},
         biobankRsql: () => '',
         selectedBiobankQuality: () => [],
         selectedCollectionQuality: () => [],
