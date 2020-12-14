@@ -21,6 +21,7 @@ describe('BiobankExplorerContainer', () => {
   const selectedCollectionMock = jest.fn().mockReturnValue([])
   const foundCollectionsAsSelectionMock = jest.fn()
   const AddCollectionToSelectionMock = jest.fn()
+  const allCollectionsSelectedMock = jest.fn()
 
   beforeEach(() => {
     store = new Vuex.Store({
@@ -33,6 +34,7 @@ describe('BiobankExplorerContainer', () => {
         selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,
+        allCollectionsSelected: allCollectionsSelectedMock,
         collectionsInPodium: podiumCollectionsMock,
         foundCollectionsAsSelection: foundCollectionsAsSelectionMock,
         collectionBiobankDictionary: () => []
@@ -97,8 +99,8 @@ describe('BiobankExplorerContainer', () => {
 
   describe('Selection logic', () => {
     it('should toggle label text when everything is selected', () => {
+      allCollectionsSelectedMock.mockReturnValueOnce(true)
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-      wrapper.setData({ selectAllCollections: true })
 
       expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
     })
