@@ -123,7 +123,6 @@ export default {
       'rsql',
       'biobankRsql',
       'loading',
-      'activeFilters',
       'foundCollectionIds',
       'allCollectionsSelected',
       'collectionsInPodium',
@@ -223,9 +222,6 @@ export default {
     showSelection () {
       this.$bvModal.show('collectioncart-modal')
       this.modalEnabled = true
-    },
-    collectionSelected (collectionId) {
-      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
     },
     handleCollectionStatus (event) {
       const checkbox = event.target
