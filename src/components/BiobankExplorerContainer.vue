@@ -241,6 +241,7 @@ export default {
     }
   },
   mounted () {
+    // check if collections have been added off-screen.
     if (this.selectedCollections.length) {
       createBookmark(this.$router, this.activeFilters, this.selectedCollections)
     }
