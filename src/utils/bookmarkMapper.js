@@ -25,7 +25,7 @@ export const createBookmark = (router, filters, selection) => {
       }
     }
   }
-  if (selection) {
+  if (selection.length) {
     bookmark.cart = encodeURI(btoa(JSON.stringify({ selection })))
   }
 

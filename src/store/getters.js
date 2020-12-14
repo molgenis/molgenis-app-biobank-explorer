@@ -77,6 +77,15 @@ export default {
     } else return []
   },
   selectedCollections: state => state.selectedCollections,
+  allCollectionsSelected: (_, { foundCollectionIds, selectedCollections }) => {
+    if (!selectedCollections.length) return false // no selection, so can't possibly selected all.
+
+    const selectedCollectionIds = selectedCollections.map(sc => sc.value)
+    const allIdsPresentInSelection = selectedCollectionIds.every(cid => foundCollectionIds.includes(cid))
+    const selectionAndFoundLengthEqual = selectedCollectionIds.length === foundCollectionIds.length
+
+    return selectionAndFoundLengthEqual && allIdsPresentInSelection
+  },
   selectedBiobankQuality: state => state.filters.selections.biobank_quality,
   selectedCollectionQuality: state => {
     return state.filters.selections.collection_quality

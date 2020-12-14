@@ -9,23 +9,23 @@
         <div class="col-md-8"></div>
         <div
           class="col-md-4 text-right"
-          v-if="
-            !loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)
-          "
+          v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)"
         >
-          <label id="select-all-label" for="select-all-collections">
-            <u> {{ collectionSelectionLabel }} </u>
-          </label>
-          <b-form-checkbox
-            class="d-inline ml-4"
-            id="select-all-collections"
-            v-model="selectAllCollections"
+          <input
+            type="checkbox"
+            id="select-deselect-all"
+            class="add-to-cart"
             @input="handleCollectionStatus"
-            name="check-button"
-            size="lg"
-            switch
-          >
-          </b-form-checkbox>
+            :checked="allCollectionsSelected"
+            value="false"
+            hidden
+          />
+          <label class="add-to-cart-label btn btn-success" for="select-deselect-all"
+            >{{ collectionSelectionLabel }}<span class="ml-2 fa fa-plus"></span
+          ></label>
+          <label class="remove-from-cart-label btn btn-danger" for="select-deselect-all">
+            {{ collectionSelectionLabel }}<span class="ml-2 fa fa-times"> </span
+          ></label>
         </div>
       </div>
       <div class="row">
@@ -42,9 +42,7 @@
     </div>
 
     <cart-selection-toast
-      v-if="
-        !loading && hasSelection && !collectionCartShown && this.foundCollectionIds.length
-      "
+      v-if="!loading && hasSelection && !collectionCartShown && this.foundCollectionIds.length"
       :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
       :clickHandler="showSelection"
       :title="negotiatorButtonText"
@@ -63,10 +61,7 @@
       @hide="closeModal"
     >
       <template v-if="collectionCart.length > 0">
-        <div
-          :key="`${cart.biobankLabel}-${index}`"
-          v-for="(cart, index) in collectionCart"
-        >
+        <div :key="`${cart.biobankLabel}-${index}`" v-for="(cart, index) in collectionCart">
           <h4 class="mt-2 ml-2">{{ cart.biobankLabel }}</h4>
           <div
             class="row ml-3 my-2"
@@ -80,7 +75,7 @@
               <span
                 class="fa fa-times text-danger remove-collection"
                 title="Remove collection"
-                @click="RemoveCollectionFromSelection(collection)"
+                @click="RemoveCollectionFromSelection({ collection, router: $router })"
               ></span>
             </div>
           </div>
@@ -93,7 +88,7 @@
         <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
         <b-button
-          :disabled="isPodium && !collectionsInPodium.length"
+          :disabled="(isPodium && !collectionsInPodium.length) || !selectedCollections.length "
           class="btn btn-secondary"
           @click="sendRequest"
           >{{ negotiatorButtonText }}</b-button
@@ -103,29 +98,12 @@
   </div>
 </template>
 
-<style>
-.biobank-explorer-container {
-  padding-top: 1rem;
-}
-#select-all-label {
-  line-height: 2;
-}
-
-#select-all-label:hover {
-  cursor: pointer;
-}
-
-.remove-collection:hover {
-  cursor: pointer;
-}
-</style>
 <script>
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
-import { createBookmark } from '../utils/bookmarkMapper'
 
 export default {
   name: 'biobank-explorer-container',
@@ -137,8 +115,6 @@ export default {
   },
   data: () => {
     return {
-      initialize: true,
-      selectAllCollections: false,
       modalEnabled: false
     }
   },
@@ -149,6 +125,7 @@ export default {
       'loading',
       'activeFilters',
       'foundCollectionIds',
+      'allCollectionsSelected',
       'collectionsInPodium',
       'selectedBiobankQuality',
       'selectedCollectionQuality',
@@ -172,18 +149,14 @@ export default {
       return this.modalEnabled
     },
     collectionCart () {
-      const collections = this.isPodium
-        ? this.collectionsInPodium
-        : this.selectedCollections
+      const collections = this.isPodium ? this.collectionsInPodium : this.selectedCollections
       return this.groupCollectionsByBiobank(collections)
     },
     hasSelection () {
       return this.selectedCollections.length > 0
     },
     collectionSelectionLabel () {
-      return this.selectAllCollections
-        ? 'Deselect all collections'
-        : 'Select all collections'
+      return this.allCollectionsSelected ? 'Deselect all collections' : 'Select all collections'
     }
   },
   watch: {
@@ -206,10 +179,6 @@ export default {
     isPodium: {
       immediate: true,
       handler: 'GetPodiumCollections'
-    },
-    selectedCollections (newValue) {
-      this.selectAllCollections = this.selectedCollections.length && this.selectedCollections.filter(f => !this.foundCollectionIds.includes(f.value)).length === 0
-      createBookmark(this.$router, this.activeFilters, newValue)
     }
   },
   methods: {
@@ -258,13 +227,53 @@ export default {
     collectionSelected (collectionId) {
       return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
     },
-    handleCollectionStatus () {
-      if (this.selectAllCollections) {
-        this.AddCollectionToSelection(this.foundCollectionsAsSelection)
+    handleCollectionStatus (event) {
+      const checkbox = event.target
+      if (checkbox.checked === true) {
+        this.AddCollectionToSelection({
+          collection: this.foundCollectionsAsSelection,
+          router: this.$router
+        })
       } else {
-        this.RemoveCollectionFromSelection(this.foundCollectionsAsSelection)
+        this.RemoveCollectionFromSelection({
+          collection: this.foundCollectionsAsSelection,
+          router: this.$router
+        })
       }
     }
   }
 }
 </script>
+
+<style>
+.biobank-explorer-container {
+  padding-top: 1rem;
+}
+#select-all-label {
+  line-height: 2;
+}
+
+#select-all-label:hover {
+  cursor: pointer;
+}
+
+.remove-collection:hover {
+  cursor: pointer;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.add-to-cart:checked ~ .add-to-cart-label {
+  display: none;
+}
+
+.remove-from-cart-label {
+  display: none;
+}
+
+.add-to-cart:checked ~ .remove-from-cart-label {
+  display: inline-block;
+}
+</style>
