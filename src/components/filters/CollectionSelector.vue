@@ -36,9 +36,9 @@ export default {
     handleCollectionStatus (event) {
       const checkbox = event.target
       if (checkbox.checked === true) {
-        this.AddCollectionToSelection({ collection: checkbox._value, router: this.$router })
+        this.AddCollectionToSelection({ collection: checkbox._value })
       } else {
-        this.RemoveCollectionFromSelection({ collection: checkbox._value, router: this.$router })
+        this.RemoveCollectionFromSelection({ collection: checkbox._value })
       }
     }
   },

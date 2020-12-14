@@ -104,6 +104,7 @@ import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { createBookmark } from '../utils/bookmarkMapper'
 
 export default {
   name: 'biobank-explorer-container',
@@ -124,6 +125,7 @@ export default {
       'biobankRsql',
       'loading',
       'foundCollectionIds',
+      'activeFilters',
       'allCollectionsSelected',
       'collectionsInPodium',
       'selectedBiobankQuality',
@@ -236,6 +238,11 @@ export default {
           router: this.$router
         })
       }
+    }
+  },
+  mounted () {
+    if (this.selectedCollections.length) {
+      createBookmark(this.$router, this.activeFilters, this.selectedCollections)
     }
   }
 }
