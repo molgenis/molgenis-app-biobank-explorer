@@ -20,6 +20,7 @@
             class="d-inline ml-4"
             id="select-all-collections"
             v-model="selectAllCollections"
+            @input="handleCollectionStatus"
             name="check-button"
             size="lg"
             switch
@@ -124,6 +125,7 @@ import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { createBookmark } from '../utils/bookmarkMapper'
 
 export default {
   name: 'biobank-explorer-container',
@@ -135,6 +137,7 @@ export default {
   },
   data: () => {
     return {
+      initialize: true,
       selectAllCollections: false,
       modalEnabled: false
     }
@@ -144,6 +147,7 @@ export default {
       'rsql',
       'biobankRsql',
       'loading',
+      'activeFilters',
       'foundCollectionIds',
       'collectionsInPodium',
       'selectedBiobankQuality',
@@ -203,8 +207,9 @@ export default {
       immediate: true,
       handler: 'GetPodiumCollections'
     },
-    selectAllCollections (newValue) {
-      this.handleCollectionStatus(newValue)
+    selectedCollections (newValue) {
+      this.selectAllCollections = this.selectedCollections.length && this.selectedCollections.filter(f => !this.foundCollectionIds.includes(f.value)).length === 0
+      createBookmark(this.$router, this.activeFilters, newValue)
     }
   },
   methods: {
@@ -253,8 +258,8 @@ export default {
     collectionSelected (collectionId) {
       return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
     },
-    handleCollectionStatus (allCollections) {
-      if (allCollections === true) {
+    handleCollectionStatus () {
+      if (this.selectAllCollections) {
         this.AddCollectionToSelection(this.foundCollectionsAsSelection)
       } else {
         this.RemoveCollectionFromSelection(this.foundCollectionsAsSelection)

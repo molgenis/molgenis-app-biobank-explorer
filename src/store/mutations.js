@@ -14,14 +14,14 @@ export default {
       Vue.set(state.filters.selections, name, [value.value])
       Vue.set(state.filters.labels, name, [value.text])
     }
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   UnsetCovidNetworkFilter (state, { name, value, router }) {
     if (state.filters.selections[name]) {
       Vue.set(state.filters.selections, name, [...state.filters.selections[name].filter(item => item !== value.value)])
       Vue.set(state.filters.labels, name, [...state.filters.labels[name].filter(item => item !== value.text)])
     }
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -34,7 +34,7 @@ export default {
   UpdateFilter (state, { name, value, router }) {
     if (name === 'search') {
       Vue.set(state.filters.selections, name, value)
-      createBookmark(router, state.filters.selections)
+      createBookmark(router, state.filters.selections, state.selectedCollections)
       return
     }
 
@@ -48,7 +48,7 @@ export default {
 
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
     Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
@@ -177,6 +177,11 @@ export default {
 
     if (query.nToken) {
       state.nToken = query.nToken
+    }
+
+    if (query.cart) {
+      const cart = JSON.parse(atob(decodeURI(query.cart)))
+      state.selectedCollections = cart.selection
     }
 
     for (const filterName of filters) {

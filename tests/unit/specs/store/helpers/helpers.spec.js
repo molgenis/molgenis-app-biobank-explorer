@@ -203,7 +203,7 @@ describe('store', () => {
           biobankRsql: 'name=q=\'free text search\'',
           filterDefinitions: filterDefinitions(state),
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
-          getActiveFilters: () => state.filters.selections
+          activeFilters: () => state.filters.selections
         }
 
         const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
@@ -227,7 +227,7 @@ describe('store', () => {
         const getters = {
           rsql: 'materials=in=(RNA)',
           filterDefinitions: filterDefinitions(state),
-          getActiveFilters: () => state.filters.selections,
+          activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
 
@@ -255,7 +255,7 @@ describe('store', () => {
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
           filterDefinitions: filterDefinitions(state),
-          getActiveFilters: () => state.filters.selections,
+          activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
       })

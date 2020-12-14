@@ -1,6 +1,6 @@
 <template>
   <ActiveFilters
-    :value="getActiveFilters"
+    :value="activeFilters"
     @input="changeAllFilters"
     :filters="filters">
   </ActiveFilters>
@@ -18,11 +18,11 @@ export default {
     ...mapMutations(['UpdateAllFilters']),
     changeAllFilters (value) {
       this.UpdateAllFilters(value)
-      createBookmark(this.$router, value)
+      createBookmark(this.$router, value, this.selectedCollections)
     }
   },
   computed: {
-    ...mapGetters(['getActiveFilters', 'filterDefinitions']),
+    ...mapGetters(['activeFilters', 'filterDefinitions', 'selectedCollections']),
     filters () {
       return this.filterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet

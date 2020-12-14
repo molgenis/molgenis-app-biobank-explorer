@@ -88,7 +88,7 @@ export default {
   /**
    * Get map of active filters
    */
-  getActiveFilters: state => state.filters.selections,
+  activeFilters: state => state.filters.selections,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined

@@ -8,7 +8,7 @@ import { INITIAL_STATE } from '../store/state'
 
 Vue.use(VueRouter)
 export default new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: INITIAL_STATE.baseUrl,
   routes: [
     {

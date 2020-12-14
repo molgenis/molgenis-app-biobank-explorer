@@ -17,7 +17,7 @@ describe('FilterContainer', () => {
 
     getters = {
       showCountryFacet: () => true,
-      getActiveFilters: () => [],
+      activeFilters: () => [],
       bookmarkMappedToState: () => true,
       filterDefinitions
     }

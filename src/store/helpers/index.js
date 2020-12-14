@@ -56,7 +56,7 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
   return result
 }
 
-const getHumanReadableString = async (state, { filterDefinitions, getActiveFilters }) => {
+const getHumanReadableString = async (state, { filterDefinitions, activeFilters }) => {
   let humanReadableString = ''
   const additionText = ' and '
 
@@ -65,8 +65,8 @@ const getHumanReadableString = async (state, { filterDefinitions, getActiveFilte
 
   for (const fd of filterDefinitions) {
     filterNegotiatorLabelsDictionary[fd.name] = fd.humanReadableString
-    if (!filterLabels[fd.name] && getActiveFilters[fd.name] && fd.name !== 'search') {
-      const url = `/api/v2/${fd.table}?attrs=*&q=${encodeRsqlValue(`id=in=(${getActiveFilters[fd.name].join(',')})`)}`
+    if (!filterLabels[fd.name] && activeFilters[fd.name] && fd.name !== 'search') {
+      const url = `/api/v2/${fd.table}?attrs=*&q=${encodeRsqlValue(`id=in=(${activeFilters[fd.name].join(',')})`)}`
       const { items } = await api.get(url)
 
       filterLabels[fd.name] = fd.name === 'diagnosis_available' ? items.map((obj) => `[ ${obj.code} ] - ${obj.label || obj.name}`) : items.map((obj) => obj.label || obj.name)
