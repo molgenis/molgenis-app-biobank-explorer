@@ -5,7 +5,7 @@
       type="checkbox"
       :id="collection.id"
       class="add-to-cart"
-      @input="handleCollectionStatus"
+      @change="handleCollectionStatus"
       :checked="collectionSelected(collection.id)"
       :value="{ label: collection.label || collection.name, value: collection.id }"
       hidden

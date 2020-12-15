@@ -36,5 +36,5 @@ export default {
     selections: {},
     labels: {} // for human readable string
   },
-  filterLabelCache: [] // needed to filter human readable string
+  filterLabelCache: [] // needed to filter human readable string > can be rewritten to use the collectiondictionary.
 }
