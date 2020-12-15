@@ -172,8 +172,8 @@ export default {
    * @param state
    * @param params
    */
-  MapQueryToState (state) {
-    const query = state.route.query
+  MapQueryToState (state, ie11Query) {
+    const query = ie11Query || state.route.query
     const keysInQuery = Object.keys(query)
     // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
     const filters = filterDefinitions(state).map(fd => fd.name)
@@ -189,7 +189,9 @@ export default {
     }
 
     if (query.cart) {
-      const cartIds = JSON.parse(atob(decodeURI(query.cart))).split(',')
+      const decoded = decodeURIComponent(query.cart)
+      const cartIdString = atob(decoded)
+      const cartIds = cartIdString.split(',')
       state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
     }
 

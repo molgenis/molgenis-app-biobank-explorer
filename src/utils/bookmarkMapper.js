@@ -1,3 +1,5 @@
+import state from '../store/state'
+
 function setBookmark (router, bookmark) {
   router.push(
     {
@@ -8,8 +10,10 @@ function setBookmark (router, bookmark) {
     // to prevent error, which occurs on routing to same page (Vue issue)
     () => { }
   )
+  if (state.isIE11) {
+    state.ie11Bookmark = `${window.location.host}/#${router.currentRoute.fullPath}`
+  }
 }
-
 export const createBookmark = (router, filters, selection) => {
   if (!router) return
 
@@ -30,7 +34,7 @@ export const createBookmark = (router, filters, selection) => {
 
   if (selection && selection.length) {
     const bookmarkIds = selection.map(s => s.value)
-    bookmark.cart = encodeURI(btoa(JSON.stringify(bookmarkIds.join(','))))
+    bookmark.cart = encodeURI(btoa(bookmarkIds.join(',')))
   }
   setBookmark(router, bookmark)
 }

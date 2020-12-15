@@ -6,7 +6,21 @@
 
     <div class="col-md-9">
       <div class="row mb-3">
-        <div class="col-md-8"></div>
+        <div class="col-md-8">
+          <div v-if="isIE11">
+            <input class="w-50 mr-2 p-1" type="text" v-model="ie11BookmarkToApply" placeholder="bookmark" /><input
+              type="button"
+              class="btn btn-secondary"
+              @click="applyIE11Bookmark"
+              value="Apply"
+              :disabled="!ie11BookmarkToApply"
+            />
+            <div>
+            <input class="d-inline" id="ie11bookmark" :value="ie11Bookmark">
+          <button class="btn btn-success ml-2 d-inline" @click="copyIE11Bookmark" :disabled="!ie11Bookmark">Copy<span class="fa fa-copy ml-1"></span></button>
+          </div>
+          </div>
+        </div>
         <div
           class="col-md-4 text-right"
           v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)"
@@ -88,7 +102,7 @@
         <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
         <b-button
-          :disabled="(isPodium && !collectionsInPodium.length) || !selectedCollections.length "
+          :disabled="(isPodium && !collectionsInPodium.length) || !selectedCollections.length"
           class="btn btn-secondary"
           @click="sendRequest"
           >{{ negotiatorButtonText }}</b-button
@@ -116,7 +130,8 @@ export default {
   },
   data: () => {
     return {
-      modalEnabled: false
+      modalEnabled: false,
+      ie11BookmarkToApply: ''
     }
   },
   computed: {
@@ -134,7 +149,7 @@ export default {
       'collectionBiobankDictionary',
       'foundCollectionsAsSelection'
     ]),
-    ...mapState(['isPodium']),
+    ...mapState(['isPodium', 'isIE11', 'ie11Bookmark']),
     modalFooterText () {
       const collectionCount = this.isPodium
         ? this.collectionsInPodium.length
@@ -183,7 +198,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
+    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection', 'MapQueryToState']),
     ...mapActions([
       'GetCollectionInfo',
       'GetBiobankIds',
@@ -238,6 +253,26 @@ export default {
           router: this.$router
         })
       }
+    },
+    applyIE11Bookmark () {
+      const rawQuery = this.ie11BookmarkToApply.split('?')[1]
+
+      const queryParts = rawQuery.split('&')
+
+      const queryObject = {}
+
+      queryParts.forEach(part => {
+        const propAndValue = part.split('=')
+        queryObject[propAndValue[0]] = propAndValue[1]
+      })
+      this.MapQueryToState(queryObject)
+      this.applyIE11Bookmark = ''
+    },
+    copyIE11Bookmark () {
+      const ie11BookmarkElement = document.getElementById('ie11bookmark')
+      ie11BookmarkElement.select()
+      ie11BookmarkElement.setSelectionRange(0, 99999)
+      document.execCommand('copy')
     }
   },
   mounted () {

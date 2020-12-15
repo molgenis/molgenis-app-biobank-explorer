@@ -1,6 +1,8 @@
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
+  isIE11: (window.ActiveXObject) && 'ActiveXObject' in window,
+  ie11Bookmark: '',
   bookmarkMappedToState: false,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
