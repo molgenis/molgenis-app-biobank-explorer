@@ -189,8 +189,8 @@ export default {
     }
 
     if (query.cart) {
-      const cart = JSON.parse(atob(decodeURI(query.cart)))
-      state.selectedCollections = cart.selection
+      const cartIds = JSON.parse(atob(decodeURI(query.cart))).split(',')
+      state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
     }
 
     for (const filterName of filters) {

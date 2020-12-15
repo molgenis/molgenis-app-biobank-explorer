@@ -11,6 +11,8 @@ function setBookmark (router, bookmark) {
 }
 
 export const createBookmark = (router, filters, selection) => {
+  if (!router) return
+
   const bookmark = {}
 
   if (filters && Object.keys(filters).length > 0) {
@@ -25,12 +27,12 @@ export const createBookmark = (router, filters, selection) => {
       }
     }
   }
+
   if (selection && selection.length) {
-    bookmark.cart = encodeURI(btoa(JSON.stringify({ selection })))
+    const bookmarkIds = selection.map(s => s.value)
+    bookmark.cart = encodeURI(btoa(JSON.stringify(bookmarkIds.join(','))))
   }
-  if (router) {
-    setBookmark(router, bookmark)
-  }
+  setBookmark(router, bookmark)
 }
 
 export default {
