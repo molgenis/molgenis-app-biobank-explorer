@@ -102,15 +102,6 @@ describe('BiobankExplorerContainer', () => {
     })
   })
 
-  describe('Selection logic', () => {
-    it('should toggle label text when everything is selected', () => {
-      allCollectionsSelectedMock.mockReturnValueOnce(true)
-      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-
-      expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
-    })
-  })
-
   describe('IE11 Bookmark logic', () => {
     it('Should map a IE11 bookmark to the state', () => {
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
