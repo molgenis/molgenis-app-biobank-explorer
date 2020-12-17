@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BiobankExplorerContainer from '@/components/BiobankExplorerContainer'
 import BootstrapVue from 'bootstrap-vue'
+import { mockState } from '../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -26,7 +27,7 @@ describe('BiobankExplorerContainer', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
-      state: {},
+      state: mockState(),
       getters: {
         rsql: rsqlMock,
         activeFilters: () => {},
@@ -39,7 +40,8 @@ describe('BiobankExplorerContainer', () => {
         allCollectionsSelected: allCollectionsSelectedMock,
         collectionsInPodium: podiumCollectionsMock,
         foundCollectionsAsSelection: foundCollectionsAsSelectionMock,
-        collectionBiobankDictionary: () => []
+        collectionBiobankDictionary: () => [],
+        ie11Bookmark: jest.fn().mockReturnValue('http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5')
       },
       mutations: {
         AddCollectionToSelection: AddCollectionToSelectionMock,
