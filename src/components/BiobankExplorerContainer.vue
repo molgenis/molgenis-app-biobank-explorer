@@ -8,17 +8,28 @@
       <div class="row mb-3">
         <div class="col-md-8">
           <div v-if="isIE11">
-            <input class="w-50 mr-2 p-1" type="text" v-model="ie11BookmarkToApply" placeholder="bookmark" /><input
+            <input
+              class="w-50 mr-2 p-1"
+              type="text"
+              v-model="ie11BookmarkToApply"
+              placeholder="Place your recieved bookmark here"
+            /><input
               type="button"
-              class="btn btn-secondary"
+              class="btn btn-sm btn-secondary"
               @click="applyIE11Bookmark"
               value="Apply"
               :disabled="!ie11BookmarkToApply"
             />
-            <div>
-            <input class="d-inline" id="ie11bookmark" :value="ie11Bookmark">
-          <button class="btn btn-success ml-2 d-inline" @click="copyIE11Bookmark" :disabled="!ie11Bookmark">Copy<span class="fa fa-copy ml-1"></span></button>
-          </div>
+            <div class="mt-1">
+              <input class="w-50 d-inline p-1" id="ie11bookmark" :value="ie11Bookmark" placeholder="Your current bookmark" />
+              <button
+                class="btn btn-sm btn-success ml-2 d-inline"
+                @click="copyIE11Bookmark"
+                :disabled="!ie11Bookmark"
+              >
+                Copy<span class="fa fa-copy ml-1"></span>
+              </button>
+            </div>
           </div>
         </div>
         <div
@@ -198,7 +209,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection', 'MapQueryToState']),
+    ...mapMutations([
+      'AddCollectionToSelection',
+      'RemoveCollectionFromSelection',
+      'MapQueryToState'
+    ]),
     ...mapActions([
       'GetCollectionInfo',
       'GetBiobankIds',
