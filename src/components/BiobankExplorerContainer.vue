@@ -21,7 +21,12 @@
               :disabled="!ie11BookmarkToApply"
             />
             <div class="mt-1">
-              <input class="w-50 d-inline p-1" id="ie11bookmark" :value="ie11Bookmark" placeholder="Your current bookmark" />
+              <input
+                class="w-50 d-inline p-1"
+                id="ie11bookmark"
+                :value="ie11Bookmark"
+                placeholder="Your current bookmark"
+              />
               <button
                 class="btn btn-sm btn-success ml-2 d-inline"
                 @click="copyIE11Bookmark"
@@ -40,17 +45,17 @@
             type="checkbox"
             id="select-deselect-all"
             class="add-to-cart"
-            @input="handleCollectionStatus"
+            @change="handleCollectionStatus"
             :checked="allCollectionsSelected"
             value="false"
             hidden
           />
           <label class="add-to-cart-label btn btn-success" for="select-deselect-all"
-            >{{ collectionSelectionLabel }}<span class="ml-2 fa fa-plus"></span
-          ></label>
+            >Select all collections <span class="ml-1 fa fa-plus"></span>
+          </label>
           <label class="remove-from-cart-label btn btn-danger" for="select-deselect-all">
-            {{ collectionSelectionLabel }}<span class="ml-2 fa fa-times"> </span
-          ></label>
+            Deselect all collections <span class="ml-1 fa fa-times"></span>
+          </label>
         </div>
       </div>
       <div class="row">
@@ -181,9 +186,6 @@ export default {
     },
     hasSelection () {
       return this.selectedCollections.length > 0
-    },
-    collectionSelectionLabel () {
-      return this.allCollectionsSelected ? 'Deselect all collections' : 'Select all collections'
     }
   },
   watch: {
