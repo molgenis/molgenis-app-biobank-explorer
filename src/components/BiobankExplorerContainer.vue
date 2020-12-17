@@ -271,9 +271,7 @@ export default {
     },
     applyIE11Bookmark () {
       const rawQuery = this.ie11BookmarkToApply.split('?')[1]
-
       const queryParts = rawQuery.split('&')
-
       const queryObject = {}
 
       queryParts.forEach(part => {

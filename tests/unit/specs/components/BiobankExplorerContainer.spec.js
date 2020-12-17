@@ -22,6 +22,7 @@ describe('BiobankExplorerContainer', () => {
   const foundCollectionsAsSelectionMock = jest.fn()
   const AddCollectionToSelectionMock = jest.fn()
   const allCollectionsSelectedMock = jest.fn()
+  const MapQueryToStateMock = jest.fn()
 
   beforeEach(() => {
     store = new Vuex.Store({
@@ -41,7 +42,8 @@ describe('BiobankExplorerContainer', () => {
         collectionBiobankDictionary: () => []
       },
       mutations: {
-        AddCollectionToSelection: AddCollectionToSelectionMock
+        AddCollectionToSelection: AddCollectionToSelectionMock,
+        MapQueryToState: MapQueryToStateMock
       },
       actions: {
         SendToNegotiator: jest.fn(),
@@ -104,6 +106,15 @@ describe('BiobankExplorerContainer', () => {
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
 
       expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
+    })
+  })
+
+  describe('IE11 Bookmark logic', () => {
+    it('Should map a IE11 bookmark to the state', () => {
+      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
+      wrapper.setData({ ie11BookmarkToApply: 'http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5' })
+      wrapper.vm.applyIE11Bookmark()
+      expect(MapQueryToStateMock).toHaveBeenCalledWith(expect.anything(), { cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5', materials: 'CDNA' })
     })
   })
 })
