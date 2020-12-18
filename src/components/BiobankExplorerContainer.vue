@@ -99,11 +99,17 @@
             v-for="(collection, index) in cart.collections"
           >
             <div class="col-md-11 p-0">
+              <font-awesome-icon
+                title="Not available for commercial use"
+                v-if="isNonCommercialCollection(collection.value)"
+                class="text-danger non-commercial"
+                :icon="['fab', 'creative-commons-nc']"
+              />
               <span> {{ collection.label }}</span>
             </div>
             <div class="col-md-1">
               <span
-                class="fa fa-times text-danger remove-collection"
+                class="fa fa-times text-bold remove-collection"
                 title="Remove collection"
                 @click="RemoveCollectionFromSelection({ collection, router: $router })"
               ></span>
@@ -115,7 +121,18 @@
         Sorry, none of the samples are currently in Podium.
       </p>
       <template v-slot:modal-footer>
-        <span class="text-white font-weight-bold mr-auto">{{ modalFooterText }}</span>
+        <div class="mr-auto">
+          <span class="text-white font-weight-bold d-block">{{ modalFooterText }}</span>
+          <span class="text-white" v-if="selectedNonCommercialCollections > 0"
+            >
+            <font-awesome-icon
+                title="Not available for commercial use"
+                class="text-white non-commercial mr-1"
+                :icon="['fab', 'creative-commons-nc']"
+              />
+              {{ selectedNonCommercialCollections }} are non-commercial only
+            </span>
+        </div>
         <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
         <b-button
           :disabled="(isPodium && !collectionsInPodium.length) || !selectedCollections.length"
@@ -163,9 +180,10 @@ export default {
       'selectedCollectionQuality',
       'selectedCollections',
       'collectionBiobankDictionary',
-      'foundCollectionsAsSelection'
+      'foundCollectionsAsSelection',
+      'selectedNonCommercialCollections'
     ]),
-    ...mapState(['isPodium', 'isIE11', 'ie11Bookmark']),
+    ...mapState(['isPodium', 'nonCommercialCollections', 'isIE11', 'ie11Bookmark']),
     modalFooterText () {
       const collectionCount = this.isPodium
         ? this.collectionsInPodium.length
@@ -223,6 +241,9 @@ export default {
       'GetBiobankIdsForQuality',
       'GetCollectionIdsForQuality'
     ]),
+    isNonCommercialCollection (collectionId) {
+      return this.nonCommercialCollections.indexOf(collectionId) >= 0
+    },
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
       collectionSelectionArray.forEach(cs => {
@@ -300,6 +321,9 @@ export default {
 </script>
 
 <style>
+.non-commercial .fa-times {
+  font-size: 1em;
+}
 .biobank-explorer-container {
   padding-top: 1rem;
 }
@@ -307,15 +331,9 @@ export default {
   line-height: 2;
 }
 
+.remove-collection:hover,
+.btn:hover,
 #select-all-label:hover {
-  cursor: pointer;
-}
-
-.remove-collection:hover {
-  cursor: pointer;
-}
-
-.btn:hover {
   cursor: pointer;
 }
 

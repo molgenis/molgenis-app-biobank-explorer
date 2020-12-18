@@ -82,13 +82,16 @@ export default {
       {
         id: item.data.id,
         label: item.data.label || item.data.name,
-        biobankName: item.data.biobank.data.label || item.data.biobank.data.name
+        biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
+        commercialUse: item.data.commercial
       }))
 
     collections.forEach(function (collection) {
       state.collectionBiobankDictionary[collection.id] = collection.biobankName
       state.collectionDictionary[collection.id] = collection.label
     })
+
+    state.nonCommercialCollections = collections.filter(c => !c.commercialUse).map(c => c.id)
   },
   SetCollectionInfo (state, response) {
     if (response === undefined) {

@@ -23,7 +23,11 @@ import {
   faTimes
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle)
+import {
+  faCreativeCommonsNc
+} from '@fortawesome/free-brands-svg-icons'
+
+library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle, faCreativeCommonsNc)
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {

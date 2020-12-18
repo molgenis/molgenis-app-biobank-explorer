@@ -59,6 +59,10 @@ export default {
     }
     return []
   },
+  selectedNonCommercialCollections (state, { selectedCollections }) {
+    const selectedNonCommercialCollections = selectedCollections.map(sc => sc.value).filter(sid => state.nonCommercialCollections.includes(sid))
+    return selectedNonCommercialCollections.length
+  },
   foundCollectionsAsSelection: (_, { parentCollections, foundCollectionIds, collectionDictionary }) => {
     const parentCollectionIds = foundCollectionIds.filter(fci => parentCollections.includes(fci))
     return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
