@@ -21,6 +21,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('data_categories', state.filters.selections.dataType || []),
     createInQuery('diagnosis_available', state.filters.selections.diagnosis_available || []),
     createInQuery('id', state.collectionIdsWithSelectedQuality),
+    createInQuery('commercial', state.filters.selections.commercial_use || []),
     createInQuery('network', state.filters.selections.collection_network || []),
     state.filters.selections.search ? [{
       operator: 'OR',

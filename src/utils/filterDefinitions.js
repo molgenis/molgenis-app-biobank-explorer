@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { genericFilterOptions, diagnosisAvailableFilterOptions } from './filterOptions'
+import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions } from './filterOptions'
 
 const filterDefinitions = (state) => [
   {
@@ -100,6 +100,17 @@ const filterDefinitions = (state) => [
     filters: state.filters.selections.type,
     maxVisibleOptions: 25,
     humanReadableString: 'Collection type(s):'
+  },
+  {
+    component: 'CheckboxFilter',
+    name: 'commercial_use',
+    label: 'Collaboration type',
+    type: 'checkbox-filter',
+    options: collaborationTypeFilterOptions(),
+    initiallyCollapsed: !state.route.query.collaboration_type,
+    filters: state.filters.selections.collaboration_type,
+    maxVisibleOptions: 25,
+    humanReadableString: 'Biobank collaboration type(s):'
   },
   {
     component: 'CheckboxFilter',
