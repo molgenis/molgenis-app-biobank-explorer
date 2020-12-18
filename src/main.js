@@ -24,10 +24,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-  faCreativeCommonsNc
+  faCreativeCommonsNcEu
 } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle, faCreativeCommonsNc)
+library.add(faCaretRight, faTimes, faSpinner, faExclamationTriangle, faCreativeCommonsNcEu)
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {

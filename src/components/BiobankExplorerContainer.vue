@@ -103,7 +103,7 @@
                 title="Not available for commercial use"
                 v-if="isNonCommercialCollection(collection.value)"
                 class="text-danger non-commercial"
-                :icon="['fab', 'creative-commons-nc']"
+                :icon="['fab', 'creative-commons-nc-eu']"
               />
               <span> {{ collection.label }}</span>
             </div>
@@ -128,7 +128,7 @@
             <font-awesome-icon
                 title="Not available for commercial use"
                 class="text-white non-commercial mr-1"
-                :icon="['fab', 'creative-commons-nc']"
+                :icon="['fab', 'creative-commons-nc-eu']"
               />
               {{ selectedNonCommercialCollections }} are non-commercial only
             </span>
