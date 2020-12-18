@@ -24,7 +24,7 @@ describe('CollectionSelector.vue', () => {
     const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
-    expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
+    expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { collection: { label: 'Collection A', value: 'A' }, router: undefined })
   })
 
   it('can remove a value on the state when clicked', async () => {
@@ -42,6 +42,6 @@ describe('CollectionSelector.vue', () => {
     const wrapper = mount(CollectionSelector, { store, localVue, propsData: { collection: { name: 'Collection A', id: 'A' } } })
 
     await wrapper.find('input[type=checkbox]').trigger('click')
-    expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { label: 'Collection A', value: 'A' })
+    expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { collection: { label: 'Collection A', value: 'A' }, router: undefined })
   })
 })

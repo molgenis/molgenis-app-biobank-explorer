@@ -18,7 +18,7 @@ describe('BiobankCardsContainer', () => {
       getters: {
         biobanks: () => biobanks,
         loading: () => true,
-        getActiveFilters: () => activeFilters,
+        activeFilters: () => activeFilters,
         foundBiobanks: () => biobanks
       }
     })

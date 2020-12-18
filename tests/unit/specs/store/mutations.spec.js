@@ -156,6 +156,10 @@ describe('store', () => {
 
     describe('MapQueryToState', () => {
       it('should map everything from router query to state', () => {
+        state.collectionDictionary = {
+          'bbmri-eric:ID:TR_ACU:collection:covid19': 'My test collection'
+        }
+
         state.route = {
           query: {
             country: 'NL,BE',
@@ -168,7 +172,8 @@ describe('store', () => {
             biobank_network: 'networkA,networkB',
             biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
-            covid19: 'covid19'
+            covid19: 'covid19',
+            cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5'
           }
         }
 
@@ -185,6 +190,10 @@ describe('store', () => {
         expect(state.filters.selections.biobank_quality).toStrictEqual(['qualityA'])
         expect(state.filters.selections.search).toBe('search')
         expect(state.nToken).toBe('29djgCm29104958f7dLqopf92JDJKS')
+        expect(state.selectedCollections).toEqual([{
+          label: 'My test collection',
+          value: 'bbmri-eric:ID:TR_ACU:collection:covid19'
+        }])
       })
     })
 

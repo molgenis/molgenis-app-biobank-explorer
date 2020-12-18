@@ -5,7 +5,7 @@
       type="checkbox"
       :id="collection.id"
       class="add-to-cart"
-      @input="handleCollectionStatus"
+      @change="handleCollectionStatus"
       :checked="collectionSelected(collection.id)"
       :value="{ label: collection.label || collection.name, value: collection.id }"
       hidden
@@ -36,9 +36,9 @@ export default {
     handleCollectionStatus (event) {
       const checkbox = event.target
       if (checkbox.checked === true) {
-        this.AddCollectionToSelection(checkbox._value)
+        this.AddCollectionToSelection({ collection: checkbox._value })
       } else {
-        this.RemoveCollectionFromSelection(checkbox._value)
+        this.RemoveCollectionFromSelection({ collection: checkbox._value })
       }
     }
   },

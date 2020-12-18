@@ -187,7 +187,7 @@ describe('store', () => {
       })
     })
 
-    describe('getActiveFilters', () => {
+    describe('activeFilters', () => {
       it('should retrieve an object of filter name <-> filters', () => {
         state.filters.selections = {
           search: 'test searchterm',
@@ -200,7 +200,7 @@ describe('store', () => {
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS']
         }
 
-        const actual = getters.getActiveFilters(state)
+        const actual = getters.activeFilters(state)
         const expected = {
           materials: ['PLASMA'],
           country: ['AT'],
@@ -220,7 +220,7 @@ describe('store', () => {
           diagnosis_available: ['urn:miriam:icd:C00-C97']
         }
         state.filters.selections = expected
-        const actual = getters.getActiveFilters(state)
+        const actual = getters.activeFilters(state)
         expect(actual).toStrictEqual(expected)
       })
     })

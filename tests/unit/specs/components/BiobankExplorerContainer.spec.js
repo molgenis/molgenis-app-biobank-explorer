@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BiobankExplorerContainer from '@/components/BiobankExplorerContainer'
 import BootstrapVue from 'bootstrap-vue'
+import { mockState } from '../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -21,24 +22,30 @@ describe('BiobankExplorerContainer', () => {
   const selectedCollectionMock = jest.fn().mockReturnValue([])
   const foundCollectionsAsSelectionMock = jest.fn()
   const AddCollectionToSelectionMock = jest.fn()
+  const allCollectionsSelectedMock = jest.fn()
+  const MapQueryToStateMock = jest.fn()
 
   beforeEach(() => {
     store = new Vuex.Store({
-      state: {},
+      state: mockState(),
       getters: {
         rsql: rsqlMock,
+        activeFilters: () => {},
         biobankRsql: () => '',
         selectedBiobankQuality: () => [],
         selectedCollectionQuality: () => [],
         selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,
+        allCollectionsSelected: allCollectionsSelectedMock,
         collectionsInPodium: podiumCollectionsMock,
         foundCollectionsAsSelection: foundCollectionsAsSelectionMock,
-        collectionBiobankDictionary: () => []
+        collectionBiobankDictionary: () => [],
+        ie11Bookmark: jest.fn().mockReturnValue('http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5')
       },
       mutations: {
-        AddCollectionToSelection: AddCollectionToSelectionMock
+        AddCollectionToSelection: AddCollectionToSelectionMock,
+        MapQueryToState: MapQueryToStateMock
       },
       actions: {
         SendToNegotiator: jest.fn(),
@@ -95,12 +102,12 @@ describe('BiobankExplorerContainer', () => {
     })
   })
 
-  describe('Selection logic', () => {
-    it('should toggle label text when everything is selected', () => {
+  describe('IE11 Bookmark logic', () => {
+    it('Should map a IE11 bookmark to the state', () => {
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-      wrapper.setData({ selectAllCollections: true })
-
-      expect(wrapper.vm.collectionSelectionLabel).toEqual('Deselect all collections')
+      wrapper.setData({ ie11BookmarkToApply: 'http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5' })
+      wrapper.vm.applyIE11Bookmark()
+      expect(MapQueryToStateMock).toHaveBeenCalledWith(expect.anything(), { cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5', materials: 'CDNA' })
     })
   })
 })

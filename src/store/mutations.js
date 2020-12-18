@@ -14,14 +14,14 @@ export default {
       Vue.set(state.filters.selections, name, [value.value])
       Vue.set(state.filters.labels, name, [value.text])
     }
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   UnsetCovidNetworkFilter (state, { name, value, router }) {
     if (state.filters.selections[name]) {
       Vue.set(state.filters.selections, name, [...state.filters.selections[name].filter(item => item !== value.value)])
       Vue.set(state.filters.labels, name, [...state.filters.labels[name].filter(item => item !== value.text)])
     }
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   /**
    * Register the filters for country, materials, standards, and diagnosis_available in the state
@@ -34,7 +34,7 @@ export default {
   UpdateFilter (state, { name, value, router }) {
     if (name === 'search') {
       Vue.set(state.filters.selections, name, value)
-      createBookmark(router, state.filters.selections)
+      createBookmark(router, state.filters.selections, state.selectedCollections)
       return
     }
 
@@ -48,7 +48,7 @@ export default {
 
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
     Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    createBookmark(router, state.filters.selections)
+    createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
@@ -147,24 +147,33 @@ export default {
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
-  AddCollectionToSelection (state, collection) {
+  AddCollectionToSelection (state, { collection, router }) {
     if (Array.isArray(collection)) {
-      state.selectedCollections = [...new Set(state.selectedCollections.concat(collection))]
-      return
+      const currentIds = state.selectedCollections.map(sc => sc.value)
+      const newCollections = collection.filter(cf => !currentIds.includes(cf.value))
+      state.selectedCollections = [...new Set(state.selectedCollections.concat(newCollections))]
+    } else {
+      state.selectedCollections.push(collection)
     }
-    state.selectedCollections.push(collection)
+    if (router) {
+      createBookmark(router, state.filters.selections, state.selectedCollections)
+    }
   },
-  RemoveCollectionFromSelection (state, collection) {
+  RemoveCollectionFromSelection (state, { collection, router }) {
     const collectionsToRemove = Array.isArray(collection) ? collection.map(c => c.value) : [collection.value]
     state.selectedCollections = [...new Set(state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value)))]
+
+    if (router) {
+      createBookmark(router, state.filters.selections, state.selectedCollections)
+    }
   },
   /**
    *
    * @param state
    * @param params
    */
-  MapQueryToState (state) {
-    const query = state.route.query
+  MapQueryToState (state, ie11Query) {
+    const query = ie11Query || state.route.query
     const keysInQuery = Object.keys(query)
     // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
     const filters = filterDefinitions(state).map(fd => fd.name)
@@ -177,6 +186,13 @@ export default {
 
     if (query.nToken) {
       state.nToken = query.nToken
+    }
+
+    if (query.cart) {
+      const decoded = decodeURIComponent(query.cart)
+      const cartIdString = atob(decoded)
+      const cartIds = cartIdString.split(',')
+      state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
     }
 
     for (const filterName of filters) {
