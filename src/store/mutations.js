@@ -91,7 +91,7 @@ export default {
       state.collectionDictionary[collection.id] = collection.label
     })
 
-    state.nonCommercialCollections = collections.filter(c => !c.commercialUse).map(c => c.id)
+    state.nonCommercialCollections = collections.filter(collection => !collection.commercialUse).map(collection => collection.id)
   },
   SetCollectionInfo (state, response) {
     if (response === undefined) {
