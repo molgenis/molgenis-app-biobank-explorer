@@ -52,7 +52,7 @@
 
 <script>
 import CollectionsTable from '../tables/CollectionsTable.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -113,9 +113,6 @@ export default {
           .join(', ')
       } else return ''
     }
-  },
-  methods: {
-    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection'])
   }
 }
 </script>
