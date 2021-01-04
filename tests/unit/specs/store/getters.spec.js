@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockState } from '../mockData'
+import { mockSelectedCollections, mockState } from '../mockData'
 
 let state
 
@@ -48,7 +48,7 @@ describe('store', () => {
           { collectionId: 'C', collectionName: 'Collection C', biobankId: 'C-1' },
           { collectionId: 'D', collectionName: 'Collection D', biobankId: 'D-1' }]
         const foundCollectionIds = ['A', 'B', 'C', 'D', 'E', 'F']
-        const selectedCollections = [{ label: 'Collection A', value: 'A' }, { text: 'Collection B', value: 'B' }]
+        const selectedCollections = mockSelectedCollections
 
         expect(getters.collectionsInPodium(state, { foundCollectionIds, selectedCollections })).toStrictEqual([{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }])
       })
@@ -252,6 +252,17 @@ describe('store', () => {
       it('should return that something went wrong', () => {
         const state = { error: {} }
         expect(getters.getErrorMessage(state)).toEqual('Something went wrong')
+      })
+    })
+
+    describe('selectedNonCommercialCollections', () => {
+      const state = {
+        nonCommercialCollections: ['A']
+      }
+      const selectedCollections = mockSelectedCollections
+      it('Gives a count of collections that are non-commercial only', () => {
+        const numberOfNonCommercialCollections = getters.selectedNonCommercialCollections(state, { selectedCollections })
+        expect(numberOfNonCommercialCollections).toBe(1)
       })
     })
 

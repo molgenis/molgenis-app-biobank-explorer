@@ -11,6 +11,8 @@ const mockStateTemplate = {
   ...state
 }
 
+export const mockSelectedCollections = [{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }]
+
 export const mockCollectionResponse = {
   items: [
     {

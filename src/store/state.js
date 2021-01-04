@@ -33,6 +33,7 @@ export default {
   filterIdLabelDictionary: {},
   collectionBiobankDictionary: {},
   collectionDictionary: {},
+  nonCommercialCollections: [],
   selectedCollections: [],
   filters: {
     selections: {},
