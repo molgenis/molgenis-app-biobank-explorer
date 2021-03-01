@@ -39,7 +39,7 @@
         </div>
         <div
           class="col-md-4 text-right"
-          v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)"
+          v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length || selectedCollections.length)"
         >
           <collection-select-all />
         </div>
