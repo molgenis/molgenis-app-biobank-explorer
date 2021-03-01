@@ -22,7 +22,7 @@
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
 import ReportSubCollection from './ReportSubCollection.vue'
-import CollectionSelector from '@/components/filters/CollectionSelector'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 
 export default {
   name: 'ReportCollection',

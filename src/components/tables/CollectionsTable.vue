@@ -20,8 +20,8 @@
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
-          <td class="pr-1">
-            <input
+          <td class="pr-1 d-flex justify-content-center">
+            <!-- <input
               type="checkbox"
               @change="handleCollectionStatus"
               :checked="collectionSelected(collection.id)"
@@ -29,7 +29,12 @@
                 label: collection.label || collection.name,
                 value: collection.id,
               }"
-            />
+            /> -->
+            <collection-selector
+              :collection="collection"
+              icon-only
+              router-enabled
+            ></collection-selector>
           </td>
           <td
             :class="{
@@ -47,10 +52,15 @@
               </router-link>
             </span>
             <span v-else-if="column === 'quality'">
-              <quality-column :qualities="collection[column]" :spacing="0"></quality-column>
+              <quality-column
+                :qualities="collection[column]"
+                :spacing="0"
+              ></quality-column>
             </span>
             <span v-else-if="column === 'type'">{{ getCollectionType(collection) }}</span>
-            <span v-else-if="column === 'materials'">{{ getCollectionMaterials(collection) }}</span>
+            <span v-else-if="column === 'materials'">{{
+              getCollectionMaterials(collection)
+            }}</span>
             <span v-else-if="column === 'size'">{{ getCollectionSize(collection) }}</span>
           </td>
         </tr>
@@ -84,12 +94,14 @@ import utils from '../../utils'
 import SubCollectionsTable from './SubCollectionsTable'
 import { mapGetters, mapMutations } from 'vuex'
 import QualityColumn from './QualityColumn'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 
 export default {
   name: 'CollectionsTable',
   components: {
     SubCollectionsTable,
-    QualityColumn
+    QualityColumn,
+    CollectionSelector
   },
   props: {
     collections: {
@@ -147,23 +159,6 @@ export default {
   },
   methods: {
     ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
-    collectionSelected (collectionId) {
-      return this.selectedCollections.map(sc => sc.value).indexOf(collectionId) >= 0
-    },
-    handleCollectionStatus (event) {
-      const checkbox = event.target
-      if (checkbox.checked === true) {
-        this.AddCollectionToSelection({
-          collection: checkbox._value,
-          router: this.$router
-        })
-      } else {
-        this.RemoveCollectionFromSelection({
-          collection: checkbox._value,
-          router: this.$router
-        })
-      }
-    },
     getCollectionMaterials (collection) {
       return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
     },

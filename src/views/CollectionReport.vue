@@ -75,7 +75,7 @@ import ReportTitle from '@/components/report-components/ReportTitle'
 import ReportListRow from '@/components/report-components/ReportListRow'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
-import CollectionSelector from '@/components/filters/CollectionSelector'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 
 import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation } from '@/utils/templateMapper'
 

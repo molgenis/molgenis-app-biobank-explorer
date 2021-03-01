@@ -1,4 +1,4 @@
-import CollectionSelector from '../../../../../src/components/filters/CollectionSelector'
+import CollectionSelector from '../../../../../src/components/buttons/CollectionSelector'
 import Vuex from 'vuex'
 import { mount, createLocalVue } from '@vue/test-utils'
 import { mockState } from '../../mockData'
