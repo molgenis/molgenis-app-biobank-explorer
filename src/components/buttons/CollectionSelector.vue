@@ -18,7 +18,7 @@
       <span class="fa fa-plus"></span>
     </label>
     <label
-      :class="[{ 'btn btn-outline-danger': !iconOnly }, 'remove-from-cart-label']"
+      class="btn btn-outline-info remove-from-cart-label"
       :for="collection.id"
     >
       <span v-if="!iconOnly" class="mr-2">Remove from selection</span>
@@ -102,11 +102,5 @@ export default {
 .remove-from-cart-label:hover {
   cursor: pointer;
   opacity: 0.8;
-}
-
-/* to make it easier for touchscreens */
-.remove-from-cart-label:not(.btn) {
-  padding: 0.5rem;
-  margin-top: -0.5rem;
 }
 </style>
