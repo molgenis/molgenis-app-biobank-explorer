@@ -19,7 +19,7 @@
       :for="identifier"
     >
       <span v-if="!iconOnly" class="mr-2">Remove from selection</span>
-      <span class="fa fa-times"></span>
+      <span class="fa fa-minus"></span>
     </label>
   </div>
 </template>
