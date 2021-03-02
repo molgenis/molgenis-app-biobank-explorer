@@ -16,6 +16,7 @@
         <tr :key="index">
           <td class="pr-1 d-flex justify-content-center">
             <collection-selector
+            class="ml-2"
               :collection="collection"
               icon-only
               router-enabled

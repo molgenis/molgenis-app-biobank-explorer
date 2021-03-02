@@ -5,7 +5,8 @@
       @click.prevent="collapsed = !collapsed"
     >
       <div class="row">
-        <div class="col-md-5" v-if="!loading">
+        <div class="col-md-5 d-flex flex-column" v-if="!loading">
+          <div class="mb-2">
           <h5>
             <router-link :to="'/biobank/' + biobank.id">
               <span
@@ -16,6 +17,7 @@
             </router-link>
             <span id="biobank-name">{{ biobank.name }}</span>
           </h5>
+
           <small v-if="biobank.quality && biobank.quality.length > 0">
             <quality-column
               :qualities="biobank.quality"
@@ -29,6 +31,16 @@
               title="Covid-19"
             />
           </span>
+          </div>
+          <collection-selector
+          class="mt-auto"
+            v-if="biobank.collections.length > 0"
+            :collections="sortedCollections"
+            :checkboxId="biobank.name"
+            icon-only
+            router-enabled
+          ></collection-selector>
+
         </div>
         <div class="col-md-6" v-if="!loading">
           <p>
@@ -58,16 +70,8 @@
           v-if="!loading"
           class="col-md-1 text-right pr-1 d-flex flex-column"
         >
-         <collection-selector
-          class="mb-auto"
-            v-if="biobank.collections.length > 0"
-            :collections="sortedCollections"
-            :checkboxId="biobank.name"
-            icon-only
-            router-enabled
-          ></collection-selector>
           <div
-            class="position-relative mt-4"
+            class="position-relative"
             v-if="biobankInSelection"
             title="One or more collections have been added to your selection"
           >
