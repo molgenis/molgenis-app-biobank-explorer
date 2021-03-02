@@ -3,12 +3,6 @@
     <thead>
       <tr>
         <th scope="col" class="pr-2">
-          <input
-            ref="header_checkbox"
-            type="checkbox"
-            v-model="selectedAllCollections"
-            :indeterminate.prop="someCollectionsSelected"
-          />
         </th>
         <th scope="col">Collection</th>
         <th scope="col">Type</th>
@@ -21,15 +15,6 @@
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
           <td class="pr-1 d-flex justify-content-center">
-            <!-- <input
-              type="checkbox"
-              @change="handleCollectionStatus"
-              :checked="collectionSelected(collection.id)"
-              :value="{
-                label: collection.label || collection.name,
-                value: collection.id,
-              }"
-            /> -->
             <collection-selector
               :collection="collection"
               icon-only
@@ -92,7 +77,7 @@
 <script>
 import utils from '../../utils'
 import SubCollectionsTable from './SubCollectionsTable'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import QualityColumn from './QualityColumn'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 
@@ -115,35 +100,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedCollections']),
-    selectedAllCollections: {
-      get () {
-        return this.parentCollections
-          .map(pc => pc.value)
-          .every(id => this.selectedCollections.map(sc => sc.value).includes(id))
-      },
-      set (newValue) {
-        if (newValue === true) {
-          this.AddCollectionToSelection({
-            collection: this.parentCollections,
-            router: this.$router
-          })
-        } else {
-          this.RemoveCollectionFromSelection({
-            collection: this.parentCollections,
-            router: this.$router
-          })
-        }
-      }
-    },
-    someCollectionsSelected () {
-      return (
-        this.parentCollections
-          .map(pc => pc.value)
-          .some(id => this.selectedCollections.map(sc => sc.value).includes(id)) &&
-        !this.selectedAllCollections
-      )
-    },
     parentCollections () {
       return this.topLevelElements.map(tle => ({ label: tle.label || tle.name, value: tle.id }))
     },
