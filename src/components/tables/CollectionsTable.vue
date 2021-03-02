@@ -14,7 +14,7 @@
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
-          <td class="pr-1 d-flex justify-content-center">
+          <td class="pr-1">
             <collection-selector
             class="ml-2"
               :collection="collection"

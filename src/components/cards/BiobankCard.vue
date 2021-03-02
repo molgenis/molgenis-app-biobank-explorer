@@ -33,9 +33,9 @@
           </span>
           </div>
           <collection-selector
-          class="mt-auto"
+            class="mt-auto w-25"
             v-if="biobank.collections.length > 0"
-            :collections="sortedCollections"
+            :collections="biobank.collections"
             :checkboxId="biobank.name"
             icon-only
             router-enabled
