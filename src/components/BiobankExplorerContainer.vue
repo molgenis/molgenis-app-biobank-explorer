@@ -6,6 +6,8 @@
 
     <div class="col-md-9">
       <div class="row mb-3">
+          <collection-select-all v-if="!loading && foundCollectionIds.length" class="mt-1" />
+
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -38,10 +40,7 @@
           </div>
         </div>
         <div
-          class="col-md-4 text-right"
-          v-if="!loading && foundCollectionIds.length"
-        >
-          <collection-select-all />
+          class="col-md-4">
         </div>
       </div>
       <div class="row">
