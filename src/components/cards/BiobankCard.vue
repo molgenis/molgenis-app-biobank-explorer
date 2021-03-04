@@ -115,6 +115,8 @@ export default {
   computed: {
     ...mapGetters(['selectedCollections']),
     biobankInSelection () {
+      if (!this.biobank.collections) return false
+
       const biobankCollectionSelection = this.biobank.collections
         .filter((bcf) => !bcf.parent_collection)
         .map((bc) => ({ label: bc.label || bc.name, value: bc.id }))
