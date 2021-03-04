@@ -6,8 +6,11 @@
 
     <div class="col-md-9">
       <div class="row mb-3">
-          <collection-select-all v-if="!loading && foundCollectionIds.length" class="mt-1 ml-3" />
-
+          <collection-select-all
+          v-if="!loading && foundCollectionIds.length"
+          class="mt-1 ml-3"
+          router-enabled
+          />
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -217,7 +220,6 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'AddCollectionToSelection',
       'RemoveCollectionFromSelection',
       'MapQueryToState'
     ]),
@@ -264,20 +266,6 @@ export default {
     showSelection () {
       this.$bvModal.show('collectioncart-modal')
       this.modalEnabled = true
-    },
-    handleCollectionStatus (event) {
-      const checkbox = event.target
-      if (checkbox.checked === true) {
-        this.AddCollectionToSelection({
-          collection: this.foundCollectionsAsSelection,
-          router: this.$router
-        })
-      } else {
-        this.RemoveCollectionFromSelection({
-          collection: this.foundCollectionsAsSelection,
-          router: this.$router
-        })
-      }
     },
     applyIE11Bookmark () {
       const rawQuery = this.ie11BookmarkToApply.split('?')[1]

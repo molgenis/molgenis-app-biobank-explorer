@@ -2,7 +2,7 @@
 <template>
   <div>
     <input
-     id="select-deselect-all"
+      id="select-deselect-all"
       type="checkbox"
       class="add-to-cart"
       @change="handleCollectionStatus"
@@ -26,6 +26,13 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'CollectionSelectAll',
+  props: {
+    routerEnabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   methods: {
     ...mapMutations([
       'AddCollectionToSelection',
