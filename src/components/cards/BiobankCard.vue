@@ -1,5 +1,5 @@
 <template>
-  <div class="card biobank-card">
+  <div :class="[{'border-secondary': biobankInSelection},'card biobank-card']">
     <div
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed"
@@ -33,7 +33,7 @@
           </span>
           </div>
           <collection-selector
-            class="mt-auto w-25"
+            class="align-with-table mt-auto w-25"
             v-if="biobank.collections.length > 0"
             :collections="biobank.collections"
             :checkboxId="biobank.name"
@@ -65,22 +65,6 @@
               >
             </template>
           </p>
-        </div>
-        <div
-          v-if="!loading"
-          class="col-md-1 text-right pr-1 d-flex flex-column"
-        >
-          <div
-            class="position-relative"
-            v-if="biobankInSelection"
-            title="One or more collections have been added to your selection"
-          >
-            <span class="fa fa-list-alt fa-lg" aria-hidden="true"> </span>
-            <span
-              class="fa fa-check-circle text-success added-to-selection"
-              aria-hidden="true"
-            ></span>
-          </div>
         </div>
         <div v-else class="col-md-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
@@ -174,6 +158,9 @@ export default {
 <style>
 .table-card {
   padding: 0.1rem;
+}
+.align-with-table {
+  margin-left: 0.1rem;
 }
 
 .added-to-selection {
