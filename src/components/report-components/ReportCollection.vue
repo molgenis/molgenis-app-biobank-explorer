@@ -1,6 +1,6 @@
 <template>
   <div>
-    <collection-selector class="mb-2" :collection="collection" />
+    <collection-selector class="mb-2" :collectionData="collection" />
     <h4>
       <router-link :to="'/collection/' + collection.id">{{ collection.name }}</router-link>
     </h4>

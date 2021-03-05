@@ -17,7 +17,7 @@
           <td class="pr-1">
             <collection-selector
             class="ml-2"
-              :collection="collection"
+              :collectionData="collection"
               icon-only
               router-enabled
             ></collection-selector>
@@ -78,7 +78,6 @@
 <script>
 import utils from '../../utils'
 import SubCollectionsTable from './SubCollectionsTable'
-import { mapMutations } from 'vuex'
 import QualityColumn from './QualityColumn'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 
@@ -115,7 +114,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['AddCollectionToSelection', 'RemoveCollectionFromSelection']),
     getCollectionMaterials (collection) {
       return utils.getUniqueIdArray(collection.materials.map(material => material.label)).join(', ')
     },

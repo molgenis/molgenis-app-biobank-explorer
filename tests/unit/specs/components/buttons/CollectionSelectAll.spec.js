@@ -10,7 +10,7 @@ localVue.use(Vuex)
 localVue.use(VueRouter)
 
 describe('CollectionSelectAll', () => {
-  let store, AddCollectionToSelection, RemoveCollectionFromSelection,
+  let store, AddCollectionsToSelection, RemoveCollectionsFromSelection,
     allCollectionsSelected, foundCollectionsAsSelection
 
   const collectionMockData = [
@@ -20,8 +20,8 @@ describe('CollectionSelectAll', () => {
   ]
 
   beforeEach(() => {
-    AddCollectionToSelection = jest.fn()
-    RemoveCollectionFromSelection = jest.fn()
+    AddCollectionsToSelection = jest.fn()
+    RemoveCollectionsFromSelection = jest.fn()
     allCollectionsSelected = jest.fn()
     foundCollectionsAsSelection = jest.fn().mockReturnValue(collectionMockData)
 
@@ -32,13 +32,13 @@ describe('CollectionSelectAll', () => {
         foundCollectionsAsSelection
       },
       mutations: {
-        AddCollectionToSelection,
-        RemoveCollectionFromSelection
+        AddCollectionsToSelection,
+        RemoveCollectionsFromSelection
       }
     })
   })
 
-  it('should call addCollectionToSelection in the "select all" state', () => {
+  it('should call addCollectionsToSelection in the "select all" state', () => {
     const wrapper = mount(CollectionSelectAll, { store, localVue })
     const label = wrapper.find('label')
 
@@ -46,10 +46,10 @@ describe('CollectionSelectAll', () => {
     expect(label.text().toLowerCase()).toContain('select all')
     label.trigger('click')
 
-    expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { collection: collectionMockData })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData })
   })
 
-  it('should call RemoveCollectionFromSelection in the "deselect all" state', () => {
+  it('should call RemoveCollectionsFromSelection in the "deselect all" state', () => {
     // you can't alter a method after the store has been initialized
     store = new Vuex.Store({
       getters: {
@@ -57,7 +57,7 @@ describe('CollectionSelectAll', () => {
         foundCollectionsAsSelection
       },
       mutations: {
-        RemoveCollectionFromSelection
+        RemoveCollectionsFromSelection
       }
     })
 
@@ -68,14 +68,14 @@ describe('CollectionSelectAll', () => {
     expect(label.text().toLowerCase()).toContain('deselect all')
     label.trigger('click')
 
-    expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { collection: collectionMockData })
+    expect(RemoveCollectionsFromSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData })
   })
 
-  it('should call addCollectionToSelection with router if routerEnabled is true', () => {
+  it('should call addCollectionsToSelection with router if routerEnabled is true', () => {
     const wrapper = mount(CollectionSelectAll, { store, propsData: { routerEnabled: true }, localVue, router })
     const label = wrapper.find('label')
     label.trigger('click')
 
-    expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { collection: collectionMockData, router })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData, router })
   })
 })

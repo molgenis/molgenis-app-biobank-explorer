@@ -1,9 +1,10 @@
 import CollectionsTable from '@/components/tables/CollectionsTable'
-import { mount, shallowMount } from '@vue/test-utils'
-import Vue from 'vue'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+
+localVue.use(Vuex)
 
 describe('components', () => {
   describe('CollectionsTable', () => {
@@ -67,8 +68,8 @@ describe('components', () => {
 
     let wrapper, store
 
-    const AddCollectionToSelection = jest.fn()
-    const RemoveCollectionFromSelection = jest.fn()
+    const AddCollectionsToSelection = jest.fn()
+    const RemoveCollectionsFromSelection = jest.fn()
     const selectedCollections = jest.fn(() => [])
 
     beforeEach(() => {
@@ -78,8 +79,8 @@ describe('components', () => {
           selectedCollections
         },
         mutations: {
-          RemoveCollectionFromSelection,
-          AddCollectionToSelection
+          RemoveCollectionsFromSelection,
+          AddCollectionsToSelection
         }
       })
 
@@ -121,17 +122,6 @@ describe('components', () => {
 
       it('should return order of magnitude if size is 0', () => {
         expect(CollectionsTable.methods.getCollectionSize({ size: 0, order_of_magnitude: { size: '10.000 - 100.000 Samples' } })).toEqual('10.000 - 100.000 Samples')
-      })
-    })
-
-    describe('Selecting collections', () => {
-      it('can set / remove a single collection when collection checkbox is clicked', async () => {
-        const wrapper = mount(CollectionsTable, { store, propsData: { collections }, stubs: ['router-link'] })
-        await wrapper.find('td').find('input[type=checkbox]').trigger('click')
-        expect(AddCollectionToSelection).toHaveBeenCalledWith(expect.anything(), { collection: { label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' }, router: undefined })
-        // Remove //
-        await wrapper.find('td').find('input[type=checkbox]').trigger('click')
-        expect(RemoveCollectionFromSelection).toHaveBeenCalledWith(expect.anything(), { collection: { label: 'Tissues in RNAlater in Long Term Storage Collection', value: 'bbmri-eric:ID:CZ_MMCI:collection:LTS:tissue-RNAlater' }, router: undefined })
       })
     })
   })

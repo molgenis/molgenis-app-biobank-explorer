@@ -35,12 +35,12 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'AddCollectionToSelection',
-      'RemoveCollectionFromSelection'
+      'AddCollectionsToSelection',
+      'RemoveCollectionsFromSelection'
     ]),
     handleCollectionStatus (event) {
       const { checked } = event.target
-      const collectionData = { collection: this.foundCollectionsAsSelection }
+      const collectionData = { collections: this.foundCollectionsAsSelection }
 
       // when it's required to be on the bookmark, we pass the router
       if (this.routerEnabled) {
@@ -48,9 +48,9 @@ export default {
       }
 
       if (checked) {
-        this.AddCollectionToSelection(collectionData)
+        this.AddCollectionsToSelection(collectionData)
       } else {
-        this.RemoveCollectionFromSelection(collectionData)
+        this.RemoveCollectionsFromSelection(collectionData)
       }
     }
   },

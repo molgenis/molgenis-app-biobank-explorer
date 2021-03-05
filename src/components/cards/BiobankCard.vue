@@ -35,8 +35,7 @@
           <collection-selector
             class="align-with-table mt-auto w-25"
             v-if="biobank.collections.length > 0"
-            :collections="biobank.collections"
-            :checkboxId="biobank.name"
+            :collectionData="biobank.collections"
             icon-only
             router-enabled
           ></collection-selector>

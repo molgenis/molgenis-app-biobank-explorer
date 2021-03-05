@@ -100,7 +100,7 @@
               <span
                 class="fa fa-times text-bold remove-collection"
                 title="Remove collection"
-                @click="RemoveCollectionFromSelection({ collection, router: $router })"
+                @click="RemoveCollectionsFromSelection({ collections: [collection], router: $router })"
               ></span>
             </div>
           </div>
@@ -220,7 +220,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'RemoveCollectionFromSelection',
+      'RemoveCollectionsFromSelection',
       'MapQueryToState'
     ]),
     ...mapActions([

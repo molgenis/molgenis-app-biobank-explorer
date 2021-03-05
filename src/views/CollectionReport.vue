@@ -12,7 +12,7 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
-                <collection-selector class="mb-2" v-if="isTopLevelCollection" :collection="collection" />
+                <collection-selector class="mb-2" v-if="isTopLevelCollection" :collectionData="collection" />
 
                 <report-description :description="collection.description" :maxLength="500"></report-description>
 

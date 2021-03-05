@@ -3,20 +3,20 @@
   <div @click.stop>
     <input
       type="checkbox"
-      :id="identifier"
+      :id="checkboxIdentifier"
       class="add-to-cart"
       @change.prevent="handleCollectionStatus"
       :checked="checkboxState"
       :value="false"
       hidden
     />
-    <label class="add-to-cart-label btn btn-secondary" :for="identifier">
+    <label class="add-to-cart-label btn btn-secondary" :for="checkboxIdentifier">
       <span v-if="!iconOnly" class="mr-2">Add to selection</span>
       <span class="fa fa-plus"></span>
     </label>
     <label
       class="btn btn-outline-secondary remove-from-cart-label"
-      :for="identifier"
+      :for="checkboxIdentifier"
     >
       <span v-if="!iconOnly" class="mr-2">Remove from selection</span>
       <span class="fa fa-minus"></span>
@@ -30,9 +30,9 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CollectionSelector',
   props: {
-    collection: {
-      type: Object,
-      required: false
+    collectionData: {
+      type: [Object, Array],
+      required: true
     },
     iconOnly: {
       type: Boolean,
@@ -43,67 +43,63 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    },
-    // We must override the checkbox id if we add an array
-    checkboxId: {
-      type: String,
-      required: false
-    },
-    collections: {
-      type: Array,
-      required: false
+    }
+  },
+  data: () => {
+    return {
+      collections: [],
+      identifier: ''
     }
   },
   methods: {
     ...mapMutations([
-      'AddCollectionToSelection',
-      'RemoveCollectionFromSelection'
+      'AddCollectionsToSelection',
+      'RemoveCollectionsFromSelection'
     ]),
     handleCollectionStatus (event) {
       const { checked } = event.target
 
-      const collectionData = { collection: this.checkboxValue }
+      const collectionData = { collections: this.collections }
       // when it's required to be on the bookmark, we pass the router
       if (this.routerEnabled) {
         collectionData.router = this.$router
       }
 
       if (checked) {
-        this.AddCollectionToSelection(collectionData)
+        this.AddCollectionsToSelection(collectionData)
       } else {
-        this.RemoveCollectionFromSelection(collectionData)
+        this.RemoveCollectionsFromSelection(collectionData)
       }
     }
   },
   computed: {
     ...mapGetters(['selectedCollections']),
-    identifier () {
-      return this.checkboxId || this.collection.id
+    checkboxIdentifier () {
+      return this.identifier
     },
     checkboxState () {
       const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
 
-      if (this.collection) {
-        return selectedCollectionIds.includes(this.collection.id)
-      } else {
-        return this.collections.map(collection => collection.value)
-          .every(id => selectedCollectionIds.includes(id))
-      }
-    },
-    checkboxValue () {
-      if (this.collection) {
-        // We need to do this, because the button is generated in a loop of collctions
-        return {
-          label: this.collection.label || this.collection.name,
-          value: this.collection.id
-        }
-      } else {
-        return this.collections.map((collection) => ({
-          label: collection.label || collection.name,
-          value: collection.id
-        }))
-      }
+      return this.collections.map(collection => collection.value)
+        .every(id => selectedCollectionIds.includes(id))
     }
+  },
+  beforeMount () {
+    let initialData
+
+    if (Array.isArray(this.collectionData)) {
+      initialData = this.collectionData
+      this.identifier = `selector-${Math.random().toString().substr(2)}`
+    } else {
+      initialData = [this.collectionData]
+      this.identifier = this.collectionData.id
+    }
+
+    this.collections = initialData.map((collection) => ({
+      label: collection.label || collection.name,
+      value: collection.id
+    })
+    )
   }
 }
 </script>
