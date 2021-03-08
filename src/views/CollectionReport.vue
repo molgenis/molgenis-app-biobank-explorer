@@ -12,7 +12,7 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
-                <collection-selector class="mb-2" v-if="isTopLevelCollection" :collection="collection" />
+                <collection-selector class="mb-2" v-if="isTopLevelCollection" :collectionData="collection" />
 
                 <report-description :description="collection.description" :maxLength="500"></report-description>
 
@@ -75,7 +75,7 @@ import ReportTitle from '@/components/report-components/ReportTitle'
 import ReportListRow from '@/components/report-components/ReportListRow'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
-import CollectionSelector from '@/components/filters/CollectionSelector'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 
 import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation } from '@/utils/templateMapper'
 

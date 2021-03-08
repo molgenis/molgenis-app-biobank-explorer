@@ -6,6 +6,11 @@
 
     <div class="col-md-9">
       <div class="row mb-3">
+          <collection-select-all
+          v-if="!loading && foundCollectionIds.length"
+          class="mt-1 ml-3"
+          router-enabled
+          />
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -38,24 +43,7 @@
           </div>
         </div>
         <div
-          class="col-md-4 text-right"
-          v-if="!loading && foundCollectionIds.length && (rsql.length || biobankRsql.length)"
-        >
-          <input
-            type="checkbox"
-            id="select-deselect-all"
-            class="add-to-cart"
-            @change="handleCollectionStatus"
-            :checked="allCollectionsSelected"
-            value="false"
-            hidden
-          />
-          <label class="add-to-cart-label btn btn-success" for="select-deselect-all"
-            >Select all collections <span class="ml-1 fa fa-plus"></span>
-          </label>
-          <label class="remove-from-cart-label btn btn-danger" for="select-deselect-all">
-            Deselect all collections <span class="ml-1 fa fa-times"></span>
-          </label>
+          class="col-md-4">
         </div>
       </div>
       <div class="row">
@@ -92,17 +80,18 @@
     >
       <template v-if="collectionCart.length > 0">
         <div :key="`${cart.biobankLabel}-${index}`" v-for="(cart, index) in collectionCart">
-          <h4 class="mt-2 ml-2">{{ cart.biobankLabel }}</h4>
+          <hr v-if="index > 0">
+          <h4 class="my-3 ml-2">{{ cart.biobankLabel }}</h4>
           <div
             class="row ml-3 my-2"
             :key="`${collection.label}-${index}`"
             v-for="(collection, index) in cart.collections"
           >
-            <div class="col-md-11 p-0">
+            <div class="col-md-11 p-0 my-1">
               <font-awesome-icon
                 title="Not available for commercial use"
                 v-if="isNonCommercialCollection(collection.value)"
-                class="text-danger non-commercial"
+                class="text-danger non-commercial mr-1"
                 :icon="['fab', 'creative-commons-nc-eu']"
               />
               <span> {{ collection.label }}</span>
@@ -111,7 +100,7 @@
               <span
                 class="fa fa-times text-bold remove-collection"
                 title="Remove collection"
-                @click="RemoveCollectionFromSelection({ collection, router: $router })"
+                @click="RemoveCollectionsFromSelection({ collections: [collection], router: $router })"
               ></span>
             </div>
           </div>
@@ -152,6 +141,7 @@ import FilterContainer from './filters/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
+import CollectionSelectAll from '@/components/buttons/CollectionSelectAll.vue'
 
 export default {
   name: 'biobank-explorer-container',
@@ -159,7 +149,8 @@ export default {
     BiobankCardsContainer,
     FilterContainer,
     ResultHeader,
-    CartSelectionToast
+    CartSelectionToast,
+    CollectionSelectAll
   },
   data: () => {
     return {
@@ -174,7 +165,6 @@ export default {
       'loading',
       'foundCollectionIds',
       'activeFilters',
-      'allCollectionsSelected',
       'collectionsInPodium',
       'selectedBiobankQuality',
       'selectedCollectionQuality',
@@ -230,8 +220,7 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'AddCollectionToSelection',
-      'RemoveCollectionFromSelection',
+      'RemoveCollectionsFromSelection',
       'MapQueryToState'
     ]),
     ...mapActions([
@@ -278,20 +267,6 @@ export default {
       this.$bvModal.show('collectioncart-modal')
       this.modalEnabled = true
     },
-    handleCollectionStatus (event) {
-      const checkbox = event.target
-      if (checkbox.checked === true) {
-        this.AddCollectionToSelection({
-          collection: this.foundCollectionsAsSelection,
-          router: this.$router
-        })
-      } else {
-        this.RemoveCollectionFromSelection({
-          collection: this.foundCollectionsAsSelection,
-          router: this.$router
-        })
-      }
-    },
     applyIE11Bookmark () {
       const rawQuery = this.ie11BookmarkToApply.split('?')[1]
       const queryParts = rawQuery.split('&')
@@ -327,25 +302,9 @@ export default {
 .biobank-explorer-container {
   padding-top: 1rem;
 }
-#select-all-label {
-  line-height: 2;
-}
-
 .remove-collection:hover,
 .btn:hover,
 #select-all-label:hover {
   cursor: pointer;
-}
-
-.add-to-cart:checked ~ .add-to-cart-label {
-  display: none;
-}
-
-.remove-from-cart-label {
-  display: none;
-}
-
-.add-to-cart:checked ~ .remove-from-cart-label {
-  display: inline-block;
 }
 </style>

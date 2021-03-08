@@ -21,7 +21,7 @@ describe('BiobankExplorerContainer', () => {
   const podiumCollectionsMock = jest.fn().mockReturnValue([])
   const selectedCollectionMock = jest.fn().mockReturnValue([])
   const foundCollectionsAsSelectionMock = jest.fn()
-  const AddCollectionToSelectionMock = jest.fn()
+  const AddCollectionsToSelectionMock = jest.fn()
   const allCollectionsSelectedMock = jest.fn()
   const MapQueryToStateMock = jest.fn()
 
@@ -44,7 +44,7 @@ describe('BiobankExplorerContainer', () => {
         ie11Bookmark: jest.fn().mockReturnValue('http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5')
       },
       mutations: {
-        AddCollectionToSelection: AddCollectionToSelectionMock,
+        AddCollectionsToSelection: AddCollectionsToSelectionMock,
         MapQueryToState: MapQueryToStateMock
       },
       actions: {

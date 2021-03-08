@@ -1,6 +1,6 @@
 <template>
   <div>
-    <collection-selector class="mb-2" :collection="collection" />
+    <collection-selector class="mb-2" :collectionData="collection" />
     <h4>
       <router-link :to="'/collection/' + collection.id">{{ collection.name }}</router-link>
     </h4>
@@ -22,7 +22,7 @@
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
 import ReportSubCollection from './ReportSubCollection.vue'
-import CollectionSelector from '@/components/filters/CollectionSelector'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 
 export default {
   name: 'ReportCollection',
