@@ -83,7 +83,7 @@ export default {
         id: item.data.id,
         label: item.data.label || item.data.name,
         biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-        commercialUse: item.data.commercial
+        commercialUse: item.data.collaboration_commercial
       }))
 
     collections.forEach(function (collection) {
