@@ -46,15 +46,15 @@
                 :spacing="0"
               ></quality-column>
             </span>
-            <span v-else-if="column === 'type'">{{
-              getCollectionType(collection)
-            }}</span>
-            <span v-else-if="column === 'materials'">{{
-              getCollectionMaterials(collection)
-            }}</span>
-            <span v-else-if="column === 'size'">{{
-              getCollectionSize(collection)
-            }}</span>
+            <span v-else-if="column === 'type'">
+              {{ getCollectionType(collection) }}
+            </span>
+            <span v-else-if="column === 'materials'">
+              {{ getCollectionMaterials(collection) }}
+            </span>
+            <span v-else-if="column === 'size'">
+              {{ getCollectionSize(collection) }}
+            </span>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
