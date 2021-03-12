@@ -81,14 +81,15 @@ export default {
     } else return []
   },
   selectedCollections: state => state.selectedCollections,
-  allCollectionsSelected: (_, { foundCollectionIds, selectedCollections }) => {
-    if (!selectedCollections.length) return false // no selection, so can't possibly selected all.
+  allCollectionsSelected: (_, { parentCollections, selectedCollections }) => {
+    // if we don't have any selections present in our cart
+    if (selectedCollections.length === 0) return false
 
     const selectedCollectionIds = selectedCollections.map(sc => sc.value)
-    const allIdsPresentInSelection = selectedCollectionIds.every(cid => foundCollectionIds.includes(cid))
-    const selectionAndFoundLengthEqual = selectedCollectionIds.length === foundCollectionIds.length
+    // parent collections are the collections currently shown based on filters, compared to the cart
+    const allIdsPresentInSelection = parentCollections.every(cid => selectedCollectionIds.includes(cid))
 
-    return selectionAndFoundLengthEqual && allIdsPresentInSelection
+    return allIdsPresentInSelection
   },
   selectedBiobankQuality: state => state.filters.selections.biobank_quality,
   selectedCollectionQuality: state => {

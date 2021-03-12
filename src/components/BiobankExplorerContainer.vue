@@ -6,11 +6,11 @@
 
     <div class="col-md-9">
       <div class="row mb-3">
-          <collection-select-all
+        <collection-select-all
           v-if="!loading && foundCollectionIds.length"
           class="mt-1 ml-3"
           router-enabled
-          />
+        />
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -42,9 +42,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="col-md-4">
-        </div>
+        <div class="col-md-4"></div>
       </div>
       <div class="row">
         <div class="col-md-12" v-if="!loading">
@@ -60,7 +58,12 @@
     </div>
 
     <cart-selection-toast
-      v-if="!loading && hasSelection && !collectionCartShown && this.foundCollectionIds.length"
+      v-if="
+        !loading &&
+        hasSelection &&
+        !collectionCartShown &&
+        this.foundCollectionIds.length
+      "
       :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
       :clickHandler="showSelection"
       :title="negotiatorButtonText"
@@ -72,6 +75,7 @@
     <b-modal
       hide-header
       id="collectioncart-modal"
+      size="xl"
       scrollable
       centered
       footer-bg-variant="warning"
@@ -79,8 +83,11 @@
       @hide="closeModal"
     >
       <template v-if="collectionCart.length > 0">
-        <div :key="`${cart.biobankLabel}-${index}`" v-for="(cart, index) in collectionCart">
-          <hr v-if="index > 0">
+        <div
+          :key="`${cart.biobankLabel}-${index}`"
+          v-for="(cart, index) in collectionCart"
+        >
+          <hr v-if="index > 0" />
           <h4 class="my-3 ml-2">{{ cart.biobankLabel }}</h4>
           <div
             class="row ml-3 my-2"
@@ -100,7 +107,12 @@
               <span
                 class="fa fa-times text-bold remove-collection"
                 title="Remove collection"
-                @click="RemoveCollectionsFromSelection({ collections: [collection], router: $router })"
+                @click="
+                  RemoveCollectionsFromSelection({
+                    collections: [collection],
+                    router: $router,
+                  })
+                "
               ></span>
             </div>
           </div>
@@ -110,25 +122,36 @@
         Sorry, none of the samples are currently in Podium.
       </p>
       <template v-slot:modal-footer>
-        <div class="mr-auto">
-          <span class="text-white font-weight-bold d-block">{{ modalFooterText }}</span>
-          <span class="text-white" v-if="selectedNonCommercialCollections > 0"
-            >
-            <font-awesome-icon
-                title="Not available for commercial use"
-                class="text-white non-commercial mr-1"
-                :icon="['fab', 'creative-commons-nc-eu']"
-              />
-              {{ selectedNonCommercialCollections }} are non-commercial only
-            </span>
-        </div>
-        <b-button class="btn btn-dark" @click="hideModal">Cancel</b-button>
-        <b-button
-          :disabled="(isPodium && !collectionsInPodium.length) || !selectedCollections.length"
-          class="btn btn-secondary"
-          @click="sendRequest"
-          >{{ negotiatorButtonText }}</b-button
+        <b-button class="btn btn-dark mr-auto" @click="removeAllCollections"
+          >Remove all</b-button
         >
+        <div>
+          <span class="text-white font-weight-bold d-block">{{
+            modalFooterText
+          }}</span>
+          <span class="text-white" v-if="selectedNonCommercialCollections > 0">
+            <font-awesome-icon
+              title="Not available for commercial use"
+              class="text-white non-commercial mr-1"
+              :icon="['fab', 'creative-commons-nc-eu']"
+            />
+            {{ selectedNonCommercialCollections }} are non-commercial only
+          </span>
+        </div>
+        <div class="ml-auto">
+          <b-button class="btn btn-dark mr-2" @click="hideModal"
+            >Cancel</b-button
+          >
+          <b-button
+            :disabled="
+              (isPodium && !collectionsInPodium.length) ||
+              !selectedCollections.length
+            "
+            class="btn btn-secondary ml-auto"
+            @click="sendRequest"
+            >{{ negotiatorButtonText }}</b-button
+          >
+        </div>
       </template>
     </b-modal>
   </div>
@@ -173,7 +196,12 @@ export default {
       'foundCollectionsAsSelection',
       'selectedNonCommercialCollections'
     ]),
-    ...mapState(['isPodium', 'nonCommercialCollections', 'isIE11', 'ie11Bookmark']),
+    ...mapState([
+      'isPodium',
+      'nonCommercialCollections',
+      'isIE11',
+      'ie11Bookmark'
+    ]),
     modalFooterText () {
       const collectionCount = this.isPodium
         ? this.collectionsInPodium.length
@@ -188,9 +216,13 @@ export default {
     collectionCartShown () {
       return this.modalEnabled
     },
+    currentSelectedCollections () {
+      return this.isPodium
+        ? this.collectionsInPodium
+        : this.selectedCollections
+    },
     collectionCart () {
-      const collections = this.isPodium ? this.collectionsInPodium : this.selectedCollections
-      return this.groupCollectionsByBiobank(collections)
+      return this.groupCollectionsByBiobank(this.currentSelectedCollections)
     },
     hasSelection () {
       return this.selectedCollections.length > 0
@@ -219,10 +251,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      'RemoveCollectionsFromSelection',
-      'MapQueryToState'
-    ]),
+    ...mapMutations(['RemoveCollectionsFromSelection', 'MapQueryToState']),
     ...mapActions([
       'GetCollectionInfo',
       'GetBiobankIds',
@@ -235,10 +264,10 @@ export default {
     },
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
-      collectionSelectionArray.forEach(cs => {
+      collectionSelectionArray.forEach((cs) => {
         const biobankLabel = this.collectionBiobankDictionary[cs.value]
         const biobankPresent = biobankWithSelectedCollections.find(
-          bsc => bsc.biobankLabel === biobankLabel
+          (bsc) => bsc.biobankLabel === biobankLabel
         )
 
         if (biobankPresent) {
@@ -251,6 +280,13 @@ export default {
         }
       })
       return biobankWithSelectedCollections
+    },
+    removeAllCollections () {
+      this.hideModal()
+      this.RemoveCollectionsFromSelection({
+        collections: this.currentSelectedCollections,
+        router: this.$router
+      })
     },
     hideModal () {
       this.$bvModal.hide('collectioncart-modal')
@@ -272,7 +308,7 @@ export default {
       const queryParts = rawQuery.split('&')
       const queryObject = {}
 
-      queryParts.forEach(part => {
+      queryParts.forEach((part) => {
         const propAndValue = part.split('=')
         queryObject[propAndValue[0]] = propAndValue[1]
       })
