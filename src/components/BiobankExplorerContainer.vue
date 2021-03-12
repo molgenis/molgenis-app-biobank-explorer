@@ -75,45 +75,48 @@
     <b-modal
       hide-header
       id="collectioncart-modal"
-      size="xl"
+      size="lg"
       scrollable
       centered
+      body-bg-variant="white"
       footer-bg-variant="warning"
       body-class="pb-0"
       @hide="closeModal"
     >
       <template v-if="collectionCart.length > 0">
         <div
+          class="card mb-3 border"
           :key="`${cart.biobankLabel}-${index}`"
           v-for="(cart, index) in collectionCart"
         >
-          <hr v-if="index > 0" />
-          <h4 class="my-3 ml-2">{{ cart.biobankLabel }}</h4>
-          <div
-            class="row ml-3 my-2"
-            :key="`${collection.label}-${index}`"
-            v-for="(collection, index) in cart.collections"
-          >
-            <div class="col-md-11 p-0 my-1">
-              <font-awesome-icon
-                title="Not available for commercial use"
-                v-if="isNonCommercialCollection(collection.value)"
-                class="text-danger non-commercial mr-1"
-                :icon="['fab', 'creative-commons-nc-eu']"
-              />
-              <span> {{ collection.label }}</span>
-            </div>
-            <div class="col-md-1">
-              <span
-                class="fa fa-times text-bold remove-collection"
-                title="Remove collection"
-                @click="
-                  RemoveCollectionsFromSelection({
-                    collections: [collection],
-                    router: $router,
-                  })
-                "
-              ></span>
+          <div class="card-header font-weight-bold">{{ cart.biobankLabel }}</div>
+          <div class="collection-cart">
+            <div
+              class="card-body d-flex border-bottom"
+              :key="`${collection.label}-${index}`"
+              v-for="(collection, index) in cart.collections"
+            >
+              <div>
+                <font-awesome-icon
+                  title="Not available for commercial use"
+                  v-if="isNonCommercialCollection(collection.value)"
+                  class="text-danger non-commercial mr-1"
+                  :icon="['fab', 'creative-commons-nc-eu']"
+                />
+                <span> {{ collection.label }}</span>
+              </div>
+              <div class="pl-3 ml-auto">
+                <span
+                  class="fa fa-times text-bold remove-collection"
+                  title="Remove collection"
+                  @click="
+                    RemoveCollectionsFromSelection({
+                      collections: [collection],
+                      router: $router,
+                    })
+                  "
+                ></span>
+              </div>
             </div>
           </div>
         </div>
@@ -217,9 +220,7 @@ export default {
       return this.modalEnabled
     },
     currentSelectedCollections () {
-      return this.isPodium
-        ? this.collectionsInPodium
-        : this.selectedCollections
+      return this.isPodium ? this.collectionsInPodium : this.selectedCollections
     },
     collectionCart () {
       return this.groupCollectionsByBiobank(this.currentSelectedCollections)
@@ -342,5 +343,9 @@ export default {
 .btn:hover,
 #select-all-label:hover {
   cursor: pointer;
+}
+
+.collection-cart > div:last-child {
+  border:none !important;
 }
 </style>

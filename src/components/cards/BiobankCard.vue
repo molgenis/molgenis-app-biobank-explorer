@@ -196,5 +196,6 @@ export default {
 .icon-alignment {
   position: relative;
   top: 1px;
+  left:2px;
 }
 </style>
