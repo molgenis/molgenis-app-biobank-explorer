@@ -1,5 +1,7 @@
 <template>
-  <div :class="[{'border-secondary': biobankInSelection},'card biobank-card']">
+  <div
+    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']"
+  >
     <div
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed"
@@ -7,30 +9,30 @@
       <div class="row">
         <div class="col-md-5 d-flex flex-column" v-if="!loading">
           <div class="mb-2">
-          <h5>
-            <router-link :to="'/biobank/' + biobank.id">
-              <span
-                class="fa fa-table mr-2 icon-alignment"
-                aria-hidden="true"
-                aria-labelledby="biobank-name"
-              ></span>
-            </router-link>
-            <span id="biobank-name">{{ biobank.name }}</span>
-          </h5>
+            <h5>
+              <router-link :to="'/biobank/' + biobank.id">
+                <span
+                  class="fa fa-table mr-2 icon-alignment"
+                  aria-hidden="true"
+                  aria-labelledby="biobank-name"
+                ></span>
+              </router-link>
+              <span id="biobank-name">{{ biobank.name }}</span>
+            </h5>
 
-          <small v-if="biobank.quality && biobank.quality.length > 0">
-            <quality-column
-              :qualities="biobank.quality"
-              :spacing="0"
-            ></quality-column>
-          </small>
-          <span v-if="availableCovidTypes">
-            <b-img
-              class="biobank-icon covid-icon"
-              :src="require('../../assets/custom_icons/covid19.png')"
-              title="Covid-19"
-            />
-          </span>
+            <small v-if="biobank.quality && biobank.quality.length > 0">
+              <quality-column
+                :qualities="biobank.quality"
+                :spacing="0"
+              ></quality-column>
+            </small>
+            <span v-if="availableCovidTypes">
+              <b-img
+                class="biobank-icon covid-icon"
+                :src="require('../../assets/custom_icons/covid19.png')"
+                title="Covid-19"
+              />
+            </span>
           </div>
           <collection-selector
             class="align-with-table mt-auto w-25"
@@ -39,7 +41,6 @@
             icon-only
             router-enabled
           ></collection-selector>
-
         </div>
         <div class="col-md-6" v-if="!loading">
           <p>
@@ -196,5 +197,6 @@ export default {
 .icon-alignment {
   position: relative;
   top: 1px;
+  left: 2px;
 }
 </style>
