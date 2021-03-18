@@ -136,6 +136,9 @@ export const mapBiobankDataCatalog = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
+    keywords: 'biobanks',
+    // description taken from BBMRI-Eric Background page
+    description: 'The BBMRI-ERIC Directory is a tool that collects and makes available information about biobanks throughout Europe that are willing to share their data and/or samples, and to collaborate with other research groups',
     provider: {
       '@type': 'Organization',
       id: `${window.location.protocol}//${window.location.host}${biobank._href}`,
