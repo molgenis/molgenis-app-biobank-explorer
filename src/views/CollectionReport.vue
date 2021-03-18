@@ -78,7 +78,7 @@ import ReportSubCollection from '@/components/report-components/ReportSubCollect
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation } from '@/utils/templateMapper'
-import MAPPINGS from '@/utils/ontologyMapping'
+import { mapCollectionsData as mapCollectionsToJsonLD } from '@/utils/bioschemasMapper'
 
 export default {
   name: 'CollectionReport',
@@ -95,36 +95,6 @@ export default {
     ...mapActions(['GetCollectionReport']),
     back () {
       this.$router.go(-1)
-    },
-    getJsonLDAdditionalProperty (data, propertyName) {
-      const value = data._href.split('/').slice(-1).pop()
-      const jsonldData = {
-        name: propertyName,
-        value: value,
-        url: MAPPINGS.properties[propertyName] || undefined,
-        valueReference: [{
-          '@type': 'CategoryCode',
-          codeValue: data.code || data.id || undefined,
-          name: data.label,
-          url: `${window.location.protocol}//${window.location.host}/${data._href}`
-        }]
-      }
-
-      if ('uri' in data) {
-        jsonldData.valueReference.push({
-          '@type': 'CategoryCode',
-          codeValue: data.uri.split('/').slice(-1).pop() || undefined,
-          url: data.uri
-        })
-      } else if (propertyName in MAPPINGS && value in MAPPINGS[propertyName]) {
-        jsonldData.valueReference.push({
-          '@type': 'CategoryCode',
-          codeValue: MAPPINGS[propertyName][value].code,
-          name: MAPPINGS[propertyName][value].name,
-          url: MAPPINGS[propertyName][value].uri
-        })
-      }
-      return jsonldData
     }
   },
   computed: {
@@ -148,32 +118,7 @@ export default {
       return splittedUrl[splittedUrl.length - 1]
     },
     jsonld () {
-      const jsonld = {
-        '@context': 'https://schema.org',
-        '@type': 'DataRecord',
-        '@id': this.collectionId
-      }
-      if (this.collection) {
-        console.log(this.collection)
-        jsonld.provider = {
-          '@type': 'Organization',
-          '@id': `${window.location.protocol}//${window.location.host}/${this.collection.biobank.id}`,
-          identifier: this.collection.biobank.id,
-          url: `${window.location.protocol}//${window.location.host}/${this.collection.biobank.id}`
-        }
-
-        const additionalProperty = []
-        const properties = ['diagnosis_available', 'materials', 'data_categories']
-        properties.forEach(prop => {
-          if (prop in this.collection) {
-            this.collection[prop].forEach(value =>
-              additionalProperty.push(this.getJsonLDAdditionalProperty(value, prop))
-            )
-          }
-        })
-        jsonld.additionalProperty = additionalProperty
-      }
-      return jsonld
+      return this.collection ? mapCollectionsToJsonLD(this.collection) : {}
     }
   },
   // needed because if we route back the component is not destroyed but its props are updated for other collection
