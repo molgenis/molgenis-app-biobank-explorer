@@ -36,9 +36,14 @@
                   >
                     <table>
                       <tbody>
-                        <tr>
-                          <td>ISO-9001</td>
-                          <td>This is an awesome certificate, want one?</td>
+                        <tr
+                          :key="`${biobank.id}-${quality.label}`"
+                          v-for="quality in biobank.quality"
+                        >
+                          <td class="align-top font-weight-bold p-2">{{ quality.label }}</td>
+                          <td class="py-2">
+                            {{ qualityStandardsDictionary[quality.label] }}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -83,11 +88,7 @@
               <small class="mr-2">
                 <span class="font-weight-bold">Covid-19:</span>
               </small>
-              <small
-                :key="type + index"
-                v-for="(type, index) of availableCovidTypes"
-                >{{ type }}</small
-              >
+              <small>{{ availableCovidTypes }}</small>
             </template>
           </p>
         </div>
@@ -108,7 +109,7 @@
 <script>
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -138,6 +139,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['qualityStandardsDictionary']),
     ...mapGetters(['selectedCollections']),
     biobankInSelection () {
       if (!this.biobank.collections) return false
@@ -234,6 +236,7 @@ export default {
 .quality-marks-popover {
   background-color: white !important;
   border: solid black 0.5px;
+  max-width: 40rem;
 }
 
 .quality-marks-popover[x-placement^='top'] > .arrow::before {
