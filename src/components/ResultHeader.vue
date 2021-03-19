@@ -1,6 +1,6 @@
 <template>
   <div class="search-box-container">
-    <div class="row>">
+    <div class="mb-3">
       <div class="col-md-12 p-0">
         <active-filter-list></active-filter-list>
       </div>
@@ -12,8 +12,11 @@
           <small class="biobank-number-report">
             <em>
               {{ foundBiobanks }} organisations with
-              {{ parentCollections.length }} collections and
-              {{ numberOfSubCollections }} subcollections matching the search criteria
+              {{ parentCollections.length }} collections
+              <template v-if="numberOfSubCollections > 0">
+                and {{ numberOfSubCollections }} subcollections
+              </template>
+              matching the search criteria
             </em>
           </small>
         </div>
