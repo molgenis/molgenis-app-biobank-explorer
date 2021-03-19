@@ -292,14 +292,6 @@ describe('store', () => {
     })
 
     describe('Set Quality Standards Dictionary', () => {
-      // const allStandards = [...new Set(...response.map(response => response.items))]
-      // const qualityStandardsDictionary = {}
-
-      // allStandards.forEach((standard) => {
-      //   qualityStandardsDictionary[standard.label] = standard.description || ''
-      // })
-
-      // state.qualityStandardsDictionary = qualityStandardsDictionary
       it('Creates a dictionary based on a response containing multiple objects in an array', () => {
         const response = [
           {
