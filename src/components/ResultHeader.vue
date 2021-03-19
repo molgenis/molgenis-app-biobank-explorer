@@ -12,9 +12,9 @@
           <small class="biobank-number-report">
             <em>
               {{ foundBiobanks }} organisations with
-              {{ parentCollections.length }} collections
+              {{ parentCollections.length }} collection(s)
               <template v-if="numberOfSubCollections > 0">
-                and {{ numberOfSubCollections }} subcollections
+                and {{ numberOfSubCollections }} subcollection(s)
               </template>
               matching the search criteria
             </em>
