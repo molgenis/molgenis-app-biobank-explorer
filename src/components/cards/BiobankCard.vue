@@ -40,7 +40,7 @@
                           :key="`${biobank.id}-${quality.label}`"
                           v-for="quality in biobank.quality"
                         >
-                          <td class="align-top font-weight-bold p-2">{{ quality.label }}</td>
+                          <td class="text-nowrap align-top font-weight-bold p-2">{{ quality.label }}</td>
                           <td class="py-2">
                             {{ qualityStandardsDictionary[quality.label] }}
                           </td>
