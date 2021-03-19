@@ -10,7 +10,11 @@
       <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
-          <em>{{foundBiobanks}} organisations with {{foundCollectionIds.length}} collections matching the search criteria</em>
+            <em>
+              {{ foundBiobanks }} organisations with
+              {{ parentCollections.length }} collections and
+              {{ numberOfSubCollections }} subcollections matching the search criteria
+            </em>
           </small>
         </div>
       </div>
@@ -19,22 +23,22 @@
 </template>
 
 <style>
-  .biobank-number-report-container {
-    border-bottom: solid 1px black;
-    width: 100%;
-  }
+.biobank-number-report-container {
+  border-bottom: solid 1px black;
+  width: 100%;
+}
 
-  .search-input-container {
-    margin-bottom: 1rem;
-  }
+.search-input-container {
+  margin-bottom: 1rem;
+}
 
-  .search-box-container {
-    margin-bottom: 1rem;
-  }
+.search-box-container {
+  margin-bottom: 1rem;
+}
 
-  .search-input-addon:hover {
-    cursor: pointer
-  }
+.search-input-addon:hover {
+  cursor: pointer;
+}
 </style>
 
 <script>
@@ -43,7 +47,10 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['foundBiobanks', 'foundCollectionIds'])
+    ...mapGetters(['foundBiobanks', 'foundCollectionIds', 'parentCollections']),
+    numberOfSubCollections () {
+      return this.foundCollectionIds.length - this.parentCollections.length
+    }
   },
   components: {
     ActiveFilterList
