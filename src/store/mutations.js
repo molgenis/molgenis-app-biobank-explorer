@@ -96,7 +96,11 @@ export default {
     state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
   },
   SetQualityStandardDictionary (state, response) {
-    const allStandards = [...new Set(...response.map(response => response.items))]
+    // Combine arrays from two tables and deduplicate
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
     const qualityStandardsDictionary = {}
 
     allStandards.forEach((standard) => {
