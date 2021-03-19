@@ -291,6 +291,30 @@ describe('store', () => {
       })
     })
 
+    describe('Set Quality Standards Dictionary', () => {
+      it('Creates a dictionary based on a response containing multiple objects in an array', () => {
+        const response = [
+          {
+            items: [{ id: 'qs-1', label: 'ISO-9001', description: "I'm a high quality standard" },
+              { id: 'qs-2', label: 'ISO-9010', description: "I'm a good quality standard" }]
+          },
+          // data is joined from two tables, so can overlap
+          {
+            items: [{ id: 'qs-3', label: 'ISO-9010', description: "I'm a good quality standard" },
+              { id: 'qs-4', label: 'ISO-9020', description: "I'm a fair quality standard" }]
+          }]
+
+        const expected = {
+          'ISO-9001': "I'm a high quality standard",
+          'ISO-9010': "I'm a good quality standard",
+          'ISO-9020': "I'm a fair quality standard"
+        }
+
+        mutations.SetQualityStandardDictionary(state, response)
+        expect(state.qualityStandardsDictionary).toStrictEqual(expected)
+      })
+    })
+
     describe('SetBiobankReport', () => {
       it('should set the biobank report value in the state with the payload', () => {
         const payload = { id: 'biobank-1-other' }

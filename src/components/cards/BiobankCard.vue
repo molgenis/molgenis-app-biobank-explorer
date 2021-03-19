@@ -21,10 +21,40 @@
             </h5>
 
             <small v-if="biobank.quality && biobank.quality.length > 0">
-              <quality-column
-                :qualities="biobank.quality"
-                :spacing="0"
-              ></quality-column>
+              <div @click.stop="">
+                <div class="d-flex">
+                  <span
+                    class="fa fa-question-circle text-info mr-1 popover-trigger-area"
+                    aria-hidden="true"
+                    :id="`qm-${biobank.id}`"
+                  ></span>
+                  <b-popover
+                    :target="`qm-${biobank.id}`"
+                    triggers="hover click"
+                    placement="top"
+                    custom-class="quality-marks-popover"
+                  >
+                    <table>
+                      <tbody>
+                        <tr
+                          :key="`${biobank.id}-${quality.label}`"
+                          v-for="quality in biobank.quality"
+                        >
+                          <td class="text-nowrap align-top font-weight-bold p-2">{{ quality.label }}</td>
+                          <td class="py-2">
+                            {{ qualityStandardsDictionary[quality.label] }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </b-popover>
+                  <b>Quality mark(s):</b>
+                </div>
+                <quality-column
+                  :qualities="biobank.quality"
+                  :spacing="0"
+                ></quality-column>
+              </div>
             </small>
             <span v-if="availableCovidTypes">
               <b-img
@@ -58,11 +88,7 @@
               <small class="mr-2">
                 <span class="font-weight-bold">Covid-19:</span>
               </small>
-              <small
-                :key="type + index"
-                v-for="(type, index) of availableCovidTypes"
-                >{{ type }}</small
-              >
+              <small>{{ availableCovidTypes }}</small>
             </template>
           </p>
         </div>
@@ -83,7 +109,7 @@
 <script>
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
@@ -113,6 +139,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['qualityStandardsDictionary']),
     ...mapGetters(['selectedCollections']),
     biobankInSelection () {
       if (!this.biobank.collections) return false
@@ -198,5 +225,45 @@ export default {
   position: relative;
   top: 1px;
   left: 2px;
+}
+
+.fa-question-circle {
+  position: relative;
+  top: 4px;
+}
+
+/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
+.quality-marks-popover {
+  background-color: white !important;
+  border: solid black 0.5px;
+  max-width: 40rem;
+}
+
+.quality-marks-popover[x-placement^='top'] > .arrow::before {
+  border-top-color: black !important;
+}
+.quality-marks-popover[x-placement^='top'] > .arrow::after {
+  border-top-color: white !important;
+}
+
+.quality-marks-popover[x-placement^='bottom'] > .arrow::before {
+  border-bottom-color: black !important;
+}
+.quality-marks-popover[x-placement^='bottom'] > .arrow::after {
+  border-bottom-color: white !important;
+}
+
+.popover-trigger-area {
+  position: relative;
+}
+
+/* for touch screens, so you have a nice area to press and still get a popover */
+.popover-trigger-area::after {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  bottom: -1rem;
+  right: -7rem;
+  left: -0.5rem;
 }
 </style>

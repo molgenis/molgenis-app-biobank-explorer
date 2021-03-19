@@ -8,6 +8,8 @@ import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+const BIOBANK_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_ops_standards'
+const COLLECTION_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_lab_standards'
 
 export const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
 export const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
@@ -27,6 +29,13 @@ export default {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)
     })
+  },
+  async GetQualityStandardInformation ({ commit }) {
+    const biobankQualityInfo = api.get(`${BIOBANK_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const collectionQualityInfo = api.get(`${COLLECTION_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
+
+    commit('SetQualityStandardDictionary', response)
   },
   /*
    * Retrieves biobanks and stores them in the cache

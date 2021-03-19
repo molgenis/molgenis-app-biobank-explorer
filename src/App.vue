@@ -23,12 +23,14 @@ export default {
   methods: {
     ...mapActions([
       'GetNegotiatorType',
-      'GetNegotiatorEntities'
+      'GetNegotiatorEntities',
+      'GetQualityStandardInformation'
     ])
   },
   mounted () {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
+    this.GetQualityStandardInformation()
   },
   name: 'biobank-explorer'
 }

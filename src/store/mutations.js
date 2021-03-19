@@ -77,6 +77,7 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
+  // TODO name more specifically
   SetDictionaries (state, response) {
     const collections = response.items.map(item => (
       {
@@ -93,6 +94,20 @@ export default {
 
     const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
     state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
+  },
+  SetQualityStandardDictionary (state, response) {
+    // Combine arrays from two tables and deduplicate
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
+    const qualityStandardsDictionary = {}
+
+    allStandards.forEach((standard) => {
+      qualityStandardsDictionary[standard.label] = standard.description || ''
+    })
+
+    state.qualityStandardsDictionary = qualityStandardsDictionary
   },
   SetCollectionInfo (state, response) {
     if (response === undefined) {
