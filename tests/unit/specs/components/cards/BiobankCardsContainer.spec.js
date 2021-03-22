@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BiobankCardsContainer from '@/components/cards/BiobankCardsContainer'
@@ -26,7 +25,7 @@ describe('BiobankCardsContainer', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(BiobankCardsContainer, { store, localVue })
-    expect(wrapper.html()).to.have.string('<div class="biobank-cards-container">')
+    expect(wrapper.html()).toContain('<div class="biobank-cards-container">')
   })
 
   it('should reset the currentPage to 1 if when the biobanks list changes', () => {
@@ -41,9 +40,9 @@ describe('BiobankCardsContainer', () => {
       localVue
     })
     wrapper.setData({ currentPage: 5 })
-    expect(wrapper.vm.currentPage).to.equal(5)
+    expect(wrapper.vm.currentPage).toEqual(5)
     // see https://github.com/vuejs/vue-test-utils/issues/331 for details
     wrapper.vm.$options.watch.biobankIds.call(wrapper.vm, ['id1'], ['id2'])
-    expect(wrapper.vm.currentPage).to.equal(1)
+    expect(wrapper.vm.currentPage).toEqual(1)
   })
 })

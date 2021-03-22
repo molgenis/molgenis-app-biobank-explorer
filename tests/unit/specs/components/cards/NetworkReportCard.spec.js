@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import NetworkReportCard from '@/components/cards/NetworkReportCard'
@@ -63,37 +62,37 @@ describe('NetworkReportCard', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
-    expect(wrapper.html()).to.have.string('class="container mg-network-report-card"')
+    expect(wrapper.html()).toContain('class="container mg-network-report-card"')
   })
 
   describe('computed', () => {
     describe('networkId', () => {
       it('computes the network id based on URL', () => {
         const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.networkId).to.equal('n-001')
+        expect(wrapper.vm.networkId).toEqual('n-001')
       })
     })
 
     describe('contact', () => {
       it('should fill contact', () => {
         const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.contact.email).to.deep.equal({ value: 'blaat@bla.nl', type: 'email' })
+        expect(wrapper.vm.contact.email).toStrictEqual({ value: 'blaat@bla.nl', type: 'email' })
       })
     })
 
     describe('detailsContent', () => {
       it('should fill detailsContent', () => {
         const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.detailsContent['Common collection focus'].value).to.equal(true)
-        expect(wrapper.vm.detailsContent['Common charter'].value).to.equal(true)
-        expect(wrapper.vm.detailsContent['Common SOPS'].value).to.equal(false)
-        expect(wrapper.vm.detailsContent['Data access policy'].value).to.equal(true)
-        expect(wrapper.vm.detailsContent['Sample access policy'].value).to.equal(false)
-        expect(wrapper.vm.detailsContent['Common MTA'].value).to.equal(true)
-        expect(wrapper.vm.detailsContent['Common image access policy'].value).to.equal(false)
-        expect(wrapper.vm.detailsContent['Common image MTA'].value).to.equal(false)
-        expect(wrapper.vm.detailsContent['Common representation'].value).to.equal(true)
-        expect(wrapper.vm.detailsContent['Common URL'].value).to.equal(true)
+        expect(wrapper.vm.detailsContent['Common collection focus'].value).toEqual(true)
+        expect(wrapper.vm.detailsContent['Common charter'].value).toEqual(true)
+        expect(wrapper.vm.detailsContent['Common SOPS'].value).toEqual(false)
+        expect(wrapper.vm.detailsContent['Data access policy'].value).toEqual(true)
+        expect(wrapper.vm.detailsContent['Sample access policy'].value).toEqual(false)
+        expect(wrapper.vm.detailsContent['Common MTA'].value).toEqual(true)
+        expect(wrapper.vm.detailsContent['Common image access policy'].value).toEqual(false)
+        expect(wrapper.vm.detailsContent['Common image MTA'].value).toEqual(false)
+        expect(wrapper.vm.detailsContent['Common representation'].value).toEqual(true)
+        expect(wrapper.vm.detailsContent['Common URL'].value).toEqual(true)
       })
     })
   })

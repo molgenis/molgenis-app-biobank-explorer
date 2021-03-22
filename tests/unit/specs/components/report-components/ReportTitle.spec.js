@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { shallowMount } from '@vue/test-utils'
 import ReportTitle from '@/components/report-components/ReportTitle'
 
@@ -9,14 +8,14 @@ describe('ReportTitle', () => {
   })
 
   it('should initialize component with title', () => {
-    expect(wrapper.html()).to.have.string('<div class="mg-report-title">')
+    expect(wrapper.html()).toContain('<div class="mg-report-title">')
   })
 
   it('should have correct type', () => {
-    expect(wrapper.html()).to.have.string('"badge badge-secondary">collection')
+    expect(wrapper.html()).toContain('"badge badge-secondary">collection')
   })
 
   it('should have correct title', () => {
-    expect(wrapper.html()).to.have.string('<h1>beautiful collection')
+    expect(wrapper.html()).toContain('<h1>beautiful collection')
   })
 })

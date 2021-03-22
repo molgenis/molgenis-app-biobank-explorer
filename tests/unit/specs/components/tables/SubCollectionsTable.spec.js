@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import { mount, createLocalVue } from '@vue/test-utils'
 import SubCollectionsTable from '@/components/tables/SubCollectionsTable'
 import BootstrapVue from 'bootstrap-vue'
@@ -94,7 +93,7 @@ describe('SubCollectionsTable', () => {
           materials: [{ id: 'DNA', label: 'DNA' }, { id: 'SERUM', label: 'SERUM' }]
         }
         const materials = wrapper.vm.getCollectionMaterials(subCollection)
-        expect(materials).to.deep.equal('DNA, SERUM')
+        expect(materials).toStrictEqual('DNA, SERUM')
       })
     })
     describe('getCollectionType', () => {
@@ -108,14 +107,14 @@ describe('SubCollectionsTable', () => {
           }]
         }
         const materials = wrapper.vm.getCollectionType(subCollection)
-        expect(materials).to.deep.equal('Sample collection, Population based')
+        expect(materials).toStrictEqual('Sample collection, Population based')
       })
     })
     describe('toggleVisible', () => {
       it('should toggle visibility of sub collection', () => {
-        expect(wrapper.vm.visible).to.deep.equal({ 'bbmri-eric:ID:NL_2': false })
+        expect(wrapper.vm.visible).toStrictEqual({ 'bbmri-eric:ID:NL_2': false })
         wrapper.vm.toggleVisible('bbmri-eric:ID:NL_2')
-        expect(wrapper.vm.visible).to.deep.equal({ 'bbmri-eric:ID:NL_2': true })
+        expect(wrapper.vm.visible).toStrictEqual({ 'bbmri-eric:ID:NL_2': true })
       })
     })
   })
