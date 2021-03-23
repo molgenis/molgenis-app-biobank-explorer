@@ -52,7 +52,6 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
-    "chai": "^4.1.2",
     "chromedriver": "^84.0.1",
     "es-check": "^5.1.2",
     "eslint": "^6.7.2",
