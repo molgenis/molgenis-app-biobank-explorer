@@ -22,6 +22,12 @@ export const createComparisons = (attribute, filters) =>
   filters.map(filterValue => ({ selector: attribute, comparison: '==', arguments: filterValue }))
 
 /**
+ * Create a  =like= comparison for each filter value
+ */
+export const createLikeQuery = (attribute, filters) =>
+  filters.map(filterValue => ({ selector: attribute, comparison: '=like=', arguments: filterValue }))
+
+/**
  * Return an Array of unique identifiers
  *
  * @param list List of strings
@@ -41,6 +47,7 @@ export const removeFilterFromFilterArrayById = (filters, selectedFilterId) => {
 export default {
   getUniqueIdArray,
   createInQuery,
+  createLikeQuery,
   createComparisons,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector

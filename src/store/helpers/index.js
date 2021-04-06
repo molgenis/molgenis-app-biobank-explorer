@@ -1,5 +1,5 @@
 import api from '@molgenis/molgenis-api-client'
-import { createInQuery, createComparisons } from '../../utils'
+import { createInQuery, createComparisons, createLikeQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
 
@@ -19,7 +19,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createInQuery('materials', state.filters.selections.materials || []),
     createInQuery('type', state.filters.selections.type || []),
     createInQuery('data_categories', state.filters.selections.dataType || []),
-    createInQuery('diagnosis_available.code', state.filters.selections.diagnosis_available || []),
+    createLikeQuery('diagnosis_available.code', state.filters.selections.diagnosis_available || []),
     createInQuery('id', state.collectionIdsWithSelectedQuality),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
     createInQuery('network', state.filters.selections.collection_network || []),
