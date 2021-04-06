@@ -24,8 +24,9 @@ export const createComparisons = (attribute, filters) =>
 /**
  * Create a  =like= comparison for each filter value
  */
-export const createLikeQuery = (attribute, filters) =>
-  filters.map(filterValue => ({ selector: attribute, comparison: '=like=', arguments: filterValue }))
+export const createLikeQuery = (attribute, filters) => filters.length > 0
+  ? [{ selector: attribute, comparison: '=like=', arguments: filters }]
+  : []
 
 /**
  * Return an Array of unique identifiers
