@@ -1,3 +1,5 @@
+import { getBaseUrl } from '@/utils/'
+
 // Should be better to put in the data model
 const getOntologyTerm = (property, term) => {
   const mappings = {
@@ -53,8 +55,9 @@ const getOntologyTerm = (property, term) => {
   return mappings[property][term]
 }
 
-const getJsonLDAdditionalProperty = (data, propertyName) => {
+const getCollectionVariableMeasured = (data, propertyName) => {
   const property = {
+    '@type': 'PropertyValue',
     name: propertyName,
     value: data._href.split('/').slice(-1).pop(),
     url: getOntologyTerm('properties', propertyName) || undefined,
@@ -91,67 +94,59 @@ const getJsonLDAdditionalProperty = (data, propertyName) => {
 export const mapCollectionsData = (collection) => {
   const jsonld = {
     '@context': 'https://schema.org',
-    '@type': 'DataRecord',
+    '@type': 'Dataset',
     '@id': collection.id,
-    provider: {
-      '@type': 'Organization',
-      '@id': `${window.location.protocol}//${window.location.host}/${collection.biobank.id}`,
-      identifier: collection.biobank.id,
-      url: `${window.location.protocol}//${window.location.host}${collection.biobank._href}`
+    name: collection.name,
+    description: collection.description,
+    url: `${getBaseUrl()}/collection/${collection.id}`,
+    includedInDataCatalog: {
+      '@type': 'DataCatalog',
+      name: collection.biobank.name,
+      url: `${getBaseUrl()}/biobank/${collection.biobank.id}`
     },
-    additionalProperty: []
+    variableMeasured: []
   }
   const properties = ['diagnosis_available', 'materials', 'data_categories']
   properties.forEach(prop => {
     if (prop in collection) {
       collection[prop].forEach(item =>
-        jsonld.additionalProperty.push(getJsonLDAdditionalProperty(item, prop))
+        jsonld.variableMeasured.push(getCollectionVariableMeasured(item, prop))
       )
     }
   })
   return jsonld
 }
 
-export const mapBiobankDataOrganization = (biobank) => {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    identifier: biobank.id,
-    url: `${window.location.protocol}//${window.location.host}${biobank._href}`,
-    name: biobank.name,
-    alternateName: biobank.acronym,
-    legalName: biobank.juridical_person,
-    description: biobank.description,
-    email: biobank.contact.email,
-    address: {
-      '@type': 'PostalAddress',
-      contactType: 'juridical person',
-      addressLocality: biobank.contact ? `${biobank.contact.city}, ${biobank.contact.country.name}` : undefined,
-      streetAddress: biobank.contact.address || undefined
-    }
-  }
-}
-
 export const mapBiobankDataCatalog = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
-    keywords: 'biobanks',
-    // description taken from BBMRI-Eric Background page
-    description: 'The BBMRI-ERIC Directory is a tool that collects and makes available information about biobanks throughout Europe that are willing to share their data and/or samples, and to collaborate with other research groups',
+    description: biobank.description || biobank.name,
+    keywords: 'biobank',
+    url: `${getBaseUrl()}/biobank/${biobank.id}`,
+    name: biobank.name,
+    alternateName: biobank.acronym,
+    identifier: biobank.id,
     provider: {
+      '@context': 'https://schema.org',
       '@type': 'Organization',
-      id: `${window.location.protocol}//${window.location.host}${biobank._href}`,
-      identifier: biobank.id,
-      url: `${window.location.protocol}//${window.location.host}${biobank._href}`
+      legalName: biobank.juridical_person,
+      email: biobank.contatct ? biobank.contact.email : undefined,
+      address: biobank.contact ? {
+        '@type': 'PostalAddress',
+        contactType: 'juridical person',
+        addressLocality: `${biobank.contact.city}, ${biobank.contact.country.name}`,
+        streetAddress: biobank.contact.address
+      } : undefined
     },
     dataset: Array.from(biobank.collections, collection => {
       return {
-        '@type': 'DataRecord',
-        '@id': `${window.location.protocol}//${window.location.host}${collection._href}`,
-        url: `${window.location.protocol}//${window.location.host}${collection._href}`,
+        '@type': 'Dataset',
+        '@id': `${getBaseUrl()}/collection/${collection.id}`,
+        url: `${getBaseUrl()}/collection/${collection.id}`,
         identifier: collection.id,
-        name: collection.name
+        name: collection.name,
+        description: collection.description
       }
     })
   }
