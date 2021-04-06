@@ -136,10 +136,10 @@ describe('store', () => {
       })
 
       it('should create a query with only a disease type filter', () => {
-        state.filters.selections.diagnosis_available = ['urn:miriam:id:disease-1', 'urn:miriam:id:disease-2', 'urn:miriam:id:disease-3']
+        state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available=in=(urn:miriam:id:disease-1,urn:miriam:id:disease-2,urn:miriam:id:disease-3)'
+        const expected = 'diagnosis_available.code=in=(G71,ORPHA%3A10,ORPHA%3A100)'
 
         expect(actual).toBe(expected)
       })

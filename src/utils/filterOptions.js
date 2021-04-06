@@ -23,9 +23,9 @@ export const diagnosisAvailableFilterOptions = (tableName) => {
     let url = `/api/v2/${tableName}`
 
     if (query) {
-      // initial load, values are ids
+      // initial load, values are code
       if (queryType === 'in') {
-        url = `${url}?q=${encodeRsqlValue(`id=in=(${query})`)}`
+        url = `${url}?q=${encodeRsqlValue(`code=in=(${query})`)}`
       } else if (isCodeRegex.test(query)) {
         url = `${url}?q=${encodeRsqlValue(createDiagnosisCodeQuery(query))}&sort=code`
       } else {
@@ -34,7 +34,7 @@ export const diagnosisAvailableFilterOptions = (tableName) => {
     }
 
     api.get(url).then(response => {
-      const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
+      const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.code } })
       resolve(filterOptions)
     })
   })
