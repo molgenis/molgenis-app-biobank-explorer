@@ -139,7 +139,7 @@ describe('store', () => {
         state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.code=like=(G71,ORPHA:10,ORPHA:100)'
+        const expected = 'diagnosis_available.code=in=(G71,ORPHA:10,ORPHA:100)'
 
         expect(actual).toBe(expected)
       })
