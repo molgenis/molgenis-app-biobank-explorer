@@ -131,7 +131,6 @@ export default {
   },
   mounted () {
     this.GetCollectionReport([this.collectionId])
-    console.log(this.jsonld)
   }
 }
 </script>

@@ -5,7 +5,9 @@ const getOntologyTerm = (property, term) => {
   const mappings = {
     properties: {
       diagnosis_available: 'http://purl.obolibrary.org/obo/OGMS_0000073',
-      storage_temperatures: 'http://purl.obolibrary.org/obo/OMIABIS_0001013'
+      storage_temperatures: 'http://purl.obolibrary.org/obo/OMIABIS_0001013',
+      materials: 'http://purl.obolibrary.org/obo/NCIT_C93863', // NCIT: Material Identifier Type Code
+      sex: 'http://purl.obolibrary.org/obo/PATO_0000047' // OMIABIS: biological sex
     },
     materials: {
       WHOLE_BLOOD: {
@@ -50,68 +52,101 @@ const getOntologyTerm = (property, term) => {
         uri: 'http://purl.obolibrary.org/obo/OMIABIS_0001027',
         name: 'sample medical record'
       }
+    },
+    sex: {
+      MALE: {
+        code: 'PATO_0000384',
+        uri: 'http://purl.obolibrary.org/obo/PATO_0000384',
+        name: 'male'
+      },
+      FEMALE: {
+        code: 'PATO_0000383',
+        uri: 'http://purl.obolibrary.org/obo/PATO_0000383',
+        name: 'female'
+      },
+      UNDIFFERENTIAL: {
+        code: 'PATO_0001340',
+        uri: 'http://purl.obolibrary.org/obo/PATO_0001340',
+        name: 'hermaphrodite'
+      },
+      NAV: {
+        label: 'Not Available'
+      },
+      NASK: {
+        label: 'Not Asked'
+      },
+      UNKNOWN: {
+        label: 'unknown'
+      }
     }
   }
-  return mappings[property][term]
+  return property in mappings ? mappings[property][term] : undefined
 }
 
-const getCollectionVariableMeasured = (data, propertyName) => {
-  const property = {
-    '@type': 'PropertyValue',
-    name: propertyName,
-    value: data._href.split('/').slice(-1).pop(),
-    url: getOntologyTerm('properties', propertyName) || undefined,
-    valueReference: [{ // by default it adds a reference with data from the directory
-      '@type': 'CategoryCode',
-      codeValue: data.code || data.id || undefined,
-      name: data.label,
-      url: `${window.location.protocol}//${window.location.host}${data._href}`
-    }]
-  }
-
+const getCollectionAdditionalProperty = (data, propertyName) => {
+  let value
+  console.log(data)
   if ('uri' in data) {
-    // it means the data contains the uri of the code in the model
-    property.valueReference.push({
+    // it means the data contains the uri of the code in the model and must be used
+    value = {
       '@type': 'CategoryCode',
-      codeValue: data.uri.split('/').slice(-1).pop() || undefined,
-      url: data.uri
-    })
+      '@id': data.uri,
+      codeValue: data.uri.split('/').slice(-1).pop() || undefined
+    }
   } else {
-    const ontologyTerm = getOntologyTerm(propertyName, property.value)
+    // Split values such as /api/v2/eu_bbmri_eric_material_types/TISSUE_FROZEN
+    const codeValue = 'id' in data ? data.id : data._href.split('/').slice(-1).pop()
+    const ontologyTerm = getOntologyTerm(propertyName, codeValue)
     // it gets mappings from the static object. It should be better to include the uri in the model
     if (ontologyTerm) {
-      property.valueReference.push({
-        '@type': 'CategoryCode',
-        codeValue: ontologyTerm.code,
-        name: ontologyTerm.name,
-        url: ontologyTerm.uri
-      })
+      if ('uri' in ontologyTerm) {
+        value = {
+          '@type': 'CategoryCode',
+          '@id': ontologyTerm.uri,
+          codeValue: ontologyTerm.code
+        }
+      } else {
+        value = ontologyTerm.label
+      }
+    } else { // if no ontology term is found, it adds the label of the value
+      value = data.label || data.size
     }
   }
-  return property
+  return {
+    '@type': 'PropertyValue',
+    propertyId: getOntologyTerm('properties', propertyName) || undefined,
+    name: propertyName,
+    value: value
+  }
 }
 
 export const mapCollectionsData = (collection) => {
   const jsonld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    '@id': collection.id,
+    '@id': `${getBaseUrl()}/collection/${collection.id}`,
+    identifier: collection.id,
     name: collection.name,
     description: collection.description,
     url: `${getBaseUrl()}/collection/${collection.id}`,
     includedInDataCatalog: {
       '@type': 'DataCatalog',
+      '@id': `${getBaseUrl()}/biobank/${collection.biobank.id}`,
       name: collection.biobank.name,
       url: `${getBaseUrl()}/biobank/${collection.biobank.id}`
     },
-    variableMeasured: []
+    additionalProperty: []
   }
-  const properties = ['diagnosis_available', 'materials', 'data_categories']
+  const properties = ['diagnosis_available', 'materials', 'data_categories', 'storage_temperatures', 'sex', 'order_of_magnitude']
   properties.forEach(prop => {
     if (prop in collection) {
-      collection[prop].forEach(item =>
-        jsonld.variableMeasured.push(getCollectionVariableMeasured(item, prop))
-      )
+      if (collection[prop] instanceof Array) {
+        collection[prop].forEach(item =>
+          jsonld.additionalProperty.push(getCollectionAdditionalProperty(item, prop))
+        )
+      } else {
+        jsonld.additionalProperty.push(getCollectionAdditionalProperty(collection[prop], prop))
+      }
     }
   })
   return jsonld
@@ -121,17 +156,17 @@ export const mapBiobankDataCatalog = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
-    description: biobank.description || biobank.name,
-    keywords: 'biobank',
-    url: `${getBaseUrl()}/biobank/${biobank.id}`,
+    '@id': `${getBaseUrl()}/biobank/${biobank.id}`, // TODO: Change with the persistent identifier
+    identifier: biobank.id,
     name: biobank.name,
     alternateName: biobank.acronym,
-    identifier: biobank.id,
+    description: biobank.description || biobank.name, // some collections doesn't have a description
+    url: `${getBaseUrl()}/biobank/${biobank.id}`,
+    keywords: 'biobank',
     provider: {
-      '@context': 'https://schema.org',
       '@type': 'Organization',
       legalName: biobank.juridical_person,
-      email: biobank.contatct ? biobank.contact.email : undefined,
+      email: biobank.contact ? biobank.contact.email : undefined,
       address: biobank.contact ? {
         '@type': 'PostalAddress',
         contactType: 'juridical person',
