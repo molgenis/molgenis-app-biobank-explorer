@@ -42,7 +42,7 @@
         </div>
         <collection-select-all
           v-if="!loading && foundCollectionIds.length"
-          class="mt-1 ml-3 mb-3"
+          class="mt-1 mb-3"
           router-enabled
         />
       </div>

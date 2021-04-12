@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row mb-3">
-      <div class="col-md-4">
+      <div class="col-md-4 pl-0">
         <StringFilter
           name="Search"
           v-model="search"
@@ -27,7 +27,7 @@
     </div>
     <div
       v-if="filterBarShown"
-      class="row border-top border-bottom border-secondary ml-1"
+      class="row border-top border-bottom border-secondary"
     >
       <div class="col-md-12 px-0 py-2">
         <b-dropdown

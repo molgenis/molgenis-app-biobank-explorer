@@ -7,7 +7,7 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 px-0">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
             <em>
