@@ -37,7 +37,7 @@
         <div class="col-md-4"></div>
       </div>
       <div class="row">
-        <div class="col-md-12" v-if="!loading">
+        <div class="col-md-12 pl-0" v-if="!loading">
           <result-header></result-header>
         </div>
         <collection-select-all

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span>Active filters: {{activeFilters}}</span>
+    <span v-if="anyActiveFilters">Active filters:</span>
     <ActiveFilters
       :value="activeFilters"
       @input="changeAllFilters"
@@ -36,6 +36,14 @@ export default {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       })
+    },
+    anyActiveFilters () {
+      for (const filter in this.activeFilters) {
+        if (this.activeFilters[filter].length) {
+          return true
+        }
+      }
+      return false
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
   <div class="search-box-container">
     <div class="mb-3">
-      <div class="col-md-12 pl-0 pt-2">
+      <div class="col-md-12 pl-0 py-2">
         <active-filter-list></active-filter-list>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-md-12 px-0">
+      <div class="col-md-12 pr-0">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
             <em>
