@@ -1,17 +1,8 @@
 <template>
   <div class="row biobank-explorer-container">
     <filter-bar />
-    <div class="col-md-3">
-      <filter-container></filter-container>
-    </div>
-
-    <div class="col-md-9">
+    <div class="col-md-12">
       <div class="row mb-3">
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          class="mt-1 ml-3"
-          router-enabled
-        />
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -49,10 +40,15 @@
         <div class="col-md-12" v-if="!loading">
           <result-header></result-header>
         </div>
+        <collection-select-all
+          v-if="!loading && foundCollectionIds.length"
+          class="mt-1 ml-3 mb-3"
+          router-enabled
+        />
       </div>
 
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 biobank-card-container border rounded p-3 mb-3">
           <biobank-cards-container></biobank-cards-container>
         </div>
       </div>
@@ -90,7 +86,9 @@
           :key="`${cart.biobankLabel}-${index}`"
           v-for="(cart, index) in collectionCart"
         >
-          <div class="card-header font-weight-bold">{{ cart.biobankLabel }}</div>
+          <div class="card-header font-weight-bold">
+            {{ cart.biobankLabel }}
+          </div>
           <div class="collection-cart">
             <div
               class="card-body d-flex border-bottom"
@@ -164,7 +162,6 @@
 <script>
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
-import FilterContainer from './filters/FilterContainer'
 import FilterBar from './filters/FilterBar'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
@@ -175,7 +172,6 @@ export default {
   name: 'biobank-explorer-container',
   components: {
     BiobankCardsContainer,
-    FilterContainer,
     FilterBar,
     ResultHeader,
     CartSelectionToast,
@@ -342,6 +338,12 @@ export default {
 .biobank-explorer-container {
   padding-top: 1rem;
 }
+
+.biobank-card-container {
+  height: 70vh;
+  overflow: auto;
+}
+
 .remove-collection:hover,
 .btn:hover,
 #select-all-label:hover {
@@ -349,6 +351,6 @@ export default {
 }
 
 .collection-cart > div:last-child {
-  border:none !important;
+  border: none !important;
 }
 </style>

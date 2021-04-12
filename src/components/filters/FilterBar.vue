@@ -1,29 +1,57 @@
 <template>
-  <div class="d-flex flex-wrap border align-items-center p-2 m-3 w-100 rounded">
-    <div>
-      <StringFilter name="Search" v-model="search"></StringFilter>
-      <label class="text-muted">Search by name, id, acronym</label>
-    </div>
-    <b-dropdown
-      :text="filter.label || filter.name"
-      variant="outline-secondary"
-      v-for="filter in filters.slice(0, 5)"
-      :key="filter.name"
-      class="mr-2"
-    >
-      <div class="bg-white p-2 dropdown-contents">
-        <component
-          v-if="bookmarkMappedToState"
-          :is="filter.component"
-          :value="activeFilters[filter.name]"
-          v-bind="filter"
-          @input="(value) => filterChange(filter.name, value)"
-          :returnTypeAsObject="true"
-          :bulkOperation="true"
-        >
-        </component>
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <StringFilter
+          name="Search"
+          v-model="search"
+          placeholder="Search by name, id, acronym"
+        ></StringFilter>
       </div>
-    </b-dropdown>
+      <div class="col-md-4"></div>
+      <div class="col-md-4 d-flex align-items-center pr-0">
+        <button
+          class="btn btn-info ml-auto"
+          @click="filterBarShown = !filterBarShown"
+        >
+          Filter menu
+          <span
+            class="fa"
+            :class="[
+              { 'fa-caret-down': !filterBarShown },
+              { 'fa-caret-up': filterBarShown },
+            ]"
+          ></span>
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="filterBarShown"
+      class="row border-top border-bottom border-secondary ml-1"
+    >
+      <div class="col-md-12 px-0 py-2">
+        <b-dropdown
+          :text="filter.label || filter.name"
+          :variant="filterVariant(filter.label || filter.name)"
+          v-for="filter in filters"
+          :key="filter.name"
+          class="mr-2 mb-1 mt-1"
+        >
+          <div class="bg-white p-2 dropdown-contents">
+            <component
+              v-if="bookmarkMappedToState"
+              :is="filter.component"
+              :value="activeFilters[filter.name]"
+              v-bind="filter"
+              @input="(value) => filterChange(filter.name, value)"
+              :returnTypeAsObject="true"
+              :bulkOperation="true"
+            >
+            </component>
+          </div>
+        </b-dropdown>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,7 +80,8 @@ export default {
   },
   data () {
     return {
-      debounce: undefined
+      debounce: undefined,
+      filterBarShown: false
     }
   },
   computed: {
@@ -94,6 +123,13 @@ export default {
     ...mapMutations(['UpdateFilter']),
     filterChange (name, value) {
       this.UpdateFilter({ name, value, router: this.$router })
+    },
+    filterVariant (filterName) {
+      if (filterName.toLowerCase().includes('covid')) {
+        return 'warning'
+      }
+
+      return 'secondary'
     }
   }
 }
@@ -101,6 +137,6 @@ export default {
 
 <style scoped>
 ::v-deep span {
-    white-space: nowrap;
-  }
+  white-space: nowrap;
+}
 </style>
