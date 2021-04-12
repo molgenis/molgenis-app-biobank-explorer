@@ -1,5 +1,6 @@
 <template>
   <div class="row biobank-explorer-container">
+    <filter-bar />
     <div class="col-md-3">
       <filter-container></filter-container>
     </div>
@@ -164,6 +165,7 @@
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
 import FilterContainer from './filters/FilterContainer'
+import FilterBar from './filters/FilterBar'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
@@ -174,6 +176,7 @@ export default {
   components: {
     BiobankCardsContainer,
     FilterContainer,
+    FilterBar,
     ResultHeader,
     CartSelectionToast,
     CollectionSelectAll
