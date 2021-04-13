@@ -1,6 +1,5 @@
 <template>
   <div class="row biobank-explorer-container">
-    <filter-bar />
     <div class="col-md-12">
       <div class="row mb-3">
         <div class="col-md-8">
@@ -37,8 +36,8 @@
         <div class="col-md-4"></div>
       </div>
       <div class="row">
-        <div class="col-md-12 pl-0" v-if="!loading">
-          <result-header></result-header>
+        <div class="col-md-12 pl-0 position-relative header-container">
+          <application-header />
         </div>
       </div>
 
@@ -157,18 +156,16 @@
 <script>
 import { CartSelectionToast } from '@molgenis-ui/components-library'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
-import FilterBar from './filters/FilterBar'
-import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
+import ApplicationHeader from './ApplicationHeader.vue'
 
 export default {
   name: 'biobank-explorer-container',
   components: {
     BiobankCardsContainer,
-    FilterBar,
-    ResultHeader,
-    CartSelectionToast
+    CartSelectionToast,
+    ApplicationHeader
   },
   data: () => {
     return {
@@ -340,5 +337,9 @@ export default {
 
 .collection-cart > div:last-child {
   border: none !important;
+}
+
+.header-container {
+  margin-bottom:18rem;
 }
 </style>

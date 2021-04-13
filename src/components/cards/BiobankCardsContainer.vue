@@ -1,32 +1,6 @@
 <template>
   <div class="biobank-cards-container">
-    <div aria-label="action-bar">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-3 pl-0">
-            <collection-select-all
-              v-if="!loading && foundCollectionIds.length"
-              router-enabled
-            />
-          </div>
-          <div class="col-md-5 pl-0">
-            <search-filter />
-          </div>
-          <div class="col-md-4 pr-0">
-            <b-pagination
-              v-if="foundBiobanks > pageSize && !loading && foundBiobanks > 0"
-              size="md"
-              align="right"
-              :total-rows="foundBiobanks"
-              v-model="currentPage"
-              :per-page="pageSize"
-            ></b-pagination>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="biobank-cards border" v-if="!loading && foundBiobanks > 0">
+    <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
@@ -51,46 +25,22 @@
   </div>
 </template>
 
-<style>
-.status-text {
-  text-align: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.biobank-cards-container {
-  width: 100%;
-}
-
-.biobank-cards {
-  height: 60vh;
-  overflow: auto;
-}
-</style>
-
 <script>
 import BiobankCard from './BiobankCard'
-import { mapGetters, mapActions } from 'vuex'
-import SearchFilter from '../filters/SearchFilter.vue'
-import CollectionSelectAll from '@/components/buttons/CollectionSelectAll.vue'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
-  data () {
-    return {
-      currentPage: 1,
-      pageSize: 10
-    }
-  },
   methods: {
-    ...mapActions(['GetBiobanks'])
+    ...mapActions(['GetBiobanks']),
+    ...mapMutations(['SetCurrentPage'])
   },
   computed: {
+    ...mapState(['pageSize', 'currentPage']),
     ...mapGetters([
       'biobanks',
       'foundBiobanks',
-      'loading',
-      'foundCollectionIds'
+      'loading'
     ]),
     biobanksShown () {
       return this.loading
@@ -108,9 +58,7 @@ export default {
     }
   },
   components: {
-    BiobankCard,
-    SearchFilter,
-    CollectionSelectAll
+    BiobankCard
   },
   watch: {
     biobankIds (newValue, oldValue) {
@@ -118,7 +66,7 @@ export default {
         newValue.length !== oldValue.length ||
         !newValue.every((element, index) => element === oldValue[index])
       ) {
-        this.currentPage = 1
+        this.SetCurrentPage(1)
       }
     },
     biobankIdsToFetch (value) {
@@ -129,3 +77,15 @@ export default {
   }
 }
 </script>
+
+<style>
+.status-text {
+  text-align: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.biobank-cards-container {
+  width: 100%;
+}
+</style>

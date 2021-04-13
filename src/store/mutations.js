@@ -224,6 +224,9 @@ export default {
   SetLoading (state, loading) {
     state.isLoading = loading
   },
+  SetCurrentPage (state, currentPage) {
+    state.currentPage = currentPage
+  },
   SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
   },
