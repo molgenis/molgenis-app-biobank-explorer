@@ -1,6 +1,6 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="position-fixed container pl-0 header-bar">
+  <div class="position-fixed container pl-0 pr-0 header-bar">
     <filter-bar />
     <div aria-label="action-bar" class="py-4">
       <div class="container-fluid">

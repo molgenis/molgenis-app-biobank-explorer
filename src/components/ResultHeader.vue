@@ -1,7 +1,7 @@
 <template>
   <div class="search-box-container">
     <div class="row">
-      <div class="col-md-12 pr-0">
+      <div class="col-md-12">
         <div class="biobank-number-report-container">
           <small class="biobank-number-report">
             <em>
