@@ -36,9 +36,7 @@
         <div class="col-md-4"></div>
       </div>
       <div class="row">
-        <div class="col-md-12 pl-0 position-relative header-container">
           <application-header />
-        </div>
       </div>
 
       <div class="row">
@@ -337,9 +335,5 @@ export default {
 
 .collection-cart > div:last-child {
   border: none !important;
-}
-
-.header-container {
-  margin-bottom:18rem;
 }
 </style>

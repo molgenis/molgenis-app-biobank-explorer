@@ -87,5 +87,6 @@ export default {
 
 .biobank-cards-container {
   width: 100%;
+  margin-top: 18rem;
 }
 </style>
