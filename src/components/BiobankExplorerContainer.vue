@@ -40,15 +40,10 @@
         <div class="col-md-12 pl-0" v-if="!loading">
           <result-header></result-header>
         </div>
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          class="mt-1 mb-3"
-          router-enabled
-        />
       </div>
 
       <div class="row">
-        <div class="col-md-12 biobank-card-container border rounded p-3 mb-3">
+        <div class="col-md-12 px-0 py-3 mb-3">
           <biobank-cards-container></biobank-cards-container>
         </div>
       </div>
@@ -166,7 +161,6 @@ import FilterBar from './filters/FilterBar'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
-import CollectionSelectAll from '@/components/buttons/CollectionSelectAll.vue'
 
 export default {
   name: 'biobank-explorer-container',
@@ -174,8 +168,7 @@ export default {
     BiobankCardsContainer,
     FilterBar,
     ResultHeader,
-    CartSelectionToast,
-    CollectionSelectAll
+    CartSelectionToast
   },
   data: () => {
     return {
@@ -337,11 +330,6 @@ export default {
 }
 .biobank-explorer-container {
   padding-top: 1rem;
-}
-
-.biobank-card-container {
-  height: 70vh;
-  overflow: auto;
 }
 
 .remove-collection:hover,

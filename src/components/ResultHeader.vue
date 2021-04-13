@@ -1,11 +1,5 @@
 <template>
   <div class="search-box-container">
-    <div class="mb-3">
-      <div class="col-md-12 pl-0 py-2">
-        <active-filter-list></active-filter-list>
-      </div>
-    </div>
-
     <div class="row">
       <div class="col-md-12 pr-0">
         <div class="biobank-number-report-container">
@@ -45,7 +39,6 @@
 </style>
 
 <script>
-import ActiveFilterList from './filters/ActiveFilterList'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -54,9 +47,6 @@ export default {
     numberOfSubCollections () {
       return this.foundCollectionIds.length - this.parentCollections.length
     }
-  },
-  components: {
-    ActiveFilterList
   }
 }
 </script>
