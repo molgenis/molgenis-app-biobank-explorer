@@ -17,6 +17,7 @@
         :value="activeFilters[filter.name]"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
+        @selectAll="(selectAllValue) => filterSelectAllChange(filter.name, selectAllValue)"
         :returnTypeAsObject="true"
         :bulkOperation="true"
       >
@@ -66,9 +67,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter']),
+    ...mapMutations(['UpdateFilter', 'UpdateFilterSelectAll']),
     filterChange (name, value) {
       this.UpdateFilter({ name, value, router: this.$router })
+    },
+    filterSelectAllChange (name, value) {
+      this.UpdateFilterSelectAll({ name, value, router: this.$router })
     }
   }
 }

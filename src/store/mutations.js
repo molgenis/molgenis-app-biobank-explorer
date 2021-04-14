@@ -45,13 +45,18 @@ export default {
       filterValues.push(item.value)
       filterTexts.push(item.text)
     }
-
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
     Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
     createBookmark(router, state.filters.selections, state.selectedCollections)
   },
+  UpdateFilterSelectAll (state, { name, value, router }) {
+    Vue.set(state.filters.selectAll, name, value)
+    createBookmark(router, state.filters.selectAll, state.selectedCollections)
+  },
+
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
+    state.filters.selectAll = {}
     for (const [key, value] of Object.entries(selections)) {
       if (key === 'search') {
         Vue.set(state.filters.selections, key, value)
@@ -68,6 +73,7 @@ export default {
    */
   ResetFilters (state) {
     state.filters.selections = {}
+    state.filters.selectAll = {}
   },
   SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
