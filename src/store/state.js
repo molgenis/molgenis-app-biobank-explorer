@@ -49,5 +49,6 @@ export default {
   filterOptionDictionary: {},
   // whenever a user returns from a bookmark with diagnosis available
   // in the active filter, there is no label. fetch it once for performance
-  diagnosisAvailableFetched: false
+  diagnosisAvailableFetched: false,
+  viewMode: 'biobankview'
 }

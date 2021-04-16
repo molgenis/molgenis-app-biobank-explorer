@@ -74,8 +74,8 @@ describe('store', () => {
       it('should retrieve biobank ids from the server based on biobank filters', async () => {
         const response = {
           items: [
-            { data: { id: 'biobank-1' } },
-            { data: { id: 'biobank-2' } }
+            { data: { id: 'biobank-1', name: 'Biobank 1', network: ['Network 1', 'Network 2'] } },
+            { data: { id: 'biobank-2', name: 'Biobank 2', network: ['Network 1', 'Network 4'] } }
           ]
         }
         api.get.mockResolvedValueOnce(response)
@@ -85,6 +85,7 @@ describe('store', () => {
 
         await actions.GetBiobankIds({ commit, getters })
         expect(commit.mock.calls[1]).toEqual(['SetBiobankIds', ['biobank-1', 'biobank-2']])
+        expect(commit.mock.calls[2]).toEqual(['SetBiobankInfo', response])
       })
     })
 

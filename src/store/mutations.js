@@ -318,5 +318,8 @@ export default {
       state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
       state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
     }
+  },
+  SetViewMode (state, viewMode) {
+    state.viewMode = viewMode
   }
 }
