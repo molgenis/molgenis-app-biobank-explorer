@@ -3,7 +3,7 @@
     <div class="query-type-selector">
       <label class="label-disabled">
         Satisfy all
-        <input type="checkbox" v-model="selectAllOptions"/>
+        <input type="checkbox" v-model="satisfyAllOptions"/>
       </label>
     </div>
     <div>
@@ -68,7 +68,7 @@ export default {
   },
   data () {
     return {
-      selectAllOptions: false,
+      satisfyAllOptions: false,
       externalUpdate: false,
       selection: [],
       resolvedOptions: [],
@@ -109,8 +109,8 @@ export default {
       }
       this.externalUpdate = false
     },
-    selectAllOptions (newValue) {
-      this.$emit('selectAll', newValue)
+    satisfyAllOptions (newValue) {
+      this.$emit('satisfyAll', newValue)
     }
   },
   created () {
