@@ -14,7 +14,7 @@ export default {
    * to add: { name: myFilterName, value: { text: 'MyFilterLabel', value: 'MyFilterId' } }
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
-  UpdateFilterSelection (state, filterUpdate) {
+  UpdateFilterSelection (state, filterUpdate, filterDefinitions, router) {
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
 

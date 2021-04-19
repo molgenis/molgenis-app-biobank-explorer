@@ -68,7 +68,7 @@ export default {
   methods: {
     ...mapMutations(['UpdateFilterSelection', 'UpdateFilterSatisfyAll']),
     filterChange (name, value) {
-      this.UpdateFilterSelection({ name, value })
+      this.UpdateFilterSelection({ name, value, filterDefinitions: this.filterDefinitions, router: this.$router })
     },
     filterSatisfyAllChange (name, value) {
       this.UpdateFilterSatisfyAll({ name, value })
