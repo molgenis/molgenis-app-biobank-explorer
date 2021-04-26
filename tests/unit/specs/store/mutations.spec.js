@@ -78,6 +78,14 @@ describe('store', () => {
       })
     })
 
+    describe('UpdatFilterSatisfyAll', () => {
+      it('can set to a specific filter the satisfy all value to true/false', () => {
+        state.filters.satisfyAll.covid19 = false
+        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true, router: [] })
+        expect(state.filters.satisfyAll.covid19).toStrictEqual(true)
+      })
+    })
+
     describe('ResetFilters', () => {
       it('should reset all the filters in the state', () => {
         state.filters.selections = {
