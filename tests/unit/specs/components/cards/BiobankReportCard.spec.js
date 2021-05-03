@@ -19,6 +19,10 @@ describe('BiobankReportCard', () => {
         last_name: 'last_name',
         email: 'email',
         phone: 'phone',
+        country: {
+          id: 'NL',
+          name: 'Netherlands'
+        },
         address: 'address',
         city: 'city',
         zip: 'zip'
