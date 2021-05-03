@@ -85,7 +85,7 @@ const getOntologyTerm = (property, term) => {
 
 const getCollectionAdditionalProperty = (data, propertyName) => {
   let value
-  console.log(data)
+
   if ('uri' in data) {
     // it means the data contains the uri of the code in the model and must be used
     value = {
@@ -125,9 +125,10 @@ export const mapCollectionsData = (collection) => {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     '@id': `${getBaseUrl()}/collection/${collection.id}`,
-    identifier: collection.id,
-    name: collection.name,
     description: collection.description,
+    identifier: collection.id,
+    keywords: 'sample, collection',
+    name: collection.name,
     url: `${getBaseUrl()}/collection/${collection.id}`,
     includedInDataCatalog: {
       '@type': 'DataCatalog',
@@ -157,23 +158,29 @@ export const mapBiobankDataCatalog = (biobank) => {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
     '@id': `${getBaseUrl()}/biobank/${biobank.id}`, // TODO: Change with the persistent identifier
-    identifier: biobank.id,
-    name: biobank.name,
-    alternateName: biobank.acronym,
     description: biobank.description || biobank.name, // some collections doesn't have a description
-    url: `${getBaseUrl()}/biobank/${biobank.id}`,
     keywords: 'biobank',
+    name: biobank.name,
     provider: {
       '@type': 'Organization',
+      description: biobank.description || biobank.name, // some collections doesn't have a description
       legalName: biobank.juridical_person,
-      email: biobank.contact ? biobank.contact.email : undefined,
-      address: biobank.contact ? {
+      name: biobank.name,
+      sameAs: `${getBaseUrl()}/biobank/${biobank.id}`,
+      topic: 'http://edamontology.org/topic_3337', // biobank in EDAM
+      contactPoint: biobank.contact ? {
+        '@type': 'ContactPoint',
+        email: biobank.contact.email
+      } : undefined,
+      location: biobank.contact ? {
         '@type': 'PostalAddress',
         contactType: 'juridical person',
         addressLocality: `${biobank.contact.city}, ${biobank.contact.country.name}`,
         streetAddress: biobank.contact.address
       } : undefined
     },
+    url: `${getBaseUrl()}/biobank/${biobank.id}`,
+    alternateName: biobank.acronym,
     dataset: Array.from(biobank.collections, collection => {
       return {
         '@type': 'Dataset',
@@ -183,6 +190,7 @@ export const mapBiobankDataCatalog = (biobank) => {
         name: collection.name,
         description: collection.description
       }
-    })
+    }),
+    identifier: biobank.id
   }
 }
