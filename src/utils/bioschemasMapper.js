@@ -175,8 +175,8 @@ export const mapBiobankDataCatalog = (biobank) => {
       location: biobank.contact ? {
         '@type': 'PostalAddress',
         contactType: 'juridical person',
-        addressLocality: `${biobank.contact.city}, ${biobank.contact.country.name}`,
-        streetAddress: biobank.contact.address
+        addressLocality: `${biobank.contact.city ? biobank.contact.city + ', ' : ''}${biobank.contact.country.name || ''}`,
+        streetAddress: biobank.contact.address || undefined
       } : undefined
     },
     url: `${getBaseUrl()}/biobank/${biobank.id}`,
