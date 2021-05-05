@@ -55,3 +55,13 @@ export default {
   qualityAttributeSelector,
   getBaseUrl
 }
+
+export const createQueryBlockForQualityIds = (qualityIds, columnName, operator) => {
+  let query = ''
+  for (let i = 0; i < qualityIds.length; i++) {
+    query += columnName + '==' + qualityIds[i] + operator
+  }
+  const cleanedQuery = query.slice(0, -1)
+  const embeddedCleanedQuery = '(' + cleanedQuery + ')'
+  return embeddedCleanedQuery
+}
