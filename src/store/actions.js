@@ -1,6 +1,6 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils from '../utils'
+import { utils, createQueryBlockForQualityIds } from '../utils'
 import 'array-flat-polyfill'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
@@ -55,7 +55,11 @@ export default {
     const qualityIds = state.filters.selections.collection_quality ?? collectionQuality
 
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q=assess_level_col=in=(${qualityIds})`).then(response => {
+      let query = ''
+      state.filters.satisfyAll.collection_quality === true
+        ? query = createQueryBlockForQualityIds(qualityIds, 'assess_level_col', ';')
+        : query = createQueryBlockForQualityIds(qualityIds, 'assess_level_col', ',')
+      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q` + query).then(response => {
         commit('SetCollectionIdsWithSelectedQuality', response)
       })
     } else {
@@ -68,7 +72,11 @@ export default {
     const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
 
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=assess_level_bio=in=(${qualityIds})`).then(response => {
+      let query = ''
+      state.filters.satisfyAll.biobank_quality === true
+        ? query = createQueryBlockForQualityIds(qualityIds, 'assess_level_bio', ';')
+        : query = createQueryBlockForQualityIds(qualityIds, 'assess_level_bio', ',')
+      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=` + query).then(response => {
         commit('SetBiobankIdsWithSelectedQuality', response)
       })
     } else {

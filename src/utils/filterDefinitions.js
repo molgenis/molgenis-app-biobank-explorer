@@ -63,7 +63,8 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.country,
     filters: state.filters.selections.country,
     maxVisibleOptions: 25,
-    humanReadableString: 'Countries:'
+    humanReadableString: 'Countries:',
+    showSatisfyAllCheckbox: false
   },
   {
     component: 'CheckboxFilter',
@@ -110,7 +111,8 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.collaboration_type,
     filters: state.filters.selections.collaboration_type,
     maxVisibleOptions: 25,
-    humanReadableString: 'Biobank collaboration type(s):'
+    humanReadableString: 'Biobank collaboration type(s):',
+    showSatisfyAllCheckbox: false
   },
   {
     component: 'CheckboxFilter',
