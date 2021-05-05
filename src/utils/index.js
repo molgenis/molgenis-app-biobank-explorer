@@ -65,3 +65,12 @@ export const createQueryBlockForQualityIds = (qualityIds, columnName, operator) 
   const embeddedCleanedQuery = '(' + cleanedQuery + ')'
   return embeddedCleanedQuery
 }
+
+export const createQueryParamOperandWithAndClause = (filterSelection, columnName, satisfyAll) => {
+  if (filterSelection && satisfyAll) {
+    return {
+      operator: 'AND',
+      operands: createComparisons(columnName, filterSelection || [])
+    }
+  } else { return createInQuery(columnName, filterSelection || []) }
+}
