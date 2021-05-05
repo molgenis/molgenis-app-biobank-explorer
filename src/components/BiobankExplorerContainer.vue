@@ -194,6 +194,8 @@ export default {
       'collectionsInPodium',
       'selectedBiobankQuality',
       'selectedCollectionQuality',
+      'satisfyAllBiobankQuality',
+      'satisfyAllCollectionQuality',
       'selectedCollections',
       'collectionBiobankDictionary',
       'foundCollectionsAsSelection',
@@ -235,6 +237,14 @@ export default {
       handler: 'GetBiobankIdsForQuality'
     },
     selectedCollectionQuality: {
+      immediate: true,
+      handler: 'GetCollectionIdsForQuality'
+    },
+    satisfyAllBiobankQuality: {
+      immediate: true,
+      handler: 'GetBiobankIdsForQuality'
+    },
+    satisfyAllCollectionQuality: {
       immediate: true,
       handler: 'GetCollectionIdsForQuality'
     },

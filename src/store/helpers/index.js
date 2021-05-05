@@ -1,5 +1,5 @@
 import api from '@molgenis/molgenis-api-client'
-import { createInQuery, createComparisons } from '../../utils'
+import { createInQuery, createQueryParamOperandWithAndClause } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
 
@@ -16,33 +16,13 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
-    // createInQuery('materials', state.filters.selections.materials || []),
-    state.filters.selections.materials !== undefined && state.filters.selections.materials.length !== 0 ? {
-      operator: state.filters.satisfyAll.materials === true ? 'AND' : 'OR',
-      operands: createComparisons('materials', state.filters.selections.materials || [])
-    } : createInQuery('materials', state.filters.selections.materials || []),
-    // createInQuery('type', state.filters.selections.type || []),
-    state.filters.selections.type !== undefined && state.filters.selections.type.length !== 0 ? {
-      operator: state.filters.satisfyAll.type === true ? 'AND' : 'OR',
-      operands: createComparisons('type', state.filters.selections.type || [])
-    } : createInQuery('type', state.filters.selections.type || []),
-    // createInQuery('data_categories', state.filters.selections.dataType || []),
-    state.filters.selections.data_categories !== undefined && state.filters.selections.data_categories.length !== 0 ? {
-      operator: state.filters.satisfyAll.data_categories === true ? 'AND' : 'OR',
-      operands: createComparisons('data_categories', state.filters.selections.data_categories || [])
-    } : createInQuery('data_categories', state.filters.selections.dataType || []),
-    state.filters.selections.diagnosis_available !== undefined && state.filters.selections.diagnosis_available.length !== 0 ? {
-      operator: state.filters.satisfyAll.diagnosis_available === true ? 'AND' : 'OR',
-      operands: createComparisons('diagnosis_available.code', state.filters.selections.diagnosis_available || [])
-    } : createInQuery('diagnosis_available.code', state.filters.selections.diagnosis_available || []),
-    // createInQuery('diagnosis_available.code', state.filters.selections.diagnosis_available || []),
+    createQueryParamOperandWithAndClause(state.filters.selections.materials, 'materials', state.filters.satisfyAll.materials),
+    createQueryParamOperandWithAndClause(state.filters.selections.type, 'type', state.filters.satisfyAll.type),
+    createQueryParamOperandWithAndClause(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.dataType),
+    createQueryParamOperandWithAndClause(state.filters.selections.diagnosis_available, 'diagnosis_available.code', state.filters.satisfyAll.diagnosis_available),
     createInQuery('id', state.collectionIdsWithSelectedQuality),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    // createInQuery('network', state.filters.selections.collection_network || []),
-    state.filters.selections.collection_network !== undefined && state.filters.selections.collection_network.length !== 0 ? {
-      operator: state.filters.satisfyAll.collection_network === true ? 'AND' : 'OR',
-      operands: createComparisons('network', state.filters.selections.collection_network || [])
-    } : createInQuery('network', state.filters.selections.collection_network || []),
+    createQueryParamOperandWithAndClause(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.collection_network),
     state.filters.selections.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
@@ -55,17 +35,17 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
-    // createInQuery('quality', state.filters.selections.biobank_quality),
     createInQuery('id', state.biobankIdsWithSelectedQuality),
-    state.filters.selections.biobank_network !== undefined && state.filters.selections.biobank_network.length !== 0 ? {
-      operator: state.filters.satisfyAll.biobank_network === true ? 'AND' : 'OR',
-      operands: createComparisons('network', state.filters.selections.biobank_network || [])
-    } : createInQuery('network', state.filters.selections.biobank_network || []),
-    // createInQuery('network', state.filters.selections.biobank_network || []),
-    state.filters.selections.covid19 !== undefined && state.filters.selections.covid19.length !== 0 ? {
-      operator: state.filters.satisfyAll.covid19 === true ? 'AND' : 'OR',
-      operands: createComparisons('covid19biobank', state.filters.selections.covid19 || [])
-    } : createInQuery('covid19biobank', state.filters.selections.covid19 || [])
+    createQueryParamOperandWithAndClause(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.biobank_network),
+    // state.filters.selections.biobank_network && state.filters.satisfyAll.biobank_network ? {
+    //  operator: 'AND',
+    //  operands: createComparisons('network', state.filters.selections.biobank_network || [])
+    // } : createInQuery('network', state.filters.selections.biobank_network || []),
+    createQueryParamOperandWithAndClause(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.covid19)
+    // state.filters.selections.covid19 && state.filters.satisfyAll.covid19 ? {
+    //  operator: 'AND',
+    //  operands: createComparisons('covid19biobank', state.filters.selections.covid19 || [])
+    // } : createInQuery('covid19biobank', state.filters.selections.covid19 || [])
   ])
 })
 
