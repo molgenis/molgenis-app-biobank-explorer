@@ -56,13 +56,12 @@ export default {
 
     if (qualityIds && qualityIds.length > 0) {
       let query = ''
-      if (state.filters.satisfyAll.biobank_quality === true) {
+      if (state.filters.satisfyAll.biobank_quality) {
         let tempQuery = ''
         for (let i = 0; i < qualityIds.length; i++) {
           tempQuery += 'assess_level_bio' + '==' + qualityIds[i] + ';'
         }
-        const cleanedQuery = tempQuery.slice(0, -1)
-        query = '(' + cleanedQuery + ')'
+        query = tempQuery.slice(0, -1)
       } else {
         query = `assess_level_col=in=(${qualityIds})`
       }
@@ -80,13 +79,12 @@ export default {
 
     if (qualityIds && qualityIds.length > 0) {
       let query = ''
-      if (state.filters.satisfyAll.biobank_quality === true) {
+      if (state.filters.satisfyAll.biobank_quality) {
         let tempQuery = ''
         for (let i = 0; i < qualityIds.length; i++) {
           tempQuery += 'assess_level_bio' + '==' + qualityIds[i] + ';'
         }
-        const cleanedQuery = tempQuery.slice(0, -1)
-        query = '(' + cleanedQuery + ')'
+        query = tempQuery.slice(0, -1)
       } else {
         query = `assess_level_bio=in=(${qualityIds})`
       }
