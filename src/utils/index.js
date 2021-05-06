@@ -47,15 +47,6 @@ export const getBaseUrl = () => {
   return `${window.location.protocol}//${window.location.host}${baseUrl}/#`
 }
 
-export default {
-  getUniqueIdArray,
-  createInQuery,
-  createComparisons,
-  removeFilterFromFilterArrayById,
-  qualityAttributeSelector,
-  getBaseUrl
-}
-
 export const createQueryBlockForQualityIds = (qualityIds, columnName, operator) => {
   let query = ''
   for (let i = 0; i < qualityIds.length; i++) {
@@ -73,4 +64,13 @@ export const createQueryParamOperandWithAndClause = (filterSelection, columnName
       operands: createComparisons(columnName, filterSelection || [])
     }
   } else { return createInQuery(columnName, filterSelection || []) }
+}
+
+export default {
+  getUniqueIdArray,
+  createInQuery,
+  createComparisons,
+  removeFilterFromFilterArrayById,
+  qualityAttributeSelector,
+  getBaseUrl
 }
