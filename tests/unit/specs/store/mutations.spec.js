@@ -30,7 +30,7 @@ describe('store', () => {
 
       it('should update the list of filters for a specific state key and map its text as label', () => {
         const countries = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }]
-        mutations.UpdateFilterSelection(state, { name: 'country', value: countries })
+        mutations.UpdateFilterSelection(state, { name: 'country', value: countries, filterDefinitions: [{ name: 'country' }], router: [] })
 
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.labels.country).toStrictEqual(['Netherlands', 'Belgium'])
