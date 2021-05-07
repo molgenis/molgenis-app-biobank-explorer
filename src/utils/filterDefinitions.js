@@ -1,12 +1,13 @@
 /* istanbul ignore file */
-import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions } from './filterOptions'
+import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions, commonNetworkFilterOptions } from './filterOptions'
 
 const filterDefinitions = (state) => [
   {
     name: 'search',
     label: 'Search',
     type: 'string-filter',
-    humanReadableString: 'Text search is'
+    humanReadableString: 'Text search is',
+    viewModes: ['biobankview']
   },
   {
     headerClass: 'bg-warning text-white',
@@ -30,7 +31,8 @@ const filterDefinitions = (state) => [
     showSatisfyAllCheckbox: true,
     all: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Covid-19 service(s):'
+    humanReadableString: 'Covid-19 service(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'MultiFilter',
@@ -44,7 +46,8 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('diagnosis_available'),
     showSatisfyAllCheckbox: true,
     initiallyCollapsed: !state.route.query.diagnosis_available,
-    humanReadableString: 'Disease type(s):'
+    humanReadableString: 'Disease type(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -58,7 +61,8 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('materials'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Material type(s):'
+    humanReadableString: 'Material type(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -70,7 +74,8 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.country,
     filters: state.filters.selections.country,
     maxVisibleOptions: 25,
-    humanReadableString: 'Countries:'
+    humanReadableString: 'Countries:',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -84,7 +89,8 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('biobank_quality'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Biobank quality mark(s):'
+    humanReadableString: 'Biobank quality mark(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -98,7 +104,8 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('collection_quality'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Collection quality mark(s):'
+    humanReadableString: 'Collection quality mark(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -112,7 +119,8 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('type'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Collection type(s):'
+    humanReadableString: 'Collection type(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -123,7 +131,8 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.collaboration_type,
     filters: state.filters.selections.collaboration_type,
     maxVisibleOptions: 25,
-    humanReadableString: 'Biobank collaboration type(s):'
+    humanReadableString: 'Biobank collaboration type(s):',
+    viewModes: ['biobankview']
   },
   {
     component: 'CheckboxFilter',
@@ -167,7 +176,20 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('dataType'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Data type(s):'
+    humanReadableString: 'Data type(s):',
+    viewModes: ['biobankview']
+  },
+  {
+    component: 'CheckboxFilter',
+    name: 'network_common_properties',
+    label: 'Common Properties',
+    type: 'checkbox-filter',
+    options: commonNetworkFilterOptions(),
+    initiallyCollapsed: false,
+    filters: state.filters.selections.network_common_properties,
+    maxVisibleOptions: 25,
+    humanReadableString: 'Common Properties',
+    viewModes: ['networkview']
   }
 ]
 

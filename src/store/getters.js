@@ -1,4 +1,4 @@
-import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString, getActiveFilters } from './helpers'
+import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString, createNetworkRSQLQuery, getActiveFilters } from './helpers'
 import { groupCollectionsByBiobankId, groupBiobanksByNetworkId } from '../utils/grouping'
 import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
@@ -101,6 +101,7 @@ export default {
   satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
+  networkRsql: createNetworkRSQLQuery,
   resetPage: state => !state.isPaginating,
   showCountryFacet: state => state.showCountryFacet,
   /**

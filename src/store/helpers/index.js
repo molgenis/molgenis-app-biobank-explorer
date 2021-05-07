@@ -1,4 +1,4 @@
-import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
+import { diagnosisAvailableQuery, createInQuery, createQuery, createComparisons } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 
@@ -39,6 +39,25 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
     createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.includes('covid19'))
   ])
 })
+
+/**
+ * @example queries
+ * q=country.id=in=(NL,BE)
+ * q=materials.id=in=(RNA,DNA)
+ * q=diagnosis_available.code=in=(C18,L40)
+ * q=standards.id=in=(cen-ts-16835-1-2015,cen-ts-16827-1-2015)
+ */
+export const createNetworkRSQLQuery = (state) => {
+  console.log(state.filters.selections.network_common_properties)
+  return transformToRSQL({
+    operator: 'AND',
+    operands: flatten(
+      state.filters.selections.network_common_properties
+        ? state.filters.selections.network_common_properties.map((property) => createComparisons(property, [true]))
+        : []
+    )
+  })
+}
 
 const createNegotiatorQueryBody = (state, getters, url) => {
   const result = {
