@@ -56,7 +56,6 @@ export default {
   },
   UpdateFilterSatisfyAll (state, { name, value, router }) {
     Vue.set(state.filters.satisfyAll, name, value)
-    // createBookmark(router, state.filters.satisfyAll, state.selectedCollections)
   },
 
   UpdateAllFilters (state, selections) {
