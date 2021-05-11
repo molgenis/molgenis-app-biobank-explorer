@@ -56,7 +56,7 @@ export default {
 
     if (qualityIds && qualityIds.length > 0) {
       let query = ''
-      if (state.filters.satisfyAll.biobank_quality) {
+      if (state.filters.satisfyAll.collection_quality) {
         let tempQuery = ''
         for (let i = 0; i < qualityIds.length; i++) {
           tempQuery += 'assess_level_bio' + '==' + qualityIds[i] + ';'
