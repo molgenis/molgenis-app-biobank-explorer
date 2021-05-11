@@ -1,8 +1,10 @@
 import FilterContainer from '@/components/filters/FilterContainer'
+import CovidFilter from '@/components/filters/CovidFilter'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { mockState } from '../../mockData'
 import filterDefinitions from '../../../../../src/utils/filterDefinitions'
+import state from '../../../../../src/store/state'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 jest.useFakeTimers()
@@ -17,13 +19,14 @@ describe('FilterContainer', () => {
 
     getters = {
       showCountryFacet: () => true,
-      activeFilters: () => [],
+      activeFilters: () => ['covid19'],
       bookmarkMappedToState: () => true,
       filterDefinitions
     }
 
     mutations = {
-      UpdateFilter: jest.fn()
+      UpdateFilter: jest.fn(),
+      UpdateFilterSatisfyAll: jest.fn()
     }
   })
 
@@ -65,6 +68,21 @@ describe('FilterContainer', () => {
 
       jest.runAllTimers()
       expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
+    })
+
+    it('should trugger the Update satisfyAll filter change, by simulating an emit', async () => {
+      store = new Vuex.Store({
+        state: mockState(),
+        actions,
+        mutations,
+        getters
+      })
+
+      wrapper = shallowMount(FilterContainer, { store, localVue })
+      wrapper.findComponent(CovidFilter).vm.$emit('satisfyAll', true)
+      await wrapper.findComponent(CovidFilter).vm.$nextTick()
+      jest.runAllTimers()
+      expect(mutations.UpdateFilterSatisfyAll).toHaveBeenCalledTimes(1)
     })
   })
 })
