@@ -1,5 +1,4 @@
 import getters from '../../../../src/store/getters'
-import filterDefinitions from '../../../../src/utils/filterDefinitions'
 import { mockFilterOptionDictionary, mockFilters, mockGetFilterDefinitions, mockSelectedCollections, mockState } from '../mockData'
 
 let state
@@ -180,18 +179,40 @@ describe('store', () => {
     })
 
     describe('loading', () => {
-      it('should be false if both biobankIds and collectionInfo are present', () => {
+      it('should be false in biobankview if both biobankIds and collectionInfo are present', () => {
         const state = {
+          viewMode: 'biobankview',
           biobankIds: ['biobank1'],
           collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
         }
         expect(getters.loading(state)).toBe(false)
       })
 
-      it('should be true if biobankIds are missing', () => {
+      it('should be true in biobankview if biobankIds are missing', () => {
         const state = {
+          viewMode: 'biobankview',
           biobankIds: undefined,
           collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }]
+        }
+        expect(getters.loading(state)).toBe(true)
+      })
+
+      it('should be false in networkview if both biobankIds and collectionInfo are present', () => {
+        const state = {
+          viewMode: 'networkview',
+          biobankIds: ['biobank1'],
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }],
+          networkIds: ['network1']
+        }
+        expect(getters.loading(state)).toBe(false)
+      })
+
+      it('should be true in biobankview if biobankIds are missing', () => {
+        const state = {
+          viewMode: 'networkview',
+          biobankIds: ['biobank1'],
+          collectionInfo: [{ collectionId: 'col-2', biobankId: 'biobank1' }],
+          networkIds: undefined
         }
         expect(getters.loading(state)).toBe(true)
       })
@@ -262,8 +283,7 @@ describe('store', () => {
           biobank_network: ['COVID-19']
         }
         const filterDefinitions = [
-          { name: 'materials' },
-          { name: 'biobank_network', viewModes: ['biobankview'] }
+          { name: 'materials' }
         ]
         state.filters.selections = stateFilters
         state.viewMode = 'networkview'
