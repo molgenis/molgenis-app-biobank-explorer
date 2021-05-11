@@ -19,7 +19,7 @@ describe('FilterContainer', () => {
 
     getters = {
       showCountryFacet: () => true,
-      activeFilters: () => ['covid19'],
+      activeFilters: () => [],
       bookmarkMappedToState: () => true,
       filterDefinitions
     }
@@ -70,7 +70,7 @@ describe('FilterContainer', () => {
       expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
     })
 
-    it('should trugger the Update satisfyAll filter change, by simulating an emit', async () => {
+    it('should trigger the Update satisfyAll filter change, by simulating an emit, both with the update of filter selections', async () => {
       store = new Vuex.Store({
         state: mockState(),
         actions,
@@ -79,9 +79,11 @@ describe('FilterContainer', () => {
       })
 
       wrapper = shallowMount(FilterContainer, { store, localVue })
+      wrapper.findComponent(CovidFilter).vm.$emit('input', ['covid_1', 'covid_2'])
       wrapper.findComponent(CovidFilter).vm.$emit('satisfyAll', true)
       await wrapper.findComponent(CovidFilter).vm.$nextTick()
       jest.runAllTimers()
+      expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
       expect(mutations.UpdateFilterSatisfyAll).toHaveBeenCalledTimes(1)
     })
   })
