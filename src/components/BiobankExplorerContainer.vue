@@ -241,15 +241,15 @@ export default {
       handler: 'GetCollectionIdsForQuality'
     },
     rsql: {
-      immediate: true,
+      immediate: false,
       handler: 'GetCollectionInfo'
     },
     biobankRsql: {
-      immediate: true,
+      immediate: false,
       handler: 'GetBiobankIds'
     },
     networkRsql: {
-      immediate: true,
+      immediate: false,
       handler: 'GetNetworkInfo'
     },
     isPodium: {
@@ -335,9 +335,12 @@ export default {
       createBookmark(this.activeFilters, this.selectedCollections)
     }
     this.SetViewMode(this.mode)
-    // if (this.mode === 'networkview') {
-    //   this.GetNetworkInfo()
-    // }
+    if (this.mode === 'networkview') {
+      this.GetNetworkInfo()
+    } else {
+      this.GetCollectionInfo()
+      this.GetBiobankIds()
+    }
   }
 }
 </script>
