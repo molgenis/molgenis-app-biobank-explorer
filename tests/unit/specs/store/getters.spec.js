@@ -21,6 +21,7 @@ describe('store', () => {
         expect(getters.rsql(state)).toEqual('')
       })
     })
+
     describe('biobankRsql', () => {
       it('should transform the biobank filters to rsql, with the default value of satisfyAll (false)', () => {
         state.filters.selections.country = ['AT', 'BE']
@@ -171,6 +172,7 @@ describe('store', () => {
       const otherGetters = { biobanks }
       expect(getters.getFoundBiobankIds(state, otherGetters)).toStrictEqual(['1', '2', '3'])
     })
+
     it('should return an array of biobank Ids when only ids are present', () => {
       const biobanks = ['1', '2', '3']
 
@@ -375,6 +377,81 @@ describe('store', () => {
         expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
         const biobankQualitySatisfyAllInfo = getters.satisfyAllCollectionQuality(state)
         expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
+      })
+    })
+
+    describe('networks', () => {
+      it('should return empty list when loading', () => {
+        state = {}
+        expect(getters.networks(state, { loading: true })).toStrictEqual([])
+      })
+      it('should look up the biobanks for matching collection ids and filter the biobank\'s collections', () => {
+        state.biobanks = {
+          1: { id: '1', name: 'one', collections: [{ id: 'col-1', sub_collections: [] }] },
+          2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }, { id: 'col-3', sub_collections: [] }] }
+        }
+        state.biobankIds = ['1', '2']
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
+        const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([{ id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }])
+      })
+      it('should return all biobanks if the collections are not filtered', () => {
+        state.biobanks = {
+          2: { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }
+        }
+        state.biobankIds = ['1', '2']
+        state.collectionInfo = [{ collectionId: 'col-2', biobankId: '2' }]
+
+        const otherGetters = { loading: false, rsql: '' }
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([
+          '1',
+          { id: '2', name: 'two', collections: [{ id: 'col-2', sub_collections: [] }] }
+        ])
+      })
+      it('should not filter out collections with matching subcollections',
+        () => {
+          const biobank1 = {
+            id: '1',
+            name: 'one',
+            collections: [{ id: 'col-1', sub_collections: [] }]
+          }
+          const biobank2 = {
+            id: '2',
+            name: 'two',
+            collections: [
+              { id: 'col-2', sub_collections: [] },
+              { id: 'col-3', sub_collections: [{ id: 'col-4', sub_collections: [] }] }]
+          }
+          const state = {
+            biobanks: { 1: biobank1, 2: biobank2 },
+            biobankIds: ['1', '2'],
+            collectionInfo: [{ collectionId: 'col-4', biobankId: '2' }]
+          }
+          const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
+          expect(getters.biobanks(state, otherGetters)).toStrictEqual([{
+            id: '2',
+            name: 'two',
+            collections: [{ id: 'col-3', sub_collections: [{ id: 'col-4', sub_collections: [] }] }]
+          }])
+        })
+
+      it('should return the biobanks in the order they appear in collectionInfo', () => {
+        const state = {
+          biobanks: {
+            1: { id: '1', name: 'B', collections: [{ id: 'col-1', sub_collections: [] }] },
+            2: { id: '2', name: 'A', collections: [{ id: 'col-2', sub_collections: [] }] }
+          },
+          biobankIds: ['1', '2'],
+          collectionInfo: [
+            { collectionId: 'col-1', biobankId: '2' },
+            { collectionId: 'col-2', biobankId: '1' }
+          ]
+        }
+        const otherGetters = { loading: false, rsql: 'type=in=(type1)' }
+        expect(getters.biobanks(state, otherGetters)).toStrictEqual([
+          { id: '2', name: 'A', collections: [{ id: 'col-2', sub_collections: [] }] },
+          { id: '1', name: 'B', collections: [{ id: 'col-1', sub_collections: [] }] }
+        ])
       })
     })
   })
