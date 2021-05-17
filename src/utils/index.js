@@ -65,7 +65,7 @@ export const createQueryBlockForQualityIds = (qualityIds, columnName, operator) 
  * @returns The RSQL string portion matching an AND or OR query for the filter parameters: for the selections above, it returns
  * 'country==IT;country==NL' if the satisfyAll parameter is set to true; else, it returns 'country=in=(IT,NL)'
  */
-export const createQueryWithSatisfyAll = (filterSelection, columnName, satisfyAll) => {
+export const createQuery = (filterSelection, columnName, satisfyAll) => {
   if (filterSelection && satisfyAll) {
     return {
       operator: 'AND',
