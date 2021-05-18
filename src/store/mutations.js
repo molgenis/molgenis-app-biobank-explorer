@@ -45,13 +45,8 @@ export default {
       filterValues.push(item.value)
       filterTexts.push(item.text)
     }
-    if (filterValues.length !== 0) {
-      Vue.set(state.filters.selections, name, [...new Set(filterValues)])
-      Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    } else {
-      Vue.delete(state.filters.selections, name)
-      Vue.delete(state.filters.labels, name)
-    }
+    Vue.set(state.filters.selections, name, [...new Set(filterValues)])
+    Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
     createBookmark(router, state.filters.selections, state.selectedCollections)
   },
   UpdateFilterSatisfyAll (state, { name, value, router }) {
