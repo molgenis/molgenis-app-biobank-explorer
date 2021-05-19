@@ -20,7 +20,9 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
     diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
+    createInQuery('biobank', state.biobankInANetwork),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
+    createInQuery('network', state.filters.selections.collection_network || []),
     createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
     state.filters.selections.search ? [{
       operator: 'OR',

@@ -24,6 +24,7 @@ export default {
         }
       }
       this.UpdateFilterSelection(newActiveFilters)
+      // createBookmark(this.$router, this.activeFilters, this.selectedCollections)
     }
   },
   computed: {

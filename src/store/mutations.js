@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
+import { arrayEqual } from '../utils/'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
@@ -105,12 +106,6 @@ export default {
         name: item.data.name,
         networkIds: item.data.network.items.map(item => item.data.id)
       }))
-
-    // state.biobankInfo = response.items.map(item => ({
-    //   id: item.data.id,
-    //   name: item.data.name,
-    //   networkIds: item.data.network.items.map(item => item.data.id)
-    // }))
   },
   // TODO name more specifically
   SetDictionaries (state, response) {
@@ -221,7 +216,17 @@ export default {
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
-  SetCollectionsToSelection (state, { collections, bookmark }) {
+  SetBiobankIdsInANetwork (state, response) {
+    if (response.items && response.items.length > 0) {
+      state.biobankInANetwork = [...response.items.map(ri => ri.data.id)]
+    } else {
+      const biobankNetworkFilter = state.filters.selections.biobank_network
+      const isBiobankNetworkFilterActive = (biobankNetworkFilter && biobankNetworkFilter.length > 0)
+
+      state.biobankInANetwork = isBiobankNetworkFilterActive ? ['no-biobank-found'] : []
+    }
+  },
+  SetCollectionsToSelection (state, { collections, bookmark, router }) {
     const currentIds = state.selectedCollections.map(sc => sc.value)
     const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
     state.selectedCollections = state.selectedCollections.concat(newCollections)
@@ -229,6 +234,9 @@ export default {
     if (bookmark) {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
+    // if (router) {
+    //  createBookmark(router, getActiveFilters(state, filterDefinitions(state)), state.selectedCollections)
+    // }
   },
   SetSearchHistory (state, history) {
     if (history === '') {
@@ -250,6 +258,9 @@ export default {
     if (bookmark) {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
+    // if (router) {
+    //  createBookmark(router, getActiveFilters(state, filterDefinitions(state)), state.selectedCollections)
+    // }
   },
   /**
    *
@@ -302,6 +313,13 @@ export default {
           })
         }
         Vue.set(state.filters.selections, filterName, queryValues)
+
+        // biobank network is reassigned only if the value is different
+        if (filterName !== 'biobank_network' ||
+          !state.filters.selections[filterName] ||
+          !arrayEqual(state.filters.selections[filterName], decodeURIComponent(query[filterName]).split(','))) {
+          Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
+        }
       }
     }
   },

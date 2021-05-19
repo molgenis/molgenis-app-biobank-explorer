@@ -106,6 +106,10 @@ export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll)
   return rsqlQuery
 }
 
+export const arrayEqual = (a, b) => {
+  return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((val, index) => val === b[index])
+}
+
 export default {
   getUniqueIdArray,
   createInQuery,
@@ -113,5 +117,6 @@ export default {
   diagnosisAvailableQuery,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector,
-  getBaseUrl
+  getBaseUrl,
+  arrayEqual
 }
