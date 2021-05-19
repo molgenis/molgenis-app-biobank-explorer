@@ -11,32 +11,40 @@ export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\
  * q=diagnosis_available.code=in=(C18,L40)
  * q=standards.id=in=(cen-ts-16835-1-2015,cen-ts-16827-1-2015)
  */
-export const createRSQLQuery = (state) => transformToRSQL({
-  operator: 'AND',
-  operands: flatten([
-    createInQuery('country', state.filters.selections.country || []),
-    createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
-    createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
-    createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
-    diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
-    createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
-    createInQuery('biobank', state.biobankInANetwork),
-    createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    (state.filters.selections.collection_network && state.filters.selections.collection_network.length > 0) ||
-    (state.biobankInANetwork && state.biobankInANetwork.length > 0) ? {
+export const createRSQLQuery = (state) => {
+  return transformToRSQL({
+    operator: 'AND',
+    operands: flatten([
+      createInQuery('country', state.filters.selections.country || []),
+      createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
+      createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
+      createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
+      diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
+      createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
+      createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
+      (state.filters.selections.collection_network && state.filters.selections.collection_network.length > 0) ||
+      (state.biobankInANetwork && state.biobankInANetwork.length > 0) ? {
+          operator: 'OR',
+          operands: flatten([
+            createInQuery('network', state.filters.selections.collection_network || []),
+            createInQuery('biobank', state.biobankInANetwork)
+          ])
+        } : [],
+      state.filters.selections.search && state.viewMode === 'biobankview' ? [{
         operator: 'OR',
         operands: flatten([
           createInQuery('network', state.filters.selections.collection_network || []),
           createInQuery('biobank', state.biobankInANetwork)
         ])
-      } : [],
-    state.filters.selections.search ? [{
-      operator: 'OR',
-      operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
-        .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.filters.selections.search || '' }))
-    }] : []
-  ])
-})
+      }] : [],
+      state.filters.selections.search ? [{
+        operator: 'OR',
+        operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
+          .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.filters.selections.search || '' }))
+      }] : []
+    ])
+  })
+}
 
 export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
@@ -54,11 +62,14 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
  */
 export const createNetworkRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
-  operands: flatten(
-    state.filters.selections.network_common_properties
-      ? state.filters.selections.network_common_properties.map((property) => createComparisons(property, [true]))
-      : []
-  )
+  operands: flatten([
+    flatten(
+      state.filters.selections.network_common_properties
+        ? state.filters.selections.network_common_properties.map((property) => createComparisons(property, [true]))
+        : []
+    ),
+    state.filters.selections.search ? { selector: 'name', comparison: '=q=', arguments: state.filters.selections.search } : []
+  ])
 })
 
 const createNegotiatorQueryBody = (state, getters, url) => {
@@ -182,6 +193,7 @@ export const getActiveFilters = (state, filterDefinitions) => {
 export default {
   createBiobankRSQLQuery,
   createRSQLQuery,
+  createNetworkRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,
   setLocationHref,
