@@ -22,8 +22,14 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('biobank', state.biobankInANetwork),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    createInQuery('network', state.filters.selections.collection_network || []),
-    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
+    (state.filters.selections.collection_network && state.filters.selections.collection_network.length > 0) ||
+    (state.biobankInANetwork && state.biobankInANetwork.length > 0) ? {
+        operator: 'OR',
+        operands: flatten([
+          createInQuery('network', state.filters.selections.collection_network || []),
+          createInQuery('biobank', state.biobankInANetwork)
+        ])
+      } : [],
     state.filters.selections.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
