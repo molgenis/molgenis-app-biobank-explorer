@@ -16,13 +16,13 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
-    createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.materials),
-    createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.type),
-    createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.dataType),
-    createQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.code', state.filters.satisfyAll.diagnosis_available),
-    createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.collection_quality),
+    createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
+    createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
+    createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
+    createQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.code', state.filters.satisfyAll.includes('diagnosis_available')),
+    createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.collection_network),
+    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
     state.filters.selections.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
@@ -36,8 +36,8 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
     createInQuery('id', state.biobankIdsWithSelectedQuality),
-    createQuery(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.biobank_network),
-    createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.covid19)
+    createQuery(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.includes('biobank_network')),
+    createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.includes('covid19'))
   ])
 })
 

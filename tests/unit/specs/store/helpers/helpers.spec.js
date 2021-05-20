@@ -181,7 +181,7 @@ describe('store', () => {
 
       it('should create a query with disease type filter enabling satisfy all and a country, not supporting it', () => {
         state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
-        state.filters.satisfyAll.diagnosis_available = true
+        state.filters.satisfyAll = ['diagnosis_available']
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createRSQLQuery(state)
@@ -192,10 +192,9 @@ describe('store', () => {
 
       it('should create a query with disease type and collection quality filters, both with the satisfyAll option enabled', () => {
         state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
-        state.filters.satisfyAll.diagnosis_available = true
         state.filters.selections.collection_quality = ['collection1', 'collection2']
         state.collectionIdsWithSelectedQuality = ['collection1', 'collection2']
-        state.filters.satisfyAll.collection_quality = true
+        state.filters.satisfyAll = ['diagnosis_available', 'collection_quality']
 
         const actual = helpers.createRSQLQuery(state)
         const expected = 'diagnosis_available.code==G71;diagnosis_available.code==ORPHA:10;diagnosis_available.code==ORPHA:100;id==collection1;id==collection2'
@@ -205,7 +204,7 @@ describe('store', () => {
 
       it('should create a query with materials and type, the first with the satisfyAll flag enabled and the second not', () => {
         state.filters.selections.materials = ['cDNA', 'mRNA', 'Cells']
-        state.filters.satisfyAll.materials = true
+        state.filters.satisfyAll = ['materials']
         state.filters.selections.type = ['Cohort', 'Longitudinal']
 
         const actual = helpers.createRSQLQuery(state)
@@ -219,7 +218,7 @@ describe('store', () => {
       afterEach(() => { state = getInitialState() })
       it('should create a Biobank query with a covid19 filter and the satisfy all flag enabled', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll.covid19 = true
+        state.filters.satisfyAll = ['covid19']
 
         const actual = helpers.createBiobankRSQLQuery(state)
         const expected = 'covid19biobank==covid_1;covid19biobank==covid_2'
@@ -229,9 +228,8 @@ describe('store', () => {
 
       it('should create a Biobank query with a covid19 filter and a network filter, both with the satisfy all flag enabled', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll.covid19 = true
         state.filters.selections.biobank_network = ['network_1', 'network_2']
-        state.filters.satisfyAll.biobank_network = true
+        state.filters.satisfyAll = ['covid19', 'biobank_network']
 
         const actual = helpers.createBiobankRSQLQuery(state)
         const expected = 'network==network_1;network==network_2;covid19biobank==covid_1;covid19biobank==covid_2'
@@ -241,9 +239,8 @@ describe('store', () => {
 
       it('should create a Biobank query with a covid19 filter and a network filter, the first with satisfyAll flag enabled, the second not', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll.covid19 = true
         state.filters.selections.biobank_network = ['network_1', 'network_2']
-        state.filters.satisfyAll.biobank_network = false
+        state.filters.satisfyAll = ['covid19']
 
         const actual = helpers.createBiobankRSQLQuery(state)
         const expected = 'network=in=(network_1,network_2);covid19biobank==covid_1;covid19biobank==covid_2'
@@ -253,7 +250,7 @@ describe('store', () => {
 
       it('should create a Biobank query with a covid19 filter and country filter. For country, satisfyAll is not supported', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll.covid19 = true
+        state.filters.satisfyAll = ['covid19']
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createBiobankRSQLQuery(state)

@@ -80,9 +80,16 @@ describe('store', () => {
 
     describe('UpdatFilterSatisfyAll', () => {
       it('can set to a specific filter the satisfy all value to true/false', () => {
-        state.filters.satisfyAll.covid19 = false
         mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true, router: [] })
-        expect(state.filters.satisfyAll.covid19).toStrictEqual(true)
+        expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(true)
+      })
+
+      it('can delete the entry in the satisfyAll array if its filter\'s satisfyAll flag value changes', () => {
+        state.filters.satisfyAll = ['diagnosis_available', 'covid19', 'materials']
+        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: false, router: [] })
+        expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(false)
+        expect(state.filters.satisfyAll.includes('diagnosis_available')).toStrictEqual(true)
+        expect(state.filters.satisfyAll.includes('materials')).toStrictEqual(true)
       })
     })
 

@@ -112,7 +112,7 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.biobank_quality = ['accredited', 'eric']
-        state.filters.satisfyAll.biobank_quality = true
+        state.filters.satisfyAll = ['biobank_quality']
         const commit = jest.fn()
 
         await actions.GetBiobankIdsForQuality({ state, commit })
@@ -205,7 +205,7 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.collection_quality = ['accredited', 'eric']
-        state.filters.satisfyAll.collection_quality = true
+        state.filters.satisfyAll = ['collection_quality']
         const commit = jest.fn()
 
         await actions.GetCollectionIdsForQuality({ state, commit })

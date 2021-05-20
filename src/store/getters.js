@@ -95,8 +95,8 @@ export default {
   selectedCollectionQuality: state => {
     return state.filters.selections.collection_quality
   },
-  satisfyAllBiobankQuality: state => state.filters.satisfyAll.biobank_quality,
-  satisfyAllCollectionQuality: state => state.filters.satisfyAll.collection_quality,
+  satisfyAllBiobankQuality: state => state.filters.satisfyAll.includes('biobank_quality'),
+  satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,

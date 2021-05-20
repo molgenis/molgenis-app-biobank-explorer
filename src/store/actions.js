@@ -60,8 +60,8 @@ export default {
       const query = encodeRsqlValue(transformToRSQL({
         operator: 'AND',
         operands: flatten([
-          state.filters.satisfyAll.collection_quality
-            ? createQuery(qualityIds, selection, state.filters.satisfyAll.collection_quality)
+          state.filters.satisfyAll.includes('collection_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('collection_quality'))
             : createInQuery(selection, qualityIds)
         ])
       }
@@ -82,8 +82,8 @@ export default {
       const query = encodeRsqlValue(transformToRSQL({
         operator: 'AND',
         operands: flatten([
-          state.filters.satisfyAll.biobank_quality
-            ? createQuery(qualityIds, selection, state.filters.satisfyAll.biobank_quality)
+          state.filters.satisfyAll.includes('biobank_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('biobank_quality'))
             : createInQuery(selection, qualityIds)
         ])
       }

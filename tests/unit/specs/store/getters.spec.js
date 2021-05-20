@@ -31,7 +31,7 @@ describe('store', () => {
       it('should create AND/OR filters for covid19 biobank filter values according to satisfyAll options', () => {
         state.filters.selections.search = 'Cell&Co'
         state.filters.selections.covid19 = ['covid19', 'covid19a']
-        if (state.filters.satisfyAll.covid19 === true) {
+        if (state.filters.satisfyAll.includes('covid19')) {
           expect(getters.biobankRsql(state)).toEqual('covid19biobank==covid19;covid19biobank==covid19a')
         } else {
           expect(getters.biobankRsql(state)).toEqual('covid19biobank=in=(covid19,covid19a)')
@@ -292,7 +292,7 @@ describe('store', () => {
     describe('Biobank Quality Getters', () => {
       const state = mockState()
       state.filters.selections.biobank_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll.biobank_quality = true
+      state.filters.satisfyAll = ['biobank_quality']
 
       it('should return biobank quality and satisfyAll flag', () => {
         const biobankQualityInfo = getters.selectedBiobankQuality(state)
@@ -304,7 +304,7 @@ describe('store', () => {
     describe('Collections Quality Getters', () => {
       const state = mockState()
       state.filters.selections.collection_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll.collection_quality = true
+      state.filters.satisfyAll = ['collection_quality']
 
       it('should return biobank quality and satisfyAll flag', () => {
         const biobankQualityInfo = getters.selectedCollectionQuality(state)
