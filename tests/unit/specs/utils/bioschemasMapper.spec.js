@@ -1,6 +1,6 @@
 import {
-  mapBiobankDataCatalog,
-  mapCollectionsData
+  mapBiobankToBioschemas,
+  mapCollectionToBioschemas
 } from '../../../../src/utils/bioschemasMapper'
 
 describe('bioschemasMapper', () => {
@@ -177,7 +177,7 @@ describe('bioschemasMapper', () => {
         _href: '/api/v2/eu_bbmri_eric_collections/c-001',
         id: 'c-001',
         name: 'beautiful collection',
-        description: 'beautiful collection description',
+        description: 'beautiful collection description'
       }
     ],
     collaboration_commercial: true,
@@ -209,7 +209,7 @@ describe('bioschemasMapper', () => {
         _href: '/api/v2/eu_bbmri_eric_collections/c-001',
         id: 'c-001',
         name: 'beautiful collection',
-        description: 'beautiful collection description',
+        description: 'beautiful collection description'
       }
     ],
     collaboration_commercial: true,
@@ -267,7 +267,7 @@ describe('bioschemasMapper', () => {
         _href: '/api/v2/eu_bbmri_eric_collections/c-001',
         id: 'c-001',
         name: 'beautiful collection',
-        description: 'beautiful collection description',
+        description: 'beautiful collection description'
       }
     ],
     collaboration_commercial: true,
@@ -375,7 +375,7 @@ describe('bioschemasMapper', () => {
           value: '666'
         }]
       }
-      const actual = mapCollectionsData(collectionData)
+      const actual = mapCollectionToBioschemas(collectionData)
       expect(actual).toStrictEqual(expected)
     })
   })
@@ -419,7 +419,7 @@ describe('bioschemasMapper', () => {
         }],
         identifier: 'b-001'
       }
-      const actual = mapBiobankDataCatalog(biobankData)
+      const actual = mapBiobankToBioschemas(biobankData)
       expect(actual).toStrictEqual(expected)
     })
   })
@@ -463,7 +463,7 @@ describe('bioschemasMapper', () => {
         }],
         identifier: 'b-001'
       }
-      const actual = mapBiobankDataCatalog(biobankDataIncompleteContact)
+      const actual = mapBiobankToBioschemas(biobankDataIncompleteContact)
       expect(actual).toStrictEqual(expected)
     })
   })
@@ -499,7 +499,7 @@ describe('bioschemasMapper', () => {
         }],
         identifier: 'b-001'
       }
-      const actual = mapBiobankDataCatalog(biobankDataNoContact)
+      const actual = mapBiobankToBioschemas(biobankDataNoContact)
       expect(actual).toStrictEqual(expected)
     })
   })

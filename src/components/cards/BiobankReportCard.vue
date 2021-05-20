@@ -1,6 +1,6 @@
 <template>
   <div class="mg-biobank-card container">
-    <script v-html='jsonld' type='application/ld+json' />
+    <script v-text='bioschemasJsonld' type='application/ld+json' />
     <loading
       :active="isLoading"
       loader="dots"
@@ -74,7 +74,7 @@ import {
 } from '../../utils/templateMapper'
 
 import {
-  mapBiobankDataCatalog
+  mapBiobankToBioschemas
 } from '@/utils/bioschemasMapper'
 
 export default {
@@ -129,8 +129,8 @@ export default {
         }
       } else return ''
     },
-    jsonld () {
-      return this.biobankDataAvailable ? mapBiobankDataCatalog(this.biobank) : {}
+    bioschemasJsonld () {
+      return this.biobankDataAvailable ? mapBiobankToBioschemas(this.biobank) : {}
     }
   },
   methods: {

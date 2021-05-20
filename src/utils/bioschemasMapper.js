@@ -120,7 +120,7 @@ const getCollectionAdditionalProperty = (data, propertyName) => {
   }
 }
 
-export const mapCollectionsData = (collection) => {
+export const mapCollectionToBioschemas = (collection) => {
   const jsonld = {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
@@ -153,7 +153,7 @@ export const mapCollectionsData = (collection) => {
   return jsonld
 }
 
-export const mapBiobankDataCatalog = (biobank) => {
+export const mapBiobankToBioschemas = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
