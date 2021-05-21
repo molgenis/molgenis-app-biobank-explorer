@@ -1,5 +1,6 @@
 <template>
   <div class="container mg-collection-report-card">
+    <script v-text='bioschemasJsonld' type='application/ld+json' />
     <loading :active="isLoading" loader="dots" :is-full-page="true" color="var(--secondary)" background-color="var(--light)"></loading>
     <div class="container-fluid">
       <!-- Back to previous page buttons -->
@@ -76,8 +77,8 @@ import ReportListRow from '@/components/report-components/ReportListRow'
 import ReportSubCollection from '@/components/report-components/ReportSubCollection'
 import CollectionReportInfoCard from '@/components/cards/CollectionReportInfoCard'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
-
 import { mapDetailsTableContent, mapCollectionsData, collectionReportInformation } from '@/utils/templateMapper'
+import { mapCollectionToBioschemas } from '@/utils/bioschemasMapper'
 
 export default {
   name: 'CollectionReport',
@@ -115,6 +116,9 @@ export default {
     collectionId () {
       const splittedUrl = this.$route.fullPath.split('/')
       return splittedUrl[splittedUrl.length - 1]
+    },
+    bioschemasJsonld () {
+      return this.collection ? mapCollectionToBioschemas(this.collection) : {}
     }
   },
   // needed because if we route back the component is not destroyed but its props are updated for other collection

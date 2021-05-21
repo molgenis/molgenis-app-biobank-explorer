@@ -20,6 +20,7 @@ describe('CollectionReport', () => {
       name: 'beautiful collection',
       description: 'beautiful samples',
       order_of_magnitude: {
+        _href: '/api/v2/eu_bbmri_eric_biobank_size/3',
         size: '666'
       },
       country: {
