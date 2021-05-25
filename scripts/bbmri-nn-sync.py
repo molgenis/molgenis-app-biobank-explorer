@@ -16,19 +16,33 @@ targetSession = Session(url=target)
 targetSession.login(username=username,password=password)
 
 # api can handle 10.000 max per request
-def get_10k_ids(target, entity):
-    data = target.get(entity=entity, num=10000)
+def get_10k_ids(target, entity, start = 0):
+    data = target.get(entity=entity, num=10000, start=start)
     return [item['id'] for item in data]
 
+def get_all_ids(target, entity):
+    ids = []
+    currentLen = 0
+    while True:
+       if currentLen is 0 :
+           ids = get_10k_ids(target=target, entity=entity, start=currentLen)
+       else:
+           print('here')
+           ids.extend(get_10k_ids(target=target, entity=entity, start=currentLen))
+           ids =list(set(ids))
+
+       if currentLen == len(ids):
+            break
+       currentLen = len(ids)
+
+    return ids
+    
+
 def wipe_table(target, entity):
-    ids = get_10k_ids(target=target, entity=entity)
+    ids = get_all_ids(target=target, entity=entity)
+
     if len(ids) > 0:
         target.delete_list(entity, ids)
-    
-    # Sanity check
-    idsLeft = get_10k_ids(target=target, entity=entity)
-    if len(idsLeft) > 0:
-        wipe_table(target=target,entity=entity)
 
 def get_one_to_manys(source, entity):
     '''Retrieves one-to-many's in table'''
