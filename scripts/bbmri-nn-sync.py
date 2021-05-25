@@ -27,7 +27,6 @@ def get_all_ids(target, entity):
        if currentLen is 0 :
            ids = get_10k_ids(target=target, entity=entity, start=currentLen)
        else:
-           print('here')
            ids.extend(get_10k_ids(target=target, entity=entity, start=currentLen))
            ids =list(set(ids))
 
