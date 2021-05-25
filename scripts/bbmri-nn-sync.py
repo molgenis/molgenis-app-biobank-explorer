@@ -1,7 +1,7 @@
 from molgenis.client import Session
 from dev import config
 
-target = config['TARGET'] 
+target = config['TARGET']
 username = config["USERNAME"]
 password = config["PASSWORD"]
 external_national_nodes = config['NODES']
@@ -11,49 +11,46 @@ package = "eu_bbmri_eric_"
 importTableSequence = ["persons", "networks", "biobanks", "collections"]
 deleteTableSequence = reversed(importTableSequence)
 
-
 targetSession = Session(url=target)
-targetSession.login(username=username,password=password)
+targetSession.login(username=username, password=password)
 
-# api can handle 10.000 max per request
-def get_10k_ids(target, entity, start = 0):
-    data = target.get(entity=entity, num=10000, start=start)
+def get_all_rows(session, entity):
+    data = []
+    while True:
+        if len(data) is 0:
+            # api can handle 10.000 max per request
+            data = session.get(entity=entity, num=10000, start=len(data))
+        else:
+            newdata = session.get(entity=entity, num=10000, start=len(data))
+            if len(newdata) > 0:
+                data.extend(data)
+            else:
+                break
+
+    return data
+
+def get_all_ids(session, entity):
+    data = get_all_rows(session=session, entity=entity)
     return [item['id'] for item in data]
 
-def get_all_ids(target, entity):
-    ids = []
-    currentLen = 0
-    while True:
-       if currentLen is 0 :
-           ids = get_10k_ids(target=target, entity=entity, start=currentLen)
-       else:
-           ids.extend(get_10k_ids(target=target, entity=entity, start=currentLen))
-           ids =list(set(ids))
-
-       if currentLen == len(ids):
-            break
-       currentLen = len(ids)
-
-    return ids
-    
-
-def wipe_table(target, entity):
-    ids = get_all_ids(target=target, entity=entity)
-
+def remove_rows(session, entity, ids):
     if len(ids) > 0:
-        target.delete_list(entity, ids)
+        session.delete_list(entity, ids)
 
-def get_one_to_manys(source, entity):
+def get_one_to_manys(session, entity):
     '''Retrieves one-to-many's in table'''
-    meta = source.get_entity_meta_data(entity)['attributes']
-    one_to_manys = [attr for attr in meta if meta[attr]['fieldType'] == "ONE_TO_MANY"]
+    meta = session.get_entity_meta_data(entity)['attributes']
+    one_to_manys = [attr for attr in meta if meta[attr]
+                    ['fieldType'] == "ONE_TO_MANY"]
     return one_to_manys
 
-def get_molgenis_upload_format(source, entity):
-    data = source.get(entity=entity, num=10000)
-    one_to_manys = get_one_to_manys(source=source, entity=entity)
+
+def get_molgenis_upload_format(session, entity):
+    # will have to change this eventually
+    data = session.get(entity=entity, num=10000)
+    one_to_manys = get_one_to_manys(session=session, entity=entity)
     upload_format = []
-    for _, item in enumerate(data):
+    for item in data:
         new_item = item
         del new_item['_href']
         for one_to_many in one_to_manys:
@@ -70,27 +67,52 @@ def get_molgenis_upload_format(source, entity):
         upload_format.append(new_item)
     return upload_format
 
+
+def processExternalNationalNode(national_node):
+    print("Processing", national_node["source"])
+    sourceSession = Session(url=national_node["source"])
+    targetTablePrefix = f"{package}{national_node['country']}_"
+    targetIdsPerTable = {}
+    # sourceIdsPerTable = {}
+
+    # remove all data in tables
+    for tableName in deleteTableSequence:
+        print("Clearing data from", tableName)
+        targetTable = f"{targetTablePrefix}{tableName}"
+
+        ids = get_all_ids(session=targetSession, entity=targetTable)
+        
+        # save this to a dictionary, so we can compare for deletions of source
+        targetIdsPerTable[tableName] = ids
+        remove_rows(session=targetSession, entity=targetTable, ids=ids)
+
+    print("\n\r")
+
+    # imports
+    for tableName in importTableSequence:
+        print("Importing data to", tableName)
+        sourceTable = f"{package}{tableName}"
+        targetTable = f"{targetTablePrefix}{tableName}"
+
+        combinedTable = f"{package}{tableName}"
+
+        sourceData = get_molgenis_upload_format(
+            session=sourceSession, entity=sourceTable)
+        if len(sourceData) > 0:
+            targetSession.add_all(entity=targetTable, entities=sourceData)
+    print("Done")
+
+
 def grabDataFromExternalNodes():
     for national_node in external_national_nodes:
-        print("Processing", national_node["source"])
-        sourceSession = Session(url=national_node["source"])
-        targetTablePrefix = f"{package}{national_node['country']}_"
-        
-        # remove all data in tables
-        for tableName in deleteTableSequence:
-            print("Clearing data from", tableName, "on", target)
-            targetTable = f"{targetTablePrefix}{tableName}"
-            wipe_table(target=targetSession, entity=targetTable)
+        processExternalNationalNode(national_node=national_node)
 
-        print("\n\r")
-        # imports
-        for tableName in importTableSequence:
-            print("Importing data to", tableName, "on", target)
-            sourceTable = f"{package}{tableName}"
-            targetTable = f"{targetTablePrefix}{tableName}"
-            sourceData = get_molgenis_upload_format(source=sourceSession, entity=sourceTable)
-            if len(sourceData) > 0:
-                targetSession.add_all(entity=targetTable, entities=sourceData)
-        print("Done")
 
 grabDataFromExternalNodes()
+
+
+# loop over nodes
+# get current and new ids, keep them in a list
+# compare them
+# delete ids not in list on target
+# update others
