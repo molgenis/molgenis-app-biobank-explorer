@@ -1,25 +1,16 @@
 from molgenis.client import Session
+from dev import config
 
-# DEVELOPMENT CODE
-from dotenv import dotenv_values 
-config = dotenv_values(".env.local")
-## END OF DEVELOPMENT CODE
-
-# replace & remove these values in production
 target = config['TARGET'] 
 username = config["USERNAME"]
 password = config["PASSWORD"]
-#
+external_national_nodes = config['NODES']
 
 package = "eu_bbmri_eric_"
 
 importTableSequence = ["persons", "networks", "biobanks", "collections"]
 deleteTableSequence = reversed(importTableSequence)
 
-sources = [{
-    "country": 'NL',
-    "source": 'https://catalogue.bbmri.nl/api/'
-}]
 
 targetSession = Session(url=target)
 targetSession.login(username=username,password=password)
@@ -66,19 +57,27 @@ def get_molgenis_upload_format(source, entity):
         upload_format.append(new_item)
     return upload_format
 
-for national_node in sources:
-    sourceSession = Session(url=national_node["source"])
-    targetTablePrefix = f"{package}{national_node['country']}_"
-    
-    # remove all data in tables
-    for tableName in deleteTableSequence:
-        targetTable = f"{targetTablePrefix}{tableName}"
-        wipe_table(target=targetSession, entity=targetTable)
+def grabDataFromExternalNodes():
+    for national_node in external_national_nodes:
+        print("Processing", national_node["source"])
+        sourceSession = Session(url=national_node["source"])
+        targetTablePrefix = f"{package}{national_node['country']}_"
+        
+        # remove all data in tables
+        for tableName in deleteTableSequence:
+            print("Clearing data from", tableName, "on", target)
+            targetTable = f"{targetTablePrefix}{tableName}"
+            wipe_table(target=targetSession, entity=targetTable)
 
-    # imports
-    for tableName in importTableSequence:
-        sourceTable = f"{package}{tableName}"
-        targetTable = f"{targetTablePrefix}{tableName}"
-        sourceData = get_molgenis_upload_format(source=sourceSession, entity=sourceTable)
-        if len(sourceData) > 0:
-            targetSession.add_all(entity=targetTable, entities=sourceData)
+        print("\n\r")
+        # imports
+        for tableName in importTableSequence:
+            print("Importing data to", tableName, "on", target)
+            sourceTable = f"{package}{tableName}"
+            targetTable = f"{targetTablePrefix}{tableName}"
+            sourceData = get_molgenis_upload_format(source=sourceSession, entity=sourceTable)
+            if len(sourceData) > 0:
+                targetSession.add_all(entity=targetTable, entities=sourceData)
+        print("Done")
+
+grabDataFromExternalNodes()
