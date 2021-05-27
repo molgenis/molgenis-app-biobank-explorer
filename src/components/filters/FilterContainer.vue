@@ -15,6 +15,7 @@
         v-if="bookmarkMappedToState"
         :is="filter.component"
         :value="activeFilters[filter.name]"
+        :satisfyAllValue="filter.satisfyAll"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
         @satisfyAll="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"

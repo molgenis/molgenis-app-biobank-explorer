@@ -47,7 +47,7 @@ export default {
     }
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
     Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    createBookmark(router, state.filters.selections, state.selectedCollections)
+    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
   UpdateFilterSatisfyAll (state, { name, value, router }) {
     if (value && state.filters.satisfyAll.indexOf(name) === -1) {
@@ -58,6 +58,7 @@ export default {
       }
     }
     Vue.set(state.filters.satisfyAll)
+    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
 
   UpdateAllFilters (state, selections) {
@@ -214,6 +215,10 @@ export default {
 
     if (query.nToken) {
       state.nToken = query.nToken
+    }
+
+    if (query.satisfyAll) {
+      Vue.set(state.filters, 'satisfyAll', decodeURIComponent(query.satisfyAll).split(','))
     }
 
     if (query.cart) {

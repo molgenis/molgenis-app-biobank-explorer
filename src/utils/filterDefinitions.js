@@ -25,6 +25,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_COVID_19'),
     initiallyCollapsed: !state.route.query.covid19,
     filters: state.filters.selections.covid19,
+    satisfyAll: state.filters.satisfyAll.includes('covid19'),
     all: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Covid-19 service(s):'
@@ -38,6 +39,7 @@ const filterDefinitions = (state) => [
     maxVisibleOptions: 10,
     table: 'eu_bbmri_eric_disease_types',
     options: diagnosisAvailableFilterOptions('eu_bbmri_eric_disease_types'),
+    satisfyAll: state.filters.satisfyAll.includes('diagnosis_available'),
     initiallyCollapsed: !state.route.query.diagnosis_available,
     humanReadableString: 'Disease type(s):'
   },
@@ -50,6 +52,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_material_types'),
     initiallyCollapsed: !state.route.query.materials,
     filters: state.filters.selections.materials,
+    satisfyAll: state.filters.satisfyAll.includes('materials'),
     maxVisibleOptions: 25,
     humanReadableString: 'Material type(s):'
   },
@@ -75,6 +78,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_assess_level_bio'),
     initiallyCollapsed: !state.route.query.biobank_quality,
     filters: state.filters.selections.biobank_quality,
+    satisfyAll: state.filters.satisfyAll.includes('biobank_quality'),
     maxVisibleOptions: 25,
     humanReadableString: 'Biobank quality mark(s):'
   },
@@ -87,6 +91,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_assess_level_col'),
     initiallyCollapsed: !state.route.query.collection_quality,
     filters: state.filters.selections.collection_quality,
+    satisfyAll: state.filters.satisfyAll.includes('collection_quality'),
     maxVisibleOptions: 25,
     humanReadableString: 'Collection quality mark(s):'
   },
@@ -99,6 +104,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_collection_types'),
     initiallyCollapsed: !state.route.query.type,
     filters: state.filters.selections.type,
+    satisfyAll: state.filters.satisfyAll.includes('type'),
     maxVisibleOptions: 25,
     humanReadableString: 'Collection type(s):'
   },
@@ -123,6 +129,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_networks'),
     initiallyCollapsed: !state.route.query.biobank_network,
     filters: state.filters.selections.biobank_network,
+    satisfyAll: state.filters.satisfyAll.includes('biobank_network'),
     maxVisibleOptions: 25,
     humanReadableString: 'Biobank with network(s):'
   },
@@ -135,6 +142,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_networks'),
     initiallyCollapsed: !state.route.query.collection_network,
     filters: state.filters.selections.collection_network,
+    satisfyAll: state.filters.satisfyAll.includes('collection_network'),
     maxVisibleOptions: 25,
     humanReadableString: 'Collection with network(s):'
   },
@@ -147,6 +155,7 @@ const filterDefinitions = (state) => [
     options: genericFilterOptions('eu_bbmri_eric_data_types'),
     initiallyCollapsed: !state.route.query.dataType,
     filters: state.filters.selections.dataType,
+    satisfyAll: state.filters.satisfyAll.includes('dataType'),
     maxVisibleOptions: 25,
     humanReadableString: 'Data type(s):'
   }
