@@ -1,14 +1,15 @@
 from molgenis.client import Session
+from bbmri_validations import validate_bbmri_id
 from dev import config
 
 target = config['TARGET']
 username = config["USERNAME"]
 password = config["PASSWORD"]
-externalNationalNodes = config['NODES']
+externalNationalNodes = config['NODES'] 
 
 package = "eu_bbmri_eric_"
 
-importTableSequence = ["persons", "networks", "biobanks", "collections"]
+importTableSequence = ["persons", "networks","biobanks", "collections" ]
 deleteTableSequence = reversed(importTableSequence)
 
 targetSession = Session(url=target)
@@ -17,9 +18,10 @@ targetSession.login(username=username, password=password)
 def get_all_rows(session, entity):
     data = []
     while True:
-        if len(data) is 0:
+        if len(data) == 0:
             # api can handle 10.000 max per request
             data = session.get(entity=entity, num=10000, start=len(data))
+            if len(data) == 0: break # if the table is empty
         else:
             newdata = session.get(entity=entity, num=10000, start=len(data))
             if len(newdata) > 0:
@@ -44,7 +46,7 @@ def get_one_to_manys(session, entity):
     return one_to_manys
 
 
-def transform_to_molgenis_upload_format(session, entity, data):
+def prepare_data_for_upload(session, entity, data, nn):
     one_to_manys = get_one_to_manys(session=session, entity=entity)
     upload_format = []
     for item in data:
@@ -55,67 +57,68 @@ def transform_to_molgenis_upload_format(session, entity, data):
         for key in new_item:
             if type(new_item[key]) is dict:
                 ref = new_item[key]['id']
-                new_item[key] = ref
+                if validate_bbmri_id(entity=entity, bbmriId=ref, nn=nn):
+                    new_item[key] = ref
             elif type(new_item[key]) is list:
                 if len(new_item[key]) > 0:
-                    # get id for each new_item in list
-                    mref = [l['id'] for l in new_item[key]]
-                    new_item[key] = mref
+                    valid_mrefs = []
+
+                    for item in new_item[key]:
+                        bbmriId = item["id"]
+                        if validate_bbmri_id(entity=entity, bbmriId=bbmriId, nn=nn):
+                            valid_mrefs.append(bbmriId)
+
+                    new_item[key] = valid_mrefs                                   
+                    
         upload_format.append(new_item)
     return upload_format
 
 
 def process_external_national_node(nationalNode):
+    nn = nationalNode['country']
     print("Processing", nationalNode["source"])
     sourceSession = Session(url=nationalNode["source"])
-    targetTablePrefix = f"{package}{nationalNode['country']}_"
-    targetEntityCache = {}
+    targetTablePrefix = f"{package}{nn}_"
 
     # remove all data in tables
     for tableName in deleteTableSequence:
-        print("Clearing data from", tableName)
         targetTable = f"{targetTablePrefix}{tableName}"
+        targetCombinedTable = f"{package}{tableName}"
 
+        print("Fetching data from", target, targetCombinedTable)
         targetData = get_all_rows(session=targetSession, entity=targetTable)
         ids = get_all_ids(targetData)
 
-        # save this to a dictionary, so we can compare for deletions of source
-        targetEntityCache[targetTable]["data"] = targetData
-        targetEntityCache[targetTable]["ids"] = ids
-
+        # delete from node specific
+        print("Clearing data from", targetTable, targetCombinedTable)
         remove_rows(session=targetSession, entity=targetTable, ids=ids)
 
-    print("\n\r")
+        # delete from combined
+        remove_rows(session=targetSession, entity=targetCombinedTable, ids=ids)
 
-    removedFromSource = {}
+    print("\n\r")
 
     # imports
     for tableName in importTableSequence:
         print("Importing data to", tableName)
+
         sourceTable = f"{package}{tableName}"
         sourceData = get_all_rows(session=sourceSession, entity=sourceTable)
-        sourceDataIds = get_all_ids(sourceData)
+
+        sourceIds = get_all_ids(sourceData)
+        validatedIds = [bbmriId for bbmriId in sourceIds if validate_bbmri_id(entity=tableName, nn=nn, bbmriId=bbmriId)]
+
+        validatedSourceData = [data for data in sourceData if sourceData["id"] in validatedIds]
         
         targetTable = f"{targetTablePrefix}{tableName}"
-        cachedTargetIds = targetEntityCache[targetTable]["ids"]
         targetCombinedTable = f"{package}{tableName}"
 
-        ## compare cache with actual data and add id's if any, to delete them afterwards
-        removedFromSource[targetCombinedTable] = [dataId for dataId in cachedTargetIds if dataId not in sourceDataIds]
-
+        # import all the data
         if len(sourceData) > 0:
-            preppedSourceData = transform_to_molgenis_upload_format(
-            session=sourceSession, entity=sourceTable, data=sourceData)
-            targetSession.add_all(entity=targetTable, entities=preppedSourceData)
-
-    # cleanup
-    for tableName in deleteTableSequence:
-        targetCombinedTable = f"{package}{tableName}"
-        entriesToDelete = removedFromSource[targetCombinedTable]
-
-        if len(entriesToDelete) > 0:
-            print("Removing", len(entriesToDelete), "entries from", targetCombinedTable)
-            remove_rows(session=targetSession, entity=targetCombinedTable, ids=entriesToDelete)
+            preppedSourceData = prepare_data_for_upload(
+            session=sourceSession, entity=sourceTable, data=validatedSourceData, nn=nn)
+            targetSession.add_all(entity=targetTable, entities=preppedSourceData) # add to node specific table
+            targetSession.add_all(entity=targetCombinedTable, entities=preppedSourceData) # add to combined
     
     print("Done")
 
