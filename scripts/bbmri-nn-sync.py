@@ -4,7 +4,7 @@ from dev import config
 target = config['TARGET']
 username = config["USERNAME"]
 password = config["PASSWORD"]
-external_national_nodes = config['NODES']
+externalNationalNodes = config['NODES']
 
 package = "eu_bbmri_eric_"
 
@@ -29,8 +29,7 @@ def get_all_rows(session, entity):
 
     return data
 
-def get_all_ids(session, entity):
-    data = get_all_rows(session=session, entity=entity)
+def get_all_ids(data):
     return [item['id'] for item in data]
 
 def remove_rows(session, entity, ids):
@@ -45,9 +44,7 @@ def get_one_to_manys(session, entity):
     return one_to_manys
 
 
-def get_molgenis_upload_format(session, entity):
-    # will have to change this eventually
-    data = session.get(entity=entity, num=10000)
+def transform_to_molgenis_upload_format(session, entity, data):
     one_to_manys = get_one_to_manys(session=session, entity=entity)
     upload_format = []
     for item in data:
@@ -68,47 +65,67 @@ def get_molgenis_upload_format(session, entity):
     return upload_format
 
 
-def processExternalNationalNode(national_node):
-    print("Processing", national_node["source"])
-    sourceSession = Session(url=national_node["source"])
-    targetTablePrefix = f"{package}{national_node['country']}_"
-    targetIdsPerTable = {}
-    # sourceIdsPerTable = {}
+def process_external_national_node(nationalNode):
+    print("Processing", nationalNode["source"])
+    sourceSession = Session(url=nationalNode["source"])
+    targetTablePrefix = f"{package}{nationalNode['country']}_"
+    targetEntityCache = {}
 
     # remove all data in tables
     for tableName in deleteTableSequence:
         print("Clearing data from", tableName)
         targetTable = f"{targetTablePrefix}{tableName}"
 
-        ids = get_all_ids(session=targetSession, entity=targetTable)
-        
+        targetData = get_all_rows(session=targetSession, entity=targetTable)
+        ids = get_all_ids(targetData)
+
         # save this to a dictionary, so we can compare for deletions of source
-        targetIdsPerTable[tableName] = ids
+        targetEntityCache[targetTable]["data"] = targetData
+        targetEntityCache[targetTable]["ids"] = ids
+
         remove_rows(session=targetSession, entity=targetTable, ids=ids)
 
     print("\n\r")
+
+    removedFromSource = {}
 
     # imports
     for tableName in importTableSequence:
         print("Importing data to", tableName)
         sourceTable = f"{package}{tableName}"
+        sourceData = get_all_rows(session=sourceSession, entity=sourceTable)
+        sourceDataIds = get_all_ids(sourceData)
+        
         targetTable = f"{targetTablePrefix}{tableName}"
+        cachedTargetIds = targetEntityCache[targetTable]["ids"]
+        targetCombinedTable = f"{package}{tableName}"
 
-        combinedTable = f"{package}{tableName}"
+        ## compare cache with actual data and add id's if any, to delete them afterwards
+        removedFromSource[targetCombinedTable] = [dataId for dataId in cachedTargetIds if dataId not in sourceDataIds]
 
-        sourceData = get_molgenis_upload_format(
-            session=sourceSession, entity=sourceTable)
         if len(sourceData) > 0:
-            targetSession.add_all(entity=targetTable, entities=sourceData)
+            preppedSourceData = transform_to_molgenis_upload_format(
+            session=sourceSession, entity=sourceTable, data=sourceData)
+            targetSession.add_all(entity=targetTable, entities=preppedSourceData)
+
+    # cleanup
+    for tableName in deleteTableSequence:
+        targetCombinedTable = f"{package}{tableName}"
+        entriesToDelete = removedFromSource[targetCombinedTable]
+
+        if len(entriesToDelete) > 0:
+            print("Removing", len(entriesToDelete), "entries from", targetCombinedTable)
+            remove_rows(session=targetSession, entity=targetCombinedTable, ids=entriesToDelete)
+    
     print("Done")
 
 
-def grabDataFromExternalNodes():
-    for national_node in external_national_nodes:
-        processExternalNationalNode(national_node=national_node)
+def sync_eric_with_national_nodes():
+    for nationalNode in externalNationalNodes:
+        process_external_national_node(nationalNode=nationalNode)
 
 
-grabDataFromExternalNodes()
+sync_eric_with_national_nodes()
 
 
 # loop over nodes
