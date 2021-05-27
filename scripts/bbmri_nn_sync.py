@@ -1,19 +1,21 @@
 from molgenis.client import Session
-from bbmri_validations import validate_bbmri_id
+from bbmri_validations import validate_bbmri_id, validate_bbmri_ref_id
 from dev import config
 
 target = config['TARGET']
 username = config["USERNAME"]
 password = config["PASSWORD"]
-externalNationalNodes = config['NODES'] 
+externalNationalNodes = config['NODES']
 
 package = "eu_bbmri_eric_"
 
-importTableSequence = ["persons", "networks","biobanks", "collections" ]
-deleteTableSequence = reversed(importTableSequence)
+importTableSequence = ["persons","networks", "biobanks", "collections"]
+deleteTableSequence = ["collections", "biobanks",
+    "networks", "persons"]  # there is a slight difference
 
 targetSession = Session(url=target)
 targetSession.login(username=username, password=password)
+
 
 def get_all_rows(session, entity):
     data = []
@@ -21,7 +23,7 @@ def get_all_rows(session, entity):
         if len(data) == 0:
             # api can handle 10.000 max per request
             data = session.get(entity=entity, num=10000, start=len(data))
-            if len(data) == 0: break # if the table is empty
+            if len(data) == 0: break  # if the table is empty
         else:
             newdata = session.get(entity=entity, num=10000, start=len(data))
             if len(newdata) > 0:
@@ -31,12 +33,15 @@ def get_all_rows(session, entity):
 
     return data
 
+
 def get_all_ids(data):
     return [item['id'] for item in data]
+
 
 def remove_rows(session, entity, ids):
     if len(ids) > 0:
         session.delete_list(entity, ids)
+
 
 def get_one_to_manys(session, entity):
     '''Retrieves one-to-many's in table'''
@@ -46,7 +51,35 @@ def get_one_to_manys(session, entity):
     return one_to_manys
 
 
-def prepare_data_for_upload(session, entity, data, nn):
+# def prepare_data_for_upload(session, entity, data):
+#     one_to_manys = get_one_to_manys(session=session, entity=entity)
+#     upload_format = []
+#     for item in data:
+#         new_item = item
+#         del new_item['_href']
+#         for one_to_many in one_to_manys:
+#             del new_item[one_to_many]
+#         for key in new_item:
+#             if type(new_item[key]) is dict:
+#                 ref = new_item[key]['id']
+#                 if validate_bbmri_ref_id(bbmriId=ref):
+#                     new_item[key] =  ",".join(ref)
+#             elif type(new_item[key]) is list:
+#                 if len(new_item[key]) > 0:
+#                     valid_mrefs = []
+
+#                     for item in new_item[key]:
+#                         bbmriId = item["id"]
+#                         if validate_bbmri_ref_id(bbmriId=bbmriId):
+#                             valid_mrefs.append(bbmriId)
+
+#                     new_item[key] = valid_mrefs
+
+#         upload_format.append(new_item)
+#     return upload_format
+
+
+def transform_to_molgenis_upload_format(session, entity, data):
     one_to_manys = get_one_to_manys(session=session, entity=entity)
     upload_format = []
     for item in data:
@@ -54,22 +87,16 @@ def prepare_data_for_upload(session, entity, data, nn):
         del new_item['_href']
         for one_to_many in one_to_manys:
             del new_item[one_to_many]
+
         for key in new_item:
             if type(new_item[key]) is dict:
                 ref = new_item[key]['id']
-                if validate_bbmri_id(entity=entity, bbmriId=ref, nn=nn):
-                    new_item[key] = ref
+                new_item[key] = ref
             elif type(new_item[key]) is list:
                 if len(new_item[key]) > 0:
-                    valid_mrefs = []
-
-                    for item in new_item[key]:
-                        bbmriId = item["id"]
-                        if validate_bbmri_id(entity=entity, bbmriId=bbmriId, nn=nn):
-                            valid_mrefs.append(bbmriId)
-
-                    new_item[key] = valid_mrefs                                   
-                    
+                    # get id for each new_item in list
+                    mref = [l['id'] for l in new_item[key]]
+                    new_item[key] = mref     
         upload_format.append(new_item)
     return upload_format
 
@@ -100,26 +127,22 @@ def process_external_national_node(nationalNode):
 
     # imports
     for tableName in importTableSequence:
-        print("Importing data to", tableName)
+   
 
         sourceTable = f"{package}{tableName}"
         sourceData = get_all_rows(session=sourceSession, entity=sourceTable)
-
-        sourceIds = get_all_ids(sourceData)
-        validatedIds = [bbmriId for bbmriId in sourceIds if validate_bbmri_id(entity=tableName, nn=nn, bbmriId=bbmriId)]
-
-        validatedSourceData = [data for data in sourceData if sourceData["id"] in validatedIds]
         
         targetTable = f"{targetTablePrefix}{tableName}"
         targetCombinedTable = f"{package}{tableName}"
 
         # import all the data
         if len(sourceData) > 0:
-            preppedSourceData = prepare_data_for_upload(
-            session=sourceSession, entity=sourceTable, data=validatedSourceData, nn=nn)
+            print("Importing data to", tableName)
+            preppedSourceData = transform_to_molgenis_upload_format(
+            session=sourceSession, entity=sourceTable, data=sourceData)
             targetSession.add_all(entity=targetTable, entities=preppedSourceData) # add to node specific table
             targetSession.add_all(entity=targetCombinedTable, entities=preppedSourceData) # add to combined
-    
+
     print("Done")
 
 

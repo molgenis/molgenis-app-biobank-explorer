@@ -4,16 +4,31 @@ idSpecByEntity = {
     "persons": "contactID",
     "networks": "networkID",
     "biobanks": "ID",
-    "collections": "collectionID"
+    "collections": "ID"
 }
 
 registeredNationalNodes =['AT','BE','BG','CH','CY','CZ','DE','EE','EU','FI','FR','GR','IT','LV','MT','NL','NO','PL','SE','TR','UK','IARC']
 
-errors = []
+# unknown what table?
+def validate_bbmri_ref_id(bbmriId): 
+    constraints = [f"^{idSpec}" for idSpec in idSpecByEntity]
+
+    if re.search('[^A-Za-z0-9:_-]', bbmriId):
+        return False
+
+    if re.search('::', bbmriId):
+        return False
+
+    for regex in constraints:
+        if re.search(regex, bbmriId):
+            return True
+    
 
 def validate_bbmri_id(entity, nn, bbmriId):
-    idSpec = idSpecByEntity[entity]
-    idConstraint = f"bbmri-eric:{idSpec}_{nn}_" # for error messages
+    errors = []
+    idSpec = idSpecByEntity[entity] # is this truly correct?! 
+
+    idConstraint = f"bbmri-eric:{idSpec}:{nn}_" # for error messages
     extIdConstraint = "bbmri-eric:ID:EXT_"
 
     extIdRegex = f"^{extIdConstraint}"
