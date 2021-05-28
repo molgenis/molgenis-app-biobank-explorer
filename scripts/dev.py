@@ -4,6 +4,6 @@ config = dotenv_values(".env.local")
 #script-dev-only
 
 config['NODES'] = [{
-    "country": 'NL',
+    "national_node": 'NL',
     "source": 'https://catalogue.bbmri.nl/api/'
 }] 

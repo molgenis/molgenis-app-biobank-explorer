@@ -1,7 +1,6 @@
 from molgenis.client import Session
-from molgenis_utilities import remove_rows, get_all_ids, get_all_rows, bulk_add_all, separate_data_with_references, transform_to_molgenis_upload_format
+from molgenis_utilities import remove_rows, get_all_ids, get_all_rows, bulk_add_all, transform_to_molgenis_upload_format
 from bbmri_validations import validate_bbmri_id, validate_generic_bbmri_id, validate_bbmri_data
-from bbmri_utilities import bbmri_data_to_valid_upload_format
 from dev import config
 
 target = config['TARGET']
@@ -17,60 +16,53 @@ deleteTableSequence = reversed(importTableSequence)
 targetSession = Session(url=target)
 targetSession.login(username=username, password=password)
 
+def create_nn_entityPrefix(nationalNode):
+    return f"{package}{nationalNode['national_node']}_"
 
-# def get_referenced_ids()
+# return a list of old id's, per entity, so we can remove all of these from the combined entity
+def delete_national_node_own_entity_data(nationalNode):
+    print("Deleting data for", nationalNode["national_node"], "on", target)
+    targetEntityPrefix = create_nn_entityPrefix(nationalNode=nationalNode)
 
-def process_external_national_node(nationalNode):
-    nn = nationalNode['country']
-    print("Processing", nationalNode["source"])
-    sourceSession = Session(url=nationalNode["source"])
-    targetTablePrefix = f"{package}{nn}_"
+    previousIdsPerEntity = {}
 
-    # remove all data in tables
-    for tableName in deleteTableSequence:
-        targetTable = f"{targetTablePrefix}{tableName}"
-        targetCombinedTable = f"{package}{tableName}"
-        targetData = get_all_rows(session=targetSession, entity=targetTable)
-        
-        stuff = transform_to_molgenis_upload_format(targetSession, targetTable, targetData)
-
-        print('----------------->',stuff, targetTable)
-
+    for entityName in deleteTableSequence:
+        targetEntity = f"{targetEntityPrefix}{entityName}"
+        targetData = get_all_rows(session=targetSession, entity=targetEntity)
         ids = get_all_ids(targetData)
+        previousIdsPerEntity[entityName] = ids
         
         if len(ids) > 0:
-
             # delete from node specific
-            print("Clearing data from", targetTable, targetCombinedTable)
-            remove_rows(session=targetSession, entity=targetTable, ids=ids)
-         #   remove_rows(session=targetSession, entity=targetCombinedTable, ids=ids)
+            print("Deleting data in", targetEntity)
+            remove_rows(session=targetSession, entity=targetEntity, ids=ids)
+    
+    return previousIdsPerEntity
 
 
-    print("\n\r")
+def import_national_node_to_own_entity(nationalNode):
+    sourceSession = Session(url=nationalNode["source"])
 
     # imports
-    for tableName in importTableSequence:
-   
-        sourceTable = f"{package}{tableName}"
+    for entityName in importTableSequence:
+        targetEntityPrefix = create_nn_entityPrefix(nationalNode=nationalNode)
+        targetEntity = f"{targetEntityPrefix}{entityName}"
+        sourceTable = f"{package}{entityName}"
         sourceData = get_all_rows(session=sourceSession, entity=sourceTable)
-        validatedData = validate_bbmri_data(sourceData)
-        
-        targetTable = f"{targetTablePrefix}{tableName}"
-        targetCombinedTable = f"{package}{tableName}"
 
         # import all the data
-        if len(validatedData) > 0:
-            print("Importing data to", tableName, targetTable, target)
-            preppedSourceData = bbmri_data_to_valid_upload_format(
-            session=sourceSession, entity=sourceTable, data=validatedData)
-            bulk_add_all(session=targetSession, entity=targetTable, data=preppedSourceData) # add to node specific table
-            # bulk_add_all(session=targetSession, entity=targetCombinedTable, data=preppedSourceData) # add to combined
+        if len(sourceData) > 0:
+            print("Importing data to", targetEntity)
+            preppedSourceData = transform_to_molgenis_upload_format(
+            session=sourceSession, entity=sourceTable, data=sourceData)
 
-    print("Done")
+            if len(preppedSourceData) > 0:
+                bulk_add_all(session=targetSession, entity=targetEntity, data=preppedSourceData) # add to node specific table
 
 def sync_eric_with_national_nodes():
     for nationalNode in externalNationalNodes:
-        process_external_national_node(nationalNode=nationalNode)
+        delete_national_node_own_entity_data(nationalNode=nationalNode)
+        import_national_node_to_own_entity(nationalNode=nationalNode)
 
 sync_eric_with_national_nodes()
 
