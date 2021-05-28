@@ -9,9 +9,8 @@ idSpecByEntity = {
 
 registeredNationalNodes =['AT','BE','BG','CH','CY','CZ','DE','EE','EU','FI','FR','GR','IT','LV','MT','NL','NO','PL','SE','TR','UK','IARC']
 
-# unknown what table?
-def validate_bbmri_ref_id(bbmriId): 
-    constraints = [f"^{idSpec}" for idSpec in idSpecByEntity]
+def validate_generic_bbmri_id(bbmriId): 
+    constraints = [f"^bbmri-eric:{idSpecByEntity[idSpec]}:" for idSpec in idSpecByEntity]
 
     if re.search('[^A-Za-z0-9:_-]', bbmriId):
         return False
@@ -23,6 +22,12 @@ def validate_bbmri_ref_id(bbmriId):
         if re.search(regex, bbmriId):
             return True
     
+def all_bbmri_ids_valid(idList):
+    for bbmriId in idList:
+        if not validate_generic_bbmri_id(bbmriId=bbmriId):
+            return False
+    return True
+
 
 def validate_bbmri_id(entity, nn, bbmriId):
     errors = []
@@ -54,3 +59,15 @@ def validate_bbmri_id(entity, nn, bbmriId):
         print(error)
     
     return len(errors) == 0
+
+
+def validate_bbmri_data(data):
+    uniqueIds =[]
+    validatedData = []
+    for item in data:
+        bbmriId = item["id"]
+        if validate_generic_bbmri_id(bbmriId=bbmriId):
+            if bbmriId not in uniqueIds:
+                uniqueIds.append(bbmriId)
+                validatedData.append(data)
+    return validatedData
