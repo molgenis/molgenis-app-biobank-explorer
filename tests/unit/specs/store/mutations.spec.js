@@ -188,7 +188,8 @@ describe('store', () => {
             biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
             covid19: 'covid19',
-            cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5'
+            cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5',
+            satisfyAll: 'covid19,materials'
           }
         }
 
@@ -209,6 +210,7 @@ describe('store', () => {
           label: 'My test collection',
           value: 'bbmri-eric:ID:TR_ACU:collection:covid19'
         }])
+        expect(state.filters.satisfyAll).toStrictEqual(['covid19', 'materials'])
       })
     })
 

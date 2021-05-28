@@ -50,14 +50,13 @@ export default {
     createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
   UpdateFilterSatisfyAll (state, { name, value, router }) {
-    if (value && state.filters.satisfyAll.indexOf(name) === -1) {
+    if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
     } else {
-      if (state.filters.satisfyAll.indexOf(name) !== -1) {
+      if (state.filters.satisfyAll.includes(name)) {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-    Vue.set(state.filters.satisfyAll)
     createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
 
