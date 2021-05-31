@@ -4,7 +4,7 @@ idSpecByEntity = {
     "persons": "contactID",
     "networks": "networkID",
     "biobanks": "ID",
-    "collections": "ID"
+    "collections": "ID" #collectionID
 }
 
 registeredNationalNodes =['AT','BE','BG','CH','CY','CZ','DE','EE','EU','FI','FR','GR','IT','LV','MT','NL','NO','PL','SE','TR','UK','IARC']
