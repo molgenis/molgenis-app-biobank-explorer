@@ -34,11 +34,10 @@ class bbmri_session(Session):
 
     def validate_national_node(self, node):
         if "national_node" not in node:
-                    raise ValueError("Argument should have key: 'national_node', which is the prefix of the national node example: 'NL'")
+            raise ValueError("Argument should have key: 'national_node', which is the prefix of the national node example: 'NL'")
         if "source" not in node:
             raise ValueError("Argument should have key: 'source', which is the complete url to the source directory")
         return True
-
 
     
     def create_national_node_entityPrefix(self, nationalNode):
@@ -67,6 +66,7 @@ class bbmri_session(Session):
                                 data=preppedSourceData)  # add to node specific table
     
     def delete_national_node_own_entity_data(self, nationalNode):
+        self.validate_national_node(node=nationalNode)
         print("Deleting data for", nationalNode["national_node"], "on", self.target)
         targetEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
 

@@ -51,14 +51,36 @@ If you need to update the requirements.txt type in the repl:
 pip freeze > requirements.txt
 ```
 
-## Using scripts in molgenis scripts plugin
-Copy the scripts content in the molgenis scripts plugin in your browser
+## Usage in molgenis scripts plugin
+Make sure you have access to the bbmri_client script on your server / vm / docker
 
-remove username/password and add token=${molgenisToken} in the session code. Make sure the switch is on for molgenis token in the scripts
+Open de scripts plugin on you Molgenis instance.
+Fill in the example with your own code
+
 
 e.g:
 
 ```
-targetSession = Session(url=target, token=${molgenisToken})
+from bbmri_client import bbmri_session
+
+bbmriSession = bbmri_session(url=target, national_nodes=externalNationalNodes, token=${molgenisToken})
+bbmriSession.update_external_entities()
 
 ```
+
+**example arguments:**
+
+url=https://yourserverurl.com
+
+national_nodes can be either a list of dictionaries of a single dictionary with the following format:
+
+```
+externalNationalNodes = [{
+    "national_node": 'NL',
+    "source": 'https://yoursourceurl.com'
+}]
+
+```
+
+*if you use an older molgenis py client:*
+add /api/ after source and target url.
