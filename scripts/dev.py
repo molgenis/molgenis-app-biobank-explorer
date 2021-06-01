@@ -10,5 +10,6 @@ externalNationalNodes = [{
     "source": 'https://catalogue.bbmri.nl/api/'
 }]
 
-bbmriSession = bbmri_session(url=target, national_nodes=externalNationalNodes, username=username, password=password)
-bbmriSession.update_external_entities()
+bbmriSession = bbmri_session(url=target, nationalNodes=externalNationalNodes, username=username, password=password)
+#bbmriSession.update_external_entities()
+bbmriSession.update_eric_entities()

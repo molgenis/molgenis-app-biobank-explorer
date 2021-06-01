@@ -13,14 +13,23 @@ def validate_generic_bbmri_id(bbmriId):
     constraints = [f"^bbmri-eric:{idSpecByEntity[idSpec]}:" for idSpec in idSpecByEntity]
 
     if re.search('[^A-Za-z0-9:_-]', bbmriId):
+        print(bbmriId, "Failed on criteria:", '[^A-Za-z0-9:_-]')
+        return False
+
+    if not re.search('[A-Z]{2}_[A-Za-z0-9-_]+$', bbmriId):
+        print(bbmriId, "Failed on criteria:", '[A-Z]{2}_[A-Za-z0-9-_]+$/i')
         return False
 
     if re.search('::', bbmriId):
+        print(bbmriId, "Failed on criteria:", '::')
         return False
 
     for regex in constraints:
         if re.search(regex, bbmriId):
             return True
+        else:
+            print(bbmriId, "Failed on criteria:", regex)
+            return False
     
 def all_bbmri_ids_valid(idList):
     for bbmriId in idList:

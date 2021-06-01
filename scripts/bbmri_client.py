@@ -1,4 +1,5 @@
 from molgenis.client import Session
+import bbmri_validations
 import molgenis_utilities
 
 class bbmri_session(Session):
@@ -6,20 +7,20 @@ class bbmri_session(Session):
     importTableSequence = ["persons", "networks", "biobanks", "collections"]
     deleteTableSequence = reversed(importTableSequence)
 
-    def __init__(self, url, national_nodes, username=None, password=None, token=None):
+    def __init__(self, url, nationalNodes, username=None, password=None, token=None):
         super().__init__(url, token)
-        self.national_nodes = national_nodes
+        self.nationalNodes = nationalNodes
         self.target = url
 
         if username and password:
             self.login(username=username, password=password)
 
     @property
-    def national_nodes(self):
-        return self._national_nodes
+    def nationalNodes(self):
+        return self._nationalNodes
     
-    @national_nodes.setter
-    def national_nodes(self, value):
+    @nationalNodes.setter
+    def nationalNodes(self, value):
         nodes = []
 
         if value is dict:
@@ -30,7 +31,7 @@ class bbmri_session(Session):
         for node in nodes:
             self.validate_national_node(node)
 
-        self._national_nodes = nodes
+        self._nationalNodes = nodes
 
     def validate_national_node(self, node):
         if "national_node" not in node:
@@ -44,7 +45,8 @@ class bbmri_session(Session):
         return f"{self.package}{nationalNode['national_node']}_"
 
     def import_national_node_to_own_entity(self, nationalNode):
-        self.validate_national_node(nationalNode)
+        if nationalNode not in self.nationalNodes:
+            self.nationalNodes.append(nationalNode)
 
         sourceSession = Session(url=nationalNode["source"])
 
@@ -52,21 +54,53 @@ class bbmri_session(Session):
         for entityName in self.importTableSequence:
             targetEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
             targetEntity = f"{targetEntityPrefix}{entityName}"
-            sourceTable = f"{self.package}{entityName}"
-            sourceData = molgenis_utilities.get_all_rows(session=sourceSession, entity=sourceTable)
+            sourceEntity = f"{self.package}{entityName}"
+            sourceData = molgenis_utilities.get_all_rows(session=sourceSession, entity=sourceEntity)
 
             # import all the data
             if len(sourceData) > 0:
                 print("Importing data to", targetEntity)
                 preppedSourceData = molgenis_utilities.transform_to_molgenis_upload_format(
-                    session=sourceSession, entity=sourceTable, data=sourceData)
+                    session=sourceSession, entity=sourceEntity, data=sourceData)
 
                 if len(preppedSourceData) > 0:
                     molgenis_utilities.bulk_add_all(session=self, entity=targetEntity,
                                 data=preppedSourceData)  # add to node specific table
     
+
+    # import contents from a national node entity to the eric entity (combined table)
+    def import_national_node_to_eric_entity(self, nationalNode):
+        if nationalNode not in self.nationalNodes:
+            self.nationalNodes.append(nationalNode)
+        
+        for entityName in self.importTableSequence:
+            sourceEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
+            targetEntity = f"{self.package}{entityName}"
+            sourceEntity = f"{sourceEntityPrefix}{entityName}"
+            sourceData = molgenis_utilities.get_all_rows(session=self, entity=sourceEntity)
+
+            # check if ids already exist
+            targetData = molgenis_utilities.get_all_rows(session=self, entity=targetEntity)
+            targetIds = molgenis_utilities.get_all_ids(targetData)
+
+            sourceIds = molgenis_utilities.get_all_ids(sourceData)
+            validIds = [sourceId for sourceId in sourceIds if bbmri_validations.validate_generic_bbmri_id(sourceId)]
+
+            validSource = [validData for validData in sourceData if validData['id'] in validIds and validData['id'] not in targetIds]
+
+            if len(validSource) > 0:
+                print("Importing data to", targetEntity)
+                preppedSourceData = molgenis_utilities.transform_to_molgenis_upload_format(
+                    session=self, entity=sourceEntity, data=validSource)
+
+                if len(preppedSourceData) > 0:
+                    molgenis_utilities.bulk_add_all(session=self, entity=targetEntity,
+                                data=preppedSourceData)
+    
     def delete_national_node_own_entity_data(self, nationalNode):
-        self.validate_national_node(node=nationalNode)
+        if nationalNode not in self.nationalNodes:
+            self.nationalNodes.append(nationalNode)
+
         print("Deleting data for", nationalNode["national_node"], "on", self.target)
         targetEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
 
@@ -86,9 +120,22 @@ class bbmri_session(Session):
         return previousIdsPerEntity
     
     def update_external_entities(self):
-        if not self.national_nodes:
+        if not self.nationalNodes:
             raise ValueError("No national nodes found to update")
 
-        for nationalNode in self.national_nodes:
+        for nationalNode in self.nationalNodes:
             self.delete_national_node_own_entity_data(nationalNode=nationalNode)
             self.import_national_node_to_own_entity(nationalNode=nationalNode)
+
+    def update_eric_entities(self):
+        if not self.nationalNodes:
+            raise ValueError("No national nodes found to update")
+
+        for nationalNode in self.nationalNodes:
+            # self.delete_national_node_own_entity_data(nationalNode=nationalNode)
+            self.import_national_node_to_eric_entity(nationalNode=nationalNode)
+    
+    def copy_national_node_to_combined(self, nationalNode):
+        if nationalNode not in self.nationalNodes:
+            self.nationalNodes.append(nationalNode)
+
