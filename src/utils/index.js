@@ -47,16 +47,6 @@ export const getBaseUrl = () => {
   return `${window.location.protocol}//${window.location.host}${baseUrl}/#`
 }
 
-export const createQueryBlockForQualityIds = (qualityIds, columnName, operator) => {
-  let query = ''
-  for (let i = 0; i < qualityIds.length; i++) {
-    query += columnName + '==' + qualityIds[i] + operator
-  }
-  const cleanedQuery = query.slice(0, -1)
-  const embeddedCleanedQuery = '(' + cleanedQuery + ')'
-  return embeddedCleanedQuery
-}
-
 /** Creates the query string portion according to filter selection and satisfyAll parameter. If the satisfyAll parameter
  * is set to true, and AND query is created; else, an OR query is created, (with the usage of the in clause)
  *
