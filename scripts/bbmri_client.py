@@ -56,12 +56,13 @@ class bbmri_session(Session):
             targetEntity = f"{targetEntityPrefix}{entityName}"
             sourceEntity = f"{self.package}{entityName}"
             sourceData = molgenis_utilities.get_all_rows(session=sourceSession, entity=sourceEntity)
+            sourceOneToManys = molgenis_utilities.get_one_to_manys(session=sourceSession, entity=sourceEntity)
 
             # import all the data
             if len(sourceData) > 0:
                 print("Importing data to", targetEntity)
                 preppedSourceData = molgenis_utilities.transform_to_molgenis_upload_format(
-                    session=sourceSession, entity=sourceEntity, data=sourceData)
+                    session=sourceSession, entity=sourceEntity, oneToManys=sourceOneToManys, data=sourceData)
 
                 if len(preppedSourceData) > 0:
                     molgenis_utilities.bulk_add_all(session=self, entity=targetEntity,
@@ -73,6 +74,8 @@ class bbmri_session(Session):
         if nationalNode not in self.nationalNodes:
             self.nationalNodes.append(nationalNode)
         
+        nn = nationalNode['national_node']
+
         for entityName in self.importTableSequence:
             sourceEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
             targetEntity = f"{self.package}{entityName}"
@@ -84,14 +87,19 @@ class bbmri_session(Session):
             targetIds = molgenis_utilities.get_all_ids(targetData)
 
             sourceIds = molgenis_utilities.get_all_ids(sourceData)
-            validIds = [sourceId for sourceId in sourceIds if bbmri_validations.validate_generic_bbmri_id(sourceId)]
+            validIds = [sourceId for sourceId in sourceIds if bbmri_validations.validate_bbmri_id(entity=entityName, nn=nn, bbmriId=sourceId)]
 
-            validSource = [validData for validData in sourceData if validData['id'] in validIds and validData['id'] not in targetIds]
+            # check for target ids because there could be eric leftovers from the national node in the table.
+            validEntries = [validData for validData in sourceData if validData['id'] in validIds and validData['id'] not in targetIds]
+
+            # validate the one to manys
+            sourceOneToManys = molgenis_utilities.get_one_to_manys(session=self, entity=sourceEntity)
+            validSource = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(nn=nn, entry=validEntry, oneToManys=sourceOneToManys)]
 
             if len(validSource) > 0:
                 print("Importing data to", targetEntity)
                 preppedSourceData = molgenis_utilities.transform_to_molgenis_upload_format(
-                    session=self, entity=sourceEntity, data=validSource)
+                    session=self, entity=sourceEntity, oneToManys=sourceOneToManys, data=validSource)
 
                 if len(preppedSourceData) > 0:
                     molgenis_utilities.bulk_add_all(session=self, entity=targetEntity,

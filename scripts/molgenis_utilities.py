@@ -31,13 +31,12 @@ def get_one_to_manys(session, entity):
     return one_to_manys 
 
 
-def transform_to_molgenis_upload_format(session, entity, data):
-        one_to_manys = get_one_to_manys(session=session, entity=entity)
+def transform_to_molgenis_upload_format(session, entity, oneToManys, data):
         upload_format = []
         for item in data:
             new_item = item
             del new_item['_href']
-            for one_to_many in one_to_manys:
+            for one_to_many in oneToManys:
                 del new_item[one_to_many]
             for key in new_item:
                 if type(new_item[key]) is dict:
