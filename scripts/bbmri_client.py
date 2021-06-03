@@ -96,7 +96,7 @@ class bbmri_session(Session):
             sourceReferences = molgenis_utilities.get_all_references_for_entity(session=self, entity=sourceEntity)
             combinedReferenceProperties = sourceReferences['xref']
             combinedReferenceProperties.extend(sourceReferences['one_to_many'])
-            validSource = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(nn=nn, entry=validEntry, possible_entity_references=combinedReferenceProperties)]
+            validSource = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(nn=nn, entry=validEntry, parent_entity=entityName, possible_entity_references=combinedReferenceProperties)]
 
             if len(validSource) > 0:
                 print("Importing data to", targetEntity)

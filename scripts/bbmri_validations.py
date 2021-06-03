@@ -60,17 +60,17 @@ def validate_bbmri_id(entity, nn, bbmriId):
     return len(errors) == 0
 
 
-def _validate_id_in_nn_entry(entity: str, nn: dict, entry: dict):
+def _validate_id_in_nn_entry(entity: str,parent_entry:dict, parent_entity: str, nn: dict, entry: dict):
     bbmriId = entry['id']
 
     if not validate_bbmri_id(entity=entity, nn=nn, bbmriId=bbmriId):
         print(
-            f"{bbmriId} in entity: {entity} contains references to an entry with an invalid id")
+            f"{parent_entry['id']} in entity: {parent_entity} contains references to entity {entity} with an invalid id ({bbmriId})")
         return False
     else:
         return True
 
-def validate_refs_in_entry(nn, entry, possible_entity_references):
+def validate_refs_in_entry(nn: dict, entry: dict, parent_entity:str, possible_entity_references: list):
 
     for entity_reference in possible_entity_references:
         if not entity_reference in entry or entity_reference not in idSpecByEntity:
@@ -80,11 +80,11 @@ def validate_refs_in_entry(nn, entry, possible_entity_references):
 
         # check if its an xref
         if type(refData) is dict:
-            return _validate_id_in_nn_entry(entity=entity_reference, nn=nn, entry=refData)
+            return _validate_id_in_nn_entry(entity=entity_reference, parent_entry=entry, parent_entity=parent_entity, nn=nn, entry=refData)
         else:
             for ref in refData:
                 if type(ref) is dict:
-                    return _validate_id_in_nn_entry(entity=entity_reference, nn=nn, entry=ref)        
+                    return _validate_id_in_nn_entry(entity=entity_reference, parent_entry=entry, parent_entity=parent_entity, nn=nn, entry=ref)        
                 else:
                     if not validate_bbmri_id(entity=entity_reference, nn=nn, bbmriId=ref):
                         return False
