@@ -5,7 +5,6 @@ import molgenis_utilities
 class bbmri_session(Session):
     package = "eu_bbmri_eric_"
     importTableSequence = ["persons", "networks", "biobanks", "collections"]
-    deleteTableSequence = reversed(importTableSequence)
 
     def __init__(self, url, nationalNodes, username=None, password=None, token=None):
         super().__init__(url, token)
@@ -75,6 +74,7 @@ class bbmri_session(Session):
             self.nationalNodes.append(nationalNode)
         
         nn = nationalNode['national_node']
+        print("Importing data for", nationalNode["national_node"], "on", self.target, "\n\r")
 
         for entityName in self.importTableSequence:
             sourceEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
@@ -92,14 +92,16 @@ class bbmri_session(Session):
             # check for target ids because there could be eric leftovers from the national node in the table.
             validEntries = [validData for validData in sourceData if validData['id'] in validIds and validData['id'] not in targetIds]
 
-            # validate the one to manys
-            sourceOneToManys = molgenis_utilities.get_one_to_manys(session=self, entity=sourceEntity)
-            validSource = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(nn=nn, entry=validEntry, oneToManys=sourceOneToManys)]
+            # validate the references
+            sourceReferences = molgenis_utilities.get_all_references_for_entity(session=self, entity=sourceEntity)
+            combinedReferenceProperties = sourceReferences['xref']
+            combinedReferenceProperties.extend(sourceReferences['one_to_many'])
+            validSource = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(nn=nn, entry=validEntry, possible_entity_references=combinedReferenceProperties)]
 
             if len(validSource) > 0:
                 print("Importing data to", targetEntity)
                 preppedSourceData = molgenis_utilities.transform_to_molgenis_upload_format(
-                    session=self, entity=sourceEntity, oneToManys=sourceOneToManys, data=validSource)
+                    session=self, entity=sourceEntity, oneToManys=sourceReferences['one_to_many'], data=validSource)
 
                 if len(preppedSourceData) > 0:
                     molgenis_utilities.bulk_add_all(session=self, entity=targetEntity,
@@ -109,12 +111,12 @@ class bbmri_session(Session):
         if nationalNode not in self.nationalNodes:
             self.nationalNodes.append(nationalNode)
 
-        print("Deleting data for", nationalNode["national_node"], "on", self.target)
+        print("Deleting data for", nationalNode["national_node"], "on", self.target, "\n\r")
         targetEntityPrefix = self.create_national_node_entityPrefix(nationalNode=nationalNode)
 
         previousIdsPerEntity = {}
 
-        for entityName in self.deleteTableSequence:
+        for entityName in reversed(self.importTableSequence):
             targetEntity = f"{targetEntityPrefix}{entityName}"
             targetData = molgenis_utilities.get_all_rows(session=self, entity=targetEntity)
             ids = molgenis_utilities.get_all_ids(targetData)
@@ -133,7 +135,11 @@ class bbmri_session(Session):
 
         for nationalNode in self.nationalNodes:
             self.delete_national_node_own_entity_data(nationalNode=nationalNode)
+            print("\n\r")
+    
             self.import_national_node_to_own_entity(nationalNode=nationalNode)
+            print("\n\r")
+
 
     def update_eric_entities(self):
         if not self.nationalNodes:
@@ -142,6 +148,7 @@ class bbmri_session(Session):
         for nationalNode in self.nationalNodes:
             # self.delete_national_node_own_entity_data(nationalNode=nationalNode)
             self.import_national_node_to_eric_entity(nationalNode=nationalNode)
+            print("\n\r")
     
     def copy_national_node_to_combined(self, nationalNode):
         if nationalNode not in self.nationalNodes:

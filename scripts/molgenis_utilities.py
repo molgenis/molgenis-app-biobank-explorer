@@ -1,11 +1,9 @@
 def get_all_ids(data):
     return [item['id'] for item in data]
 
-
 def remove_rows(session, entity, ids):
     if len(ids) > 0:
         session.delete_list(entity, ids)
-
 
 def get_all_rows(session, entity):
     data = []
@@ -23,13 +21,17 @@ def get_all_rows(session, entity):
 
     return data
 
+def get_all_references_for_entity(session, entity):
+    '''retrieves one_to_many and xref attributes'''
+    meta = session.get_entity_meta_data(entity)['attributes']
+    one_to_many = [attr for attr in meta if meta[attr]['fieldType'] == "ONE_TO_MANY"]
+    xref = [attr for attr in meta if meta[attr]['fieldType'] == "XREF"]
+    return {"xref": xref, "one_to_many": one_to_many }
+
 def get_one_to_manys(session, entity):
     '''Retrieves one-to-many's in table'''
-    meta = session.get_entity_meta_data(entity)['attributes']
-    one_to_manys = [attr for attr in meta if meta[attr]
-                    ['fieldType'] == "ONE_TO_MANY"]
-    return one_to_manys 
-
+    all_references = get_all_references_for_entity(session=session, entity=entity)
+    return all_references["one_to_many"]
 
 def transform_to_molgenis_upload_format(session, entity, oneToManys, data):
         upload_format = []

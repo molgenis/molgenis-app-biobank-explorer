@@ -2,6 +2,7 @@ import re
 
 idSpecByEntity = {
     "persons": "contactID",
+    "contact": "contactID",
     "networks": "networkID",
     "biobanks": "ID",
     "collections": "ID",  # collectionID
@@ -14,7 +15,11 @@ registeredNationalNodes = ['AT', 'BE', 'BG', 'CH', 'CY', 'CZ', 'DE', 'EE', 'EU',
 
 def validate_bbmri_id(entity, nn, bbmriId):
     errors = []
-    idSpec = idSpecByEntity[entity]  # is this truly correct?!
+    
+    if not entity in idSpecByEntity:
+        return True # no constraints found
+
+    idSpec = idSpecByEntity[entity]
 
     idConstraint = f"bbmri-eric:{idSpec}:{nn}_"  # for error messages
     globalIdConstraint = f"bbmri-eric:{idSpec}:EU_" # for global refs
@@ -47,7 +52,7 @@ def validate_bbmri_id(entity, nn, bbmriId):
 
     if not re.search('[A-Z]{2}_[A-Za-z0-9-_:]+$', bbmriId):
         errors.append(
-            f"{bbmriId} in entity: {entity} does not comply with a two letter national node code, an _ and alphanumeric characters (: allowed) afterwards \n\r e.g: NL_myid1234")
+            f"{bbmriId} in entity: {entity} does not comply with a two letter national node code, an _ and alphanumeric characters (a : is allowed) afterwards \n\r e.g: NL_myid1234")
 
     for error in errors:
         print(error)
@@ -55,18 +60,32 @@ def validate_bbmri_id(entity, nn, bbmriId):
     return len(errors) == 0
 
 
-def validate_refs_in_entry(nn, entry, oneToManys):
-    for oneToMany in oneToManys:
-        refs = entry[oneToMany]
+def _validate_id_in_nn_entry(entity: str, nn: dict, entry: dict):
+    bbmriId = entry['id']
 
-        for ref in refs:
-            if type(ref) is dict:
-                bbmriId = ref['id']
-                if not validate_bbmri_id(entity=oneToMany, nn=nn, bbmriId=bbmriId):
-                    print(
-                        f"{bbmriId} in entity: {oneToMany} contains references to an entry with an invalid id")
-                    return False
-            else:
-                if not validate_bbmri_id(entity=oneToMany, nn=nn, bbmriId=ref):
-                    return False
+    if not validate_bbmri_id(entity=entity, nn=nn, bbmriId=bbmriId):
+        print(
+            f"{bbmriId} in entity: {entity} contains references to an entry with an invalid id")
+        return False
+    else:
+        return True
+
+def validate_refs_in_entry(nn, entry, possible_entity_references):
+
+    for entity_reference in possible_entity_references:
+        if not entity_reference in entry or entity_reference not in idSpecByEntity:
+            continue
+
+        refData = entry[entity_reference]
+
+        # check if its an xref
+        if type(refData) is dict:
+            return _validate_id_in_nn_entry(entity=entity_reference, nn=nn, entry=refData)
+        else:
+            for ref in refData:
+                if type(ref) is dict:
+                    return _validate_id_in_nn_entry(entity=entity_reference, nn=nn, entry=ref)        
+                else:
+                    if not validate_bbmri_id(entity=entity_reference, nn=nn, bbmriId=ref):
+                        return False
     return True
