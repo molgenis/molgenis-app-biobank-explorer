@@ -3,7 +3,7 @@
     <div class="query-type-selector">
       <label class="label-disabled">
         Satisfy all
-        <input type="checkbox" v-model="satisfyAllSelection"/>
+        <input type="checkbox" :checked='satisfyAllValue' :value='satisfyAllValue' @change="satisfyAllSelection"/>
       </label>
     </div>
     <div>
@@ -50,7 +50,6 @@ export default {
       type: Array,
       default: () => []
     },
-
     satisfyAllValue: {
       type: Boolean,
       default: () => false
@@ -73,9 +72,7 @@ export default {
   },
   data () {
     return {
-      satisfyAllSelection: undefined,
       externalUpdate: false,
-      satisfyAllExternalUpdate: false,
       selection: [],
       resolvedOptions: [],
       sliceOptions: this.maxVisibleOptions && this.resolvedOptions && this.maxVisibleOptions < this.resolvedOptions.length
@@ -114,12 +111,6 @@ export default {
         this.$emit('input', newSelection)
       }
       this.externalUpdate = false
-    },
-    satisfyAllSelection (newSatisfyAllSelectionValue) {
-      if (!this.satisfyAllExternalUpdate) {
-        this.$emit('satisfyAll', newSatisfyAllSelectionValue)
-      }
-      this.satisfyAllExternalUpdate = false
     }
   },
   created () {
@@ -127,7 +118,6 @@ export default {
       this.resolvedOptions = response
     })
     this.setValue()
-    this.setSatisfyAllValue()
   },
   methods: {
     toggleSelect () {
@@ -148,9 +138,8 @@ export default {
         this.selection = this.value
       }
     },
-    setSatisfyAllValue () {
-      this.satisfyAllExternalUpdate = true
-      this.satisfyAllSelection = this.satisfyAllValue
+    satisfyAllSelection (event) {
+      this.$emit('satisfyAll', event.target.value)
     }
   }
 }
