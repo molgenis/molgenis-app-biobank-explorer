@@ -1,3 +1,5 @@
+# merge this into Py Client
+
 def get_all_ids(data):
     return [item['id'] for item in data]
 
@@ -33,12 +35,12 @@ def get_one_to_manys(session, entity):
     all_references = get_all_references_for_entity(session=session, entity=entity)
     return all_references["one_to_many"]
 
-def transform_to_molgenis_upload_format(session, entity, oneToManys, data):
+def transform_to_molgenis_upload_format(data, one_to_manys):
         upload_format = []
         for item in data:
             new_item = item
             del new_item['_href']
-            for one_to_many in oneToManys:
+            for one_to_many in one_to_manys:
                 del new_item[one_to_many]
             for key in new_item:
                 if type(new_item[key]) is dict:

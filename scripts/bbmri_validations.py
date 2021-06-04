@@ -65,7 +65,7 @@ def _validate_id_in_nn_entry(entity: str,parent_entry:dict, parent_entity: str, 
 
     if not validate_bbmri_id(entity=entity, nn=nn, bbmriId=bbmriId):
         print(
-            f"{parent_entry['id']} in entity: {parent_entity} contains references to entity {entity} with an invalid id ({bbmriId})")
+            f"{parent_entry['id']} in entity: {parent_entity} contains references to entity: {entity} with an invalid id ({bbmriId})")
         return False
     else:
         return True
