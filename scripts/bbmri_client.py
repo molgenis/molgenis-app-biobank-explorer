@@ -2,8 +2,7 @@ from molgenis.client import Session
 import bbmri_validations
 import molgenis_utilities
 
-
-class bbmri_session(Session):
+class BBMRISession(Session):
     package = "eu_bbmri_eric_"
     import_table_sequence = ["persons", "networks", "biobanks", "collections"]
     combined_entity_cache = {}
@@ -44,6 +43,11 @@ class bbmri_session(Session):
             return  f"{self.package}{national_node_code}_{entity_name}"
         else:
             return  f"{self.package}{entity_name}"
+    
+    def filter_national_node_data(self, data: list[dict], national_node_code: str):
+        national_node_signature = f":{national_node_code}_"
+        data_from_national_node = [row for row in data if national_node_signature in row['id']]
+        return data_from_national_node
 
     def validate_national_node(self, node):
         if "national_node" not in node:
@@ -56,10 +60,11 @@ class bbmri_session(Session):
 
     def cache_combined_entity_data(self):
         for entity in self.import_table_sequence:
+            source_entity = self.get_qualified_entity_name(entity_name=entity)
             source_data = molgenis_utilities.get_all_rows(
-                session=self, entity=entity)
+                session=self, entity=source_entity)
             source_one_to_manys = molgenis_utilities.get_one_to_manys(
-                session=self, entity=entity)
+                session=self, entity=source_entity)
             uploadable_source = molgenis_utilities.transform_to_molgenis_upload_format(
                 data=source_data, one_to_manys=source_one_to_manys)
 
@@ -160,6 +165,28 @@ class bbmri_session(Session):
 
         return previous_ids_per_entity
 
+    def delete_national_node_data_from_combined(self, national_node):
+        # varify we have it cached, if not start caching
+        if not all(entity_name in self.combined_entity_cache for entity_name in self.import_table_sequence):
+            self.cache_combined_entity_data()
+
+        nn = national_node['national_node']
+        
+        for entity_name in reversed(self.import_table_sequence):
+            print('Removing data from the entity:', entity_name, 'for:', nn)
+            entity_cached_data = self.combined_entity_cache[entity_name]
+            target_entity  = self.get_qualified_entity_name(entity_name=entity_name)
+            national_node_data_for_entity = self.filter_national_node_data(data=entity_cached_data, national_node_code=nn)
+            ids_for_national_node_data = molgenis_utilities.get_all_ids(data=national_node_data_for_entity)
+
+            if len(ids_for_national_node_data) > 0:
+                molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_for_national_node_data)
+                print('Removed:', len(ids_for_national_node_data), 'rows')
+            else:
+                print('Nothing to remove')
+            
+            return ids_for_national_node_data
+
     def update_external_entities(self):
         if not self.national_nodes:
             raise ValueError("No national nodes found to update")
@@ -176,17 +203,9 @@ class bbmri_session(Session):
             raise ValueError("No national nodes found to update")
 
         for national_node in self.national_nodes:
-            # self.delete_national_node_own_entity_data(nationalNode=nationalNode)
+            self.delete_national_node_data_from_combined(national_node=national_node)
             self.import_national_node_to_eric_entity(national_node=national_node)
             print("\n\r")
-
-    # def delete_national_node_data_from_combined(self, national_node):
-    #     # varify we have it cached, if not start caching
-    #     if not all(self.import_table_sequence in self.combined_entity_cache):
-    #         self.cache_combined_entity_data()
-        
-    #     for entity in reversed(self.import_table_sequence):
-
 
 
     def copy_national_node_to_combined(self, national_node):

@@ -1,4 +1,4 @@
-from bbmri_client import bbmri_session
+from bbmri_client import BBMRISession
 from dotenv import dotenv_values 
 config = dotenv_values(".env.local")
 
@@ -14,6 +14,6 @@ external_national_nodes = [{
     "source": 'https://catalogue.bbmri.nl/api/'
 }]
 
-bbmriSession = bbmri_session(url=target, national_nodes=external_national_nodes, username=username, password=password)
-bbmriSession.update_external_entities()
+bbmriSession = BBMRISession(url=target, national_nodes=external_national_nodes, username=username, password=password)
+# bbmriSession.update_external_entities()
 bbmriSession.update_eric_entities()
