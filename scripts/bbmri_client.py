@@ -115,7 +115,7 @@ class BBMRISession(Session):
 
         nnc = national_node['national_node']
         print("Importing data for",
-              national_node["national_node"], "on", self.target, "\n\r")
+              national_node["national_node"], "on", self.target, "\n")
 
         for entity_name in self.import_table_sequence:
             target_entity  = self.get_qualified_entity_name(entity_name=entity_name)
@@ -155,16 +155,22 @@ class BBMRISession(Session):
                                                         data=prepped_source_data)  # add to node specific table
                         print('Imported:', len(prepped_source_data), 'rows', 'to', target_entity, 'out of', len(source_ids))
                     except Exception as e: # rollback
+                        print('\n')
+                        print('---' * 10)
+                        print('Failed to import, following error occurred:', e)
+                        print('---' * 10, end='\n')
+
                         cached_data = self.combined_entity_cache[entity_name]
                         original_data = self.filter_national_node_data(data=cached_data, national_node_code=nnc)
                         ids_to_revert = molgenis_utilities.get_all_ids(data=prepped_source_data)
-                        molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_to_revert)
-                        molgenis_utilities.bulk_add_all(session=self, entity=target_entity, data=original_data)
-                        print('---' * 10)
-                        print('Failed to import, following error occurred:', e)
-                        print('Rolled back', target_entity, 'with previous data for', nnc)
-                        print('---' * 10)
 
+                        if len(ids_to_revert) > 0:
+                            molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_to_revert)
+                        
+                        if len(original_data) > 0:
+                            molgenis_utilities.bulk_add_all(session=self, entity=target_entity, data=original_data)
+                            print('Rolled back', target_entity, 'with previous data for', nnc, end='\n')
+  
                     
 
     def delete_national_node_own_entity_data(self, national_node):
@@ -173,7 +179,7 @@ class BBMRISession(Session):
 
         nnc = national_node["national_node"]
 
-        print("Deleting data for", nnc, "on", self.target, "\n\r")
+        print("Deleting data for", nnc, "on", self.target, "\n")
 
         previous_ids_per_entity = {}
    
@@ -214,7 +220,7 @@ class BBMRISession(Session):
         nnc = national_node['national_node']
         
         for entity_name in reversed(self.import_table_sequence):
-            print('\n\rRemoving data from the entity:', entity_name, 'for:', nnc, end='\n\r')
+            print('\nRemoving data from the entity:', entity_name, 'for:', nnc, end='\n')
             entity_cached_data = self.combined_entity_cache[entity_name]
             target_entity  = self.get_qualified_entity_name(entity_name=entity_name)
             national_node_data_for_entity = self.filter_national_node_data(data=entity_cached_data, national_node_code=nnc)
@@ -222,16 +228,19 @@ class BBMRISession(Session):
 
             if len(ids_for_national_node_data) > 0:
                 molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_for_national_node_data)
-                print('Removed:', len(ids_for_national_node_data), 'rows', end='\n\r')
+                print('Removed:', len(ids_for_national_node_data), 'rows', end='\n')
             else:
-                print('Nothing to remove for', target_entity,'\n\r', end='\n\r')
+                print('Nothing to remove for', target_entity, end='\n\n')
     
     def replace_global_entities(self):
         print("Placing back the global entities")
         for global_entity in self.tables_to_cache_for_import:
             source_data = self.combined_entity_cache[global_entity]
-            molgenis_utilities.bulk_add_all(session=self, entity=global_entity, data=source_data)
-            print('Placed back:', len(source_data), 'rows', 'to', global_entity)
+            if len(source_data) > 0:
+                molgenis_utilities.bulk_add_all(session=self, entity=global_entity, data=source_data)
+                print('Placed back:', len(source_data), 'rows', 'to', global_entity)
+            else:
+                print('No rows found to place back')
 
     def update_external_entities(self):
         if not self.national_nodes:
@@ -239,10 +248,10 @@ class BBMRISession(Session):
 
         for national_node in self.national_nodes:
             self.delete_national_node_own_entity_data(national_node=national_node)
-            print("\n\r")
+            print("\n")
 
             self.import_national_node_to_own_entity(national_node=national_node)
-            print("\n\r")
+            print("\n")
 
     def update_eric_entities(self):
         if not self.national_nodes:
@@ -253,9 +262,9 @@ class BBMRISession(Session):
         try:
             for national_node in self.national_nodes:
                 self.delete_national_node_data_from_eric_entity(national_node=national_node)
-                print("\n\r")
+                print("\n")
                 self.import_national_node_to_eric_entity(national_node=national_node)
-                print("\n\r")
+                print("\n")
         finally:
             self.finish_importing_of_node_data()
 

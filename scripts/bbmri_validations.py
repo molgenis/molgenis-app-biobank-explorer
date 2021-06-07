@@ -52,7 +52,7 @@ def validate_bbmri_id(entity, nn, bbmriId):
 
     if not re.search('[A-Z]{2}_[A-Za-z0-9-_:]+$', bbmriId):
         errors.append(
-            f"{bbmriId} in entity: {entity} does not comply with a two letter national node code, an _ and alphanumeric characters (a : is allowed) afterwards \n\r e.g: NL_myid1234")
+            f"{bbmriId} in entity: {entity} does not comply with a two letter national node code, an _ and alphanumeric characters (a : is allowed) afterwards \n e.g: NL_myid1234")
 
     for error in errors:
         print(error)
