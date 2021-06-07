@@ -1,5 +1,6 @@
 <template>
   <div class="mg-biobank-card container">
+    <script v-text='bioschemasJsonld' type='application/ld+json' />
     <loading
       :active="isLoading"
       loader="dots"
@@ -72,6 +73,10 @@ import {
   mapObjArray
 } from '../../utils/templateMapper'
 
+import {
+  mapBiobankToBioschemas
+} from '@/utils/bioschemasMapper'
+
 export default {
   name: 'biobank-report-card',
   components: {
@@ -123,6 +128,9 @@ export default {
           }
         }
       } else return ''
+    },
+    bioschemasJsonld () {
+      return this.biobankDataAvailable ? mapBiobankToBioschemas(this.biobank) : {}
     }
   },
   methods: {

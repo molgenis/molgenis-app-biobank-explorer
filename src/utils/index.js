@@ -1,3 +1,4 @@
+import { INITIAL_STATE } from '../store/state'
 /**
  * Generate the attribute selector for quality parameters (can be either for collection or for biobank)
  * */
@@ -38,10 +39,19 @@ export const removeFilterFromFilterArrayById = (filters, selectedFilterId) => {
   return filters.filter(filter => filter.id !== selectedFilterId).map(filter => filter.id)
 }
 
+/**
+ * Return the whole base url comprising protocol, host, and base path of the application.
+ */
+export const getBaseUrl = () => {
+  const baseUrl = INITIAL_STATE.baseUrl || ''
+  return `${window.location.protocol}//${window.location.host}${baseUrl}/#`
+}
+
 export default {
   getUniqueIdArray,
   createInQuery,
   createComparisons,
   removeFilterFromFilterArrayById,
-  qualityAttributeSelector
+  qualityAttributeSelector,
+  getBaseUrl
 }
