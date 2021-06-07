@@ -63,8 +63,11 @@ def bulk_add_all(session, entity, data):
 
     numberOfCycles = int(len(data) / maxUpdateCount)
 
-    for cycle in range(numberOfCycles):
-        nextBatchStart = int(cycle * maxUpdateCount)
-        nextBatchStop = int(maxUpdateCount + cycle * maxUpdateCount)
-        itemsToAdd = data[nextBatchStart:nextBatchStop]
-        session.add_all(entity=entity, entities=itemsToAdd)
+    try:
+        for cycle in range(numberOfCycles):
+            nextBatchStart = int(cycle * maxUpdateCount)
+            nextBatchStop = int(maxUpdateCount + cycle * maxUpdateCount)
+            itemsToAdd = data[nextBatchStart:nextBatchStop]
+            session.add_all(entity=entity, entities=itemsToAdd)
+    except Exception as e:
+        raise e

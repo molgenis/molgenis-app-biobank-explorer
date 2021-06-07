@@ -87,9 +87,11 @@ class BBMRISession(Session):
 
         source_session = Session(url=national_node["source"])
 
+        nnc = national_node['national_node']
+
         # imports
         for entity_name in self.import_table_sequence:
-            target_entity = self.get_qualified_entity_name(entity_name=entity_name, national_node_code=national_node['national_node'])
+            target_entity = self.get_qualified_entity_name(entity_name=entity_name, national_node_code=nnc)
             source_entity = self.get_qualified_entity_name(entity_name=entity_name)
             sourceData = molgenis_utilities.get_all_rows(
                 session=source_session, entity=source_entity)
@@ -100,25 +102,24 @@ class BBMRISession(Session):
             if len(sourceData) > 0:
                 print("Importing data to", target_entity)
                 prepped_source_data = molgenis_utilities.transform_to_molgenis_upload_format(
-                    data=sourceData,   one_to_manys=source_one_to_manys)
+                    data=sourceData, one_to_manys=source_one_to_manys)
 
                 if len(prepped_source_data) > 0:
                     molgenis_utilities.bulk_add_all(session=self, entity=target_entity,
                                                     data=prepped_source_data)  # add to node specific table
-
+    
     # import contents from a national node entity to the eric entity (combined table)
-
     def import_national_node_to_eric_entity(self, national_node):
         if national_node not in self.national_nodes:
             self.national_nodes.append(national_node)
 
-        nn = national_node['national_node']
+        nnc = national_node['national_node']
         print("Importing data for",
               national_node["national_node"], "on", self.target, "\n\r")
 
         for entity_name in self.import_table_sequence:
             target_entity  = self.get_qualified_entity_name(entity_name=entity_name)
-            source_entity= self.get_qualified_entity_name(entity_name=entity_name, national_node_code=nn)
+            source_entity= self.get_qualified_entity_name(entity_name=entity_name, national_node_code=nnc)
             source_data = molgenis_utilities.get_all_rows(session=self, entity=source_entity)
 
             # check if ids already exist
@@ -128,7 +129,7 @@ class BBMRISession(Session):
 
             source_ids = molgenis_utilities.get_all_ids(source_data)
             validIds = [sourceId for sourceId in source_ids if bbmri_validations.validate_bbmri_id(
-                entity=entity_name, nn=nn, bbmriId=sourceId)]
+                entity=entity_name, nn=nnc, bbmriId=sourceId)]
 
             # check for target ids because there could be eric leftovers from the national node in the table.
             validEntries = [validData for validData in source_data if validData['id']
@@ -140,7 +141,7 @@ class BBMRISession(Session):
             combinedReferenceProperties = sourceReferences['xref']
             combinedReferenceProperties.extend(sourceReferences['one_to_many'])
             valid_source = [validEntry for validEntry in validEntries if bbmri_validations.validate_refs_in_entry(
-                nn=nn, entry=validEntry, parent_entity=entity_name, possible_entity_references=combinedReferenceProperties)]
+                nn=nnc, entry=validEntry, parent_entity=entity_name, possible_entity_references=combinedReferenceProperties)]
 
             if len(valid_source) > 0:
                 print("Importing data to", target_entity)
@@ -148,22 +149,36 @@ class BBMRISession(Session):
                     data=valid_source, one_to_manys=sourceReferences['one_to_many'])
 
                 if len(prepped_source_data) > 0:
-                    molgenis_utilities.bulk_add_all(session=self, entity=target_entity,
-                                                    data=prepped_source_data)
-                    print('Imported:', len(prepped_source_data), 'rows', 'to', target_entity, 'out of', len(source_ids))
+
+                    try:
+                        molgenis_utilities.bulk_add_all(session=self, entity=target_entity,
+                                                        data=prepped_source_data)  # add to node specific table
+                        print('Imported:', len(prepped_source_data), 'rows', 'to', target_entity, 'out of', len(source_ids))
+                    except Exception as e: # rollback
+                        cached_data = self.combined_entity_cache[entity_name]
+                        original_data = self.filter_national_node_data(data=cached_data, national_node_code=nnc)
+                        ids_to_revert = molgenis_utilities.get_all_ids(data=prepped_source_data)
+                        molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_to_revert)
+                        molgenis_utilities.bulk_add_all(session=self, entity=target_entity, data=original_data)
+                        print('---' * 10)
+                        print('Failed to import, following error occurred:', e)
+                        print('Rolled back', target_entity, 'with previous data for', nnc)
+                        print('---' * 10)
+
+                    
 
     def delete_national_node_own_entity_data(self, national_node):
         if national_node not in self.national_nodes:
             self.national_nodes.append(national_node)
 
-        nn = national_node["national_node"]
+        nnc = national_node["national_node"]
 
-        print("Deleting data for", nn, "on", self.target, "\n\r")
+        print("Deleting data for", nnc, "on", self.target, "\n\r")
 
         previous_ids_per_entity = {}
    
         for entity_name in reversed(self.import_table_sequence):
-            target_entity = self.get_qualified_entity_name(entity_name=entity_name, national_node_code=nn)
+            target_entity = self.get_qualified_entity_name(entity_name=entity_name, national_node_code=nnc)
             target_data = molgenis_utilities.get_all_rows(
                 session=self, entity=target_entity)
             ids = molgenis_utilities.get_all_ids(target_data)
@@ -196,13 +211,13 @@ class BBMRISession(Session):
         if not all(entity_name in self.combined_entity_cache for entity_name in self.import_table_sequence):
             self.cache_combined_entity_data()
 
-        nn = national_node['national_node']
+        nnc = national_node['national_node']
         
         for entity_name in reversed(self.import_table_sequence):
-            print('\n\rRemoving data from the entity:', entity_name, 'for:', nn, end='\n\r')
+            print('\n\rRemoving data from the entity:', entity_name, 'for:', nnc, end='\n\r')
             entity_cached_data = self.combined_entity_cache[entity_name]
             target_entity  = self.get_qualified_entity_name(entity_name=entity_name)
-            national_node_data_for_entity = self.filter_national_node_data(data=entity_cached_data, national_node_code=nn)
+            national_node_data_for_entity = self.filter_national_node_data(data=entity_cached_data, national_node_code=nnc)
             ids_for_national_node_data = molgenis_utilities.get_all_ids(data=national_node_data_for_entity)
 
             if len(ids_for_national_node_data) > 0:
@@ -234,16 +249,13 @@ class BBMRISession(Session):
             raise ValueError("No national nodes found to update")
 
         self.prepare_deletion_of_node_data()
-
-        for national_node in self.national_nodes:
-            self.delete_national_node_data_from_eric_entity(national_node=national_node)
-            print("\n\r")
-            self.import_national_node_to_eric_entity(national_node=national_node)
-            print("\n\r")
         
-        self.finish_importing_of_node_data()
+        try:
+            for national_node in self.national_nodes:
+                self.delete_national_node_data_from_eric_entity(national_node=national_node)
+                print("\n\r")
+                self.import_national_node_to_eric_entity(national_node=national_node)
+                print("\n\r")
+        finally:
+            self.finish_importing_of_node_data()
 
-
-    # def copy_national_node_to_eric(self, national_node):
-    #     if national_node not in self.national_nodes:
-    #         self.national_nodes.append(national_node)
