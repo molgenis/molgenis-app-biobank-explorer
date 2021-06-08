@@ -73,7 +73,7 @@ export default {
       commit('SetCollectionIdsWithSelectedQuality', [])
     }
   },
-  // // Same as collections above
+  // Same as collections above
   GetBiobankIdsForQuality ({ state, commit }) {
     const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
     const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
