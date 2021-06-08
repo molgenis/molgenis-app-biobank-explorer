@@ -5,7 +5,11 @@ def get_all_ids(data):
 
 def remove_rows(session, entity, ids):
     if len(ids) > 0:
-        session.delete_list(entity, ids)
+        try:
+            session.delete_list(entity, ids)
+        except Exception as e:
+            raise e
+
 
 def get_all_rows(session, entity):
     data = []

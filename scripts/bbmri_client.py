@@ -6,7 +6,7 @@ class BBMRISession(Session):
     package = "eu_bbmri_eric_"
     import_table_sequence = ["persons", "networks", "biobanks", "collections"]
     combined_entity_cache = {}
-    tables_to_cache_for_import = ['eu_bbmri_eric_bio_qual_info']
+    tables_to_cache_for_import = ['eu_bbmri_eric_bio_qual_info', 'eu_bbmri_eric_col_qual_info']
 
     def __init__(self, url, national_nodes, username=None, password=None, token=None):
         super().__init__(url, token)
@@ -49,7 +49,7 @@ class BBMRISession(Session):
         data_from_national_node = [row for row in data if national_node_signature in row['id']]
         return data_from_national_node
 
-    def validate_national_node(self, node):
+    def validate_national_node(self, node: str):
         if "national_node" not in node:
             raise ValueError(
                 "Argument should have key: 'national_node', which is the prefix of the national node example: 'NL'")
@@ -193,8 +193,10 @@ class BBMRISession(Session):
             if len(ids) > 0:
                 # delete from node specific
                 print("Deleting data in", target_entity)
-                molgenis_utilities.remove_rows(
-                    session=self, entity=target_entity, ids=ids)
+                try:
+                    molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids)
+                except Exception as e:
+                    raise e
 
         return previous_ids_per_entity
 
@@ -227,8 +229,11 @@ class BBMRISession(Session):
             ids_for_national_node_data = molgenis_utilities.get_all_ids(data=national_node_data_for_entity)
 
             if len(ids_for_national_node_data) > 0:
-                molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_for_national_node_data)
-                print('Removed:', len(ids_for_national_node_data), 'rows', end='\n')
+                try:
+                    molgenis_utilities.remove_rows(session=self, entity=target_entity, ids=ids_for_national_node_data)
+                    print('Removed:', len(ids_for_national_node_data), 'rows', end='\n')
+                except Exception as e:
+                    raise e
             else:
                 print('Nothing to remove for', target_entity, end='\n\n')
     
@@ -252,6 +257,7 @@ class BBMRISession(Session):
 
             self.import_national_node_to_own_entity(national_node=national_node)
             print("\n")
+
 
     def update_eric_entities(self):
         if not self.national_nodes:
