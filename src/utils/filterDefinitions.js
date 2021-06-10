@@ -26,6 +26,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.covid19,
     filters: state.filters.selections.covid19,
     satisfyAll: state.filters.satisfyAll.includes('covid19'),
+    showSatisfyAllCheckbox: true,
     all: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Covid-19 service(s):'
@@ -40,6 +41,7 @@ const filterDefinitions = (state) => [
     table: 'eu_bbmri_eric_disease_types',
     options: diagnosisAvailableFilterOptions('eu_bbmri_eric_disease_types'),
     satisfyAll: state.filters.satisfyAll.includes('diagnosis_available'),
+    showSatisfyAllCheckbox: true,
     initiallyCollapsed: !state.route.query.diagnosis_available,
     humanReadableString: 'Disease type(s):'
   },
@@ -53,6 +55,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.materials,
     filters: state.filters.selections.materials,
     satisfyAll: state.filters.satisfyAll.includes('materials'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Material type(s):'
   },
@@ -66,8 +69,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.country,
     filters: state.filters.selections.country,
     maxVisibleOptions: 25,
-    humanReadableString: 'Countries:',
-    showSatisfyAllCheckbox: false
+    humanReadableString: 'Countries:'
   },
   {
     component: 'CheckboxFilter',
@@ -79,6 +81,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.biobank_quality,
     filters: state.filters.selections.biobank_quality,
     satisfyAll: state.filters.satisfyAll.includes('biobank_quality'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Biobank quality mark(s):'
   },
@@ -92,6 +95,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.collection_quality,
     filters: state.filters.selections.collection_quality,
     satisfyAll: state.filters.satisfyAll.includes('collection_quality'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Collection quality mark(s):'
   },
@@ -105,6 +109,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.type,
     filters: state.filters.selections.type,
     satisfyAll: state.filters.satisfyAll.includes('type'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Collection type(s):'
   },
@@ -117,8 +122,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.collaboration_type,
     filters: state.filters.selections.collaboration_type,
     maxVisibleOptions: 25,
-    humanReadableString: 'Biobank collaboration type(s):',
-    showSatisfyAllCheckbox: false
+    humanReadableString: 'Biobank collaboration type(s):'
   },
   {
     component: 'CheckboxFilter',
@@ -130,6 +134,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.biobank_network,
     filters: state.filters.selections.biobank_network,
     satisfyAll: state.filters.satisfyAll.includes('biobank_network'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Biobank with network(s):'
   },
@@ -143,6 +148,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.collection_network,
     filters: state.filters.selections.collection_network,
     satisfyAll: state.filters.satisfyAll.includes('collection_network'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Collection with network(s):'
   },
@@ -156,6 +162,7 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.dataType,
     filters: state.filters.selections.dataType,
     satisfyAll: state.filters.satisfyAll.includes('dataType'),
+    showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
     humanReadableString: 'Data type(s):'
   }

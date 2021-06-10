@@ -60,6 +60,10 @@ export default {
       type: Array,
       default: () => []
     },
+    /**
+     * This is the satisfyAll property value. It is true if the satisfyAll property has been set (satisfyAll button checked),
+     * false if not.
+     */
     satisfyAllValue: {
       type: Boolean,
       default: () => false
