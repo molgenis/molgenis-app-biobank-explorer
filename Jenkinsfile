@@ -87,7 +87,8 @@ pipeline {
                 sh "rancher apps delete ${NAME} || true" 
                 sh "sleep 5s" // wait for deletion
                 sh "rancher apps install " +
-                    "cattle-global-data:molgenis-helm-molgenis-frontend " +
+                    "-n ${NAME} " +
+                    "p-vx5vf:molgenis-helm3-molgenis-frontend " +
                     "${NAME} " +
                     "--no-prompt " +
                     "--set environment=dev " +
@@ -97,6 +98,7 @@ pipeline {
                     "--set proxy.backend.service.targetRelease=master " +
                     "--set image.pullPolicy=Always " +
                     "--set readinessPath=/index.html"
+                    
             }
         }
         post {
