@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { mockState } from '../../mockData'
 import filterDefinitions from '../../../../../src/utils/filterDefinitions'
-import state from '../../../../../src/store/state'
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 jest.useFakeTimers()
@@ -80,7 +80,7 @@ describe('FilterContainer', () => {
 
       wrapper = shallowMount(FilterContainer, { store, localVue })
       wrapper.findComponent(CovidFilter).vm.$emit('input', ['covid_1', 'covid_2'])
-      wrapper.findComponent(CovidFilter).vm.$emit('satisfyAll', true)
+      wrapper.findComponent(CovidFilter).vm.$emit('satisfy-all', true)
       await wrapper.findComponent(CovidFilter).vm.$nextTick()
       jest.runAllTimers()
       expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)

@@ -1,19 +1,21 @@
 <template>
   <div>
-    <div class="query-type-selector">
-      <label class="label-disabled">
-        Satisfy all
-        <input
-          type="checkbox" :checked="satisfyAllValue"
-          :value="satisfyAllValue"
-          @change="(event) => $emit('satisfyAll', event.target.checked)"
-        >
-      </label>
-    </div>
+    <satisfy-all-checkbox
+      :value="satisfyAllValue"
+      @input="(value) => $emit('satisfy-all', value)"
+    />
     <div>
-      <b-form-checkbox-group v-model="selection" stacked :options="visibleOptions" />
+      <b-form-checkbox-group
+        v-model="selection"
+        stacked
+        :options="visibleOptions"
+      />
       <span v-if="bulkOperation">
-        <b-link v-if="showToggleSlice" class="toggle-slice card-link" @click.prevent="toggleSlice">
+        <b-link
+          v-if="showToggleSlice"
+          class="toggle-slice card-link"
+          @click.prevent="toggleSlice"
+        >
           {{ toggleSliceText }}
         </b-link>
         <b-link class="toggle-select card-link" @click.prevent="toggleSelect">
@@ -26,9 +28,13 @@
 
 <script>
 /* istanbul ignore file */
+import { SatisfyAllCheckbox } from '@molgenis-ui/components-library'
 
 export default {
   name: 'CovidFilter',
+  components: {
+    SatisfyAllCheckbox
+  },
   props: {
     /**
      * Toggle to switch between returning an array with values or an array with the full option
@@ -79,21 +85,33 @@ export default {
       externalUpdate: false,
       selection: [],
       resolvedOptions: [],
-      sliceOptions: this.maxVisibleOptions && this.resolvedOptions && this.maxVisibleOptions < this.resolvedOptions.length
+      sliceOptions:
+        this.maxVisibleOptions &&
+        this.resolvedOptions &&
+        this.maxVisibleOptions < this.resolvedOptions.length
     }
   },
   computed: {
     visibleOptions () {
-      return this.sliceOptions ? this.resolvedOptions.slice(0, this.maxVisibleOptions) : (typeof this.resolvedOptions === 'function' ? [] : this.resolvedOptions)
+      return this.sliceOptions
+        ? this.resolvedOptions.slice(0, this.maxVisibleOptions)
+        : typeof this.resolvedOptions === 'function'
+          ? []
+          : this.resolvedOptions
     },
     showToggleSlice () {
-      return this.maxVisibleOptions && this.maxVisibleOptions < this.resolvedOptions.length
+      return (
+        this.maxVisibleOptions &&
+        this.maxVisibleOptions < this.resolvedOptions.length
+      )
     },
     toggleSelectText () {
       return this.value.length ? 'Deselect all' : 'Select all'
     },
     toggleSliceText () {
-      return this.sliceOptions ? `Show ${this.resolvedOptions.length - this.maxVisibleOptions} more` : 'Show less'
+      return this.sliceOptions
+        ? `Show ${this.resolvedOptions.length - this.maxVisibleOptions} more`
+        : 'Show less'
     }
   },
   watch: {
@@ -108,7 +126,10 @@ export default {
         let newSelection = []
 
         if (this.returnTypeAsObject) {
-          newSelection = Object.assign(newSelection, this.resolvedOptions.filter(of => newValue.includes(of.value)))
+          newSelection = Object.assign(
+            newSelection,
+            this.resolvedOptions.filter((of) => newValue.includes(of.value))
+          )
         } else {
           newSelection = [...newValue]
         }
@@ -118,7 +139,7 @@ export default {
     }
   },
   created () {
-    this.options().then(response => {
+    this.options().then((response) => {
       this.resolvedOptions = response
     })
     this.setValue()
@@ -128,7 +149,7 @@ export default {
       if (this.selection && this.selection.length > 0) {
         this.selection = []
       } else {
-        this.selection = this.resolvedOptions.map(option => option.value)
+        this.selection = this.resolvedOptions.map((option) => option.value)
       }
     },
     toggleSlice () {
@@ -136,8 +157,12 @@ export default {
     },
     setValue () {
       this.externalUpdate = true
-      if (this.value && this.value.length > 0 && typeof this.value[0] === 'object') {
-        this.selection = this.value.map(vo => vo.value)
+      if (
+        this.value &&
+        this.value.length > 0 &&
+        typeof this.value[0] === 'object'
+      ) {
+        this.selection = this.value.map((vo) => vo.value)
       } else {
         this.selection = this.value
       }
@@ -150,29 +175,5 @@ export default {
 .card-link {
   font-style: italic;
   font-size: small;
-}
-.query-type-selector {
-  text-align: right;
-}
-
-.query-type-selector label {
-  position: relative;
-  margin: 0;
-  top: -0.5rem;
-}
-
-.query-type-selector label:hover {
-  cursor: not-allowed;
-}
-
-.query-type-selector input {
-  margin-left: 0.5rem;
-  background-color: black;
-}
-
-.query-type-selector input::checked {
-  color: #fff !important;
-  background-color: #28a745 !important;
-  border-color: #28a745 !important;
 }
 </style>
