@@ -1,6 +1,6 @@
 <template>
   <div>
-    <satisfy-all
+    <satisfy-all-checkbox
       :value="satisfyAllValue"
       @input="(value) => $emit('satisfy-all', value)"
     />
@@ -28,12 +28,12 @@
 
 <script>
 /* istanbul ignore file */
-import { SatisfyAll } from '@molgenis-ui/components-library'
+import { SatisfyAllCheckbox } from '@molgenis-ui/components-library'
 
 export default {
   name: 'CovidFilter',
   components: {
-    SatisfyAll
+    SatisfyAllCheckbox
   },
   props: {
     /**
