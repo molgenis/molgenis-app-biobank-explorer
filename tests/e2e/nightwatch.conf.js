@@ -3,13 +3,13 @@ var config = require('../../config')
 var packageJson = require('../../package.json')
 
 const buildName = packageJson.name + '#PR-' + process.env.CHANGE_ID + '-build-' + process.env.BUILD_NUMBER
-const ciDevServer = 'http://' + process.env.JENKINS_AGENT_NAME + ':' + (process.env.PORT || config.dev.port)
+const ciDevServerHost = process.env.JENKINS_AGENT_NAME || 'localhost'
+const ciDevServer = 'http://' + ciDevServerHost + ':' + (process.env.PORT || config.dev.port)
 
 // http://nightwatchjs.org/gettingstarted#settings-file
 module.exports = {
   src_folders: ['test/e2e/specs'],
   output_folder: 'test/e2e/reports',
-  custom_assertions_path: ['test/e2e/custom-assertions'],
 
   selenium: {
     start_process: true,
@@ -17,7 +17,8 @@ module.exports = {
     host: '127.0.0.1',
     port: 4444,
     cli_args: {
-      'webdriver.chrome.driver': require('chromedriver').path
+      'webdriver.chrome.driver': require('chromedriver').path,
+      'webdriver.firefox.driver': require('geckodriver').path
     }
   },
 
@@ -32,12 +33,14 @@ module.exports = {
     },
 
     ci_chrome: {
-      launch_url: 'http://ondemand.saucelabs.com:80',
       selenium_port: 80,
-      selenium_host: 'ondemand.saucelabs.com',
+      selenium_host: 'ondemand.us-west-1.saucelabs.com',
       silent: true,
       username: process.env.SAUCE_CRED_USR,
       access_key: process.env.SAUCE_CRED_PSW,
+      selenium: {
+        start_process: false
+      },
       desiredCapabilities: {
         name: packageJson.name,
         build: buildName,
@@ -51,12 +54,14 @@ module.exports = {
     },
 
     ci_firefox: {
-      launch_url: 'http://ondemand.saucelabs.com:80',
       selenium_port: 80,
-      selenium_host: 'ondemand.saucelabs.com',
+      selenium_host: 'ondemand.us-west-1.saucelabs.com',
       silent: true,
       username: process.env.SAUCE_CRED_USR,
       access_key: process.env.SAUCE_CRED_PSW,
+      selenium: {
+        start_process: false
+      },
       desiredCapabilities: {
         name: packageJson.name,
         build: buildName,
@@ -70,12 +75,14 @@ module.exports = {
     },
 
     ci_ie11: {
-      launch_url: 'http://ondemand.saucelabs.com:80',
       selenium_port: 80,
-      selenium_host: 'ondemand.saucelabs.com',
+      selenium_host: 'ondemand.us-west-1.saucelabs.com',
       silent: true,
       username: process.env.SAUCE_CRED_USR,
       access_key: process.env.SAUCE_CRED_PSW,
+      selenium: {
+        start_process: false
+      },
       desiredCapabilities: {
         name: packageJson.name,
         build: buildName,
@@ -91,12 +98,14 @@ module.exports = {
     },
 
     ci_safari: {
-      launch_url: 'http://ondemand.saucelabs.com:80',
       selenium_port: 80,
-      selenium_host: 'ondemand.saucelabs.com',
+      selenium_host: 'ondemand.us-west-1.saucelabs.com',
       silent: true,
       username: process.env.SAUCE_CRED_USR,
       access_key: process.env.SAUCE_CRED_PSW,
+      selenium: {
+        start_process: false
+      },
       desiredCapabilities: {
         name: packageJson.name,
         build: buildName,
@@ -121,7 +130,8 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'firefox',
         javascriptEnabled: true,
-        acceptSslCerts: true
+        acceptSslCerts: true,
+        marionette: true
       }
     },
 
