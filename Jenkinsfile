@@ -38,7 +38,7 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-          sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox"
         }
       }
       post {
@@ -121,7 +121,7 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-          sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox"
         }
       }
       post {
