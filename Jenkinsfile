@@ -26,12 +26,7 @@ pipeline {
           }
         }
         container('node') {
-          // We intermittently get a DNS error: non-recoverable failure in name resolution (-4)
-          // To prevent this, use Google DNS server instead
-          sh "daemon --name=sauceconnect -- /usr/local/bin/sc --dns 8.8.8.8,8.8.4.4:53 --readyfile /tmp/sauce-ready.txt -u ${SAUCE_CRED_USR} -k ${SAUCE_CRED_PSW} -i ${TUNNEL_IDENTIFIER}"
-          timeout (1) {
-            sh "while [ ! -f /tmp/sauce-ready.txt ]; do sleep 1; done"
-          }
+          startSauceConnect()
         }
       }
     }
