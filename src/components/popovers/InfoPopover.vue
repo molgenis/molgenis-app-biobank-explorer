@@ -90,7 +90,7 @@ export default {
 .info-popover {
   background-color: white !important;
   border: solid black 0.5px;
-  max-width: 40rem;
+  max-width: 30rem;
 }
 
 .popover-trigger-area:hover {
