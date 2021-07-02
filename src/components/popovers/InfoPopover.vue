@@ -13,7 +13,7 @@
           position-relative
           popover-trigger-area
         "
-        :class="iconBeforeLabel ? 'mr-1' : 'ml-1'"
+        :class="label ? iconBeforeLabel ? 'mr-1' : 'ml-1' : ''"
         aria-hidden="true"
         :id="`qm-${uniqueId}`"
       ></span>

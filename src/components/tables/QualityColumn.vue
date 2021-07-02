@@ -1,10 +1,10 @@
 <template>
-  <ul class="list-unstyled">
+  <ul class="list-unstyled text-nowrap">
     <li
       v-for="quality in qualities"
       :style="margin"
       :key="quality.id"
-      class="text-nowrap"
+      class="d-flex"
     >
       <a
         :href="quality.certification_report"
@@ -35,7 +35,7 @@
           />
         </span>
       </span>
-      <info-popover v-if="qualityInfo" class="d-inline-block" popover-placement="left">
+      <info-popover v-if="qualityInfo" class="pl-1 ml-auto" popover-placement="left">
         <table>
           <tbody>
             <tr>
