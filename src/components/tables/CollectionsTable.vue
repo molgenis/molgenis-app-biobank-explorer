@@ -44,6 +44,8 @@
               <quality-column
                 :qualities="collection[column]"
                 :spacing="0"
+                :popoverUniqueId="collection.id"
+                :qualityInfo="qualityStandardsDictionary"
               ></quality-column>
             </span>
             <span v-else-if="column === 'type'">
@@ -86,7 +88,8 @@
 import utils from '../../utils'
 import SubCollectionsTable from './SubCollectionsTable'
 import QualityColumn from './QualityColumn'
-import CollectionSelector from '@/components/buttons/CollectionSelector'
+import CollectionSelector from '../buttons/CollectionSelector'
+import { mapState } from 'vuex'
 
 export default {
   name: 'CollectionsTable',
@@ -107,6 +110,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['qualityStandardsDictionary']),
     parentCollections () {
       return this.topLevelElements.map((tle) => ({
         label: tle.label || tle.name,
