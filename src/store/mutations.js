@@ -45,13 +45,24 @@ export default {
       filterValues.push(item.value)
       filterTexts.push(item.text)
     }
-
     Vue.set(state.filters.selections, name, [...new Set(filterValues)])
     Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    createBookmark(router, state.filters.selections, state.selectedCollections)
+    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
+  UpdateFilterSatisfyAll (state, { name, value, router }) {
+    if (value && !state.filters.satisfyAll.includes(name)) {
+      state.filters.satisfyAll.push(name)
+    } else {
+      if (state.filters.satisfyAll.includes(name)) {
+        state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
+      }
+    }
+    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
+  },
+
   UpdateAllFilters (state, selections) {
     state.filters.selections = {}
+    state.filters.satisfyAll = []
     for (const [key, value] of Object.entries(selections)) {
       if (key === 'search') {
         Vue.set(state.filters.selections, key, value)
@@ -68,6 +79,7 @@ export default {
    */
   ResetFilters (state) {
     state.filters.selections = {}
+    state.filters.satisfyAll = []
   },
   SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
@@ -202,6 +214,10 @@ export default {
 
     if (query.nToken) {
       state.nToken = query.nToken
+    }
+
+    if (query.satisfyAll) {
+      Vue.set(state.filters, 'satisfyAll', decodeURIComponent(query.satisfyAll).split(','))
     }
 
     if (query.cart) {

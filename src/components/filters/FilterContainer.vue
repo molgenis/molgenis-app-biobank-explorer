@@ -15,8 +15,11 @@
         v-if="bookmarkMappedToState"
         :is="filter.component"
         :value="activeFilters[filter.name]"
+        :satisfyAllValue="filter.satisfyAll"
+        :show-satisfy-all-checkbox="true"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
+        @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
         :returnTypeAsObject="true"
         :bulkOperation="true"
       >
@@ -66,9 +69,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter']),
+    ...mapMutations(['UpdateFilter', 'UpdateFilterSatisfyAll']),
     filterChange (name, value) {
       this.UpdateFilter({ name, value, router: this.$router })
+    },
+    filterSatisfyAllChange (name, value) {
+      this.UpdateFilterSatisfyAll({ name, value, router: this.$router })
     }
   }
 }

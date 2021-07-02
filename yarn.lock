@@ -1101,10 +1101,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@molgenis-ui/components-library@^2.4.0":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@molgenis-ui/components-library/-/components-library-2.4.3.tgz#8f6960adebf22af286d7d0c1e34494f062ae3ae5"
-  integrity sha512-N3pipXo1IoUE1oNLV/rLNiDwgVd6sP1OurztxDF1ZxefnGG9Qscx5BEL6DZfBR5HgLJYIV7d7kIaAjfu/HMnAg==
+"@molgenis-ui/components-library@^2.7.7":
+  version "2.7.7"
+  resolved "https://registry.yarnpkg.com/@molgenis-ui/components-library/-/components-library-2.7.7.tgz#b8f266a2ddbb25f229f3d55d97a72c58fbb8de97"
+  integrity sha512-JiTx1uY637IMWtn5o3u7Yz6IEiPhWKfOaCMOFhVNGttxLJEQxPXirZ1CuoHs5b0tWzjCYjFHxxj4ttoWcbqLNg==
 
 "@molgenis/molgenis-api-client@^3.0.0":
   version "3.1.4"

@@ -1,7 +1,9 @@
+
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils from '../utils'
+import utils, { createQuery, createInQuery } from '../utils'
 import 'array-flat-polyfill'
+import { flatten } from 'lodash'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 
@@ -53,9 +55,18 @@ export default {
   GetCollectionIdsForQuality ({ state, commit }) {
     const collectionQuality = state.route.query.collection_quality ? state.route.query.collection_quality : null
     const qualityIds = state.filters.selections.collection_quality ?? collectionQuality
-
+    const selection = 'assess_level_col'
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q=assess_level_col=in=(${qualityIds})`).then(response => {
+      const query = encodeRsqlValue(transformToRSQL({
+        operator: 'AND',
+        operands: flatten([
+          state.filters.satisfyAll.includes('collection_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('collection_quality'))
+            : createInQuery(selection, qualityIds)
+        ])
+      }
+      ))
+      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q` + query).then(response => {
         commit('SetCollectionIdsWithSelectedQuality', response)
       })
     } else {
@@ -66,9 +77,18 @@ export default {
   GetBiobankIdsForQuality ({ state, commit }) {
     const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
     const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
-
+    const selection = 'assess_level_bio'
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=assess_level_bio=in=(${qualityIds})`).then(response => {
+      const query = encodeRsqlValue(transformToRSQL({
+        operator: 'AND',
+        operands: flatten([
+          state.filters.satisfyAll.includes('biobank_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('biobank_quality'))
+            : createInQuery(selection, qualityIds)
+        ])
+      }
+      ))
+      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=` + query).then(response => {
         commit('SetBiobankIdsWithSelectedQuality', response)
       })
     } else {
