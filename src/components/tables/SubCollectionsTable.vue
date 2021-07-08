@@ -31,7 +31,7 @@
             <span v-else-if="column === 'quality'">
               <quality-column
                 :qualities="subCollection[column]"
-                spacing="0"
+                :spacing=0
                 :qualityInfo="qualityStandardsDictionary"
               ></quality-column>
             </span>
