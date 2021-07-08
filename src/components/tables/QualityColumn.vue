@@ -35,7 +35,12 @@
           />
         </span>
       </span>
-      <info-popover v-if="qualityInfo" class="pl-1 ml-auto" popover-placement="left">
+      <span class="fa fa-check text-success pl-1"></span>
+      <info-popover
+        v-if="qualityInfo"
+        class="pl-1 ml-auto"
+        popover-placement="left"
+      >
         <table>
           <tbody>
             <tr>
@@ -88,5 +93,10 @@ export default {
 .quality-logo {
   max-width: 9rem;
   max-height: 4rem;
+}
+
+.fa-check {
+  position: relative;
+  top:2px;
 }
 </style>
