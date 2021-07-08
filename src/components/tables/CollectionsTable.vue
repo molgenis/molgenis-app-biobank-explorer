@@ -44,7 +44,6 @@
               <quality-column
                 :qualities="collection[column]"
                 :spacing="0"
-                :popoverUniqueId="collection.id"
                 :qualityInfo="qualityStandardsDictionary"
               ></quality-column>
             </span>
