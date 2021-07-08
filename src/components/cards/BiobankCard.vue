@@ -21,7 +21,7 @@
             </h5>
 
             <small v-if="biobank.quality && biobank.quality.length > 0">
-              <info-popover label="Quality mark(s):" :uniqueId="biobank.id" bold-text icon-before-label>
+              <info-popover label="Quality mark(s):" bold-text icon-before-label>
                 <table>
                   <tbody>
                     <tr
