@@ -1,14 +1,15 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import SubCollectionsTable from '@/components/tables/SubCollectionsTable'
 import BootstrapVue from 'bootstrap-vue'
+import Vuex from 'vuex'
+import { mockState } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+localVue.use(Vuex)
 
 describe('SubCollectionsTable', () => {
-  let stubs
-  let mocks
-  let wrapper
+  let stubs, mocks, wrapper, store
 
   beforeEach(() => {
     const subCollections = [
@@ -84,7 +85,12 @@ describe('SubCollectionsTable', () => {
       }
     }
     stubs = ['router-link']
-    wrapper = mount(SubCollectionsTable, { propsData: { subCollections }, stubs, mocks, localVue })
+
+    store = new Vuex.Store({
+      state: mockState()
+    })
+
+    wrapper = mount(SubCollectionsTable, { propsData: { subCollections }, stubs, mocks, store, localVue })
   })
   describe('methods', () => {
     describe('getCollectionMaterials', () => {

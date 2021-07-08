@@ -122,6 +122,7 @@ export default {
     api.get(url)
       .then(response => {
         commit('SetBiobankIds', response.items.map(item => item.data.id))
+        commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })
