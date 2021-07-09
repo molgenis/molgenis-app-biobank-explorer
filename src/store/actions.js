@@ -108,7 +108,6 @@ export default {
       .then(response => {
         commit('SetCollectionInfo', response)
         commit('SetDictionaries', response)
-        commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })
@@ -122,7 +121,6 @@ export default {
     api.get(url)
       .then(response => {
         commit('SetBiobankIds', response.items.map(item => item.data.id))
-        commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })

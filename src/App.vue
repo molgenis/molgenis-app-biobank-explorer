@@ -14,23 +14,30 @@
 </style>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   computed: {
     ...mapGetters({ errorMessage: 'getErrorMessage' })
   },
   methods: {
+    ...mapMutations(['MapQueryToState']),
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
       'GetQualityStandardInformation'
     ])
   },
+  watch: {
+    $route () {
+      this.MapQueryToState()
+    }
+  },
   mounted () {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
     this.GetQualityStandardInformation()
+    this.MapQueryToState()
   },
   name: 'biobank-explorer'
 }
