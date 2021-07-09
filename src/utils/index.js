@@ -47,6 +47,23 @@ export const getBaseUrl = () => {
   return `${window.location.protocol}//${window.location.host}${baseUrl}/#`
 }
 
+/** Creates the query string portion according to filter selection and satisfyAll parameter. If the satisfyAll parameter
+ * is set to true, and AND query is created; else, an OR query is created, (with the usage of the in clause)
+ *
+ * @param filterSelection The list of filter items selections, as ['IT', 'NL'] for country filter
+ * @param columnName The name of the filter column in the database
+ * @returns The RSQL string portion matching an AND or OR query for the filter parameters: for the selections above, it returns
+ * 'country==IT;country==NL' if the satisfyAll parameter is set to true; else, it returns 'country=in=(IT,NL)'
+ */
+export const createQuery = (filterSelection, columnName, satisfyAll) => {
+  if (filterSelection && satisfyAll) {
+    return {
+      operator: 'AND',
+      operands: createComparisons(columnName, filterSelection || [])
+    }
+  } else { return createInQuery(columnName, filterSelection || []) }
+}
+
 export default {
   getUniqueIdArray,
   createInQuery,

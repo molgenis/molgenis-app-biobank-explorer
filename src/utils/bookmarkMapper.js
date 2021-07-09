@@ -14,7 +14,7 @@ function setBookmark (router, bookmark) {
     state.ie11Bookmark = `${window.location.host}/#${router.currentRoute.fullPath}`
   }
 }
-export const createBookmark = (router, filters, selection) => {
+export const createBookmark = (router, filters, selection, satisfyAllSelection) => {
   if (!router) return
 
   const bookmark = {}
@@ -36,6 +36,11 @@ export const createBookmark = (router, filters, selection) => {
     const bookmarkIds = selection.map(s => s.value)
     bookmark.cart = encodeURI(btoa(bookmarkIds.join(',')))
   }
+
+  if (satisfyAllSelection && satisfyAllSelection.length) {
+    bookmark.satisfyAll = encodeURI(satisfyAllSelection.join(','))
+  }
+
   setBookmark(router, bookmark)
 }
 
