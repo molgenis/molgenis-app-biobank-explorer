@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'node-erbium'
+      inheritFrom 'node-erbium'
     }
   }
   environment {
@@ -26,7 +26,7 @@ pipeline {
           }
         }
         container('node') {
-          sh "daemon --name=sauceconnect -- /usr/local/bin/sc -u ${SAUCE_CRED_USR} -k ${SAUCE_CRED_PSW} -i ${TUNNEL_IDENTIFIER}"
+          startSauceConnect()
         }
       }
     }
@@ -38,7 +38,7 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-         // sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium"
         }
       }
       post {
@@ -85,7 +85,7 @@ pipeline {
             }
             container('rancher') {
                 sh "rancher apps delete ${NAME} || true" 
-                sh "sleep 5s" // wait for deletion
+                sh "sleep 15s" // wait for deletion
                 sh "rancher apps install " +
                     "-n ${NAME} " +
                     "p-vx5vf:molgenis-helm3-molgenis-frontend " +
@@ -121,7 +121,7 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-         // sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium"
         }
       }
       post {
