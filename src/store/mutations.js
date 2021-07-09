@@ -209,7 +209,7 @@ export default {
       .filter(fr => !['search', 'nToken'].includes(fr)) // remove specific filters, else we are doing them again.
 
     if (query.search) {
-      Vue.set(state.filters.selections, 'search', query.search)
+      Vue.set(state.filters.selections, 'search', decodeURIComponent(query.search))
     }
 
     if (query.nToken) {
