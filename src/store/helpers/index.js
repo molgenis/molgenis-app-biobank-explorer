@@ -3,7 +3,7 @@ import { createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
 
-export const isCodeRegex = /^([A-Z]+|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
+export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
 /**
  * @example queries
