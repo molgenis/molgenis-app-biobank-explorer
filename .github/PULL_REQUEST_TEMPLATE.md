@@ -5,3 +5,4 @@
 - [ ] User documentation updated
 - [ ] Clean commits
 - [ ] No warnings during install
+- [ ] Added to release notes
