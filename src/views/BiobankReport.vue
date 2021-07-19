@@ -1,0 +1,185 @@
+<template>
+  <div class="mg-biobank-card container">
+    <script :text="bioschemasJsonld" type="application/ld+json" />
+    <loading
+      :active="isLoading"
+      loader="dots"
+      color="var(--secondary)"
+      background-color="var(--light)"
+    ></loading>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <!-- Back to previous page buttons -->
+          <button class="btn btn-link" @click="back">
+            <i class="fa fa-angle-left" aria-hidden="true"></i> Back
+          </button>
+        </div>
+      </div>
+
+      <div class="row" v-if="biobankDataAvailable && !this.isLoading">
+        <div class="col">
+          <report-title type="Biobank" :name="biobank.name"></report-title>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8">
+                <p><b>Id: </b>{{ biobank.id }}</p>
+                <report-description
+                  :description="biobank.description"
+                  :maxLength="500"
+                ></report-description>
+                <p v-if="availableCovidTypes">
+                  <report-details-list
+                    :reportDetails="availableCovidTypes"
+                  ></report-details-list>
+                </p>
+                <h3>Collections</h3>
+                <div
+                  v-for="(collection, index) in collectionsData"
+                  :key="collection.id"
+                >
+                  <hr v-if="index" />
+                  <report-collection-details
+                    :collection="collection"
+                  ></report-collection-details>
+                </div>
+              </div>
+              <!-- Right side card -->
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="card-text">
+                      <h5>Contact Information</h5>
+                      <report-details-list
+                        :reportDetails="contact"
+                      ></report-details-list>
+                      <h5 v-if="networks && networks.length > 0">Networks</h5>
+                      <report-details-list
+                        :reportDetails="network"
+                        v-for="network in networks"
+                        :key="network.id"
+                      ></report-details-list>
+                      <h5
+                        v-if="
+                          quality &&
+                          quality.Certification &&
+                          quality.Certification.value.length > 0
+                        "
+                      >
+                        Quality
+                      </h5>
+                      <report-details-list
+                        :reportDetails="quality"
+                      ></report-details-list>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import ReportDescription from '../components/report-components/ReportDescription.vue'
+import ReportTitle from '../components/report-components/ReportTitle.vue'
+import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
+import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
+import {
+  mapCollectionsDetailsTableContent,
+  mapContactInfo,
+  mapNetworkInfo,
+  mapObjArray
+} from '../utils/templateMapper'
+
+import { mapBiobankToBioschemas } from '@/utils/bioschemasMapper'
+
+export default {
+  name: 'biobank-report-card',
+  components: {
+    ReportTitle,
+    ReportDescription,
+    ReportDetailsList,
+    Loading,
+    ReportCollectionDetails
+  },
+  data () {
+    return {
+      collapsed: true
+    }
+  },
+  computed: {
+    ...mapState({
+      biobank: 'biobankReport',
+      isLoading: 'isLoading'
+    }),
+    biobankDataAvailable () {
+      return this.biobank && this.biobank
+    },
+    query () {
+      return this.$route.query
+    },
+    networks () {
+      return this.biobankDataAvailable && this.biobank.network
+        ? mapNetworkInfo(this.biobank)
+        : []
+    },
+    contact () {
+      return this.biobankDataAvailable && this.biobank.contact
+        ? mapContactInfo(this.biobank)
+        : {}
+    },
+    collectionsData () {
+      return this.biobankDataAvailable && this.biobank.collections
+        ? this.biobank.collections
+          .filter((it) => !it.parent_collection)
+          .map((col) => mapCollectionsDetailsTableContent(col))
+        : []
+    },
+    quality () {
+      return {
+        Certification: {
+          value: mapObjArray(this.biobank.quality),
+          type: 'list'
+        }
+      }
+    },
+    availableCovidTypes () {
+      if (
+        this.biobank.covid19biobank &&
+        this.biobank.covid19biobank.length > 0
+      ) {
+        return {
+          Covid19: {
+            badgeColor: 'warning',
+            type: 'list',
+            value: this.biobank.covid19biobank.map(
+              (covidItem) => covidItem.label || covidItem.name
+            )
+          }
+        }
+      } else return ''
+    },
+    bioschemasJsonld () {
+      return this.biobankDataAvailable
+        ? mapBiobankToBioschemas(this.biobank)
+        : {}
+    }
+  },
+  methods: {
+    ...mapActions(['GetBiobankReport']),
+    back () {
+      this.$router.go(-1)
+    }
+  },
+  mounted () {
+    this.GetBiobankReport(this.$store.state.route.params.id)
+  }
+}
+</script>

@@ -39,7 +39,7 @@
                     <div class="pt-3">
                       <div v-for="(collection, index) in collections" :key="collection.id">
                         <hr v-if="index"/>
-                        <report-collection :collection="collection"></report-collection>
+                        <report-collection-details :collection="collection"></report-collection-details>
                       </div>
                     </div>
                   </b-tab>
@@ -85,18 +85,20 @@
 </template>
 
 <script>
+/** Move to views */
+
 import { mapActions, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportTitle from '../report-components/ReportTitle.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-import ReportCollection from '../report-components/ReportCollection'
-import { mapNetworkData, mapContactInfo, mapCollectionsData } from '../../utils/templateMapper'
+import ReportCollectionDetails from '../report-components/ReportCollectionDetails'
+import { mapNetworkData, mapContactInfo, mapCollectionsDetailsTableContent } from '../../utils/templateMapper'
 
 export default {
   name: 'NetworkReportCard',
-  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollection },
+  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollectionDetails },
   methods: {
     ...mapActions(['GetNetworkReport']),
     back () {
@@ -115,8 +117,8 @@ export default {
       return this.networkReport.network
     },
     collections () {
-      return this.networkReport.collections ? mapCollectionsData(this.networkReport.collections).filter(
-        (collection) => { return !collection.parentCollection }) : []
+      return this.networkReport.collections ? this.networkReport.collections.filter(
+        (collection) => { return !collection.parentCollection }).map(col => mapCollectionsDetailsTableContent(col)) : []
     },
     biobanks () {
       return this.networkReport.biobanks

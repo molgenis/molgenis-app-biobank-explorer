@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { sortCollectionsByName } from './sorting'
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]
@@ -58,8 +57,10 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
   return ageRange
 }
 
-export const mapDetailsTableContent = collection => {
+export const mapCollectionsDetailsTableContent = collection => {
   return {
+    ...collection,
+    sub_collections: collection.sub_collections ? collection.sub_collections.map(subCol => mapCollectionsDetailsTableContent(subCol)) : [],
     Size: {
       value: getSize(collection),
       type: 'list',
@@ -178,39 +179,6 @@ export const mapContactInfo = instance => {
       type: 'string'
     }
   }
-}
-
-export const mapCollectionsData = collections => {
-  return sortCollectionsByName(collections.map(collection => {
-    return {
-      description: collection.description ? collection.description : undefined,
-      parentCollection: collection.parent_collection,
-      // Max depth supported in current api call is sub-sub-collections, if you go deeper, you get an empty list
-      subCollections:
-        collection.sub_collections && collection.sub_collections.length > 0
-          ? mapCollectionsData(collection.sub_collections)
-          : [],
-      name: collection.name,
-      id: collection.id,
-      content: {
-        Size: {
-          value: getSize(collection),
-          type: 'list',
-          badgeColor: 'success'
-        },
-        Materials: {
-          value: mapObjArray(collection.materials),
-          type: 'list',
-          badgeColor: 'danger'
-        },
-        Data: {
-          value: mapObjArray(collection.data_categories),
-          type: 'list',
-          badgeColor: 'info'
-        }
-      }
-    }
-  }))
 }
 
 export const mapNetworkData = network => {

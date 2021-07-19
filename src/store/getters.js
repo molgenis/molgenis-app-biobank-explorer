@@ -1,6 +1,7 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
 import filterDefinitions from '../utils/filterDefinitions'
+import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   filterDefinitions,
@@ -27,7 +28,7 @@ export default {
       const biobank = biobanks[biobankId]
       return {
         ...biobank,
-        collections: filterCollectionTree(collectionInfo.map(it => it.collectionId), biobank.collections)
+        collections: sortCollectionsByName(filterCollectionTree(collectionInfo.map(it => it.collectionId), biobank.collections))
       }
     })
   },

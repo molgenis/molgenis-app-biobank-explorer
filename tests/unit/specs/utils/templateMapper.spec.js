@@ -1,7 +1,6 @@
 import {
-  mapDetailsTableContent,
+  mapCollectionsDetailsTableContent,
   mapAgeRange,
-  mapCollectionsData,
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
@@ -11,97 +10,101 @@ import {
   collectionReportInformation
 } from '../../../../src/utils/templateMapper'
 
+let collectionsReport
+
 describe('templateMapper', () => {
-  const collectionsReport = {
-    _meta: {
-      name: 'meta'
-    },
-    id: 'c-001',
-    name: 'beautiful collection',
-    description: 'beautiful samples',
-    order_of_magnitude: {
-      size: '666'
-    },
-    network: [],
-    age_low: 0,
-    age_high: 20,
-    age_unit: [{ label: 'years' }],
-    type: [{ label: 'type1' }, { label: 'type2' }],
-    sex: [{ label: 'male' }, { label: 'female' }],
-    materials: [{ label: 'material1' }, { label: 'material2' }],
-    storage_temperatures: [{ label: '10 degrees' }],
-    data_categories: [{ label: 'One type' }],
-    diagnosis_available: [{ label: 'Common cold' }, { label: 'Mysterious illness' }, { label: 'Instaneous death' }],
-    head_lastname: 'Thermopolis Renaldi',
-    head_firstname: 'Amelia Mignonette',
-    head_role: 'Princess of Genovia',
-    contact: {
-      title_before_name: 'Princess of Genovia',
-      last_name: 'Thermopolis Renaldi',
-      first_name: 'Amelia Mignonette',
-      email: 'mia@genovia.gnv',
-      phone: '+66 123456789'
-    },
-    sub_collections: [
-      {
-        id: '1',
-        materials: [{ id: 'OTHER', label: 'Other' }],
-        description: 'Description of test1',
-        name: 'Test 1',
-        order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
-        data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
-        parent_collection: { id: 'c-001', name: 'beautiful collection' },
-        sub_collections: []
+  beforeEach(() => {
+    collectionsReport = {
+      _meta: {
+        name: 'meta'
+      },
+      id: 'c-001',
+      name: 'beautiful collection',
+      description: 'beautiful samples',
+      order_of_magnitude: {
+        size: '777'
+      },
+      network: [],
+      age_low: 0,
+      age_high: 20,
+      age_unit: [{ label: 'years' }],
+      type: [{ label: 'type1' }, { label: 'type2' }],
+      sex: [{ label: 'male' }, { label: 'female' }],
+      materials: [{ label: 'material1' }, { label: 'material2' }],
+      storage_temperatures: [{ label: '10 degrees' }],
+      data_categories: [{ label: 'One type' }],
+      diagnosis_available: [{ label: 'Common cold' }, { label: 'Mysterious illness' }, { label: 'Instaneous death' }],
+      head_lastname: 'Thermopolis Renaldi',
+      head_firstname: 'Amelia Mignonette',
+      head_role: 'Princess of Genovia',
+      contact: {
+        title_before_name: 'Princess of Genovia',
+        last_name: 'Thermopolis Renaldi',
+        first_name: 'Amelia Mignonette',
+        email: 'mia@genovia.gnv',
+        phone: '+66 123456789'
+      },
+      sub_collections: [
+        {
+          id: '1',
+          materials: [{ id: 'OTHER', label: 'Other' }],
+          description: 'Description of test1',
+          name: 'Test 1',
+          order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
+          data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
+          parent_collection: { id: 'c-001', name: 'beautiful collection' },
+          sub_collections: []
+        },
+        {
+          id: '2',
+          materials: [{ id: 'OTHER', label: 'Other' }],
+          name: 'Test 2',
+          data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
+          order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
+          parent_collection: { id: 'c-001', name: 'beautiful collection' },
+          sub_collections: [
+            {
+              id: '3',
+              materials: [{ id: 'OTHER', label: 'Other' }],
+              name: 'Test 3 (sub sub)',
+              order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
+              parent_collection: { id: '2', name: 'Test 2' },
+              sub_collections: []
+            }
+          ]
+        }
+      ],
+      collaboration_commercial: false,
+      collaboration_non_for_profit: true,
+      country: { name: 'Genovia' },
+      quality: [{ label: 'Order of the rose' }],
+      biobank: {
+        id: 'b-001',
+        name: 'beautiful biobank',
+        juridical_person: 'Is this even a person?',
+        email: 'info@beautiful-biobank.gnv',
+        url: 'https://beautiful-biobank.gnv',
+        partner_charter_signed: true
+      },
+      data_use: [{
+        label: 'DUO Testlabel',
+        uri: 'https://external-link-to-duo-item'
       },
       {
-        id: '2',
-        materials: [{ id: 'OTHER', label: 'Other' }],
-        name: 'Test 2',
-        data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
-        order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
-        parent_collection: { id: 'c-001', name: 'beautiful collection' },
-        sub_collections: [
-          {
-            id: '3',
-            materials: [{ id: 'OTHER', label: 'Other' }],
-            name: 'Test 3 (sub sub)',
-            order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
-            parent_collection: { id: '2', name: 'Test 2' },
-            sub_collections: []
-          }
-        ]
-      }
-    ],
-    collaboration_commercial: false,
-    collaboration_non_for_profit: true,
-    country: { name: 'Genovia' },
-    quality: [{ label: 'Order of the rose' }],
-    biobank: {
-      id: 'b-001',
-      name: 'beautiful biobank',
-      juridical_person: 'Is this even a person?',
-      email: 'info@beautiful-biobank.gnv',
-      url: 'https://beautiful-biobank.gnv',
-      partner_charter_signed: true
-    },
-    data_use: [{
-      label: 'DUO Testlabel',
-      uri: 'https://external-link-to-duo-item'
-    },
-    {
-      label: 'DUO Testlabel',
-      uri: ''
-    }]
-  }
-  describe('mapDetailsTableContent', () => {
+        label: 'DUO Testlabel',
+        uri: ''
+      }]
+    }
+  })
+  describe('mapCollectionsDetailsTableContent', () => {
     it('should generate stringValues of details table content', () => {
-      const actual = mapDetailsTableContent(collectionsReport)
-      const expectedSize = ['666']
+      const actual = mapCollectionsDetailsTableContent(collectionsReport)
+      const expectedSize = ['777']
       expect(actual.Size.value).toStrictEqual(expectedSize)
     })
 
     it('should generate listValues of details table content', () => {
-      const actual = mapDetailsTableContent(collectionsReport)
+      const actual = mapCollectionsDetailsTableContent(collectionsReport)
       expect(actual.Type.value).toStrictEqual(['type1', 'type2'])
       expect(actual.Storage.value).toStrictEqual(['10 degrees'])
       expect(actual.Data.value).toStrictEqual(['One type'])
@@ -155,84 +158,404 @@ describe('templateMapper', () => {
     })
   })
 
-  describe('mapCollectionsData', () => {
-    it('should generate details list data for sub collections', () => {
-      const expected = [
-        {
-          description: 'Description of test1',
-          parentCollection: { id: 'c-001', name: 'beautiful collection' },
-          subCollections: [],
-          name: 'Test 1',
-          id: '1',
-          content: {
-            Size: {
-              value: ['10.000 - 100.000'],
-              type: 'list',
-              badgeColor: 'success'
+  describe('mapCollectionsDetailsTableContent', () => {
+    it('should add details for collection and for sub collections', () => {
+      const expected = {
+        Age: {
+          type: 'string-with-key',
+          value: '0-20 years'
+        },
+        Data: {
+          badgeColor: 'info',
+          type: 'list',
+          value: [
+            'One type'
+          ]
+        },
+        DataUse: {
+          badgeColor: 'success',
+          type: 'list',
+          value: [
+            {
+              label: 'DUO Testlabel',
+              uri: 'https://external-link-to-duo-item'
             },
-            Materials: {
-              value: ['Other'],
-              type: 'list',
-              badgeColor: 'danger'
+            {
+              label: 'DUO Testlabel',
+              uri: '#'
+            }
+          ]
+        },
+        Diagnosis: {
+          badgeColor: 'primary',
+          type: 'list',
+          value: [
+            'Common cold',
+            'Mysterious illness',
+            'Instaneous death'
+          ]
+        },
+        Materials: {
+          badgeColor: 'danger',
+          type: 'list',
+          value: [
+            'material1',
+            'material2'
+          ]
+        },
+        Sex: {
+          badgeColor: 'secondary',
+          type: 'list',
+          value: [
+            'male',
+            'female'
+          ]
+        },
+        Size: {
+          badgeColor: 'success',
+          type: 'list',
+          value: [
+            '777'
+          ]
+        },
+        Storage: {
+          badgeColor: 'warning',
+          type: 'list',
+          value: [
+            '10 degrees'
+          ]
+        },
+        Type: {
+          badgeColor: 'info',
+          type: 'list',
+          value: [
+            'type1',
+            'type2'
+          ]
+        },
+        _meta: {
+          name: 'meta'
+        },
+        age_high: 20,
+        age_low: 0,
+        age_unit: [
+          {
+            label: 'years'
+          }
+        ],
+        biobank: {
+          email: 'info@beautiful-biobank.gnv',
+          id: 'b-001',
+          juridical_person: 'Is this even a person?',
+          name: 'beautiful biobank',
+          partner_charter_signed: true,
+          url: 'https://beautiful-biobank.gnv'
+        },
+        collaboration_commercial: false,
+        collaboration_non_for_profit: true,
+        contact: {
+          email: 'mia@genovia.gnv',
+          first_name: 'Amelia Mignonette',
+          last_name: 'Thermopolis Renaldi',
+          phone: '+66 123456789',
+          title_before_name: 'Princess of Genovia'
+        },
+        country: {
+          name: 'Genovia'
+        },
+        data_categories: [
+          {
+            label: 'One type'
+          }
+        ],
+        data_use: [
+          {
+            label: 'DUO Testlabel',
+            uri: 'https://external-link-to-duo-item'
+          },
+          {
+            label: 'DUO Testlabel',
+            uri: ''
+          }
+        ],
+        description: 'beautiful samples',
+        diagnosis_available: [
+          {
+            label: 'Common cold'
+          },
+          {
+            label: 'Mysterious illness'
+          },
+          {
+            label: 'Instaneous death'
+          }
+        ],
+        head_firstname: 'Amelia Mignonette',
+        head_lastname: 'Thermopolis Renaldi',
+        head_role: 'Princess of Genovia',
+        id: 'c-001',
+        materials: [
+          {
+            label: 'material1'
+          },
+          {
+            label: 'material2'
+          }
+        ],
+        name: 'beautiful collection',
+        network: [],
+        order_of_magnitude: {
+          size: '777'
+        },
+        quality: [
+          {
+            label: 'Order of the rose'
+          }
+        ],
+        sex: [
+          {
+            label: 'male'
+          },
+          {
+            label: 'female'
+          }
+        ],
+        storage_temperatures: [
+          {
+            label: '10 degrees'
+          }
+        ],
+        sub_collections: [
+          {
+            Age: {
+              type: 'string-with-key',
+              value: undefined
             },
             Data: {
-              value: ['Biological samples'],
+              badgeColor: 'info',
               type: 'list',
-              badgeColor: 'info'
-            }
-          }
-        },
-        {
-          description: undefined,
-          parentCollection: { id: 'c-001', name: 'beautiful collection' },
-          subCollections: [
-            {
-              parentCollection: { id: '2', name: 'Test 2' },
-              subCollections: [],
-              name: 'Test 3 (sub sub)',
-              id: '3',
-              description: undefined,
-              content: {
-                Size: {
-                  value: ['10.000 - 100.000'],
-                  type: 'list',
-                  badgeColor: 'success'
-                },
-                Materials: {
-                  value: ['Other'],
-                  type: 'list',
-                  badgeColor: 'danger'
+              value: [
+                'Biological samples'
+              ]
+            },
+            DataUse: {
+              badgeColor: 'success',
+              type: 'list',
+              value: []
+            },
+            Diagnosis: {
+              badgeColor: 'primary',
+              type: 'list',
+              value: []
+            },
+            Materials: {
+              badgeColor: 'danger',
+              type: 'list',
+              value: [
+                'Other'
+              ]
+            },
+            Sex: {
+              badgeColor: 'secondary',
+              type: 'list',
+              value: []
+            },
+            Size: {
+              badgeColor: 'success',
+              type: 'list',
+              value: [
+                '10.000 - 100.000'
+              ]
+            },
+            Storage: {
+              badgeColor: 'warning',
+              type: 'list',
+              value: []
+            },
+            Type: {
+              badgeColor: 'info',
+              type: 'list',
+              value: []
+            },
+            data_categories: [
+              {
+                id: 'BIOLOGICAL_SAMPLES',
+                label: 'Biological samples'
+              }
+            ],
+            description: 'Description of test1',
+            id: '1',
+            materials: [
+              {
+                id: 'OTHER',
+                label: 'Other'
+              }
+            ],
+            name: 'Test 1',
+            order_of_magnitude: {
+              id: 4,
+              size: '10.000 - 100.000'
+            },
+            parent_collection: {
+              id: 'c-001',
+              name: 'beautiful collection'
+            },
+            sub_collections: []
+          },
+          {
+            Age: {
+              type: 'string-with-key',
+              value: undefined
+            },
+            Data: {
+              badgeColor: 'info',
+              type: 'list',
+              value: [
+                'Biological samples'
+              ]
+            },
+            DataUse: {
+              badgeColor: 'success',
+              type: 'list',
+              value: []
+            },
+            Diagnosis: {
+              badgeColor: 'primary',
+              type: 'list',
+              value: []
+            },
+            Materials: {
+              badgeColor: 'danger',
+              type: 'list',
+              value: [
+                'Other'
+              ]
+            },
+            Sex: {
+              badgeColor: 'secondary',
+              type: 'list',
+              value: []
+            },
+            Size: {
+              badgeColor: 'success',
+              type: 'list',
+              value: [
+                '10.000 - 100.000'
+              ]
+            },
+            Storage: {
+              badgeColor: 'warning',
+              type: 'list',
+              value: []
+            },
+            Type: {
+              badgeColor: 'info',
+              type: 'list',
+              value: []
+            },
+            data_categories: [
+              {
+                id: 'BIOLOGICAL_SAMPLES',
+                label: 'Biological samples'
+              }
+            ],
+            id: '2',
+            materials: [
+              {
+                id: 'OTHER',
+                label: 'Other'
+              }
+            ],
+            name: 'Test 2',
+            order_of_magnitude: {
+              id: 4,
+              size: '10.000 - 100.000'
+            },
+            parent_collection: {
+              id: 'c-001',
+              name: 'beautiful collection'
+            },
+            sub_collections: [
+              {
+                Age: {
+                  type: 'string-with-key',
+                  value: undefined
                 },
                 Data: {
-                  value: [],
+                  badgeColor: 'info',
                   type: 'list',
-                  badgeColor: 'info'
-                }
+                  value: []
+                },
+                DataUse: {
+                  badgeColor: 'success',
+                  type: 'list',
+                  value: []
+                },
+                Diagnosis: {
+                  badgeColor: 'primary',
+                  type: 'list',
+                  value: []
+                },
+                Materials: {
+                  badgeColor: 'danger',
+                  type: 'list',
+                  value: [
+                    'Other'
+                  ]
+                },
+                Sex: {
+                  badgeColor: 'secondary',
+                  type: 'list',
+                  value: []
+                },
+                Size: {
+                  badgeColor: 'success',
+                  type: 'list',
+                  value: [
+                    '10.000 - 100.000'
+                  ]
+                },
+                Storage: {
+                  badgeColor: 'warning',
+                  type: 'list',
+                  value: []
+                },
+                Type: {
+                  badgeColor: 'info',
+                  type: 'list',
+                  value: []
+                },
+                id: '3',
+                materials: [
+                  {
+                    id: 'OTHER',
+                    label: 'Other'
+                  }
+                ],
+                name: 'Test 3 (sub sub)',
+                order_of_magnitude: {
+                  id: 4,
+                  size: '10.000 - 100.000'
+                },
+                parent_collection: {
+                  id: '2',
+                  name: 'Test 2'
+                },
+                sub_collections: []
               }
-            }
-          ],
-          name: 'Test 2',
-          id: '2',
-          content: {
-            Size: {
-              value: ['10.000 - 100.000'],
-              type: 'list',
-              badgeColor: 'success'
-            },
-            Materials: {
-              value: ['Other'],
-              type: 'list',
-              badgeColor: 'danger'
-            },
-            Data: {
-              value: ['Biological samples'],
-              type: 'list',
-              badgeColor: 'info'
-            }
+            ]
           }
-        }
-      ]
-      const actual = mapCollectionsData(collectionsReport.sub_collections)
+        ],
+        type: [
+          {
+            label: 'type1'
+          },
+          {
+            label: 'type2'
+          }
+        ]
+      }
+      const actual = mapCollectionsDetailsTableContent(collectionsReport)
       expect(actual).toStrictEqual(expected)
     })
   })
