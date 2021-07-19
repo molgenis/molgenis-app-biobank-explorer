@@ -39,6 +39,7 @@
                     <div class="pt-3">
                       <div v-for="(collection, index) in collections" :key="collection.id">
                         <hr v-if="index"/>
+                         <collection-title :title="collection.name" :id="collection.id"  />
                         <report-collection-details :collection="collection"></report-collection-details>
                       </div>
                     </div>
@@ -93,12 +94,13 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportTitle from '../report-components/ReportTitle.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-import ReportCollectionDetails from '../report-components/ReportCollectionDetails'
+import ReportCollectionDetails from '../report-components/ReportCollectionDetails.vue'
+import CollectionTitle from '../report-components/CollectionTitle.vue'
 import { mapNetworkData, mapContactInfo, mapCollectionsDetailsTableContent } from '../../utils/templateMapper'
 
 export default {
   name: 'NetworkReportCard',
-  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollectionDetails },
+  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollectionDetails, CollectionTitle },
   methods: {
     ...mapActions(['GetNetworkReport']),
     back () {

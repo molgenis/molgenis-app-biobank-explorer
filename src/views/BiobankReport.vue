@@ -39,6 +39,10 @@
                   :key="collection.id"
                 >
                   <hr v-if="index" />
+                  <collection-title
+                    :title="collection.name"
+                    :id="collection.id"
+                  />
                   <report-collection-details
                     :collection="collection"
                   ></report-collection-details>
@@ -90,6 +94,7 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../components/report-components/ReportDescription.vue'
 import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
+import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
 import {
   mapCollectionsDetailsTableContent,
@@ -107,7 +112,8 @@ export default {
     ReportDescription,
     ReportDetailsList,
     Loading,
-    ReportCollectionDetails
+    ReportCollectionDetails,
+    CollectionTitle
   },
   data () {
     return {
