@@ -21,7 +21,7 @@ describe('CollectionReport', () => {
       description: 'beautiful samples',
       order_of_magnitude: {
         _href: '/api/v2/eu_bbmri_eric_biobank_size/3',
-        size: '666'
+        size: '777'
       },
       country: {
         name: 'Genovia'
@@ -76,101 +76,10 @@ describe('CollectionReport', () => {
   })
 
   describe('computed', () => {
-    describe('mainContent', () => {
-      it('should return empty object', () => {
-        store.state.collectionReport = undefined
-        const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.mainContent).toStrictEqual({})
-      })
-    })
-
     describe('collectionId', () => {
       it('computes the collection id based on URL', () => {
         const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
         expect(wrapper.vm.collectionId).toBe('c-001')
-      })
-    })
-
-    describe('subCollections', () => {
-      it('computes empty array for empty subCollections', () => {
-        const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.subCollections).toStrictEqual([])
-      })
-      it('computes array with subCollections', () => {
-        store.state.collectionReport.sub_collections = [
-          {
-            id: '1',
-            materials: [{ id: 'OTHER', label: 'Other' }],
-            name: 'Test 1',
-            order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
-            data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
-            parent_collection: { id: 'c-001', name: 'beautiful collection' },
-            sub_collections: []
-          },
-          {
-            id: '2',
-            materials: [{ id: 'OTHER', label: 'Other' }],
-            name: 'Test 2',
-            data_categories: [{ id: 'BIOLOGICAL_SAMPLES', label: 'Biological samples' }],
-            order_of_magnitude: { id: 4, size: '10.000 - 100.000' },
-            parent_collection: { id: 'c-001', name: 'beautiful collection' },
-            sub_collections: []
-          }
-        ]
-
-        const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-        const expected = [
-          {
-            description: undefined,
-            parentCollection: { id: 'c-001', name: 'beautiful collection' },
-            subCollections: [],
-            name: 'Test 1',
-            id: '1',
-            content: {
-              Size: {
-                value: ['10.000 - 100.000'],
-                type: 'list',
-                badgeColor: 'success'
-              },
-              Materials: {
-                value: ['Other'],
-                type: 'list',
-                badgeColor: 'danger'
-              },
-              Data: {
-                value: ['Biological samples'],
-                type: 'list',
-                badgeColor: 'info'
-              }
-
-            }
-          },
-          {
-            description: undefined,
-            parentCollection: { id: 'c-001', name: 'beautiful collection' },
-            subCollections: [],
-            name: 'Test 2',
-            id: '2',
-            content: {
-              Size: {
-                value: ['10.000 - 100.000'],
-                type: 'list',
-                badgeColor: 'success'
-              },
-              Materials: {
-                value: ['Other'],
-                type: 'list',
-                badgeColor: 'danger'
-              },
-              Data: {
-                value: ['Biological samples'],
-                type: 'list',
-                badgeColor: 'info'
-              }
-            }
-          }
-        ]
-        expect(wrapper.vm.subCollections).toStrictEqual(expected)
       })
     })
   })

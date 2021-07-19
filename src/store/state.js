@@ -17,7 +17,7 @@ export default {
   biobankIds: undefined,
   // IDs of collections matching the collection filters
   collectionInfo: undefined,
-  /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
+  /* A single biobank object which is fetched by ID for showing the BiobankReport view */
   biobankReport: undefined,
   collectionReport: undefined,
   networkReport: {
