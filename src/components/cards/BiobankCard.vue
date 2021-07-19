@@ -5,6 +5,13 @@
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed">
       <div class="row">
+        <div class="collapse-column" v-if="!loading">
+          <font-awesome-icon
+            icon="caret-right"
+            :style="iconStyle"
+            class="collapse-button mr-2"
+          />
+        </div>
         <div class="col-md-5 d-flex flex-column" v-if="!loading">
           <div class="mb-2">
             <h5>
@@ -160,6 +167,12 @@ export default {
           .map((covidItem) => covidItem.label || covidItem.name)
           .join(', ')
       } else return ''
+    },
+    iconStyle () {
+      return {
+        transform: `rotate(${this.collapsed ? 0 : 90}deg)`,
+        transition: 'transform 0.2s'
+      }
     }
   }
 }
@@ -191,7 +204,7 @@ export default {
 
 .biobank-card-header:hover {
   cursor: pointer;
-  background-color: #e4e4e4;
+  /* background-color: #e4e4e4; */
 }
 .biobank-icon:hover {
   cursor: pointer;
@@ -243,5 +256,16 @@ export default {
   bottom: -1rem;
   right: -7rem;
   left: -0.5rem;
+}
+
+.collapse-column {
+  margin-left: 10px;
+  margin-right: 6px;
+  display: table-cell !important;
+  vertical-align: middle;
+}
+
+.collapse-button {
+  cursor: pointer;
 }
 </style>
