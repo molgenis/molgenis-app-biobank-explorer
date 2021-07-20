@@ -6,8 +6,7 @@
       loader="dots"
       :is-full-page="true"
       color="var(--secondary)"
-      background-color="var(--light)"
-    ></loading>
+      background-color="var(--light)"></loading>
     <div class="container-fluid">
       <!-- Back to previous page buttons -->
       <button class="btn btn-link pl-0" @click="back">
@@ -27,8 +26,7 @@
 
               <!-- Right side card -->
               <collection-report-info-card
-                :info="info"
-              ></collection-report-info-card>
+                :info="info"></collection-report-info-card>
             </div>
           </div>
         </div>

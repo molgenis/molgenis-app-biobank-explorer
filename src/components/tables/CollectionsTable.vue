@@ -18,8 +18,7 @@
               class="collection-selection-button"
               :collectionData="collection"
               icon-only
-              router-enabled
-            ></collection-selector>
+              router-enabled></collection-selector>
           </td>
           <td
             :class="{
@@ -29,13 +28,11 @@
               'table-text-content-columns': !hasSubCollections(collection),
             }"
             v-for="(column, index) in columns"
-            :key="index"
-          >
+            :key="index">
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + collection['id']">
                 <button
-                  class="btn btn-link collection-link text-left pt-0 border-0"
-                >
+                  class="btn btn-link collection-link text-left pt-0 border-0">
                   {{ collection[column] }}
                 </button>
               </router-link>
@@ -44,8 +41,7 @@
               <quality-column
                 :qualities="collection[column]"
                 :spacing="0"
-                :qualityInfo="qualityStandardsDictionary"
-              ></quality-column>
+                :qualityInfo="qualityStandardsDictionary"></quality-column>
             </span>
             <span v-else-if="column === 'type'">
               {{ getCollectionType(collection) }}
@@ -73,8 +69,7 @@
             </b-link>
             <b-collapse :id="'collapse-' + collection.id">
               <sub-collections-table
-                :subCollections="collection.sub_collections"
-              ></sub-collections-table>
+                :subCollections="collection.sub_collections"></sub-collections-table>
             </b-collapse>
           </td>
         </tr>

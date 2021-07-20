@@ -3,8 +3,7 @@
     <div
       :class="{
         'font-weight-bold': boldText,
-      }"
-    >
+      }">
       <span v-if="label && !iconBeforeLabel">{{ label }}</span>
       <span
         class="
@@ -15,16 +14,14 @@
         "
         :class="label ? iconBeforeLabel ? 'mr-1' : 'ml-1' : ''"
         aria-hidden="true"
-        :id="`qm-${uniqueId}`"
-      ></span>
+        :id="`qm-${uniqueId}`"></span>
       <span v-if="label && iconBeforeLabel">{{ label }}</span>
     </div>
     <b-popover
       :target="`qm-${uniqueId}`"
       triggers="hover click"
       :placement="popoverPlacement"
-      custom-class="info-popover"
-    >
+      custom-class="info-popover">
       <slot></slot>
     </b-popover>
   </div>

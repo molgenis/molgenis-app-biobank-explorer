@@ -9,8 +9,7 @@
       :name="filter.name"
       :label="filter.label"
       :headerClass="filter.headerClass"
-      :collapsed="filter.initiallyCollapsed"
-    >
+      :collapsed="filter.initiallyCollapsed">
       <component
         v-if="bookmarkMappedToState"
         :is="filter.component"
@@ -20,8 +19,7 @@
         @input="(value) => filterChange(filter.name, value)"
         @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
         :returnTypeAsObject="true"
-        :bulkOperation="true"
-      >
+        :bulkOperation="true">
       </component>
     </FilterCard>
   </div>

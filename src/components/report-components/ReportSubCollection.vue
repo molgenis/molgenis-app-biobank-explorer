@@ -16,8 +16,7 @@
         v-for="subCollection in collection.sub_collections"
         :collection="subCollection"
         :key="subCollection.id"
-        :level="level + 1"
-      ></report-sub-collection>
+        :level="level + 1"></report-sub-collection>
     </div>
   </div>
 </template>

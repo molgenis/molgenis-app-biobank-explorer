@@ -9,34 +9,29 @@
         <collection-select-all
           v-if="!loading && foundCollectionIds.length"
           class="mt-1 ml-3"
-          router-enabled
-        />
+          router-enabled/>
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
               class="w-50 mr-2 p-1"
               type="text"
               v-model="ie11BookmarkToApply"
-              placeholder="Place your recieved bookmark here"
-            /><input
+              placeholder="Place your recieved bookmark here"/><input
               type="button"
               class="btn btn-sm btn-secondary"
               @click="applyIE11Bookmark"
               value="Apply"
-              :disabled="!ie11BookmarkToApply"
-            />
+              :disabled="!ie11BookmarkToApply"/>
             <div class="mt-1">
               <input
                 class="w-50 d-inline p-1"
                 id="ie11bookmark"
                 :value="ie11Bookmark"
-                placeholder="Your current bookmark"
-              />
+                placeholder="Your current bookmark"/>
               <button
                 class="btn btn-sm btn-success ml-2 d-inline"
                 @click="copyIE11Bookmark"
-                :disabled="!ie11Bookmark"
-              >
+                :disabled="!ie11Bookmark">
                 Copy<span class="fa fa-copy ml-1"></span>
               </button>
             </div>
@@ -67,8 +62,7 @@
       :cartSelectionText="`${this.selectedCollections.length} collection(s) selected`"
       :clickHandler="showSelection"
       :title="negotiatorButtonText"
-      toastClass="bg-warning text-white"
-    >
+      toastClass="bg-warning text-white">
       <template v-slot:buttonText> Show selection </template>
     </cart-selection-toast>
 
@@ -81,28 +75,24 @@
       body-bg-variant="white"
       footer-bg-variant="warning"
       body-class="pb-0"
-      @hide="closeModal"
-    >
+      @hide="closeModal">
       <template v-if="collectionCart.length > 0">
         <div
           class="card mb-3 border"
           :key="`${cart.biobankLabel}-${index}`"
-          v-for="(cart, index) in collectionCart"
-        >
+          v-for="(cart, index) in collectionCart">
           <div class="card-header font-weight-bold">{{ cart.biobankLabel }}</div>
           <div class="collection-cart">
             <div
               class="card-body d-flex border-bottom"
               :key="`${collection.label}-${index}`"
-              v-for="(collection, index) in cart.collections"
-            >
+              v-for="(collection, index) in cart.collections">
               <div>
                 <font-awesome-icon
                   title="Not available for commercial use"
                   v-if="isNonCommercialCollection(collection.value)"
                   class="text-danger non-commercial mr-1"
-                  :icon="['fab', 'creative-commons-nc-eu']"
-                />
+                  :icon="['fab', 'creative-commons-nc-eu']"/>
                 <span> {{ collection.label }}</span>
               </div>
               <div class="pl-3 ml-auto">
@@ -114,8 +104,7 @@
                       collections: [collection],
                       router: $router,
                     })
-                  "
-                ></span>
+                  "></span>
               </div>
             </div>
           </div>
@@ -125,9 +114,7 @@
         Sorry, none of the samples are currently in Podium.
       </p>
       <template v-slot:modal-footer>
-        <b-button class="btn btn-dark mr-auto" @click="removeAllCollections"
-          >Remove all</b-button
-        >
+        <b-button class="btn btn-dark mr-auto" @click="removeAllCollections">Remove all</b-button>
         <div>
           <span class="text-white font-weight-bold d-block">{{
             modalFooterText
@@ -136,24 +123,19 @@
             <font-awesome-icon
               title="Not available for commercial use"
               class="text-white non-commercial mr-1"
-              :icon="['fab', 'creative-commons-nc-eu']"
-            />
+              :icon="['fab', 'creative-commons-nc-eu']"/>
             {{ selectedNonCommercialCollections }} are non-commercial only
           </span>
         </div>
         <div class="ml-auto">
-          <b-button class="btn btn-dark mr-2" @click="hideModal"
-            >Cancel</b-button
-          >
+          <b-button class="btn btn-dark mr-2" @click="hideModal">Cancel</b-button>
           <b-button
             :disabled="
               (isPodium && !collectionsInPodium.length) ||
               !selectedCollections.length
             "
             class="btn btn-secondary ml-auto"
-            @click="sendRequest"
-            >{{ negotiatorButtonText }}</b-button
-          >
+            @click="sendRequest">{{ negotiatorButtonText }}</b-button>
         </div>
       </template>
     </b-modal>

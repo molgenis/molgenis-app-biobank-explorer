@@ -15,8 +15,7 @@
           <td
             class="table-text-content-columns-sub"
             v-for="column in columns"
-            :key="column"
-          >
+            :key="column">
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + subCollection.id">
                 {{ subCollection[column] }}
@@ -32,8 +31,7 @@
               <quality-column
                 :qualities="subCollection[column]"
                 :spacing=0
-                :qualityInfo="qualityStandardsDictionary"
-              ></quality-column>
+                :qualityInfo="qualityStandardsDictionary"></quality-column>
             </span>
             <span v-else-if="column === 'size'">{{
               subCollection[column]
@@ -42,8 +40,7 @@
         </tr>
         <tr
           v-if="subCollection.sub_collections.length"
-          :key="'subsubs-' + subCollection.id"
-        >
+          :key="'subsubs-' + subCollection.id">
           <td colspan="5" class="sub-table-cell">
             <b-button
               :class="visible[subCollection.id] ? null : 'collapsed'"
@@ -52,24 +49,20 @@
               @click="toggleVisible(subCollection.id)"
               class="m-1"
               size="sm"
-              variant="primary"
-            >
+              variant="primary">
               <i
                 class="fa fa-caret-down"
                 aria-hidden="true"
-                v-if="visible[subCollection.id]"
-              ></i>
+                v-if="visible[subCollection.id]"></i>
               <i class="fa fa-caret-right" aria-hidden="true" v-else></i>
               Sub collections
             </b-button>
             <b-collapse
               :id="'collapse-' + subCollection.id"
-              v-model="visible[subCollection.id]"
-            >
+              v-model="visible[subCollection.id]">
               <sub-collections-table
                 :subCollections="subCollection.sub_collections"
-                :level="level + 2"
-              ></sub-collections-table>
+                :level="level + 2"></sub-collections-table>
             </b-collapse>
           </td>
         </tr>

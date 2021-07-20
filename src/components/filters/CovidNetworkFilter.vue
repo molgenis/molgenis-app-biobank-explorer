@@ -3,15 +3,13 @@
     <b-form-checkbox
       id="covidBiobankNetwork"
       v-model="biobankNetwork"
-      name="covidBiobankNetwork"
-    >
+      name="covidBiobankNetwork">
       Biobanks providing COVID-19 services
     </b-form-checkbox>
     <b-form-checkbox
       id="covidCollectionNetwork"
       v-model="collectionNetwork"
-      name="covidCollectionNetwork"
-    >
+      name="covidCollectionNetwork">
       COVID-19 collections
     </b-form-checkbox>
   </div>

@@ -5,8 +5,7 @@
       loader="dots"
       :is-full-page="true"
       color="var(--secondary)"
-      background-color="var(--light)"
-    ></loading>
+      background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
         <div class="col">

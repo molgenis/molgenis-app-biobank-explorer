@@ -3,13 +3,11 @@
     <collection-selector
       class="mb-2"
       v-if="isTopLevelCollection"
-      :collectionData="collection"
-    />
+      :collectionData="collection"/>
 
     <report-description
       :description="collection.description"
-      :maxLength="500"
-    ></report-description>
+      :maxLength="500"></report-description>
 
     <!-- main collection information -->
     <table class="mg-report-details-list mb-3">
@@ -20,11 +18,9 @@
       <tr v-if="collection.url">
         <th scope="row" class="pr-1">Website:</th>
         <td>
-          <span
-            ><a target="_blank" :href="collection.url">{{
+          <span><a target="_blank" :href="collection.url">{{
               collection.url
-            }}</a></span
-          >
+            }}</a></span>
         </td>
       </tr>
       <report-list-row :data="mainContent.Size">Size:</report-list-row>
@@ -39,8 +35,7 @@
       </report-list-row>
       <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
       <report-list-row :data="mainContent.Data">Data:</report-list-row>
-      <report-list-row :data="mainContent.Diagnosis">
-        Diagnosis:
+      <report-list-row :data="mainContent.Diagnosis">Diagnosis:
       </report-list-row>
       <report-list-row :data="mainContent.DataUse">
         Data use conditions:
@@ -50,15 +45,13 @@
     <!-- Recursive set of subcollections -->
     <div
       v-if="collection.sub_collections && collection.sub_collections.length"
-      class="mt-2"
-    >
+      class="mt-2">
       <h5>Sub collections</h5>
       <report-sub-collection
         v-for="subCollection in collection.sub_collections"
         :collection="subCollection"
         :key="subCollection.id"
-        :level="1"
-      ></report-sub-collection>
+        :level="1"></report-sub-collection>
     </div>
   </div>
 </template>
@@ -86,7 +79,9 @@ export default {
   },
   computed: {
     mainContent () {
-      return this.collection ? mapCollectionsDetailsTableContent(this.collection) : {}
+      return this.collection
+        ? mapCollectionsDetailsTableContent(this.collection)
+        : {}
     },
     isTopLevelCollection () {
       return this.collection.parent_collection === undefined
