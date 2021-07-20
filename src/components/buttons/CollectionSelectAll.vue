@@ -7,8 +7,7 @@
       class="add-to-cart"
       @change="handleCollectionStatus"
       :checked="allCollectionsSelected"
-      hidden
-    />
+      hidden/>
     <label class="add-to-cart-label btn btn-outline-secondary" for="select-deselect-all">
       <span class="mr-2">Select all collections</span>
       <span class="fa fa-plus"></span>

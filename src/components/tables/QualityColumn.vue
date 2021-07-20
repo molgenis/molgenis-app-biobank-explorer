@@ -4,14 +4,12 @@
       v-for="quality in qualities"
       :style="margin"
       :key="quality.id"
-      class="d-flex"
-    >
+      class="d-flex">
       <a
         :href="quality.certification_report"
         target="_blank"
         rel="noopener noreferrer"
-        v-if="quality.certification_report"
-      >
+        v-if="quality.certification_report">
         <span v-if="!quality.certification_image_link">
           {{ quality.label }}
         </span>
@@ -19,8 +17,7 @@
           <img
             :src="quality.certification_image_link"
             class="quality-logo"
-            :alt="generateQualityLabel(quality)"
-          />
+            :alt="generateQualityLabel(quality)"/>
         </span>
       </a>
       <span v-else>
@@ -31,16 +28,14 @@
           <img
             :src="quality.certification_image_link"
             class="quality-logo"
-            :alt="generateQualityLabel(quality)"
-          />
+            :alt="generateQualityLabel(quality)"/>
         </span>
       </span>
       <span class="fa fa-check text-success pl-1"></span>
       <info-popover
         v-if="qualityInfo"
         class="pl-1 ml-auto"
-        popover-placement="left"
-      >
+        popover-placement="left">
         <table>
           <tbody>
             <tr>

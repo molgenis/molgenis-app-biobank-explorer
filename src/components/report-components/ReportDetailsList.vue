@@ -38,8 +38,7 @@
             v-for="(val, index) in value.value"
             class="m-1 badge"
             :key="index"
-            :class="'badge-' + (value.badgeColor ? value.badgeColor : 'success')"
-          >{{ val }}</span>
+            :class="'badge-' + (value.badgeColor ? value.badgeColor : 'success')">{{ val }}</span>
         </td>
         <!--Type report-->
         <td v-else-if="value.type === 'report'" colspan="2">

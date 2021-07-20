@@ -5,8 +5,7 @@
       :active="isLoading"
       loader="dots"
       color="var(--secondary)"
-      background-color="var(--light)"
-    ></loading>
+      background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
         <div class="col">
@@ -26,26 +25,21 @@
                 <p><b>Id: </b>{{ biobank.id }}</p>
                 <report-description
                   :description="biobank.description"
-                  :maxLength="500"
-                ></report-description>
+                  :maxLength="500"></report-description>
                 <p v-if="availableCovidTypes">
                   <report-details-list
-                    :reportDetails="availableCovidTypes"
-                  ></report-details-list>
+                    :reportDetails="availableCovidTypes"></report-details-list>
                 </p>
                 <h3>Collections</h3>
                 <div
                   v-for="(collection, index) in collectionsData"
-                  :key="collection.id"
-                >
+                  :key="collection.id">
                   <hr v-if="index" />
                   <collection-title
                     :title="collection.name"
-                    :id="collection.id"
-                  />
+                    :id="collection.id"/>
                   <report-collection-details
-                    :collection="collection"
-                  ></report-collection-details>
+                    :collection="collection"></report-collection-details>
                 </div>
               </div>
               <!-- Right side card -->
@@ -55,26 +49,22 @@
                     <div class="card-text">
                       <h5>Contact Information</h5>
                       <report-details-list
-                        :reportDetails="contact"
-                      ></report-details-list>
+                        :reportDetails="contact"></report-details-list>
                       <h5 v-if="networks && networks.length > 0">Networks</h5>
                       <report-details-list
                         :reportDetails="network"
                         v-for="network in networks"
-                        :key="network.id"
-                      ></report-details-list>
+                        :key="network.id"></report-details-list>
                       <h5
                         v-if="
                           quality &&
                           quality.Certification &&
                           quality.Certification.value.length > 0
-                        "
-                      >
+                        ">
                         Quality
                       </h5>
                       <report-details-list
-                        :reportDetails="quality"
-                      ></report-details-list>
+                        :reportDetails="quality"></report-details-list>
                     </div>
                   </div>
                 </div>

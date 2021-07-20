@@ -8,16 +8,14 @@
       @change.prevent="handleCollectionStatus"
       :checked="checkboxState"
       :value="false"
-      hidden
-    />
+      hidden/>
     <label class="add-to-cart-label btn btn-outline-secondary" :for="checkboxIdentifier">
       <span v-if="!iconOnly" class="mr-2">Add to selection</span>
       <span class="fa fa-plus"></span>
     </label>
     <label
       class="btn btn-secondary remove-from-cart-label"
-      :for="checkboxIdentifier"
-    >
+      :for="checkboxIdentifier">
       <span v-if="!iconOnly" class="mr-2">Remove from selection</span>
       <span class="fa fa-minus"></span>
     </label>

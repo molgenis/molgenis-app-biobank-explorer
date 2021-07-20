@@ -2,20 +2,17 @@
   <div>
     <satisfy-all-checkbox
       :value="satisfyAllValue"
-      @input="(value) => $emit('satisfy-all', value)"
-    />
+      @input="(value) => $emit('satisfy-all', value)"/>
     <div>
       <b-form-checkbox-group
         v-model="selection"
         stacked
-        :options="visibleOptions"
-      />
+        :options="visibleOptions"/>
       <span v-if="bulkOperation">
         <b-link
           v-if="showToggleSlice"
           class="toggle-slice card-link"
-          @click.prevent="toggleSlice"
-        >
+          @click.prevent="toggleSlice">
           {{ toggleSliceText }}
         </b-link>
         <b-link class="toggle-select card-link" @click.prevent="toggleSelect">

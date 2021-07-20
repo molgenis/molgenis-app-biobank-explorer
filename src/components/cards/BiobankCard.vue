@@ -1,11 +1,9 @@
 <template>
   <div
-    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']"
-  >
+    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']">
     <div
       class="card-header biobank-card-header"
-      @click.prevent="collapsed = !collapsed"
-    >
+      @click.prevent="collapsed = !collapsed">
       <div class="row">
         <div class="col-md-5 d-flex flex-column" v-if="!loading">
           <div class="mb-2">
@@ -14,8 +12,7 @@
                 <span
                   class="fa fa-table mr-2 icon-alignment"
                   aria-hidden="true"
-                  aria-labelledby="biobank-name"
-                ></span>
+                  aria-labelledby="biobank-name"></span>
               </router-link>
               <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
@@ -26,8 +23,7 @@
                   <tbody>
                     <tr
                       :key="`${biobank.id}-${quality.label}`"
-                      v-for="quality in biobank.quality"
-                    >
+                      v-for="quality in biobank.quality">
                       <td class="text-nowrap align-top font-weight-bold p-2">
                         {{ quality.label }}
                       </td>
@@ -40,15 +36,13 @@
               </info-popover>
               <quality-column
                 :qualities="biobank.quality"
-                :spacing="0"
-              ></quality-column>
+                :spacing="0"></quality-column>
             </small>
             <span v-if="availableCovidTypes">
               <b-img
                 class="biobank-icon covid-icon"
                 :src="require('../../assets/custom_icons/covid19.png')"
-                title="Covid-19"
-              />
+                title="Covid-19"/>
             </span>
           </div>
           <collection-selector
@@ -56,8 +50,7 @@
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            router-enabled
-          ></collection-selector>
+            router-enabled></collection-selector>
         </div>
         <div class="col-md-6" v-if="!loading">
           <p>
@@ -87,8 +80,7 @@
     <div class="card-body table-card" v-if="!collapsed && !loading">
       <collections-table
         v-if="biobank.collections.length > 0"
-        :collections="sortedCollections"
-      ></collections-table>
+        :collections="sortedCollections"></collections-table>
     </div>
   </div>
 </template>
