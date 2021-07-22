@@ -2,30 +2,31 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
-        <th scope="col" class="pr-2"></th>
-        <th scope="col">Collection</th>
-        <th scope="col">Type</th>
-        <th scope="col">Materials</th>
-        <th scope="col">Standards</th>
-        <th scope="col">#Samples</th>
+        <th class="col-md-3" scope="col">Collection</th>
+        <th class="col-md-2" scope="col">Type</th>
+        <th class="col-md-2" scope="col">Materials</th>
+        <th class="col-md-2" scope="col">Standards</th>
+        <th class="col-md-2" scope="col">#Samples</th>
+        <th class="col-md-1" scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
-          <td class="pr-1">
+          <!-- <td class="pr-1">
             <collection-selector
               class="collection-selection-button"
               :collectionData="collection"
               icon-only
               bookmark></collection-selector>
-          </td>
+          </td> -->
           <td
             :class="{
-              'table-text-content-columns-has-sub': hasSubCollections(
-                collection
-              ),
+              'table-text-content-columns-has-sub': hasSubCollections(collection),
               'table-text-content-columns': !hasSubCollections(collection),
+              'col-md-3': column === 'name',
+              'col-md-2': column === 'materials' || column === 'quality' || column === 'size',
+              'col-md-1': column === 'type'
             }"
             v-for="(column, index) in columns"
             :key="index">
@@ -52,6 +53,13 @@
             <span v-else-if="column === 'size'">
               {{ getCollectionSize(collection) }}
             </span>
+          </td>
+          <td class="col-md-1 short-col">
+            <collection-selector
+              class="collection-selection-button"
+              :collectionData="collection"
+              icon-only
+              router-enabled></collection-selector>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
@@ -152,7 +160,7 @@ export default {
 
 <style>
 .collection-selection-button {
-  margin-left: 0.75rem;
+  padding-right: 0.9em;
 }
 
 .collapsed > .when-visible {
@@ -181,5 +189,9 @@ export default {
 .collection-link {
   white-space: normal !important;
   line-height: normal;
+}
+
+.pr-1 {
+  margin-right: 5px;
 }
 </style>

@@ -5,15 +5,14 @@
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed">
       <div class="row">
-        <div class="collapse-column" v-if="!loading">
-          <font-awesome-icon
-            icon="caret-right"
-            :style="iconStyle"
-            class="collapse-button mr-2"
-          />
-        </div>
-        <div class="col-md-5 d-flex flex-column" v-if="!loading">
-          <div class="mb-2">
+        <div class="col-6 d-flex" v-if="!loading">
+          <div class="collapse-icon" v-if="!loading">
+            <font-awesome-icon
+              icon="caret-right"
+              :style="iconStyle"
+              class="collapse-button"/>
+          </div>
+          <div class="mb-2 name">
             <h5>
               <router-link :to="'/biobank/' + biobank.id">
                 <span
@@ -52,14 +51,14 @@
                 title="Covid-19"/>
             </span>
           </div>
-          <collection-selector
+          <!-- <collection-selector
             class="align-with-table mt-auto w-25"
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            bookmark></collection-selector>
+            bookmark></collection-selector> -->
         </div>
-        <div class="col-md-6" v-if="!loading">
+        <div class="col-5" v-if="!loading">
           <p>
             <small class="mr-2">
               <span class="font-weight-bold">Collection types:</span>
@@ -79,7 +78,15 @@
             </template>
           </p>
         </div>
-        <div v-else class="col-md-12 text-center">
+        <div class="col-1 checkbox-column"  v-if="!loading">
+          <collection-selector
+            class="align-with-checkboxes mt-auto w-25"
+            v-if="biobank.collections.length > 0"
+            :collectionData="biobank.collections"
+            icon-only
+            router-enabled></collection-selector>
+        </div>
+        <div v-else class="col-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
         </div>
       </div>
@@ -182,8 +189,8 @@ export default {
 .table-card {
   padding: 0.1rem;
 }
-.align-with-table {
-  margin-left: 0.1rem;
+.align-with-checkboxes {
+  margin-left: 0.1em;
 }
 
 .added-to-selection {
@@ -258,14 +265,17 @@ export default {
   left: -0.5rem;
 }
 
-.collapse-column {
-  margin-left: 10px;
-  margin-right: 6px;
-  display: table-cell !important;
-  vertical-align: middle;
+.name {
+  float: right;
 }
 
-.collapse-button {
-  cursor: pointer;
+.collapse-icon {
+  float: left;
+  margin-right: 1rem;
+}
+
+.checkbox-column {
+  padding-left: 0.5rem;
+  float: right;
 }
 </style>

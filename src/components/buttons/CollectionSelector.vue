@@ -9,15 +9,33 @@
       :checked="checkboxState"
       :value="false"
       hidden/>
-    <label class="add-to-cart-label btn btn-outline-secondary" :for="checkboxIdentifier">
-      <span v-if="!iconOnly" class="mr-2">Add to selection</span>
-      <span class="fa fa-plus"></span>
+    <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary" :for="checkboxIdentifier">
+      <span class="mr-2">Add to selection</span>
+      <font-awesome-icon
+        :icon="['far', 'square']"></font-awesome-icon>
+    </label>
+    <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
+      <font-awesome-icon
+        :style="faStyle"
+        :icon="['far', 'square']"
+        size="lg"></font-awesome-icon>
     </label>
     <label
-      class="btn btn-secondary remove-from-cart-label"
+      v-if="!iconOnly"
+      class="btn remove-from-cart-label btn-secondary"
       :for="checkboxIdentifier">
-      <span v-if="!iconOnly" class="mr-2">Remove from selection</span>
-      <span class="fa fa-minus"></span>
+      <span class="mr-2">Remove from selection</span>
+      <font-awesome-icon
+        :icon="['fas', 'check-square']"></font-awesome-icon>
+    </label>
+    <label
+      v-else
+      class="btn remove-from-cart-label"
+      :for="checkboxIdentifier">
+      <font-awesome-icon
+        :style="faStyle"
+        :icon="['fas', 'check-square']"
+        size="lg"></font-awesome-icon>
     </label>
   </div>
 </template>
@@ -46,7 +64,10 @@ export default {
   data: () => {
     return {
       collections: [],
-      identifier: ''
+      identifier: '',
+      faStyle: {
+        color: 'var(--secondary)'
+      }
     }
   },
   methods: {
