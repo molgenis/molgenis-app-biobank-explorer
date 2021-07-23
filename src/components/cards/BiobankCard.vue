@@ -84,7 +84,8 @@
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            router-enabled></collection-selector>
+            router-enabled
+            @checked="handleCheckAll"></collection-selector>
         </div>
         <div v-else class="col-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
@@ -131,6 +132,13 @@ export default {
     return {
       biobankSelected: false,
       collapsed: this.initCollapsed
+    }
+  },
+  methods: {
+    handleCheckAll: function (checked) {
+      if (checked === true) {
+        this.collapsed = false
+      }
     }
   },
   computed: {

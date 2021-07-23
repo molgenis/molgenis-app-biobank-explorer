@@ -87,6 +87,7 @@ export default {
       } else {
         this.RemoveCollectionsFromSelection(collectionData)
       }
+      this.$emit('checked', checked)
     }
   },
   computed: {

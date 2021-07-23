@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import BiobankCard from '@/components/cards/BiobankCard'
+import CollectionSelector from '@/components/buttons/CollectionSelector'
 import Vuex from 'vuex'
 import Vue from 'vue'
 
@@ -84,5 +85,22 @@ describe('BiobankCard', () => {
 
     const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
     expect(wrapper.vm.sortedCollections).toStrictEqual(result)
+  })
+  it('should open the card when the checkbox for selection is set to true', () => {
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
+    wrapper.findComponent(CollectionSelector).vm.$emit('checked', true)
+    expect(wrapper.vm.collapsed).toBe(false)
+  })
+  it('should keep the card in the same state when the checkbox for selection is set to false', async () => {
+    const wrapper = shallowMount(BiobankCard, { store, propsData, stubs })
+    const collectionSelector = wrapper.findComponent(CollectionSelector)
+
+    await wrapper.setData({ collapsed: false })
+    collectionSelector.vm.$emit('checked', false)
+    expect(wrapper.vm.collapsed).toBe(false)
+
+    await wrapper.setData({ collapsed: true })
+    collectionSelector.vm.$emit('checked', false)
+    expect(wrapper.vm.collapsed).toBe(true)
   })
 })
