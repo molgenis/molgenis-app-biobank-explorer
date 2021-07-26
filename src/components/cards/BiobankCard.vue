@@ -50,7 +50,7 @@
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            router-enabled></collection-selector>
+            bookmark></collection-selector>
         </div>
         <div class="col-md-6" v-if="!loading">
           <p>

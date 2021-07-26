@@ -25,7 +25,7 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CollectionSelectAll',
   props: {
-    routerEnabled: {
+    bookmark: {
       type: Boolean,
       required: false,
       default: false
@@ -38,12 +38,7 @@ export default {
     ]),
     handleCollectionStatus (event) {
       const { checked } = event.target
-      const collectionData = { collections: this.foundCollectionsAsSelection }
-
-      // when it's required to be on the bookmark, we pass the router
-      if (this.routerEnabled) {
-        collectionData.router = this.$router
-      }
+      const collectionData = { collections: this.foundCollectionsAsSelection, bookmark: this.bookmark }
 
       if (checked) {
         this.AddCollectionsToSelection(collectionData)

@@ -6,50 +6,55 @@ import filterDefinitions from '../utils/filterDefinitions'
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
-  SetCovidNetworkFilter (state, { name, value, router }) {
-    if (state.filters.selections[name]) {
-      Vue.set(state.filters.selections, name, [...new Set([...state.filters.selections[name], value.value])])
-      Vue.set(state.filters.labels, name, [...new Set([...state.filters.labels[name], value.text])])
-    } else {
-      Vue.set(state.filters.selections, name, [value.value])
-      Vue.set(state.filters.labels, name, [value.text])
-    }
-    createBookmark(router, state.filters.selections, state.selectedCollections)
-  },
-  UnsetCovidNetworkFilter (state, { name, value, router }) {
-    if (state.filters.selections[name]) {
-      Vue.set(state.filters.selections, name, [...state.filters.selections[name].filter(item => item !== value.value)])
-      Vue.set(state.filters.labels, name, [...state.filters.labels[name].filter(item => item !== value.text)])
-    }
-    createBookmark(router, state.filters.selections, state.selectedCollections)
-  },
   /**
-   * Register the filters for country, materials, standards, and diagnosis_available in the state
-   * so they can be used for 1) the URL and 2) retrieving biobanks based on IDs
-   *
-   * @param state
-   * @param name name of the state entry e.g. country, materials, standards, or diagnosis_available
-   * @param filters an array of values
+   * Updates filter and keeps a history of searches
+   * @param {*} state;
+   * @param {*} filterUpdate; Object with name as filtername, and value / value[] as text: filterlabel, value: filter value
    */
-  UpdateFilter (state, { name, value, router }) {
-    if (name === 'search') {
-      Vue.set(state.filters.selections, name, value)
-      createBookmark(router, state.filters.selections, state.selectedCollections)
-      return
+  UpdateFilterSelection (state, filterUpdate) {
+    const currentFilterSelection = state.filters.selections
+    const currentLabels = state.filters.labels
+
+    // reminder: do we still need state.filterLabelCache
+
+    let tempFilterUpdate = filterUpdate
+
+    // check if it's single filter input
+    if (Object.prototype.hasOwnProperty.call(filterUpdate, 'name')) {
+      tempFilterUpdate = { [filterUpdate.name]: filterUpdate.value }
     }
 
-    const filterValues = []
-    const filterTexts = []
+    const newSelections = {}
+    const newFilterLabels = {}
 
-    for (const item of value) {
-      filterValues.push(item.value)
-      filterTexts.push(item.text)
+    for (const propertyName in tempFilterUpdate) {
+      const filterValue = tempFilterUpdate[propertyName]
+
+      // check if empty, taking care of a 0 value, in case of a number filter
+      if (filterValue === undefined || filterValue === '' || filterValue === []) {
+        delete currentFilterSelection[propertyName] // remove the empty filter
+      } else if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { // check if it's an array of filter values
+        newSelections[propertyName] = filterValue.map(filter => filter.value)
+        newFilterLabels[propertyName] = filterValue.map(filter => filter.text)
+      } else if (!Array.isArray(filterValue) && typeof filterValue === 'object') { // single added filter
+        newSelections[propertyName] = filterValue.value
+        newFilterLabels[propertyName] = filterValue.text
+      } else { // a filter with only one option, like stringfilter or an array with strings
+        newSelections[propertyName] = filterValue
+        newFilterLabels[propertyName] = propertyName
+      }
     }
-    Vue.set(state.filters.selections, name, [...new Set(filterValues)])
-    Vue.set(state.filters.labels, name, [...new Set(filterTexts)])
-    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
+
+    // create new filter selection object and then put that on the state
+    const filterSelection = { ...currentFilterSelection, ...newSelections }
+    Vue.set(state.filters, 'selections', filterSelection)
+
+    const labels = { ...currentLabels, ...newFilterLabels }
+    Vue.set(state.filters, 'labels', labels)
+
+    createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
-  UpdateFilterSatisfyAll (state, { name, value, router }) {
+  UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
     } else {
@@ -57,22 +62,7 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-    createBookmark(router, state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
-  },
-
-  UpdateAllFilters (state, selections) {
-    state.filters.selections = {}
-    state.filters.satisfyAll = []
-    for (const [key, value] of Object.entries(selections)) {
-      if (key === 'search') {
-        Vue.set(state.filters.selections, key, value)
-        continue
-      }
-
-      Vue.set(state.filters.selections, key, value)
-      const leftoverLabels = [...new Set(state.filterLabelCache.filter(flc => value.includes(flc.value)).map(flc => flc.text))]
-      Vue.set(state.filters.labels, key, leftoverLabels)
-    }
+    createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
   /**
    * Reset all filters in the state
@@ -178,21 +168,21 @@ export default {
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
-  AddCollectionsToSelection (state, { collections, router }) {
+  AddCollectionsToSelection (state, { collections, bookmark }) {
     const currentIds = state.selectedCollections.map(sc => sc.value)
     const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
     state.selectedCollections = state.selectedCollections.concat(newCollections)
 
-    if (router) {
-      createBookmark(router, state.filters.selections, state.selectedCollections)
+    if (bookmark) {
+      createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
-  RemoveCollectionsFromSelection (state, { collections, router }) {
+  RemoveCollectionsFromSelection (state, { collections, bookmark }) {
     const collectionsToRemove = collections.map(c => c.value)
     state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
 
-    if (router) {
-      createBookmark(router, state.filters.selections, state.selectedCollections)
+    if (bookmark) {
+      createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
   /**

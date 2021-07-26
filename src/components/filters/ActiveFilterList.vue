@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { createBookmark } from '../../utils/bookmarkMapper'
 import { mapGetters, mapMutations } from 'vuex'
 import { ActiveFilters } from '@molgenis-ui/components-library'
 
@@ -16,10 +15,15 @@ export default {
   components: { ActiveFilters },
   name: 'active-filter-list',
   methods: {
-    ...mapMutations(['UpdateAllFilters']),
-    changeAllFilters (value) {
-      this.UpdateAllFilters(value)
-      createBookmark(this.$router, value, this.selectedCollections)
+    ...mapMutations(['UpdateFilterSelection']),
+    changeAllFilters (newActiveFilters) {
+      for (const prevActiveFilter in this.activeFilters) {
+        if (!Object.prototype.hasOwnProperty.call(newActiveFilters, prevActiveFilter)) {
+          // add the active filter as empty, so it will be picked up by filter update as delete
+          newActiveFilters[prevActiveFilter] = ''
+        }
+      }
+      this.UpdateFilterSelection(newActiveFilters)
     }
   },
   computed: {

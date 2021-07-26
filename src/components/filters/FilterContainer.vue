@@ -54,7 +54,7 @@ export default {
 
         this.debounce = setTimeout(async () => {
           clearTimeout(this.debounce)
-          this.UpdateFilter({ name: 'search', value: search, router: this.$router }) // passing router so we can set bookmark
+          this.UpdateFilterSelection({ name: 'search', value: search })
         }, 500)
       }
     },
@@ -66,12 +66,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter', 'UpdateFilterSatisfyAll']),
+    ...mapMutations(['UpdateFilterSelection', 'UpdateFilterSatisfyAll']),
     filterChange (name, value) {
-      this.UpdateFilter({ name, value, router: this.$router })
+      this.UpdateFilterSelection({ name, value })
     },
     filterSatisfyAllChange (name, value) {
-      this.UpdateFilterSatisfyAll({ name, value, router: this.$router })
+      this.UpdateFilterSatisfyAll({ name, value })
     }
   }
 }

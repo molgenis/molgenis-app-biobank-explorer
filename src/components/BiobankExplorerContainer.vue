@@ -9,7 +9,7 @@
         <collection-select-all
           v-if="!loading && foundCollectionIds.length"
           class="mt-1 ml-3"
-          router-enabled/>
+          bookmark/>
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -277,8 +277,7 @@ export default {
     removeAllCollections () {
       this.hideModal()
       this.RemoveCollectionsFromSelection({
-        collections: this.currentSelectedCollections,
-        router: this.$router
+        collections: this.currentSelectedCollections
       })
     },
     hideModal () {
@@ -318,7 +317,7 @@ export default {
   mounted () {
     // check if collections have been added off-screen.
     if (this.selectedCollections.length) {
-      createBookmark(this.$router, this.activeFilters, this.selectedCollections)
+      createBookmark(this.activeFilters, this.selectedCollections)
     }
   }
 }

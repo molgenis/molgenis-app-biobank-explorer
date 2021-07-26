@@ -18,7 +18,7 @@
               class="collection-selection-button"
               :collectionData="collection"
               icon-only
-              router-enabled></collection-selector>
+              bookmark></collection-selector>
           </td>
           <td
             :class="{
