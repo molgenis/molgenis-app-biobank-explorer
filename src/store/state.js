@@ -30,7 +30,6 @@ export default {
   nToken: null,
   collectionIdsWithSelectedQuality: [],
   biobankIdsWithSelectedQuality: [],
-  filterIdLabelDictionary: {},
   collectionBiobankDictionary: {},
   collectionDictionary: {},
   qualityStandardsDictionary: {},
@@ -41,5 +40,8 @@ export default {
     satisfyAll: [],
     labels: {} // for human readable string
   },
-  filterLabelCache: [] // needed to filter human readable string > can be rewritten to use the collectiondictionary.
+  // caching filter options for performance
+  filterOptionDictionary: {},
+  // Caching filter info for negotiator call
+  filterValueTextDictionary: {}
 }
