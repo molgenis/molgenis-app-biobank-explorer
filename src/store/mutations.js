@@ -111,10 +111,10 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  async SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
     Vue.set(state.filterOptionDictionary, filterName, filterOptions)
   },
-  async SetFilterValueTextDictionary (state, filterOptions) {
+  SetFilterValueTextDictionary (state, filterOptions) {
     const oldDictionary = state.filterValueTextDictionary
     const dictionaryAddition = {}
 

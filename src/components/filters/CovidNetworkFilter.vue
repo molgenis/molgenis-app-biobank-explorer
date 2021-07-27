@@ -37,7 +37,7 @@ export default {
         return false
       },
       set (checked) {
-        const value = checked ? covid19NetworkId : ''
+        const value = checked ? covid19NetworkId : []
         this.UpdateFilterSelection({ name: 'biobank_network', value: { text: 'COVID_19', value } })
       }
     },
@@ -50,7 +50,7 @@ export default {
         return false
       },
       set (checked) {
-        const value = checked ? covid19NetworkId : ''
+        const value = checked ? covid19NetworkId : []
         this.UpdateFilterSelection({ name: 'collection_network', value: { text: 'COVID_19', value } })
       }
     }
