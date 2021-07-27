@@ -42,6 +42,7 @@ export default {
   },
   // caching filter options for performance
   filterOptionDictionary: {},
-  // Caching filter info for negotiator call
-  filterValueTextDictionary: {}
+  // whenever a user returns from a bookmark with diagnosis available
+  // in the active filter, there is no label. fetch it once for performance
+  diagnosisAvailableFetched: false
 }

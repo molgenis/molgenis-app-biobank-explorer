@@ -118,7 +118,7 @@ const filterDefinitions = (state) => [
     name: 'commercial_use',
     label: 'Collaboration type',
     type: 'checkbox-filter',
-    options: collaborationTypeFilterOptions('commercial_use'),
+    options: collaborationTypeFilterOptions(),
     initiallyCollapsed: !state.route.query.collaboration_type,
     filters: state.filters.selections.collaboration_type,
     maxVisibleOptions: 25,

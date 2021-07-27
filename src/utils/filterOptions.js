@@ -13,6 +13,27 @@ function retrieveFromCache (filterName) {
   return store.state.filterOptionDictionary[filterName] ?? []
 }
 
+function checkForBookmarkFilter (filterName, filterOptions) {
+  if (!store.state.diagnosisAvailableFetched) {
+    // If we have a cold start with a bookmark
+    // we need to have the label for the selected filter
+    const activeDiagnosisFilter = store.getters.activeFilters[filterName]
+
+    if (activeDiagnosisFilter) {
+      const options = []
+      for (const activeFilter of activeDiagnosisFilter) {
+        const optionToCache = filterOptions.filter(option => option.value === activeFilter)
+        if (optionToCache) {
+          options.push(optionToCache)
+        }
+      }
+      if (options.length) {
+        cache({ filterName, filterOptions: options })
+      }
+    }
+  }
+}
+
 export const genericFilterOptions = (tableName, filterName) => {
   return () => new Promise((resolve) => {
     const cachedOptions = retrieveFromCache(filterName)
@@ -52,31 +73,14 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.code } })
-
-      // If we have a cold start with a bookmark
-      // we need to have the label for the selected filter
-      const activeDiagnosisFilter = store.getters.activeFilters[filterName]
-
-      if (activeDiagnosisFilter) {
-        const options = []
-        for (const activeFilter of activeDiagnosisFilter) {
-          const optionToCache = filterOptions.filter(option => option.value === activeFilter)
-          options.push(optionToCache)
-        }
-        if (options.length) {
-          cache({ filterName, filterOptions: options })
-        }
-      }
-
+      checkForBookmarkFilter(filterName, filterOptions)
       resolve(filterOptions)
     })
   })
 }
 
-export const collaborationTypeFilterOptions = (filterName) => {
+export const collaborationTypeFilterOptions = () => {
   const filterOptions = [{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use', value: 'false' }]
-  // caching for filter label
-  cache({ filterName, filterOptions })
 
   return () => new Promise((resolve) => {
     resolve(filterOptions)

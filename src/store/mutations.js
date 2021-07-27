@@ -31,7 +31,7 @@ export default {
       const filterValue = tempFilterUpdate[propertyName]
 
       // check if empty, taking care of a 0 value, in case of a number filter
-      if (filterValue === undefined || filterValue === '' || filterValue === []) {
+      if (filterValue === undefined || !filterValue.length) {
         delete currentFilterSelection[propertyName] // remove the empty filter
       } else if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { // check if it's an array of filter values
         newSelections[propertyName] = filterValue.map(filter => filter.value)
@@ -112,7 +112,15 @@ export default {
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
-    Vue.set(state.filterOptionDictionary, filterName, filterOptions)
+    // only cache it once
+    if (!state.filterOptionDictionary[filterName]) {
+      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
+
+      // to let the filter know, no more caching needed
+      if (filterName === 'diagnosis_available') {
+        state.diagnosisAvailableFetched = true
+      }
+    }
   },
   SetCollectionInfo (state, response) {
     if (response === undefined) {
