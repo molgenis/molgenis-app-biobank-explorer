@@ -114,16 +114,6 @@ export default {
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
     Vue.set(state.filterOptionDictionary, filterName, filterOptions)
   },
-  SetFilterValueTextDictionary (state, filterOptions) {
-    const oldDictionary = state.filterValueTextDictionary
-    const dictionaryAddition = {}
-
-    for (const filterOption of filterOptions) {
-      dictionaryAddition[filterOption.value] = filterOption.text
-    }
-
-    Vue.set(state, 'filterValueTextDictionary', { ...oldDictionary, ...dictionaryAddition })
-  },
   SetCollectionInfo (state, response) {
     if (response === undefined) {
       state.collectionInfo = response
@@ -235,6 +225,7 @@ export default {
         Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
       }
     }
+
     state.bookmarkMappedToState = true
   },
   SetError (state, error) {

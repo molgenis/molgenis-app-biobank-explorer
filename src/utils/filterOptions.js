@@ -7,7 +7,6 @@ import { isCodeRegex } from '../../src/store/helpers'
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
   store.commit('SetFilterOptionDictionary', filterData)
-  store.commit('SetFilterValueTextDictionary', filterData.filterOptions)
 }
 
 function retrieveFromCache (filterName) {
@@ -54,7 +53,20 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.code } })
 
-      store.commit('SetFilterValueTextDictionary', filterOptions)
+      // If we have a cold start with a bookmark
+      // we need to have the label for the selected filter
+      const activeDiagnosisFilter = store.getters.activeFilters[filterName]
+
+      if (activeDiagnosisFilter) {
+        const options = []
+        for (const activeFilter of activeDiagnosisFilter) {
+          const optionToCache = filterOptions.filter(option => option.value === activeFilter)
+          options.push(optionToCache)
+        }
+        if (options.length) {
+          cache({ filterName, filterOptions: options })
+        }
+      }
 
       resolve(filterOptions)
     })
@@ -62,7 +74,11 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 }
 
 export const collaborationTypeFilterOptions = (filterName) => {
+  const filterOptions = [{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use', value: 'false' }]
+  // caching for filter label
+  cache({ filterName, filterOptions })
+
   return () => new Promise((resolve) => {
-    resolve([{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use', value: 'false' }])
+    resolve(filterOptions)
   })
 }
