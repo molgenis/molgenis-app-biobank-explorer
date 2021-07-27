@@ -1,13 +1,10 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import CollectionSelectAll from '@/components/buttons/CollectionSelectAll'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
 
 const localVue = createLocalVue()
-const router = new VueRouter()
 
 localVue.use(Vuex)
-localVue.use(VueRouter)
 
 describe('CollectionSelectAll', () => {
   let store, AddCollectionsToSelection, RemoveCollectionsFromSelection,
@@ -46,7 +43,7 @@ describe('CollectionSelectAll', () => {
     expect(label.text().toLowerCase()).toContain('select all')
     label.trigger('click')
 
-    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: false, collections: collectionMockData })
   })
 
   it('should call RemoveCollectionsFromSelection in the "deselect all" state', () => {
@@ -68,14 +65,14 @@ describe('CollectionSelectAll', () => {
     expect(label.text().toLowerCase()).toContain('deselect all')
     label.trigger('click')
 
-    expect(RemoveCollectionsFromSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData })
+    expect(RemoveCollectionsFromSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: false, collections: collectionMockData })
   })
 
-  it('should call addCollectionsToSelection with router if routerEnabled is true', () => {
-    const wrapper = mount(CollectionSelectAll, { store, propsData: { routerEnabled: true }, localVue, router })
+  it('should pass bookmark true when property is set to true', () => {
+    const wrapper = mount(CollectionSelectAll, { store, propsData: { bookmark: true }, localVue })
     const label = wrapper.find('label')
     label.trigger('click')
 
-    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionMockData, router })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: true, collections: collectionMockData })
   })
 })

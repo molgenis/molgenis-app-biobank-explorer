@@ -1,62 +1,50 @@
+
 import mutations from '../../../../src/store/mutations'
 import { mockCollectionResponse, mockState } from '../mockData'
 
 let state
-
 describe('store', () => {
   beforeEach(() => {
     state = mockState()
   })
   describe('mutations', () => {
-    describe('CovidNetworkFilter', () => {
-      it('should set covid19 network filter for biobank if it is not present already', () => {
+    describe('UpdateFilterSelection', () => {
+      it('should set covid19 network filter for biobank if it is not present already', async () => {
         expect(state.filters.selections.biobank_network).toBe(undefined)
 
-        mutations.SetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
+        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' } })
         expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+        expect(state.filters.labels.biobank_network).toStrictEqual(['Covid-19'])
       })
-      it('should not set covid19 network filter again for biobank if it is present already', () => {
+
+      it('should remove covid19 network filter for biobank when unchecked', () => {
         state.filters.selections.biobank_network = ['COVID_19']
         state.filters.labels.biobank_network = ['Covid-19']
 
         expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
 
-        mutations.SetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: [] } })
+        expect(state.filters.selections.biobank_network).toBeUndefined()
+        expect(state.filters.labels.biobank_network).toBeUndefined()
       })
 
-      it('should remove covid19 network filter for biobank if it is present already', () => {
-        state.filters.selections.biobank_network = ['COVID_19']
-        state.filters.labels.biobank_network = ['Covid-19']
-
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
-
-        mutations.UnsetCovidNetworkFilter(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' }, router: [] })
-        expect(state.filters.selections.biobank_network).toStrictEqual([])
-      })
-    })
-    describe('UpdateFilter', () => {
       it('should update the list of filters for a specific state key and map its text as label', () => {
         const countries = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }]
-        mutations.UpdateFilter(state, { name: 'country', value: countries, router: [] })
+        mutations.UpdateFilterSelection(state, { name: 'country', value: countries })
 
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.labels.country).toStrictEqual(['Netherlands', 'Belgium'])
       })
 
       it('should treat the search filter value as a string', () => {
-        mutations.UpdateFilter(state, { name: 'search', value: 'free text search', router: [] })
+        mutations.UpdateFilterSelection(state, { name: 'search', value: 'free text search' })
 
         expect(state.filters.selections.search).toBe('free text search')
-        expect(state.filters.labels.search).toBe(undefined)
+        expect(state.filters.labels.search).toBeUndefined()
       })
-    })
 
-    describe('UpdateAllFilters', () => {
       it('can set all filters', () => {
         state.filters.labels.country = ['Netherlands', 'Belgium', 'France']
-        state.filterLabelCache = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }, { value: 'FR', text: 'France' }]
-
         state.filters.selections = {
           search: 'Free text search',
           country: ['BE', 'NL', 'FR']
@@ -64,14 +52,14 @@ describe('store', () => {
 
         const newSelections = {
           search: 'Free text search',
-          country: ['BE', 'NL']
+          country: [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }]
         }
 
-        mutations.UpdateAllFilters(state, newSelections)
+        mutations.UpdateFilterSelection(state, newSelections)
 
         expect(state.filters.selections).toStrictEqual({
           search: 'Free text search',
-          country: ['BE', 'NL']
+          country: ['NL', 'BE']
         })
 
         expect(state.filters.labels).toStrictEqual({ country: ['Netherlands', 'Belgium'] })
@@ -80,13 +68,13 @@ describe('store', () => {
 
     describe('UpdatFilterSatisfyAll', () => {
       it('can set to a specific filter the satisfy all value to true/false', () => {
-        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true, router: [] })
+        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true })
         expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(true)
       })
 
       it('can delete the entry in the satisfyAll array if its filter\'s satisfyAll flag value changes', () => {
         state.filters.satisfyAll = ['diagnosis_available', 'covid19', 'materials']
-        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: false, router: [] })
+        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: false })
         expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(false)
         expect(state.filters.satisfyAll.includes('diagnosis_available')).toStrictEqual(true)
         expect(state.filters.satisfyAll.includes('materials')).toStrictEqual(true)

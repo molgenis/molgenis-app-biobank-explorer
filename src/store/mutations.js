@@ -31,22 +31,34 @@ export default {
       const filterValue = tempFilterUpdate[propertyName]
 
       // check if empty, taking care of a 0 value, in case of a number filter
-      if (filterValue === undefined || !filterValue.length) {
-        delete currentFilterSelection[propertyName] // remove the empty filter
-      } else if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { // check if it's an array of filter values
+      if (filterValue === undefined ||
+        filterValue === '' ||
+        (Array.isArray(filterValue) && !filterValue.length) ||
+        (!Array.isArray(filterValue) && typeof filterValue === 'object' && !filterValue.value.length)) {
+        // remove the empty filter and the label
+        delete currentFilterSelection[propertyName]
+        delete currentLabels[propertyName]
+        continue
+      }
+
+      // check if it's an array of filter values, e.g. material
+      if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { // object array filter, e.g Collection Quality marks
         newSelections[propertyName] = filterValue.map(filter => filter.value)
         newFilterLabels[propertyName] = filterValue.map(filter => filter.text)
-      } else if (!Array.isArray(filterValue) && typeof filterValue === 'object') { // single added filter
-        newSelections[propertyName] = filterValue.value
-        newFilterLabels[propertyName] = filterValue.text
-      } else { // a filter with only one option, like stringfilter or an array with strings
+      } else if (!Array.isArray(filterValue) && typeof filterValue === 'object') { // single added filter e.g covid_19 network
+        newSelections[propertyName] = [filterValue.value]
+        newFilterLabels[propertyName] = [filterValue.text]
+      } else { // a filter with only one option e.g. search
         newSelections[propertyName] = filterValue
-        newFilterLabels[propertyName] = propertyName
+        if (propertyName !== 'search') {
+          newFilterLabels[propertyName] = propertyName
+        }
       }
     }
 
     // create new filter selection object and then put that on the state
     const filterSelection = { ...currentFilterSelection, ...newSelections }
+
     Vue.set(state.filters, 'selections', filterSelection)
 
     const labels = { ...currentLabels, ...newFilterLabels }
