@@ -25,7 +25,7 @@ describe('FilterContainer', () => {
     }
 
     mutations = {
-      UpdateFilter: jest.fn(),
+      UpdateFilterSelection: jest.fn(),
       UpdateFilterSatisfyAll: jest.fn()
     }
   })
@@ -67,7 +67,7 @@ describe('FilterContainer', () => {
       wrapper.setData({ search: 'collection1' })
 
       jest.runAllTimers()
-      expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
+      expect(mutations.UpdateFilterSelection).toHaveBeenCalledTimes(1)
     })
 
     it('should trigger the Update satisfyAll filter change, by simulating an emit, both with the update of filter selections', async () => {
@@ -83,7 +83,7 @@ describe('FilterContainer', () => {
       wrapper.findComponent(CovidFilter).vm.$emit('satisfy-all', true)
       await wrapper.findComponent(CovidFilter).vm.$nextTick()
       jest.runAllTimers()
-      expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
+      expect(mutations.UpdateFilterSelection).toHaveBeenCalledTimes(1)
       expect(mutations.UpdateFilterSatisfyAll).toHaveBeenCalledTimes(1)
     })
 

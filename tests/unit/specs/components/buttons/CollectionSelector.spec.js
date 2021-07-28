@@ -1,13 +1,9 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
 
 const localVue = createLocalVue()
-const router = new VueRouter()
-
 localVue.use(Vuex)
-localVue.use(VueRouter)
 
 describe('CollectionSelector', () => {
   let store, AddCollectionsToSelection, RemoveCollectionsFromSelection,
@@ -53,7 +49,7 @@ describe('CollectionSelector', () => {
     expect(label.text().toLowerCase()).toContain('add')
     label.trigger('click')
 
-    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionResolveData })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: false, collections: collectionResolveData })
   })
 
   it('should call RemoveCollectionsFromSelection in the "deselect all" state', () => {
@@ -76,23 +72,23 @@ describe('CollectionSelector', () => {
     expect(label.text().toLowerCase()).toContain('remove')
     label.trigger('click')
 
-    expect(RemoveCollectionsFromSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionResolveData })
+    expect(RemoveCollectionsFromSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: false, collections: collectionResolveData })
   })
 
-  it('should call addCollectionsToSelection with router if routerEnabled is true', () => {
-    const propsData = { collectionData, routerEnabled: true }
+  it('should call addCollectionsToSelection with bookmark true if bookmark is true', () => {
+    const propsData = { collectionData, bookmark: true }
 
-    const wrapper = mount(CollectionSelector, { store, propsData, localVue, router })
+    const wrapper = mount(CollectionSelector, { store, propsData, localVue })
     const label = wrapper.find('label')
     label.trigger('click')
 
-    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { collections: collectionResolveData, router })
+    expect(AddCollectionsToSelection).toHaveBeenCalledWith(expect.anything(), { bookmark: true, collections: collectionResolveData })
   })
 
   it('should convert a single collection to an array', () => {
     const propsData = { collectionData: { id: 'single_collection', label: 'Single Collection' } }
 
-    const wrapper = mount(CollectionSelector, { store, propsData, localVue, router })
+    const wrapper = mount(CollectionSelector, { store, propsData, localVue })
     const label = wrapper.find('label')
     label.trigger('click')
 

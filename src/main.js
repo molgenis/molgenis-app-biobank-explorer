@@ -44,6 +44,7 @@ if (INITIAL_STATE.GA_KEY) {
   })
 }
 
+// accessible by state.route
 sync(store, router)
 
 if (window.__webpack_public_path__) {
