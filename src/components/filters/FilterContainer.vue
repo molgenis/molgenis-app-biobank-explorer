@@ -41,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'activeFilters', 'filterDefinitions']),
+    ...mapGetters(['showCountryFacet', 'activeFilters', 'getFilterDefinitions']),
     search: {
       get () {
         return this.activeFilters.search
@@ -58,7 +58,7 @@ export default {
       }
     },
     filters () {
-      return this.filterDefinitions.filter((facet) => {
+      return this.getFilterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       }).filter((item) => item.component)

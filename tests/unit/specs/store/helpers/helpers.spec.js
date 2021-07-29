@@ -8,6 +8,9 @@ import { mockState } from '../../mockData'
 const getInitialState = () => {
   return mockState()
 }
+
+const getFilterDefinitions = filterDefinitions(mockState())
+
 let state
 
 describe('store', () => {
@@ -290,7 +293,7 @@ describe('store', () => {
         const getters = {
           rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
           biobankRsql: 'name=q=\'free text search\'',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           activeFilters: () => state.filters.selections
         }
@@ -315,7 +318,7 @@ describe('store', () => {
 
         const getters = {
           rsql: 'materials=in=(RNA)',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
@@ -343,7 +346,7 @@ describe('store', () => {
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }

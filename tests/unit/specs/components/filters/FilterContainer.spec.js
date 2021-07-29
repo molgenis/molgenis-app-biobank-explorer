@@ -20,7 +20,7 @@ describe('FilterContainer', () => {
     getters = {
       showCountryFacet: () => true,
       activeFilters: () => [],
-      filterDefinitions
+      getFilterDefinitions: filterDefinitions
     }
 
     mutations = {

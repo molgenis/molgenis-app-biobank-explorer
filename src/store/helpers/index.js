@@ -56,7 +56,7 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
   return result
 }
 
-export const getHumanReadableString = (state, { filterDefinitions }) => {
+export const getHumanReadableString = (state, { getFilterDefinitions }) => {
   const activeFilters = Object.keys(state.filters.selections)
   let humanReadableString = ''
   const additionText = ' and '
@@ -65,8 +65,10 @@ export const getHumanReadableString = (state, { filterDefinitions }) => {
   const humanReadableStart = {}
 
   // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
-  filterDefinitions.filter(fd => activeFilters.includes(fd.name))
-    .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
+  if (getFilterDefinitions) {
+    getFilterDefinitions.filter(fd => activeFilters.includes(fd.name))
+      .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
+  }
 
   // Extract filternames for which we have the labels for
   const labelsForFilters = Object.keys(filterLabels)
