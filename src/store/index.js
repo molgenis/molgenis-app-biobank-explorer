@@ -8,10 +8,11 @@ import actions from './actions'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+// https://github.com/vuejs/vuex/issues/1748
+export default {
   state,
   mutations,
   actions,
   getters,
   strict: process.env.NODE_ENV !== 'production'
-})
+}

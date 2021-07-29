@@ -350,7 +350,7 @@ describe('store', () => {
       })
 
       it('should generate a human readable string based on the filters', async () => {
-        const actual = await helpers.getHumanReadableString(state, getters)
+        const actual = helpers.getHumanReadableString(state, getters)
         const expected = 'Text search is this is a free text search and Material type(s): PLASMA, RNA'
 
         expect(actual).toBe(expected)

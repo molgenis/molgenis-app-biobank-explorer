@@ -45,7 +45,7 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
     entityId: state.negotiatorCollectionEntityId,
-    humanReadable: await getHumanReadableString(state, getters),
+    humanReadable: getHumanReadableString(state, getters),
     nToken: state.nToken
   }
 
@@ -65,7 +65,7 @@ export const getHumanReadableString = (state, { filterDefinitions }) => {
   const humanReadableStart = {}
 
   // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
-  filterDefinitions(state).filter(fd => activeFilters.includes(fd.name))
+  filterDefinitions.filter(fd => activeFilters.includes(fd.name))
     .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
   // Extract filternames for which we have the labels for
@@ -79,13 +79,15 @@ export const getHumanReadableString = (state, { filterDefinitions }) => {
       const selectedValues = state.filters.selections[activeFilter]
 
       // Grab the options from the cache that we have selected
-      const cachedFilterOptions = state.filterOptionDictionary[activeFilter].filter(option => selectedValues.includes(option.value))
+      if (state.filterOptionDictionary[activeFilter]) {
+        const cachedFilterOptions = state.filterOptionDictionary[activeFilter].filter(option => selectedValues.includes(option.value))
 
-      const optionTexts = []
-      for (const cachedOption of cachedFilterOptions) {
-        optionTexts.push(cachedOption.text)
+        const optionTexts = []
+        for (const cachedOption of cachedFilterOptions) {
+          optionTexts.push(cachedOption.text)
+        }
+        filterLabels[activeFilter] = optionTexts
       }
-      filterLabels[activeFilter] = optionTexts
     }
   }
 
