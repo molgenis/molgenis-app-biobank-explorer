@@ -56,7 +56,6 @@ describe('store', () => {
           ]
         }
         helpers.setLocationHref = jest.fn()
-        api.get.mockResolvedValueOnce({ items: [] })
       })
 
       it('should send a negotiator query to the server and then surf to the negotiator', async () => {
