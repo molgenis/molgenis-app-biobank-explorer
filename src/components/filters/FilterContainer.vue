@@ -11,7 +11,6 @@
       :headerClass="filter.headerClass"
       :collapsed="filter.initiallyCollapsed">
       <component
-        v-if="bookmarkMappedToState"
         :is="filter.component"
         :value="activeFilters[filter.name]"
         :satisfyAllValue="filter.satisfyAll"
@@ -42,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'activeFilters', 'filterDefinitions', 'bookmarkMappedToState']),
+    ...mapGetters(['showCountryFacet', 'activeFilters', 'filterDefinitions']),
     search: {
       get () {
         return this.activeFilters.search

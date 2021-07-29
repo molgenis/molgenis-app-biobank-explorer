@@ -1,7 +1,6 @@
-import api from '@molgenis/molgenis-api-client'
 import { createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
-import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
+import { transformToRSQL } from '@molgenis/rsql'
 
 export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
@@ -57,26 +56,44 @@ const createNegotiatorQueryBody = async (state, getters, url) => {
   return result
 }
 
-const getHumanReadableString = async (state, { filterDefinitions, activeFilters }) => {
+export const getHumanReadableString = (state, { filterDefinitions }) => {
+  const activeFilters = Object.keys(state.filters.selections)
   let humanReadableString = ''
   const additionText = ' and '
 
-  const filterNegotiatorLabelsDictionary = {}
   const filterLabels = state.filters.labels
+  const humanReadableStart = {}
 
-  for (const fd of filterDefinitions) {
-    filterNegotiatorLabelsDictionary[fd.name] = fd.humanReadableString
-    if (!filterLabels[fd.name] && activeFilters[fd.name] && fd.name !== 'search') {
-      const url = `/api/v2/${fd.table}?attrs=*&q=${encodeRsqlValue(`id=in=(${activeFilters[fd.name].join(',')})`)}`
-      const { items } = await api.get(url)
+  // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
+  filterDefinitions(state).filter(fd => activeFilters.includes(fd.name))
+    .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
-      filterLabels[fd.name] = fd.name === 'diagnosis_available' ? items.map((obj) => `[ ${obj.code} ] - ${obj.label || obj.name}`) : items.map((obj) => obj.label || obj.name)
+  // Extract filternames for which we have the labels for
+  const labelsForFilters = Object.keys(filterLabels)
+
+  // loop over the selection object and get all the keys which correspond to filtername
+  for (const activeFilter in state.filters.selections) {
+    // check if we already have labels
+    if (!labelsForFilters.includes(activeFilter)) {
+      // Get the selection values (ids)
+      const selectedValues = state.filters.selections[activeFilter]
+
+      // Grab the options from the cache that we have selected
+      const cachedFilterOptions = state.filterOptionDictionary[activeFilter].filter(option => selectedValues.includes(option.value))
+
+      const optionTexts = []
+      for (const cachedOption of cachedFilterOptions) {
+        optionTexts.push(cachedOption.text)
+      }
+      filterLabels[activeFilter] = optionTexts
     }
   }
 
   for (const [filterName, filterValue] of Object.entries(state.filters.selections)) {
     if (!filterValue) continue
-    humanReadableString += filterNegotiatorLabelsDictionary[filterName]
+
+    humanReadableString += humanReadableStart[filterName]
+
     if (filterName === 'search') {
       humanReadableString += ` ${filterValue}`
     } else {

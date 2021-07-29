@@ -20,11 +20,11 @@ function checkForBookmarkFilter (filterName, filterOptions) {
     const activeDiagnosisFilter = store.getters.activeFilters[filterName]
 
     if (activeDiagnosisFilter) {
-      const options = []
+      let options = []
       for (const activeFilter of activeDiagnosisFilter) {
         const optionToCache = filterOptions.filter(option => option.value === activeFilter)
         if (optionToCache) {
-          options.push(optionToCache)
+          options = options.concat(optionToCache)
         }
       }
       if (options.length) {

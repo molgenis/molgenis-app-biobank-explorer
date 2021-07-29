@@ -1,11 +1,11 @@
-import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
+import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
 import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   filterDefinitions: (state) => filterDefinitions(state),
-  bookmarkMappedToState: state => state.bookmarkMappedToState,
+  getHumanReadableString: (state) => getHumanReadableString(state, { filterDefinitions }),
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {

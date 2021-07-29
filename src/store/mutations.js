@@ -9,13 +9,14 @@ export default {
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
-   * @param {*} filterUpdate; Object with name as filtername, and value / value[] as text: filterlabel, value: filter value
+   * @param {*} filterUpdate; Object { name, value: Array<Object> | Object }
+   * e.g:
+   * to add: { name: myFilterName, value: { text: 'MyFilterLabel', value: 'MyFilterId' } }
+   * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
   UpdateFilterSelection (state, filterUpdate) {
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
-
-    // reminder: do we still need state.filterLabelCache
 
     let tempFilterUpdate = filterUpdate
 
@@ -245,8 +246,6 @@ export default {
         Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
       }
     }
-
-    state.bookmarkMappedToState = true
   },
   SetError (state, error) {
     state.error = error
