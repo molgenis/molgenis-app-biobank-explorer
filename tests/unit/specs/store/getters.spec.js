@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockSelectedCollections, mockState } from '../mockData'
+import { mockFilterOptionDictionary, mockFilters, mockGetFilterDefinitions, mockSelectedCollections, mockState } from '../mockData'
 
 let state
 
@@ -39,6 +39,20 @@ describe('store', () => {
       })
       it('should return an empty string if no filters are selected', () => {
         expect(getters.biobankRsql(state)).toEqual('')
+      })
+    })
+
+    describe('getHumanReadableString', () => {
+      it('Should return a string based on active filters and corresponding labels', () => {
+        state.filters = mockFilters
+
+        // add lookup to use in function
+        state.filterOptionDictionary = mockFilterOptionDictionary
+        // push a selection on the state, where there is no label from, to trigger lookup
+        state.filters.selections.diagnosis_available = ['ORPHA:352530']
+
+        expect(getters.getHumanReadableString(state, { getFilterDefinitions: mockGetFilterDefinitions }))
+          .toBe('Countries: Europe and Biobank collaboration type(s): Non-commercial use and Disease type(s): [ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome')
       })
     })
 

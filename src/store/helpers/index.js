@@ -65,10 +65,8 @@ export const getHumanReadableString = (state, { getFilterDefinitions }) => {
   const humanReadableStart = {}
 
   // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
-  if (getFilterDefinitions) {
-    getFilterDefinitions.filter(fd => activeFilters.includes(fd.name))
-      .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
-  }
+  getFilterDefinitions.filter(fd => activeFilters.includes(fd.name))
+    .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
   // Extract filternames for which we have the labels for
   const labelsForFilters = Object.keys(filterLabels)

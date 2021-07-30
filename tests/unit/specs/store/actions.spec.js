@@ -1,9 +1,8 @@
 import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
-import { mockState } from '../mockData'
+import { mockGetFilterDefinitions, mockState } from '../mockData'
 import actions from '../../../../src/store/actions'
-import filterDefinitions from '../../../../src//utils/filterDefinitions'
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -47,7 +46,7 @@ describe('store', () => {
         state.filters.labels.materials = ['Cell Lines']
         getters = {
           rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions: mockGetFilterDefinitions,
           activeFilters: state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           biobanks: [
