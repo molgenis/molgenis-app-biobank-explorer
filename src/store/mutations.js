@@ -52,6 +52,9 @@ export default {
         newFilterLabels[propertyName] = [filterValue.text]
       } else { // a filter with only one option e.g. search
         newSelections[propertyName] = filterValue
+        // we only get one filter value, so we don't know which label is attached, clear all
+        // let humanReadableString figure it out.
+        delete currentLabels[propertyName]
       }
     }
 
