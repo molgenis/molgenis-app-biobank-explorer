@@ -4,7 +4,7 @@ import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
-  getFilterDefinitions: (state, getters) => filterDefinitions(state, getters),
+  getFilterDefinitions: (state) => filterDefinitions(state),
   getHumanReadableString,
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
