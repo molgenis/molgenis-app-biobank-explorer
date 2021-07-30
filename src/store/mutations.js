@@ -52,9 +52,6 @@ export default {
         newFilterLabels[propertyName] = [filterValue.text]
       } else { // a filter with only one option e.g. search
         newSelections[propertyName] = filterValue
-        if (propertyName !== 'search') {
-          newFilterLabels[propertyName] = propertyName
-        }
       }
     }
 

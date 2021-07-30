@@ -301,7 +301,7 @@ describe('store', () => {
         const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Text search is free text search and Countries: Netherlands,Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease,medium disease,big disease and Covid-19 service(s): covid19 and with custom collection selection.',
+          humanReadable: 'Text search is free text search and Countries: Netherlands, Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease, medium disease, big disease and Covid-19 service(s): covid19 and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'id=in=(collection1,collection4)'
@@ -354,7 +354,7 @@ describe('store', () => {
 
       it('should generate a human readable string based on the filters', async () => {
         const actual = helpers.getHumanReadableString(state, getters)
-        const expected = 'Text search is this is a free text search and Material type(s): PLASMA, RNA'
+        const expected = 'Text search is this is a free text search and Material type(s): PLASMA,  RNA'
 
         expect(actual).toBe(expected)
       })
