@@ -40,7 +40,7 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   ])
 })
 
-const createNegotiatorQueryBody = async (state, getters, url) => {
+const createNegotiatorQueryBody = (state, getters, url) => {
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),

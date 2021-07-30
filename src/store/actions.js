@@ -185,7 +185,7 @@ export default {
    */
   async SendToNegotiator ({ state, getters, commit }) {
     const options = {
-      body: JSON.stringify(await helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
+      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))
