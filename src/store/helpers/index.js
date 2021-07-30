@@ -99,7 +99,7 @@ export const getHumanReadableString = (state, { getFilterDefinitions }) => {
     if (filterName === 'search') {
       humanReadableString += ` ${filterValue}`
     } else {
-      humanReadableString += ` ${filterLabels[filterName].join(',')}`
+      humanReadableString += ` ${filterLabels[filterName].join(', ')}`
     }
     humanReadableString += additionText
   }
