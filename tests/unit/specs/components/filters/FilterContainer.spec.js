@@ -20,8 +20,7 @@ describe('FilterContainer', () => {
     getters = {
       showCountryFacet: () => true,
       activeFilters: () => [],
-      bookmarkMappedToState: () => true,
-      filterDefinitions
+      getFilterDefinitions: filterDefinitions
     }
 
     mutations = {

@@ -8,6 +8,9 @@ import { mockState } from '../../mockData'
 const getInitialState = () => {
   return mockState()
 }
+
+const getFilterDefinitions = filterDefinitions(mockState())
+
 let state
 
 describe('store', () => {
@@ -290,7 +293,7 @@ describe('store', () => {
         const getters = {
           rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
           biobankRsql: 'name=q=\'free text search\'',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           activeFilters: () => state.filters.selections
         }
@@ -298,7 +301,7 @@ describe('store', () => {
         const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Text search is free text search and Countries: Netherlands,Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease,medium disease,big disease and Covid-19 service(s): covid19 and with custom collection selection.',
+          humanReadable: 'Text search is free text search and Countries: Netherlands, Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease, medium disease, big disease and Covid-19 service(s): covid19 and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'id=in=(collection1,collection4)'
@@ -315,7 +318,7 @@ describe('store', () => {
 
         const getters = {
           rsql: 'materials=in=(RNA)',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
@@ -343,15 +346,15 @@ describe('store', () => {
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
       })
 
       it('should generate a human readable string based on the filters', async () => {
-        const actual = await helpers.getHumanReadableString(state, getters)
-        const expected = 'Text search is this is a free text search and Material type(s): PLASMA, RNA'
+        const actual = helpers.getHumanReadableString(state, getters)
+        const expected = 'Text search is this is a free text search and Material type(s): PLASMA,  RNA'
 
         expect(actual).toBe(expected)
       })

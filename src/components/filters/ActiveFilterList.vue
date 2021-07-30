@@ -27,13 +27,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['activeFilters', 'filterDefinitions', 'selectedCollections']),
+    ...mapGetters(['activeFilters', 'getFilterDefinitions', 'selectedCollections']),
     activeFilterKey () {
       // Create a base64 representation of the active filters as key, so it forces re-render on change
       return btoa(JSON.stringify(this.activeFilters))
     },
     filters () {
-      return this.filterDefinitions.filter((facet) => {
+      return this.getFilterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       })

@@ -1,9 +1,8 @@
 import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
-import { mockState } from '../mockData'
+import { mockGetFilterDefinitions, mockState } from '../mockData'
 import actions from '../../../../src/store/actions'
-import filterDefinitions from '../../../../src//utils/filterDefinitions'
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -44,9 +43,10 @@ describe('store', () => {
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.filters.selections.search = 'Cell&Co'
         state.filters.selections.materials = ['CELL_LINES']
+        state.filters.labels.materials = ['Cell Lines']
         getters = {
           rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions: mockGetFilterDefinitions,
           activeFilters: state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           biobanks: [
@@ -55,7 +55,6 @@ describe('store', () => {
           ]
         }
         helpers.setLocationHref = jest.fn()
-        api.get.mockResolvedValueOnce({ items: [] })
       })
 
       it('should send a negotiator query to the server and then surf to the negotiator', async () => {
