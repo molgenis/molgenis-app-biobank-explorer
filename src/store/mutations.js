@@ -35,7 +35,8 @@ export default {
       if (filterValue === undefined ||
         filterValue === '' ||
         (Array.isArray(filterValue) && !filterValue.length) ||
-        (!Array.isArray(filterValue) && typeof filterValue === 'object' && !filterValue.value.length)) {
+        (!Array.isArray(filterValue) && typeof filterValue === 'object' &&
+        (!filterValue.value.length || !filterValue.value[0].length))) {
         // remove the empty filter and the label
         delete currentFilterSelection[propertyName]
         delete currentLabels[propertyName]

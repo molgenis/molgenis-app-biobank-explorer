@@ -43,6 +43,13 @@ describe('store', () => {
         expect(state.filters.labels.search).toBeUndefined()
       })
 
+      it('should remove a filter when it has an array with an empty string as value', () => {
+        state.filters.selections.diagnosis_available = ['unknown_disease']
+
+        mutations.UpdateFilterSelection(state, { name: 'diagnosis_available', value: { text: 'Unknown disease', value: [''] } })
+        expect(state.filters.selections.diagnosis_available).toBeUndefined()
+      })
+
       it('can set all filters', () => {
         state.filters.labels.country = ['Netherlands', 'Belgium', 'France']
         state.filters.selections = {
