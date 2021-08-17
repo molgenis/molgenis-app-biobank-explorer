@@ -73,7 +73,7 @@ describe('store', () => {
       })
     })
 
-    describe('UpdatFilterSatisfyAll', () => {
+    describe('UpdateFilterSatisfyAll', () => {
       it('can set to a specific filter the satisfy all value to true/false', () => {
         mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true })
         expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(true)
@@ -206,6 +206,18 @@ describe('store', () => {
           value: 'bbmri-eric:ID:TR_ACU:collection:covid19'
         }])
         expect(state.filters.satisfyAll).toStrictEqual(['covid19', 'materials'])
+      })
+
+      it('should be backwards compatible with previous saved ICD-10 codes', () => {
+        state.route = {
+          query: {
+            diagnosis_available: 'urn:miriam:icd:C15,D00,C10.3,ORPHA:1000'
+          }
+        }
+
+        mutations.MapQueryToState(state)
+
+        expect(state.filters.selections.diagnosis_available).toStrictEqual(['urn:miriam:icd:C15', 'urn:miriam:icd:D00', 'urn:miriam:icd:C10.3', 'ORPHA:1000'])
       })
     })
 

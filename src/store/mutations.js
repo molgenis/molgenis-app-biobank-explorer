@@ -244,7 +244,17 @@ export default {
 
     for (const filterName of filters) {
       if (query[filterName]) {
-        Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
+        let queryValues = decodeURIComponent(query[filterName]).split(',')
+        // if it's not ORPHA it's ICD-10, then we have to add urn:miriam:icd: to make it an id
+        // for backwards compatibility if it's not present
+        if (filterName === 'diagnosis_available') {
+          queryValues = queryValues.map(value => {
+            const isOrphanet = value.match(/^ORPHA/g)
+            const isICD10 = value.match(/^urn:miriam:icd:/g)
+            return (!isOrphanet && !isICD10) ? `urn:miriam:icd:${value}` : value
+          })
+        }
+        Vue.set(state.filters.selections, filterName, queryValues)
       }
     }
   },
