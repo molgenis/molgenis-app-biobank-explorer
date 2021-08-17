@@ -18,7 +18,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters({ errorMessage: 'getErrorMessage' })
+    ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading' })
   },
   methods: {
     ...mapMutations(['MapQueryToState']),
@@ -31,13 +31,17 @@ export default {
   watch: {
     $route () {
       this.MapQueryToState()
+    },
+    loading (loading) {
+      if (!loading) {
+        this.MapQueryToState()
+      }
     }
   },
   mounted () {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
     this.GetQualityStandardInformation()
-    this.MapQueryToState()
   },
   name: 'biobank-explorer'
 }

@@ -139,10 +139,10 @@ describe('store', () => {
       })
 
       it('should create a query with only a disease type filter', () => {
-        state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
+        state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.code=in=(G71,ORPHA:10,ORPHA:100)'
+        const expected = 'diagnosis_available.id=in=(id:G71,id:ORPHA:10,id:ORPHA:100)'
 
         expect(actual).toBe(expected)
       })
@@ -173,34 +173,25 @@ describe('store', () => {
         expect(actual).toBe(expected)
       })
 
-      it('should create a query with only a disease type filter', () => {
-        state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.code=in=(G71,ORPHA:10,ORPHA:100)'
-
-        expect(actual).toBe(expected)
-      })
-
       it('should create a query with disease type filter enabling satisfy all and a country, not supporting it', () => {
-        state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
+        state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
         state.filters.satisfyAll = ['diagnosis_available']
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);diagnosis_available.code==G71;diagnosis_available.code==ORPHA:10;diagnosis_available.code==ORPHA:100'
+        const expected = 'country=in=(NL,BE);diagnosis_available.id==id:G71;diagnosis_available.id==id:ORPHA:10;diagnosis_available.id==id:ORPHA:100'
 
         expect(actual).toBe(expected)
       })
 
       it('should create a query with disease type and collection quality filters, both with the satisfyAll option enabled', () => {
-        state.filters.selections.diagnosis_available = ['G71', 'ORPHA:10', 'ORPHA:100']
+        state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
         state.filters.selections.collection_quality = ['collection1', 'collection2']
         state.collectionIdsWithSelectedQuality = ['collection1', 'collection2']
         state.filters.satisfyAll = ['diagnosis_available', 'collection_quality']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.code==G71;diagnosis_available.code==ORPHA:10;diagnosis_available.code==ORPHA:100;id==collection1;id==collection2'
+        const expected = 'diagnosis_available.id==id:G71;diagnosis_available.id==id:ORPHA:10;diagnosis_available.id==id:ORPHA:100;id==collection1;id==collection2'
 
         expect(actual).toBe(expected)
       })
