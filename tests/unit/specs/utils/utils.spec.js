@@ -33,7 +33,7 @@ describe('Utilities', () => {
   })
 
   describe('createInQuery', () => {
-    it('should return an empty string if the filters are empty', () => {
+    it('should return an empty array if the filters are empty', () => {
       const actual = utils.createInQuery('country', [])
       const expected = []
 
@@ -44,6 +44,50 @@ describe('Utilities', () => {
       const actual = utils.createInQuery('country', ['AT', 'BE'])
       const expected = [{ selector: 'country', comparison: '=in=', arguments: ['AT', 'BE'] }]
 
+      expect(actual).toStrictEqual(expected)
+    })
+  })
+  describe('diagnosisAvailableQuery', () => {
+    it('should return an empty array if the filters are empty', () => {
+      const actual = utils.diagnosisAvailableQuery([], 'diagnosis_available')
+      const expected = []
+
+      expect(actual).toStrictEqual(expected)
+    })
+
+    it('should return a separate query for aggregate codes if the filters have aggregate code', () => {
+      const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available')
+      const expected = [{
+        arguments: [
+          'id:ORPHA:1000'
+        ],
+        comparison: '=in=',
+        selector: 'diagnosis_available'
+      },
+      {
+        arguments: 'id:C15-C25',
+        comparison: '==',
+        selector: 'diagnosis_available'
+      }]
+
+      expect(actual).toStrictEqual(expected)
+    })
+
+    it('should return a comparison queries instead of =in= if satisfy all is true', () => {
+      const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available', true)
+      const expected =
+      {
+        operator: 'AND',
+        operands: [{
+          arguments: 'id:ORPHA:1000',
+          comparison: '==',
+          selector: 'diagnosis_available'
+        }, {
+          arguments: 'id:C15-C25',
+          comparison: '==',
+          selector: 'diagnosis_available'
+        }]
+      }
       expect(actual).toStrictEqual(expected)
     })
   })

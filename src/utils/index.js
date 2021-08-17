@@ -6,6 +6,12 @@ const qualityAttributeSelector = (type) => {
   return `quality(id,standards(*),assess_level_${type}(*),certification_number,certification_image_link,certification_report,label)`
 }
 
+const hasAggregateCode = /C\d{1,2}\.?\d+?-C\d{1,2}\.?\d+?$/gm
+
+export const queryBuilder = (attribute, filters, comparison) => filters.length > 0
+  ? [{ selector: attribute, comparison, arguments: filters }]
+  : []
+
 /**
  * Create an RSQL 'in' query for filters
  *
@@ -13,7 +19,7 @@ const qualityAttributeSelector = (type) => {
  * country=in=(NL,BE,DE)
  */
 export const createInQuery = (attribute, filters) => filters.length > 0
-  ? [{ selector: attribute, comparison: '=in=', arguments: filters }]
+  ? queryBuilder(attribute, filters, '=in=')
   : []
 
 /**
@@ -56,7 +62,7 @@ export const getBaseUrl = () => {
  * 'country==IT;country==NL' if the satisfyAll parameter is set to true; else, it returns 'country=in=(IT,NL)'
  */
 export const createQuery = (filterSelection, columnName, satisfyAll) => {
-  if (filterSelection && satisfyAll) {
+  if (filterSelection && filterSelection.length && satisfyAll) {
     return {
       operator: 'AND',
       operands: createComparisons(columnName, filterSelection || [])
@@ -64,10 +70,57 @@ export const createQuery = (filterSelection, columnName, satisfyAll) => {
   } else { return createInQuery(columnName, filterSelection || []) }
 }
 
+/**
+ * Some specific cases have a id with a code that is a combination of codes
+ * e.g. c15-c26 is everything between c15 and c26, but this is handled in molgenis.
+ */
+export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll) => {
+  if (!filterSelection || !filterSelection.length) return [] // nothing to filter
+
+  const codeIds = filterSelection.filter(code => !code.match(hasAggregateCode))
+  const aggregateCodeIds = filterSelection.filter(code => code.match(hasAggregateCode))
+
+  let rsqlQuery, query, aggregateCodeQuery
+
+  if (codeIds.length) {
+    query = satisfyAll ? createComparisons(columnName, codeIds) : createInQuery(columnName, codeIds)
+  }
+
+  if (aggregateCodeIds.length) {
+    aggregateCodeQuery = createComparisons('diagnosis_available', aggregateCodeIds)
+  }
+
+  if (satisfyAll) {
+    rsqlQuery = {
+      operator: 'AND',
+      operands: []
+    }
+
+    if (query) {
+      rsqlQuery.operands = rsqlQuery.operands.concat(query)
+    }
+    if (aggregateCodeQuery) {
+      rsqlQuery.operands = rsqlQuery.operands.concat(aggregateCodeQuery)
+    }
+  } else {
+    rsqlQuery = []
+
+    if (query) {
+      rsqlQuery = rsqlQuery.concat(query)
+    }
+
+    if (aggregateCodeQuery) {
+      rsqlQuery = rsqlQuery.concat(aggregateCodeQuery)
+    }
+  }
+  return rsqlQuery
+}
+
 export default {
   getUniqueIdArray,
   createInQuery,
   createComparisons,
+  diagnosisAvailableQuery,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector,
   getBaseUrl

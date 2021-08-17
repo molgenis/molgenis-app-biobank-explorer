@@ -61,9 +61,9 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
     let url = `/api/v2/${tableName}`
 
     if (query) {
-      // initial load, values are code
+      // initial load, values are id's
       if (queryType === 'in') {
-        url = `${url}?q=${encodeRsqlValue(`code=in=(${query})`)}`
+        url = `${url}?q=${encodeRsqlValue(`id=in=(${query})`)}`
       } else if (isCodeRegex.test(query)) {
         url = `${url}?q=${encodeRsqlValue(createDiagnosisCodeQuery(query))}&sort=code`
       } else {
@@ -72,7 +72,7 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
     }
 
     api.get(url).then(response => {
-      const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.code } })
+      const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
       checkForBookmarkFilter(filterName, filterOptions)
       resolve(filterOptions)
     })
