@@ -61,7 +61,7 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
     let url = `/api/v2/${tableName}`
 
     if (query) {
-      // initial load, values are code
+      // initial load, values are id's
       if (queryType === 'in') {
         url = `${url}?q=${encodeRsqlValue(`id=in=(${query})`)}`
       } else if (isCodeRegex.test(query)) {
