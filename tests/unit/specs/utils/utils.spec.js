@@ -55,7 +55,7 @@ describe('Utilities', () => {
       expect(actual).toStrictEqual(expected)
     })
 
-    it('should return a seperate query for aggregate codes if the filters have aggregate code', () => {
+    it('should return a separate query for aggregate codes if the filters have aggregate code', () => {
       const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available')
       const expected = [{
         arguments: [
@@ -70,6 +70,24 @@ describe('Utilities', () => {
         selector: 'diagnosis_available'
       }]
 
+      expect(actual).toStrictEqual(expected)
+    })
+
+    it('should return a comparison queries instead of =in= if satisfy all is true', () => {
+      const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available', true)
+      const expected =
+      {
+        operator: 'AND',
+        operands: [{
+          arguments: 'id:ORPHA:1000',
+          comparison: '==',
+          selector: 'diagnosis_available'
+        }, {
+          arguments: 'id:C15-C25',
+          comparison: '==',
+          selector: 'diagnosis_available'
+        }]
+      }
       expect(actual).toStrictEqual(expected)
     })
   })
