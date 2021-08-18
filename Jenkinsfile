@@ -172,9 +172,6 @@ pipeline {
         sh "daemon --name=sauceconnect --stop"
       }
     }
-    success {
-      molgenisSlack(message: 'Build success', status:'INFO', channel: '#pr-app-team')
-    }
     failure {
       molgenisSlack(message: 'Build failed', status:'ERROR', channel: '#pr-app-team')
     }
