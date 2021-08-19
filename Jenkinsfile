@@ -98,12 +98,11 @@ pipeline {
                     "--set proxy.backend.service.targetRelease=master " +
                     "--set image.pullPolicy=Always " +
                     "--set readinessPath=/index.html"
-                    
             }
         }
         post {
             success {
-                hubotSend(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', site: 'slack-pr-app-team')
+                molgenisSlack(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', channel: '#pr-app-team')
                 container('node') {
                     sh "set +x; curl -X POST -H 'Content-Type: application/json' -H 'Authorization: token ${GITHUB_TOKEN}' " +
                         "--data '{\"body\":\":star: PR Preview available on https://${NAME}.dev.molgenis.org\"}' " +
@@ -162,7 +161,7 @@ pipeline {
           sh "npm version ${RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
 
           sh "git push --tags origin ${BRANCH_NAME}"
-          hubotSend(message: "${env.REPOSITORY} has been successfully deployed on ${env.LOCAL_REGISTRY}.", status:'SUCCESS')
+          molgenisSlack(message: "${env.REPOSITORY} has been successfully deployed on ${env.LOCAL_REGISTRY}.", status:'SUCCESS', channel: "#release")
         }
       }
     }
@@ -173,11 +172,8 @@ pipeline {
         sh "daemon --name=sauceconnect --stop"
       }
     }
-    success {
-      hubotSend(message: 'Build success', status:'INFO', site: 'slack-pr-app-team')
-    }
     failure {
-      hubotSend(message: 'Build failed', status:'ERROR', site: 'slack-pr-app-team')
+      molgenisSlack(message: 'Build failed', status:'ERROR', channel: '#pr-app-team')
     }
   }
 }
