@@ -86,8 +86,9 @@ export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll)
     query = satisfyAll ? createComparisons(columnName, codeIds) : createInQuery(columnName, codeIds)
   }
 
+  // treat this separately, because this is treated special in the backend.
   if (aggregateCodeIds.length) {
-    aggregateCodeQuery = createComparisons('diagnosis_available', aggregateCodeIds)
+    aggregateCodeQuery = createInQuery('diagnosis_available', aggregateCodeIds)
   }
 
   if (satisfyAll) {

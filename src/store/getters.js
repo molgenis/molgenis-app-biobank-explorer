@@ -105,7 +105,9 @@ export default {
   /**
    * Get map of active filters
    */
-  activeFilters: state => state.filters.selections,
+  activeFilters: state => {
+    return state.filters.selections
+  },
   getErrorMessage: state => {
     if (!state.error) {
       return undefined

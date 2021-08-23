@@ -75,3 +75,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Fix checkbox focus outline being cut-off */
+::v-deep #diagnosis_available > .card-body {
+  padding: 0.5rem;
+}
+
+::v-deep #diagnosis_available > .custom-control {
+  padding-left: 1.7rem;
+}
+</style>
