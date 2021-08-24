@@ -57,16 +57,19 @@ describe('Utilities', () => {
 
     it('should return a separate query for aggregate codes if the filters have aggregate code', () => {
       const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available')
-      const expected = [{
-        arguments: ['id:ORPHA:1000'],
-        comparison: '=in=',
-        selector: 'diagnosis_available'
-      },
-      {
-        arguments: ['id:C15-C25'],
-        comparison: '=in=',
-        selector: 'diagnosis_available'
-      }]
+      const expected = {
+        operator: 'OR',
+        operands: [{
+          arguments: ['id:ORPHA:1000'],
+          comparison: '=in=',
+          selector: 'diagnosis_available'
+        },
+        {
+          arguments: ['id:C15-C25'],
+          comparison: '=in=',
+          selector: 'diagnosis_available'
+        }]
+      }
 
       expect(actual).toStrictEqual(expected)
     })
