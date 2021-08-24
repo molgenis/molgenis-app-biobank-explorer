@@ -6,6 +6,8 @@ const qualityAttributeSelector = (type) => {
   return `quality(id,standards(*),assess_level_${type}(*),certification_number,certification_image_link,certification_report,label)`
 }
 
+const hasAggregateCode = /[A-Z]{1}\d{1,2}\.?\d+?-[A-Z]{1}\d{1,2}\.?\d+?$/gm
+
 export const queryBuilder = (attribute, filters, comparison) => filters.length > 0
   ? [{ selector: attribute, comparison, arguments: filters }]
   : []
@@ -68,10 +70,47 @@ export const createQuery = (filterSelection, columnName, satisfyAll) => {
   } else { return createInQuery(columnName, filterSelection || []) }
 }
 
+/**
+ * Some specific cases have a id with a code that is a combination of codes
+ * e.g. c15-c26 is everything between c15 and c26, but this is handled in molgenis.
+ */
+export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll) => {
+  if (!filterSelection || !filterSelection.length) return [] // nothing to filter
+
+  const codeIds = filterSelection.filter(code => !code.match(hasAggregateCode))
+  const aggregateCodeIds = filterSelection.filter(code => code.match(hasAggregateCode))
+
+  let query, aggregateCodeQuery
+
+  if (codeIds.length) {
+    query = satisfyAll ? createComparisons(columnName, codeIds) : createInQuery(columnName, codeIds)
+  }
+
+  // treat this separately, because this is treated special in the backend.
+  if (aggregateCodeIds.length) {
+    aggregateCodeQuery = createInQuery('diagnosis_available', aggregateCodeIds)
+  }
+
+  const rsqlQuery = {
+    operator: satisfyAll ? 'AND' : 'OR',
+    operands: []
+  }
+
+  if (query) {
+    rsqlQuery.operands = rsqlQuery.operands.concat(query)
+  }
+  if (aggregateCodeQuery) {
+    rsqlQuery.operands = rsqlQuery.operands.concat(aggregateCodeQuery)
+  }
+
+  return rsqlQuery
+}
+
 export default {
   getUniqueIdArray,
   createInQuery,
   createComparisons,
+  diagnosisAvailableQuery,
   removeFilterFromFilterArrayById,
   qualityAttributeSelector,
   getBaseUrl
