@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'CollectionSelector',
@@ -50,8 +50,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'AddCollectionsToSelection'
+    ]),
     ...mapMutations([
-      'AddCollectionsToSelection',
       'RemoveCollectionsFromSelection'
     ]),
     handleCollectionStatus (event) {

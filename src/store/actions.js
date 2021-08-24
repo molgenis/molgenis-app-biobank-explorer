@@ -189,5 +189,9 @@ export default {
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))
+  },
+  AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
+    commit('SetCollectionsToSelection', { collections, bookmark })
+    commit('SetSearchHistory', getters.getHumanReadableString)
   }
 }

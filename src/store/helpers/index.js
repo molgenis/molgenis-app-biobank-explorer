@@ -45,15 +45,23 @@ const createNegotiatorQueryBody = (state, getters, url) => {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
     entityId: state.negotiatorCollectionEntityId,
-    humanReadable: getHumanReadableString(state, getters),
+    humanReadable: createHistoryJournal(state),
     nToken: state.nToken
   }
 
   const collections = state.isPodium ? getters.collectionsInPodium : getters.selectedCollections
   result.rsql = transformToRSQL({ operator: 'AND', operands: createInQuery('id', collections.map(sc => sc.value)) })
-  result.humanReadable += result.humanReadable.length ? ' and with custom collection selection.' : 'Custom collection selection.'
 
   return result
+}
+
+function createHistoryJournal (state) {
+  let journal = ''
+
+  for (let i = 0, length = state.searchHistory.length; i < length; i++) {
+    journal += `#${i + 1}: ${state.searchHistory[i]}\r\n`
+  }
+  return journal.substr(0, journal.length - 2) // remove the last \r\n
 }
 
 export const getHumanReadableString = (state, { getFilterDefinitions }) => {

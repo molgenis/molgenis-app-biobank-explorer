@@ -255,44 +255,20 @@ describe('store', () => {
     })
 
     describe('createNegotiatorQueryBody', () => {
-      it('should generate a negotiator query with collection and biobank filter expressions', async () => {
-        state.negotiatorBiobankEntityId = 'eu_bbmri_eric_biobanks'
+      it('should generate a negotiator query with collection and biobank filter expressions', () => {
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
-        state.filters.selections.search = 'free text search'
-        state.filters.selections.country = ['NL', 'BE']
-        state.filters.selections.materials = ['RNA']
-        state.filters.selections.collection_quality = ['eric']
-        state.filters.selections.type = ['type']
-        state.filters.selections.dataType = ['dataType']
-        state.filters.selections.diagnosis_available = [
-          { label: 'small disease' },
-          { label: 'medium disease' },
-          { label: 'big disease' }
-        ]
-        state.filters.selections.covid19 = ['covid19']
         state.nToken = '2837538B50189SR237489X14098A2374'
-        state.filters.labels = {
-          country: ['Netherlands', 'Belgium'],
-          materials: ['RNA'],
-          collection_quality: ['eric'],
-          type: ['type'],
-          dataType: ['dataType'],
-          diagnosis_available: ['small disease', 'medium disease', 'big disease'],
-          covid19: ['covid19']
-        }
+
+        state.searchHistory = ['Text search is free text search and Countries: Netherlands, Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease, medium disease, big disease and Covid-19 service(s): covid19 and with custom collection selection.']
 
         const getters = {
-          rsql: 'country=in=(NL,BE);name=q=\'free text search\'',
-          biobankRsql: 'name=q=\'free text search\'',
-          getFilterDefinitions,
-          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
-          activeFilters: () => state.filters.selections
+          selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
 
-        const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Text search is free text search and Countries: Netherlands, Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease, medium disease, big disease and Covid-19 service(s): covid19 and with custom collection selection.',
+          humanReadable: '#1: Text search is free text search and Countries: Netherlands, Belgium and Material type(s): RNA and Collection quality mark(s): eric and Collection type(s): type and Data type(s): dataType and Disease type(s): small disease, medium disease, big disease and Covid-19 service(s): covid19 and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'id=in=(collection1,collection4)'
@@ -301,28 +277,23 @@ describe('store', () => {
         expect(actual).toStrictEqual(expected)
       })
 
-      it('should generate a negotiator query with collection filter expressions', async () => {
+      it('should generate a negotiator query with collection filter expressions', () => {
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
-        state.filters.selections.materials = ['RNA']
         state.nToken = '2837538B50189SR237489X14098A2374'
-        state.filters.labels = { materials: ['RNA'] }
+        state.searchHistory = ['Material type(s): RNA and with custom collection selection.']
 
         const getters = {
-          rsql: 'materials=in=(RNA)',
-          getFilterDefinitions,
-          activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }
 
-        const actual = await helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
+        const actual = helpers.createNegotiatorQueryBody(state, getters, 'http://test.com?id=1&nToken=2837538B50189SR237489X14098A2374')
         const expected = {
           URL: 'http://test.com?id=1',
-          humanReadable: 'Material type(s): RNA and with custom collection selection.',
+          humanReadable: '#1: Material type(s): RNA and with custom collection selection.',
           nToken: state.nToken,
           entityId: 'eu_bbmri_eric_collections',
           rsql: 'id=in=(collection1,collection4)'
         }
-
         expect(actual).toStrictEqual(expected)
       })
     })

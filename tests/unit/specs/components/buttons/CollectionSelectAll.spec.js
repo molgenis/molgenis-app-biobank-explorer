@@ -28,8 +28,10 @@ describe('CollectionSelectAll', () => {
         allCollectionsSelected,
         foundCollectionsAsSelection
       },
+      actions: {
+        AddCollectionsToSelection
+      },
       mutations: {
-        AddCollectionsToSelection,
         RemoveCollectionsFromSelection
       }
     })

@@ -39,6 +39,8 @@ export default {
     satisfyAll: [],
     labels: {} // for human readable string
   },
+  // hold the current search history
+  searchHistory: [],
   // caching filter options for performance
   filterOptionDictionary: {},
   // whenever a user returns from a bookmark with diagnosis available
