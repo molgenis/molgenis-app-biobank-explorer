@@ -47,51 +47,6 @@ describe('Utilities', () => {
       expect(actual).toStrictEqual(expected)
     })
   })
-  describe('diagnosisAvailableQuery', () => {
-    it('should return an empty array if the filters are empty', () => {
-      const actual = utils.diagnosisAvailableQuery([], 'diagnosis_available')
-      const expected = []
-
-      expect(actual).toStrictEqual(expected)
-    })
-
-    it('should return a separate query for aggregate codes if the filters have aggregate code', () => {
-      const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available')
-      const expected = {
-        operator: 'OR',
-        operands: [{
-          arguments: ['id:ORPHA:1000'],
-          comparison: '=in=',
-          selector: 'diagnosis_available'
-        },
-        {
-          arguments: ['id:C15-C25'],
-          comparison: '=in=',
-          selector: 'diagnosis_available'
-        }]
-      }
-
-      expect(actual).toStrictEqual(expected)
-    })
-
-    it('should return a comparison queries instead of =in= if satisfy all is true', () => {
-      const actual = utils.diagnosisAvailableQuery(['id:C15-C25', 'id:ORPHA:1000'], 'diagnosis_available', true)
-      const expected =
-      {
-        operator: 'AND',
-        operands: [{
-          arguments: 'id:ORPHA:1000',
-          comparison: '==',
-          selector: 'diagnosis_available'
-        }, {
-          arguments: ['id:C15-C25'],
-          comparison: '=in=',
-          selector: 'diagnosis_available'
-        }]
-      }
-      expect(actual).toStrictEqual(expected)
-    })
-  })
 
   describe('removeFilterFromFilterArrayById', () => {
     it('should return an array of filter IDs without the selectedFilter', () => {

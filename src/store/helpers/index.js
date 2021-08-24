@@ -1,4 +1,4 @@
-import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
+import { createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 
@@ -18,7 +18,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
     createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
     createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
-    diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
+    createQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
     createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
