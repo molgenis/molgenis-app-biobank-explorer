@@ -6,7 +6,7 @@ const qualityAttributeSelector = (type) => {
   return `quality(id,standards(*),assess_level_${type}(*),certification_number,certification_image_link,certification_report,label)`
 }
 
-const hasAggregateCode = /C\d{1,2}\.?\d+?-C\d{1,2}\.?\d+?$/gm
+const hasAggregateCode = /[A-Z]{1}\d{1,2}\.?\d+?-[A-Z]{1}\d{1,2}\.?\d+?$/gm
 
 export const queryBuilder = (attribute, filters, comparison) => filters.length > 0
   ? [{ selector: attribute, comparison, arguments: filters }]
@@ -80,39 +80,29 @@ export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll)
   const codeIds = filterSelection.filter(code => !code.match(hasAggregateCode))
   const aggregateCodeIds = filterSelection.filter(code => code.match(hasAggregateCode))
 
-  let rsqlQuery, query, aggregateCodeQuery
+  let query, aggregateCodeQuery
 
   if (codeIds.length) {
     query = satisfyAll ? createComparisons(columnName, codeIds) : createInQuery(columnName, codeIds)
   }
 
+  // treat this separately, because this is treated special in the backend.
   if (aggregateCodeIds.length) {
-    aggregateCodeQuery = createComparisons('diagnosis_available', aggregateCodeIds)
+    aggregateCodeQuery = createInQuery('diagnosis_available', aggregateCodeIds)
   }
 
-  if (satisfyAll) {
-    rsqlQuery = {
-      operator: 'AND',
-      operands: []
-    }
-
-    if (query) {
-      rsqlQuery.operands = rsqlQuery.operands.concat(query)
-    }
-    if (aggregateCodeQuery) {
-      rsqlQuery.operands = rsqlQuery.operands.concat(aggregateCodeQuery)
-    }
-  } else {
-    rsqlQuery = []
-
-    if (query) {
-      rsqlQuery = rsqlQuery.concat(query)
-    }
-
-    if (aggregateCodeQuery) {
-      rsqlQuery = rsqlQuery.concat(aggregateCodeQuery)
-    }
+  const rsqlQuery = {
+    operator: satisfyAll ? 'AND' : 'OR',
+    operands: []
   }
+
+  if (query) {
+    rsqlQuery.operands = rsqlQuery.operands.concat(query)
+  }
+  if (aggregateCodeQuery) {
+    rsqlQuery.operands = rsqlQuery.operands.concat(aggregateCodeQuery)
+  }
+
   return rsqlQuery
 }
 
