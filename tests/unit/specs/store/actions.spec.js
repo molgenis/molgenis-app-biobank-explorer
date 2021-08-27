@@ -428,4 +428,26 @@ describe('store', () => {
       })
     })
   })
+
+  describe('AddCollectionsToSelection', () => {
+    const commit = jest.fn()
+    const collections = [{
+      id: 'Test Collection A',
+      label: 'Mock Collection A'
+    },
+    {
+      id: 'Test Collection B',
+      label: 'Mock Collection B'
+    }]
+    const getters = {
+      getHumanReadableString: 'Using a mock selection'
+    }
+
+    it('calls SetCollectionToSelection and SetSearchHistory', () => {
+      actions.AddCollectionsToSelection({ commit, getters }, { collections })
+
+      expect(commit).toHaveBeenCalledWith('SetCollectionsToSelection', { bookmark: undefined, collections })
+      expect(commit).toHaveBeenCalledWith('SetSearchHistory', getters.getHumanReadableString)
+    })
+  })
 })

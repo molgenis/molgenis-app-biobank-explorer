@@ -32,8 +32,10 @@ describe('CollectionSelector', () => {
       getters: {
         selectedCollections
       },
+      actions: {
+        AddCollectionsToSelection
+      },
       mutations: {
-        AddCollectionsToSelection,
         RemoveCollectionsFromSelection
       }
     })
