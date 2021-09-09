@@ -346,10 +346,43 @@ describe('store', () => {
 
         await actions.GetBiobankIdsInNetwork({ state, commit })
         expect(api.get.mock.calls[0]).toEqual(['/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name&q=network=in=(n1,n2)'])
+        expect(commit.mock.calls.length).toBe(3)
         expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsInANetwork', []])
         expect(commit.mock.calls[1]).toEqual(['SetBiobankIdsInANetwork', response])
-        expect(commit.mock.calls[2]).toEqual(
-          ['UpdateFilter', { name: 'collection_network', value: [{ text: 'network 1', value: 'n1' }, { text: 'network 2', value: 'n2' }], router: undefined }])
+        expect(commit.mock.calls[2]).toEqual(['UpdateFilterSelection',
+          { name: 'collection_network', value: [{ text: 'network 1', value: 'n1' }, { text: 'network 2', value: 'n2' }], updateBookmark: false }])
+      })
+
+      it('should not update the collection filter when in network view but the value is the same', async () => {
+        const response = {
+          items: [
+            { data: { id: 'biobank-1', name: 'Biobank 1', network: ['Network 1', 'Network 2'] } },
+            { data: { id: 'biobank-2', name: 'Biobank 2', network: ['Network 1', 'Network 4'] } }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+
+        const state = {
+          filters: {
+            selections: {
+              biobank_network: ['n1', 'n2'],
+              collection_network: ['n1', 'n2']
+            },
+            labels: {
+              biobank_network: ['network 1', 'network 2']
+            }
+          },
+          viewMode: 'networkview'
+        }
+        const commit = jest.fn()
+
+        await actions.GetBiobankIdsInNetwork({ state, commit })
+        expect(api.get.mock.calls[0]).toEqual(['/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name&q=network=in=(n1,n2)'])
+        expect(commit.mock.calls.length).toBe(2)
+        expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsInANetwork', []])
+        expect(commit.mock.calls[1]).toEqual(['SetBiobankIdsInANetwork', response])
+        expect(commit).not.toHaveBeenCalledWith('UpdateFilterSelection',
+          { name: 'collection_network', value: [{ text: 'network 1', value: 'n1' }, { text: 'network 2', value: 'n2' }], updateBookmark: false })
       })
 
       it('should retrieve set the biobank ids in a network to empty lists when the biobank_network filter is empty', () => {
@@ -450,7 +483,7 @@ describe('store', () => {
         expect(commit.mock.calls[0]).toEqual(['SetNetworkIds', undefined])
         expect(commit.mock.calls[1]).toEqual(['SetNetworks', response.items.map(network => network.data)])
         expect(commit.mock.calls[2]).toEqual(['SetNetworkIds', response.items.map(network => network.data.id)])
-        expect(commit.mock.calls[3]).toEqual(['UpdateFilter', { name: 'biobank_network', value: networkFilters, router: undefined }])
+        expect(commit.mock.calls[3]).toEqual(['UpdateFilterSelection', { name: 'biobank_network', value: networkFilters, updateBookmark: false }])
       })
 
       it('should set an error if something wrong happens in rest call', async () => {

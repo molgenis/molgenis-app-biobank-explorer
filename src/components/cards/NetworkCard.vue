@@ -1,16 +1,14 @@
 <template>
   <div class="card network-card">
     <div
-      class="card-header network-card-header"
-    >
+      class="card-header network-card-header">
       <div class="row">
         <div class="collapse-column" v-if="!loading">
           <font-awesome-icon
             icon="caret-right"
             :style="iconStyle"
             class="collapse-button mr-2"
-            @click.prevent="collapsed=!collapsed"
-          />
+            @click.prevent="collapsed=!collapsed"/>
         </div>
         <div class="col-md-5 d-flex flex-column" v-if="!loading">
           <div class="mb-2">
@@ -19,8 +17,7 @@
                 <font-awesome-icon
                   transform="shrink-3"
                   class="mr-2"
-                  :icon="['fas', 'project-diagram']"
-                />
+                  :icon="['fas', 'project-diagram']"/>
               </router-link>
               <span id="network-name">{{ network.name }}</span>
             </h5>

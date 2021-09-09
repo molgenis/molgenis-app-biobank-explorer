@@ -253,7 +253,7 @@ describe('store', () => {
           { name: 'biobank_quality' },
           { name: 'search' }
         ]
-        const actual = getters.activeFilters(state, { filterDefinitions: filterDefinitions })
+        const actual = getters.activeFilters(state, { getFilterDefinitions: filterDefinitions })
         const expected = {
           materials: ['PLASMA'],
           country: ['AT'],
@@ -276,7 +276,7 @@ describe('store', () => {
           { name: 'diagnosis_available' }
         ]
         state.filters.selections = expected
-        const actual = getters.activeFilters(state, { filterDefinitions: filterDefinitions })
+        const actual = getters.activeFilters(state, { getFilterDefinitions: filterDefinitions })
         expect(actual).toStrictEqual(expected)
       })
       it('should retrieve an object of filters without the filters not defined in filterDefinitions', () => {
@@ -292,7 +292,7 @@ describe('store', () => {
         ]
         state.filters.selections = stateFilters
         state.viewMode = 'networkview'
-        const actual = getters.activeFilters(state, { filterDefinitions: filterDefinitions })
+        const actual = getters.activeFilters(state, { getFilterDefinitions: filterDefinitions })
         expect(actual).toStrictEqual(expected)
       })
     })

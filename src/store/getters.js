@@ -114,9 +114,9 @@ export default {
   /**
    * Get map of active filters
    */
-  activeFilters: (state, { filterDefinitions }) => {
+  activeFilters: (state, { getFilterDefinitions }) => {
     // Select only the filters that are to be displayed in the current view mode
-    return getActiveFilters(state, filterDefinitions)
+    return getActiveFilters(state, getFilterDefinitions)
   },
   getErrorMessage: state => {
     if (!state.error) {

@@ -1,7 +1,7 @@
 
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils, { createQuery, createInQuery } from '../utils'
+import utils, { createQuery, createInQuery, arrayEqual } from '../utils'
 import 'array-flat-polyfill'
 import { flatten } from 'lodash'
 
@@ -61,19 +61,17 @@ export default {
         .then(response => {
           // Applies also the filter for collection in networks
           commit('SetBiobankIdsInANetwork', response)
-          if (state.viewMode === 'networkview') {
+          if (state.viewMode === 'networkview' && !arrayEqual(state.filters.selections.collection_network, networkIds)) {
             const networkLabels = state.filters.labels.biobank_network
-            commit('UpdateFilter', {
+            commit('UpdateFilterSelection', {
               name: 'collection_network',
-              value: networkIds.map((item, index) => { return { value: item, text: networkLabels[index] } }),
-              router: undefined
+              value: networkIds.map((item, index) => { return { text: networkLabels[index], value: item } }),
+              updateBookmark: false
             })
           }
         }, error => {
           commit('SetError', error)
         })
-    } else {
-      commit('SetBiobankIdsInANetwork', [])
     }
   },
   // We need to get id's to use in RSQL later, because we can't do a join on this table
@@ -165,8 +163,8 @@ export default {
         const networkFilters = response.items.map(item => { return { text: item.data.name, value: item.data.id } })
         commit('SetNetworks', networks)
         commit('SetNetworkIds', networks.map(network => network.id))
-        commit('UpdateFilter', { name: 'biobank_network', value: networkFilters, router: undefined })
-        // commit('UpdateFilter', { name: 'collection_network', value: networkFilters, router: undefined })
+        commit('UpdateFilterSelection', { name: 'biobank_network', value: networkFilters, updateBookmark: false })
+        // commit('UpdateFilterSelection', { name: 'collection_network', value: networkFilters, router: undefined })
       }, error => {
         commit('SetError', error)
       })

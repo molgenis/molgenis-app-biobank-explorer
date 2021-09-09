@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import { fixCollectionTree } from './helpers'
+import { fixCollectionTree, getActiveFilters } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
 import { arrayEqual } from '../utils/'
 
@@ -15,7 +15,7 @@ export default {
    * to add: { name: myFilterName, value: { text: 'MyFilterLabel', value: 'MyFilterId' } }
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
-  UpdateFilterSelection (state, filterUpdate, filterDefinitions, router) {
+  UpdateFilterSelection (state, filterUpdate, updateBookmark) {
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
 
@@ -66,8 +66,9 @@ export default {
 
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
-
-    createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
+    if (updateBookmark !== false) {
+      createBookmark(getActiveFilters(state, filterDefinitions(state)), state.selectedCollections, state.filters.satisfyAll)
+    }
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
@@ -318,13 +319,11 @@ export default {
             return (!isOrphanet && !isICD10) ? `urn:miriam:icd:${value}` : value
           })
         }
-        Vue.set(state.filters.selections, filterName, queryValues)
-
         // biobank network is reassigned only if the value is different
         if (filterName !== 'biobank_network' ||
           !state.filters.selections[filterName] ||
           !arrayEqual(state.filters.selections[filterName], decodeURIComponent(query[filterName]).split(','))) {
-          Vue.set(state.filters.selections, filterName, decodeURIComponent(query[filterName]).split(','))
+          Vue.set(state.filters.selections, filterName, queryValues)
         }
       }
     }

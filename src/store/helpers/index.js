@@ -26,18 +26,12 @@ export const createRSQLQuery = (state) => {
       (state.biobankInANetwork && state.biobankInANetwork.length > 0) ? {
           operator: 'OR',
           operands: flatten([
-            createInQuery('network', state.filters.selections.collection_network || []),
+          // createInQuery('network', state.filters.selections.collection_network || []),
+            createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
             createInQuery('biobank', state.biobankInANetwork)
           ])
         } : [],
       state.filters.selections.search && state.viewMode === 'biobankview' ? [{
-        operator: 'OR',
-        operands: flatten([
-          createInQuery('network', state.filters.selections.collection_network || []),
-          createInQuery('biobank', state.biobankInANetwork)
-        ])
-      }] : [],
-      state.filters.selections.search ? [{
         operator: 'OR',
         operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
           .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.filters.selections.search || '' }))

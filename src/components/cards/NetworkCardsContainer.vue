@@ -7,13 +7,11 @@
         align="center"
         :total-rows="foundNetworks"
         v-model="currentPage"
-        :per-page="pageSize"
-      ></b-pagination>
+        :per-page="pageSize"></b-pagination>
       <network-card
         v-for="network in networksShown"
         :key="network.id || network"
-        :network="network"
-      >
+        :network="network">
       </network-card>
       <b-pagination
         v-if="foundNetworks > pageSize"
@@ -21,8 +19,7 @@
         align="center"
         :total-rows="foundNetworks"
         v-model="currentPage"
-        :per-page="pageSize"
-      ></b-pagination>
+        :per-page="pageSize"></b-pagination>
     </div>
 
     <div v-else-if="!loading && foundNetworks === 0" class="status-text">

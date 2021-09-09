@@ -241,22 +241,20 @@ describe('store', () => {
 
       it('should create a Biobank query with a covid19 filter and a network filter, both with the satisfy all flag enabled', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.selections.biobank_network = ['network_1', 'network_2']
-        state.filters.satisfyAll = ['covid19', 'biobank_network']
+        state.filters.satisfyAll = ['covid19']
 
         const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'network==network_1;network==network_2;covid19biobank==covid_1;covid19biobank==covid_2'
+        const expected = 'covid19biobank==covid_1;covid19biobank==covid_2'
 
         expect(actual).toBe(expected)
       })
 
       it('should create a Biobank query with a covid19 filter and a network filter, the first with satisfyAll flag enabled, the second not', () => {
         state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.selections.biobank_network = ['network_1', 'network_2']
         state.filters.satisfyAll = ['covid19']
 
         const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'network=in=(network_1,network_2);covid19biobank==covid_1;covid19biobank==covid_2'
+        const expected = 'covid19biobank==covid_1;covid19biobank==covid_2'
 
         expect(actual).toBe(expected)
       })

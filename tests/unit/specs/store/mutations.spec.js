@@ -30,7 +30,7 @@ describe('store', () => {
 
       it('should update the list of filters for a specific state key and map its text as label', () => {
         const countries = [{ value: 'NL', text: 'Netherlands' }, { value: 'BE', text: 'Belgium' }]
-        mutations.UpdateFilterSelection(state, { name: 'country', value: countries, filterDefinitions: [{ name: 'country' }], router: [] })
+        mutations.UpdateFilterSelection(state, { name: 'country', value: countries, filterDefinitions: [{ name: 'country' }] })
 
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.labels.country).toStrictEqual(['Netherlands', 'Belgium'])
@@ -213,7 +213,7 @@ describe('store', () => {
         const collectionResponse = {
           items: [
             { data: { id: 'col1', label: 'collection 1', name: 'collection 1 name', biobank: { data: { id: 'b1' } }, network: { items: [{ data: { id: 'n2' } }] } } },
-            { data: { id: 'col2', name: 'collection 2', biobank: { data: { id: 'b1' } }, network: { items: [{ data: { id: 'n1' } }, { data: { id: 'n3' } }] }, parent_collection: undefined } },
+            { data: { id: 'col2', name: 'collection 2', biobank: { data: { id: 'b1' } }, network: { items: [{ data: { id: 'n1' } }, { data: { id: 'n3' } }] }, parent_collection: undefined } }
           ]
         }
         mutations.SetCollectionInfo(state, collectionResponse)
