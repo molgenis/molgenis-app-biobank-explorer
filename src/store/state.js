@@ -14,6 +14,10 @@ export default {
   biobanks: {},
   // IDs of biobanks matching the biobank filters
   biobankIds: undefined,
+  biobankInfo: undefined,
+  // IDs of networks matching the network filters
+  networks: {},
+  networkIds: undefined,
   // IDs of collections matching the collection filters
   collectionInfo: undefined,
   /* A single biobank object which is fetched by ID for showing the BiobankReport view */
@@ -27,6 +31,7 @@ export default {
   /* Randomly generated 32 character token provided by the Negotiator
   when they want to edit an existing query */
   nToken: null,
+  biobankInANetwork: [],
   collectionIdsWithSelectedQuality: [],
   biobankIdsWithSelectedQuality: [],
   collectionBiobankDictionary: {},
@@ -45,5 +50,6 @@ export default {
   filterOptionDictionary: {},
   // whenever a user returns from a bookmark with diagnosis available
   // in the active filter, there is no label. fetch it once for performance
-  diagnosisAvailableFetched: false
+  diagnosisAvailableFetched: false,
+  viewMode: 'biobankview'
 }

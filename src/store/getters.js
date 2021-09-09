@@ -1,12 +1,19 @@
-import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString } from './helpers'
-import { groupCollectionsByBiobankId } from '../utils/grouping'
+import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString, createNetworkRSQLQuery, getActiveFilters } from './helpers'
+import { groupCollectionsByBiobankId, groupBiobanksByNetworkId } from '../utils/grouping'
 import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   getFilterDefinitions: (state) => filterDefinitions(state),
   getHumanReadableString,
-  loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
+  bookmarkMappedToState: state => state.bookmarkMappedToState,
+  loading: ({ viewMode, collectionInfo, biobankIds, networkIds, biobankInANetwork }) => {
+    if (viewMode === 'biobankview') {
+      return !(biobankIds && collectionInfo)
+    } else {
+      return !(networkIds && biobankInANetwork && collectionInfo)
+    }
+  },
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
       return []
@@ -92,6 +99,7 @@ export default {
 
     return allIdsPresentInSelection
   },
+  selectedBiobankInNetwork: state => state.filters.selections.biobank_network,
   selectedBiobankQuality: state => state.filters.selections.biobank_quality,
   selectedCollectionQuality: state => {
     return state.filters.selections.collection_quality
@@ -100,12 +108,16 @@ export default {
   satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
+  networkRsql: createNetworkRSQLQuery,
   resetPage: state => !state.isPaginating,
   showCountryFacet: state => state.showCountryFacet,
   /**
    * Get map of active filters
    */
-  activeFilters: state => state.filters.selections,
+  activeFilters: (state, { getFilterDefinitions }) => {
+    // Select only the filters that are to be displayed in the current view mode
+    return getActiveFilters(state, getFilterDefinitions)
+  },
   getErrorMessage: state => {
     if (!state.error) {
       return undefined
@@ -117,5 +129,42 @@ export default {
       return state.error.message
     }
     return 'Something went wrong'
-  }
+  },
+  networks: ({ collectionInfo, biobankInfo, networks, networkIds }, { biobanks, loading }) => {
+    if (loading) {
+      return []
+    }
+    const biobanksByNetwork = groupBiobanksByNetworkId(biobanks, biobankInfo)
+    return networkIds.map(networkId => {
+      if (!Object.prototype.hasOwnProperty.call(networks, networkId)) {
+        return networkId
+      }
+      // Filters the collections to keep only the ones that are part of the network.
+      // Notice that if it's one subcollection to be part of the network the collection appears but only with the subcollection
+      if (biobanksByNetwork[networkId] !== undefined) {
+        biobanksByNetwork[networkId].forEach(biobank => {
+          if (typeof biobank === 'object') { // Is it an object with all information needed or is it a string?
+            // If the biobank is directly part of the network all its collections are included so nothing to do
+            if (!biobank.network.map(network => network.id).includes(networkId)) {
+              // Get the ids of the collections to keep: they are the ones of the collection in the biobank and in the network
+              const collectionsInNetwork = collectionInfo.filter(
+                collectionInfo => collectionInfo.biobankId === biobank.id && collectionInfo.networkIds.includes(networkId)
+              ).map(collectionInfo => collectionInfo.collectionId)
+              // Filters the collections
+              biobank.collections = filterCollectionTree(collectionsInNetwork, biobank.collections)
+            }
+          }
+        })
+      }
+      const network = networks[networkId]
+      return {
+        ...network,
+        biobanks: biobanksByNetwork[networkId] || []
+      }
+    })
+  },
+  foundNetworks: ({ networkIds }) => {
+    return networkIds ? networkIds.length : 0
+  },
+  viewMode: ({ viewMode }) => viewMode
 }

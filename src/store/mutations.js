@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import { fixCollectionTree } from './helpers'
+import { fixCollectionTree, getActiveFilters } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
+import { arrayEqual } from '../utils/'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
@@ -14,7 +15,7 @@ export default {
    * to add: { name: myFilterName, value: { text: 'MyFilterLabel', value: 'MyFilterId' } }
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
-  UpdateFilterSelection (state, filterUpdate) {
+  UpdateFilterSelection (state, filterUpdate, updateBookmark) {
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
 
@@ -65,8 +66,9 @@ export default {
 
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
-
-    createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
+    if (updateBookmark !== false) {
+      createBookmark(getActiveFilters(state, filterDefinitions(state)), state.selectedCollections, state.filters.satisfyAll)
+    }
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
@@ -93,6 +95,19 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
+  SetBiobankInfo (state, response) {
+    if (response === undefined) {
+      state.biobankInfo = response
+      return
+    }
+    state.biobankInfo = {}
+    response.items.forEach(item => (
+      state.biobankInfo[item.data.id] = {
+        id: item.data.id,
+        name: item.data.name,
+        networkIds: item.data.network.items.map(item => item.data.id)
+      }))
+  },
   // TODO name more specifically
   SetDictionaries (state, response) {
     const collections = response.items.map(item => (
@@ -110,6 +125,14 @@ export default {
 
     const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
     state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
+  },
+  SetNetworks (state, networks) {
+    networks.forEach(network => {
+      Vue.set(state.networks, network.id, network)
+    })
+  },
+  SetNetworkIds (state, networkIds) {
+    state.networkIds = networkIds
   },
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
@@ -146,9 +169,19 @@ export default {
       collectionId: item.data.id,
       collectionName: item.data.label || item.data.name,
       biobankId: item.data.biobank.data.id,
+      networkIds: item.data.network.items.map(item => item.data.id),
       isSubcollection: item.data.parent_collection !== undefined
     }))
     state.collectionInfo = collectionInfo
+    // If a collection is part of a network it means that its biobank is part of it.
+    // This adds the network ids of the collection to the biobank if it doesn't already have them
+    collectionInfo.forEach(collection => {
+      state.biobankInfo[collection.biobankId].networkIds =
+        state.biobankInfo[collection.biobankId].networkIds
+          .concat(collection.networkIds
+            .filter(nid => !state.biobankInfo[collection.biobankId].networkIds.includes(nid))
+          )
+    })
   },
   /**
    * Store a single biobank in the state for showing a biobank report
@@ -193,7 +226,14 @@ export default {
       state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
     }
   },
-  SetCollectionsToSelection (state, { collections, bookmark }) {
+  SetBiobankIdsInANetwork (state, response) {
+    if (response.items && response.items.length > 0) {
+      state.biobankInANetwork = [...response.items.map(ri => ri.data.id)]
+    } else {
+      state.biobankInANetwork = []
+    }
+  },
+  SetCollectionsToSelection (state, { collections, bookmark, router }) {
     const currentIds = state.selectedCollections.map(sc => sc.value)
     const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
     state.selectedCollections = state.selectedCollections.concat(newCollections)
@@ -201,6 +241,9 @@ export default {
     if (bookmark) {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
+    // if (router) {
+    //  createBookmark(router, getActiveFilters(state, filterDefinitions(state)), state.selectedCollections)
+    // }
   },
   SetSearchHistory (state, history) {
     if (history === '') {
@@ -222,6 +265,9 @@ export default {
     if (bookmark) {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
+    // if (router) {
+    //  createBookmark(router, getActiveFilters(state, filterDefinitions(state)), state.selectedCollections)
+    // }
   },
   /**
    *
@@ -273,7 +319,12 @@ export default {
             return (!isOrphanet && !isICD10) ? `urn:miriam:icd:${value}` : value
           })
         }
-        Vue.set(state.filters.selections, filterName, queryValues)
+        // biobank network is reassigned only if the value is different
+        if (filterName !== 'biobank_network' ||
+          !state.filters.selections[filterName] ||
+          !arrayEqual(state.filters.selections[filterName], decodeURIComponent(query[filterName]).split(','))) {
+          Vue.set(state.filters.selections, filterName, queryValues)
+        }
       }
     }
   },
@@ -297,6 +348,11 @@ export default {
     if (negotiatorEntities) {
       state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
       state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
+    }
+  },
+  SetViewMode (state, viewMode) {
+    if (viewMode === 'biobankview' || viewMode === 'networkview') {
+      state.viewMode = viewMode
     }
   }
 }
