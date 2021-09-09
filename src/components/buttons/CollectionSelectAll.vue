@@ -10,13 +10,9 @@
       hidden/>
     <label class="add-to-cart-label btn btn-outline-secondary" for="select-deselect-all">
       <span class="mr-2">Select all collections</span>
-      <font-awesome-icon
-        :icon="['far', 'square']"></font-awesome-icon>
     </label>
     <label class="remove-from-cart-label btn btn-outline-danger" for="select-deselect-all">
       <span class="mr-2">Deselect all collections</span>
-      <font-awesome-icon
-        :icon="['fas', 'check-square']"></font-awesome-icon>
     </label>
   </div>
 </template>
