@@ -5,11 +5,7 @@
     </div>
 
     <div class="col-md-9">
-      <div class="row mb-3">
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          class="mt-1 ml-3"
-          bookmark/>
+      <div class="row">
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -37,7 +33,11 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4"></div>
+        <!-- <div class="col-md-2"></div> -->
+        <collection-select-all
+          v-if="!loading && foundCollectionIds.length"
+          class="col-md-4 align-right"
+          bookmark/>
       </div>
       <div class="row">
         <div class="col-md-12" v-if="!loading">
@@ -338,5 +338,9 @@ export default {
 
 .collection-cart > div:last-child {
   border:none !important;
+}
+
+.align-right {
+    text-align: right;
 }
 </style>
