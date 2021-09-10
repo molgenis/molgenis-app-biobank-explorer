@@ -100,7 +100,7 @@ describe('CollectionSelector', () => {
   it('should emit checked event when the checkbox change its value', async () => {
     const propsData = { collectionData: { id: 'single_collection', label: 'Single Collection' } }
 
-    const wrapper = mount(CollectionSelector, { store, propsData, localVue, router })
+    const wrapper = mount(CollectionSelector, { store, propsData, localVue })
     const label = wrapper.find('label')
     await label.trigger('click')
     expect(wrapper.emitted().checked[0]).toEqual([true])
