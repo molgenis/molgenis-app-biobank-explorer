@@ -78,9 +78,9 @@
             </template>
           </p>
         </div>
-        <div class="col-1 checkbox-column"  v-if="!loading">
+        <div class="col-1"  v-if="!loading">
           <collection-selector
-            class="align-with-checkboxes mt-auto w-25"
+            class="mt-auto w-100 text-right"
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
@@ -196,9 +196,6 @@ export default {
 <style>
 .table-card {
   padding: 0.1rem;
-}
-.align-with-checkboxes {
-  margin-left: 0.1em;
 }
 
 .added-to-selection {

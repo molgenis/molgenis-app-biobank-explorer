@@ -2,12 +2,12 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
-        <th class="col-md-3" scope="col">Collection</th>
-        <th class="col-md-2" scope="col">Type</th>
-        <th class="col-md-2" scope="col">Materials</th>
-        <th class="col-md-2" scope="col">Standards</th>
-        <th class="col-md-2" scope="col">#Samples</th>
-        <th class="col-md-1" scope="col"></th>
+        <th class="col-3" scope="col">Collection</th>
+        <th class="col-2" scope="col">Type</th>
+        <th class="col-2" scope="col">Materials</th>
+        <th class="col-2" scope="col">Standards</th>
+        <th class="col-2" scope="col">#Samples</th>
+        <th class="col-1" scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -24,9 +24,9 @@
             :class="{
               'table-text-content-columns-has-sub': hasSubCollections(collection),
               'table-text-content-columns': !hasSubCollections(collection),
-              'col-md-3': column === 'name',
-              'col-md-2': column === 'materials' || column === 'quality' || column === 'size',
-              'col-md-1': column === 'type'
+              'col-3': column === 'name',
+              'col-2': column === 'materials' || column === 'quality' || column === 'size',
+              'col-1': column === 'type'
             }"
             v-for="(column, index) in columns"
             :key="index">
@@ -54,9 +54,9 @@
               {{ getCollectionSize(collection) }}
             </span>
           </td>
-          <td class="col-md-1 short-col">
+          <td class="col-1 collection-selector-td">
             <collection-selector
-              class="collection-selection-button"
+              class="mt-auto w-100 text-right"
               :collectionData="collection"
               icon-only
               router-enabled></collection-selector>
@@ -159,8 +159,8 @@ export default {
 </script>
 
 <style>
-.collection-selection-button {
-  padding-right: 0.9em;
+.collection-selector-td {
+  padding-right: 1.1em !important;
 }
 
 .collapsed > .when-visible {
@@ -189,6 +189,8 @@ export default {
 .collection-link {
   white-space: normal !important;
   line-height: normal;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .pr-1 {
