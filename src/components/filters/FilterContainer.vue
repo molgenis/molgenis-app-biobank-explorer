@@ -9,17 +9,16 @@
       :name="filter.name"
       :label="filter.label"
       :headerClass="filter.headerClass"
-      :collapsed="filter.initiallyCollapsed"
-    >
+      :collapsed="filter.initiallyCollapsed">
       <component
-        v-if="bookmarkMappedToState"
         :is="filter.component"
         :value="activeFilters[filter.name]"
+        :satisfyAllValue="filter.satisfyAll"
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
+        @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
         :returnTypeAsObject="true"
-        :bulkOperation="true"
-      >
+        :bulkOperation="true">
       </component>
     </FilterCard>
   </div>
@@ -42,7 +41,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'activeFilters', 'filterDefinitions', 'bookmarkMappedToState']),
+    ...mapGetters(['showCountryFacet', 'activeFilters', 'getFilterDefinitions']),
     search: {
       get () {
         return this.activeFilters.search
@@ -54,22 +53,36 @@ export default {
 
         this.debounce = setTimeout(async () => {
           clearTimeout(this.debounce)
-          this.UpdateFilter({ name: 'search', value: search, router: this.$router }) // passing router so we can set bookmark
+          this.UpdateFilterSelection({ name: 'search', value: search })
         }, 500)
       }
     },
     filters () {
-      return this.filterDefinitions.filter((facet) => {
+      return this.getFilterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
         return !(this.showCountryFacet === false && facet.name === 'country')
       }).filter((item) => item.component)
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter']),
+    ...mapMutations(['UpdateFilterSelection', 'UpdateFilterSatisfyAll']),
     filterChange (name, value) {
-      this.UpdateFilter({ name, value, router: this.$router })
+      this.UpdateFilterSelection({ name, value })
+    },
+    filterSatisfyAllChange (name, value) {
+      this.UpdateFilterSatisfyAll({ name, value })
     }
   }
 }
 </script>
+
+<style scoped>
+/* Fix checkbox focus outline being cut-off */
+::v-deep #diagnosis_available > .card-body {
+  padding: 0.5rem;
+}
+
+::v-deep #diagnosis_available > .custom-control {
+  padding-left: 1.7rem;
+}
+</style>

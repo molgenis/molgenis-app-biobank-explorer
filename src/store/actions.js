@@ -1,7 +1,9 @@
+
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils from '../utils'
+import utils, { createQuery, createInQuery } from '../utils'
 import 'array-flat-polyfill'
+import { flatten } from 'lodash'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 
@@ -20,8 +22,8 @@ const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfi
 /**/
 
 /* Query Parameters */
-export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available,name,type,order_of_magnitude(*),size,sub_collections(*),parent_collection,quality(*),data_categories)'
-export const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label),data_use(label,uri),biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials,data_categories)'
+export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
+export const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = '*,diagnosis_available(label,uri,code),data_use(label,uri),biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories)'
 /**/
 
 export default {
@@ -53,9 +55,18 @@ export default {
   GetCollectionIdsForQuality ({ state, commit }) {
     const collectionQuality = state.route.query.collection_quality ? state.route.query.collection_quality : null
     const qualityIds = state.filters.selections.collection_quality ?? collectionQuality
-
+    const selection = 'assess_level_col'
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q=assess_level_col=in=(${qualityIds})`).then(response => {
+      const query = encodeRsqlValue(transformToRSQL({
+        operator: 'AND',
+        operands: flatten([
+          state.filters.satisfyAll.includes('collection_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('collection_quality'))
+            : createInQuery(selection, qualityIds)
+        ])
+      }
+      ))
+      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q` + query).then(response => {
         commit('SetCollectionIdsWithSelectedQuality', response)
       })
     } else {
@@ -66,9 +77,18 @@ export default {
   GetBiobankIdsForQuality ({ state, commit }) {
     const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
     const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
-
+    const selection = 'assess_level_bio'
     if (qualityIds && qualityIds.length > 0) {
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=assess_level_bio=in=(${qualityIds})`).then(response => {
+      const query = encodeRsqlValue(transformToRSQL({
+        operator: 'AND',
+        operands: flatten([
+          state.filters.satisfyAll.includes('biobank_quality')
+            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('biobank_quality'))
+            : createInQuery(selection, qualityIds)
+        ])
+      }
+      ))
+      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=` + query).then(response => {
         commit('SetBiobankIdsWithSelectedQuality', response)
       })
     } else {
@@ -88,7 +108,6 @@ export default {
       .then(response => {
         commit('SetCollectionInfo', response)
         commit('SetDictionaries', response)
-        commit('MapQueryToState')
       }, error => {
         commit('SetError', error)
       })
@@ -166,9 +185,13 @@ export default {
    */
   async SendToNegotiator ({ state, getters, commit }) {
     const options = {
-      body: JSON.stringify(await helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
+      body: JSON.stringify(helpers.createNegotiatorQueryBody(state, getters, helpers.getLocationHref()))
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))
+  },
+  AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
+    commit('SetCollectionsToSelection', { collections, bookmark })
+    commit('SetSearchHistory', getters.getHumanReadableString)
   }
 }

@@ -1,11 +1,9 @@
 <template>
   <div
-    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']"
-  >
+    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']">
     <div
       class="card-header biobank-card-header"
-      @click.prevent="collapsed = !collapsed"
-    >
+      @click.prevent="collapsed = !collapsed">
       <div class="row">
         <div class="col-md-5 d-flex flex-column" v-if="!loading">
           <div class="mb-2">
@@ -14,54 +12,37 @@
                 <span
                   class="fa fa-table mr-2 icon-alignment"
                   aria-hidden="true"
-                  aria-labelledby="biobank-name"
-                ></span>
+                  aria-labelledby="biobank-name"></span>
               </router-link>
               <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
 
             <small v-if="biobank.quality && biobank.quality.length > 0">
-              <div @click.stop="">
-                <div class="d-flex">
-                  <span
-                    class="fa fa-question-circle text-info mr-1 popover-trigger-area"
-                    aria-hidden="true"
-                    :id="`qm-${biobank.id}`"
-                  ></span>
-                  <b-popover
-                    :target="`qm-${biobank.id}`"
-                    triggers="hover click"
-                    placement="top"
-                    custom-class="quality-marks-popover"
-                  >
-                    <table>
-                      <tbody>
-                        <tr
-                          :key="`${biobank.id}-${quality.label}`"
-                          v-for="quality in biobank.quality"
-                        >
-                          <td class="text-nowrap align-top font-weight-bold p-2">{{ quality.label }}</td>
-                          <td class="py-2">
-                            {{ qualityStandardsDictionary[quality.label] }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </b-popover>
-                  <b>Quality mark(s):</b>
-                </div>
-                <quality-column
-                  :qualities="biobank.quality"
-                  :spacing="0"
-                ></quality-column>
-              </div>
+              <info-popover label="Quality mark(s):" bold-text icon-before-label>
+                <table>
+                  <tbody>
+                    <tr
+                      :key="`${biobank.id}-${quality.label}`"
+                      v-for="quality in biobank.quality">
+                      <td class="text-nowrap align-top font-weight-bold p-2">
+                        {{ quality.label }}
+                      </td>
+                      <td class="py-2">
+                        {{ qualityStandardsDictionary[quality.label] }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </info-popover>
+              <quality-column
+                :qualities="biobank.quality"
+                :spacing="0"></quality-column>
             </small>
             <span v-if="availableCovidTypes">
               <b-img
                 class="biobank-icon covid-icon"
                 :src="require('../../assets/custom_icons/covid19.png')"
-                title="Covid-19"
-              />
+                title="Covid-19"/>
             </span>
           </div>
           <collection-selector
@@ -69,8 +50,7 @@
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            router-enabled
-          ></collection-selector>
+            bookmark></collection-selector>
         </div>
         <div class="col-md-6" v-if="!loading">
           <p>
@@ -100,27 +80,28 @@
     <div class="card-body table-card" v-if="!collapsed && !loading">
       <collections-table
         v-if="biobank.collections.length > 0"
-        :collections="sortedCollections"
-      ></collections-table>
+        :collections="sortedCollections"></collections-table>
     </div>
   </div>
 </template>
 
 <script>
-import CollectionSelector from '@/components/buttons/CollectionSelector'
+import CollectionSelector from '../buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
 import { mapGetters, mapState } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 import QualityColumn from '../tables/QualityColumn'
 import 'array-flat-polyfill'
+import InfoPopover from '../popovers/InfoPopover.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     CollectionsTable,
     QualityColumn,
-    CollectionSelector
+    CollectionSelector,
+    InfoPopover
   },
   props: {
     biobank: {
@@ -227,10 +208,7 @@ export default {
   left: 2px;
 }
 
-.fa-question-circle {
-  position: relative;
-  top: 4px;
-}
+/* can go: */
 
 /* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
 .quality-marks-popover {

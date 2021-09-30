@@ -6,24 +6,20 @@
           :variant="filterVariant(filter.label || filter.name)"
           v-for="filter in filters"
           :key="filter.name"
-          class="mr-2 mb-1 mt-1"
-        >
+          class="mr-2 mb-1 mt-1">
           <template #button-content>
             <span>{{ filter.label || filter.name }}</span>
             <span class="badge badge-light ml-3" v-if="filterSelectionCount(filter.name) > 0">
-              {{ filterSelectionCount(filter.name) }}</span
-            >
+              {{ filterSelectionCount(filter.name) }}</span>
           </template>
           <div class="bg-white p-2 dropdown-contents">
             <component
-              v-if="bookmarkMappedToState"
               :is="filter.component"
               :value="activeFilters[filter.name]"
               v-bind="filter"
               @input="(value) => filterChange(filter.name, value)"
               :returnTypeAsObject="true"
-              :bulkOperation="true"
-            >
+              :bulkOperation="true">
             </component>
           </div>
         </b-dropdown>
@@ -63,11 +59,10 @@ export default {
     ...mapGetters([
       'showCountryFacet',
       'activeFilters',
-      'filterDefinitions',
-      'bookmarkMappedToState'
+      'getFilterDefinitions'
     ]),
     filters () {
-      return this.filterDefinitions
+      return this.getFilterDefinitions
         .filter((facet) => {
           // config option showCountryFacet is used to toggle Country facet
           return !(this.showCountryFacet === false && facet.name === 'country')
@@ -76,9 +71,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter']),
+    ...mapMutations(['UpdateFilterSelection']),
     filterChange (name, value) {
-      this.UpdateFilter({ name, value, router: this.$router })
+      this.UpdateFilterSelection({ name, value })
     },
     filterVariant (filterName) {
       if (filterName.toLowerCase().includes('covid')) {

@@ -6,8 +6,7 @@
     align="right"
     :total-rows="foundBiobanks"
     v-model="pageNumber"
-    :per-page="pageSize"
-  ></b-pagination>
+    :per-page="pageSize"></b-pagination>
 </template>
 
 <script>

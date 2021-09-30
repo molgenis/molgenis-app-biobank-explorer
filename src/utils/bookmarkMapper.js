@@ -1,22 +1,21 @@
 import state from '../store/state'
+import Router from '../router'
 
-function setBookmark (router, bookmark) {
-  router.push(
+function setBookmark (bookmark) {
+  Router.push(
     {
-      name: router.name,
-      path: router.path,
+      name: Router.name,
+      path: Router.path,
       query: bookmark
     },
     // to prevent error, which occurs on routing to same page (Vue issue)
     () => { }
   )
   if (state.isIE11) {
-    state.ie11Bookmark = `${window.location.host}/#${router.currentRoute.fullPath}`
+    state.ie11Bookmark = `${window.location.host}/#${Router.currentRoute.fullPath}`
   }
 }
-export const createBookmark = (router, filters, selection) => {
-  if (!router) return
-
+export const createBookmark = (filters, selection, satisfyAllSelection) => {
   const bookmark = {}
 
   if (filters && Object.keys(filters).length > 0) {
@@ -36,7 +35,12 @@ export const createBookmark = (router, filters, selection) => {
     const bookmarkIds = selection.map(s => s.value)
     bookmark.cart = encodeURI(btoa(bookmarkIds.join(',')))
   }
-  setBookmark(router, bookmark)
+
+  if (satisfyAllSelection && satisfyAllSelection.length) {
+    bookmark.satisfyAll = encodeURI(satisfyAllSelection.join(','))
+  }
+
+  setBookmark(bookmark)
 }
 
 export default {

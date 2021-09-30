@@ -1,9 +1,8 @@
-import api from '@molgenis/molgenis-api-client'
-import { createInQuery, createComparisons } from '../../utils'
+import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
-import { transformToRSQL, encodeRsqlValue } from '@molgenis/rsql'
+import { transformToRSQL } from '@molgenis/rsql'
 
-export const isCodeRegex = /^([A-Z]|[XVI]+)(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?)?$/i
+export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
 /**
  * @example queries
@@ -16,13 +15,13 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
-    createInQuery('materials', state.filters.selections.materials || []),
-    createInQuery('type', state.filters.selections.type || []),
-    createInQuery('data_categories', state.filters.selections.dataType || []),
-    createInQuery('diagnosis_available.code', state.filters.selections.diagnosis_available || []),
-    createInQuery('id', state.collectionIdsWithSelectedQuality),
+    createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
+    createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
+    createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
+    diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
+    createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    createInQuery('network', state.filters.selections.collection_network || []),
+    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
     state.filters.selections.search ? [{
       operator: 'OR',
       operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
@@ -36,51 +35,79 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
     createInQuery('id', state.biobankIdsWithSelectedQuality),
-    createInQuery('network', state.filters.selections.biobank_network || []),
-    createComparisons('covid19biobank', state.filters.selections.covid19 || [])
+    createQuery(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.includes('biobank_network')),
+    createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.includes('covid19'))
   ])
 })
 
-const createNegotiatorQueryBody = async (state, getters, url) => {
+const createNegotiatorQueryBody = (state, getters, url) => {
   const result = {
     /* Remove the nToken from the URL to prevent duplication on the negotiator side when a query is edited more than once */
     URL: url.replace(/&nToken=\w{32}/, ''),
     entityId: state.negotiatorCollectionEntityId,
-    humanReadable: await getHumanReadableString(state, getters),
+    humanReadable: createHistoryJournal(state),
     nToken: state.nToken
   }
 
   const collections = state.isPodium ? getters.collectionsInPodium : getters.selectedCollections
   result.rsql = transformToRSQL({ operator: 'AND', operands: createInQuery('id', collections.map(sc => sc.value)) })
-  result.humanReadable += result.humanReadable.length ? ' and with custom collection selection.' : 'Custom collection selection.'
 
   return result
 }
 
-const getHumanReadableString = async (state, { filterDefinitions, activeFilters }) => {
+function createHistoryJournal (state) {
+  let journal = ''
+
+  for (let i = 0, length = state.searchHistory.length; i < length; i++) {
+    journal += `#${i + 1}: ${state.searchHistory[i]}\r\n`
+  }
+  return journal.substr(0, journal.length - 2) // remove the last \r\n
+}
+
+export const getHumanReadableString = (state, { getFilterDefinitions }) => {
+  const activeFilters = Object.keys(state.filters.selections)
   let humanReadableString = ''
   const additionText = ' and '
 
-  const filterNegotiatorLabelsDictionary = {}
   const filterLabels = state.filters.labels
+  const humanReadableStart = {}
 
-  for (const fd of filterDefinitions) {
-    filterNegotiatorLabelsDictionary[fd.name] = fd.humanReadableString
-    if (!filterLabels[fd.name] && activeFilters[fd.name] && fd.name !== 'search') {
-      const url = `/api/v2/${fd.table}?attrs=*&q=${encodeRsqlValue(`id=in=(${activeFilters[fd.name].join(',')})`)}`
-      const { items } = await api.get(url)
+  // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
+  getFilterDefinitions.filter(fd => activeFilters.includes(fd.name))
+    .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
-      filterLabels[fd.name] = fd.name === 'diagnosis_available' ? items.map((obj) => `[ ${obj.code} ] - ${obj.label || obj.name}`) : items.map((obj) => obj.label || obj.name)
+  // Extract filternames for which we have the labels for
+  const labelsForFilters = Object.keys(filterLabels)
+
+  // loop over the selection object and get all the keys which correspond to filtername
+  for (const activeFilter in state.filters.selections) {
+    // check if we already have labels
+    if (!labelsForFilters.includes(activeFilter)) {
+      // Get the selection values (ids)
+      const selectedValues = state.filters.selections[activeFilter]
+
+      // Grab the options from the cache that we have selected
+      if (state.filterOptionDictionary[activeFilter]) {
+        const cachedFilterOptions = state.filterOptionDictionary[activeFilter].filter(option => selectedValues.includes(option.value))
+
+        const optionTexts = []
+        for (const cachedOption of cachedFilterOptions) {
+          optionTexts.push(cachedOption.text)
+        }
+        filterLabels[activeFilter] = optionTexts
+      }
     }
   }
 
   for (const [filterName, filterValue] of Object.entries(state.filters.selections)) {
     if (!filterValue) continue
-    humanReadableString += filterNegotiatorLabelsDictionary[filterName]
+
+    humanReadableString += humanReadableStart[filterName]
+
     if (filterName === 'search') {
       humanReadableString += ` ${filterValue}`
     } else {
-      humanReadableString += ` ${filterLabels[filterName].join(',')}`
+      humanReadableString += ` ${filterLabels[filterName].join(', ')}`
     }
     humanReadableString += additionText
   }
@@ -120,6 +147,7 @@ export const filterCollectionTree = (collectionIds, collections) =>
     }, [])
 
 export default {
+  createBiobankRSQLQuery,
   createRSQLQuery,
   createNegotiatorQueryBody,
   getHumanReadableString,

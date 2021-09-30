@@ -14,18 +14,29 @@
 </style>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters({ errorMessage: 'getErrorMessage' })
+    ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading' })
   },
   methods: {
+    ...mapMutations(['MapQueryToState']),
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
       'GetQualityStandardInformation'
     ])
+  },
+  watch: {
+    $route () {
+      this.MapQueryToState()
+    },
+    loading (loading) {
+      if (!loading) {
+        this.MapQueryToState()
+      }
+    }
   },
   mounted () {
     this.GetNegotiatorType()

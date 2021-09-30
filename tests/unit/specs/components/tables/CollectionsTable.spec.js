@@ -1,5 +1,10 @@
 import CollectionsTable from '@/components/tables/CollectionsTable'
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import Vuex from 'vuex'
+import { mockState } from '../../mockData'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 describe('components', () => {
   describe('CollectionsTable', () => {
@@ -61,10 +66,14 @@ describe('components', () => {
       }]
     }, { parent_collection: { id: 5 } }]
 
-    let wrapper
+    let wrapper, store
 
     beforeEach(() => {
-      wrapper = shallowMount(CollectionsTable, { propsData: { collections }, stubs: ['router-link'] })
+      store = new Vuex.Store({
+        state: mockState()
+      })
+
+      wrapper = shallowMount(CollectionsTable, { store, localVue, propsData: { collections }, stubs: ['router-link'] })
     })
 
     describe('html', () => {

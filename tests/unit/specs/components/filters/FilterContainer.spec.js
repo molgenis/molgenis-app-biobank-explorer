@@ -1,8 +1,10 @@
 import FilterContainer from '@/components/filters/FilterContainer'
+import CovidFilter from '@/components/filters/CovidFilter'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import { mockState } from '../../mockData'
 import filterDefinitions from '../../../../../src/utils/filterDefinitions'
+
 const localVue = createLocalVue()
 localVue.use(Vuex)
 jest.useFakeTimers()
@@ -18,12 +20,12 @@ describe('FilterContainer', () => {
     getters = {
       showCountryFacet: () => true,
       activeFilters: () => [],
-      bookmarkMappedToState: () => true,
-      filterDefinitions
+      getFilterDefinitions: filterDefinitions
     }
 
     mutations = {
-      UpdateFilter: jest.fn()
+      UpdateFilterSelection: jest.fn(),
+      UpdateFilterSatisfyAll: jest.fn()
     }
   })
 
@@ -64,7 +66,38 @@ describe('FilterContainer', () => {
       wrapper.setData({ search: 'collection1' })
 
       jest.runAllTimers()
-      expect(mutations.UpdateFilter).toHaveBeenCalledTimes(1)
+      expect(mutations.UpdateFilterSelection).toHaveBeenCalledTimes(1)
+    })
+
+    it('should trigger the Update satisfyAll filter change, by simulating an emit, both with the update of filter selections', async () => {
+      store = new Vuex.Store({
+        state: mockState(),
+        actions,
+        mutations,
+        getters
+      })
+
+      wrapper = shallowMount(FilterContainer, { store, localVue })
+      wrapper.findComponent(CovidFilter).vm.$emit('input', ['covid_1', 'covid_2'])
+      wrapper.findComponent(CovidFilter).vm.$emit('satisfy-all', true)
+      await wrapper.findComponent(CovidFilter).vm.$nextTick()
+      jest.runAllTimers()
+      expect(mutations.UpdateFilterSelection).toHaveBeenCalledTimes(1)
+      expect(mutations.UpdateFilterSatisfyAll).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not set the showSatisfyAllCheckbox property for filters where the checkbox is not needed', async () => {
+      store = new Vuex.Store({
+        state: mockState(),
+        actions,
+        mutations,
+        getters
+      })
+
+      wrapper = shallowMount(FilterContainer, { store, localVue })
+      expect(wrapper.vm.filters.find((filter) => filter.name === 'country').showSatisfyAllCheckbox).toBeUndefined()
+      expect(wrapper.vm.filters.find((filter) => filter.name === 'covid19network').showSatisfyAllCheckbox).toBeUndefined()
+      expect(wrapper.vm.filters.find((filter) => filter.name === 'commercial_use').showSatisfyAllCheckbox).toBeUndefined()
     })
   })
 })

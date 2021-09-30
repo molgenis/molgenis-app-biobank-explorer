@@ -34,6 +34,8 @@ describe('BiobankExplorerContainer', () => {
         biobankRsql: () => '',
         selectedBiobankQuality: () => [],
         selectedCollectionQuality: () => [],
+        satisfyAllBiobankQuality: () => false,
+        satisfyAllCollectionQuality: () => false,
         selectedCollections: selectedCollectionMock,
         foundCollectionIds: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         loading: () => false,

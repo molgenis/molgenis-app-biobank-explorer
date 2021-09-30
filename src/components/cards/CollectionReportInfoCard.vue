@@ -24,8 +24,7 @@
                 <div v-if="info.contact.phone">
                   <span class="fa fa-fw fa-phone mr-1" aria-hidden="true"></span>
                   <a :href="'tel:' + info.contact.phone">
-                    <span> {{ info.contact.phone }}</span></a
-                  >
+                    <span> {{ info.contact.phone }}</span></a>
                 </div>
               </li>
             </ul>

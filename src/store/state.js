@@ -3,7 +3,6 @@ export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 export default {
   isIE11: window.ActiveXObject !== undefined && 'ActiveXObject' in window,
   ie11Bookmark: '',
-  bookmarkMappedToState: false,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
   isLoading: false,
@@ -19,7 +18,7 @@ export default {
   biobankIds: undefined,
   // IDs of collections matching the collection filters
   collectionInfo: undefined,
-  /* A single biobank object which is fetched by ID for showing the BiobankReportCard component */
+  /* A single biobank object which is fetched by ID for showing the BiobankReport view */
   biobankReport: undefined,
   collectionReport: undefined,
   networkReport: {
@@ -32,7 +31,6 @@ export default {
   nToken: null,
   collectionIdsWithSelectedQuality: [],
   biobankIdsWithSelectedQuality: [],
-  filterIdLabelDictionary: {},
   collectionBiobankDictionary: {},
   collectionDictionary: {},
   qualityStandardsDictionary: {},
@@ -40,7 +38,14 @@ export default {
   selectedCollections: [],
   filters: {
     selections: {},
+    satisfyAll: [],
     labels: {} // for human readable string
   },
-  filterLabelCache: [] // needed to filter human readable string > can be rewritten to use the collectiondictionary.
+  // hold the current search history
+  searchHistory: [],
+  // caching filter options for performance
+  filterOptionDictionary: {},
+  // whenever a user returns from a bookmark with diagnosis available
+  // in the active filter, there is no label. fetch it once for performance
+  diagnosisAvailableFetched: false
 }

@@ -1,10 +1,11 @@
-import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree } from './helpers'
+import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
 import filterDefinitions from '../utils/filterDefinitions'
+import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
-  filterDefinitions,
-  bookmarkMappedToState: state => state.bookmarkMappedToState,
+  getFilterDefinitions: (state) => filterDefinitions(state),
+  getHumanReadableString,
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
@@ -27,7 +28,7 @@ export default {
       const biobank = biobanks[biobankId]
       return {
         ...biobank,
-        collections: filterCollectionTree(collectionInfo.map(it => it.collectionId), biobank.collections)
+        collections: sortCollectionsByName(filterCollectionTree(collectionInfo.map(it => it.collectionId), biobank.collections))
       }
     })
   },
@@ -95,6 +96,8 @@ export default {
   selectedCollectionQuality: state => {
     return state.filters.selections.collection_quality
   },
+  satisfyAllBiobankQuality: state => state.filters.satisfyAll.includes('biobank_quality'),
+  satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,

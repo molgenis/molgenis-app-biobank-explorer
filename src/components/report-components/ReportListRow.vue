@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="data.value.length > 0">
+  <tr v-if="data && data.value.length > 0">
     <th scope="row" class="pr-1"><slot></slot></th>
     <td>
       <template v-if="dataContainsUri">
@@ -8,8 +8,7 @@
           v-for="(obj, index) in data.value"
           class="m-1 badge"
           :key="index + obj.label"
-          :class="'badge-' + (data.badgeColor ? data.badgeColor : 'success')"
-          >{{ obj.label }}
+          :class="'badge-' + (data.badgeColor ? data.badgeColor : 'success')">{{ obj.label }}
           <span class="ml-1 fa fa-external-link" aria-hidden="true"></span>
         </a>
       </template>
@@ -18,8 +17,7 @@
           v-for="(val, index) in data.value"
           class="m-1 badge"
           :key="index"
-          :class="'badge-' + (data.badgeColor ? data.badgeColor : 'success')"
-          >{{ val }}
+          :class="'badge-' + (data.badgeColor ? data.badgeColor : 'success')">{{ val }}
         </span>
       </template>
     </td>

@@ -5,19 +5,18 @@
     </b>
 
     <table class="mg-report-details-list mb-3">
-      <report-list-row :data="collection.content.Size">Size:</report-list-row>
-      <report-list-row :data="collection.content.Materials">Materials:</report-list-row>
-      <report-list-row :data="collection.content.Data">Data:</report-list-row>
+      <report-list-row :data="collection.Size">Size:</report-list-row>
+      <report-list-row :data="collection.Materials">Materials:</report-list-row>
+      <report-list-row :data="collection.Data">Data:</report-list-row>
     </table>
 
-    <div v-if="collection.subCollections && collection.subCollections.length > 0" class="m-3">
+    <div v-if="collection.sub_collections && collection.sub_collections.length > 0" class="m-3">
       <b>Sub collections</b>
       <report-sub-collection
-        v-for="subCollection in collection.subCollections"
+        v-for="subCollection in collection.sub_collections"
         :collection="subCollection"
         :key="subCollection.id"
-        :level="level + 1"
-      ></report-sub-collection>
+        :level="level + 1"></report-sub-collection>
     </div>
   </div>
 </template>
@@ -35,7 +34,7 @@ export default {
     collection: {
       description: String,
       parentCollection: Object,
-      subCollections: Array,
+      sub_collections: Array,
       name: String,
       id: String,
       content: {

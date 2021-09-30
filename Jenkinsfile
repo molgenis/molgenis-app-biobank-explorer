@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      label 'node-erbium'
+      inheritFrom 'node-erbium'
     }
   }
   environment {
@@ -26,7 +26,7 @@ pipeline {
           }
         }
         container('node') {
-          sh "daemon --name=sauceconnect -- /usr/local/bin/sc -u ${SAUCE_CRED_USR} -k ${SAUCE_CRED_PSW} -i ${TUNNEL_IDENTIFIER}"
+          startSauceConnect()
         }
       }
     }
@@ -38,13 +38,14 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-         // sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium"
         }
       }
       post {
         always {
           container('node') {
-            sh "curl -s https://codecov.io/bash | bash -s - -c -F unit -K"
+            fetch_codecov()
+            sh "./codecov -c -F unit -K -C ${GIT_COMMIT}"
           }
         }
       }
@@ -84,9 +85,10 @@ pipeline {
             }
             container('rancher') {
                 sh "rancher apps delete ${NAME} || true" 
-                sh "sleep 5s" // wait for deletion
+                sh "sleep 15s" // wait for deletion
                 sh "rancher apps install " +
-                    "cattle-global-data:molgenis-helm-molgenis-frontend " +
+                    "-n ${NAME} " +
+                    "p-vx5vf:molgenis-helm3-molgenis-frontend " +
                     "${NAME} " +
                     "--no-prompt " +
                     "--set environment=dev " +
@@ -100,7 +102,7 @@ pipeline {
         }
         post {
             success {
-                hubotSend(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', site: 'slack-pr-app-team')
+                molgenisSlack(message: "PR Preview available on https://${NAME}.dev.molgenis.org", status:'INFO', channel: '#pr-app-team')
                 container('node') {
                     sh "set +x; curl -X POST -H 'Content-Type: application/json' -H 'Authorization: token ${GITHUB_TOKEN}' " +
                         "--data '{\"body\":\":star: PR Preview available on https://${NAME}.dev.molgenis.org\"}' " +
@@ -118,13 +120,14 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-         // sh "yarn test:e2e --env chrome,firefox"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium"
         }
       }
       post {
         always {
           container('node') {
-            sh "curl -s https://codecov.io/bash | bash -s - -c -F unit -K"
+            fetch_codecov()
+            sh "./codecov -c -F unit -K -C ${GIT_COMMIT}"
           }
         }
       }
@@ -158,7 +161,7 @@ pipeline {
           sh "npm version ${RELEASE_SCOPE} -m '[ci skip] [npm-version] %s'"
 
           sh "git push --tags origin ${BRANCH_NAME}"
-          hubotSend(message: "${env.REPOSITORY} has been successfully deployed on ${env.LOCAL_REGISTRY}.", status:'SUCCESS')
+          molgenisSlack(message: "${env.REPOSITORY} has been successfully deployed on ${env.LOCAL_REGISTRY}.", status:'SUCCESS', channel: "#release")
         }
       }
     }
@@ -169,11 +172,8 @@ pipeline {
         sh "daemon --name=sauceconnect --stop"
       }
     }
-    success {
-      hubotSend(message: 'Build success', status:'INFO', site: 'slack-pr-app-team')
-    }
     failure {
-      hubotSend(message: 'Build failed', status:'ERROR', site: 'slack-pr-app-team')
+      molgenisSlack(message: 'Build failed', status:'ERROR', channel: '#pr-app-team')
     }
   }
 }

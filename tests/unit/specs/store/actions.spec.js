@@ -1,9 +1,8 @@
 import api from '@molgenis/molgenis-api-client'
 import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
-import { mockState } from '../mockData'
+import { mockGetFilterDefinitions, mockState } from '../mockData'
 import actions from '../../../../src/store/actions'
-import filterDefinitions from '../../../../src//utils/filterDefinitions'
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -44,9 +43,10 @@ describe('store', () => {
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
         state.filters.selections.search = 'Cell&Co'
         state.filters.selections.materials = ['CELL_LINES']
+        state.filters.labels.materials = ['Cell Lines']
         getters = {
           rsql: 'materials=in=(CELL_LINES);name=q="Cell&Co"',
-          filterDefinitions: filterDefinitions(state),
+          getFilterDefinitions: mockGetFilterDefinitions,
           activeFilters: state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }],
           biobanks: [
@@ -55,7 +55,6 @@ describe('store', () => {
           ]
         }
         helpers.setLocationHref = jest.fn()
-        api.get.mockResolvedValueOnce({ items: [] })
       })
 
       it('should send a negotiator query to the server and then surf to the negotiator', async () => {
@@ -89,6 +88,191 @@ describe('store', () => {
       })
     })
 
+    describe('GetBiobankIdsForQuality', () => {
+      let state
+      beforeEach(() => {
+        state = mockState()
+      })
+      it('should retrieve biobank ids from the server based on biobank quality filters and true SatisfyAll', async () => {
+        const response = {
+          items: [
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_bio: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_bio: { id: 'accredited', label: 'Certified by accredited body' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.filters.selections.biobank_quality = ['accredited', 'eric']
+        state.filters.satisfyAll = ['biobank_quality']
+        const commit = jest.fn()
+
+        await actions.GetBiobankIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
+      })
+
+      it('should retrieve biobank ids from the server based on biobank quality filters and false SatisfyAll', async () => {
+        const response = {
+          items: [
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_bio: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_bio: { id: 'accredited', label: 'Certified by accredited body' }
+            },
+            {
+              biobank: { id: 'biobank-2' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_bio: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.filters.selections.biobank_quality = ['accredited', 'eric']
+        const commit = jest.fn()
+
+        await actions.GetBiobankIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
+      })
+
+      it('should get biobank quality from route', async () => {
+        const response = {
+          items: [
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_bio: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              biobank: { id: 'biobank-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_bio: { id: 'accredited', label: 'Certified by accredited body' }
+            },
+            {
+              biobank: { id: 'biobank-2' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_bio: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.route.query.biobank_quality = ['accredited', 'eric']
+        const commit = jest.fn()
+
+        await actions.GetBiobankIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
+      })
+
+      it('should exit with an empty list', async () => {
+        const commit = jest.fn()
+
+        await actions.GetBiobankIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', []])
+      })
+    })
+
+    describe('GetCollectionIdsForQuality', () => {
+      let state
+      beforeEach(() => {
+        state = mockState()
+      })
+      it('should retrieve collections ids from the server based on biobank quality filters and true SatisfyAll', async () => {
+        const response = {
+          items: [
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.filters.selections.collection_quality = ['accredited', 'eric']
+        state.filters.satisfyAll = ['collection_quality']
+        const commit = jest.fn()
+
+        await actions.GetCollectionIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
+      })
+
+      it('should retrieve biobank ids from the server based on biobank quality filters and false SatisfyAll', async () => {
+        const response = {
+          items: [
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
+            },
+            {
+              collection: { id: 'col-2' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.filters.selections.collection_quality = ['accredited', 'eric']
+        const commit = jest.fn()
+
+        await actions.GetCollectionIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
+      })
+      it('should get collection quality from route', async () => {
+        const response = {
+          items: [
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            },
+            {
+              collection: { id: 'col-1' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
+            },
+            {
+              collection: { id: 'col-2' },
+              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
+              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
+            }
+          ]
+        }
+        api.get.mockResolvedValueOnce(response)
+        state.route.query.collection_quality = ['accredited', 'eric']
+        const commit = jest.fn()
+
+        await actions.GetCollectionIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
+      })
+
+      it('should exit with an empty list', async () => {
+        const commit = jest.fn()
+
+        await actions.GetCollectionIdsForQuality({ state, commit })
+        expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', []])
+      })
+    })
+
     describe('GetCollectionInfo', () => {
       const response = {
         items: [
@@ -106,7 +290,6 @@ describe('store', () => {
         expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
         expect(commit.mock.calls[1]).toEqual(['SetCollectionInfo', response])
         expect(commit.mock.calls[2]).toEqual(['SetDictionaries', response])
-        expect(commit.mock.calls[3]).toEqual(['MapQueryToState'])
       })
     })
 
@@ -243,6 +426,28 @@ describe('store', () => {
         }
         utils.testAction(actions.GetNetworkReport, options, done)
       })
+    })
+  })
+
+  describe('AddCollectionsToSelection', () => {
+    const commit = jest.fn()
+    const collections = [{
+      id: 'Test Collection A',
+      label: 'Mock Collection A'
+    },
+    {
+      id: 'Test Collection B',
+      label: 'Mock Collection B'
+    }]
+    const getters = {
+      getHumanReadableString: 'Using a mock selection'
+    }
+
+    it('calls SetCollectionToSelection and SetSearchHistory', () => {
+      actions.AddCollectionsToSelection({ commit, getters }, { collections })
+
+      expect(commit).toHaveBeenCalledWith('SetCollectionsToSelection', { bookmark: undefined, collections })
+      expect(commit).toHaveBeenCalledWith('SetSearchHistory', getters.getHumanReadableString)
     })
   })
 })

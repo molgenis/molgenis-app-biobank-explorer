@@ -16,6 +16,13 @@ module.exports = {
     "@vue/standard"
   ],
 
+  rules: {
+    "vue/html-closing-bracket-newline": ["error", {
+      "singleline": "never",
+      "multiline": "never"
+    }]
+  },
+
   overrides: [
     {
       files: [

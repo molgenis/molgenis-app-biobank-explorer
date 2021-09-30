@@ -8,8 +8,7 @@
           <div class="col-md-3 pl-0">
             <collection-select-all
               v-if="!loading && foundCollectionIds.length"
-              router-enabled
-            />
+              router-enabled/>
           </div>
           <div class="col-md-5 pl-0">
             <search-filter />
