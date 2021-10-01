@@ -18,7 +18,6 @@ describe('FilterContainer', () => {
     }
 
     getters = {
-      showCountryFacet: () => true,
       activeFilters: () => [],
       getFilterDefinitions: filterDefinitions
     }
@@ -41,10 +40,10 @@ describe('FilterContainer', () => {
       expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).toEqual('country')
     })
 
-    it('should exclude the country filters if showCountryFacet is set to false', () => {
+    it('should exclude the country filters if the country filter facer is in the disabledFilters list', () => {
       getters.showCountryFacet = () => false
       store = new Vuex.Store({
-        state: mockState(),
+        state: { ...mockState(), disabledFilters: ['country'] },
         actions,
         mutations,
         getters

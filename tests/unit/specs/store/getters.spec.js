@@ -242,17 +242,6 @@ describe('store', () => {
       })
     })
 
-    describe('showCountryFacet', () => {
-      it('should return true if showCountryFacet setting is set to true', () => {
-        const state = { showCountryFacet: true }
-        expect(getters.showCountryFacet(state)).toEqual(true)
-      })
-      it('should return false if showCountryFacet setting is set to false', () => {
-        const state = { showCountryFacet: false }
-        expect(getters.showCountryFacet(state)).toEqual(false)
-      })
-    })
-
     describe('getErrorMessage', () => {
       it('should return undefined if no error is set', () => {
         const state = { error: undefined }

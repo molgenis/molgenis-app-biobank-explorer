@@ -101,7 +101,6 @@ export default {
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,
-  showCountryFacet: state => state.showCountryFacet,
   /**
    * Get map of active filters
    */

@@ -31,7 +31,7 @@ import CovidNetworkFilter from '../filters/CovidNetworkFilter'
 import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
 /** */
 
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   components: { StringFilter, CheckboxFilter, MultiFilter, FilterCard, CovidFilter, CovidNetworkFilter },
@@ -41,7 +41,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['showCountryFacet', 'activeFilters', 'getFilterDefinitions']),
+    ...mapState(['disabledFilters']),
+    ...mapGetters(['activeFilters', 'getFilterDefinitions']),
     search: {
       get () {
         return this.activeFilters.search
@@ -60,7 +61,7 @@ export default {
     filters () {
       return this.getFilterDefinitions.filter((facet) => {
         // config option showCountryFacet is used to toggle Country facet
-        return !(this.showCountryFacet === false && facet.name === 'country')
+        return !this.disabledFilters.includes(facet.name)
       }).filter((item) => item.component)
     }
   },

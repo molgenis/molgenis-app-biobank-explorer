@@ -9,7 +9,7 @@ export default {
   isPodium: false,
   podiumCollectionIds: [],
   error: null,
-  showCountryFacet: Object.hasOwnProperty.call(INITIAL_STATE, 'showCountryFacet') ? INITIAL_STATE.showCountryFacet : true,
+  disabledFilters: Object.hasOwnProperty.call(INITIAL_STATE, 'disabledFilters') ? INITIAL_STATE.disabledFilters : [],
   // Map ID to biobank
   biobanks: {},
   // IDs of biobanks matching the biobank filters
