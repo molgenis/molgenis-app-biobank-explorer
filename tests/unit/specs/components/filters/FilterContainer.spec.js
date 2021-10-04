@@ -40,7 +40,7 @@ describe('FilterContainer', () => {
       expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).toEqual('country')
     })
 
-    it('should exclude the country filters if the country filter facer is in the disabledFilters list', () => {
+    it('should exclude the country filters if the country filter facet is in the disabledFilters list', () => {
       getters.showCountryFacet = () => false
       store = new Vuex.Store({
         state: { ...mockState(), disabledFilters: ['country'] },
