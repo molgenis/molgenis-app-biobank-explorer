@@ -73,7 +73,8 @@ module.exports = {
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',
-          disabledFilters: []
+          disabledFilters: [],
+          collectionColumns: []
         }
       }),
       new ZipPlugin({

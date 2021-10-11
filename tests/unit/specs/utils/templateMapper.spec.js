@@ -106,9 +106,9 @@ describe('templateMapper', () => {
     it('should generate listValues of details table content', () => {
       const actual = mapCollectionsDetailsTableContent(collectionsReport)
       expect(actual.Type.value).toStrictEqual(['type1', 'type2'])
-      expect(actual.Storage.value).toStrictEqual(['10 degrees'])
-      expect(actual.Data.value).toStrictEqual(['One type'])
-      expect(actual.Diagnosis.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
+      expect(actual.Storage_temperatures.value).toStrictEqual(['10 degrees'])
+      expect(actual.Data_categories.value).toStrictEqual(['One type'])
+      expect(actual.Diagnosis_available.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
     })
   })
 
@@ -165,16 +165,12 @@ describe('templateMapper', () => {
           type: 'string-with-key',
           value: '0-20 years'
         },
-        Data: {
-          badgeColor: 'info',
-          type: 'list',
+        Data_categories: {
           value: [
             'One type'
           ]
         },
-        DataUse: {
-          badgeColor: 'success',
-          type: 'list',
+        Data_use: {
           value: [
             {
               label: 'DUO Testlabel',
@@ -186,9 +182,7 @@ describe('templateMapper', () => {
             }
           ]
         },
-        Diagnosis: {
-          badgeColor: 'primary',
-          type: 'list',
+        Diagnosis_available: {
           value: [
             'Common cold',
             'Mysterious illness',
@@ -196,16 +190,12 @@ describe('templateMapper', () => {
           ]
         },
         Materials: {
-          badgeColor: 'danger',
-          type: 'list',
           value: [
             'material1',
             'material2'
           ]
         },
         Sex: {
-          badgeColor: 'secondary',
-          type: 'list',
           value: [
             'male',
             'female'
@@ -218,16 +208,12 @@ describe('templateMapper', () => {
             '777'
           ]
         },
-        Storage: {
-          badgeColor: 'warning',
-          type: 'list',
+        Storage_temperatures: {
           value: [
             '10 degrees'
           ]
         },
         Type: {
-          badgeColor: 'info',
-          type: 'list',
           value: [
             'type1',
             'type2'
@@ -331,33 +317,23 @@ describe('templateMapper', () => {
               type: 'string-with-key',
               value: undefined
             },
-            Data: {
-              badgeColor: 'info',
-              type: 'list',
+            Data_categories: {
               value: [
                 'Biological samples'
               ]
             },
-            DataUse: {
-              badgeColor: 'success',
-              type: 'list',
+            Data_use: {
               value: []
             },
-            Diagnosis: {
-              badgeColor: 'primary',
-              type: 'list',
+            Diagnosis_available: {
               value: []
             },
             Materials: {
-              badgeColor: 'danger',
-              type: 'list',
               value: [
                 'Other'
               ]
             },
             Sex: {
-              badgeColor: 'secondary',
-              type: 'list',
               value: []
             },
             Size: {
@@ -367,14 +343,10 @@ describe('templateMapper', () => {
                 '10.000 - 100.000'
               ]
             },
-            Storage: {
-              badgeColor: 'warning',
-              type: 'list',
+            Storage_temperatures: {
               value: []
             },
             Type: {
-              badgeColor: 'info',
-              type: 'list',
               value: []
             },
             data_categories: [
@@ -407,33 +379,23 @@ describe('templateMapper', () => {
               type: 'string-with-key',
               value: undefined
             },
-            Data: {
-              badgeColor: 'info',
-              type: 'list',
+            Data_categories: {
               value: [
                 'Biological samples'
               ]
             },
-            DataUse: {
-              badgeColor: 'success',
-              type: 'list',
+            Data_use: {
               value: []
             },
-            Diagnosis: {
-              badgeColor: 'primary',
-              type: 'list',
+            Diagnosis_available: {
               value: []
             },
             Materials: {
-              badgeColor: 'danger',
-              type: 'list',
               value: [
                 'Other'
               ]
             },
             Sex: {
-              badgeColor: 'secondary',
-              type: 'list',
               value: []
             },
             Size: {
@@ -443,14 +405,10 @@ describe('templateMapper', () => {
                 '10.000 - 100.000'
               ]
             },
-            Storage: {
-              badgeColor: 'warning',
-              type: 'list',
+            Storage_temperatures: {
               value: []
             },
             Type: {
-              badgeColor: 'info',
-              type: 'list',
               value: []
             },
             data_categories: [
@@ -481,31 +439,21 @@ describe('templateMapper', () => {
                   type: 'string-with-key',
                   value: undefined
                 },
-                Data: {
-                  badgeColor: 'info',
-                  type: 'list',
+                Data_categories: {
                   value: []
                 },
-                DataUse: {
-                  badgeColor: 'success',
-                  type: 'list',
+                Data_use: {
                   value: []
                 },
-                Diagnosis: {
-                  badgeColor: 'primary',
-                  type: 'list',
+                Diagnosis_available: {
                   value: []
                 },
                 Materials: {
-                  badgeColor: 'danger',
-                  type: 'list',
                   value: [
                     'Other'
                   ]
                 },
                 Sex: {
-                  badgeColor: 'secondary',
-                  type: 'list',
                   value: []
                 },
                 Size: {
@@ -515,14 +463,10 @@ describe('templateMapper', () => {
                     '10.000 - 100.000'
                   ]
                 },
-                Storage: {
-                  badgeColor: 'warning',
-                  type: 'list',
+                Storage_temperatures: {
                   value: []
                 },
                 Type: {
-                  badgeColor: 'info',
-                  type: 'list',
                   value: []
                 },
                 id: '3',

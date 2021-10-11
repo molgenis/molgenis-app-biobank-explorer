@@ -1,3 +1,5 @@
+import initialCollectionColumns from '../config/initialCollectionColumns'
+
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
@@ -10,6 +12,7 @@ export default {
   podiumCollectionIds: [],
   error: null,
   disabledFilters: Object.hasOwnProperty.call(INITIAL_STATE, 'disabledFilters') ? INITIAL_STATE.disabledFilters : [],
+  collectionColumns: Object.hasOwnProperty.call(INITIAL_STATE, 'collectionColumns') && INITIAL_STATE.collectionColumns.length ? INITIAL_STATE.collectionColumns : initialCollectionColumns,
   // Map ID to biobank
   biobanks: {},
   // IDs of biobanks matching the biobank filters

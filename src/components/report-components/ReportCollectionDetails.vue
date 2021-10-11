@@ -18,9 +18,9 @@
       <tr v-if="collection.url">
         <th scope="row" class="pr-1">Website:</th>
         <td>
-          <span><a target="_blank" :href="collection.url">{{
-              collection.url
-            }}</a></span>
+          <span><a target="_blank" :href="collection.url">
+            {{ collection.url }}
+          </a></span>
         </td>
       </tr>
       <report-list-row :data="mainContent.Size">Size:</report-list-row>
@@ -28,18 +28,10 @@
         <th scope="row" class="pr-1">Age:</th>
         <td>{{ mainContent.Age.value }}</td>
       </tr>
-      <report-list-row :data="mainContent.Type">Type:</report-list-row>
-      <report-list-row :data="mainContent.Sex">Sex:</report-list-row>
-      <report-list-row :data="mainContent.Materials">
-        Materials:
-      </report-list-row>
-      <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
-      <report-list-row :data="mainContent.Data">Data:</report-list-row>
-      <report-list-row :data="mainContent.Diagnosis">Diagnosis:
-      </report-list-row>
-      <report-list-row :data="mainContent.DataUse">
-        Data use conditions:
-      </report-list-row>
+      <create-collection-details
+        v-for="(property, prop_index) in properties"
+        :key="property.label + prop_index" :property="property"
+        :collection="mainContent" :badgeColor="generateBadgeColor()" />
     </table>
 
     <!-- Recursive set of subcollections -->
@@ -57,11 +49,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { mapCollectionsDetailsTableContent } from '../../utils/templateMapper'
 import CollectionSelector from '../buttons/CollectionSelector.vue'
+import CreateCollectionDetails from '../generators/CreateCollectionDetails.vue'
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportListRow from '../report-components/ReportListRow.vue'
 import ReportSubCollection from '../report-components/ReportSubCollection.vue'
+import { createColumnKey } from '../../utils/generatorUtils'
 
 export default {
   name: 'ReportCollectionDetails',
@@ -75,9 +70,11 @@ export default {
     CollectionSelector,
     ReportDescription,
     ReportListRow,
-    ReportSubCollection
+    ReportSubCollection,
+    CreateCollectionDetails
   },
   computed: {
+    ...mapState(['collectionColumns']),
     mainContent () {
       return this.collection
         ? mapCollectionsDetailsTableContent(this.collection)
@@ -85,7 +82,33 @@ export default {
     },
     isTopLevelCollection () {
       return this.collection.parent_collection === undefined
+    },
+    properties () {
+      console.log(this.mainContent)
+      const collectionKeys = Object.keys(this.mainContent)
+
+      // filter out anything we don't have value for, so we dont mess up the badge-colors
+      return this.collectionColumns.filter(prop => collectionKeys
+        .includes(createColumnKey(prop.column)) &&
+        this.mainContent[createColumnKey(prop.column)].value &&
+        this.mainContent[createColumnKey(prop.column)].value.length)
     }
+  },
+  methods: {
+    generateBadgeColor () {
+      const badgeColors = ['info', 'secondary', 'danger', 'primary', 'success']
+      let nextBadgeColor = 0
+      if (this.prevBadgeColor === -1) {
+        this.prevBadgeColor = 0
+      } else {
+        nextBadgeColor = this.prevBadgeColor === 4 ? 0 : this.prevBadgeColor + 1
+      }
+      this.prevBadgeColor = nextBadgeColor
+      return badgeColors[nextBadgeColor]
+    }
+  },
+  created () {
+    this.prevBadgeColor = -1
   }
 }
 </script>

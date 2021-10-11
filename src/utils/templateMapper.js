@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+import state from '../store/state'
+
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]
@@ -58,6 +60,13 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 }
 
 export const mapCollectionsDetailsTableContent = collection => {
+  const additionalColumns = {}
+
+  for (const columnInfo of state.collectionColumns) {
+    const columnKey = columnInfo.column[0].toUpperCase() + columnInfo.column.slice(1)
+    additionalColumns[columnKey] = { value: mapObjArray(collection[columnInfo.column]) }
+  }
+
   return {
     ...collection,
     sub_collections: collection.sub_collections ? collection.sub_collections.map(subCol => mapCollectionsDetailsTableContent(subCol)) : [],
@@ -70,41 +79,7 @@ export const mapCollectionsDetailsTableContent = collection => {
       value: mapAgeRange(collection.age_low, collection.age_high, collection.age_unit),
       type: 'string-with-key'
     },
-    Type: {
-      value: mapObjArray(collection.type),
-      type: 'list',
-      badgeColor: 'info'
-    },
-    Sex: {
-      value: mapObjArray(collection.sex),
-      type: 'list',
-      badgeColor: 'secondary'
-    },
-    Materials: {
-      value: mapObjArray(collection.materials),
-      type: 'list',
-      badgeColor: 'danger'
-    },
-    Storage: {
-      value: mapObjArray(collection.storage_temperatures),
-      type: 'list',
-      badgeColor: 'warning'
-    },
-    Data: {
-      value: mapObjArray(collection.data_categories),
-      type: 'list',
-      badgeColor: 'info'
-    },
-    Diagnosis: {
-      value: mapObjArray(collection.diagnosis_available),
-      type: 'list',
-      badgeColor: 'primary'
-    },
-    DataUse: {
-      value: mapObjArray(collection.data_use),
-      type: 'list',
-      badgeColor: 'success'
-    }
+    ...additionalColumns
   }
 }
 
