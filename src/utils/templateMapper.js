@@ -61,7 +61,7 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 
 export const mapCollectionsDetailsTableContent = collection => {
   const additionalColumns = {}
-
+  console.log('>>>>>>>>>>>>>>>>', state.collectionColumns)
   for (const columnInfo of state.collectionColumns) {
     const columnKey = columnInfo.column[0].toUpperCase() + columnInfo.column.slice(1)
     additionalColumns[columnKey] = { value: mapObjArray(collection[columnInfo.column]) }

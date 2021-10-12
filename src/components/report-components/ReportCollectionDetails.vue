@@ -84,7 +84,6 @@ export default {
       return this.collection.parent_collection === undefined
     },
     properties () {
-      console.log(this.mainContent)
       const collectionKeys = Object.keys(this.mainContent)
 
       // filter out anything we don't have value for, so we dont mess up the badge-colors
