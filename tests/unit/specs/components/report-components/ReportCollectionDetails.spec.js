@@ -268,5 +268,21 @@ describe('ReportCollectionDetails', () => {
         expect(wrapper.vm.isTopLevelCollection).toBeTruthy()
       })
     })
+
+    describe('BadgeColor Generator', () => {
+      it('should not return two the same colors', () => {
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
+
+        const colors = []
+        for (let i = 0; i < 5; i++) {
+          colors.push(wrapper.vm.generateBadgeColor())
+        }
+
+        const colorCount = colors.length
+        const distinctCount = [...new Set(colors)].length
+
+        expect(colorCount).toEqual(distinctCount)
+      })
+    })
   })
 })

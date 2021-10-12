@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import state from '../store/state'
+import { createColumnKey } from '../utils/generatorUtils'
 
 export const getSize = obj => {
   return obj.size
@@ -61,9 +62,8 @@ export const mapAgeRange = (minAge, maxAge, ageUnit) => {
 
 export const mapCollectionsDetailsTableContent = collection => {
   const additionalColumns = {}
-  console.log('>>>>>>>>>>>>>>>>', state.collectionColumns)
   for (const columnInfo of state.collectionColumns) {
-    const columnKey = columnInfo.column[0].toUpperCase() + columnInfo.column.slice(1)
+    const columnKey = createColumnKey(columnInfo.column)
     additionalColumns[columnKey] = { value: mapObjArray(collection[columnInfo.column]) }
   }
 
