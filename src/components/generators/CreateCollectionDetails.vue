@@ -34,7 +34,7 @@ export default {
       required: true
     },
     /**
-     * Array with objects stating: 'label': 'This is :', column: 'name_of_property'
+     * Array with objects stating: 'label': 'This is:', column: 'name_of_property'
      */
     property: {
       type: Object,
@@ -42,7 +42,7 @@ export default {
     },
     badgeColor: {
       type: String,
-      required: true
+      default: () => 'info'
     }
   },
   computed: {
