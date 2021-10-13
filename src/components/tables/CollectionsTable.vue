@@ -13,27 +13,19 @@
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
-          <!-- <td class="pr-1">
-            <collection-selector
-              class="collection-selection-button"
-              :collectionData="collection"
-              icon-only
-              bookmark></collection-selector>
-          </td> -->
           <td
             :class="{
               'table-text-content-columns-has-sub': hasSubCollections(collection),
               'table-text-content-columns': !hasSubCollections(collection),
-              'col-3': column === 'name',
-              'col-2': column === 'materials' || column === 'quality' || column === 'size',
-              'col-1': column === 'type'
+              'col-3': isWideColumn(column),
+              'col-2': !isWideColumn(column),
             }"
             v-for="(column, index) in columns"
             :key="index">
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + collection['id']">
                 <button
-                  class="btn btn-link collection-link text-left pt-0 border-0">
+                  class="btn btn-link collection-link text-left pt-0 border-0 px-0">
                   {{ collection[column] }}
                 </button>
               </router-link>
@@ -54,9 +46,9 @@
               {{ getCollectionSize(collection) }}
             </span>
           </td>
-          <td class="col-1 collection-selector-td">
+          <td class="col-1 pr-2">
             <collection-selector
-              class="mt-auto w-100 text-right"
+              class="mt-auto text-right"
               :collectionData="collection"
               icon-only
               router-enabled></collection-selector>
@@ -153,19 +145,19 @@ export default {
     },
     getCollectionSize (collection) {
       return collection.size || collection.order_of_magnitude.size
+    },
+    isWideColumn (columnName) {
+      return columnName === 'name'
     }
   }
 }
 </script>
 
 <style>
-.collection-selector-td {
-  padding-right: 1.1em !important;
-}
-
 .collapsed > .when-visible {
   display: none;
 }
+
 :not(.collapsed) > .when-hidden {
   display: none;
 }
@@ -189,11 +181,5 @@ export default {
 .collection-link {
   white-space: normal !important;
   line-height: normal;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-.pr-1 {
-  margin-right: 5px;
 }
 </style>

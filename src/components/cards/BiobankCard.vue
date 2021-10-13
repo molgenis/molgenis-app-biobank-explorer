@@ -12,7 +12,7 @@
               :style="iconStyle"
               class="collapse-button"/>
           </div>
-          <div class="mb-2 name">
+          <div class="mb-2">
             <h5>
               <router-link :to="'/biobank/' + biobank.id">
                 <span
@@ -51,12 +51,6 @@
                 title="Covid-19"/>
             </span>
           </div>
-          <!-- <collection-selector
-            class="align-with-table mt-auto w-25"
-            v-if="biobank.collections.length > 0"
-            :collectionData="biobank.collections"
-            icon-only
-            bookmark></collection-selector> -->
         </div>
         <div class="col-5" v-if="!loading">
           <p>
@@ -78,9 +72,9 @@
             </template>
           </p>
         </div>
-        <div class="col-1"  v-if="!loading">
+        <div class="col-1 px-1"  v-if="!loading">
           <collection-selector
-            class="mt-auto w-100 text-right"
+            class="mt-auto text-right"
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
@@ -206,6 +200,7 @@ export default {
   background: white;
   border-radius: 50%;
 }
+
 .biobank-card {
   margin-bottom: 1em;
 }
@@ -216,8 +211,8 @@ export default {
 
 .biobank-card-header:hover {
   cursor: pointer;
-  /* background-color: #e4e4e4; */
 }
+
 .biobank-icon:hover {
   cursor: pointer;
 }
@@ -270,17 +265,7 @@ export default {
   left: -0.5rem;
 }
 
-.name {
-  float: right;
-}
-
 .collapse-icon {
-  float: left;
   margin-right: 1rem;
-}
-
-.checkbox-column {
-  padding-left: 0.5rem;
-  float: right;
 }
 </style>
