@@ -6,7 +6,7 @@
       @click.prevent="collapsed = !collapsed">
       <div class="row">
         <div class="col-6 d-flex" v-if="!loading">
-          <div class="collapse-icon" v-if="!loading">
+          <div class="mr-3" v-if="!loading">
             <font-awesome-icon
               icon="caret-right"
               :style="iconStyle"
@@ -263,9 +263,5 @@ export default {
   bottom: -1rem;
   right: -7rem;
   left: -0.5rem;
-}
-
-.collapse-icon {
-  margin-right: 1rem;
 }
 </style>

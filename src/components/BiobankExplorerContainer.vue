@@ -33,10 +33,9 @@
             </div>
           </div>
         </div>
-        <!-- <div class="col-md-2"></div> -->
         <collection-select-all
           v-if="!loading && foundCollectionIds.length"
-          class="col-md-4 align-right"
+          class="col-md-4 text-right"
           bookmark/>
       </div>
       <div class="row">
@@ -338,9 +337,5 @@ export default {
 
 .collection-cart > div:last-child {
   border:none !important;
-}
-
-.align-right {
-    text-align: right;
 }
 </style>

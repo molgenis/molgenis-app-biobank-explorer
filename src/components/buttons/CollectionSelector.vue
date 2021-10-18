@@ -14,7 +14,7 @@
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
-        :style="faStyle"
+        :style="checkboxFaStyle"
         :icon="['far', 'square']"
         size="lg"></font-awesome-icon>
     </label>
@@ -29,7 +29,7 @@
       class="btn remove-from-cart-label"
       :for="checkboxIdentifier">
       <font-awesome-icon
-        :style="faStyle"
+        :style="checkboxFaStyle"
         :icon="['fas', 'check-square']"
         size="lg"></font-awesome-icon>
     </label>
@@ -55,15 +55,21 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    checkboxFaStyle: {
+      type: Object,
+      required: false,
+      default: function () {
+        return {
+          color: 'var(--secondary)'
+        }
+      }
     }
   },
   data: () => {
     return {
       collections: [],
-      identifier: '',
-      faStyle: {
-        color: 'var(--secondary)'
-      }
+      identifier: ''
     }
   },
   methods: {
