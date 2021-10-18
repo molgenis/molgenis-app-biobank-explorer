@@ -14,12 +14,11 @@
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
           <td
-            :class="{
+            :class="[{
               'table-text-content-columns-has-sub': hasSubCollections(collection),
-              'table-text-content-columns': !hasSubCollections(collection),
-              'col-3': isWideColumn(column),
-              'col-2': !isWideColumn(column),
-            }"
+              'table-text-content-columns': !hasSubCollections(collection)},
+              columnSize (column)
+            ]"
             v-for="(column, index) in columns"
             :key="index">
             <span v-if="column === 'name'">
@@ -146,8 +145,8 @@ export default {
     getCollectionSize (collection) {
       return collection.size || collection.order_of_magnitude.size
     },
-    isWideColumn (columnName) {
-      return columnName === 'name'
+    columnSize (column) {
+      return column === 'name' ? 'col-3' : 'col-2'
     }
   }
 }
