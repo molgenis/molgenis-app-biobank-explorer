@@ -5,7 +5,13 @@
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed">
       <div class="row">
-        <div class="col-md-5 d-flex flex-column" v-if="!loading">
+        <div class="col-6 d-flex" v-if="!loading">
+          <div class="mr-3" v-if="!loading">
+            <font-awesome-icon
+              icon="caret-right"
+              :style="iconStyle"
+              class="collapse-button"/>
+          </div>
           <div class="mb-2">
             <h5>
               <router-link :to="'/biobank/' + biobank.id">
@@ -45,14 +51,8 @@
                 title="Covid-19"/>
             </span>
           </div>
-          <collection-selector
-            class="align-with-table mt-auto w-25"
-            v-if="biobank.collections.length > 0"
-            :collectionData="biobank.collections"
-            icon-only
-            bookmark></collection-selector>
         </div>
-        <div class="col-md-6" v-if="!loading">
+        <div class="col-5" v-if="!loading">
           <p>
             <small class="mr-2">
               <span class="font-weight-bold">Collection types:</span>
@@ -72,7 +72,16 @@
             </template>
           </p>
         </div>
-        <div v-else class="col-md-12 text-center">
+        <div class="col-1 px-1"  v-if="!loading">
+          <collection-selector
+            class="mt-auto text-right"
+            v-if="biobank.collections.length > 0"
+            :collectionData="biobank.collections"
+            icon-only
+            router-enabled
+            @checked="handleCheckAll"></collection-selector>
+        </div>
+        <div v-else class="col-12 text-center">
           <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
         </div>
       </div>
@@ -119,6 +128,13 @@ export default {
       collapsed: this.initCollapsed
     }
   },
+  methods: {
+    handleCheckAll: function (checked) {
+      if (checked === true) {
+        this.collapsed = false
+      }
+    }
+  },
   computed: {
     ...mapState(['qualityStandardsDictionary']),
     ...mapGetters(['selectedCollections']),
@@ -160,6 +176,12 @@ export default {
           .map((covidItem) => covidItem.label || covidItem.name)
           .join(', ')
       } else return ''
+    },
+    iconStyle () {
+      return {
+        transform: `rotate(${this.collapsed ? 0 : 90}deg)`,
+        transition: 'transform 0.2s'
+      }
     }
   }
 }
@@ -168,9 +190,6 @@ export default {
 <style>
 .table-card {
   padding: 0.1rem;
-}
-.align-with-table {
-  margin-left: 0.1rem;
 }
 
 .added-to-selection {
@@ -181,6 +200,7 @@ export default {
   background: white;
   border-radius: 50%;
 }
+
 .biobank-card {
   margin-bottom: 1em;
 }
@@ -191,8 +211,8 @@ export default {
 
 .biobank-card-header:hover {
   cursor: pointer;
-  background-color: #e4e4e4;
 }
+
 .biobank-icon:hover {
   cursor: pointer;
 }

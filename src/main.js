@@ -20,14 +20,20 @@ import {
   faCaretRight,
   faExclamationCircle,
   faSpinner,
-  faTimes
+  faTimes,
+  faCheck,
+  faCheckSquare
 } from '@fortawesome/free-solid-svg-icons'
+
+import {
+  faSquare
+} from '@fortawesome/free-regular-svg-icons'
 
 import {
   faCreativeCommonsNcEu
 } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu)
+library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare)
 
 if (INITIAL_STATE.GA_KEY) {
   Vue.use(VueAnalytics, {
