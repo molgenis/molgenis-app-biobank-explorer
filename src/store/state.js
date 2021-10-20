@@ -1,3 +1,7 @@
+import { bbmriConfig } from '../config/configManager'
+
+const config = bbmriConfig()
+
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
@@ -9,7 +13,8 @@ export default {
   isPodium: false,
   podiumCollectionIds: [],
   error: null,
-  disabledFilters: Object.hasOwnProperty.call(INITIAL_STATE, 'disabledFilters') ? INITIAL_STATE.disabledFilters : [],
+  disabledFilters: config.disabledFilters,
+  collectionColumns: config.collectionColumns,
   // Map ID to biobank
   biobanks: {},
   // IDs of biobanks matching the biobank filters

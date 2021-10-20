@@ -1,36 +1,32 @@
-import { shallowMount } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+import Vuex from 'vuex'
 import ReportCollectionDetails from '../../../../../src/components/report-components/ReportCollectionDetails'
 
-let collection
+import { mockState } from '../../mockData'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+let collection, store
 
 const expected = {
   Age: {
     type: 'string-with-key',
     value: undefined
   },
-  Data: {
-    badgeColor: 'info',
-    type: 'list',
+  Data_categories: {
     value: []
   },
-  DataUse: {
-    badgeColor: 'success',
-    type: 'list',
+  Data_use: {
     value: []
   },
-  Diagnosis: {
-    badgeColor: 'primary',
-    type: 'list',
+  Diagnosis_available: {
     value: []
   },
   Materials: {
-    badgeColor: 'danger',
-    type: 'list',
     value: []
   },
   Sex: {
-    badgeColor: 'secondary',
-    type: 'list',
     value: []
   },
   Size: {
@@ -38,14 +34,10 @@ const expected = {
     type: 'list',
     value: ['777']
   },
-  Storage: {
-    badgeColor: 'warning',
-    type: 'list',
+  Storage_temperatures: {
     value: []
   },
   Type: {
-    badgeColor: 'info',
-    type: 'list',
     value: []
   },
   _meta: {
@@ -84,33 +76,23 @@ const expected = {
         type: 'string-with-key',
         value: undefined
       },
-      Data: {
-        badgeColor: 'info',
-        type: 'list',
+      Data_categories: {
         value: [
           'Biological samples'
         ]
       },
-      DataUse: {
-        badgeColor: 'success',
-        type: 'list',
+      Data_use: {
         value: []
       },
-      Diagnosis: {
-        badgeColor: 'primary',
-        type: 'list',
+      Diagnosis_available: {
         value: []
       },
       Materials: {
-        badgeColor: 'danger',
-        type: 'list',
         value: [
           'Other'
         ]
       },
       Sex: {
-        badgeColor: 'secondary',
-        type: 'list',
         value: []
       },
       Size: {
@@ -120,14 +102,10 @@ const expected = {
           '10.000 - 100.000'
         ]
       },
-      Storage: {
-        badgeColor: 'warning',
-        type: 'list',
+      Storage_temperatures: {
         value: []
       },
       Type: {
-        badgeColor: 'info',
-        type: 'list',
         value: []
       },
       data_categories: [
@@ -159,33 +137,23 @@ const expected = {
         type: 'string-with-key',
         value: undefined
       },
-      Data: {
-        badgeColor: 'info',
-        type: 'list',
+      Data_categories: {
         value: [
           'Biological samples'
         ]
       },
-      DataUse: {
-        badgeColor: 'success',
-        type: 'list',
+      Data_use: {
         value: []
       },
-      Diagnosis: {
-        badgeColor: 'primary',
-        type: 'list',
+      Diagnosis_available: {
         value: []
       },
       Materials: {
-        badgeColor: 'danger',
-        type: 'list',
         value: [
           'Other'
         ]
       },
       Sex: {
-        badgeColor: 'secondary',
-        type: 'list',
         value: []
       },
       Size: {
@@ -195,14 +163,10 @@ const expected = {
           '10.000 - 100.000'
         ]
       },
-      Storage: {
-        badgeColor: 'warning',
-        type: 'list',
+      Storage_temperatures: {
         value: []
       },
       Type: {
-        badgeColor: 'info',
-        type: 'list',
         value: []
       },
       data_categories: [
@@ -234,6 +198,10 @@ const expected = {
 
 describe('ReportCollectionDetails', () => {
   beforeEach(() => {
+    store = new Vuex.Store({
+      state: mockState()
+    })
+
     collection = {
       _meta: {
         name: 'meta'
@@ -290,14 +258,30 @@ describe('ReportCollectionDetails', () => {
   describe('computed', () => {
     describe('mainContent', () => {
       it('should return an object with badgeColor properties for both collection and subcollections', () => {
-        const wrapper = shallowMount(ReportCollectionDetails, { propsData: { collection } })
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
         expect(wrapper.vm.mainContent).toStrictEqual(expected)
       })
     })
     describe('isTopLevelCollection', () => {
       it('should return true if parent_collection is not defined on the collection', () => {
-        const wrapper = shallowMount(ReportCollectionDetails, { propsData: { collection } })
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
         expect(wrapper.vm.isTopLevelCollection).toBeTruthy()
+      })
+    })
+
+    describe('BadgeColor Generator', () => {
+      it('should not return two the same colors', () => {
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
+
+        const colors = []
+        for (let i = 0; i < 5; i++) {
+          colors.push(wrapper.vm.generateBadgeColor())
+        }
+
+        const colorCount = colors.length
+        const distinctCount = [...new Set(colors)].length
+
+        expect(colorCount).toEqual(distinctCount)
       })
     })
   })
