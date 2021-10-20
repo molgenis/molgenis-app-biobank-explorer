@@ -26,9 +26,15 @@ const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfi
 export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
 
 const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = () => {
-  const collectionRsql = initialCollectionColumns.map(prop => prop.rsql)
+  const collectionRsql = initialCollectionColumns.filter(icc => icc.rsql).map(prop => prop.rsql)
 
-  return `*,${collectionRsql.join(',')},biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories)`
+  let rsqlStart = '*,'
+
+  if (collectionRsql.length) {
+    rsqlStart += collectionRsql.join(',')
+  }
+
+  return `${rsqlStart},biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories)`
 }
 /**/
 

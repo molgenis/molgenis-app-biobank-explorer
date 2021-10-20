@@ -97,12 +97,14 @@ export default {
     generateBadgeColor () {
       const badgeColors = ['info', 'secondary', 'danger', 'primary', 'success']
       let nextBadgeColor = 0
+
       if (this.prevBadgeColor === -1) {
         this.prevBadgeColor = 0
       } else {
         nextBadgeColor = this.prevBadgeColor === 4 ? 0 : this.prevBadgeColor + 1
       }
       this.prevBadgeColor = nextBadgeColor
+
       return badgeColors[nextBadgeColor]
     }
   },

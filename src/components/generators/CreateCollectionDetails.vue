@@ -18,7 +18,8 @@
           v-for="(value, index) in getValue()"
           class="m-1 badge"
           :key="index"
-          :class="'badge-' + badgeColor">{{ value }}
+          :class="'badge-' + badgeColor">
+          {{ value }}
         </span>
       </template>
     </td>
@@ -51,7 +52,7 @@ export default {
     },
     dataContainsUri () {
       return typeof this.collection[this.columnKey].value[0] === 'object' &&
-             this.collection[this.columnKey].value.some(item => item.uri)
+        this.collection[this.columnKey].value.some(item => item.uri)
     }
   },
   methods: {
