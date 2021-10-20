@@ -11,8 +11,8 @@ export const getSize = obj => {
 }
 export const mapObjArray = (objects) => {
   if (!objects) return []
-  if (!objects.some(o => o.uri)) return objects.map(item => item.label)
-  else return objects.map(item => ({ label: item.label, uri: item.uri || '#' }))
+  if (!objects.some(o => o.uri)) return objects.map(item => item.label || item.name)
+  else return objects.map(item => ({ label: item.label || item.name, uri: item.uri || '#' }))
 }
 
 export const mapUrl = url =>
