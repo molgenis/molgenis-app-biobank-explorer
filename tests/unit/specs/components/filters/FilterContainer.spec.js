@@ -19,7 +19,7 @@ describe('FilterContainer', () => {
 
     getters = {
       activeFilters: () => [],
-      getFilterDefinitions: filterDefinitions
+      getFilters: filterDefinitions
     }
 
     mutations = {
@@ -38,18 +38,6 @@ describe('FilterContainer', () => {
       })
       wrapper = shallowMount(FilterContainer, { store, localVue })
       expect(wrapper.vm.filters.find((filter) => filter.name === 'country').name).toEqual('country')
-    })
-
-    it('should exclude the country filters if the country filter facet is in the disabledFilters list', () => {
-      getters.showCountryFacet = () => false
-      store = new Vuex.Store({
-        state: { ...mockState(), disabledFilters: ['country'] },
-        actions,
-        mutations,
-        getters
-      })
-      wrapper = shallowMount(FilterContainer, { store, localVue })
-      expect(wrapper.vm.filters.find((filter) => filter.name === 'country')).toEqual(undefined)
     })
 
     it('should ony trigger the update filter once, if there are multiple search inputs consecutivly', () => {

@@ -15,6 +15,7 @@ export default {
   error: null,
   disabledFilters: config.disabledFilters,
   collectionColumns: config.collectionColumns,
+  customCollectionFilterFacets: config.customCollectionFilterFacets,
   // Map ID to biobank
   biobanks: {},
   // IDs of biobanks matching the biobank filters

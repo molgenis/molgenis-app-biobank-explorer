@@ -9,7 +9,7 @@ const getInitialState = () => {
   return mockState()
 }
 
-const getFilterDefinitions = filterDefinitions(mockState())
+const getFilters = filterDefinitions(mockState())
 
 let state
 
@@ -308,7 +308,7 @@ describe('store', () => {
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
-          getFilterDefinitions,
+          getFilters,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }

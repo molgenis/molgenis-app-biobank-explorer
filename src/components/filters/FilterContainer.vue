@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     ...mapState(['disabledFilters']),
-    ...mapGetters(['activeFilters', 'getFilterDefinitions']),
+    ...mapGetters(['activeFilters', 'getFilters']),
     search: {
       get () {
         return this.activeFilters.search
@@ -59,10 +59,7 @@ export default {
       }
     },
     filters () {
-      return this.getFilterDefinitions.filter((facet) => {
-        // config option showCountryFacet is used to toggle Country facet
-        return !this.disabledFilters.includes(facet.name)
-      }).filter((item) => item.component)
+      return this.getFilters.filter((facet) => facet.component)
     }
   },
   methods: {

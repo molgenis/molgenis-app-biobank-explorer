@@ -5,7 +5,8 @@ const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 export const bbmriConfig = () => {
   const config = {
     disabledFilters: [],
-    collectionColumns: initialCollectionColumns
+    collectionColumns: initialCollectionColumns,
+    customCollectionFilterFacets: []
   }
 
   // check if property is in database and has a value
@@ -15,6 +16,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'collectionColumns') && INITIAL_STATE.collectionColumns.length) {
     config.collectionColumns = INITIAL_STATE.collectionColumns
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'customCollectionFilterFacets') && INITIAL_STATE.customCollectionFilterFacets.length) {
+    config.customCollectionFilterFacets = INITIAL_STATE.customCollectionFilterFacets
   }
 
   return config

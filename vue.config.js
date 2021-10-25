@@ -76,6 +76,7 @@ module.exports = {
         runtimeOptions: {
           language: 'en',
           disabledFilters: [],
+          customCollectionFilterFacets: [],
           collectionColumns: initialCollectionColumns
         }
       }),

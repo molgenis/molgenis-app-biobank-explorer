@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
+import { customCheckboxFilters } from '../config/configurableFacets'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
@@ -233,7 +234,7 @@ export default {
 
     const keysInQuery = Object.keys(query)
     // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
-    const filters = filterDefinitions(state).map(fd => fd.name)
+    const filters = filterDefinitions(state).concat(customCheckboxFilters(state)).map(fd => fd.name)
       .filter(name => keysInQuery.includes(name))
       .filter(fr => !['search', 'nToken'].includes(fr)) // remove specific filters, else we are doing them again.
 
