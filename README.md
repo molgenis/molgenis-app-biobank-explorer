@@ -33,18 +33,70 @@ Scroll down to Tracking and fill in the fields and add the GA_KEY to:
 
 This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 8.3.10.
 
-### Pre-selection a country
+### Disabling filter facets
 
-The country facet can removed from the list of facets and a country filter can be set by default.
+Facets (except search) can be removed from the list of facets by adding the facet name to an array in the config.
 This setting can be toggled using the runtimeOptions section in the webpack.prod.conf.js or at runtime using the config entity
 
-`runtimeOptions.showCountryFacet` should contain a boolean value indicating if the country facet needs to be shown.
+`runtimeOptions.disabledFilters` should contain an array with facets names that should be hidden.
+
+You can find the names here in [the filter definitions on github.](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/utils/filterDefinitions.js)
 
 ```js
 "appOptions": {
-    "showCountryFacet": true
+    ...
+    "disabledFilters": ["country"],
+    ...
   }
 ```
+
+## Collection entity (table)
+
+If you want to customize the collection table with additional columns containing an (categorical) mref,
+you can add these to the view using the following configuration:
+
+```js
+"appOptions": {
+    ...
+    "collectionColumns": [{ "label": "Type:", "column": "type" }],
+    ...
+  }
+```
+
+Label is the label to show and column is the column name of the collection entity.
+
+You can find the complete default list [here](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/config/initialCollectionColumns.js) or in the runtimeOptions
+
+> mind the correctness in the config using " around the key and value
+
+### Configuring filter facets for collections
+
+If you want to customize the collection table with additional columns containing an (categorical) mref,
+you can add these to the view using the following configuration:
+
+```js
+"appOptions": {
+    ...
+    "customCollectionFilterFacets": [{
+    "tableName": "eu_bbmri_eric_data_types",
+    "columnName": "data_categories",
+    "negotiatorDescription": "Where data category is: ",
+    "facetTitle": "Data Categories",
+    "insertBefore": "dataType"
+    ...
+  }
+```
+**tableName** is the table where the (categorical) mref is declared
+> The table needs to have a unique id per row and either a name and/or a label
+
+**columnName** the column name in the collection entity (table) that refers to the (categorical) mref.
+
+**negotiatorDescription** when sending the query to the negotiator or podium this will be sent as a header along with a comma separated list with the selected id's
+
+**facetTitle** is the text on top of the filter facet.
+
+**insertBefore** *(optional)* the name of the facet where you want this to be in front of.
+You can find the names here in [the filter definitions on github.](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/utils/filterDefinitions.js)
 
 ## Contributing
 There are 2 ways to test and develop in apps for MOLGENIS.
