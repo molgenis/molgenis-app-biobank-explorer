@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockFilterOptionDictionary, mockFilters, mockGetFilters, mockSelectedCollections, mockState } from '../mockData'
+import { mockFilterOptionDictionary, mockFilters, mockSelectedCollections, mockState } from '../mockData'
 
 let state
 
@@ -51,7 +51,7 @@ describe('store', () => {
         // push a selection on the state, where there is no label from, to trigger lookup
         state.filters.selections.diagnosis_available = ['ORPHA:352530']
 
-        expect(getters.getHumanReadableString(state, { getFilters: mockGetFilters }))
+        expect(getters.getHumanReadableString(state))
           .toBe('Countries: Europe and Biobank collaboration type(s): Non-commercial use and Disease type(s): [ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome')
       })
     })

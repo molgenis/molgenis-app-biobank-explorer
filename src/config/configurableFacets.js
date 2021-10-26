@@ -17,7 +17,8 @@ export const customCheckboxFilters = (state) => {
         satisfyAll: state.filters.satisfyAll.includes(customFacet.columnName),
         showSatisfyAllCheckbox: true,
         maxVisibleOptions: 25,
-        humanReadableString: customFacet.negotiatorDescription
+        humanReadableString: customFacet.negotiatorDescription,
+        insertBefore: customFacet.insertBefore
       })
   }
 

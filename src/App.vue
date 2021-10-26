@@ -21,7 +21,7 @@ export default {
     ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading' })
   },
   methods: {
-    ...mapMutations(['MapQueryToState']),
+    ...mapMutations(['MapQueryToState', 'ConfigureFilters']),
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
@@ -37,6 +37,9 @@ export default {
         this.MapQueryToState()
       }
     }
+  },
+  beforeMount () {
+    this.ConfigureFilters()
   },
   mounted () {
     this.GetNegotiatorType()

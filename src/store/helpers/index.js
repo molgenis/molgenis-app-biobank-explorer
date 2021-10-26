@@ -78,7 +78,7 @@ function createHistoryJournal (state) {
   return journal.substr(0, journal.length - 2) // remove the last \r\n
 }
 
-export const getHumanReadableString = (state, { getFilters }) => {
+export const getHumanReadableString = (state) => {
   const activeFilters = Object.keys(state.filters.selections)
   let humanReadableString = ''
   const additionText = ' and '
@@ -87,7 +87,7 @@ export const getHumanReadableString = (state, { getFilters }) => {
   const humanReadableStart = {}
 
   // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
-  getFilters.filter(fd => activeFilters.includes(fd.name))
+  state.filterFacets.filter(fd => activeFilters.includes(fd.name))
     .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
   // Extract filternames for which we have the labels for

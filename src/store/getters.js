@@ -1,14 +1,10 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
-import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
-import { customCheckboxFilters } from '../config/configurableFacets'
 
 export default {
   getFilters: (state) => {
-    const allFilters = filterDefinitions(state).concat(customCheckboxFilters(state))
-
-    return allFilters.filter((facet) => {
+    return state.filterFacets.filter((facet) => {
       return !state.disabledFilters.includes(facet.name)
     })
   },

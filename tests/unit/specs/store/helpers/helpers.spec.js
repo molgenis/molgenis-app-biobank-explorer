@@ -2,14 +2,11 @@ import helpers, {
   filterCollectionTree,
   isCodeRegex
 } from '../../../../../src/store/helpers'
-import filterDefinitions from '../../../../../src/utils/filterDefinitions'
 import { mockState } from '../../mockData'
 
 const getInitialState = () => {
   return mockState()
 }
-
-const getFilters = filterDefinitions(mockState())
 
 let state
 
@@ -308,7 +305,6 @@ describe('store', () => {
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']
         getters = {
-          getFilters,
           activeFilters: () => state.filters.selections,
           selectedCollections: [{ label: 'Collection A', value: 'collection1' }, { text: 'Collection B', value: 'collection4' }]
         }

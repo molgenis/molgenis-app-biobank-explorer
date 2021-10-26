@@ -38,7 +38,7 @@ describe('BiobankCard', () => {
         }]
       }
     }
-    stubs = ['router-link', 'router-view', 'b-img']
+    stubs = ['router-link', 'router-view', 'b-img', 'font-awesome-icon']
   })
 
   it('should initialize the collapsed prop to true if none is passed', () => {
