@@ -83,8 +83,8 @@ you can add these to the view using the following configuration:
     "negotiatorDescription": "Where data category is: ",
     "facetTitle": "Data Categories",
     "insertBefore": "dataType"
+    }]
     ...
-  }
 ```
 **tableName** is the table where the (categorical) mref is declared
 > The table needs to have a unique id per row and either a name and/or a label

@@ -1,4 +1,3 @@
-
 import mutations from '../../../../src/store/mutations'
 import { mockCollectionResponse, mockState } from '../mockData'
 
@@ -448,6 +447,41 @@ describe('store', () => {
         mutations.SetNegotiatorEntities(state, response)
         expect(state.negotiatorCollectionEntityId).toStrictEqual('table_for_collection')
         expect(state.negotiatorBiobankEntityId).toStrictEqual('table_for_biobank')
+      })
+    })
+
+    describe('ConfigureFilters', () => {
+      it('can add custom filter facets based on config', () => {
+        state.customCollectionFilterFacets = [{
+          tableName: 'eu_bbmri_eric_data_types',
+          columnName: 'data_categories',
+          negotiatorDescription: 'Where data category is: ',
+          facetTitle: 'Test facet'
+        }]
+
+        mutations.ConfigureFilters(state)
+
+        const result = state.filterFacets.find(f => f.label === 'Test facet')
+
+        expect(result).not.toBeUndefined()
+      })
+
+      it('can add custom filter at a specific place based on config', () => {
+        state.customCollectionFilterFacets = [{
+          tableName: 'eu_bbmri_eric_data_types',
+          columnName: 'data_categories',
+          negotiatorDescription: 'Where data category is: ',
+          facetTitle: 'Test facet',
+          insertBefore: 'dataType'
+        }]
+
+        mutations.ConfigureFilters(state)
+
+        const configFilter = state.filterFacets.findIndex(f => f.label === 'Test facet')
+        const filter = state.filterFacets.findIndex(f => f.name === 'dataType')
+
+        // assert that the configFilter is indeed 1 above the selected filter
+        expect(configFilter === (filter - 1)).toBeTruthy()
       })
     })
   })

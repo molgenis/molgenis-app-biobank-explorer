@@ -287,6 +287,8 @@ export default {
         const filterIndex = filterFacets.indexOf(filter => filter.columnName === customFilter.insertBefore)
 
         filterFacets.splice(filterIndex, 0, customFilter)
+      } else {
+        filterFacets.push(customFilter)
       }
     }
     state.filterFacets = filterFacets
