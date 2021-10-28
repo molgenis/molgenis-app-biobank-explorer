@@ -79,7 +79,7 @@ module.exports = {
           customCollectionFilterFacets: [],
           collectionColumns: initialCollectionColumns
         }
-      }),
+      }, null, 4),
       new ZipPlugin({
         filename: `${packageJson.name}.v${packageJson.version}`
       })
