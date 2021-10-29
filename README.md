@@ -38,7 +38,7 @@ This version of the biobank explorer is compatible with the Negotiator API in MO
 Facets (except search) can be removed from the list of facets by adding the facet name to an array in the config.
 This setting can be toggled using the runtimeOptions section in the webpack.prod.conf.js or at runtime using the config entity
 
-`runtimeOptions.disabledFilters` should contain an array with facets names that should be hidden.
+`runtimeOptions.disabledFilters` should contain an array with facet names that should be hidden.
 
 You can find the names here in [the filter definitions on github.](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/utils/filterDefinitions.js)
 

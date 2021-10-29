@@ -284,9 +284,13 @@ export default {
 
     for (const customFilter of customFilters) {
       if (customFilter.insertBefore) {
-        const filterIndex = filterFacets.indexOf(filter => filter.columnName === customFilter.insertBefore)
+        const filterIndex = filterFacets.findIndex(filter => filter.name === customFilter.insertBefore)
 
-        filterFacets.splice(filterIndex, 0, customFilter)
+        if (filterIndex !== -1) {
+          filterFacets.splice(filterIndex, 0, customFilter)
+        } else {
+          filterFacets.push(customFilter)
+        }
       } else {
         filterFacets.push(customFilter)
       }

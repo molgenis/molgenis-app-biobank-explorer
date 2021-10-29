@@ -472,13 +472,13 @@ describe('store', () => {
           columnName: 'data_categories',
           negotiatorDescription: 'Where data category is: ',
           facetTitle: 'Test facet',
-          insertBefore: 'dataType'
+          insertBefore: 'diagnosis_available'
         }]
 
         mutations.ConfigureFilters(state)
 
         const configFilter = state.filterFacets.findIndex(f => f.label === 'Test facet')
-        const filter = state.filterFacets.findIndex(f => f.name === 'dataType')
+        const filter = state.filterFacets.findIndex(f => f.name === 'diagnosis_available')
 
         // assert that the configFilter is indeed 1 above the selected filter
         expect(configFilter === (filter - 1)).toBeTruthy()
