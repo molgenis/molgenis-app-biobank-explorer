@@ -78,7 +78,7 @@
             v-if="biobank.collections.length > 0"
             :collectionData="biobank.collections"
             icon-only
-            router-enabled
+            bookmark
             @checked="handleCheckAll"></collection-selector>
         </div>
         <div v-else class="col-12 text-center">
