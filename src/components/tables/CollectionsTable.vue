@@ -50,7 +50,7 @@
               class="mt-auto text-right"
               :collectionData="collection"
               icon-only
-              router-enabled></collection-selector>
+              bookmark></collection-selector>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
