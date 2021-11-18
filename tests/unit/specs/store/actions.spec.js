@@ -1,5 +1,4 @@
 import api from '@molgenis/molgenis-api-client'
-import utils from '@molgenis/molgenis-vue-test-utils'
 import helpers from '../../../../src/store/helpers'
 import { mockGetFilterDefinitions, mockState } from '../mockData'
 import actions from '../../../../src/store/actions'
@@ -10,11 +9,17 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     get: jest.fn()
   }
 })
+let commit, state
 
 describe('store', () => {
+  beforeEach(() => {
+    commit = jest.fn()
+    state = mockState()
+  })
+
   describe('actions', () => {
     describe('GetBiobanks', () => {
-      it('should retrieve biobanks from the server and store them in state', (done) => {
+      it('should retrieve biobanks from the server and store them in state', async () => {
         const response = {
           items: [
             { id: '1', name: 'biobank-1' },
@@ -24,20 +29,17 @@ describe('store', () => {
         }
 
         api.get.mockResolvedValueOnce(response)
-        const options = {
-          payload: ['id1', 'id2'],
-          expectedMutations: [
-            { type: 'SetBiobanks', payload: response.items }
-          ]
-        }
-        utils.testAction(actions.GetBiobanks, options, done)
+        const requestedBiobankIds = ['1', '2', '3']
+
+        await actions.GetBiobanks({ commit }, requestedBiobankIds)
+        expect(commit).toHaveBeenCalledWith('SetBiobanks', [{ id: '1', name: 'biobank-1' }, { id: '2', name: 'biobank-2' }, { id: '3', name: 'biobank-3' }])
       })
     })
 
     describe('SendToNegotiator', () => {
       let state
       let getters
-      const commit = jest.fn()
+
       beforeEach(() => {
         state = mockState()
         state.negotiatorCollectionEntityId = 'eu_bbmri_eric_collections'
@@ -81,7 +83,6 @@ describe('store', () => {
         api.get.mockResolvedValueOnce(response)
 
         const getters = { biobankRsql: 'covid19=in=(covid19)' }
-        const commit = jest.fn()
 
         await actions.GetBiobankIds({ commit, getters })
         expect(commit.mock.calls[1]).toEqual(['SetBiobankIds', ['biobank-1', 'biobank-2']])
@@ -89,10 +90,6 @@ describe('store', () => {
     })
 
     describe('GetBiobankIdsForQuality', () => {
-      let state
-      beforeEach(() => {
-        state = mockState()
-      })
       it('should retrieve biobank ids from the server based on biobank quality filters and true SatisfyAll', async () => {
         const response = {
           items: [
@@ -111,7 +108,6 @@ describe('store', () => {
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.biobank_quality = ['accredited', 'eric']
         state.filters.satisfyAll = ['biobank_quality']
-        const commit = jest.fn()
 
         await actions.GetBiobankIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
@@ -139,7 +135,6 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.biobank_quality = ['accredited', 'eric']
-        const commit = jest.fn()
 
         await actions.GetBiobankIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
@@ -167,25 +162,18 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.route.query.biobank_quality = ['accredited', 'eric']
-        const commit = jest.fn()
 
         await actions.GetBiobankIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', response])
       })
 
       it('should exit with an empty list', async () => {
-        const commit = jest.fn()
-
         await actions.GetBiobankIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetBiobankIdsWithSelectedQuality', []])
       })
     })
 
     describe('GetCollectionIdsForQuality', () => {
-      let state
-      beforeEach(() => {
-        state = mockState()
-      })
       it('should retrieve collections ids from the server based on biobank quality filters and true SatisfyAll', async () => {
         const response = {
           items: [
@@ -204,7 +192,6 @@ describe('store', () => {
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.collection_quality = ['accredited', 'eric']
         state.filters.satisfyAll = ['collection_quality']
-        const commit = jest.fn()
 
         await actions.GetCollectionIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
@@ -232,7 +219,6 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.filters.selections.collection_quality = ['accredited', 'eric']
-        const commit = jest.fn()
 
         await actions.GetCollectionIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
@@ -259,15 +245,12 @@ describe('store', () => {
         }
         api.get.mockResolvedValueOnce(response)
         state.route.query.collection_quality = ['accredited', 'eric']
-        const commit = jest.fn()
 
         await actions.GetCollectionIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', response])
       })
 
       it('should exit with an empty list', async () => {
-        const commit = jest.fn()
-
         await actions.GetCollectionIdsForQuality({ state, commit })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionIdsWithSelectedQuality', []])
       })
@@ -284,7 +267,6 @@ describe('store', () => {
       it('should set the collection info, create a dictionary and map query to the state', async () => {
         api.get.mockResolvedValueOnce(response)
         const getters = { rsql: 'country=in=(NL,BE)' }
-        const commit = jest.fn()
 
         await actions.GetCollectionInfo({ commit, getters })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
@@ -294,48 +276,39 @@ describe('store', () => {
     })
 
     describe('GetBiobankReport', () => {
-      it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', done => {
-        const biobank = {
+      it('should retrieve a single biobank entity from the server based on a biobank id and store it in the state', async () => {
+        const response = {
           _meta: {
             name: 'biobank'
           },
           id: 'biobank-1'
         }
 
-        api.get.mockResolvedValueOnce(biobank)
+        api.get.mockResolvedValueOnce(response)
+        const biobankId = 'biobank-1'
 
-        const options = {
-          payload: 'biobank-1',
-          expectedMutations: [
-            { type: 'SetLoading', payload: true },
-            { type: 'SetBiobankReport', payload: biobank },
-            { type: 'SetLoading', payload: false }
-          ]
-        }
+        await actions.GetBiobankReport({ commit, state }, biobankId)
 
-        utils.testAction(actions.GetBiobankReport, options, done)
+        expect(commit).toHaveBeenNthCalledWith(1, 'SetLoading', true)
+        expect(commit).toHaveBeenNthCalledWith(2, 'SetBiobankReport', response)
+        expect(commit).toHaveBeenNthCalledWith(3, 'SetLoading', false)
       })
 
-      it('should return biobank from state if it is already there', done => {
-        const state = {
-          allBiobanks: [
-            { id: 'biobank' }
-          ]
-        }
+      it('should return biobank from state if it is already there', async () => {
+        const alreadyPresentBiobank =
+          { id: 'biobank' }
 
-        const options = {
-          state,
-          payload: 'biobank',
-          expectedMutations: [
-            { type: 'SetBiobankReport', payload: { id: 'biobank' } }
-          ]
-        }
+        state.allBiobanks = [
+          alreadyPresentBiobank
+        ]
 
-        utils.testAction(actions.GetBiobankReport, options, done)
+        await actions.GetBiobankReport({ commit, state }, 'biobank')
+
+        expect(commit).toHaveBeenCalledWith('SetBiobankReport', alreadyPresentBiobank)
       })
     })
     describe('GetCollectionReport', () => {
-      it('should retrieve a single collection entity from the server based on a collection id and store it in the state', done => {
+      it('should retrieve a single collection entity from the server based on a collection id and store it in the state', async () => {
         const response = {
           _meta: {
             name: 'meta'
@@ -346,41 +319,36 @@ describe('store', () => {
         }
 
         api.get.mockResolvedValueOnce(response)
+        const collectionId = '001'
 
-        const options = {
-          payload: '001',
-          expectedMutations: [
-            { type: 'SetLoading', payload: true },
-            { type: 'SetCollectionReport', payload: response },
-            { type: 'SetLoading', payload: false }
-          ]
-        }
-        utils.testAction(actions.GetCollectionReport, options, done)
+        await actions.GetCollectionReport({ commit, state }, collectionId)
+
+        expect(commit).toHaveBeenNthCalledWith(1, 'SetLoading', true)
+        expect(commit).toHaveBeenNthCalledWith(2, 'SetCollectionReport', response)
+        expect(commit).toHaveBeenNthCalledWith(3, 'SetLoading', false)
       })
     })
 
     describe('GetNetworkReport', () => {
       const neverReturningPromise = new Promise(() => {})
       const collectionError = new Error('No way!')
-      it('should set error', done => {
+      it('should set error', async () => {
         api.get.mockResolvedValueOnce(neverReturningPromise)
         api.get.mockResolvedValueOnce(neverReturningPromise)
         api.get.mockRejectedValueOnce(collectionError)
 
-        const options = {
-          payload: '001',
-          expectedMutations: [
-            { type: 'SetNetworkBiobanks', payload: undefined },
-            { type: 'SetNetworkCollections', payload: undefined },
-            { type: 'SetNetworkReport', payload: undefined },
-            { type: 'SetLoading', payload: true },
-            { type: 'SetError', payload: collectionError }
-          ]
-        }
-        utils.testAction(actions.GetNetworkReport, options, done)
+        const networkId = '001'
+
+        await actions.GetNetworkReport({ commit }, networkId)
+
+        expect(commit).toHaveBeenNthCalledWith(1, 'SetNetworkBiobanks', undefined)
+        expect(commit).toHaveBeenNthCalledWith(2, 'SetNetworkCollections', undefined)
+        expect(commit).toHaveBeenNthCalledWith(3, 'SetNetworkReport', undefined)
+        expect(commit).toHaveBeenNthCalledWith(4, 'SetLoading', true)
+        expect(commit).toHaveBeenNthCalledWith(5, 'SetError', collectionError)
       })
 
-      it('should load network', done => {
+      it('should load network', async () => {
         const network = {
           _meta: {
             name: 'meta'
@@ -390,47 +358,42 @@ describe('store', () => {
           description: 'beautiful data'
         }
         api.get.mockResolvedValueOnce(network)
-        api.get.mockResolvedValueOnce(neverReturningPromise)
-        api.get.mockResolvedValueOnce(neverReturningPromise)
+        api.get.mockResolvedValueOnce(undefined)
+        api.get.mockResolvedValueOnce(undefined)
 
-        const options = {
-          payload: '001',
-          expectedMutations: [
-            { type: 'SetNetworkBiobanks', payload: undefined },
-            { type: 'SetNetworkCollections', payload: undefined },
-            { type: 'SetNetworkReport', payload: undefined },
-            { type: 'SetLoading', payload: true },
-            { type: 'SetNetworkReport', payload: network },
-            { type: 'SetLoading', payload: false }
-          ]
-        }
-        utils.testAction(actions.GetNetworkReport, options, done)
+        const networkId = '001'
+
+        await actions.GetNetworkReport({ commit }, networkId)
+
+        expect(commit).toHaveBeenCalledWith('SetNetworkBiobanks', undefined)
+        expect(commit).toHaveBeenCalledWith('SetNetworkCollections', undefined)
+        expect(commit).toHaveBeenCalledWith('SetNetworkReport', undefined)
+        expect(commit).toHaveBeenCalledWith('SetLoading', true)
+        expect(commit).toHaveBeenCalledWith('SetNetworkReport', network)
+        expect(commit).toHaveBeenCalledWith('SetLoading', false)
       })
 
-      it('should retrieve the collections and biobanks of a network from the server based on a network id and store them in the state', done => {
-        const networkPromise = new Promise(() => {})
-        api.get.mockResolvedValueOnce(networkPromise)
-        api.get.mockResolvedValueOnce([{ id: 'bb-1' }])
-        api.get.mockResolvedValueOnce([{ id: 'col-1' }])
+      it('should retrieve the collections and biobanks of a network from the server based on a network id and store them in the state', async () => {
+        api.get.mockResolvedValueOnce(undefined)
+        api.get.mockResolvedValueOnce({ items: [{ id: 'col-1' }] })
+        api.get.mockResolvedValueOnce({ items: [{ id: 'bb-1' }] })
 
-        const options = {
-          payload: '001',
-          expectedMutations: [
-            { type: 'SetNetworkBiobanks', payload: undefined },
-            { type: 'SetNetworkCollections', payload: undefined },
-            { type: 'SetNetworkReport', payload: undefined },
-            { type: 'SetLoading', payload: true },
-            { type: 'SetNetworkCollections', payload: [{ id: 'col-1' }] },
-            { type: 'SetNetworkBiobanks', payload: [{ id: 'bb-1' }] }
-          ]
-        }
-        utils.testAction(actions.GetNetworkReport, options, done)
+        const networkId = '001'
+
+        await actions.GetNetworkReport({ commit }, networkId)
+
+        expect(commit).toHaveBeenCalledWith('SetNetworkBiobanks', undefined)
+        expect(commit).toHaveBeenCalledWith('SetNetworkCollections', undefined)
+        expect(commit).toHaveBeenCalledWith('SetNetworkReport', undefined)
+        expect(commit).toHaveBeenCalledWith('SetLoading', true)
+        expect(commit).toHaveBeenCalledWith('SetNetworkCollections', [{ id: 'col-1' }])
+        expect(commit).toHaveBeenCalledWith('SetNetworkBiobanks', [{ id: 'bb-1' }])
+        expect(commit).toHaveBeenCalledWith('SetLoading', false)
       })
     })
   })
 
   describe('AddCollectionsToSelection', () => {
-    const commit = jest.fn()
     const collections = [{
       id: 'Test Collection A',
       label: 'Mock Collection A'

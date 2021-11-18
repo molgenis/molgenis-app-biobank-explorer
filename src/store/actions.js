@@ -168,11 +168,12 @@ export default {
       commit('SetError', error)
     })
   },
-  GetNetworkReport ({ commit }, networkId) {
+  async GetNetworkReport ({ commit }, networkId) {
     commit('SetNetworkBiobanks', undefined)
     commit('SetNetworkCollections', undefined)
     commit('SetNetworkReport', undefined)
     commit('SetLoading', true)
+
     const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
       .then(response => commit('SetNetworkReport', response))
       .finally(() => commit('SetLoading', false))
@@ -180,8 +181,11 @@ export default {
       .then(response => commit('SetNetworkCollections', response.items))
     const biobanks = api.get(`${BIOBANK_API_PATH}?q=network==${networkId}&num=10000`)
       .then(response => commit('SetNetworkBiobanks', response.items))
-    Promise.all([collections, biobanks, networks])
-      .catch((error) => commit('SetError', error))
+
+    await Promise.all([collections, biobanks, networks])
+      .catch((error) => {
+        commit('SetError', error)
+      })
   },
   GetPodiumCollections ({ state, commit }) {
     if (state.isPodium && state.podiumCollectionIds.length === 0) { // only fetch once.
