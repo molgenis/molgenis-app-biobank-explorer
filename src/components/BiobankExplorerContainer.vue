@@ -101,7 +101,7 @@
                   @click="
                     RemoveCollectionsFromSelection({
                       collections: [collection],
-                      router: $router,
+                      bookmark: true,
                     })
                   "></span>
               </div>
@@ -276,7 +276,8 @@ export default {
     removeAllCollections () {
       this.hideModal()
       this.RemoveCollectionsFromSelection({
-        collections: this.currentSelectedCollections
+        collections: this.currentSelectedCollections,
+        bookmark: true
       })
     },
     hideModal () {

@@ -221,6 +221,7 @@ export default {
     state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
 
     if (bookmark) {
+      console.log('!')
       createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
