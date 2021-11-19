@@ -23,10 +23,27 @@ export const createInQuery = (attribute, filters) => filters.length > 0
   : []
 
 /**
+ * Create an RSQL 'like' query for filters
+ * @example in query for search filter
+ * label=like=NL
+ */
+export const createLikeQuery = (attribute, text) => text.length > 0
+  ? queryBuilder(attribute, text, '=like=')
+  : []
+
+/**
  * Create an array of == comparisons for each filter value
  */
 export const createComparisons = (attribute, filters) =>
   filters.map(filterValue => ({ selector: attribute, comparison: '==', arguments: filterValue }))
+
+/**
+ * Create an array of =like= comparisons for each text value
+ */
+export const createTokenizedLikeQuery = (attribute, text) => {
+  const words = text.split(' ')
+  return words.map(word => ({ selector: attribute, comparison: '=like=', arguments: word }))
+}
 
 /**
  * Return an Array of unique identifiers
@@ -68,6 +85,22 @@ export const createQuery = (filterSelection, columnName, satisfyAll) => {
       operands: createComparisons(columnName, filterSelection || [])
     }
   } else { return createInQuery(columnName, filterSelection || []) }
+}
+
+/** Creates an RSQL query string for text search
+ *
+ * @param text The text to search on
+ * @param columnName The name of the filter column in the database
+ * @param tokenize if set to true, text will be split on space and a query is formed for all words
+ * @returns The RSQL string portion matching an AND or OR query
+ */
+export const createTextSearchQuery = (text, columnName, tokenize) => {
+  if (text && tokenize) {
+    return {
+      operator: 'AND',
+      operands: createTokenizedLikeQuery(columnName, text)
+    }
+  } else { return createLikeQuery(columnName, text) }
 }
 
 /**
