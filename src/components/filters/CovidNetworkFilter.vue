@@ -33,7 +33,7 @@ export default {
 
       if (checked && !biobankNetworkSelection.includes(covid19NetworkId)) {
         biobankNetworkSelection.push(covid19NetworkId)
-      } else {
+      } else if (!checked) {
         biobankNetworkSelection = biobankNetworkSelection.filter(network => network !== covid19NetworkId)
       }
       this.UpdateFilterSelection({ name: 'biobank_network', value: biobankNetworkSelection })
@@ -43,7 +43,7 @@ export default {
 
       if (checked && !collectionNetworkSelection.includes(covid19NetworkId)) {
         collectionNetworkSelection.push(covid19NetworkId)
-      } else {
+      } else if (!checked) {
         collectionNetworkSelection = collectionNetworkSelection.filter(network => network !== covid19NetworkId)
       }
 
