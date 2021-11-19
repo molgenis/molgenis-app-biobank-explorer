@@ -40,7 +40,7 @@ export const createComparisons = (attribute, filters) =>
 /**
  * Create an array of =like= comparisons for each text value
  */
-export const createTokenizedLikeQuery = (attribute, text) => {
+export const createMultipleLikeQuery = (attribute, text) => {
   const words = text.split(' ')
   return words.map(word => ({ selector: attribute, comparison: '=like=', arguments: word }))
 }
@@ -91,14 +91,14 @@ export const createQuery = (filterSelection, columnName, satisfyAll) => {
  *
  * @param text The text to search on
  * @param columnName The name of the filter column in the database
- * @param tokenize if set to true, text will be split on space and a query is formed for all words
+ * @param split if set to true, text will be split on space and a query is formed for all words
  * @returns The RSQL string portion matching an AND or OR query
  */
-export const createTextSearchQuery = (text, columnName, tokenize) => {
-  if (text && tokenize) {
+export const createTextSearchQuery = (columnName, text, split) => {
+  if (text && split) {
     return {
       operator: 'AND',
-      operands: createTokenizedLikeQuery(columnName, text)
+      operands: createMultipleLikeQuery(columnName, text)
     }
   } else { return createLikeQuery(columnName, text) }
 }
@@ -142,6 +142,8 @@ export const diagnosisAvailableQuery = (filterSelection, columnName, satisfyAll)
 export default {
   getUniqueIdArray,
   createInQuery,
+  createLikeQuery,
+  createTextSearchQuery,
   createComparisons,
   diagnosisAvailableQuery,
   removeFilterFromFilterArrayById,

@@ -52,8 +52,8 @@ export const genericFilterOptions = (tableName, filterName) => {
 }
 
 /** Specific logic for diagnosis available filter */
-const createDiagnosisLabelQuery = (query) => transformToRSQL(createTextSearchQuery(query, 'label', true))
-const createDiagnosisCodeQuery = (query) => transformToRSQL(createTextSearchQuery(query.toUpperCase(), 'code', false))
+const createDiagnosisLabelQuery = (query) => transformToRSQL(createTextSearchQuery('label', query, true))
+const createDiagnosisCodeQuery = (query) => transformToRSQL(createTextSearchQuery('code', query.toUpperCase(), false))
 /** */
 
 export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
