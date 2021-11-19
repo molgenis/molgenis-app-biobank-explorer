@@ -46,7 +46,6 @@ export default {
       } else if (!checked) {
         collectionNetworkSelection = collectionNetworkSelection.filter(network => network !== covid19NetworkId)
       }
-
       this.UpdateFilterSelection({ name: 'collection_network', value: collectionNetworkSelection })
     }
   },
