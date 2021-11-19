@@ -3,7 +3,7 @@
     <b-form-checkbox
       id="covidBiobankNetwork"
       :checked="biobankNetwork"
-        @change="setBiobankNetwork($event)"
+      @change="setBiobankNetwork($event)"
       name="covidBiobankNetwork">
       Biobanks providing COVID-19 services
     </b-form-checkbox>
