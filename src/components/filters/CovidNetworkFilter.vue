@@ -45,7 +45,7 @@ export default {
           biobankNetworkSelection = biobankNetworkSelection.filter(network => network !== covid19NetworkId)
         }
 
-        this.UpdateFilterSelection({ name: 'biobank_network', value: { text: 'COVID_19', value: biobankNetworkSelection } })
+        this.UpdateFilterSelection({ name: 'biobank_network', value: biobankNetworkSelection })
       }
     },
     collectionNetwork: {
@@ -57,15 +57,15 @@ export default {
         return false
       },
       set (checked) {
-        let selectedCollectionNetworks = this.filters.selections.collection_network || []
+        let collectionNetworkSelection = this.filters.selections.collection_network || []
 
         if (checked) {
-          selectedCollectionNetworks.push(covid19NetworkId)
+          collectionNetworkSelection.push(covid19NetworkId)
         } else {
-          selectedCollectionNetworks = selectedCollectionNetworks.filter(network => network !== covid19NetworkId)
+          collectionNetworkSelection = collectionNetworkSelection.filter(network => network !== covid19NetworkId)
         }
 
-        this.UpdateFilterSelection({ name: 'collection_network', value: { text: 'COVID_19', value: selectedCollectionNetworks } })
+        this.UpdateFilterSelection({ name: 'collection_network', value: collectionNetworkSelection })
       }
     }
   }
