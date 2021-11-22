@@ -67,9 +67,11 @@ export default {
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
 
+    state.cartValid = true
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
+    state.cartValid = false
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
     } else {
@@ -77,6 +79,8 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
+
+    state.cartValid = true
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
   /**
@@ -195,11 +199,13 @@ export default {
     }
   },
   SetCollectionsToSelection (state, { collections, bookmark }) {
+    state.cartValid = false
     const currentIds = state.selectedCollections.map(sc => sc.value)
     const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
     state.selectedCollections = state.selectedCollections.concat(newCollections)
 
     if (bookmark) {
+      state.cartValid = true
       createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
@@ -217,10 +223,12 @@ export default {
     }
   },
   RemoveCollectionsFromSelection (state, { collections, bookmark }) {
+    state.cartValid = false
     const collectionsToRemove = collections.map(c => c.value)
     state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
 
     if (bookmark) {
+      state.cartValid = true
       createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
@@ -230,6 +238,8 @@ export default {
    * @param params
    */
   MapQueryToState (state, ie11Query) {
+    // bookmark has been altered in another view
+    if (!state.cartValid) return
     const query = ie11Query || state.route.query
 
     const keysInQuery = Object.keys(query)

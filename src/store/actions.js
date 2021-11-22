@@ -207,6 +207,7 @@ export default {
       .then(helpers.setLocationHref, error => commit('SetError', error))
   },
   AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
+    commit('SetCartValidationStatus', false)
     commit('SetCollectionsToSelection', { collections, bookmark })
     commit('SetSearchHistory', getters.getHumanReadableString)
   }
