@@ -95,7 +95,7 @@ export const createQuery = (filterSelection, columnName, satisfyAll) => {
  * @returns The RSQL string portion matching an AND or OR query
  */
 export const createTextSearchQuery = (columnName, text, split) => {
-  if (text && split) {
+  if (split) {
     return {
       operator: 'AND',
       operands: createMultipleLikeQuery(columnName, text)
