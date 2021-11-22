@@ -67,11 +67,9 @@ export default {
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
 
-    state.cartValid = true
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
-    state.cartValid = false
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
     } else {
@@ -80,7 +78,6 @@ export default {
       }
     }
 
-    state.cartValid = true
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
   /**
