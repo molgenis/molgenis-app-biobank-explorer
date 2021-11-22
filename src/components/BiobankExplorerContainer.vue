@@ -316,9 +316,8 @@ export default {
   },
   mounted () {
     // check if collections have been added off-screen.
-    if (this.selectedCollections.length) {
-      createBookmark(this.activeFilters, this.selectedCollections)
-    }
+
+    createBookmark(this.activeFilters, this.selectedCollections)
   }
 }
 </script>

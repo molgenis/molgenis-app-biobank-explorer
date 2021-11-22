@@ -484,5 +484,45 @@ describe('store', () => {
         expect(configFilter === (filter - 1)).toBeTruthy()
       })
     })
+
+    describe('Collection state handling', () => {
+      it('should invalidate the cart if collections are added without bookmark', () => {
+        // initial state verification
+        expect(state.cartValid).toBeTruthy()
+
+        mutations.SetCollectionsToSelection(state, { collections: ['collectionA'] })
+        expect(state.selectedCollections).toEqual(['collectionA'])
+        expect(state.cartValid).toBeFalsy()
+      })
+
+      it('should not invalidate the cart if collections are added with bookmark', () => {
+        // initial state verification
+        expect(state.cartValid).toBeTruthy()
+
+        mutations.SetCollectionsToSelection(state, { collections: ['collectionA'], bookmark: true })
+        expect(state.selectedCollections).toEqual(['collectionA'])
+        expect(state.cartValid).toBeTruthy()
+      })
+
+      it('should invalidate the cart if collections are removed without bookmark', () => {
+        state.selectedCollections = ['collectionA']
+
+        // initial state verification
+        expect(state.cartValid).toBeTruthy()
+
+        mutations.RemoveCollectionsFromSelection(state, { collections: ['collectionA'] })
+        expect(state.selectedCollections).toEqual([])
+        expect(state.cartValid).toBeFalsy()
+      })
+
+      it('should not invalidate the cart if collections are removed with bookmark', () => {
+        // initial state verification
+        expect(state.cartValid).toBeTruthy()
+
+        mutations.RemoveCollectionsFromSelection(state, { collections: ['collectionA'], bookmark: true })
+        expect(state.selectedCollections).toEqual([])
+        expect(state.cartValid).toBeTruthy()
+      })
+    })
   })
 })
