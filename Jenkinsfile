@@ -5,7 +5,7 @@ pipeline {
     }
   }
   environment {
-    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/molgenis-frontend"
+    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/bbmri-directory"
   }
   stages {
     stage('Prepare') {
@@ -65,7 +65,7 @@ pipeline {
                 }
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
-                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
+                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}, \"https://index.docker.io/v1/\": {\"auth\": \"${DOCKERHUB_AUTH}\"}, \"registry.hub.docker.com\": {\"auth\": \"${DOCKERHUB_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
                     sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${LOCAL_REPOSITORY}:${TAG}"
                 }
             }
