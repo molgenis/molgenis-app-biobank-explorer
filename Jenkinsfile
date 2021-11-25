@@ -5,7 +5,9 @@ pipeline {
     }
   }
   environment {
-    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/bbmri-directory"
+    IMAGE_NAME = "molgenis/bbmri-directory"
+    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
+    
   }
   stages {
     stage('Prepare') {
@@ -94,7 +96,8 @@ pipeline {
                     "--no-prompt " +
                     "--set environment=dev " +
                     "--set image.tag=${TAG} " +
-                    "--set image.repository=${env.LOCAL_REGISTRY} " +
+                    "--set image.repository=${LOCAL_REGISTRY} " +
+                    "--set image.name=${IMAGE_NAME}" +
                     "--set proxy.backend.service.targetNamespace=molgenis-abcde " +
                     "--set proxy.backend.service.targetRelease=master " +
                     "--set image.pullPolicy=Always " +
