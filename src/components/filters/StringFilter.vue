@@ -55,17 +55,3 @@ export default {
   }
 }
 </script>
-
-<docs>
-Browser input filter with additional options.
-### Usage
-```jsx
-const model = 'bla'
-<StringFilter
-  v-model="model"
-  placeholder="Input placeholder"
-  name="my-string-filter">
-</StringFilter>
-<div>{{model}}</div>
-```
-</docs>

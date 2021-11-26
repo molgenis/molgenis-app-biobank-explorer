@@ -212,25 +212,3 @@ export default {
   font-style: italic;
 }
 </style>
-
-<docs>
-Filter that renders a list of options as a set of checkboxes
-
-## Usage
-```jsx
-const model = []
-let satisfyAll = false
-<CheckboxFilter
-  show-satisfy-all-checkbox
-  v-bind:maxVisibleOptions="5"
-  v-bind:bulkOperation="true"
-  v-bind:options="fruitOptionsFunction"
-  v-bind:optionsFilter="[]"
-  v-model="model"
-  v-on:satisfy-all="(value) => { satisfyAll = value }"
-  >
-</CheckboxFilter>
-<div>model: {{model}}</div>
-<div>satisfyAll: {{satisfyAll}}</div>
-```
-</docs>

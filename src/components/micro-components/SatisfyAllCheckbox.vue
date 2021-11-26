@@ -44,18 +44,3 @@ export default {
   }
 }
 </script>
-
-<docs>
-Filter that renders a list of options as a set of checkboxes
-
-## Usage
-```jsx
-const satisfyAllLabel = 'Satisfy all'
-let satisfyAll = false
-    <satisfy-all-checkbox
-      v-bind:satisfy-all-label="satisfyAllLabel"
-      v-model="satisfyAll"
-    />
-<div>satisfyAll: {{satisfyAll}}</div>
-```
-</docs>

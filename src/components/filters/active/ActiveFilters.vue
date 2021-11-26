@@ -160,26 +160,3 @@ button:hover svg path {
   fill: var(--danger);
 }
 </style>
-
-<docs>
-Visualisation of active filters
-
-### Usage
-```jsx
-
-const selections = {
-  search: 'test',
-  name: 'John',
-  age: [32, 45],
-  fruit: ['orange', 'apple'],
-  color: ['red', 'green'],
-  datetime: [new Date('10/01/1980'), new Date('03/12/2020')],
-}
-
-<ActiveFilters
-  v-model="selections"
-  v-bind:filters="filtersMocks">
-</ActiveFilters>
-<div>{{selections}}</div>
-```
-</docs>
