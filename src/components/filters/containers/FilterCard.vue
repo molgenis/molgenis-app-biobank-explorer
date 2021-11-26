@@ -172,38 +172,3 @@ export default {
     opacity: 0.2;
   }
 </style>
-
-<docs>
-Card containing filter
-### Usage
-```jsx
-const onRemoveFilter = () => alert('remove me please')
-
-const options = () => Promise.resolve(
- [
-  { text: 'Orange', value: 'orange' },
-  { text: 'Apple', value: 'apple' },
-  { text: 'Pineapple', value: 'pineapple' },
-  { text: 'Grape', value: 'grape' }
- ]
-)
-const model = []
-
-<FilterCard
-  name="fruit-card"
-  label="Fruit"
-  headerClass="bg-info text-white"
-  description="Example with checkbox filter"
-  v-bind:collapsed="false"
-  v-bind:collapsable="true"
-  v-bind:canRemove="true"
-  v-on:removeFilter="onRemoveFilter">
-  <CheckboxFilter
-    v-bind:maxVisibleOptions="null"
-    v-bind:bulkOperation="true"
-    v-bind:options="options"
-    v-model="model">
-  </CheckboxFilter>
-</FilterCard>
-```
-</docs>

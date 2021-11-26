@@ -2,8 +2,8 @@ import FilterContainer from '@/components/filters/containers/FilterContainer'
 import CovidFilter from '@/components/filters/CovidFilter'
 import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils'
-import { mockState } from '../../mockData'
-import filterDefinitions from '../../../../../src/utils/filterDefinitions'
+import { mockState } from '../../../mockData'
+import filterDefinitions from '../../../../../../src/utils/filterDefinitions'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
