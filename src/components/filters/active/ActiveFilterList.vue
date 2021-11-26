@@ -9,7 +9,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import { ActiveFilters } from '@molgenis-ui/components-library'
+import ActiveFilters from './ActiveFilters.vue'
 
 export default {
   components: { ActiveFilters },

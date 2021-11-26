@@ -26,9 +26,12 @@
 
 <script>
 /** Components used for filters */
-import CovidFilter from '../filters/CovidFilter'
-import CovidNetworkFilter from '../filters/CovidNetworkFilter'
-import { StringFilter, FilterCard, CheckboxFilter, MultiFilter } from '@molgenis-ui/components-library'
+import CovidFilter from '../CovidFilter'
+import CovidNetworkFilter from '../CovidNetworkFilter'
+import StringFilter from '../StringFilter'
+import FilterCard from '../containers/FilterCard'
+import CheckboxFilter from '../CheckboxFilter'
+import MultiFilter from '../MultiFilter'
 /** */
 
 import { mapGetters, mapMutations, mapState } from 'vuex'
