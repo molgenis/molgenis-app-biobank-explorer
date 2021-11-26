@@ -155,7 +155,11 @@ export default {
        * @event input
        * @property {Array} Returns new array without the deleted item
        */
-      this.$emit('input', this.value.filter(item => item !== itemName))
+      if (this.value.length && typeof this.value[0] === 'string') {
+        this.$emit('input', this.value.filter(item => item !== itemName))
+      } else {
+        this.$emit('input', this.value.filter(item => item[this.labelAttribute] !== itemName))
+      }
     }
   }
 }
