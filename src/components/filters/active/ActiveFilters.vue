@@ -58,19 +58,6 @@ export default {
           return
         }
 
-        if (filter.type === 'date-time-filter') {
-          let value
-
-          if (current[0].toISOString() === current[1].toISOString()) {
-            value = current[0].toLocaleDateString()
-          } else {
-            value = `${current[0].toLocaleDateString()} - ${current[1].toLocaleDateString()}`
-          }
-
-          activeValues.push({ key, value, label: filter.label })
-          return
-        }
-
         // Unpack array
         if (Array.isArray(current)) {
           // Checkbox
@@ -88,28 +75,6 @@ export default {
                 label: filter.label
               })
             })
-          }
-          // Range Filter
-          if (filter.type === 'range-filter') {
-            if ((current[0] === null || current[0] === '') && current[1] != null) {
-              activeValues.push({
-                key,
-                value: `${current[1]} and less`,
-                label: filter.label
-              })
-            } else if (current[0] !== null && (current[1] === null || current[1] === '')) {
-              activeValues.push({
-                key,
-                value: `${current[0]} and more`,
-                label: filter.label
-              })
-            } else if (current[0] !== null && current[1] !== null) {
-              activeValues.push({
-                key,
-                value: `${current[0]} to ${current[1]}`,
-                label: filter.label
-              })
-            }
           }
 
           if (filter.type === 'multi-filter') {
