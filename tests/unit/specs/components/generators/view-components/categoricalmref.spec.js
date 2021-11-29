@@ -37,14 +37,20 @@ describe('Generator view-components', () => {
       const html = wrapper.html()
 
       // assert if links are present
-      expect(html.includes('href="https://id.com" target="_blank"'))
-      expect(html.includes('href="https://name.com" target="_blank"'))
-      expect(html.includes('href="https://label.com" target="_blank"'))
+      expect(html.includes('href="https://id.com" target="_blank"')).toBeTruthy()
+      expect(html.includes('href="https://name.com" target="_blank"')).toBeTruthy()
+      expect(html.includes('href="https://label.com" target="_blank"')).toBeTruthy()
 
       // assert if id, label and name are present
       expect(html.includes('myId')).toBeTruthy()
       expect(html.includes('myName')).toBeTruthy()
       expect(html.includes('myLabel')).toBeTruthy()
+    })
+
+    it('does not create a tr when attribute is empty', () => {
+      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+      const html = wrapper.html()
+      expect(html).toBe('')
     })
   })
 })
