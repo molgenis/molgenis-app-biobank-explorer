@@ -27,7 +27,8 @@ export default {
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
-      'GetQualityStandardInformation'
+      'GetQualityStandardInformation',
+      'GetCollectionMetadata'
     ])
   },
   watch: {
@@ -47,6 +48,7 @@ export default {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
     this.GetQualityStandardInformation()
+    this.GetCollectionMetadata()
   },
   name: 'biobank-explorer'
 }

@@ -1,0 +1,50 @@
+import { mount } from '@vue/test-utils'
+import categoricalmref from '../../../../../../src/components/generators/view-components/categoricalmref.vue'
+
+let attribute
+
+describe('Generator view-components', () => {
+  describe('categoricalmref', () => {
+    beforeEach(() => {
+      attribute = { }
+    })
+
+    it('can create a tr with badges for a standard categorical mref attribute', () => {
+      attribute = {
+        label: 'Count: ',
+        values: [1, 2, 3]
+      }
+
+      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+
+      // remove whitespace and newlines for easy check
+      const flattendHtml = wrapper.html().replace(/\s/gmi, '')
+
+      expect(flattendHtml).toBe('<tr><thscope="row"class="pr-1">Count:</th><td><spanclass="m-1badgebadge-info">1</span><spanclass="m-1badgebadge-info">2</span><spanclass="m-1badgebadge-info">3</span></td></tr>')
+    })
+
+    it('can create a tr with badges for a categorical mref attribute object with id/label/name and a uri', () => {
+      attribute = {
+        label: 'Count: ',
+        values: [
+          { id: 'myId', uri: 'https://id.com' },
+          { name: 'myName', uri: 'https://name.com' },
+          { label: 'myLabel', uri: 'https://label.com' }
+        ]
+      }
+
+      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+      const html = wrapper.html()
+
+      // assert if links are present
+      expect(html.includes('href="https://id.com" target="_blank"'))
+      expect(html.includes('href="https://name.com" target="_blank"'))
+      expect(html.includes('href="https://label.com" target="_blank"'))
+
+      // assert if id, label and name are present
+      expect(html.includes('myId')).toBeTruthy()
+      expect(html.includes('myName')).toBeTruthy()
+      expect(html.includes('myLabel')).toBeTruthy()
+    })
+  })
+})

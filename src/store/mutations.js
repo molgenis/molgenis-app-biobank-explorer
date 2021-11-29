@@ -152,6 +152,15 @@ export default {
     }))
     state.collectionInfo = collectionInfo
   },
+  SetCollectionMetadataDictionary (state, response) {
+    const metadataDictionary = {}
+
+    for (const attr of response.data.attributes.items) {
+      metadataDictionary[attr.data.name] = attr.data.type
+    }
+
+    state.collectionMetadataDictionary = metadataDictionary
+  },
   /**
    * Store a single biobank in the state for showing a biobank report
    * @param state
