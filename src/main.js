@@ -12,7 +12,6 @@ import App from './App'
 import VueAnalytics from 'vue-analytics'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '@molgenis-ui/components-library/dist/components-library.css'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
