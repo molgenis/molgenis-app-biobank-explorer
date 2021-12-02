@@ -9,10 +9,10 @@ describe('Generator view-components', () => {
       attribute = { }
     })
 
-    it('can create a tr with badges for a standard categorical mref attribute', () => {
+    it('can create a tr with badges for an mref attribute', () => {
       attribute = {
         label: 'Count: ',
-        values: [1, 2, 3]
+        value: [1, 2, 3]
       }
 
       const wrapper = mount(mref, { propsData: { attribute } })
@@ -26,7 +26,7 @@ describe('Generator view-components', () => {
     it('can create a tr with badges for a categorical mref attribute object with id/label/name and a uri', () => {
       attribute = {
         label: 'Count: ',
-        values: [
+        value: [
           { id: 'myId', uri: 'https://id.com' },
           { name: 'myName', uri: 'https://name.com' },
           { label: 'myLabel', uri: 'https://label.com' }
