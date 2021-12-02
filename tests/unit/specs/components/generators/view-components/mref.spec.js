@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
-import categoricalmref from '../../../../../../src/components/generators/view-components/categoricalmref.vue'
+import mref from '../../../../../../src/components/generators/view-components/mref.vue'
 
 let attribute
 
 describe('Generator view-components', () => {
-  describe('categoricalmref', () => {
+  describe('mref', () => {
     beforeEach(() => {
       attribute = { }
     })
@@ -15,12 +15,12 @@ describe('Generator view-components', () => {
         values: [1, 2, 3]
       }
 
-      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+      const wrapper = mount(mref, { propsData: { attribute } })
 
       // remove whitespace and newlines for easy check
       const flattendHtml = wrapper.html().replace(/\s/gmi, '')
 
-      expect(flattendHtml).toBe('<tr><thscope="row"class="pr-1">Count:</th><td><spanclass="m-1badgebadge-info">1</span><spanclass="m-1badgebadge-info">2</span><spanclass="m-1badgebadge-info">3</span></td></tr>')
+      expect(flattendHtml).toBe('<tr><thscope="row"class="pr-1align-top">Count:</th><td><spanclass="m-1badgebadge-info">1</span><spanclass="m-1badgebadge-info">2</span><spanclass="m-1badgebadge-info">3</span></td></tr>')
     })
 
     it('can create a tr with badges for a categorical mref attribute object with id/label/name and a uri', () => {
@@ -33,7 +33,7 @@ describe('Generator view-components', () => {
         ]
       }
 
-      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+      const wrapper = mount(mref, { propsData: { attribute } })
       const html = wrapper.html()
 
       // assert if links are present
@@ -48,7 +48,7 @@ describe('Generator view-components', () => {
     })
 
     it('does not create a tr when attribute is empty', () => {
-      const wrapper = mount(categoricalmref, { propsData: { attribute } })
+      const wrapper = mount(mref, { propsData: { attribute } })
       const html = wrapper.html()
       expect(html).toBe('')
     })

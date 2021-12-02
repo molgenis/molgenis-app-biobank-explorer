@@ -1,9 +1,9 @@
 <template>
-  <tr v-if="attribute.values">
-    <th scope="row" class="pr-1">{{ displayName(attribute) }}</th>
+  <tr v-if="attribute.value && attribute.value.length">
+    <th scope="row" class="pr-1 align-top">{{ displayName(attribute) }}</th>
     <td>
       <template v-if="dataContainsUri">
-        <a v-for="(item, index) in attribute.values"
+        <a v-for="(item, index) in attribute.value"
           :href="item.uri"
           target="_blank"
           class="m-1 badge"
@@ -15,7 +15,7 @@
       </template>
       <template v-else>
         <span
-          v-for="(value, index) in attribute.values"
+          v-for="(value, index) in attribute.value"
           class="m-1 badge"
           :key="index"
           :class="'badge-' + badgeColor">
@@ -29,10 +29,6 @@
 <script>
 export default {
   props: {
-    badgeColor: {
-      type: String,
-      default: () => 'info'
-    },
     attribute: {
       type: Object,
       default: () => {}
@@ -40,11 +36,14 @@ export default {
   },
   computed: {
     dataContainsUri () {
-      if (this.attribute.values.length && typeof this.attribute.values[0] === 'object') {
-        return this.attribute.values.some(item => item.uri)
+      if (this.attribute.value.length && typeof this.attribute.value[0] === 'object') {
+        return this.attribute.value.some(item => item.uri)
       } else {
         return ''
       }
+    },
+    badgeColor () {
+      return this.attribute.badgeColor || 'info'
     }
   },
   methods: {
@@ -54,3 +53,21 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.badge {
+  transition: transform 0.1s;
+  box-shadow: 0 0 0 1px white;
+}
+.badge:hover {
+  transform: scale(1.4);
+}
+.fa-external-link {
+  top: 1px;
+  position: relative;
+}
+
+.fa-external-link:hover {
+  cursor: pointer;
+}
+</style>
