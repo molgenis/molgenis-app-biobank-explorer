@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="mg-report-details-list">
+    <table class="mg-report-details-list mb-4">
       <component
         v-for="attribute in viewmodel"
         :is="component(attribute.type)"
