@@ -9,7 +9,7 @@ const initialCollectionColumns = [
   { label: 'Materials:', column: 'materials', type: 'categoricalmref' },
   { label: 'Storage:', column: 'storage_temperatures', type: 'categoricalmref' },
   { label: 'Data:', column: 'data_categories', type: 'categoricalmref' },
-  { label: 'Diagnosis:', column: 'diagnosis_available', rsql: 'diagnosis_available(label,uri,code)', type: 'mref' },
-  { label: 'Data use conditions:', column: 'data_use', rsql: 'data_use(label,uri)', type: 'mref' }]
+  { label: 'Diagnosis:', column: 'diagnosis_available', type: 'mref', rsql: 'diagnosis_available(label,uri,code)' },
+  { label: 'Data use conditions:', column: 'data_use', type: 'mref', rsql: 'data_use(label,uri)' }]
 
 module.exports = initialCollectionColumns

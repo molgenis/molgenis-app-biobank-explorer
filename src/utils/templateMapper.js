@@ -75,10 +75,9 @@ export const getCollectionModel = (collection) => {
   const attributes = []
 
   for (const columnInfo of state.collectionColumns) {
-    const type = columnInfo.type || state.collectionMetadataDictionary[columnInfo.column]
     let attributeValue
 
-    switch (type) {
+    switch (columnInfo.type) {
       case 'range': {
         const { min, max, unit } = columnInfo
         attributeValue = mapRange(collection[min], collection[max], collection[unit]) || ''
@@ -98,7 +97,7 @@ export const getCollectionModel = (collection) => {
       }
     }
 
-    const attribute = { label: columnInfo.label, type, value: attributeValue }
+    const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
 
     // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
     if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {

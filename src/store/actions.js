@@ -124,17 +124,6 @@ export default {
         commit('SetError', error)
       })
   },
-  /** Retrieves metadata for collection view attribute generator */
-  GetCollectionMetadata ({ commit }) {
-    const url = '/api/metadata/eu_bbmri_eric_collections'
-
-    api.get(url)
-      .then(response => {
-        commit('SetCollectionMetadataDictionary', response)
-      }, error => {
-        commit('SetError', error)
-      })
-  },
   GetBiobankIds ({ commit, getters }) {
     commit('SetBiobankIds', undefined)
     let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
