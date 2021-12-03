@@ -142,9 +142,9 @@
 </template>
 
 <script>
-import { CartSelectionToast } from '@molgenis-ui/components-library'
+import CartSelectionToast from './popovers/CartSelectionToast.vue'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
-import FilterContainer from './filters/FilterContainer'
+import FilterContainer from './filters/containers/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
