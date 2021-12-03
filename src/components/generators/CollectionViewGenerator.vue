@@ -24,6 +24,7 @@
 <script>
 import mref from './view-components/mref.vue'
 import string from './view-components/string.vue'
+import hyperlink from './view-components/hyperlink.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
 export default {
@@ -31,6 +32,7 @@ export default {
   components: {
     mref,
     string,
+    hyperlink,
     Subcollection
   },
   props: {
@@ -47,9 +49,12 @@ export default {
   methods: {
     component (type) {
       switch (type) {
-        case 'mref':
         case 'categoricalmref': {
           return 'mref'
+        }
+        case 'mref':
+        case 'hyperlink': {
+          return type
         }
         default: {
           return 'string'

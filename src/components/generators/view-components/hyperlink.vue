@@ -3,7 +3,7 @@
     <th scope="row" class="pr-1 align-top">{{ displayName(attribute) }}</th>
     <td>
       <span>
-        <a target="_blank" :href="collection.url">{{ collection.url }}</a>
+        <a target="_blank" :href="attribute.value">{{ attribute.value }}</a>
       </span>
     </td>
   </tr>
