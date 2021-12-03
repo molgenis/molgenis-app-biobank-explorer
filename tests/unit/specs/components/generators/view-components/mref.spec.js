@@ -48,7 +48,7 @@ describe('Generator view-components', () => {
     })
 
     it('does not create a tr when attribute is empty', () => {
-      const wrapper = mount(mref, { propsData: { attribute } })
+      const wrapper = mount(mref)
       const html = wrapper.html()
       expect(html).toBe('')
     })
