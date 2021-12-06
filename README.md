@@ -83,7 +83,7 @@ Currently the following types are available:
     - ```"unit": "column_with_unit_value"``` e.g: 'age_unit'
 
 - object
-  - ```  { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size'```
+  - ```  { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size' }```
 
 > order_of_magnitude query resolves to multiple values as a JSON object, here you can specify which property you want to show.
 
