@@ -1,6 +1,6 @@
 import {
-  mapCollectionsDetailsTableContent,
-  mapAgeRange,
+  getCollectionDetails,
+  mapRange,
   mapNetworkInfo,
   mapContactInfo,
   mapNetworkData,
@@ -96,35 +96,46 @@ describe('templateMapper', () => {
       }]
     }
   })
-  describe('mapCollectionsDetailsTableContent', () => {
-    it('should generate stringValues of details table content', () => {
-      const actual = mapCollectionsDetailsTableContent(collectionsReport)
-      const expectedSize = ['777']
-      expect(actual.Size.value).toStrictEqual(expectedSize)
+  describe('getCollectionDetails', () => {
+    it('should generate a string for values of Size', () => {
+      const collectionDetails = getCollectionDetails(collectionsReport)
+      const expectedSize = '777'
+
+      const sizeAttribute = collectionDetails.viewmodel.find(attr => attr.label === 'Size:')
+
+      expect(sizeAttribute.value).toStrictEqual(expectedSize)
     })
 
     it('should generate listValues of details table content', () => {
-      const actual = mapCollectionsDetailsTableContent(collectionsReport)
-      expect(actual.Type.value).toStrictEqual(['type1', 'type2'])
-      expect(actual.Storage_temperatures.value).toStrictEqual(['10 degrees'])
-      expect(actual.Data_categories.value).toStrictEqual(['One type'])
-      expect(actual.Diagnosis_available.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
+      const collectionDetails = getCollectionDetails(collectionsReport)
+
+      const typeModel = collectionDetails.viewmodel.find(attr => attr.label === 'Type:')
+      expect(typeModel.value).toStrictEqual(['type1', 'type2'])
+
+      const storageModel = collectionDetails.viewmodel.find(attr => attr.label === 'Storage:')
+      expect(storageModel.value).toStrictEqual(['10 degrees'])
+
+      const dataModel = collectionDetails.viewmodel.find(attr => attr.label === 'Data:')
+      expect(dataModel.value).toStrictEqual(['One type'])
+
+      const diagnosisModel = collectionDetails.viewmodel.find(attr => attr.label === 'Diagnosis:')
+      expect(diagnosisModel.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
     })
   })
 
-  describe('mapAgeRange', () => {
+  describe('mapRange', () => {
     it('should age range below max age', () => {
-      const actual = mapAgeRange(undefined, 20, [{ label: 'years' }])
+      const actual = mapRange(undefined, 20, [{ label: 'years' }])
       expect(actual).toBe('< 20 years')
     })
 
     it('should age range above min age', () => {
-      const actual = mapAgeRange(0, undefined, [{ label: 'years' }])
+      const actual = mapRange(0, undefined, [{ label: 'years' }])
       expect(actual).toBe('> 0 years')
     })
 
     it('should age range between ages', () => {
-      const actual = mapAgeRange(0, 20, [{ label: 'years' }])
+      const actual = mapRange(0, 20, [{ label: 'years' }])
       expect(actual).toBe('0-20 years')
     })
   })
@@ -158,67 +169,9 @@ describe('templateMapper', () => {
     })
   })
 
-  describe('mapCollectionsDetailsTableContent', () => {
+  describe('getCollectionDetails', () => {
     it('should add details for collection and for sub collections', () => {
       const expected = {
-        Age: {
-          type: 'string-with-key',
-          value: '0-20 years'
-        },
-        Data_categories: {
-          value: [
-            'One type'
-          ]
-        },
-        Data_use: {
-          value: [
-            {
-              label: 'DUO Testlabel',
-              uri: 'https://external-link-to-duo-item'
-            },
-            {
-              label: 'DUO Testlabel',
-              uri: '#'
-            }
-          ]
-        },
-        Diagnosis_available: {
-          value: [
-            'Common cold',
-            'Mysterious illness',
-            'Instaneous death'
-          ]
-        },
-        Materials: {
-          value: [
-            'material1',
-            'material2'
-          ]
-        },
-        Sex: {
-          value: [
-            'male',
-            'female'
-          ]
-        },
-        Size: {
-          badgeColor: 'success',
-          type: 'list',
-          value: [
-            '777'
-          ]
-        },
-        Storage_temperatures: {
-          value: [
-            '10 degrees'
-          ]
-        },
-        Type: {
-          value: [
-            'type1',
-            'type2'
-          ]
-        },
         _meta: {
           name: 'meta'
         },
@@ -313,42 +266,75 @@ describe('templateMapper', () => {
         ],
         sub_collections: [
           {
-            Age: {
-              type: 'string-with-key',
-              value: undefined
-            },
-            Data_categories: {
-              value: [
-                'Biological samples'
-              ]
-            },
-            Data_use: {
-              value: []
-            },
-            Diagnosis_available: {
-              value: []
-            },
-            Materials: {
-              value: [
-                'Other'
-              ]
-            },
-            Sex: {
-              value: []
-            },
-            Size: {
-              badgeColor: 'success',
-              type: 'list',
-              value: [
-                '10.000 - 100.000'
-              ]
-            },
-            Storage_temperatures: {
-              value: []
-            },
-            Type: {
-              value: []
-            },
+            viewmodel: [
+              {
+                label: 'Id:',
+                type: 'string',
+                value: '1'
+              },
+              {
+                label: 'Website:',
+                type: 'hyperlink',
+                value: ''
+              },
+              {
+                badgeColor: 'info',
+                label: 'Size:',
+                type: 'object',
+                value: '10.000 - 100.000'
+              },
+              {
+                label: 'Available:',
+                type: 'int',
+                value: ''
+              },
+              {
+                label: 'Age:',
+                type: 'range',
+                value: ''
+              },
+              {
+                label: 'Type:',
+                type: 'mref',
+                value: []
+              },
+              {
+                label: 'Sex:',
+                type: 'categoricalmref',
+                value: []
+              },
+              {
+                badgeColor: 'secondary',
+                label: 'Materials:',
+                type: 'categoricalmref',
+                value: [
+                  'Other'
+                ]
+              },
+              {
+                label: 'Storage:',
+                type: 'categoricalmref',
+                value: []
+              },
+              {
+                badgeColor: 'danger',
+                label: 'Data:',
+                type: 'categoricalmref',
+                value: [
+                  'Biological samples'
+                ]
+              },
+              {
+                label: 'Diagnosis:',
+                type: 'mref',
+                value: []
+              },
+              {
+                label: 'Data use conditions:',
+                type: 'mref',
+                value: []
+              }
+            ],
             data_categories: [
               {
                 id: 'BIOLOGICAL_SAMPLES',
@@ -357,6 +343,7 @@ describe('templateMapper', () => {
             ],
             description: 'Description of test1',
             id: '1',
+            level: 1,
             materials: [
               {
                 id: 'OTHER',
@@ -375,42 +362,6 @@ describe('templateMapper', () => {
             sub_collections: []
           },
           {
-            Age: {
-              type: 'string-with-key',
-              value: undefined
-            },
-            Data_categories: {
-              value: [
-                'Biological samples'
-              ]
-            },
-            Data_use: {
-              value: []
-            },
-            Diagnosis_available: {
-              value: []
-            },
-            Materials: {
-              value: [
-                'Other'
-              ]
-            },
-            Sex: {
-              value: []
-            },
-            Size: {
-              badgeColor: 'success',
-              type: 'list',
-              value: [
-                '10.000 - 100.000'
-              ]
-            },
-            Storage_temperatures: {
-              value: []
-            },
-            Type: {
-              value: []
-            },
             data_categories: [
               {
                 id: 'BIOLOGICAL_SAMPLES',
@@ -418,6 +369,7 @@ describe('templateMapper', () => {
               }
             ],
             id: '2',
+            level: 1,
             materials: [
               {
                 id: 'OTHER',
@@ -435,41 +387,8 @@ describe('templateMapper', () => {
             },
             sub_collections: [
               {
-                Age: {
-                  type: 'string-with-key',
-                  value: undefined
-                },
-                Data_categories: {
-                  value: []
-                },
-                Data_use: {
-                  value: []
-                },
-                Diagnosis_available: {
-                  value: []
-                },
-                Materials: {
-                  value: [
-                    'Other'
-                  ]
-                },
-                Sex: {
-                  value: []
-                },
-                Size: {
-                  badgeColor: 'success',
-                  type: 'list',
-                  value: [
-                    '10.000 - 100.000'
-                  ]
-                },
-                Storage_temperatures: {
-                  value: []
-                },
-                Type: {
-                  value: []
-                },
                 id: '3',
+                level: 2,
                 materials: [
                   {
                     id: 'OTHER',
@@ -485,7 +404,142 @@ describe('templateMapper', () => {
                   id: '2',
                   name: 'Test 2'
                 },
-                sub_collections: []
+                sub_collections: [],
+                viewmodel: [
+                  {
+                    label: 'Id:',
+                    type: 'string',
+                    value: '3'
+                  },
+                  {
+                    label: 'Website:',
+                    type: 'hyperlink',
+                    value: ''
+                  },
+                  {
+                    badgeColor: 'info',
+                    label: 'Size:',
+                    type: 'object',
+                    value: '10.000 - 100.000'
+                  },
+                  {
+                    label: 'Available:',
+                    type: 'int',
+                    value: ''
+                  },
+                  {
+                    label: 'Age:',
+                    type: 'range',
+                    value: ''
+                  },
+                  {
+                    label: 'Type:',
+                    type: 'mref',
+                    value: []
+                  },
+                  {
+                    label: 'Sex:',
+                    type: 'categoricalmref',
+                    value: []
+                  },
+                  {
+                    badgeColor: 'secondary',
+                    label: 'Materials:',
+                    type: 'categoricalmref',
+                    value: [
+                      'Other'
+                    ]
+                  },
+                  {
+                    label: 'Storage:',
+                    type: 'categoricalmref',
+                    value: []
+                  },
+                  {
+                    label: 'Data:',
+                    type: 'categoricalmref',
+                    value: []
+                  },
+                  {
+                    label: 'Diagnosis:',
+                    type: 'mref',
+                    value: []
+                  },
+                  {
+                    label: 'Data use conditions:',
+                    type: 'mref',
+                    value: []
+                  }
+                ]
+              }
+            ],
+            viewmodel: [
+              {
+                label: 'Id:',
+                type: 'string',
+                value: '2'
+              },
+              {
+                label: 'Website:',
+                type: 'hyperlink',
+                value: ''
+              },
+              {
+                badgeColor: 'info',
+                label: 'Size:',
+                type: 'object',
+                value: '10.000 - 100.000'
+              },
+              {
+                label: 'Available:',
+                type: 'int',
+                value: ''
+              },
+              {
+                label: 'Age:',
+                type: 'range',
+                value: ''
+              },
+              {
+                label: 'Type:',
+                type: 'mref',
+                value: []
+              },
+              {
+                label: 'Sex:',
+                type: 'categoricalmref',
+                value: []
+              },
+              {
+                badgeColor: 'secondary',
+                label: 'Materials:',
+                type: 'categoricalmref',
+                value: [
+                  'Other'
+                ]
+              },
+              {
+                label: 'Storage:',
+                type: 'categoricalmref',
+                value: []
+              },
+              {
+                badgeColor: 'danger',
+                label: 'Data:',
+                type: 'categoricalmref',
+                value: [
+                  'Biological samples'
+                ]
+              },
+              {
+                label: 'Diagnosis:',
+                type: 'mref',
+                value: []
+              },
+              {
+                label: 'Data use conditions:',
+                type: 'mref',
+                value: []
               }
             ]
           }
@@ -497,9 +551,105 @@ describe('templateMapper', () => {
           {
             label: 'type2'
           }
+        ],
+        viewmodel: [
+          {
+            label: 'Id:',
+            type: 'string',
+            value: 'c-001'
+          },
+          {
+            label: 'Website:',
+            type: 'hyperlink',
+            value: ''
+          },
+          {
+            badgeColor: 'info',
+            label: 'Size:',
+            type: 'object',
+            value: '777'
+          },
+          {
+            label: 'Available:',
+            type: 'int',
+            value: ''
+          },
+          {
+            label: 'Age:',
+            type: 'range',
+            value: '0-20 years'
+          },
+          {
+            badgeColor: 'secondary',
+            label: 'Type:',
+            type: 'mref',
+            value: [
+              'type1',
+              'type2'
+            ]
+          },
+          {
+            badgeColor: 'danger',
+            label: 'Sex:',
+            type: 'categoricalmref',
+            value: [
+              'male',
+              'female'
+            ]
+          },
+          {
+            badgeColor: 'primary',
+            label: 'Materials:',
+            type: 'categoricalmref',
+            value: [
+              'material1',
+              'material2'
+            ]
+          },
+          {
+            badgeColor: 'success',
+            label: 'Storage:',
+            type: 'categoricalmref',
+            value: [
+              '10 degrees'
+            ]
+          },
+          {
+            badgeColor: 'info',
+            label: 'Data:',
+            type: 'categoricalmref',
+            value: [
+              'One type'
+            ]
+          },
+          {
+            badgeColor: 'secondary',
+            label: 'Diagnosis:',
+            type: 'mref',
+            value: [
+              'Common cold',
+              'Mysterious illness',
+              'Instaneous death'
+            ]
+          },
+          {
+            badgeColor: 'danger',
+            label: 'Data use conditions:',
+            type: 'mref',
+            value: [
+              {
+                label: 'DUO Testlabel',
+                uri: 'https://external-link-to-duo-item'
+              },
+              {
+                label: 'DUO Testlabel',
+                uri: '#'
+              }
+            ]
+          }
         ]
       }
-      const actual = mapCollectionsDetailsTableContent(collectionsReport)
+      const actual = getCollectionDetails(collectionsReport)
       expect(actual).toStrictEqual(expected)
     })
   })

@@ -58,12 +58,39 @@ you can add these to the view using the following configuration:
 ```js
 "appOptions": {
     ...
-    "collectionColumns": [{ "label": "Type:", "column": "type" }],
+    "collectionColumns": [{ "label": "Size:", "column": "order_of_magnitude", "type": "categoricalmref" }],
     ...
   }
 ```
 
-Label is the label to show and column is the column name of the collection entity.
+Label is the label to show, column is the column name of the collection entity and type is the data type. If you do not specify a type, it will default to a string.
+
+### Types
+
+Currently the following types are available:
+
+- mref / categoricalmref (renders as badges)
+- string
+  - add prefix or suffix to the string like:
+    - ```"prefix": "has"``` 
+    - ```"suffix": "samples"```
+> results in has X samples (where X is the value of the string)
+- hyperlink
+- range
+  - supply in the config:
+    - ```"min": "column_with_min_value"``` e.g: 'age_low'
+    - ```"max": "column_with_max_value"``` e.g: 'age_high'
+    - ```"unit": "column_with_unit_value"``` e.g: 'age_unit'
+
+- object
+  - ```  { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size' }```
+
+> order_of_magnitude query resolves to multiple values as a JSON object, here you can specify which property you want to show.
+
+#### Optionals
+- optionally you can add ```"display": "badge"``` to display it as a badge
+
+### Default config
 
 You can find the complete default list [here](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/config/initialCollectionColumns.js) or in the runtimeOptions
 

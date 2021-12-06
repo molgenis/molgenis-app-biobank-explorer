@@ -38,8 +38,8 @@
                   <collection-title
                     :title="collection.name"
                     :id="collection.id"/>
-                  <report-collection-details
-                    :collection="collection"></report-collection-details>
+
+                  <collection-view-generator :collection="collection" />
                 </div>
               </div>
               <!-- Right side card -->
@@ -85,9 +85,10 @@ import ReportDescription from '../components/report-components/ReportDescription
 import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
-import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
+import CollectionViewGenerator from '../components/generators/CollectionViewGenerator.vue'
+
 import {
-  mapCollectionsDetailsTableContent,
+  getCollectionDetails,
   mapContactInfo,
   mapNetworkInfo,
   mapObjArray
@@ -102,7 +103,7 @@ export default {
     ReportDescription,
     ReportDetailsList,
     Loading,
-    ReportCollectionDetails,
+    CollectionViewGenerator,
     CollectionTitle
   },
   data () {
@@ -134,8 +135,8 @@ export default {
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
         ? this.biobank.collections
-          .filter((it) => !it.parent_collection)
-          .map((col) => mapCollectionsDetailsTableContent(col))
+          .filter(it => !it.parent_collection)
+          .map(col => getCollectionDetails(col))
         : []
     },
     quality () {
@@ -156,7 +157,7 @@ export default {
             badgeColor: 'warning',
             type: 'list',
             value: this.biobank.covid19biobank.map(
-              (covidItem) => covidItem.label || covidItem.name
+              covidItem => covidItem.label || covidItem.name
             )
           }
         }

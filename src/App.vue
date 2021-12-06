@@ -19,6 +19,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
+  name: 'biobank-explorer',
   computed: {
     ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading' })
   },
@@ -47,7 +48,6 @@ export default {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
     this.GetQualityStandardInformation()
-  },
-  name: 'biobank-explorer'
+  }
 }
 </script>
