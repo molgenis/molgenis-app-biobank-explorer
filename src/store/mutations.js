@@ -235,6 +235,7 @@ export default {
    * @param params
    */
   MapQueryToState (state, ie11Query) {
+    console.log(state.route.query)
     // bookmark has been altered in another view
     if (!state.cartValid) return
     const query = ie11Query || state.route.query

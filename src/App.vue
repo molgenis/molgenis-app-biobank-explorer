@@ -43,6 +43,7 @@ export default {
   },
   beforeMount () {
     this.ConfigureFilters()
+    this.MapQueryToState()
   },
   mounted () {
     this.GetNegotiatorType()
