@@ -53,20 +53,20 @@ export const getName = contact => {
 }
 
 export const mapRange = (min, max, unit) => {
-  let ageRange = ''
+  let range = ''
   if ((min || min === 0) && max) {
-    ageRange = `${min}-${max} `
+    range = `${min}-${max} `
   } else if (min || min === 0) {
-    ageRange = `> ${min} `
+    range = `> ${min} `
   } else if (max) {
-    ageRange = `< ${max} `
+    range = `< ${max} `
   }
-  if (ageRange.length > 0 && unit.length) {
-    ageRange += unit.map(unit => unit.label).join()
+  if (range.length > 0 && unit.length) {
+    range += unit.map(unit => unit.label).join()
   } else {
-    ageRange = undefined
+    range = undefined
   }
-  return ageRange
+  return range
 }
 
 export const getCollectionModel = (collection) => {
