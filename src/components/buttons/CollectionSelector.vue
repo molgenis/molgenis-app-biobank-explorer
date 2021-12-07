@@ -10,7 +10,7 @@
       :value="false"
       hidden/>
     <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary" :for="checkboxIdentifier">
-      <span class="mr-2">Add to selection</span>
+      <span>Add to selection</span>
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -22,7 +22,7 @@
       v-if="!iconOnly"
       class="btn remove-from-cart-label btn-outline-danger"
       :for="checkboxIdentifier">
-      <span class="mr-2">Remove from selection</span>
+      <span>Remove from selection</span>
     </label>
     <label
       v-else

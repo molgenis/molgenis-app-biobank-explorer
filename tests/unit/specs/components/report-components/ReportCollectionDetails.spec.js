@@ -88,6 +88,16 @@ const expected = {
           value: ''
         },
         {
+          label: 'Donor size:',
+          type: 'object',
+          value: ''
+        },
+        {
+          label: 'Donors:',
+          type: 'int',
+          value: ''
+        },
+        {
           label: 'Age:',
           type: 'range',
           value: ''
@@ -184,6 +194,16 @@ const expected = {
           value: ''
         },
         {
+          label: 'Donor size:',
+          type: 'object',
+          value: ''
+        },
+        {
+          label: 'Donors:',
+          type: 'int',
+          value: ''
+        },
+        {
           label: 'Age:',
           type: 'range',
           value: ''
@@ -251,6 +271,16 @@ const expected = {
     },
     {
       label: 'Available:',
+      type: 'int',
+      value: ''
+    },
+    {
+      label: 'Donor size:',
+      type: 'object',
+      value: ''
+    },
+    {
+      label: 'Donors:',
       type: 'int',
       value: ''
     },
