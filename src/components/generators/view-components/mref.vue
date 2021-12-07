@@ -1,12 +1,12 @@
 <template>
   <tr v-if="attribute && attribute.value && attribute.value.length">
-    <th scope="row" class="pr-1 align-top">{{ displayName(attribute) }}</th>
+    <th scope="row" class="pr-1 align-top text-nowrap">{{ displayName(attribute) }}</th>
     <td>
       <template v-if="dataContainsUri">
         <a v-for="(item, index) in attribute.value"
           :href="item.uri"
           target="_blank"
-          class="m-1 badge"
+          class="m-1 badge text-break"
           :class="'badge-' + badgeColor"
           :key="`${index}-${displayName(item)}`">
           {{ displayName(item) }}
@@ -16,7 +16,7 @@
       <template v-else>
         <span
           v-for="(value, index) in attribute.value"
-          class="m-1 badge"
+          class="m-1 badge text-break"
           :key="index"
           :class="'badge-' + badgeColor">
           {{ value }}
@@ -55,11 +55,15 @@ export default {
 
 <style scoped>
 .badge {
+  white-space: normal;
   transition: transform 0.1s;
   box-shadow: 0 0 0 1px white;
+  text-align: left;
 }
 .badge:hover {
+  position: relative;
   transform: scale(1.4);
+  z-index: 9000;
 }
 .fa-external-link {
   top: 1px;

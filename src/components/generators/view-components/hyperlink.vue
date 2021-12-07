@@ -1,6 +1,6 @@
 <template>
   <tr v-if="attribute && attribute.value && attribute.value.length">
-    <th scope="row" class="pr-1 align-top">{{ displayName(attribute) }}</th>
+    <th scope="row" class="pr-1 align-top text-nowrap">{{ displayName(attribute) }}</th>
     <td>
       <span>
         <a target="_blank" :href="attribute.value">{{ attribute.value }}</a>
