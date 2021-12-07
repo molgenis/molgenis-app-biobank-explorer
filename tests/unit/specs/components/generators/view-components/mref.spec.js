@@ -20,7 +20,10 @@ describe('Generator view-components', () => {
       // remove whitespace and newlines for easy check
       const flattendHtml = wrapper.html().replace(/\s/gmi, '')
 
-      expect(flattendHtml).toBe('<tr><thscope="row"class="pr-1align-top">Count:</th><td><spanclass="m-1badgebadge-info">1</span><spanclass="m-1badgebadge-info">2</span><spanclass="m-1badgebadge-info">3</span></td></tr>')
+      expect(flattendHtml.includes('>Count:<')).toBeTruthy()
+      expect(flattendHtml.includes('>1<')).toBeTruthy()
+      expect(flattendHtml.includes('>2<')).toBeTruthy()
+      expect(flattendHtml.includes('>3<')).toBeTruthy()
     })
 
     it('can create a tr with badges for a categorical mref attribute object with id/label/name and a uri', () => {

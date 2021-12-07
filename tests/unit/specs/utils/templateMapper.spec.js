@@ -289,6 +289,16 @@ describe('templateMapper', () => {
                 value: ''
               },
               {
+                label: 'Donor size:',
+                type: 'object',
+                value: ''
+              },
+              {
+                label: 'Donors:',
+                type: 'int',
+                value: ''
+              },
+              {
                 label: 'Age:',
                 type: 'range',
                 value: ''
@@ -428,6 +438,16 @@ describe('templateMapper', () => {
                     value: ''
                   },
                   {
+                    label: 'Donor size:',
+                    type: 'object',
+                    value: ''
+                  },
+                  {
+                    label: 'Donors:',
+                    type: 'int',
+                    value: ''
+                  },
+                  {
                     label: 'Age:',
                     type: 'range',
                     value: ''
@@ -492,6 +512,16 @@ describe('templateMapper', () => {
               },
               {
                 label: 'Available:',
+                type: 'int',
+                value: ''
+              },
+              {
+                label: 'Donor size:',
+                type: 'object',
+                value: ''
+              },
+              {
+                label: 'Donors:',
                 type: 'int',
                 value: ''
               },
@@ -571,6 +601,16 @@ describe('templateMapper', () => {
           },
           {
             label: 'Available:',
+            type: 'int',
+            value: ''
+          },
+          {
+            label: 'Donor size:',
+            type: 'object',
+            value: ''
+          },
+          {
+            label: 'Donors:',
             type: 'int',
             value: ''
           },

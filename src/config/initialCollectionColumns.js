@@ -3,6 +3,8 @@ const initialCollectionColumns = [
   { label: 'Website:', column: 'url', type: 'hyperlink' },
   { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size', display: 'badge' },
   { label: 'Available:', column: 'size', type: 'int', display: 'badge', suffix: 'samples' },
+  { label: 'Donor size:', column: 'order_of_magnitude_donors', type: 'object', property: 'size', display: 'badge' },
+  { label: 'Donors:', column: 'number_of_donors', type: 'int', display: 'badge', suffix: 'donors' },
   { label: 'Age:', type: 'range', min: 'age_low', max: 'age_high', unit: 'age_unit' },
   { label: 'Type:', column: 'type', type: 'mref' },
   { label: 'Sex:', column: 'sex', type: 'categoricalmref' },
