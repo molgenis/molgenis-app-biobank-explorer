@@ -139,7 +139,7 @@ describe('store', () => {
         state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.id=in=(id:G71,id:ORPHA:10,id:ORPHA:100)'
+        const expected = 'diagnosis_available=in=(id:G71,id:ORPHA:10,id:ORPHA:100)'
 
         expect(actual).toBe(expected)
       })
@@ -176,7 +176,7 @@ describe('store', () => {
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);diagnosis_available.id==id:G71;diagnosis_available.id==id:ORPHA:10;diagnosis_available.id==id:ORPHA:100'
+        const expected = 'country=in=(NL,BE);diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100'
 
         expect(actual).toBe(expected)
       })
@@ -188,7 +188,7 @@ describe('store', () => {
         state.filters.satisfyAll = ['diagnosis_available', 'collection_quality']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available.id==id:G71;diagnosis_available.id==id:ORPHA:10;diagnosis_available.id==id:ORPHA:100;id==collection1;id==collection2'
+        const expected = 'diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100;id==collection1;id==collection2'
 
         expect(actual).toBe(expected)
       })
