@@ -1,5 +1,5 @@
 import getters from '../../../../src/store/getters'
-import { mockFilterOptionDictionary, mockFilters, mockGetFilterDefinitions, mockSelectedCollections, mockState } from '../mockData'
+import { mockFilterOptionDictionary, mockFilters, mockSelectedCollections, mockState } from '../mockData'
 
 let state
 
@@ -51,7 +51,7 @@ describe('store', () => {
         // push a selection on the state, where there is no label from, to trigger lookup
         state.filters.selections.diagnosis_available = ['ORPHA:352530']
 
-        expect(getters.getHumanReadableString(state, { getFilterDefinitions: mockGetFilterDefinitions }))
+        expect(getters.getHumanReadableString(state))
           .toBe('Countries: Europe and Biobank collaboration type(s): Non-commercial use and Disease type(s): [ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome')
       })
     })
@@ -242,17 +242,6 @@ describe('store', () => {
       })
     })
 
-    describe('showCountryFacet', () => {
-      it('should return true if showCountryFacet setting is set to true', () => {
-        const state = { showCountryFacet: true }
-        expect(getters.showCountryFacet(state)).toEqual(true)
-      })
-      it('should return false if showCountryFacet setting is set to false', () => {
-        const state = { showCountryFacet: false }
-        expect(getters.showCountryFacet(state)).toEqual(false)
-      })
-    })
-
     describe('getErrorMessage', () => {
       it('should return undefined if no error is set', () => {
         const state = { error: undefined }
@@ -325,6 +314,15 @@ describe('store', () => {
         expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
         const biobankQualitySatisfyAllInfo = getters.satisfyAllCollectionQuality(state)
         expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
+      })
+    })
+
+    describe('Filters', () => {
+      it('should exclude the country filters if the country filter facet is in the disabledFilters list', () => {
+        state = { ...mockState(), disabledFilters: ['country'] }
+
+        const filters = getters.getFilters(state)
+        expect(filters.find((filter) => filter.name === 'country')).toEqual(undefined)
       })
     })
   })

@@ -5,7 +5,8 @@ pipeline {
     }
   }
   environment {
-    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/molgenis/molgenis-frontend"
+    IMAGE_NAME = "molgenis/bbmri-directory"
+    LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
   }
   stages {
     stage('Prepare') {
@@ -22,6 +23,7 @@ pipeline {
             env.SAUCE_CRED_PSW = sh(script: 'vault read -field=value secret/ops/token/saucelabs', returnStdout: true)
             env.REGISTRY_CRED_USR = sh(script: 'vault read -field=username secret/ops/account/nexus', returnStdout: true)
             env.REGISTRY_CRED_PSW = sh(script: 'vault read -field=password secret/ops/account/nexus', returnStdout: true)
+            env.DOCKERHUB_AUTH = sh(script: 'vault read -field=value secret/gcc/token/dockerhub', returnStdout: true)
             env.NEXUS_AUTH = sh(script: 'vault read -field=base64 secret/ops/account/nexus', returnStdout: true)
           }
         }
@@ -65,7 +67,7 @@ pipeline {
                 }
                 container (name: 'kaniko', shell: '/busybox/sh') {
                     sh "#!/busybox/sh\nmkdir -p ${DOCKER_CONFIG}"
-                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
+                    sh "#!/busybox/sh\necho '{\"auths\": {\"registry.molgenis.org\": {\"auth\": \"${NEXUS_AUTH}\"}, \"https://index.docker.io/v1/\": {\"auth\": \"${DOCKERHUB_AUTH}\"}, \"registry.hub.docker.com\": {\"auth\": \"${DOCKERHUB_AUTH}\"}}}' > ${DOCKER_CONFIG}/config.json"
                     sh "#!/busybox/sh\n/kaniko/executor --context ${WORKSPACE} --destination ${LOCAL_REPOSITORY}:${TAG}"
                 }
             }
@@ -93,7 +95,8 @@ pipeline {
                     "--no-prompt " +
                     "--set environment=dev " +
                     "--set image.tag=${TAG} " +
-                    "--set image.repository=${env.LOCAL_REGISTRY} " +
+                    "--set image.repository=${LOCAL_REGISTRY} " +
+                    "--set image.name=${IMAGE_NAME} " +
                     "--set proxy.backend.service.targetNamespace=molgenis-abcde " +
                     "--set proxy.backend.service.targetRelease=master " +
                     "--set image.pullPolicy=Always " +

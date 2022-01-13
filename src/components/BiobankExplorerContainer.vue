@@ -5,11 +5,7 @@
     </div>
 
     <div class="col-md-9">
-      <div class="row mb-3">
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          class="mt-1 ml-3"
-          bookmark/>
+      <div class="row">
         <div class="col-md-8">
           <div v-if="isIE11">
             <input
@@ -37,7 +33,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4"></div>
+        <collection-select-all
+          v-if="!loading && foundCollectionIds.length"
+          class="col-md-4 text-right"
+          bookmark/>
       </div>
       <div class="row">
         <div class="col-md-12" v-if="!loading">
@@ -102,7 +101,7 @@
                   @click="
                     RemoveCollectionsFromSelection({
                       collections: [collection],
-                      router: $router,
+                      bookmark: true,
                     })
                   "></span>
               </div>
@@ -143,9 +142,9 @@
 </template>
 
 <script>
-import { CartSelectionToast } from '@molgenis-ui/components-library'
+import CartSelectionToast from './popovers/CartSelectionToast.vue'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
-import FilterContainer from './filters/FilterContainer'
+import FilterContainer from './filters/containers/FilterContainer'
 import ResultHeader from './ResultHeader'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
@@ -277,7 +276,8 @@ export default {
     removeAllCollections () {
       this.hideModal()
       this.RemoveCollectionsFromSelection({
-        collections: this.currentSelectedCollections
+        collections: this.currentSelectedCollections,
+        bookmark: true
       })
     },
     hideModal () {
@@ -316,9 +316,8 @@ export default {
   },
   mounted () {
     // check if collections have been added off-screen.
-    if (this.selectedCollections.length) {
-      createBookmark(this.activeFilters, this.selectedCollections)
-    }
+
+    createBookmark(this.activeFilters, this.selectedCollections)
   }
 }
 </script>

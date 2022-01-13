@@ -1,4 +1,7 @@
 /* eslint-disable camelcase */
+import state from '../store/state'
+import { generateBadgeColor } from '../utils/generatorUtils'
+
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]
@@ -6,10 +9,19 @@ export const getSize = obj => {
       ? [obj.order_of_magnitude.size]
       : []
 }
+
+export const mapToString = (object, property, prefix, suffix) => {
+  if (!object) return ''
+
+  prefix = prefix ? `${prefix} ` : ''
+  suffix = suffix ? ` ${suffix}` : ''
+  return object[property] ? `${prefix}${object[property]}${suffix}` : ''
+}
+
 export const mapObjArray = (objects) => {
   if (!objects) return []
-  if (!objects.some(o => o.uri)) return objects.map(item => item.label)
-  else return objects.map(item => ({ label: item.label, uri: item.uri || '#' }))
+  if (!objects.some(o => o.uri)) return objects.map(item => item.label || item.name)
+  else return objects.map(item => ({ label: item.label || item.name, uri: item.uri || '#' }))
 }
 
 export const mapUrl = url =>
@@ -40,71 +52,92 @@ export const getName = contact => {
   return name !== '' ? name.trim() : undefined
 }
 
-export const mapAgeRange = (minAge, maxAge, ageUnit) => {
-  let ageRange = ''
-  if ((minAge || minAge === 0) && maxAge) {
-    ageRange = `${minAge}-${maxAge} `
-  } else if (minAge || minAge === 0) {
-    ageRange = `> ${minAge} `
-  } else if (maxAge) {
-    ageRange = `< ${maxAge} `
+export const mapRange = (min, max, unit) => {
+  let range = ''
+  if ((min || min === 0) && max) {
+    range = `${min}-${max} `
+  } else if (min || min === 0) {
+    range = `> ${min} `
+  } else if (max) {
+    range = `< ${max} `
   }
-  if (ageRange.length > 0 && ageUnit.length) {
-    ageRange += ageUnit.map(unit => unit.label).join()
+  if (range.length > 0 && unit.length) {
+    range += unit.map(unit => unit.label).join()
   } else {
-    ageRange = undefined
+    range = undefined
   }
-  return ageRange
+  return range
 }
 
-export const mapCollectionsDetailsTableContent = collection => {
+export const getCollectionModel = (collection) => {
+  // for generating badgecolors for (categorical)mrefs
+  let previousBadgeColor = -1
+  const attributes = []
+
+  for (const columnInfo of state.collectionColumns) {
+    let attributeValue
+
+    switch (columnInfo.type) {
+      case 'range': {
+        const { min, max, unit } = columnInfo
+        attributeValue = mapRange(collection[min], collection[max], collection[unit]) || ''
+        break
+      }
+      case 'object': {
+        attributeValue = mapToString(collection[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
+        break
+      }
+      case 'mref':
+      case 'categoricalmref': {
+        attributeValue = mapObjArray(collection[columnInfo.column])
+        break
+      }
+      default: {
+        attributeValue = mapToString(collection, columnInfo.column, columnInfo.prefix, columnInfo.suffix)
+      }
+    }
+
+    const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
+
+    // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
+    if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {
+      const generatedBadgeColor = generateBadgeColor(previousBadgeColor)
+      previousBadgeColor = generatedBadgeColor.prevBadgeColor
+      attribute.badgeColor = generatedBadgeColor.badgeColor
+    }
+    attributes.push(attribute)
+  }
+
+  return attributes
+}
+
+const mapSubcollections = (collections, level) => {
+  const subCollections = []
+
+  for (const collection of collections) {
+    if (collection.sub_collections && collection.sub_collections.length) {
+      subCollections.push({
+        level,
+        ...collection,
+        viewmodel: getCollectionModel(collection),
+        sub_collections: mapSubcollections(collection.sub_collections, ++level)
+      })
+    } else {
+      subCollections.push({
+        level,
+        ...collection,
+        viewmodel: getCollectionModel(collection)
+      })
+    }
+  }
+  return subCollections
+}
+
+export const getCollectionDetails = collection => {
   return {
     ...collection,
-    sub_collections: collection.sub_collections ? collection.sub_collections.map(subCol => mapCollectionsDetailsTableContent(subCol)) : [],
-    Size: {
-      value: getSize(collection),
-      type: 'list',
-      badgeColor: 'success'
-    },
-    Age: {
-      value: mapAgeRange(collection.age_low, collection.age_high, collection.age_unit),
-      type: 'string-with-key'
-    },
-    Type: {
-      value: mapObjArray(collection.type),
-      type: 'list',
-      badgeColor: 'info'
-    },
-    Sex: {
-      value: mapObjArray(collection.sex),
-      type: 'list',
-      badgeColor: 'secondary'
-    },
-    Materials: {
-      value: mapObjArray(collection.materials),
-      type: 'list',
-      badgeColor: 'danger'
-    },
-    Storage: {
-      value: mapObjArray(collection.storage_temperatures),
-      type: 'list',
-      badgeColor: 'warning'
-    },
-    Data: {
-      value: mapObjArray(collection.data_categories),
-      type: 'list',
-      badgeColor: 'info'
-    },
-    Diagnosis: {
-      value: mapObjArray(collection.diagnosis_available),
-      type: 'list',
-      badgeColor: 'primary'
-    },
-    DataUse: {
-      value: mapObjArray(collection.data_use),
-      type: 'list',
-      badgeColor: 'success'
-    }
+    viewmodel: getCollectionModel(collection),
+    sub_collections: mapSubcollections(collection.sub_collections, 1)
   }
 }
 

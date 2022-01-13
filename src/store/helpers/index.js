@@ -14,11 +14,14 @@ export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\
 export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
+    createCustomRSQLQuery(state),
     createInQuery('country', state.filters.selections.country || []),
     createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
     createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
     createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
-    diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available.id', state.filters.satisfyAll.includes('diagnosis_available')),
+    // diagnosis_availabe uses a dynamic decorator to do automatic tree expansion. Therefor it MUST be on the column from collection itself.
+    // And NOT on the column from the EntityType (table) it references to
+    diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available', state.filters.satisfyAll.includes('diagnosis_available')),
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
     createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
@@ -29,6 +32,19 @@ export const createRSQLQuery = (state) => transformToRSQL({
     }] : []
   ])
 })
+
+function createCustomRSQLQuery (state) {
+  const activeFilterSelection = Object.keys(state.filters.selections)
+  const queries = []
+
+  for (const customFacet of state.customCollectionFilterFacets) {
+    if (activeFilterSelection.includes(customFacet.columnName)) {
+      queries.push(createQuery(state.filters.selections[customFacet.columnName], customFacet.columnName, state.filters.satisfyAll.includes(customFacet.columnName)))
+    }
+  }
+
+  return flatten(queries)
+}
 
 export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
@@ -64,7 +80,7 @@ function createHistoryJournal (state) {
   return journal.substr(0, journal.length - 2) // remove the last \r\n
 }
 
-export const getHumanReadableString = (state, { getFilterDefinitions }) => {
+export const getHumanReadableString = (state) => {
   const activeFilters = Object.keys(state.filters.selections)
   let humanReadableString = ''
   const additionText = ' and '
@@ -73,7 +89,7 @@ export const getHumanReadableString = (state, { getFilterDefinitions }) => {
   const humanReadableStart = {}
 
   // Get all the filterdefinitions for current active filters and make a dictionary name: humanreadable
-  getFilterDefinitions.filter(fd => activeFilters.includes(fd.name))
+  state.filterFacets.filter(fd => activeFilters.includes(fd.name))
     .forEach(filterDefinition => { humanReadableStart[filterDefinition.name] = filterDefinition.humanReadableString })
 
   // Extract filternames for which we have the labels for

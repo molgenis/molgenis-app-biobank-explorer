@@ -9,12 +9,10 @@
       :checked="allCollectionsSelected"
       hidden/>
     <label class="add-to-cart-label btn btn-outline-secondary" for="select-deselect-all">
-      <span class="mr-2">Select all collections</span>
-      <span class="fa fa-plus"></span>
+      <span>Select all collections</span>
     </label>
     <label class="remove-from-cart-label btn btn-outline-danger" for="select-deselect-all">
-      <span class="mr-2">Deselect all collections</span>
-      <span class="fa fa-times"></span>
+      <span>Deselect all collections</span>
     </label>
   </div>
 </template>

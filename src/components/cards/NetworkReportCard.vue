@@ -39,7 +39,7 @@
                       <div v-for="(collection, index) in collections" :key="collection.id">
                         <hr v-if="index"/>
                          <collection-title :title="collection.name" :id="collection.id"  />
-                        <report-collection-details :collection="collection"></report-collection-details>
+                        <collection-view-generator :collection="collection" />
                       </div>
                     </div>
                   </b-tab>
@@ -93,13 +93,13 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportTitle from '../report-components/ReportTitle.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-import ReportCollectionDetails from '../report-components/ReportCollectionDetails.vue'
+import CollectionViewGenerator from '../generators/CollectionViewGenerator.vue'
 import CollectionTitle from '../report-components/CollectionTitle.vue'
-import { mapNetworkData, mapContactInfo, mapCollectionsDetailsTableContent } from '../../utils/templateMapper'
+import { mapNetworkData, mapContactInfo, getCollectionDetails } from '../../utils/templateMapper'
 
 export default {
   name: 'NetworkReportCard',
-  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, ReportCollectionDetails, CollectionTitle },
+  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, CollectionTitle, CollectionViewGenerator },
   methods: {
     ...mapActions(['GetNetworkReport']),
     back () {
@@ -119,7 +119,7 @@ export default {
     },
     collections () {
       return this.networkReport.collections ? this.networkReport.collections.filter(
-        (collection) => { return !collection.parentCollection }).map(col => mapCollectionsDetailsTableContent(col)) : []
+        (collection) => { return !collection.parentCollection }).map(col => getCollectionDetails(col)) : []
     },
     biobanks () {
       return this.networkReport.biobanks

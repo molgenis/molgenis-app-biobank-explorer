@@ -25,7 +25,7 @@
 
 <script>
 /* istanbul ignore file */
-import { SatisfyAllCheckbox } from '@molgenis-ui/components-library'
+import SatisfyAllCheckbox from '../micro-components/SatisfyAllCheckbox'
 
 export default {
   name: 'CovidFilter',
