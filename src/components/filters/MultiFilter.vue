@@ -217,7 +217,7 @@ export default {
       }
 
       if (!queryValue || !queryValue.length) {
-        this.inputOptions = this.sort(this.initialOptions)
+        this.inputOptions = this.sort(this.initialOptions.concat(this.inputOptions))
         return
       }
 
@@ -249,27 +249,6 @@ export default {
       const selectedOptions = optionsArray.filter(option =>
         this.selection.includes(option.value)
       )
-
-      notSelectedOptions.sort((a, b) => {
-        if (
-          !this.selection.includes(a.value) ||
-          !this.selection.includes(b.value)
-        ) {
-          return 0
-        } else if (
-          this.selection.includes(a.value) &&
-          !this.selection.includes(b.value)
-        ) {
-          return 1
-        } else if (
-          !this.selection.includes(a.value) &&
-          this.selection.includes(b.value)
-        ) {
-          return 1
-        } else {
-          return -1
-        }
-      })
 
       const allOptions = selectedOptions.concat(notSelectedOptions)
       return this.deduplicateOptions(allOptions)
@@ -369,5 +348,10 @@ export default {
 .card-link {
   font-size: small;
   font-style: italic;
+}
+
+/* the focus on checkbox was cut off, this fixes it */
+::v-deep .custom-control {
+  padding-left: 1.65rem;
 }
 </style>
