@@ -41,6 +41,7 @@ export default {
   qualityStandardsDictionary: {},
   nonCommercialCollections: [],
   selectedCollections: [],
+  dynamicFilters: {}, // holds data for adaptive filters if flag is set in filterDefinitions. Set by "resetFilters" in mutations using dynamicFilter.
   filters: {
     selections: {},
     satisfyAll: [],
