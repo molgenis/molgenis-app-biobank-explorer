@@ -9,8 +9,8 @@
       :checked="checkboxState"
       :value="false"
       hidden/>
-    <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary" :for="checkboxIdentifier">
-      <span>Add to selection</span>
+    <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary px-2" :for="checkboxIdentifier">
+      <span>Add</span>
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -20,9 +20,9 @@
     </label>
     <label
       v-if="!iconOnly"
-      class="btn remove-from-cart-label btn-outline-danger"
+      class="btn remove-from-cart-label btn-outline-danger px-2"
       :for="checkboxIdentifier">
-      <span>Remove from selection</span>
+      <span>Remove</span>
     </label>
     <label
       v-else

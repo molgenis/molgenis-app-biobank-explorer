@@ -23,6 +23,7 @@
             <div class="row">
               <div class="col-md-8">
                 <p><b>Id: </b>{{ biobank.id }}</p>
+                <p><b>PID: </b>{{ biobank.pid }}</p>
                 <report-description
                   :description="biobank.description"
                   :maxLength="500"></report-description>
