@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions } from './filterOptions'
+import store from '../store'
 
 const filterDefinitions = (state) => [
   {
@@ -57,7 +58,9 @@ const filterDefinitions = (state) => [
     satisfyAll: state.filters.satisfyAll.includes('materials'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Material type(s):'
+    humanReadableString: 'Material type(s):',
+    optionsFilter: store.getters.dynamicFilters.materials,
+    dynamic: true
   },
   {
     component: 'CheckboxFilter',
@@ -69,7 +72,9 @@ const filterDefinitions = (state) => [
     initiallyCollapsed: !state.route.query.country,
     filters: state.filters.selections.country,
     maxVisibleOptions: 25,
-    humanReadableString: 'Countries:'
+    humanReadableString: 'Countries:',
+    optionsFilter: store.getters.dynamicFilters.country,
+    dynamic: true
   },
   {
     component: 'CheckboxFilter',

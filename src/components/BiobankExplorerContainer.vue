@@ -240,6 +240,10 @@ export default {
     isPodium: {
       immediate: true,
       handler: 'GetPodiumCollections'
+    },
+    activeFilters: {
+      immediate: true,
+      handler: 'GetFilterReduction'
     }
   },
   methods: {
@@ -249,7 +253,8 @@ export default {
       'GetBiobankIds',
       'GetPodiumCollections',
       'GetBiobankIdsForQuality',
-      'GetCollectionIdsForQuality'
+      'GetCollectionIdsForQuality',
+      'GetFilterReduction'
     ]),
     isNonCommercialCollection (collectionId) {
       return this.nonCommercialCollections.indexOf(collectionId) >= 0

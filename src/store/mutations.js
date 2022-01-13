@@ -80,6 +80,21 @@ export default {
 
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
+  ResetDynamicFilters (state, filters) {
+    for (var filterName in filters) {
+      // state.dynamicFilters[filters[filterName]] = []
+      Vue.set(state.dynamicFilters, filters[filterName], [])
+    }
+  },
+  SetFilterReduction (state, load) {
+    // unpack load and push item.id OR item.name
+    // to state[filtername] (which is initialized as list)
+    const filtername = load.filter
+    state.dynamicFilters[filtername] = []
+    load.options.forEach((item) => {
+      state.dynamicFilters[filtername].push(item.id || item.name)
+    })
+  },
   /**
    * Reset all filters in the state
    */
