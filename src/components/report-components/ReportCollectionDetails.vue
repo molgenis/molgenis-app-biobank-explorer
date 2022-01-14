@@ -1,7 +1,7 @@
 <template>
   <div>
     <collection-selector
-      class="mb-2"
+      class="mb-2 float-right"
       v-if="isTopLevelCollection"
       :collectionData="collection"/>
 
