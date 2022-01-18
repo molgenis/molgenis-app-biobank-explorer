@@ -17,6 +17,7 @@
         v-bind="filter"
         @input="(value) => filterChange(filter.name, value)"
         @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
+        :optionsFilter="dynamicFilters[filter.name]"
         :returnTypeAsObject="true"
         :bulkOperation="true">
       </component>
@@ -45,7 +46,7 @@ export default {
   },
   computed: {
     ...mapState(['disabledFilters']),
-    ...mapGetters(['activeFilters', 'getFilters']),
+    ...mapGetters(['activeFilters', 'getFilters', 'dynamicFilters']),
     search: {
       get () {
         return this.activeFilters.search

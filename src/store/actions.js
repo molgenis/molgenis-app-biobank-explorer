@@ -138,10 +138,11 @@ export default {
         commit('SetError', error)
       })
     }
+
     // prepare baseUrl and set list for dynamic filters that will be updated
     const baseUrl = '/api/v2/rd_connect_collections'
     const dynamicFilters = []
-    const dynFilt = getters.getFilterDefinitions
+    const dynFilt = getters.getFilters
 
     for (const filter in dynFilt) {
       if (dynFilt[filter].dynamic) {
@@ -160,6 +161,8 @@ export default {
     for (const filter in dynamicFilters) {
       const filterName = dynamicFilters[filter]
       const unique = `?aggs=x==${filterName};distinct==${filterName}`
+      // const unique = `?distinct==${filterName}`
+
       var additionalFilters = '&q='
 
       for (const activeFilter in getters.activeFilters) {

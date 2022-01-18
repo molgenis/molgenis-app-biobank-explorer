@@ -89,6 +89,7 @@ export default {
   SetFilterReduction (state, load) {
     // unpack load and push item.id OR item.name
     // to state[filtername] (which is initialized as list)
+    // ToDO create array, push once to state
     const filtername = load.filter
     state.dynamicFilters[filtername] = []
     load.options.forEach((item) => {
