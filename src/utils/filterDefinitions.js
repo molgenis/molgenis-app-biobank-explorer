@@ -156,17 +156,18 @@ const filterDefinitions = (state) => [
   },
   {
     component: 'CheckboxFilter',
-    name: 'dataType',
+    name: 'data_categories',
     label: 'Data types',
     type: 'checkbox-filter',
     table: 'eu_bbmri_eric_data_types',
-    options: genericFilterOptions('eu_bbmri_eric_data_types', 'dataType'),
+    options: genericFilterOptions('eu_bbmri_eric_data_types', 'data_categories'),
     initiallyCollapsed: !state.route.query.dataType,
     filters: state.filters.selections.dataType,
     satisfyAll: state.filters.satisfyAll.includes('dataType'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Data type(s):'
+    humanReadableString: 'Data type(s):',
+    dynamic: true
   }
 ]
 
