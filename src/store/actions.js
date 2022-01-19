@@ -140,7 +140,8 @@ export default {
     }
 
     // prepare baseUrl and set list for dynamic filters that will be updated
-    const baseUrl = '/api/v2/rd_connect_collections'
+    // ToDo thsi should not be hard coded maybe...
+    const baseUrl = '/api/v2/eu_bbmri_eric_collections'
     const dynamicFilters = []
     const dynFilt = getters.getFilters
 
