@@ -95,6 +95,7 @@ export default {
     load.options.forEach((item) => {
       state.dynamicFilters[filtername].push(item.id || item.name)
     })
+    state.dynamicFilters[filtername].push.apply(state.dynamicFilters[filtername], state.filters.selections[filtername])
   },
   /**
    * Reset all filters in the state
