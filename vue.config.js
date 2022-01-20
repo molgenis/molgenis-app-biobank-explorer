@@ -76,7 +76,8 @@ module.exports = {
           language: 'en',
           disabledFilters: [],
           customCollectionFilterFacets: [],
-          collectionColumns: initialCollectionColumns
+          collectionColumns: initialCollectionColumns,
+          googleAnalyticsKey: ''
         }
       }, null, 4),
       new ZipPlugin({

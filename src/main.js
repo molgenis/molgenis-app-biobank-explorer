@@ -34,9 +34,9 @@ import {
 
 library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare)
 
-if (INITIAL_STATE.GA_KEY) {
+if (INITIAL_STATE.googleAnalyticsKey) {
   Vue.use(VueAnalytics, {
-    id: INITIAL_STATE.GA_KEY,
+    id: INITIAL_STATE.googleAnalyticsKey,
     router,
     // TODO Use MOLGENIS settings for this
     set: [
