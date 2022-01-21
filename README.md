@@ -28,7 +28,6 @@ Scroll down to Tracking and fill in the fields and add the GA_KEY to:
 
 > Google analytics tracking ID
 
-
 ### Configuring Negotiator
 
 This version of the biobank explorer is compatible with the Negotiator API in MOLGENIS version 8.3.10.
@@ -130,7 +129,6 @@ There are 2 ways to test and develop in apps for MOLGENIS.
 
 - locally without MOLGENIS
 - locally with MOLGENIS
-
 ### Test locally without a running MOLGENIS instance
 
 For local testing you can execute the following commands:
@@ -163,7 +161,6 @@ You can run end-to-end test locally by running the following command:
 yarn test:e2e
 ```
 
-
 ### Test with a running MOLGENIS instance
 For local testing with a running MOLGENIS instance you have to alter the config of the app:
 
@@ -195,7 +192,6 @@ module.exports = {
 
 And comment out this block in the same file.
 
-
 ```javascript
 /**
  * GET and POST interceptors
@@ -224,7 +220,6 @@ You can find the zip-file in the ```dist/molgenis-app-biobank-explorer_v2.zip```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
 
 ## Create a docker image | Molgenis Dev Team
 To make a standalone docker image that can be run from the Rancher Cluster perform the following steps:
