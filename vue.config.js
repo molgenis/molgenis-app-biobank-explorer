@@ -19,6 +19,8 @@ build-date: ${buildDate}
 PR: ${process.env.CHANGE_ID}
 BUILD: ${process.env.BUILD_NUMBER}`
 
+const initialCollectionColumns = require('./src/config/initialCollectionColumns')
+
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
   if (process.env.NODE_ENV === 'development') return 'public/index.html'
@@ -37,7 +39,6 @@ if (process.env.DATA_EXPLORER_DEV_PW) {
 }
 
 module.exports = {
-  transpileDependencies: ['@molgenis-ui/components-library'],
   runtimeCompiler: true,
   outputDir: 'dist',
   publicPath: process.env.NODE_ENV === 'production'
@@ -73,9 +74,12 @@ module.exports = {
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',
-          showCountryFacet: true
+          disabledFilters: [],
+          customCollectionFilterFacets: [],
+          collectionColumns: initialCollectionColumns,
+          googleAnalyticsKey: ''
         }
-      }),
+      }, null, 4),
       new ZipPlugin({
         filename: `${packageJson.name}.v${packageJson.version}`
       })

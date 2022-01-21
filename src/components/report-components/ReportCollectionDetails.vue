@@ -1,7 +1,7 @@
 <template>
   <div>
     <collection-selector
-      class="mb-2"
+      class="mb-2 float-right"
       v-if="isTopLevelCollection"
       :collectionData="collection"/>
 
@@ -9,59 +9,17 @@
       :description="collection.description"
       :maxLength="500"></report-description>
 
-    <!-- main collection information -->
-    <table class="mg-report-details-list mb-3">
-      <tr>
-        <th scope="row" class="pr-1">Id:</th>
-        <td>{{ collection.id }}</td>
-      </tr>
-      <tr v-if="collection.url">
-        <th scope="row" class="pr-1">Website:</th>
-        <td>
-          <span><a target="_blank" :href="collection.url">{{
-              collection.url
-            }}</a></span>
-        </td>
-      </tr>
-      <report-list-row :data="mainContent.Size">Size:</report-list-row>
-      <tr v-if="mainContent.Age && mainContent.Age.value">
-        <th scope="row" class="pr-1">Age:</th>
-        <td>{{ mainContent.Age.value }}</td>
-      </tr>
-      <report-list-row :data="mainContent.Type">Type:</report-list-row>
-      <report-list-row :data="mainContent.Sex">Sex:</report-list-row>
-      <report-list-row :data="mainContent.Materials">
-        Materials:
-      </report-list-row>
-      <report-list-row :data="mainContent.Storage">Storage:</report-list-row>
-      <report-list-row :data="mainContent.Data">Data:</report-list-row>
-      <report-list-row :data="mainContent.Diagnosis">Diagnosis:
-      </report-list-row>
-      <report-list-row :data="mainContent.DataUse">
-        Data use conditions:
-      </report-list-row>
-    </table>
-
-    <!-- Recursive set of subcollections -->
-    <div
-      v-if="collection.sub_collections && collection.sub_collections.length"
-      class="mt-2">
-      <h5>Sub collections</h5>
-      <report-sub-collection
-        v-for="subCollection in collection.sub_collections"
-        :collection="subCollection"
-        :key="subCollection.id"
-        :level="1"></report-sub-collection>
-    </div>
+    <!-- collection information -->
+    <collection-view-generator :collection="collectionModel" />
   </div>
 </template>
 
 <script>
-import { mapCollectionsDetailsTableContent } from '../../utils/templateMapper'
+import { mapState } from 'vuex'
+import { getCollectionDetails } from '../../utils/templateMapper'
 import CollectionSelector from '../buttons/CollectionSelector.vue'
 import ReportDescription from '../report-components/ReportDescription.vue'
-import ReportListRow from '../report-components/ReportListRow.vue'
-import ReportSubCollection from '../report-components/ReportSubCollection.vue'
+import CollectionViewGenerator from '../generators/CollectionViewGenerator.vue'
 
 export default {
   name: 'ReportCollectionDetails',
@@ -74,13 +32,13 @@ export default {
   components: {
     CollectionSelector,
     ReportDescription,
-    ReportListRow,
-    ReportSubCollection
+    CollectionViewGenerator
   },
   computed: {
-    mainContent () {
+    ...mapState(['collectionColumns']),
+    collectionModel () {
       return this.collection
-        ? mapCollectionsDetailsTableContent(this.collection)
+        ? getCollectionDetails(this.collection)
         : {}
     },
     isTopLevelCollection () {
@@ -89,9 +47,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-::v-deep .mg-report-details-list th {
-  vertical-align: top;
-}
-</style>

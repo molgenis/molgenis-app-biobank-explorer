@@ -1,7 +1,7 @@
 {
   "name": "molgenis-app-biobank-explorer",
   "license": "LGPL-3.0",
-  "version": "4.6.0",
+  "version": "6.0.4",
   "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -19,9 +19,9 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.0",
-    "@molgenis-ui/components-library": "^2.7.14",
     "@molgenis/molgenis-api-client": "^3.0.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
     "@molgenis/rsql": "^0.1.1",
@@ -37,7 +37,6 @@
     "vuex-router-sync": "5.0.0"
   },
   "devDependencies": {
-    "@molgenis/molgenis-vue-test-utils": "^1.1.0",
     "@vue/cli-plugin-babel": "~4.5.13",
     "@vue/cli-plugin-e2e-nightwatch": "~4.5.13",
     "@vue/cli-plugin-eslint": "~4.5.13",
@@ -48,7 +47,6 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
-    "chai": "^4.3.4",
     "chromedriver": "^91.0.1",
     "es-check": "^5.1.2",
     "eslint": "^6.7.2",

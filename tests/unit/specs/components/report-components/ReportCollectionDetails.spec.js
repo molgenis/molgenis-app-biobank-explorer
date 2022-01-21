@@ -1,53 +1,15 @@
-import { shallowMount } from '@vue/test-utils'
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+import Vuex from 'vuex'
 import ReportCollectionDetails from '../../../../../src/components/report-components/ReportCollectionDetails'
 
-let collection
+import { mockState } from '../../mockData'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+let collection, store
 
 const expected = {
-  Age: {
-    type: 'string-with-key',
-    value: undefined
-  },
-  Data: {
-    badgeColor: 'info',
-    type: 'list',
-    value: []
-  },
-  DataUse: {
-    badgeColor: 'success',
-    type: 'list',
-    value: []
-  },
-  Diagnosis: {
-    badgeColor: 'primary',
-    type: 'list',
-    value: []
-  },
-  Materials: {
-    badgeColor: 'danger',
-    type: 'list',
-    value: []
-  },
-  Sex: {
-    badgeColor: 'secondary',
-    type: 'list',
-    value: []
-  },
-  Size: {
-    badgeColor: 'success',
-    type: 'list',
-    value: ['777']
-  },
-  Storage: {
-    badgeColor: 'warning',
-    type: 'list',
-    value: []
-  },
-  Type: {
-    badgeColor: 'info',
-    type: 'list',
-    value: []
-  },
   _meta: {
     name: 'meta'
   },
@@ -80,56 +42,6 @@ const expected = {
   },
   sub_collections: [
     {
-      Age: {
-        type: 'string-with-key',
-        value: undefined
-      },
-      Data: {
-        badgeColor: 'info',
-        type: 'list',
-        value: [
-          'Biological samples'
-        ]
-      },
-      DataUse: {
-        badgeColor: 'success',
-        type: 'list',
-        value: []
-      },
-      Diagnosis: {
-        badgeColor: 'primary',
-        type: 'list',
-        value: []
-      },
-      Materials: {
-        badgeColor: 'danger',
-        type: 'list',
-        value: [
-          'Other'
-        ]
-      },
-      Sex: {
-        badgeColor: 'secondary',
-        type: 'list',
-        value: []
-      },
-      Size: {
-        badgeColor: 'success',
-        type: 'list',
-        value: [
-          '10.000 - 100.000'
-        ]
-      },
-      Storage: {
-        badgeColor: 'warning',
-        type: 'list',
-        value: []
-      },
-      Type: {
-        badgeColor: 'info',
-        type: 'list',
-        value: []
-      },
       data_categories: [
         {
           id: 'BIOLOGICAL_SAMPLES',
@@ -137,6 +49,7 @@ const expected = {
         }
       ],
       id: '1',
+      level: 1,
       materials: [
         {
           id: 'OTHER',
@@ -152,59 +65,88 @@ const expected = {
         id: 'c-001',
         name: 'beautiful collection'
       },
+      viewmodel: [
+        {
+          label: 'Id:',
+          type: 'string',
+          value: '1'
+        },
+        {
+          label: 'Website:',
+          type: 'hyperlink',
+          value: ''
+        },
+        {
+          badgeColor: 'info',
+          label: 'Size:',
+          type: 'object',
+          value: '10.000 - 100.000'
+        },
+        {
+          label: 'Available:',
+          type: 'int',
+          value: ''
+        },
+        {
+          label: 'Donor size:',
+          type: 'object',
+          value: ''
+        },
+        {
+          label: 'Donors:',
+          type: 'int',
+          value: ''
+        },
+        {
+          label: 'Age:',
+          type: 'range',
+          value: ''
+        },
+        {
+          label: 'Type:',
+          type: 'mref',
+          value: []
+        },
+        {
+          label: 'Sex:',
+          type: 'categoricalmref',
+          value: []
+        },
+        {
+          badgeColor: 'secondary',
+          label: 'Materials:',
+          type: 'categoricalmref',
+          value: [
+            'Other'
+          ]
+        },
+        {
+          label: 'Storage:',
+          type: 'categoricalmref',
+          value: []
+        },
+        {
+          badgeColor: 'danger',
+          label: 'Data:',
+          type: 'categoricalmref',
+          value: [
+            'Biological samples'
+          ]
+        },
+        {
+          label: 'Diagnosis:',
+          type: 'mref',
+          value: []
+        },
+        {
+          label: 'Data use conditions:',
+          type: 'mref',
+          value: []
+        }
+      ],
       sub_collections: []
     },
     {
-      Age: {
-        type: 'string-with-key',
-        value: undefined
-      },
-      Data: {
-        badgeColor: 'info',
-        type: 'list',
-        value: [
-          'Biological samples'
-        ]
-      },
-      DataUse: {
-        badgeColor: 'success',
-        type: 'list',
-        value: []
-      },
-      Diagnosis: {
-        badgeColor: 'primary',
-        type: 'list',
-        value: []
-      },
-      Materials: {
-        badgeColor: 'danger',
-        type: 'list',
-        value: [
-          'Other'
-        ]
-      },
-      Sex: {
-        badgeColor: 'secondary',
-        type: 'list',
-        value: []
-      },
-      Size: {
-        badgeColor: 'success',
-        type: 'list',
-        value: [
-          '10.000 - 100.000'
-        ]
-      },
-      Storage: {
-        badgeColor: 'warning',
-        type: 'list',
-        value: []
-      },
-      Type: {
-        badgeColor: 'info',
-        type: 'list',
-        value: []
-      },
       data_categories: [
         {
           id: 'BIOLOGICAL_SAMPLES',
@@ -212,6 +154,7 @@ const expected = {
         }
       ],
       id: '2',
+      level: 1,
       materials: [
         {
           id: 'OTHER',
@@ -227,13 +170,169 @@ const expected = {
         id: 'c-001',
         name: 'beautiful collection'
       },
-      sub_collections: []
+      sub_collections: [],
+      viewmodel: [
+        {
+          label: 'Id:',
+          type: 'string',
+          value: '2'
+        },
+        {
+          label: 'Website:',
+          type: 'hyperlink',
+          value: ''
+        },
+        {
+          badgeColor: 'info',
+          label: 'Size:',
+          type: 'object',
+          value: '10.000 - 100.000'
+        },
+        {
+          label: 'Available:',
+          type: 'int',
+          value: ''
+        },
+        {
+          label: 'Donor size:',
+          type: 'object',
+          value: ''
+        },
+        {
+          label: 'Donors:',
+          type: 'int',
+          value: ''
+        },
+        {
+          label: 'Age:',
+          type: 'range',
+          value: ''
+        },
+        {
+          label: 'Type:',
+          type: 'mref',
+          value: []
+        },
+        {
+          label: 'Sex:',
+          type: 'categoricalmref',
+          value: []
+        },
+        {
+          badgeColor: 'secondary',
+          label: 'Materials:',
+          type: 'categoricalmref',
+          value: [
+            'Other'
+          ]
+        },
+        {
+          label: 'Storage:',
+          type: 'categoricalmref',
+          value: []
+        },
+        {
+          badgeColor: 'danger',
+          label: 'Data:',
+          type: 'categoricalmref',
+          value: [
+            'Biological samples'
+          ]
+        },
+        {
+          label: 'Diagnosis:',
+          type: 'mref',
+          value: []
+        },
+        {
+          label: 'Data use conditions:',
+          type: 'mref',
+          value: []
+        }
+      ]
+    }
+  ],
+  viewmodel: [
+    {
+      label: 'Id:',
+      type: 'string',
+      value: 'c-001'
+    },
+    {
+      label: 'Website:',
+      type: 'hyperlink',
+      value: ''
+    },
+    {
+      badgeColor: 'info',
+      label: 'Size:',
+      type: 'object',
+      value: '777'
+    },
+    {
+      label: 'Available:',
+      type: 'int',
+      value: ''
+    },
+    {
+      label: 'Donor size:',
+      type: 'object',
+      value: ''
+    },
+    {
+      label: 'Donors:',
+      type: 'int',
+      value: ''
+    },
+    {
+      label: 'Age:',
+      type: 'range',
+      value: ''
+    },
+    {
+      label: 'Type:',
+      type: 'mref',
+      value: []
+    },
+    {
+      label: 'Sex:',
+      type: 'categoricalmref',
+      value: []
+    },
+    {
+      label: 'Materials:',
+      type: 'categoricalmref',
+      value: []
+    },
+    {
+      label: 'Storage:',
+      type: 'categoricalmref',
+      value: []
+    },
+    {
+      label: 'Data:',
+      type: 'categoricalmref',
+      value: []
+    },
+    {
+      label: 'Diagnosis:',
+      type: 'mref',
+      value: []
+    },
+    {
+      label: 'Data use conditions:',
+      type: 'mref',
+      value: []
     }
   ]
 }
 
 describe('ReportCollectionDetails', () => {
   beforeEach(() => {
+    store = new Vuex.Store({
+      state: mockState()
+    })
+
     collection = {
       _meta: {
         name: 'meta'
@@ -288,15 +387,15 @@ describe('ReportCollectionDetails', () => {
     }
   })
   describe('computed', () => {
-    describe('mainContent', () => {
+    describe('collectionModel', () => {
       it('should return an object with badgeColor properties for both collection and subcollections', () => {
-        const wrapper = shallowMount(ReportCollectionDetails, { propsData: { collection } })
-        expect(wrapper.vm.mainContent).toStrictEqual(expected)
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
+        expect(wrapper.vm.collectionModel).toStrictEqual(expected)
       })
     })
     describe('isTopLevelCollection', () => {
       it('should return true if parent_collection is not defined on the collection', () => {
-        const wrapper = shallowMount(ReportCollectionDetails, { propsData: { collection } })
+        const wrapper = shallowMount(ReportCollectionDetails, { store, localVue, propsData: { collection } })
         expect(wrapper.vm.isTopLevelCollection).toBeTruthy()
       })
     })

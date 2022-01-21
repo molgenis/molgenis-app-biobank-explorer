@@ -1,7 +1,9 @@
 <template>
   <div @click="$root.$emit('bv::hide::popover')">
     <div class="container">
-      <b-alert v-if="errorMessage" show variant="danger" dismissible>{{errorMessage}}</b-alert>
+      <b-alert v-if="errorMessage" show variant="danger" dismissible>
+        {{ errorMessage }}
+      </b-alert>
       <router-view></router-view>
     </div>
   </div>
@@ -17,11 +19,12 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
+  name: 'biobank-explorer',
   computed: {
     ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading' })
   },
   methods: {
-    ...mapMutations(['MapQueryToState']),
+    ...mapMutations(['MapQueryToState', 'ConfigureFilters']),
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
@@ -38,11 +41,14 @@ export default {
       }
     }
   },
+  beforeMount () {
+    this.ConfigureFilters()
+    this.MapQueryToState()
+  },
   mounted () {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
     this.GetQualityStandardInformation()
-  },
-  name: 'biobank-explorer'
+  }
 }
 </script>

@@ -3,8 +3,6 @@ import filterDefinitions from '../../../src/utils/filterDefinitions'
 
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
-export const mockState = () => JSON.parse(JSON.stringify(mockStateTemplate))
-
 const mockStateTemplate = {
   // routersync
   route: {
@@ -13,8 +11,12 @@ const mockStateTemplate = {
   ...state
 }
 
+mockStateTemplate.filterFacets = filterDefinitions(mockStateTemplate)
+
+export const mockState = () => JSON.parse(JSON.stringify(mockStateTemplate))
+
 export const mockFilters = { selections: { country: ['EU'], commercial_use: ['false'] }, satisfyAll: [], labels: { country: ['Europe'], commercial_use: ['Non-commercial use'] } }
-export const mockGetFilterDefinitions = filterDefinitions(mockState())
+export const mockGetFilters = filterDefinitions(mockState())
 export const mockFilterOptionDictionary = { diagnosis_available: [{ text: '[ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome', value: 'ORPHA:352530' }] }
 
 export const mockSelectedCollections = [{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }]

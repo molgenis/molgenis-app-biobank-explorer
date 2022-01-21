@@ -47,6 +47,43 @@ describe('Utilities', () => {
       expect(actual).toStrictEqual(expected)
     })
   })
+
+  describe('createLikeQuery', () => {
+    it('should return an empty array if the text is empty', () => {
+      const actual = utils.createLikeQuery('diagnosis_available', '')
+      const expected = []
+
+      expect(actual).toStrictEqual(expected)
+    })
+
+    it('should transform (diagnosis_available, "cancer") to rsql object', () => {
+      const actual = utils.createLikeQuery('diagnosis_available', 'cancer')
+      const expected = [{ selector: 'diagnosis_available', comparison: '=like=', arguments: 'cancer' }]
+
+      expect(actual).toStrictEqual(expected)
+    })
+  })
+
+  describe('createTextSearchQuery', () => {
+    it('should return a single query object if tokenization is omitted', () => {
+      const actual = utils.createTextSearchQuery('diagnosis_available', 'hereditary disease')
+      const expected = [{ selector: 'diagnosis_available', comparison: '=like=', arguments: 'hereditary disease' }]
+
+      expect(actual).toStrictEqual(expected)
+    })
+
+    it('should transform (diagnosis_available, "hereditary disease") to rsql object with two queries, with tokenization', () => {
+      const actual = utils.createTextSearchQuery('diagnosis_available', 'hereditary disease', true)
+      const expected = {
+        operator: 'AND',
+        operands: [{ arguments: 'hereditary', comparison: '=like=', selector: 'diagnosis_available' },
+          { arguments: 'disease', comparison: '=like=', selector: 'diagnosis_available' }]
+      }
+
+      expect(actual).toStrictEqual(expected)
+    })
+  })
+
   describe('diagnosisAvailableQuery', () => {
     it('should return an empty array if the filters are empty', () => {
       const actual = utils.diagnosisAvailableQuery([], 'diagnosis_available')

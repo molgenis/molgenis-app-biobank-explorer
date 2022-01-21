@@ -5,8 +5,7 @@
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
         :biobank="biobank"
-        :initCollapsed="
-          biobanksShown[0].id !== biobank.id || biobanksShown[0] !== biobank">
+        :initCollapsed="true">
       </biobank-card>
     </div>
 

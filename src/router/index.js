@@ -7,7 +7,7 @@ import NetworkReportCard from '../components/cards/NetworkReportCard'
 import { INITIAL_STATE } from '../store/state'
 
 Vue.use(VueRouter)
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'hash',
   base: INITIAL_STATE.baseUrl,
   routes: [
@@ -40,3 +40,5 @@ export default new VueRouter({
     }
   ]
 })
+
+export default router

@@ -2,37 +2,29 @@
   <table class="table table-condensed table-responsive">
     <thead>
       <tr>
-        <th scope="col" class="pr-2"></th>
-        <th scope="col">Collection</th>
-        <th scope="col">Type</th>
-        <th scope="col">Materials</th>
-        <th scope="col">Standards</th>
-        <th scope="col">#Samples</th>
+        <th class="col-3" scope="col">Collection</th>
+        <th class="col-2" scope="col">Type</th>
+        <th class="col-2" scope="col">Materials</th>
+        <th class="col-2" scope="col">Standards</th>
+        <th class="col-2" scope="col">#Samples</th>
+        <th class="col-1" scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <template v-for="(collection, index) in topLevelElements">
         <tr :key="index">
-          <td class="pr-1">
-            <collection-selector
-              class="collection-selection-button"
-              :collectionData="collection"
-              icon-only
-              bookmark></collection-selector>
-          </td>
           <td
-            :class="{
-              'table-text-content-columns-has-sub': hasSubCollections(
-                collection
-              ),
-              'table-text-content-columns': !hasSubCollections(collection),
-            }"
+            :class="[{
+              'table-text-content-columns-has-sub': hasSubCollections(collection),
+              'table-text-content-columns': !hasSubCollections(collection)},
+              columnSize (column)
+            ]"
             v-for="(column, index) in columns"
             :key="index">
             <span v-if="column === 'name'">
               <router-link :to="'/collection/' + collection['id']">
                 <button
-                  class="btn btn-link collection-link text-left pt-0 border-0">
+                  class="btn btn-link collection-link text-left pt-0 border-0 px-0">
                   {{ collection[column] }}
                 </button>
               </router-link>
@@ -52,6 +44,13 @@
             <span v-else-if="column === 'size'">
               {{ getCollectionSize(collection) }}
             </span>
+          </td>
+          <td class="col-1 pr-2">
+            <collection-selector
+              class="mt-auto text-right"
+              :collectionData="collection"
+              icon-only
+              bookmark></collection-selector>
           </td>
         </tr>
         <tr v-if="hasSubCollections(collection)" :key="collection.id">
@@ -145,19 +144,19 @@ export default {
     },
     getCollectionSize (collection) {
       return collection.size || collection.order_of_magnitude.size
+    },
+    columnSize (column) {
+      return column === 'name' ? 'col-3' : 'col-2'
     }
   }
 }
 </script>
 
 <style>
-.collection-selection-button {
-  margin-left: 0.75rem;
-}
-
 .collapsed > .when-visible {
   display: none;
 }
+
 :not(.collapsed) > .when-hidden {
   display: none;
 }

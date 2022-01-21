@@ -1,10 +1,13 @@
 import { createRSQLQuery, createBiobankRSQLQuery, filterCollectionTree, getHumanReadableString } from './helpers'
 import { groupCollectionsByBiobankId } from '../utils/grouping'
-import filterDefinitions from '../utils/filterDefinitions'
 import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
-  getFilterDefinitions: (state) => filterDefinitions(state),
+  getFilters: (state) => {
+    return state.filterFacets.filter((facet) => {
+      return !state.disabledFilters.includes(facet.name)
+    })
+  },
   getHumanReadableString,
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
@@ -101,7 +104,6 @@ export default {
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   resetPage: state => !state.isPaginating,
-  showCountryFacet: state => state.showCountryFacet,
   /**
    * Get map of active filters
    */
