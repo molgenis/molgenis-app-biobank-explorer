@@ -25,6 +25,8 @@ pipeline {
             env.REGISTRY_CRED_PSW = sh(script: 'vault read -field=password secret/ops/account/nexus', returnStdout: true)
             env.DOCKERHUB_AUTH = sh(script: 'vault read -field=value secret/gcc/token/dockerhub', returnStdout: true)
             env.NEXUS_AUTH = sh(script: 'vault read -field=base64 secret/ops/account/nexus', returnStdout: true)
+            properties ( [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', defaultValue: '', description: '', name: 'payload']]]] )
+            echo ("This build is built with the payload: $payload")
           }
         }
         container('node') {
@@ -37,8 +39,6 @@ pipeline {
         changeRequest()
       }
       steps {
-        properties ( [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', defaultValue: '', description: '', name: 'payload']]]] )
-        echo ("This build is built with the payload: $payload")
         sh "printenv"
         container('node') {
           sh "yarn install"
