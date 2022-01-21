@@ -1,6 +1,6 @@
 <template>
   <div @click="$root.$emit('bv::hide::popover')">
-    <div class="container">
+    <div class="container pt-4">
       <b-alert v-if="errorMessage" show variant="danger" dismissible>
         {{ errorMessage }}
       </b-alert>
@@ -8,12 +8,6 @@
     </div>
   </div>
 </template>
-
-<style>
-.mg-page-content {
-  padding-top: 0 !important;
-}
-</style>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -52,3 +46,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.mg-page-content {
+  padding-top: 0 !important;
+}
+
+body {
+  background-color: #fafafa;
+}
+</style>

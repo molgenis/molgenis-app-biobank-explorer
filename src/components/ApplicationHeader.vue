@@ -1,19 +1,20 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="position-fixed container pl-0 pr-0 header-bar">
+  <div class="position-fixed container px-3 pb-3 header-bar card">
     <filter-bar />
     <div aria-label="action-bar" class="py-4">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3 pl-0">
+          <div class="col">
             <collection-select-all
               v-if="!loading && foundCollectionIds.length"
-              router-enabled/>
+              class="col"
+              bookmark/>
           </div>
-          <div class="col-md-5 pl-0">
+          <div class="col">
             <search-filter />
           </div>
-          <div class="col-md-4 pr-0">
+          <div class="col">
             <pagination />
           </div>
         </div>
@@ -47,8 +48,8 @@ export default {
 
 <style>
 .header-bar {
-  top:0;
-  padding-top: 80px; /* Molgenis header is 50px */
+  top: 0;
+  padding-top: 80px; /* Molgenis header is 80px, and so content scrolled is not seen */
   background-color: white;
   z-index: 100;
 }

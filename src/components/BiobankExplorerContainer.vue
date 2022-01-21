@@ -29,10 +29,6 @@
             </div>
           </div>
         </div>
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          class="col-md-4 text-right"
-          bookmark/>
       </div>
       <div class="row">
         <application-header />
@@ -140,7 +136,6 @@
 <script>
 import CartSelectionToast from './popovers/CartSelectionToast.vue'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
-import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
 import ApplicationHeader from './ApplicationHeader.vue'
@@ -150,8 +145,7 @@ export default {
   components: {
     BiobankCardsContainer,
     CartSelectionToast,
-    ApplicationHeader,
-    CollectionSelectAll
+    ApplicationHeader
   },
   data: () => {
     return {
