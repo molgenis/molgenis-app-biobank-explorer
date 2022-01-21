@@ -37,7 +37,7 @@ pipeline {
         changeRequest()
       }
       steps {
-        sh "printenv"
+        sh "${GITHUB_PR_STATE}"
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
