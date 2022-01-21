@@ -59,15 +59,10 @@ export default {
     ...mapGetters([
       'showCountryFacet',
       'activeFilters',
-      'getFilterDefinitions'
+      'getFilters'
     ]),
     filters () {
-      return this.getFilterDefinitions
-        .filter(facet => {
-          // config option showCountryFacet is used to toggle Country facet
-          return !(this.showCountryFacet === false && facet.name === 'country')
-        })
-        .filter(item => item.component)
+      return this.getFilters.filter((facet) => facet.component)
     }
   },
   methods: {
