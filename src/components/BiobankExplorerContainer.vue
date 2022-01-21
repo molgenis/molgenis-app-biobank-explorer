@@ -35,7 +35,7 @@
           bookmark/>
       </div>
       <div class="row">
-          <application-header />
+        <application-header />
       </div>
 
       <div class="row">
@@ -140,6 +140,7 @@
 <script>
 import CartSelectionToast from './popovers/CartSelectionToast.vue'
 import BiobankCardsContainer from './cards/BiobankCardsContainer'
+import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
 import ApplicationHeader from './ApplicationHeader.vue'
@@ -149,7 +150,8 @@ export default {
   components: {
     BiobankCardsContainer,
     CartSelectionToast,
-    ApplicationHeader
+    ApplicationHeader,
+    CollectionSelectAll
   },
   data: () => {
     return {
@@ -248,10 +250,10 @@ export default {
     },
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
-      collectionSelectionArray.forEach((cs) => {
+      collectionSelectionArray.forEach(cs => {
         const biobankLabel = this.collectionBiobankDictionary[cs.value]
         const biobankPresent = biobankWithSelectedCollections.find(
-          (bsc) => bsc.biobankLabel === biobankLabel
+          bsc => bsc.biobankLabel === biobankLabel
         )
 
         if (biobankPresent) {
@@ -292,7 +294,7 @@ export default {
       const queryParts = rawQuery.split('&')
       const queryObject = {}
 
-      queryParts.forEach((part) => {
+      queryParts.forEach(part => {
         const propAndValue = part.split('=')
         queryObject[propAndValue[0]] = propAndValue[1]
       })

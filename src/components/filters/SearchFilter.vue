@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { StringFilter } from '@molgenis-ui/components-library'
+import StringFilter from '../filters/StringFilter.vue'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   components: {
@@ -25,17 +25,16 @@ export default {
 
         this.debounce = setTimeout(async () => {
           clearTimeout(this.debounce)
-          this.UpdateFilter({
+          this.UpdateFilterSelection({
             name: 'search',
-            value: search,
-            router: this.$router
-          }) // passing router so we can set bookmark
+            value: search
+          })
         }, 500)
       }
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilter'])
+    ...mapMutations(['UpdateFilterSelection'])
   }
 }
 </script>
