@@ -37,6 +37,8 @@ pipeline {
         changeRequest()
       }
       steps {
+        properties ( [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', defaultValue: '', description: '', name: 'payload']]]] )
+        echo ("This build is built with the payload: $payload")
         sh "printenv"
         container('node') {
           sh "yarn install"
