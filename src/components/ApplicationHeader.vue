@@ -1,14 +1,13 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="position-fixed container px-3 pb-3 header-bar card">
+  <div class="container p-3 header-bar card">
     <filter-bar />
     <div aria-label="action-bar" class="py-4">
-      <div class="container-fluid">
+      <div class="container-fluid px-0">
         <div class="row">
           <div class="col">
             <collection-select-all
               v-if="!loading && foundCollectionIds.length"
-              class="col"
               bookmark/>
           </div>
           <div class="col">
@@ -26,7 +25,7 @@
 
 <script>
 import SearchFilter from './filters/SearchFilter.vue'
-import CollectionSelectAll from '@/components/buttons/CollectionSelectAll.vue'
+import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
 import Pagination from './buttons/Pagination.vue'
 import { mapGetters } from 'vuex'
 import ResultHeader from './ResultHeader.vue'
@@ -48,9 +47,6 @@ export default {
 
 <style>
 .header-bar {
-  top: 0;
-  padding-top: 80px; /* Molgenis header is 80px, and so content scrolled is not seen */
   background-color: white;
-  z-index: 100;
 }
 </style>

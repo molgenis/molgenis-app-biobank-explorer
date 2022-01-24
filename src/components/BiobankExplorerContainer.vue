@@ -185,7 +185,7 @@ export default {
         : `${collectionCount} collection(s) selected`
     },
     negotiatorButtonText () {
-      return this.isPodium ? 'Send to Podium' : 'Send to the negotiator'
+      return this.isPodium ? 'Send to Podium' : 'Send to the Negotiator'
     },
     collectionCartShown () {
       return this.modalEnabled
@@ -313,9 +313,6 @@ export default {
 <style>
 .non-commercial .fa-times {
   font-size: 1em;
-}
-.biobank-explorer-container {
-  padding-top: 1rem;
 }
 
 .remove-collection:hover,

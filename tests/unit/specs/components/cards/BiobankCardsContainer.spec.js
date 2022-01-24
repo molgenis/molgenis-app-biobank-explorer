@@ -29,7 +29,7 @@ describe('BiobankCardsContainer', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(BiobankCardsContainer, { store, localVue })
-    expect(wrapper.html()).toContain('<div class="biobank-cards-container">')
+    expect(wrapper.html()).toContain('<div class="biobank-cards-container')
   })
 
   it('should reset the currentPage to 1 if when the biobanks list changes', () => {

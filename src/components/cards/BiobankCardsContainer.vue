@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container">
+  <div class="biobank-cards-container border border-left-0 border-right-0">
     <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
@@ -34,11 +34,7 @@ export default {
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
-    ...mapGetters([
-      'biobanks',
-      'foundBiobanks',
-      'loading'
-    ]),
+    ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
     biobanksShown () {
       return this.loading
         ? []
@@ -48,10 +44,10 @@ export default {
         )
     },
     biobankIds () {
-      return this.loading ? [] : this.biobanks.map((it) => it.id || it)
+      return this.loading ? [] : this.biobanks.map(it => it.id || it)
     },
     biobankIdsToFetch () {
-      return this.biobanksShown.filter((it) => typeof it === 'string')
+      return this.biobanksShown.filter(it => typeof it === 'string')
     }
   },
   components: {
@@ -83,7 +79,9 @@ export default {
 }
 
 .biobank-cards-container {
+  padding-top: 1rem;
   width: 100%;
-  margin-top: 18rem;
+  max-height: 60vh;
+  overflow-y:auto;
 }
 </style>

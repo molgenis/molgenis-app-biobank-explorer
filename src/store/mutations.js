@@ -37,7 +37,7 @@ export default {
         filterValue === '' ||
         (Array.isArray(filterValue) && !filterValue.length) ||
         (!Array.isArray(filterValue) && typeof filterValue === 'object' &&
-        (!filterValue.value.length || !filterValue.value[0].length))) {
+          (!filterValue.value.length || !filterValue.value[0].length))) {
         // remove the empty filter and the label
         delete currentFilterSelection[propertyName]
         delete currentLabels[propertyName]
@@ -206,6 +206,9 @@ export default {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
+  SetCartValidationStatus (state, status) {
+    state.cartValid = status
+  },
   SetSearchHistory (state, history) {
     if (history === '') {
       history = 'No filters used.'
@@ -303,6 +306,10 @@ export default {
       }
     }
     state.filterFacets = filterFacets
+  },
+  ClearActiveFilters (state) {
+    state.filters.selections = {}
+    createBookmark(state.filters.selections, state.selectedCollections)
   },
   SetError (state, error) {
     state.error = error
