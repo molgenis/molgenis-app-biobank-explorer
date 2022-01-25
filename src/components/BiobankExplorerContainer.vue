@@ -1,7 +1,7 @@
 <template>
   <div class="row biobank-explorer-container">
     <div class="col-md-12">
-      <div class="row mb-3">
+      <div class="row mt-0">
         <div class="col-md-8">
           <div v-if="isIE11">
             <input

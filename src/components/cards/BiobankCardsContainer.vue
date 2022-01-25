@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container border border-left-0 border-right-0">
+  <div class="biobank-cards-container border p-3">
     <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import BiobankCard from './BiobankCard'
+import BiobankCard from './BiobankCard.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
@@ -81,7 +81,7 @@ export default {
 .biobank-cards-container {
   padding-top: 1rem;
   width: 100%;
-  max-height: 60vh;
+  max-height: 75vh;
   overflow-y:auto;
 }
 </style>
