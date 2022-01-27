@@ -27,6 +27,7 @@
                 :value="activeFilters[filter.name]"
                 v-bind="filter"
                 @input="(value) => filterChange(filter.name, value)"
+                @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -83,7 +84,6 @@ import ResultHeader from './ResultHeader.vue'
 import SearchFilter from './filters/SearchFilter.vue'
 import CovidFilter from './filters/CovidFilter.vue'
 import CovidNetworkFilter from './filters/CovidNetworkFilter.vue'
-import FilterCard from './filters/containers/FilterCard.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
 /** */
@@ -96,7 +96,6 @@ export default {
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
-    FilterCard,
     CovidFilter,
     CovidNetworkFilter
   },
@@ -125,9 +124,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilterSelection', 'ClearActiveFilters']),
+    ...mapMutations(['UpdateFilterSelection', 'ClearActiveFilters', 'UpdateFilterSatisfyAll']),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
+    },
+    filterSatisfyAllChange (name, value) {
+      this.UpdateFilterSatisfyAll({ name, value })
     },
     filterVariant (filterName) {
       if (filterName.toLowerCase().includes('covid')) {

@@ -228,8 +228,6 @@ export default {
   left: 2px;
 }
 
-/* can go: */
-
 /* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
 .quality-marks-popover {
   background-color: white !important;
