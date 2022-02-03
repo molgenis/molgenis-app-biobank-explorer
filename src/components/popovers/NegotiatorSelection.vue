@@ -67,7 +67,7 @@
         </span>
       </div>
       <div class="ml-auto">
-        <b-button class="btn btn-dark mr-2" @click="cartVisible = false">Cancel</b-button>
+        <b-button class="btn btn-dark mr-2" @click="cartVisible = false">Close</b-button>
         <b-button
           :disabled="
             (isPodium && !collectionsInPodium.length) ||

@@ -103,7 +103,6 @@ export default {
   satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
-  resetPage: state => !state.isPaginating,
   /**
    * Get map of active filters
    */
