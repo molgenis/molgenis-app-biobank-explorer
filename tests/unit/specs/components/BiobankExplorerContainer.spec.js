@@ -42,8 +42,7 @@ describe('BiobankExplorerContainer', () => {
         allCollectionsSelected: allCollectionsSelectedMock,
         collectionsInPodium: podiumCollectionsMock,
         foundCollectionsAsSelection: foundCollectionsAsSelectionMock,
-        collectionBiobankDictionary: () => [],
-        ie11Bookmark: jest.fn().mockReturnValue('http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5')
+        collectionBiobankDictionary: () => []
       },
       mutations: {
         AddCollectionsToSelection: AddCollectionsToSelectionMock,
@@ -101,15 +100,6 @@ describe('BiobankExplorerContainer', () => {
       store.state.isPodium = true
       const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
       expect(wrapper.vm.modalFooterText).toEqual('0 collection(s) present in Podium')
-    })
-  })
-
-  describe('IE11 Bookmark logic', () => {
-    it('Should map a IE11 bookmark to the state', () => {
-      const wrapper = shallowMount(BiobankExplorerContainer, { store, localVue })
-      wrapper.setData({ ie11BookmarkToApply: 'http://mytest.org/#/?materials=CDNA&cart=YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5' })
-      wrapper.vm.applyIE11Bookmark()
-      expect(MapQueryToStateMock).toHaveBeenCalledWith(expect.anything(), { cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5', materials: 'CDNA' })
     })
   })
 })

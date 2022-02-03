@@ -237,10 +237,10 @@ export default {
    * @param state
    * @param params
    */
-  MapQueryToState (state, ie11Query) {
+  MapQueryToState (state) {
     // bookmark has been altered in another view
     if (!state.cartValid) return
-    const query = ie11Query || state.route.query
+    const query = state.route.query
 
     const keysInQuery = Object.keys(query)
     // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
