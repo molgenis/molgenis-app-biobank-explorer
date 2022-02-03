@@ -3,7 +3,7 @@
     v-if="foundBiobanks > pageSize && !loading"
     class="m-0"
     size="md"
-    align="right"
+    align="center"
     :total-rows="foundBiobanks"
     v-model="pageNumber"
     :per-page="pageSize"></b-pagination>

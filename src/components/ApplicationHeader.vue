@@ -1,7 +1,40 @@
 <template>
   <!-- using container for bootstrap's max-width -->
   <div class="container p-3 header-bar card">
-    <div class="row">
+    <div class="row my-2">
+      <div class="col-5" aria-label="action-bar">
+        <b-button
+          class="mr-2"
+          v-b-toggle.filters
+          variant="outline-info"
+          @click="filtersCollapsed = !filtersCollapsed">
+          <font-awesome-icon
+            icon="caret-right"
+            :style="iconStyle"
+            class="collapse-button mr-2"/>
+          <span>Filters</span>
+
+          <span class="badge badge-info ml-2" v-if="numberOfActiveFilters > 0">
+            {{ numberOfActiveFilters }}</span>
+        </b-button>
+        <b-button
+          v-if="numberOfActiveFilters > 0"
+          variant="outline-secondary"
+          @click="ClearActiveFilters">Clear all filters</b-button>
+        <collection-select-all
+          class="d-inline ml-2"
+          v-if="!loading && foundCollectionIds.length"
+          bookmark/>
+      </div>
+      <div class="col-4">
+        <pagination />
+      </div>
+      <div class="col text-right">
+        <b-button variant="primary" @click="showCart = !showCart"><span>Checkout</span><span class="badge badge-light ml-2">
+            {{ selectedCollections.length }}</span></b-button>
+      </div>
+    </div>
+    <div class="row my-2">
       <b-collapse id="filters" visible>
         <div class="col-12">
           <div class="w-25 search-container mr-2">
@@ -27,50 +60,21 @@
                 :value="activeFilters[filter.name]"
                 v-bind="filter"
                 @input="(value) => filterChange(filter.name, value)"
-                @satisfy-all="(satisfyAllValue) => filterSatisfyAllChange(filter.name, satisfyAllValue)"
+                @satisfy-all="
+                  (satisfyAllValue) =>
+                    filterSatisfyAllChange(filter.name, satisfyAllValue)
+                "
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
             </div>
           </b-dropdown>
-          <b-button variant="outline-secondary" @click="ClearActiveFilters">Clear all filters</b-button>
         </div>
       </b-collapse>
     </div>
 
-    <div class="row my-2">
-      <div class="col">
-        <b-button
-          class="mt-2"
-          v-b-toggle.filters
-          variant="outline-info"
-          @click="filtersCollapsed = !filtersCollapsed">
-          <font-awesome-icon
-            icon="caret-right"
-            :style="iconStyle"
-            class="collapse-button mr-2"/>
-          <span>Filters</span>
-
-          <span
-            class="badge badge-info ml-2"
-            v-if="
-              Object.keys(activeFilters) &&
-              Object.keys(activeFilters).length > 0
-            ">
-            {{ Object.keys(activeFilters).length }}</span>
-        </b-button>
-      </div>
-      <div class="col">
-        <pagination />
-      </div>
-      <div aria-label="action-bar" class="col text-right">
-        <collection-select-all
-          v-if="!loading && foundCollectionIds.length"
-          bookmark/>
-      </div>
-    </div>
-
     <result-header v-if="!loading" />
+    <negotiator-selection v-model="showCart" />
   </div>
 </template>
 
@@ -86,6 +90,7 @@ import CovidFilter from './filters/CovidFilter.vue'
 import CovidNetworkFilter from './filters/CovidNetworkFilter.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
+import NegotiatorSelection from './popovers/NegotiatorSelection.vue'
 /** */
 
 export default {
@@ -97,34 +102,45 @@ export default {
     CheckboxFilter,
     MultiFilter,
     CovidFilter,
-    CovidNetworkFilter
+    CovidNetworkFilter,
+    NegotiatorSelection
   },
   computed: {
     ...mapGetters([
       'loading',
       'foundCollectionIds',
       'activeFilters',
-      'getFilters'
+      'getFilters',
+      'selectedCollections'
     ]),
     filters () {
       return this.getFilters.filter(facet => facet.component)
     },
     iconStyle () {
       return {
-        transform: `rotate(${this.filtersCollapsed ? 0 : -90}deg)`,
+        transform: `rotate(${this.filtersCollapsed ? 0 : 90}deg)`,
         transition: 'transform 0.2s'
       }
+    },
+    numberOfActiveFilters () {
+      const hasActiveFilters = Object.keys(this.activeFilters)
+      return hasActiveFilters ? hasActiveFilters.length : 0
     }
   },
   data () {
     return {
       debounce: undefined,
       filterBarShown: false,
-      filtersCollapsed: false
+      filtersCollapsed: false,
+      showCart: false
     }
   },
   methods: {
-    ...mapMutations(['UpdateFilterSelection', 'ClearActiveFilters', 'UpdateFilterSatisfyAll']),
+    ...mapMutations([
+      'UpdateFilterSelection',
+      'ClearActiveFilters',
+      'UpdateFilterSatisfyAll'
+    ]),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
     },
