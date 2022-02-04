@@ -1,15 +1,7 @@
 <template>
   <div>
-    <div class="row">
-      <application-header />
-    </div>
-
-    <div class="row">
-      <div class="col-md-12 px-0 py-3 mb-3">
-        <biobank-cards-container></biobank-cards-container>
-      </div>
-    </div>
-
+    <application-header />
+    <biobank-cards-container />
   </div>
 </template>
 

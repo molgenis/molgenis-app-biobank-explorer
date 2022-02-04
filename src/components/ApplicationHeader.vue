@@ -1,6 +1,6 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="container p-3 header-bar card">
+  <div class="p-3 mx-3 header-bar card">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button

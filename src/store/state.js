@@ -8,6 +8,7 @@ export default {
   cartValid: true,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
+  removeFreemarkerMargin: config.removeFreemarkerMargin,
   isLoading: false,
   currentPage: 1,
   pageSize: 10,

@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container border p-3">
+  <div class="biobank-cards-container border-bottom p-3">
     <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
