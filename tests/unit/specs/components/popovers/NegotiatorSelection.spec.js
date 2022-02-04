@@ -54,5 +54,17 @@ describe('Negotiator Selection Modal', () => {
       const wrapper = shallowMount(NegotiatorSelection, { store, localVue, propsData: { value: true } })
       expect(wrapper.vm.modalFooterText).toEqual('0 collection(s) present in Podium')
     })
+
+    it('should set Send to Podium text when podium is active', () => {
+      store.state.isPodium = true
+      const wrapper = shallowMount(NegotiatorSelection, { store, localVue, propsData: { value: true } })
+      expect(wrapper.vm.negotiatorButtonText).toEqual('Send to Podium')
+    })
+
+    it('should set Send to the Negotiator text when podium is not active', () => {
+      store.state.isPodium = false
+      const wrapper = shallowMount(NegotiatorSelection, { store, localVue, propsData: { value: true } })
+      expect(wrapper.vm.negotiatorButtonText).toEqual('Send to the Negotiator')
+    })
   })
 })
