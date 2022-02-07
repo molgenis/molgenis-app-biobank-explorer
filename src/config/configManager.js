@@ -1,8 +1,8 @@
 import initialCollectionColumns from './initialCollectionColumns'
 
-const INITIAL_STATE = window.__INITIAL_STATE__ || {}
-
 export const bbmriConfig = () => {
+  const INITIAL_STATE = window.__INITIAL_STATE__ || {}
+
   const config = {
     disabledFilters: [],
     collectionColumns: initialCollectionColumns,
