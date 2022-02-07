@@ -4,7 +4,7 @@
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
-          class="mr-2"
+          class="mr-2 mb-2"
           v-b-toggle.filters
           variant="outline-info"
           @click="filtersCollapsed = !filtersCollapsed">
@@ -19,10 +19,11 @@
         </b-button>
         <b-button
           v-if="numberOfActiveFilters > 0"
+          class="mr-2 mb-2"
           variant="outline-secondary"
           @click="ClearActiveFilters">Clear all filters</b-button>
         <collection-select-all
-          class="d-inline ml-2"
+          class="d-inline"
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
       </div>
