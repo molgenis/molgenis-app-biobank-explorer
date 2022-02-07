@@ -87,7 +87,7 @@ describe('store', () => {
       })
     })
 
-    describe('ResetFilters', () => {
+    describe('ClearActiveFilters', () => {
       it('should reset all the filters in the state', () => {
         state.filters.selections = {
           country: ['AT'],
@@ -100,7 +100,7 @@ describe('store', () => {
           dataType: ['type']
         }
         expect(state.filters.selections.country).toEqual(['AT'])
-        mutations.ResetFilters(state)
+        mutations.ClearActiveFilters(state)
         expect(state.filters.selections).toStrictEqual({})
       })
     })

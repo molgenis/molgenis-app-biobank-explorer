@@ -54,7 +54,11 @@ export default {
     biobankNetwork: {
       get () {
         const network = this.filters.selections.biobank_network
-        if (network && network.length > 0 && network.includes(covid19NetworkId)) {
+        if (
+          network &&
+          network.length > 0 &&
+          network.includes(covid19NetworkId)
+        ) {
           return true
         }
         return false
@@ -63,7 +67,11 @@ export default {
     collectionNetwork: {
       get () {
         const network = this.filters.selections.collection_network
-        if (network && network.length > 0 && network.includes(covid19NetworkId)) {
+        if (
+          network &&
+          network.length > 0 &&
+          network.includes(covid19NetworkId)
+        ) {
           return true
         }
         return false

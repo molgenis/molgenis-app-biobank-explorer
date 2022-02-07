@@ -1,12 +1,13 @@
 import initialCollectionColumns from './initialCollectionColumns'
 
-const INITIAL_STATE = window.__INITIAL_STATE__ || {}
-
 export const bbmriConfig = () => {
+  const INITIAL_STATE = window.__INITIAL_STATE__ || {}
+
   const config = {
     disabledFilters: [],
     collectionColumns: initialCollectionColumns,
-    customCollectionFilterFacets: []
+    customCollectionFilterFacets: [],
+    removeFreemarkerMargin: false
   }
 
   // check if property is in database and has a value
@@ -20,6 +21,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'customCollectionFilterFacets') && INITIAL_STATE.customCollectionFilterFacets.length) {
     config.customCollectionFilterFacets = INITIAL_STATE.customCollectionFilterFacets
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'removeFreemarkerMargin') && INITIAL_STATE.removeFreemarkerMargin === true) {
+    config.removeFreemarkerMargin = INITIAL_STATE.removeFreemarkerMargin
   }
 
   return config

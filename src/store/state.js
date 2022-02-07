@@ -5,12 +5,13 @@ const config = bbmriConfig()
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
-  isIE11: window.ActiveXObject !== undefined && 'ActiveXObject' in window,
-  ie11Bookmark: '',
   cartValid: true,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
+  removeFreemarkerMargin: config.removeFreemarkerMargin,
   isLoading: false,
+  currentPage: 1,
+  pageSize: 10,
   isPodium: false,
   podiumCollectionIds: [],
   error: null,

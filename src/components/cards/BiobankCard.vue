@@ -228,8 +228,6 @@ export default {
   left: 2px;
 }
 
-/* can go: */
-
 /* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
 .quality-marks-popover {
   background-color: white !important;
@@ -237,17 +235,18 @@ export default {
   max-width: 40rem;
 }
 
-.quality-marks-popover[x-placement^='top'] > .arrow::before {
+/** Fixes popover styles for quality-marks, even autoplaced. */
+[x-placement^='top'] > .arrow::before {
   border-top-color: black !important;
 }
-.quality-marks-popover[x-placement^='top'] > .arrow::after {
+[x-placement^='top'] > .arrow::after {
   border-top-color: white !important;
 }
 
-.quality-marks-popover[x-placement^='bottom'] > .arrow::before {
+[x-placement^='bottom'] > .arrow::before {
   border-bottom-color: black !important;
 }
-.quality-marks-popover[x-placement^='bottom'] > .arrow::after {
+[x-placement^='bottom'] > .arrow::after {
   border-bottom-color: white !important;
 }
 

@@ -1,27 +1,12 @@
 <template>
-  <div class="biobank-cards-container">
+  <div class="biobank-cards-container border-bottom p-3">
     <div v-if="!loading && foundBiobanks > 0">
-      <b-pagination
-        v-if="foundBiobanks > pageSize"
-        size="md"
-        align="center"
-        :total-rows="foundBiobanks"
-        v-model="currentPage"
-        :per-page="pageSize"></b-pagination>
       <biobank-card
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
         :biobank="biobank"
         :initCollapsed="true">
       </biobank-card>
-
-      <b-pagination
-        v-if="foundBiobanks > pageSize"
-        size="md"
-        align="center"
-        :total-rows="foundBiobanks"
-        v-model="currentPage"
-        :per-page="pageSize"></b-pagination>
     </div>
 
     <div v-else-if="!loading && foundBiobanks === 0" class="status-text">
@@ -37,41 +22,26 @@
   </div>
 </template>
 
-<style>
-.status-text {
-  text-align: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.biobank-cards-container {
-  width: 100%;
-}
-</style>
-
 <script>
-import BiobankCard from './BiobankCard'
-import { mapGetters, mapActions } from 'vuex'
+import BiobankCard from './BiobankCard.vue'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
-  data () {
-    return {
-      currentPage: 1,
-      pageSize: 10
-    }
-  },
   methods: {
-    ...mapActions(['GetBiobanks'])
+    ...mapActions(['GetBiobanks']),
+    ...mapMutations(['SetCurrentPage'])
   },
   computed: {
-    ...mapGetters([
-      'biobanks',
-      'foundBiobanks',
-      'loading'
-    ]),
+    ...mapState(['pageSize', 'currentPage']),
+    ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
     biobanksShown () {
-      return this.loading ? [] : this.biobanks.slice(this.pageSize * (this.currentPage - 1), this.pageSize * this.currentPage)
+      return this.loading
+        ? []
+        : this.biobanks.slice(
+          this.pageSize * (this.currentPage - 1),
+          this.pageSize * this.currentPage
+        )
     },
     biobankIds () {
       return this.loading ? [] : this.biobanks.map(it => it.id || it)
@@ -85,9 +55,11 @@ export default {
   },
   watch: {
     biobankIds (newValue, oldValue) {
-      if (newValue.length !== oldValue.length ||
-        !newValue.every((element, index) => element === oldValue[index])) {
-        this.currentPage = 1
+      if (
+        newValue.length !== oldValue.length ||
+        !newValue.every((element, index) => element === oldValue[index])
+      ) {
+        this.SetCurrentPage(1)
       }
     },
     biobankIdsToFetch (value) {
@@ -98,3 +70,18 @@ export default {
   }
 }
 </script>
+
+<style>
+.status-text {
+  text-align: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.biobank-cards-container {
+  padding-top: 1rem;
+  width: 100%;
+  max-height: 75vh;
+  overflow-y:auto;
+}
+</style>

@@ -37,7 +37,7 @@ export default {
         filterValue === '' ||
         (Array.isArray(filterValue) && !filterValue.length) ||
         (!Array.isArray(filterValue) && typeof filterValue === 'object' &&
-        (!filterValue.value.length || !filterValue.value[0].length))) {
+          (!filterValue.value.length || !filterValue.value[0].length))) {
         // remove the empty filter and the label
         delete currentFilterSelection[propertyName]
         delete currentLabels[propertyName]
@@ -79,13 +79,6 @@ export default {
     }
 
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
-  },
-  /**
-   * Reset all filters in the state
-   */
-  ResetFilters (state) {
-    state.filters.selections = {}
-    state.filters.satisfyAll = []
   },
   SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
@@ -206,6 +199,9 @@ export default {
       createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
+  SetCartValidationStatus (state, status) {
+    state.cartValid = status
+  },
   SetSearchHistory (state, history) {
     if (history === '') {
       history = 'No filters used.'
@@ -234,10 +230,10 @@ export default {
    * @param state
    * @param params
    */
-  MapQueryToState (state, ie11Query) {
+  MapQueryToState (state) {
     // bookmark has been altered in another view
     if (!state.cartValid) return
-    const query = ie11Query || state.route.query
+    const query = state.route.query
 
     const keysInQuery = Object.keys(query)
     // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
@@ -304,11 +300,19 @@ export default {
     }
     state.filterFacets = filterFacets
   },
+  ClearActiveFilters (state) {
+    state.filters.selections = {}
+    state.filters.satisfyAll = []
+    createBookmark(state.filters.selections, state.selectedCollections)
+  },
   SetError (state, error) {
     state.error = error
   },
   SetLoading (state, loading) {
     state.isLoading = loading
+  },
+  SetCurrentPage (state, currentPage) {
+    state.currentPage = currentPage
   },
   SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
