@@ -80,13 +80,6 @@ export default {
 
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
-  /**
-   * Reset all filters in the state
-   */
-  ResetFilters (state) {
-    state.filters.selections = {}
-    state.filters.satisfyAll = []
-  },
   SetBiobanks (state, biobanks) {
     biobanks.forEach(biobank => {
       Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
@@ -309,6 +302,7 @@ export default {
   },
   ClearActiveFilters (state) {
     state.filters.selections = {}
+    state.filters.satisfyAll = []
     createBookmark(state.filters.selections, state.selectedCollections)
   },
   SetError (state, error) {
