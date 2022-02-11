@@ -1,12 +1,13 @@
 
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import utils, { createQuery, createInQuery } from '../utils'
+import { createQuery, createInQuery } from '../utils'
 import initialCollectionColumns from '../config/initialCollectionColumns'
 import 'array-flat-polyfill'
 import { flatten } from 'lodash'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
+import { biobankActions } from './biobank/actions'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -39,6 +40,7 @@ const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = () => {
 /**/
 
 export default {
+  ...biobankActions,
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)
@@ -50,18 +52,6 @@ export default {
     const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
 
     commit('SetQualityStandardDictionary', response)
-  },
-  /*
-   * Retrieves biobanks and stores them in the cache
-   */
-  GetBiobanks ({ commit }, biobankIds) {
-    const q = encodeRsqlValue(transformToRSQL({ selector: 'id', comparison: '=in=', arguments: biobankIds }))
-    api.get(`${BIOBANK_API_PATH}?num=10000&attrs=${COLLECTION_ATTRIBUTE_SELECTOR},*&q=${q}`)
-      .then(response => {
-        commit('SetBiobanks', response.items)
-      }, error => {
-        commit('SetError', error)
-      })
   },
   // We need to get id's to use in RSQL later, because we can't do a join on this table
   GetCollectionIdsForQuality ({ state, commit }) {
@@ -85,28 +75,6 @@ export default {
       commit('SetCollectionIdsWithSelectedQuality', [])
     }
   },
-  // Same as collections above
-  GetBiobankIdsForQuality ({ state, commit }) {
-    const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
-    const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
-    const selection = 'assess_level_bio'
-    if (qualityIds && qualityIds.length > 0) {
-      const query = encodeRsqlValue(transformToRSQL({
-        operator: 'AND',
-        operands: flatten([
-          state.filters.satisfyAll.includes('biobank_quality')
-            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('biobank_quality'))
-            : createInQuery(selection, qualityIds)
-        ])
-      }
-      ))
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=` + query).then(response => {
-        commit('SetBiobankIdsWithSelectedQuality', response)
-      })
-    } else {
-      commit('SetBiobankIdsWithSelectedQuality', [])
-    }
-  },
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
@@ -123,33 +91,6 @@ export default {
       }, error => {
         commit('SetError', error)
       })
-  },
-  GetBiobankIds ({ commit, getters }) {
-    commit('SetBiobankIds', undefined)
-    let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
-    if (getters.biobankRsql) {
-      url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`
-    }
-    api.get(url)
-      .then(response => {
-        commit('SetBiobankIds', response.items.map(item => item.data.id))
-      }, error => {
-        commit('SetError', error)
-      })
-  },
-  GetBiobankReport ({ commit, state }, biobankId) {
-    if (state.allBiobanks) {
-      commit('SetBiobankReport', state.allBiobanks.find(it => it.id === biobankId))
-      return
-    }
-    commit('SetLoading', true)
-    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*`).then(response => {
-      commit('SetBiobankReport', response)
-      commit('SetLoading', false)
-    }, error => {
-      commit('SetError', error)
-      commit('SetLoading', false)
-    })
   },
   GetCollectionReport ({ commit }, collectionId) {
     commit('SetLoading', true)
