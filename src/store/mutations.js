@@ -90,24 +90,6 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  // // TODO remove
-  // SetDictionaries (state, response) {
-  //   const collections = response.items.map(item => (
-  //     {
-  //       id: item.data.id,
-  //       label: item.data.label || item.data.name,
-  //       biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-  //       commercialUse: item.data.collaboration_commercial
-  //     }))
-
-  //   collections.forEach(function (collection) {
-  //     state.collectionBiobankDictionary[collection.id] = collection.biobankName
-  //     state.collectionNameDictionary[collection.id] = collection.label
-  //   })
-
-  //   const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
-  //   state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
-  // },
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
     const allStandards = [...new Set(
