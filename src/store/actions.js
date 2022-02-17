@@ -8,7 +8,7 @@ import { flatten } from 'lodash'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { biobankActions } from './biobank/actions'
-import { generalActions } from './general/actions'
+import { collectionActions } from './collection/actions'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -41,7 +41,7 @@ const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = () => {
 /**/
 
 export default {
-  ...generalActions,
+  ...collectionActions,
   ...biobankActions,
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
@@ -80,16 +80,20 @@ export default {
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
-  GetCollectionInfo ({ commit, getters }) {
+  async GetCollectionInfo ({ state, commit, getters, dispatch }) {
+    // check if initial data is present, else fetch that first
+    if (state.collectionRelationData.length === 0) {
+      await dispatch('initializeCollectionRelationData')
+    }
+
     commit('SetCollectionInfo', undefined)
-    let url = '/api/data/eu_bbmri_eric_collections?filter=id,biobank(id,name,label),name,label,collaboration_commercial,parent_collection&expand=biobank&size=10000&sort=biobank_label'
+    let url = '/api/data/eu_bbmri_eric_collections?filter=id&size=10000&sort=biobank_label'
     if (getters.rsql) {
       url = `${url}&q=${encodeRsqlValue(getters.rsql)}`
     }
     api.get(url)
       .then(response => {
         commit('SetCollectionInfo', response)
-        commit('SetAllCollectionRelationData', response)
       }, error => {
         commit('SetError', error)
       })

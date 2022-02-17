@@ -1,4 +1,4 @@
-export const generalMutations = {
+export const collectionMutations = {
   SetAllCollectionRelationData (state, response) {
     const collectionRelationData = response.items.map(item => ({
       collectionId: item.data.id,

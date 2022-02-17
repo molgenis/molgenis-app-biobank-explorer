@@ -3,12 +3,12 @@ import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
-import { generalMutations } from './general/mutations'
+import { collectionMutations } from './collection/mutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
-  ...generalMutations,
+  ...collectionMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
@@ -139,14 +139,14 @@ export default {
       return
     }
 
-    const collectionInfo = response.items.map(item => ({
-      collectionId: item.data.id,
-      collectionName: item.data.label || item.data.name,
-      biobankId: item.data.biobank.data.id,
-      biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-      isSubcollection: item.data.parent_collection !== undefined,
-      parentCollection: item.data.parent_collection
-    }))
+    const collectionIds = response.items.map(item => item.data.id)
+    const collectionInfo = []
+    state.collectionRelationData.forEach((collection) => {
+      if (collectionIds.includes(collection.collectionId)) {
+        collectionInfo.push(collection)
+      }
+    })
+
     state.collectionInfo = collectionInfo
   },
   /**

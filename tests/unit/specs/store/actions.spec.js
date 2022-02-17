@@ -9,11 +9,12 @@ jest.mock('@molgenis/molgenis-api-client', () => {
     get: jest.fn()
   }
 })
-let commit, state
+let commit, state, dispatch
 
 describe('store', () => {
   beforeEach(() => {
     commit = jest.fn()
+    dispatch = jest.fn()
     state = mockState()
   })
 
@@ -268,10 +269,11 @@ describe('store', () => {
         api.get.mockResolvedValueOnce(response)
         const getters = { rsql: 'country=in=(NL,BE)' }
 
-        await actions.GetCollectionInfo({ commit, getters })
+        await actions.GetCollectionInfo({ state, commit, getters, dispatch })
+
+        expect(dispatch).toHaveBeenCalledWith('initializeCollectionRelationData')
         expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
         expect(commit.mock.calls[1]).toEqual(['SetCollectionInfo', response])
-        expect(commit.mock.calls[2]).toEqual(['SetAllCollectionRelationData', response])
       })
     })
 
