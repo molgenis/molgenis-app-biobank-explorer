@@ -286,8 +286,8 @@ describe('store', () => {
       it('Should return filters as label + value objects', () => {
         const parentCollections = ['col-1']
         const foundCollectionIds = ['col-1', 'col-2']
-        const collectionDictionary = { 'col-1': 'Collection A', 'col-2': 'Collection B' }
-        const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds, collectionDictionary })
+        state.collectionNameDictionary = { 'col-1': 'Collection A', 'col-2': 'Collection B' }
+        const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds })
 
         expect(result).toStrictEqual([{ label: 'Collection A', value: 'col-1' }])
       })

@@ -3,10 +3,12 @@ import { createBookmark } from '../utils/bookmarkMapper'
 import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
+import { generalMutations } from './general/mutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
+  ...generalMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
@@ -88,24 +90,24 @@ export default {
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
   },
-  // TODO name more specifically
-  SetDictionaries (state, response) {
-    const collections = response.items.map(item => (
-      {
-        id: item.data.id,
-        label: item.data.label || item.data.name,
-        biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-        commercialUse: item.data.collaboration_commercial
-      }))
+  // // TODO remove
+  // SetDictionaries (state, response) {
+  //   const collections = response.items.map(item => (
+  //     {
+  //       id: item.data.id,
+  //       label: item.data.label || item.data.name,
+  //       biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
+  //       commercialUse: item.data.collaboration_commercial
+  //     }))
 
-    collections.forEach(function (collection) {
-      state.collectionBiobankDictionary[collection.id] = collection.biobankName
-      state.collectionDictionary[collection.id] = collection.label
-    })
+  //   collections.forEach(function (collection) {
+  //     state.collectionBiobankDictionary[collection.id] = collection.biobankName
+  //     state.collectionNameDictionary[collection.id] = collection.label
+  //   })
 
-    const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
-    state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
-  },
+  //   const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
+  //   state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
+  // },
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
     const allStandards = [...new Set(
@@ -141,7 +143,9 @@ export default {
       collectionId: item.data.id,
       collectionName: item.data.label || item.data.name,
       biobankId: item.data.biobank.data.id,
-      isSubcollection: item.data.parent_collection !== undefined
+      biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
+      isSubcollection: item.data.parent_collection !== undefined,
+      parentCollection: item.data.parent_collection
     }))
     state.collectionInfo = collectionInfo
   },
@@ -257,7 +261,7 @@ export default {
       const decoded = decodeURIComponent(query.cart)
       const cartIdString = atob(decoded)
       const cartIds = cartIdString.split(',')
-      state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
+      state.selectedCollections = cartIds.map(id => ({ label: state.collectionNameDictionary[id], value: id }))
 
       // add the beginning of history if from a link-back url
       if (state.searchHistory.length === 0) {

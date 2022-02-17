@@ -44,7 +44,6 @@ export default {
     return flattenedCollections
   },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
-  collectionDictionary: state => state.collectionDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   foundBiobanks: (_, { biobanks }) => {
     return biobanks.length
@@ -67,9 +66,9 @@ export default {
     const selectedNonCommercialCollections = selectedCollections.map(sc => sc.value).filter(sid => state.nonCommercialCollections.includes(sid))
     return selectedNonCommercialCollections.length
   },
-  foundCollectionsAsSelection: (_, { parentCollections, foundCollectionIds, collectionDictionary }) => {
+  foundCollectionsAsSelection: (state, { parentCollections, foundCollectionIds }) => {
     const parentCollectionIds = foundCollectionIds.filter(fci => parentCollections.includes(fci))
-    return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
+    return parentCollectionIds.map(colId => ({ label: state.collectionNameDictionary[colId], value: colId }))
   },
   collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds, selectedCollections }) {
     if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {

@@ -271,7 +271,7 @@ describe('store', () => {
         await actions.GetCollectionInfo({ commit, getters })
         expect(commit.mock.calls[0]).toEqual(['SetCollectionInfo', undefined])
         expect(commit.mock.calls[1]).toEqual(['SetCollectionInfo', response])
-        expect(commit.mock.calls[2]).toEqual(['SetDictionaries', response])
+        expect(commit.mock.calls[2]).toEqual(['SetAllCollectionRelationData', response])
       })
     })
 

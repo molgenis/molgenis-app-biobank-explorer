@@ -8,6 +8,7 @@ import { flatten } from 'lodash'
 
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { biobankActions } from './biobank/actions'
+import { generalActions } from './general/actions'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -40,6 +41,7 @@ const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = () => {
 /**/
 
 export default {
+  ...generalActions,
   ...biobankActions,
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
@@ -87,7 +89,7 @@ export default {
     api.get(url)
       .then(response => {
         commit('SetCollectionInfo', response)
-        commit('SetDictionaries', response)
+        commit('SetAllCollectionRelationData', response)
       }, error => {
         commit('SetError', error)
       })
