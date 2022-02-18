@@ -8,15 +8,20 @@ export const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
 export const biobankActions = {
-  GetBiobankIds ({ commit, getters }) {
+  QueryBiobanks ({ state, commit, getters }) {
     commit('SetBiobankIds', undefined)
-    let url = '/api/data/eu_bbmri_eric_biobanks?filter=id&size=10000&sort=name'
+
+    const size = getters.biobankRsql ? 10000 : state.pageSize
+
+    let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name`
     if (getters.biobankRsql) {
       url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`
     }
+
     api.get(url)
       .then(response => {
         commit('SetBiobankIds', response.items.map(item => item.data.id))
+        commit('SetBiobankPagination', response)
       }, error => {
         commit('SetError', error)
       })

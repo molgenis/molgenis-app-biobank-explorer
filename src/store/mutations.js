@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
 import { collectionMutations } from './collection/mutations'
+import { biobankMutations } from './biobank/mutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
+  ...biobankMutations,
   ...collectionMutations,
   /**
    * Updates filter and keeps a history of searches
@@ -82,14 +83,7 @@ export default {
 
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
-  SetBiobanks (state, biobanks) {
-    biobanks.forEach(biobank => {
-      Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
-    })
-  },
-  SetBiobankIds (state, biobankIds) {
-    state.biobankIds = biobankIds
-  },
+
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
     const allStandards = [...new Set(
@@ -131,14 +125,7 @@ export default {
 
     state.collectionInfo = collectionInfo
   },
-  /**
-   * Store a single biobank in the state for showing a biobank report
-   * @param state
-   * @param biobank response object from the server containing meta and items for a single biobank
-   */
-  SetBiobankReport (state, biobank) {
-    state.biobankReport = biobank
-  },
+
   SetCollectionReport (state, collection) {
     state.collectionReport = collection
   },

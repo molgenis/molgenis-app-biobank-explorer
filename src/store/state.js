@@ -12,6 +12,7 @@ export default {
   isLoading: false,
   currentPage: 1,
   pageSize: 10,
+  biobankPagination: {},
   isPodium: false,
   podiumCollectionIds: [],
   error: null,

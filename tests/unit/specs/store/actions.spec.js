@@ -73,7 +73,7 @@ describe('store', () => {
       })
     })
 
-    describe('GetBiobankIds', () => {
+    describe('QueryBiobanks', () => {
       it('should retrieve biobank ids from the server based on biobank filters', async () => {
         const response = {
           items: [
@@ -85,7 +85,7 @@ describe('store', () => {
 
         const getters = { biobankRsql: 'covid19=in=(covid19)' }
 
-        await actions.GetBiobankIds({ commit, getters })
+        await actions.QueryBiobanks({ state, commit, getters })
         expect(commit.mock.calls[1]).toEqual(['SetBiobankIds', ['biobank-1', 'biobank-2']])
       })
     })
