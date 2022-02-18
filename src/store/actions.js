@@ -1,14 +1,10 @@
 
 import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
-import { createQuery, createInQuery } from '../utils'
-import initialCollectionColumns from '../config/initialCollectionColumns'
 import 'array-flat-polyfill'
-import { flatten } from 'lodash'
 
-import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { biobankActions } from './biobank/actions'
-import { collectionActions } from './collection/actions'
+import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/actions'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
@@ -27,19 +23,6 @@ const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfi
 /* Query Parameters */
 export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
 
-const COLLECTION_REPORT_ATTRIBUTE_SELECTOR = () => {
-  const collectionRsql = initialCollectionColumns.filter(icc => icc.rsql).map(prop => prop.rsql)
-
-  let rsqlStart = '*,'
-
-  if (collectionRsql.length) {
-    rsqlStart += collectionRsql.join(',')
-  }
-
-  return `${rsqlStart},biobank(id,name,juridical_person,country,url,contact),contact(title_before_name,first_name,last_name,title_after_name,email,phone),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories)`
-}
-/**/
-
 export default {
   ...collectionActions,
   ...biobankActions,
@@ -55,59 +38,7 @@ export default {
 
     commit('SetQualityStandardDictionary', response)
   },
-  // We need to get id's to use in RSQL later, because we can't do a join on this table
-  GetCollectionIdsForQuality ({ state, commit }) {
-    const collectionQuality = state.route.query.collection_quality ? state.route.query.collection_quality : null
-    const qualityIds = state.filters.selections.collection_quality ?? collectionQuality
-    const selection = 'assess_level_col'
-    if (qualityIds && qualityIds.length > 0) {
-      const query = encodeRsqlValue(transformToRSQL({
-        operator: 'AND',
-        operands: flatten([
-          state.filters.satisfyAll.includes('collection_quality')
-            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('collection_quality'))
-            : createInQuery(selection, qualityIds)
-        ])
-      }
-      ))
-      api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q` + query).then(response => {
-        commit('SetCollectionIdsWithSelectedQuality', response)
-      })
-    } else {
-      commit('SetCollectionIdsWithSelectedQuality', [])
-    }
-  },
-  /*
-   * Retrieves all collection identifiers matching the collection filters, and their biobanks
-   */
-  async GetCollectionInfo ({ state, commit, getters, dispatch }) {
-    // check if initial data is present, else fetch that first
-    if (state.collectionRelationData.length === 0) {
-      await dispatch('initializeCollectionRelationData')
-    }
 
-    commit('SetCollectionInfo', undefined)
-    let url = '/api/data/eu_bbmri_eric_collections?filter=id&size=10000&sort=biobank_label'
-    if (getters.rsql) {
-      url = `${url}&q=${encodeRsqlValue(getters.rsql)}`
-    }
-    api.get(url)
-      .then(response => {
-        commit('SetCollectionInfo', response)
-      }, error => {
-        commit('SetError', error)
-      })
-  },
-  GetCollectionReport ({ commit }, collectionId) {
-    commit('SetLoading', true)
-    api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR()}`).then(response => {
-      commit('SetCollectionReport', response)
-      commit('SetLoading', false)
-    }, error => {
-      commit('SetError', error)
-      commit('SetLoading', false)
-    })
-  },
   GetNegotiatorType ({ commit }) {
     api.get(`${NEGOTIATOR_API_PATH}`).then(response => {
       commit('SetPodium', response)

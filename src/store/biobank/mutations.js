@@ -18,7 +18,19 @@ export const biobankMutations = {
   SetBiobankReport (state, biobank) {
     state.biobankReport = biobank
   },
-  SetBiobankPagination (state, response) {
-    state.biobankPagination = response.page
+  SetBiobankCount (state, response) {
+    /* Need to keep track of initial amount, because not all biobanks have collections */
+    if (!state.initialBiobankCount) {
+      state.initialBiobankCount = response.page.totalElements
+      state.initialBiobankIds = response.items.map(item => item.data.id)
+    }
+    state.biobankCount = response.page.totalElements
+  },
+  CalculateBiobankCount (state, getters) {
+    if (getters.rsql) {
+      state.biobankCount = [...new Set(state.collectionInfo.map(collection => collection.biobankId))].length
+    } else {
+      state.biobankCount = state.initialBiobankCount
+    }
   }
 }

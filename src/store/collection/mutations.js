@@ -27,5 +27,37 @@ export const collectionMutations = {
     state.collectionNameDictionary = collectionNameDictionary
     state.nonCommercialCollections = nonCommercialUseCollections
     state.collectionRelationData = collectionRelationData
+  },
+  SetCollectionInfo (state, response) {
+    if (response === undefined) {
+      state.collectionInfo = response
+      return
+    }
+
+    const collectionIds = response.items.map(item => item.data.id)
+    const collectionInfo = []
+    state.collectionRelationData.forEach((collection) => {
+      if (collectionIds.includes(collection.collectionId)) {
+        collectionInfo.push(collection)
+      }
+    })
+
+    state.collectionInfo = collectionInfo
+  },
+
+  SetCollectionReport (state, collection) {
+    state.collectionReport = collection
+  },
+  // methods for rehydrating bookmark
+  SetCollectionIdsWithSelectedQuality (state, response) {
+    if (response.items && response.items.length > 0) {
+      state.collectionIdsWithSelectedQuality = []
+      state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
+    } else {
+      const collectionQualityFilter = state.filters.selections.collection_quality
+      const isCollectionQualityFilterActive = (collectionQualityFilter && collectionQualityFilter.length > 0) || state.route.query.collection_quality
+
+      state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
+    }
   }
 }

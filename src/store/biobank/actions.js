@@ -11,7 +11,7 @@ export const biobankActions = {
   QueryBiobanks ({ state, commit, getters }) {
     commit('SetBiobankIds', undefined)
 
-    const size = getters.biobankRsql ? 10000 : state.pageSize
+    const size = getters.biobankRsql ? state.pageSize : 10000
 
     let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name`
     if (getters.biobankRsql) {
@@ -21,7 +21,7 @@ export const biobankActions = {
     api.get(url)
       .then(response => {
         commit('SetBiobankIds', response.items.map(item => item.data.id))
-        commit('SetBiobankPagination', response)
+        commit('SetBiobankCount', response)
       }, error => {
         commit('SetError', error)
       })

@@ -46,7 +46,7 @@ export default {
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   foundBiobanks: (state) => {
-    return state.biobankPagination.totalElements
+    return state.biobankCount
   },
   foundCollectionIds (state, { getFoundBiobankIds }) {
     // only if there are biobanks, then there are collections. we can't have rogue collections :)
