@@ -130,7 +130,6 @@ export default {
   },
   data () {
     return {
-      debounce: undefined,
       filterBarShown: false,
       filtersCollapsed: false,
       showCart: false
