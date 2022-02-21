@@ -8,7 +8,7 @@ import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './colle
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
-const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const BIOBANK_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_ops_standards'
 const COLLECTION_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_lab_standards'
 

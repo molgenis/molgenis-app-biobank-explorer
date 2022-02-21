@@ -1,7 +1,7 @@
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { createInQuery, createQuery } from '../../utils'
-import { COLLECTION_QUALITY_INFO_API_PATH } from '../actions'
+import { COLLECTION_API_PATH, COLLECTION_QUALITY_INFO_API_PATH } from '../actions'
 /**/
 import { flatten } from 'lodash'
 import initialCollectionColumns from '../../config/initialCollectionColumns'
@@ -51,7 +51,7 @@ export const collectionActions = {
   },
   GetCollectionReport ({ commit }, collectionId) {
     commit('SetLoading', true)
-    api.get(`${COLLECTION_QUALITY_INFO_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR()}`).then(response => {
+    api.get(`${COLLECTION_API_PATH}/${collectionId}?attrs=${COLLECTION_REPORT_ATTRIBUTE_SELECTOR()}`).then(response => {
       commit('SetCollectionReport', response)
       commit('SetLoading', false)
     }, error => {

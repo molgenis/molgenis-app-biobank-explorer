@@ -22,27 +22,8 @@
               </router-link>
               <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
-
-            <small v-if="biobank.quality && biobank.quality.length > 0">
-              <info-popover label="Quality mark(s):" bold-text icon-before-label>
-                <table>
-                  <tbody>
-                    <tr
-                      :key="`${biobank.id}-${quality.label}`"
-                      v-for="quality in biobank.quality">
-                      <td class="text-nowrap align-top font-weight-bold p-2">
-                        {{ quality.label }}
-                      </td>
-                      <td class="py-2">
-                        {{ qualityStandardsDictionary[quality.label] }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </info-popover>
-              <quality-column
-                :qualities="biobank.quality"
-                :spacing="0"></quality-column>
+            <small>
+              <quality :attribute="biobank" summary/>
             </small>
             <span v-if="availableCovidTypes">
               <b-img
@@ -62,7 +43,7 @@
             <small class="mr-2">
               <span class="font-weight-bold">Juridical person:</span>
             </small>
-            <small>{{ biobank['juridical_person'] }}</small>
+            <small>{{ biobank["juridical_person"] }}</small>
             <template v-if="availableCovidTypes">
               <br />
               <small class="mr-2">
@@ -72,7 +53,7 @@
             </template>
           </p>
         </div>
-        <div class="col-1 px-1"  v-if="!loading">
+        <div class="col-1 px-1" v-if="!loading">
           <collection-selector
             class="mt-auto text-right"
             v-if="biobank.collections.length > 0"
@@ -97,20 +78,19 @@
 <script>
 import CollectionSelector from '../buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
+import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
 import { mapGetters, mapState } from 'vuex'
 import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
-import QualityColumn from '../tables/QualityColumn'
+
 import 'array-flat-polyfill'
-import InfoPopover from '../popovers/InfoPopover.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     CollectionsTable,
-    QualityColumn,
-    CollectionSelector,
-    InfoPopover
+    quality,
+    CollectionSelector
   },
   props: {
     biobank: {
@@ -142,13 +122,11 @@ export default {
       if (!this.biobank.collections) return false
 
       const biobankCollectionSelection = this.biobank.collections
-        .filter((bcf) => !bcf.parent_collection)
-        .map((bc) => ({ label: bc.label || bc.name, value: bc.id }))
+        .filter(bcf => !bcf.parent_collection)
+        .map(bc => ({ label: bc.label || bc.name, value: bc.id }))
       return this.selectedCollections
-        .map((sc) => sc.value)
-        .some((id) =>
-          biobankCollectionSelection.map((pc) => pc.value).includes(id)
-        )
+        .map(sc => sc.value)
+        .some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
     },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)
@@ -157,14 +135,14 @@ export default {
       return typeof this.biobank === 'string'
     },
     collectionTypes () {
-      const getSubCollections = (collection) => [
+      const getSubCollections = collection => [
         collection,
         ...collection.sub_collections.flatMap(getSubCollections)
       ]
       const types = this.biobank.collections
         .flatMap(getSubCollections)
-        .flatMap((collection) => collection.type)
-        .map((type) => type.label)
+        .flatMap(collection => collection.type)
+        .map(type => type.label)
       return utils.getUniqueIdArray(types).join(', ')
     },
     availableCovidTypes () {
@@ -173,7 +151,7 @@ export default {
         this.biobank.covid19biobank.length > 0
       ) {
         return this.biobank.covid19biobank
-          .map((covidItem) => covidItem.label || covidItem.name)
+          .map(covidItem => covidItem.label || covidItem.name)
           .join(', ')
       } else return ''
     },
@@ -236,17 +214,17 @@ export default {
 }
 
 /** Fixes popover styles for quality-marks, even autoplaced. */
-[x-placement^='top'] > .arrow::before {
+[x-placement^="top"] > .arrow::before {
   border-top-color: black !important;
 }
-[x-placement^='top'] > .arrow::after {
+[x-placement^="top"] > .arrow::after {
   border-top-color: white !important;
 }
 
-[x-placement^='bottom'] > .arrow::before {
+[x-placement^="bottom"] > .arrow::before {
   border-bottom-color: black !important;
 }
-[x-placement^='bottom'] > .arrow::after {
+[x-placement^="bottom"] > .arrow::after {
   border-bottom-color: white !important;
 }
 
@@ -256,7 +234,7 @@ export default {
 
 /* for touch screens, so you have a nice area to press and still get a popover */
 .popover-trigger-area::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -0.5rem;
   bottom: -1rem;
