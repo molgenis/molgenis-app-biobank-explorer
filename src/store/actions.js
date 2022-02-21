@@ -65,13 +65,6 @@ export default {
         commit('SetError', error)
       })
   },
-  GetPodiumCollections ({ state, commit }) {
-    if (state.isPodium && state.podiumCollectionIds.length === 0) { // only fetch once.
-      api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
-        commit('SetPodiumCollections', response)
-      })
-    }
-  },
   /**
    * Transform the state into a NegotiatorQuery object.
    * Calls the DirectoryController method '/export' which answers with a URL
@@ -83,10 +76,5 @@ export default {
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))
-  },
-  AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
-    commit('SetCartValidationStatus', false)
-    commit('SetCollectionsToSelection', { collections, bookmark })
-    commit('SetSearchHistory', getters.getHumanReadableString)
   }
 }

@@ -80,7 +80,6 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
 
@@ -118,29 +117,6 @@ export default {
   SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
   },
-
-  SetBiobankIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.biobankIdsWithSelectedQuality = []
-      state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
-    } else {
-      const biobankQualityFilter = state.filters.selections.biobank_quality
-      const isBiobankQualityFilterActive = (biobankQualityFilter && biobankQualityFilter.length > 0) || state.route.query.biobank_quality
-
-      state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
-    }
-  },
-  SetCollectionsToSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const currentIds = state.selectedCollections.map(sc => sc.value)
-    const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
-    state.selectedCollections = state.selectedCollections.concat(newCollections)
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
-    }
-  },
   SetCartValidationStatus (state, status) {
     state.cartValid = status
   },
@@ -155,16 +131,6 @@ export default {
     } else {
       // we can safely write history here.
       state.searchHistory.push(history)
-    }
-  },
-  RemoveCollectionsFromSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const collectionsToRemove = collections.map(c => c.value)
-    state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
   /**
@@ -258,9 +224,6 @@ export default {
   },
   SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
-  },
-  SetPodiumCollections (state, response) {
-    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   },
   SetNegotiatorEntities (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {

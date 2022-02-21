@@ -80,5 +80,17 @@ export const collectionActions = {
     } else {
       commit('SetCollectionIdsWithSelectedQuality', [])
     }
+  },
+  AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
+    commit('SetCartValidationStatus', false)
+    commit('SetCollectionsToSelection', { collections, bookmark })
+    commit('SetSearchHistory', getters.getHumanReadableString)
+  },
+  GetPodiumCollections ({ state, commit }) {
+    if (state.isPodium && state.podiumCollectionIds.length === 0) { // only fetch once.
+      api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
+        commit('SetPodiumCollections', response)
+      })
+    }
   }
 }

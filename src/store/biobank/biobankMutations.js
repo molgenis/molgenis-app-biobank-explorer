@@ -32,5 +32,16 @@ export const biobankMutations = {
     } else {
       state.biobankCount = state.initialBiobankCount
     }
+  },
+  SetBiobankIdsWithSelectedQuality (state, response) {
+    if (response.items && response.items.length > 0) {
+      state.biobankIdsWithSelectedQuality = []
+      state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
+    } else {
+      const biobankQualityFilter = state.filters.selections.biobank_quality
+      const isBiobankQualityFilterActive = (biobankQualityFilter && biobankQualityFilter.length > 0) || state.route.query.biobank_quality
+
+      state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
+    }
   }
 }

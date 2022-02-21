@@ -1,3 +1,5 @@
+import { createBookmark } from '../../utils/bookmarkMapper'
+
 export const collectionMutations = {
   SetAllCollectionRelationData (state, response) {
     const collectionRelationData = response.items.map(item => ({
@@ -59,5 +61,29 @@ export const collectionMutations = {
 
       state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
     }
+  },
+  SetCollectionsToSelection (state, { collections, bookmark }) {
+    state.cartValid = false
+    const currentIds = state.selectedCollections.map(sc => sc.value)
+    const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
+    state.selectedCollections = state.selectedCollections.concat(newCollections)
+
+    if (bookmark) {
+      state.cartValid = true
+      createBookmark(state.filters.selections, state.selectedCollections)
+    }
+  },
+  RemoveCollectionsFromSelection (state, { collections, bookmark }) {
+    state.cartValid = false
+    const collectionsToRemove = collections.map(c => c.value)
+    state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
+
+    if (bookmark) {
+      state.cartValid = true
+      createBookmark(state.filters.selections, state.selectedCollections)
+    }
+  },
+  SetPodiumCollections (state, response) {
+    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   }
 }
