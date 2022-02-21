@@ -3,8 +3,8 @@ import api from '@molgenis/molgenis-api-client'
 import helpers from './helpers'
 import 'array-flat-polyfill'
 
-import { biobankActions } from './biobank/actions'
-import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/actions'
+import { biobankActions } from './biobank/biobankActions'
+import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/collectionActions'
 
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'

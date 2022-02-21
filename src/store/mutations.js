@@ -2,8 +2,8 @@ import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
 import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
-import { collectionMutations } from './collection/mutations'
-import { biobankMutations } from './biobank/mutations'
+import { collectionMutations } from './collection/collectionMutations'
+import { biobankMutations } from './biobank/biobankMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
