@@ -19,11 +19,11 @@
                   class="fa fa-table mr-2 icon-alignment"
                   aria-hidden="true"
                   aria-labelledby="biobank-name"></span>
+                <span id="biobank-name">{{ biobank.name }}</span>
               </router-link>
-              <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
             <small>
-              <quality :attribute="biobank" summary/>
+              <quality :attribute="biobank" summary />
             </small>
             <span v-if="availableCovidTypes">
               <b-img

@@ -38,6 +38,8 @@ export const collectionMutations = {
 
     const collectionIds = response.items.map(item => item.data.id)
     const collectionInfo = []
+
+    // retrieve data from the 'cache'
     state.collectionRelationData.forEach((collection) => {
       if (collectionIds.includes(collection.collectionId)) {
         collectionInfo.push(collection)

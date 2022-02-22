@@ -25,6 +25,7 @@ export default {
         .filter((value, index, self) => self.indexOf(value) === index)
     }
     return ids.map(biobankId => {
+      // lazy loading, return only the id, which will be fetched on demand
       if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
         return biobankId
       }

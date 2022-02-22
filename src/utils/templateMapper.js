@@ -69,31 +69,37 @@ export const mapRange = (min, max, unit) => {
   return range
 }
 
-export const getCollectionModel = (collection) => {
+/**
+ *
+ * @param {*} object collection / biobank
+ * @param {*} columns column config
+ * @returns viewmodel
+ */
+export const getViewmodel = (object, columns) => {
   // for generating badgecolors for (categorical)mrefs
   let previousBadgeColor = -1
   const attributes = []
 
-  for (const columnInfo of state.collectionColumns) {
+  for (const columnInfo of columns) {
     let attributeValue
 
     switch (columnInfo.type) {
       case 'range': {
         const { min, max, unit } = columnInfo
-        attributeValue = mapRange(collection[min], collection[max], collection[unit]) || ''
+        attributeValue = mapRange(object[min], object[max], object[unit]) || ''
         break
       }
       case 'object': {
-        attributeValue = mapToString(collection[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
+        attributeValue = mapToString(object[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
         break
       }
       case 'mref':
       case 'categoricalmref': {
-        attributeValue = mapObjArray(collection[columnInfo.column])
+        attributeValue = mapObjArray(object[columnInfo.column])
         break
       }
       default: {
-        attributeValue = mapToString(collection, columnInfo.column, columnInfo.prefix, columnInfo.suffix)
+        attributeValue = mapToString(object, columnInfo.column, columnInfo.prefix, columnInfo.suffix)
       }
     }
 
@@ -119,14 +125,14 @@ const mapSubcollections = (collections, level) => {
       subCollections.push({
         level,
         ...collection,
-        viewmodel: getCollectionModel(collection),
+        viewmodel: getViewmodel(collection, state.collectionColumns),
         sub_collections: mapSubcollections(collection.sub_collections, ++level)
       })
     } else {
       subCollections.push({
         level,
         ...collection,
-        viewmodel: getCollectionModel(collection)
+        viewmodel: getViewmodel(collection, state.collectionColumns)
       })
     }
   }
@@ -136,9 +142,14 @@ const mapSubcollections = (collections, level) => {
 export const getCollectionDetails = collection => {
   return {
     ...collection,
-    viewmodel: getCollectionModel(collection),
+    viewmodel: getViewmodel(collection, state.collectionColumns),
     sub_collections: mapSubcollections(collection.sub_collections, 1)
   }
+}
+
+export const getBiobankDetails = (biobank) => {
+  // collection_types logic and add that to biobank
+  // create viewmodel
 }
 
 export const collectionReportInformation = collection => {

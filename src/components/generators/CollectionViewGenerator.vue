@@ -11,7 +11,7 @@
     <div
       v-if="collection.sub_collections && collection.sub_collections.length > 0"
       class="mt-3">
-      <h3>Sub collections</h3>
+      <h3>Subcollections</h3>
 
       <subcollection
         v-for="subcollection of collection.sub_collections"
