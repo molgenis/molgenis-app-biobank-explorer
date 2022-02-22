@@ -13,7 +13,7 @@ const filterDefinitions = (state) => [
     component: 'CovidNetworkFilter',
     name: 'covid19network',
     label: 'COVID-19',
-    initiallyCollapsed: !state.route.query.collection_network || !state.route.query.biobank_network
+    initiallyCollapsed: !state.route.query.collection_network || !state.route.query.network
   },
   {
     headerClass: 'bg-warning text-white',
@@ -126,31 +126,17 @@ const filterDefinitions = (state) => [
   },
   {
     component: 'CheckboxFilter',
-    name: 'biobank_network',
-    label: 'Biobank network',
+    name: 'network',
+    label: 'Network',
     type: 'checkbox-filter',
     table: 'eu_bbmri_eric_networks',
-    options: genericFilterOptions('eu_bbmri_eric_networks', 'biobank_network'),
-    initiallyCollapsed: !state.route.query.biobank_network,
-    filters: state.filters.selections.biobank_network,
-    satisfyAll: state.filters.satisfyAll.includes('biobank_network'),
+    options: genericFilterOptions('eu_bbmri_eric_networks', 'network'),
+    initiallyCollapsed: !state.route.query.network,
+    filters: state.filters.selections.network,
+    satisfyAll: state.filters.satisfyAll.includes('network'),
     showSatisfyAllCheckbox: true,
     maxVisibleOptions: 25,
-    humanReadableString: 'Biobank with network(s):'
-  },
-  {
-    component: 'CheckboxFilter',
-    name: 'collection_network',
-    label: 'Collection network',
-    type: 'checkbox-filter',
-    table: 'eu_bbmri_eric_networks',
-    options: genericFilterOptions('eu_bbmri_eric_networks', 'collection_network'),
-    initiallyCollapsed: !state.route.query.collection_network,
-    filters: state.filters.selections.collection_network,
-    satisfyAll: state.filters.satisfyAll.includes('collection_network'),
-    showSatisfyAllCheckbox: true,
-    maxVisibleOptions: 25,
-    humanReadableString: 'Collection with network(s):'
+    humanReadableString: 'Network(s):'
   },
   {
     component: 'CheckboxFilter',
