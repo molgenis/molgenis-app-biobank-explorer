@@ -84,6 +84,7 @@ import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
 
 import 'array-flat-polyfill'
+import { getBiobankDetails } from '../../utils/templateMapper'
 
 export default {
   name: 'biobank-card',
@@ -135,6 +136,7 @@ export default {
       return typeof this.biobank === 'string'
     },
     collectionTypes () {
+      console.log(getBiobankDetails(this.biobank))
       const getSubCollections = collection => [
         collection,
         ...collection.sub_collections.flatMap(getSubCollections)
@@ -143,6 +145,7 @@ export default {
         .flatMap(getSubCollections)
         .flatMap(collection => collection.type)
         .map(type => type.label)
+
       return utils.getUniqueIdArray(types).join(', ')
     },
     availableCovidTypes () {

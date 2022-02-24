@@ -19,6 +19,7 @@ export default {
   podiumCollectionIds: [],
   error: null,
   disabledFilters: config.disabledFilters,
+  biobankColumns: config.biobankColumns,
   collectionColumns: config.collectionColumns,
   customCollectionFilterFacets: config.customCollectionFilterFacets,
   biobanks: {}, // Map ID to biobank

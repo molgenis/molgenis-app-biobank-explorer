@@ -1,3 +1,4 @@
+import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
 
 export const bbmriConfig = () => {
@@ -6,6 +7,7 @@ export const bbmriConfig = () => {
   const config = {
     disabledFilters: [],
     collectionColumns: initialCollectionColumns,
+    biobankColumns: initialBiobankColumns,
     customCollectionFilterFacets: [],
     removeFreemarkerMargin: false
   }

@@ -93,6 +93,10 @@ export const getViewmodel = (object, columns) => {
         attributeValue = mapToString(object[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
         break
       }
+      case 'array': {
+        attributeValue = object[columnInfo.column]
+        break
+      }
       case 'mref':
       case 'categoricalmref': {
         attributeValue = mapObjArray(object[columnInfo.column])
@@ -147,9 +151,33 @@ export const getCollectionDetails = collection => {
   }
 }
 
+/**
+ * Get all the types available within the collection tree
+ */
+function extractCollectionTypes (collections, extractedTypes) {
+  let collectionTypes = extractedTypes || []
+
+  for (const collection of collections) {
+    collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+
+    if (collection.sub_collections && collection.sub_collections.length) {
+      collectionTypes = collectionTypes.concat(extractCollectionTypes(collection.sub_collections, collectionTypes))
+    }
+  }
+  return collectionTypes
+}
+
 export const getBiobankDetails = (biobank) => {
   // collection_types logic and add that to biobank
   // create viewmodel
+
+  /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
+  biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+
+  return {
+    ...biobank,
+    viewmodel: getViewmodel(biobank, state.biobankColumns)
+  }
 }
 
 export const collectionReportInformation = collection => {

@@ -55,9 +55,6 @@ export default {
   },
   computed: {
     ...mapState(['qualityStandardsDictionary'])
-  },
-  mounted () {
-    console.log(this.item)
   }
 }
 </script>
