@@ -4,9 +4,9 @@
     <div
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed">
-      <div class="row">
-        <div class="col-6 d-flex" v-if="!loading">
-          <div class="mr-3" v-if="!loading">
+      <div class="row" v-if="!loading">
+        <div class="col-6 d-flex">
+          <div class="mr-3">
             <font-awesome-icon
               icon="caret-right"
               :style="iconStyle"
@@ -16,7 +16,7 @@
             <h5>
               <router-link :to="'/biobank/' + biobank.id">
                 <span
-                  class="fa fa-table mr-2 icon-alignment"
+                  class="fa fa-table mr-2 icon-alignment text-dark"
                   aria-hidden="true"
                   aria-labelledby="biobank-name"></span>
                 <span id="biobank-name">{{ biobank.name }}</span>
@@ -25,7 +25,8 @@
             <small>
               <quality :attribute="biobank" summary />
             </small>
-            <span v-if="availableCovidTypes">
+            <span
+              v-if="biobank.covid19biobank && biobank.covid19biobank.length > 0">
               <b-img
                 class="biobank-icon covid-icon"
                 :src="require('../../assets/custom_icons/covid19.png')"
@@ -33,12 +34,12 @@
             </span>
           </div>
         </div>
-        <div class="col-5" v-if="!loading">
+        <div class="col-5">
           <small>
             <view-generator :viewmodel="biobankcardViewmodel" />
           </small>
         </div>
-        <div class="col-1 px-1" v-if="!loading">
+        <div class="col-1 px-1">
           <collection-selector
             class="mt-auto text-right"
             v-if="biobank.collections.length > 0"
@@ -47,9 +48,9 @@
             bookmark
             @checked="handleCheckAll"></collection-selector>
         </div>
-        <div v-else class="col-12 text-center">
-          <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
-        </div>
+      </div>
+      <div v-else class="col-12 text-center">
+        <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
       </div>
     </div>
     <div class="card-body table-card" v-if="!collapsed && !loading">
@@ -131,16 +132,6 @@ export default {
     },
     loading () {
       return typeof this.biobank === 'string'
-    },
-    availableCovidTypes () {
-      if (
-        this.biobank.covid19biobank &&
-        this.biobank.covid19biobank.length > 0
-      ) {
-        return this.biobank.covid19biobank
-          .map(covidItem => covidItem.label || covidItem.name)
-          .join(', ')
-      } else return ''
     },
     iconStyle () {
       return {
