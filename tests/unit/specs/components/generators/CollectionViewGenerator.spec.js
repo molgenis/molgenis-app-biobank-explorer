@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import CollectionViewGenerator from '../../../../../src/components/generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../../../../../src/components/generators/ViewGenerator.vue'
 
 describe('CollectionView Generator', () => {
   it('can generate an mref based on categoricalmref or just mref', () => {
@@ -9,7 +9,7 @@ describe('CollectionView Generator', () => {
       ]
     }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { collection } })
 
     // flatten html so be can better assess if the value is between tags
     const html = wrapper.html().replace(/\s/gmi, '')
@@ -34,7 +34,7 @@ describe('CollectionView Generator', () => {
       viewmodel: [{ label: 'test-hyperlink', type: 'hyperlink', value: 'https://test.com' }]
     }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { collection } })
     const html = wrapper.html().replace(/\s/gmi, '')
 
     expect(html.includes('>test-hyperlink<')).toBeTruthy()
@@ -46,7 +46,7 @@ describe('CollectionView Generator', () => {
       viewmodel: [{ label: 'unknown-type', value: 'something very special' }]
     }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { collection } })
     const html = wrapper.html().replace(/\s/gmi, '')
 
     expect(html.includes('>unknown-type<')).toBeTruthy()

@@ -5,7 +5,7 @@
         {{ collection.name }}
       </router-link>
     </b>
-    <collection-view-generator :collection="collection" />
+    <view-generator :collection="collection" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   name: 'Subcollection',
   components: {
     // required because of recursion, else Vue will give component not found error
-    CollectionViewGenerator: () => import('../CollectionViewGenerator.vue')
+    ViewGenerator: () => import('../ViewGenerator.vue')
   },
   props: {
     collection: {

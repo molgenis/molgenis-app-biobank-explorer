@@ -34,24 +34,9 @@
           </div>
         </div>
         <div class="col-5" v-if="!loading">
-          <p>
-            <small class="mr-2">
-              <span class="font-weight-bold">Collection types:</span>
-            </small>
-            <small>{{ collectionTypes }}</small>
-            <br />
-            <small class="mr-2">
-              <span class="font-weight-bold">Juridical person:</span>
-            </small>
-            <small>{{ biobank["juridical_person"] }}</small>
-            <template v-if="availableCovidTypes">
-              <br />
-              <small class="mr-2">
-                <span class="font-weight-bold">Covid-19:</span>
-              </small>
-              <small>{{ availableCovidTypes }}</small>
-            </template>
-          </p>
+          <small>
+            <view-generator :viewmodel="biobankcardViewmodel" />
+          </small>
         </div>
         <div class="col-1 px-1" v-if="!loading">
           <collection-selector
@@ -80,18 +65,17 @@ import CollectionSelector from '../buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
 import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
 import { mapGetters, mapState } from 'vuex'
-import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
-
-import 'array-flat-polyfill'
 import { getBiobankDetails } from '../../utils/templateMapper'
+import ViewGenerator from '../generators/ViewGenerator.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     CollectionsTable,
     quality,
-    CollectionSelector
+    CollectionSelector,
+    ViewGenerator
   },
   props: {
     biobank: {
@@ -117,8 +101,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['qualityStandardsDictionary']),
+    ...mapState(['qualityStandardsDictionary', 'biobankColumns']),
     ...mapGetters(['selectedCollections']),
+    biobankcardViewmodel () {
+      const { viewmodel } = getBiobankDetails(this.biobank)
+      const biobankcardViewmodel = []
+
+      for (const item of this.biobankColumns) {
+        if (item.showOnBiobankCard) {
+          biobankcardViewmodel.push(
+            viewmodel.find(vm => vm.label === item.label)
+          )
+        }
+      }
+      return biobankcardViewmodel
+    },
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
@@ -134,19 +131,6 @@ export default {
     },
     loading () {
       return typeof this.biobank === 'string'
-    },
-    collectionTypes () {
-      console.log(getBiobankDetails(this.biobank))
-      const getSubCollections = collection => [
-        collection,
-        ...collection.sub_collections.flatMap(getSubCollections)
-      ]
-      const types = this.biobank.collections
-        .flatMap(getSubCollections)
-        .flatMap(collection => collection.type)
-        .map(type => type.label)
-
-      return utils.getUniqueIdArray(types).join(', ')
     },
     availableCovidTypes () {
       if (

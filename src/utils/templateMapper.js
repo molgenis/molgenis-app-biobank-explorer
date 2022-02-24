@@ -111,9 +111,11 @@ export const getViewmodel = (object, columns) => {
 
     // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
     if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {
+      console.log(columnInfo.badgeColor)
       const generatedBadgeColor = generateBadgeColor(previousBadgeColor)
       previousBadgeColor = generatedBadgeColor.prevBadgeColor
-      attribute.badgeColor = generatedBadgeColor.badgeColor
+      /* Badgecolor can be overridden in config */
+      attribute.badgeColor = columnInfo.badgeColor ? columnInfo.badgeColor : generatedBadgeColor.badgeColor
     }
     attributes.push(attribute)
   }
@@ -144,10 +146,12 @@ const mapSubcollections = (collections, level) => {
 }
 
 export const getCollectionDetails = collection => {
+  const viewmodel = getViewmodel(collection, state.collectionColumns)
+  viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
+
   return {
     ...collection,
-    viewmodel: getViewmodel(collection, state.collectionColumns),
-    sub_collections: mapSubcollections(collection.sub_collections, 1)
+    viewmodel
   }
 }
 
