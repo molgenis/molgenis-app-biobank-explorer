@@ -68,6 +68,13 @@ export default {
 </script>
 
 <style>
+/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
+.info-popover {
+  background-color: white !important;
+  border: solid black 0.5px;
+  max-width: 30rem;
+}
+
 /* Styling to add a line around the triangle, cannot be scoped due to bootstrap */
 .info-popover[x-placement^='top'] > .arrow::before {
   border-top-color: black !important;
@@ -83,11 +90,19 @@ export default {
   border-left-color: white !important;
 }
 
-/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
-.info-popover {
-  background-color: white !important;
-  border: solid black 0.5px;
-  max-width: 30rem;
+/** Fixes popover styles for quality-marks, even autoplaced. */
+[x-placement^="top"] > .arrow::before {
+  border-top-color: black !important;
+}
+[x-placement^="top"] > .arrow::after {
+  border-top-color: white !important;
+}
+
+[x-placement^="bottom"] > .arrow::before {
+  border-bottom-color: black !important;
+}
+[x-placement^="bottom"] > .arrow::after {
+  border-bottom-color: white !important;
 }
 
 .popover-trigger-area:hover {
@@ -102,5 +117,16 @@ export default {
   bottom: -1rem;
   right: -7rem;
   left: -0.5rem;
+}
+
+/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
+.quality-marks-popover {
+  background-color: white !important;
+  border: solid black 0.5px;
+  max-width: 40rem;
+}
+
+.popover-trigger-area {
+  position: relative;
 }
 </style>

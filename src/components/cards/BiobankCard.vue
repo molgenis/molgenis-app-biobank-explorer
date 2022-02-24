@@ -183,40 +183,4 @@ export default {
   top: 1px;
   left: 2px;
 }
-
-/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
-.quality-marks-popover {
-  background-color: white !important;
-  border: solid black 0.5px;
-  max-width: 40rem;
-}
-
-/** Fixes popover styles for quality-marks, even autoplaced. */
-[x-placement^="top"] > .arrow::before {
-  border-top-color: black !important;
-}
-[x-placement^="top"] > .arrow::after {
-  border-top-color: white !important;
-}
-
-[x-placement^="bottom"] > .arrow::before {
-  border-bottom-color: black !important;
-}
-[x-placement^="bottom"] > .arrow::after {
-  border-bottom-color: white !important;
-}
-
-.popover-trigger-area {
-  position: relative;
-}
-
-/* for touch screens, so you have a nice area to press and still get a popover */
-.popover-trigger-area::after {
-  content: "";
-  position: absolute;
-  top: -0.5rem;
-  bottom: -1rem;
-  right: -7rem;
-  left: -0.5rem;
-}
 </style>
