@@ -101,7 +101,7 @@ describe('templateMapper', () => {
       const collectionDetails = getCollectionDetails(collectionsReport)
       const expectedSize = '777'
 
-      const sizeAttribute = collectionDetails.viewmodel.find(attr => attr.label === 'Size:')
+      const sizeAttribute = collectionDetails.viewmodel.attributes.find(attr => attr.label === 'Size:')
 
       expect(sizeAttribute.value).toStrictEqual(expectedSize)
     })
@@ -109,16 +109,16 @@ describe('templateMapper', () => {
     it('should generate listValues of details table content', () => {
       const collectionDetails = getCollectionDetails(collectionsReport)
 
-      const typeModel = collectionDetails.viewmodel.find(attr => attr.label === 'Type:')
+      const typeModel = collectionDetails.viewmodel.attributes.find(attr => attr.label === 'Type:')
       expect(typeModel.value).toStrictEqual(['type1', 'type2'])
 
-      const storageModel = collectionDetails.viewmodel.find(attr => attr.label === 'Storage:')
+      const storageModel = collectionDetails.viewmodel.attributes.find(attr => attr.label === 'Storage:')
       expect(storageModel.value).toStrictEqual(['10 degrees'])
 
-      const dataModel = collectionDetails.viewmodel.find(attr => attr.label === 'Data:')
+      const dataModel = collectionDetails.viewmodel.attributes.find(attr => attr.label === 'Data:')
       expect(dataModel.value).toStrictEqual(['One type'])
 
-      const diagnosisModel = collectionDetails.viewmodel.find(attr => attr.label === 'Diagnosis:')
+      const diagnosisModel = collectionDetails.viewmodel.attributes.find(attr => attr.label === 'Diagnosis:')
       expect(diagnosisModel.value).toStrictEqual(['Common cold', 'Mysterious illness', 'Instaneous death'])
     })
   })
@@ -172,417 +172,7 @@ describe('templateMapper', () => {
   describe('getCollectionDetails', () => {
     it('should add details for collection and for sub collections', () => {
       const expected = {
-        _meta: {
-          name: 'meta'
-        },
-        age_high: 20,
-        age_low: 0,
-        age_unit: [
-          {
-            label: 'years'
-          }
-        ],
-        biobank: {
-          email: 'info@beautiful-biobank.gnv',
-          id: 'b-001',
-          juridical_person: 'Is this even a person?',
-          name: 'beautiful biobank',
-          partner_charter_signed: true,
-          url: 'https://beautiful-biobank.gnv'
-        },
-        collaboration_commercial: false,
-        collaboration_non_for_profit: true,
-        contact: {
-          email: 'mia@genovia.gnv',
-          first_name: 'Amelia Mignonette',
-          last_name: 'Thermopolis Renaldi',
-          phone: '+66 123456789',
-          title_before_name: 'Princess of Genovia'
-        },
-        country: {
-          name: 'Genovia'
-        },
-        data_categories: [
-          {
-            label: 'One type'
-          }
-        ],
-        data_use: [
-          {
-            label: 'DUO Testlabel',
-            uri: 'https://external-link-to-duo-item'
-          },
-          {
-            label: 'DUO Testlabel',
-            uri: ''
-          }
-        ],
-        description: 'beautiful samples',
-        diagnosis_available: [
-          {
-            label: 'Common cold'
-          },
-          {
-            label: 'Mysterious illness'
-          },
-          {
-            label: 'Instaneous death'
-          }
-        ],
-        head_firstname: 'Amelia Mignonette',
-        head_lastname: 'Thermopolis Renaldi',
-        head_role: 'Princess of Genovia',
-        id: 'c-001',
-        materials: [
-          {
-            label: 'material1'
-          },
-          {
-            label: 'material2'
-          }
-        ],
-        name: 'beautiful collection',
-        network: [],
-        order_of_magnitude: {
-          size: '777'
-        },
-        quality: [
-          {
-            label: 'Order of the rose'
-          }
-        ],
-        sex: [
-          {
-            label: 'male'
-          },
-          {
-            label: 'female'
-          }
-        ],
-        storage_temperatures: [
-          {
-            label: '10 degrees'
-          }
-        ],
-        sub_collections: [
-          {
-            viewmodel: [
-              {
-                label: 'Id:',
-                type: 'string',
-                value: '1'
-              },
-              {
-                label: 'Website:',
-                type: 'hyperlink',
-                value: ''
-              },
-              {
-                badgeColor: 'info',
-                label: 'Size:',
-                type: 'object',
-                value: '10.000 - 100.000'
-              },
-              {
-                label: 'Available:',
-                type: 'int',
-                value: ''
-              },
-              {
-                label: 'Donor size:',
-                type: 'object',
-                value: ''
-              },
-              {
-                label: 'Donors:',
-                type: 'int',
-                value: ''
-              },
-              {
-                label: 'Age:',
-                type: 'range',
-                value: ''
-              },
-              {
-                label: 'Type:',
-                type: 'mref',
-                value: []
-              },
-              {
-                label: 'Sex:',
-                type: 'categoricalmref',
-                value: []
-              },
-              {
-                badgeColor: 'secondary',
-                label: 'Materials:',
-                type: 'categoricalmref',
-                value: [
-                  'Other'
-                ]
-              },
-              {
-                label: 'Storage:',
-                type: 'categoricalmref',
-                value: []
-              },
-              {
-                badgeColor: 'danger',
-                label: 'Data:',
-                type: 'categoricalmref',
-                value: [
-                  'Biological samples'
-                ]
-              },
-              {
-                label: 'Diagnosis:',
-                type: 'mref',
-                value: []
-              },
-              {
-                label: 'Data use conditions:',
-                type: 'mref',
-                value: []
-              }
-            ],
-            data_categories: [
-              {
-                id: 'BIOLOGICAL_SAMPLES',
-                label: 'Biological samples'
-              }
-            ],
-            description: 'Description of test1',
-            id: '1',
-            level: 1,
-            materials: [
-              {
-                id: 'OTHER',
-                label: 'Other'
-              }
-            ],
-            name: 'Test 1',
-            order_of_magnitude: {
-              id: 4,
-              size: '10.000 - 100.000'
-            },
-            parent_collection: {
-              id: 'c-001',
-              name: 'beautiful collection'
-            },
-            sub_collections: []
-          },
-          {
-            data_categories: [
-              {
-                id: 'BIOLOGICAL_SAMPLES',
-                label: 'Biological samples'
-              }
-            ],
-            id: '2',
-            level: 1,
-            materials: [
-              {
-                id: 'OTHER',
-                label: 'Other'
-              }
-            ],
-            name: 'Test 2',
-            order_of_magnitude: {
-              id: 4,
-              size: '10.000 - 100.000'
-            },
-            parent_collection: {
-              id: 'c-001',
-              name: 'beautiful collection'
-            },
-            sub_collections: [
-              {
-                id: '3',
-                level: 2,
-                materials: [
-                  {
-                    id: 'OTHER',
-                    label: 'Other'
-                  }
-                ],
-                name: 'Test 3 (sub sub)',
-                order_of_magnitude: {
-                  id: 4,
-                  size: '10.000 - 100.000'
-                },
-                parent_collection: {
-                  id: '2',
-                  name: 'Test 2'
-                },
-                sub_collections: [],
-                viewmodel: [
-                  {
-                    label: 'Id:',
-                    type: 'string',
-                    value: '3'
-                  },
-                  {
-                    label: 'Website:',
-                    type: 'hyperlink',
-                    value: ''
-                  },
-                  {
-                    badgeColor: 'info',
-                    label: 'Size:',
-                    type: 'object',
-                    value: '10.000 - 100.000'
-                  },
-                  {
-                    label: 'Available:',
-                    type: 'int',
-                    value: ''
-                  },
-                  {
-                    label: 'Donor size:',
-                    type: 'object',
-                    value: ''
-                  },
-                  {
-                    label: 'Donors:',
-                    type: 'int',
-                    value: ''
-                  },
-                  {
-                    label: 'Age:',
-                    type: 'range',
-                    value: ''
-                  },
-                  {
-                    label: 'Type:',
-                    type: 'mref',
-                    value: []
-                  },
-                  {
-                    label: 'Sex:',
-                    type: 'categoricalmref',
-                    value: []
-                  },
-                  {
-                    badgeColor: 'secondary',
-                    label: 'Materials:',
-                    type: 'categoricalmref',
-                    value: [
-                      'Other'
-                    ]
-                  },
-                  {
-                    label: 'Storage:',
-                    type: 'categoricalmref',
-                    value: []
-                  },
-                  {
-                    label: 'Data:',
-                    type: 'categoricalmref',
-                    value: []
-                  },
-                  {
-                    label: 'Diagnosis:',
-                    type: 'mref',
-                    value: []
-                  },
-                  {
-                    label: 'Data use conditions:',
-                    type: 'mref',
-                    value: []
-                  }
-                ]
-              }
-            ],
-            viewmodel: [
-              {
-                label: 'Id:',
-                type: 'string',
-                value: '2'
-              },
-              {
-                label: 'Website:',
-                type: 'hyperlink',
-                value: ''
-              },
-              {
-                badgeColor: 'info',
-                label: 'Size:',
-                type: 'object',
-                value: '10.000 - 100.000'
-              },
-              {
-                label: 'Available:',
-                type: 'int',
-                value: ''
-              },
-              {
-                label: 'Donor size:',
-                type: 'object',
-                value: ''
-              },
-              {
-                label: 'Donors:',
-                type: 'int',
-                value: ''
-              },
-              {
-                label: 'Age:',
-                type: 'range',
-                value: ''
-              },
-              {
-                label: 'Type:',
-                type: 'mref',
-                value: []
-              },
-              {
-                label: 'Sex:',
-                type: 'categoricalmref',
-                value: []
-              },
-              {
-                badgeColor: 'secondary',
-                label: 'Materials:',
-                type: 'categoricalmref',
-                value: [
-                  'Other'
-                ]
-              },
-              {
-                label: 'Storage:',
-                type: 'categoricalmref',
-                value: []
-              },
-              {
-                badgeColor: 'danger',
-                label: 'Data:',
-                type: 'categoricalmref',
-                value: [
-                  'Biological samples'
-                ]
-              },
-              {
-                label: 'Diagnosis:',
-                type: 'mref',
-                value: []
-              },
-              {
-                label: 'Data use conditions:',
-                type: 'mref',
-                value: []
-              }
-            ]
-          }
-        ],
-        type: [
-          {
-            label: 'type1'
-          },
-          {
-            label: 'type2'
-          }
-        ],
-        viewmodel: [
+        attributes: [
           {
             label: 'Id:',
             type: 'string',
@@ -687,10 +277,348 @@ describe('templateMapper', () => {
               }
             ]
           }
+        ],
+        sub_collections: [
+          {
+            data_categories: [
+              {
+                id: 'BIOLOGICAL_SAMPLES',
+                label: 'Biological samples'
+              }
+            ],
+            description: 'Description of test1',
+            id: '1',
+            level: 1,
+            materials: [
+              {
+                id: 'OTHER',
+                label: 'Other'
+              }
+            ],
+            name: 'Test 1',
+            order_of_magnitude: {
+              id: 4,
+              size: '10.000 - 100.000'
+            },
+            parent_collection: {
+              id: 'c-001',
+              name: 'beautiful collection'
+            },
+            sub_collections: [],
+            viewmodel: {
+              attributes: [
+                {
+                  label: 'Id:',
+                  type: 'string',
+                  value: '1'
+                },
+                {
+                  label: 'Website:',
+                  type: 'hyperlink',
+                  value: ''
+                },
+                {
+                  badgeColor: 'info',
+                  label: 'Size:',
+                  type: 'object',
+                  value: '10.000 - 100.000'
+                },
+                {
+                  label: 'Available:',
+                  type: 'int',
+                  value: ''
+                },
+                {
+                  label: 'Donor size:',
+                  type: 'object',
+                  value: ''
+                },
+                {
+                  label: 'Donors:',
+                  type: 'int',
+                  value: ''
+                },
+                {
+                  label: 'Age:',
+                  type: 'range',
+                  value: ''
+                },
+                {
+                  label: 'Type:',
+                  type: 'mref',
+                  value: []
+                },
+                {
+                  label: 'Sex:',
+                  type: 'categoricalmref',
+                  value: []
+                },
+                {
+                  badgeColor: 'secondary',
+                  label: 'Materials:',
+                  type: 'categoricalmref',
+                  value: [
+                    'Other'
+                  ]
+                },
+                {
+                  label: 'Storage:',
+                  type: 'categoricalmref',
+                  value: []
+                },
+                {
+                  badgeColor: 'danger',
+                  label: 'Data:',
+                  type: 'categoricalmref',
+                  value: [
+                    'Biological samples'
+                  ]
+                },
+                {
+                  label: 'Diagnosis:',
+                  type: 'mref',
+                  value: []
+                },
+                {
+                  label: 'Data use conditions:',
+                  type: 'mref',
+                  value: []
+                }
+              ]
+            }
+          },
+          {
+            data_categories: [
+              {
+                id: 'BIOLOGICAL_SAMPLES',
+                label: 'Biological samples'
+              }
+            ],
+            id: '2',
+            level: 2,
+            materials: [
+              {
+                id: 'OTHER',
+                label: 'Other'
+              }
+            ],
+            name: 'Test 2',
+            order_of_magnitude: {
+              id: 4,
+              size: '10.000 - 100.000'
+            },
+            parent_collection: {
+              id: 'c-001',
+              name: 'beautiful collection'
+            },
+            sub_collections: [
+              {
+                id: '3',
+                materials: [
+                  {
+                    id: 'OTHER',
+                    label: 'Other'
+                  }
+                ],
+                name: 'Test 3 (sub sub)',
+                order_of_magnitude: {
+                  id: 4,
+                  size: '10.000 - 100.000'
+                },
+                parent_collection: {
+                  id: '2',
+                  name: 'Test 2'
+                },
+                sub_collections: []
+              }
+            ],
+            viewmodel: {
+              attributes: [
+                {
+                  label: 'Id:',
+                  type: 'string',
+                  value: '2'
+                },
+                {
+                  label: 'Website:',
+                  type: 'hyperlink',
+                  value: ''
+                },
+                {
+                  badgeColor: 'info',
+                  label: 'Size:',
+                  type: 'object',
+                  value: '10.000 - 100.000'
+                },
+                {
+                  label: 'Available:',
+                  type: 'int',
+                  value: ''
+                },
+                {
+                  label: 'Donor size:',
+                  type: 'object',
+                  value: ''
+                },
+                {
+                  label: 'Donors:',
+                  type: 'int',
+                  value: ''
+                },
+                {
+                  label: 'Age:',
+                  type: 'range',
+                  value: ''
+                },
+                {
+                  label: 'Type:',
+                  type: 'mref',
+                  value: []
+                },
+                {
+                  label: 'Sex:',
+                  type: 'categoricalmref',
+                  value: []
+                },
+                {
+                  badgeColor: 'secondary',
+                  label: 'Materials:',
+                  type: 'categoricalmref',
+                  value: [
+                    'Other'
+                  ]
+                },
+                {
+                  label: 'Storage:',
+                  type: 'categoricalmref',
+                  value: []
+                },
+                {
+                  badgeColor: 'danger',
+                  label: 'Data:',
+                  type: 'categoricalmref',
+                  value: [
+                    'Biological samples'
+                  ]
+                },
+                {
+                  label: 'Diagnosis:',
+                  type: 'mref',
+                  value: []
+                },
+                {
+                  label: 'Data use conditions:',
+                  type: 'mref',
+                  value: []
+                }
+              ],
+              sub_collections: [
+                {
+                  id: '3',
+                  level: 2,
+                  materials: [
+                    {
+                      id: 'OTHER',
+                      label: 'Other'
+                    }
+                  ],
+                  name: 'Test 3 (sub sub)',
+                  order_of_magnitude: {
+                    id: 4,
+                    size: '10.000 - 100.000'
+                  },
+                  parent_collection: {
+                    id: '2',
+                    name: 'Test 2'
+                  },
+                  sub_collections: [],
+                  viewmodel: {
+                    attributes: [
+                      {
+                        label: 'Id:',
+                        type: 'string',
+                        value: '3'
+                      },
+                      {
+                        label: 'Website:',
+                        type: 'hyperlink',
+                        value: ''
+                      },
+                      {
+                        badgeColor: 'info',
+                        label: 'Size:',
+                        type: 'object',
+                        value: '10.000 - 100.000'
+                      },
+                      {
+                        label: 'Available:',
+                        type: 'int',
+                        value: ''
+                      },
+                      {
+                        label: 'Donor size:',
+                        type: 'object',
+                        value: ''
+                      },
+                      {
+                        label: 'Donors:',
+                        type: 'int',
+                        value: ''
+                      },
+                      {
+                        label: 'Age:',
+                        type: 'range',
+                        value: ''
+                      },
+                      {
+                        label: 'Type:',
+                        type: 'mref',
+                        value: []
+                      },
+                      {
+                        label: 'Sex:',
+                        type: 'categoricalmref',
+                        value: []
+                      },
+                      {
+                        badgeColor: 'secondary',
+                        label: 'Materials:',
+                        type: 'categoricalmref',
+                        value: [
+                          'Other'
+                        ]
+                      },
+                      {
+                        label: 'Storage:',
+                        type: 'categoricalmref',
+                        value: []
+                      },
+                      {
+                        label: 'Data:',
+                        type: 'categoricalmref',
+                        value: []
+                      },
+                      {
+                        label: 'Diagnosis:',
+                        type: 'mref',
+                        value: []
+                      },
+                      {
+                        label: 'Data use conditions:',
+                        type: 'mref',
+                        value: []
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
         ]
       }
+
       const actual = getCollectionDetails(collectionsReport)
-      expect(actual).toStrictEqual(expected)
+      expect(actual.viewmodel).toStrictEqual(expected)
     })
   })
 

@@ -5,7 +5,7 @@
         {{ collection.name }}
       </router-link>
     </b>
-    <view-generator :collection="collection" />
+    <view-generator :viewmodel="collection.viewmodel" />
   </div>
 </template>
 

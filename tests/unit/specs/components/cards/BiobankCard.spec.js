@@ -1,6 +1,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import BiobankCard from '@/components/cards/BiobankCard'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
+import { mockState } from '../../mockData'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
@@ -11,7 +12,7 @@ describe('BiobankCard', () => {
 
   beforeEach(() => {
     store = new Vuex.Store({
-      state: {},
+      state: mockState(),
       getters: {
         selectedCollections: () => []
       }
@@ -50,20 +51,6 @@ describe('BiobankCard', () => {
     propsData.initCollapsed = false
     const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
     expect(wrapper.props().initCollapsed).toBe(false)
-  })
-
-  it('should expose a list of collectionTypes', () => {
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.vm.collectionTypes).toBe('col-type-a, col-type-b, col-type-d, col-type-e')
-  })
-  it('should expose a list of covid19 types if available', () => {
-    propsData.biobank.covid19biobank = [{ label: 'Member of the COVID-19 network' }, { name: 'COVID-19' }]
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.vm.availableCovidTypes).toBe('Member of the COVID-19 network, COVID-19')
-  })
-  it('should return nothing if covid types are not available', () => {
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.vm.availableCovidTypes).toBe('')
   })
   it('should sort collections based by name alphabeticaly', () => {
     const result = [{

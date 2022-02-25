@@ -1,4 +1,5 @@
 import { bbmriConfig } from '../../../../src/config/configManager'
+import initialBiobankColumns from '../../../../src/config/initialBiobankColumns'
 import initialCollectionColumns from '../../../../src/config/initialCollectionColumns'
 
 let windowSpy
@@ -6,6 +7,7 @@ let windowSpy
 const initialState = {
   disabledFilters: ['country'],
   collectionColumns: initialCollectionColumns,
+  biobankColumns: initialBiobankColumns,
   customCollectionFilterFacets: [],
   removeFreemarkerMargin: true
 }

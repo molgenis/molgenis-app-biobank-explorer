@@ -2,7 +2,7 @@
   <div>
     <table class="mg-report-details-list mb-4">
       <component
-        v-for="attribute in renderObject"
+        v-for="attribute in renderObject.attributes"
         :is="component(attribute.type)"
         :attribute="attribute"
         :key="attribute.id"/>
@@ -39,7 +39,7 @@ export default {
   },
   props: {
     viewmodel: {
-      type: Array,
+      type: Object,
       required: true
     }
   },

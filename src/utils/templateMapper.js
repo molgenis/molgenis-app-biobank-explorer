@@ -111,7 +111,6 @@ export const getViewmodel = (object, columns) => {
 
     // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
     if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {
-      console.log(columnInfo.badgeColor)
       const generatedBadgeColor = generateBadgeColor(previousBadgeColor)
       previousBadgeColor = generatedBadgeColor.prevBadgeColor
       /* Badgecolor can be overridden in config */
@@ -120,7 +119,7 @@ export const getViewmodel = (object, columns) => {
     attributes.push(attribute)
   }
 
-  return attributes
+  return { attributes }
 }
 
 const mapSubcollections = (collections, level) => {
@@ -128,11 +127,13 @@ const mapSubcollections = (collections, level) => {
 
   for (const collection of collections) {
     if (collection.sub_collections && collection.sub_collections.length) {
+      const viewmodel = getViewmodel(collection, state.collectionColumns)
+      viewmodel.sub_collections = mapSubcollections(collection.sub_collections, ++level)
+
       subCollections.push({
         level,
         ...collection,
-        viewmodel: getViewmodel(collection, state.collectionColumns),
-        sub_collections: mapSubcollections(collection.sub_collections, ++level)
+        viewmodel
       })
     } else {
       subCollections.push({
@@ -172,9 +173,6 @@ function extractCollectionTypes (collections, extractedTypes) {
 }
 
 export const getBiobankDetails = (biobank) => {
-  // collection_types logic and add that to biobank
-  // create viewmodel
-
   /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
   biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
 
@@ -228,7 +226,6 @@ export const collectionReportInformation = collection => {
 
   return collectionReport
 }
-
 export const mapNetworkInfo = data => {
   return data.network.map(network => {
     return {

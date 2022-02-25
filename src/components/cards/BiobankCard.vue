@@ -106,16 +106,16 @@ export default {
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
       const { viewmodel } = getBiobankDetails(this.biobank)
-      const biobankcardViewmodel = []
+      const attributes = []
 
       for (const item of this.biobankColumns) {
         if (item.showOnBiobankCard) {
-          biobankcardViewmodel.push(
-            viewmodel.find(vm => vm.label === item.label)
+          attributes.push(
+            viewmodel.attributes.find(vm => vm.label === item.label)
           )
         }
       }
-      return biobankcardViewmodel
+      return { attributes }
     },
     biobankInSelection () {
       if (!this.biobank.collections) return false

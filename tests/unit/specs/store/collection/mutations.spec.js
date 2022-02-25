@@ -1,4 +1,4 @@
-import { collectionMutations } from '../../../../../src/store/collection/mutations'
+import { collectionMutations } from '../../../../../src/store/collection/collectionMutations'
 import { mockCollectionResponse, mockState } from '../../mockData'
 let state
 
