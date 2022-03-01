@@ -1,6 +1,6 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="p-3 mx-3 header-bar card">
+  <div class="p-3 mx-3 header-bar card sticky-top">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
@@ -183,5 +183,9 @@ export default {
   display: inline-flex;
   position: relative;
   top: 2px; /* aligning it with the dropwdowns */
+}
+
+.sticky-top {
+  top:50px; /* adjust for molgenis menubar */
 }
 </style>

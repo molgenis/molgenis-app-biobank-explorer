@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container border-bottom p-3">
+  <div class="biobank-cards-container border-bottom p-3 molgenis-menu-adjustment">
     <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
@@ -78,10 +78,7 @@ export default {
   padding: 1rem;
 }
 
-.biobank-cards-container {
-  padding-top: 1rem;
-  width: 100%;
-  max-height: 75vh;
-  overflow-y:auto;
+.molgenis-menu-adjustment {
+  margin-top: 50px;
 }
 </style>
