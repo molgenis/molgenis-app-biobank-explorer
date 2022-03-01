@@ -9,22 +9,22 @@ describe('store', () => {
   describe('mutations', () => {
     describe('UpdateFilterSelection', () => {
       it('should set covid19 network filter for biobank if it is not present already', async () => {
-        expect(state.filters.selections.biobank_network).toBe(undefined)
+        expect(state.filters.selections.network).toBe(undefined)
 
-        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' } })
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
-        expect(state.filters.labels.biobank_network).toStrictEqual(['Covid-19'])
+        mutations.UpdateFilterSelection(state, { name: 'network', value: { text: 'Covid-19', value: 'COVID_19' } })
+        expect(state.filters.selections.network).toStrictEqual(['COVID_19'])
+        expect(state.filters.labels.network).toStrictEqual(['Covid-19'])
       })
 
       it('should remove covid19 network filter for biobank when unchecked', () => {
-        state.filters.selections.biobank_network = ['COVID_19']
-        state.filters.labels.biobank_network = ['Covid-19']
+        state.filters.selections.network = ['COVID_19']
+        state.filters.labels.network = ['Covid-19']
 
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+        expect(state.filters.selections.network).toStrictEqual(['COVID_19'])
 
-        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: [] } })
-        expect(state.filters.selections.biobank_network).toBeUndefined()
-        expect(state.filters.labels.biobank_network).toBeUndefined()
+        mutations.UpdateFilterSelection(state, { name: 'network', value: { text: 'Covid-19', value: [] } })
+        expect(state.filters.selections.network).toBeUndefined()
+        expect(state.filters.labels.network).toBeUndefined()
       })
 
       it('should update the list of filters for a specific state key and map its text as label', () => {
@@ -178,7 +178,7 @@ describe('store', () => {
             type: 'BIRTH_COHORT',
             dataType: 'BIOLOGICAL_SAMPLES',
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
-            biobank_network: 'networkA,networkB',
+            network: 'networkA,networkB',
             biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
             covid19: 'covid19',
@@ -196,7 +196,7 @@ describe('store', () => {
         expect(state.filters.selections.dataType).toStrictEqual(['BIOLOGICAL_SAMPLES'])
         expect(state.filters.selections.collection_quality).toStrictEqual(['eric', 'self'])
         expect(state.filters.selections.covid19).toStrictEqual(['covid19'])
-        expect(state.filters.selections.biobank_network).toStrictEqual(['networkA', 'networkB'])
+        expect(state.filters.selections.network).toStrictEqual(['networkA', 'networkB'])
         expect(state.filters.selections.biobank_quality).toStrictEqual(['qualityA'])
         expect(state.filters.selections.search).toBe('search')
         expect(state.nToken).toBe('29djgCm29104958f7dLqopf92JDJKS')
