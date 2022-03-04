@@ -1,15 +1,15 @@
 import { mount } from '@vue/test-utils'
-import CollectionViewGenerator from '../../../../../src/components/generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../../../../../src/components/generators/ViewGenerator.vue'
 
 describe('CollectionView Generator', () => {
   it('can generate an mref based on categoricalmref or just mref', () => {
-    const collection = {
-      viewmodel: [{ label: 'test-categorical-mref', type: 'categoricalmref', value: ['a', 'b', 'c'] },
+    const viewmodel = {
+      attributes: [{ label: 'test-categorical-mref', type: 'categoricalmref', value: ['a', 'b', 'c'] },
         { label: 'test-mref', type: 'mref', value: ['d', 'e', 'f'] }
       ]
     }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { viewmodel } })
 
     // flatten html so be can better assess if the value is between tags
     const html = wrapper.html().replace(/\s/gmi, '')
@@ -30,11 +30,9 @@ describe('CollectionView Generator', () => {
   })
 
   it('can generate a hyperlink', () => {
-    const collection = {
-      viewmodel: [{ label: 'test-hyperlink', type: 'hyperlink', value: 'https://test.com' }]
-    }
+    const viewmodel = { attributes: [{ label: 'test-hyperlink', type: 'hyperlink', value: 'https://test.com' }] }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { viewmodel } })
     const html = wrapper.html().replace(/\s/gmi, '')
 
     expect(html.includes('>test-hyperlink<')).toBeTruthy()
@@ -42,11 +40,9 @@ describe('CollectionView Generator', () => {
   })
 
   it('defaults to rendering as string when type is omitted', () => {
-    const collection = {
-      viewmodel: [{ label: 'unknown-type', value: 'something very special' }]
-    }
+    const viewmodel = { attributes: [{ label: 'unknown-type', value: 'something very special' }] }
 
-    const wrapper = mount(CollectionViewGenerator, { propsData: { collection } })
+    const wrapper = mount(ViewGenerator, { propsData: { viewmodel } })
     const html = wrapper.html().replace(/\s/gmi, '')
 
     expect(html.includes('>unknown-type<')).toBeTruthy()

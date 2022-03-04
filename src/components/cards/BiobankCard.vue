@@ -4,9 +4,9 @@
     <div
       class="card-header biobank-card-header"
       @click.prevent="collapsed = !collapsed">
-      <div class="row">
-        <div class="col-6 d-flex" v-if="!loading">
-          <div class="mr-3" v-if="!loading">
+      <div class="row" v-if="!loading">
+        <div class="col-6 d-flex">
+          <div class="mr-3">
             <font-awesome-icon
               icon="caret-right"
               :style="iconStyle"
@@ -16,35 +16,17 @@
             <h5>
               <router-link :to="'/biobank/' + biobank.id">
                 <span
-                  class="fa fa-table mr-2 icon-alignment"
+                  class="fa fa-table mr-2 icon-alignment text-dark"
                   aria-hidden="true"
                   aria-labelledby="biobank-name"></span>
+                <span id="biobank-name">{{ biobank.name }}</span>
               </router-link>
-              <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
-
-            <small v-if="biobank.quality && biobank.quality.length > 0">
-              <info-popover label="Quality mark(s):" bold-text icon-before-label>
-                <table>
-                  <tbody>
-                    <tr
-                      :key="`${biobank.id}-${quality.label}`"
-                      v-for="quality in biobank.quality">
-                      <td class="text-nowrap align-top font-weight-bold p-2">
-                        {{ quality.label }}
-                      </td>
-                      <td class="py-2">
-                        {{ qualityStandardsDictionary[quality.label] }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </info-popover>
-              <quality-column
-                :qualities="biobank.quality"
-                :spacing="0"></quality-column>
+            <small>
+              <quality :attribute="biobank" summary />
             </small>
-            <span v-if="availableCovidTypes">
+            <span
+              v-if="biobank.covid19biobank && biobank.covid19biobank.length > 0">
               <b-img
                 class="biobank-icon covid-icon"
                 :src="require('../../assets/custom_icons/covid19.png')"
@@ -52,27 +34,12 @@
             </span>
           </div>
         </div>
-        <div class="col-5" v-if="!loading">
-          <p>
-            <small class="mr-2">
-              <span class="font-weight-bold">Collection types:</span>
-            </small>
-            <small>{{ collectionTypes }}</small>
-            <br />
-            <small class="mr-2">
-              <span class="font-weight-bold">Juridical person:</span>
-            </small>
-            <small>{{ biobank['juridical_person'] }}</small>
-            <template v-if="availableCovidTypes">
-              <br />
-              <small class="mr-2">
-                <span class="font-weight-bold">Covid-19:</span>
-              </small>
-              <small>{{ availableCovidTypes }}</small>
-            </template>
-          </p>
+        <div class="col-5">
+          <small>
+            <view-generator :viewmodel="biobankcardViewmodel" />
+          </small>
         </div>
-        <div class="col-1 px-1"  v-if="!loading">
+        <div class="col-1 px-1">
           <collection-selector
             class="mt-auto text-right"
             v-if="biobank.collections.length > 0"
@@ -81,9 +48,9 @@
             bookmark
             @checked="handleCheckAll"></collection-selector>
         </div>
-        <div v-else class="col-12 text-center">
-          <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
-        </div>
+      </div>
+      <div v-else class="col-12 text-center">
+        <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
       </div>
     </div>
     <div class="card-body table-card" v-if="!collapsed && !loading">
@@ -97,20 +64,19 @@
 <script>
 import CollectionSelector from '../buttons/CollectionSelector'
 import CollectionsTable from '../tables/CollectionsTable.vue'
+import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
 import { mapGetters, mapState } from 'vuex'
-import utils from '../../utils'
 import { sortCollectionsByName } from '../../utils/sorting'
-import QualityColumn from '../tables/QualityColumn'
-import 'array-flat-polyfill'
-import InfoPopover from '../popovers/InfoPopover.vue'
+import { getBiobankDetails } from '../../utils/templateMapper'
+import ViewGenerator from '../generators/ViewGenerator.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     CollectionsTable,
-    QualityColumn,
+    quality,
     CollectionSelector,
-    InfoPopover
+    ViewGenerator
   },
   props: {
     biobank: {
@@ -136,46 +102,36 @@ export default {
     }
   },
   computed: {
-    ...mapState(['qualityStandardsDictionary']),
+    ...mapState(['qualityStandardsDictionary', 'biobankColumns']),
     ...mapGetters(['selectedCollections']),
+    biobankcardViewmodel () {
+      const { viewmodel } = getBiobankDetails(this.biobank)
+      const attributes = []
+
+      for (const item of this.biobankColumns) {
+        if (item.showOnBiobankCard) {
+          attributes.push(
+            viewmodel.attributes.find(vm => vm.label === item.label)
+          )
+        }
+      }
+      return { attributes }
+    },
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
       const biobankCollectionSelection = this.biobank.collections
-        .filter((bcf) => !bcf.parent_collection)
-        .map((bc) => ({ label: bc.label || bc.name, value: bc.id }))
+        .filter(bcf => !bcf.parent_collection)
+        .map(bc => ({ label: bc.label || bc.name, value: bc.id }))
       return this.selectedCollections
-        .map((sc) => sc.value)
-        .some((id) =>
-          biobankCollectionSelection.map((pc) => pc.value).includes(id)
-        )
+        .map(sc => sc.value)
+        .some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
     },
     sortedCollections () {
       return sortCollectionsByName(this.biobank.collections)
     },
     loading () {
       return typeof this.biobank === 'string'
-    },
-    collectionTypes () {
-      const getSubCollections = (collection) => [
-        collection,
-        ...collection.sub_collections.flatMap(getSubCollections)
-      ]
-      const types = this.biobank.collections
-        .flatMap(getSubCollections)
-        .flatMap((collection) => collection.type)
-        .map((type) => type.label)
-      return utils.getUniqueIdArray(types).join(', ')
-    },
-    availableCovidTypes () {
-      if (
-        this.biobank.covid19biobank &&
-        this.biobank.covid19biobank.length > 0
-      ) {
-        return this.biobank.covid19biobank
-          .map((covidItem) => covidItem.label || covidItem.name)
-          .join(', ')
-      } else return ''
     },
     iconStyle () {
       return {
@@ -226,41 +182,5 @@ export default {
   position: relative;
   top: 1px;
   left: 2px;
-}
-
-/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
-.quality-marks-popover {
-  background-color: white !important;
-  border: solid black 0.5px;
-  max-width: 40rem;
-}
-
-/** Fixes popover styles for quality-marks, even autoplaced. */
-[x-placement^='top'] > .arrow::before {
-  border-top-color: black !important;
-}
-[x-placement^='top'] > .arrow::after {
-  border-top-color: white !important;
-}
-
-[x-placement^='bottom'] > .arrow::before {
-  border-bottom-color: black !important;
-}
-[x-placement^='bottom'] > .arrow::after {
-  border-bottom-color: white !important;
-}
-
-.popover-trigger-area {
-  position: relative;
-}
-
-/* for touch screens, so you have a nice area to press and still get a popover */
-.popover-trigger-area::after {
-  content: '';
-  position: absolute;
-  top: -0.5rem;
-  bottom: -1rem;
-  right: -7rem;
-  left: -0.5rem;
 }
 </style>

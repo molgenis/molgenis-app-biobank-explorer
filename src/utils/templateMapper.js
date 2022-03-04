@@ -69,31 +69,41 @@ export const mapRange = (min, max, unit) => {
   return range
 }
 
-export const getCollectionModel = (collection) => {
+/**
+ *
+ * @param {*} object collection / biobank
+ * @param {*} columns column config
+ * @returns viewmodel
+ */
+export const getViewmodel = (object, columns) => {
   // for generating badgecolors for (categorical)mrefs
   let previousBadgeColor = -1
   const attributes = []
 
-  for (const columnInfo of state.collectionColumns) {
+  for (const columnInfo of columns) {
     let attributeValue
 
     switch (columnInfo.type) {
       case 'range': {
         const { min, max, unit } = columnInfo
-        attributeValue = mapRange(collection[min], collection[max], collection[unit]) || ''
+        attributeValue = mapRange(object[min], object[max], object[unit]) || ''
         break
       }
       case 'object': {
-        attributeValue = mapToString(collection[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
+        attributeValue = mapToString(object[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
+        break
+      }
+      case 'array': {
+        attributeValue = object[columnInfo.column]
         break
       }
       case 'mref':
       case 'categoricalmref': {
-        attributeValue = mapObjArray(collection[columnInfo.column])
+        attributeValue = mapObjArray(object[columnInfo.column])
         break
       }
       default: {
-        attributeValue = mapToString(collection, columnInfo.column, columnInfo.prefix, columnInfo.suffix)
+        attributeValue = mapToString(object, columnInfo.column, columnInfo.prefix, columnInfo.suffix)
       }
     }
 
@@ -103,12 +113,13 @@ export const getCollectionModel = (collection) => {
     if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {
       const generatedBadgeColor = generateBadgeColor(previousBadgeColor)
       previousBadgeColor = generatedBadgeColor.prevBadgeColor
-      attribute.badgeColor = generatedBadgeColor.badgeColor
+      /* Badgecolor can be overridden in config */
+      attribute.badgeColor = columnInfo.badgeColor ? columnInfo.badgeColor : generatedBadgeColor.badgeColor
     }
     attributes.push(attribute)
   }
 
-  return attributes
+  return { attributes }
 }
 
 const mapSubcollections = (collections, level) => {
@@ -116,17 +127,19 @@ const mapSubcollections = (collections, level) => {
 
   for (const collection of collections) {
     if (collection.sub_collections && collection.sub_collections.length) {
+      const viewmodel = getViewmodel(collection, state.collectionColumns)
+      viewmodel.sub_collections = mapSubcollections(collection.sub_collections, ++level)
+
       subCollections.push({
         level,
         ...collection,
-        viewmodel: getCollectionModel(collection),
-        sub_collections: mapSubcollections(collection.sub_collections, ++level)
+        viewmodel
       })
     } else {
       subCollections.push({
         level,
         ...collection,
-        viewmodel: getCollectionModel(collection)
+        viewmodel: getViewmodel(collection, state.collectionColumns)
       })
     }
   }
@@ -134,10 +147,38 @@ const mapSubcollections = (collections, level) => {
 }
 
 export const getCollectionDetails = collection => {
+  const viewmodel = getViewmodel(collection, state.collectionColumns)
+  viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
+
   return {
     ...collection,
-    viewmodel: getCollectionModel(collection),
-    sub_collections: mapSubcollections(collection.sub_collections, 1)
+    viewmodel
+  }
+}
+
+/**
+ * Get all the types available within the collection tree
+ */
+function extractCollectionTypes (collections, extractedTypes) {
+  let collectionTypes = extractedTypes || []
+
+  for (const collection of collections) {
+    collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+
+    if (collection.sub_collections && collection.sub_collections.length) {
+      collectionTypes = collectionTypes.concat(extractCollectionTypes(collection.sub_collections, collectionTypes))
+    }
+  }
+  return collectionTypes
+}
+
+export const getBiobankDetails = (biobank) => {
+  /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
+  biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+
+  return {
+    ...biobank,
+    viewmodel: getViewmodel(biobank, state.biobankColumns)
   }
 }
 
@@ -185,7 +226,6 @@ export const collectionReportInformation = collection => {
 
   return collectionReport
 }
-
 export const mapNetworkInfo = data => {
   return data.network.map(network => {
     return {

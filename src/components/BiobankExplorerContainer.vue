@@ -52,7 +52,7 @@ export default {
     },
     biobankRsql: {
       immediate: true,
-      handler: 'GetBiobankIds'
+      handler: 'QueryBiobanks'
     },
     isPodium: {
       immediate: true,
@@ -63,7 +63,7 @@ export default {
     ...mapMutations(['MapQueryToState']),
     ...mapActions([
       'GetCollectionInfo',
-      'GetBiobankIds',
+      'QueryBiobanks',
       'GetPodiumCollections',
       'GetBiobankIdsForQuality',
       'GetCollectionIdsForQuality'

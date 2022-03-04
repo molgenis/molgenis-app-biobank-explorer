@@ -20,6 +20,7 @@ PR: ${process.env.CHANGE_ID}
 BUILD: ${process.env.BUILD_NUMBER}`
 
 const initialCollectionColumns = require('./src/config/initialCollectionColumns')
+const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -77,6 +78,7 @@ module.exports = {
           disabledFilters: [],
           customCollectionFilterFacets: [],
           collectionColumns: initialCollectionColumns,
+          biobankColumns: initialBiobankColumns,
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true
         }

@@ -39,7 +39,7 @@
                       <div v-for="(collection, index) in collections" :key="collection.id">
                         <hr v-if="index"/>
                          <collection-title :title="collection.name" :id="collection.id"  />
-                        <collection-view-generator :collection="collection" />
+                        <view-generator :viewmodel="collection.viewmodel" />
                       </div>
                     </div>
                   </b-tab>
@@ -93,13 +93,13 @@ import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportDescription from '../report-components/ReportDescription.vue'
 import ReportTitle from '../report-components/ReportTitle.vue'
 import ReportDetailsList from '../report-components/ReportDetailsList.vue'
-import CollectionViewGenerator from '../generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../generators/ViewGenerator.vue'
 import CollectionTitle from '../report-components/CollectionTitle.vue'
 import { mapNetworkData, mapContactInfo, getCollectionDetails } from '../../utils/templateMapper'
 
 export default {
   name: 'NetworkReportCard',
-  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, CollectionTitle, CollectionViewGenerator },
+  components: { ReportTitle, ReportDescription, ReportDetailsList, Loading, CollectionTitle, ViewGenerator },
   methods: {
     ...mapActions(['GetNetworkReport']),
     back () {

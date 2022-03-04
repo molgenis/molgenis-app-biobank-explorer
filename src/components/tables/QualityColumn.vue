@@ -33,7 +33,7 @@
       </span>
       <span class="fa fa-check text-success pl-1"></span>
       <info-popover
-        v-if="qualityInfo"
+        v-if="qualityInfo && Object.keys(qualityInfo).length"
         class="pl-1 ml-auto"
         popover-placement="left">
         <table>

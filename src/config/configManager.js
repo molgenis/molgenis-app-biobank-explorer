@@ -1,3 +1,4 @@
+import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
 
 export const bbmriConfig = () => {
@@ -6,6 +7,7 @@ export const bbmriConfig = () => {
   const config = {
     disabledFilters: [],
     collectionColumns: initialCollectionColumns,
+    biobankColumns: initialBiobankColumns,
     customCollectionFilterFacets: [],
     removeFreemarkerMargin: false
   }
@@ -17,6 +19,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'collectionColumns') && INITIAL_STATE.collectionColumns.length) {
     config.collectionColumns = INITIAL_STATE.collectionColumns
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'biobankColumns') && INITIAL_STATE.biobankColumns.length) {
+    config.biobankColumns = INITIAL_STATE.biobankColumns
   }
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'customCollectionFilterFacets') && INITIAL_STATE.customCollectionFilterFacets.length) {

@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import { fixCollectionTree } from './helpers'
 import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
+import { collectionMutations } from './collection/collectionMutations'
+import { biobankMutations } from './biobank/biobankMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
+  ...biobankMutations,
+  ...collectionMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
@@ -77,35 +80,9 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
-  SetBiobanks (state, biobanks) {
-    biobanks.forEach(biobank => {
-      Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
-    })
-  },
-  SetBiobankIds (state, biobankIds) {
-    state.biobankIds = biobankIds
-  },
-  // TODO name more specifically
-  SetDictionaries (state, response) {
-    const collections = response.items.map(item => (
-      {
-        id: item.data.id,
-        label: item.data.label || item.data.name,
-        biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-        commercialUse: item.data.collaboration_commercial
-      }))
 
-    collections.forEach(function (collection) {
-      state.collectionBiobankDictionary[collection.id] = collection.biobankName
-      state.collectionDictionary[collection.id] = collection.label
-    })
-
-    const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
-    state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
-  },
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
     const allStandards = [...new Set(
@@ -131,31 +108,6 @@ export default {
       }
     }
   },
-  SetCollectionInfo (state, response) {
-    if (response === undefined) {
-      state.collectionInfo = response
-      return
-    }
-
-    const collectionInfo = response.items.map(item => ({
-      collectionId: item.data.id,
-      collectionName: item.data.label || item.data.name,
-      biobankId: item.data.biobank.data.id,
-      isSubcollection: item.data.parent_collection !== undefined
-    }))
-    state.collectionInfo = collectionInfo
-  },
-  /**
-   * Store a single biobank in the state for showing a biobank report
-   * @param state
-   * @param biobank response object from the server containing meta and items for a single biobank
-   */
-  SetBiobankReport (state, biobank) {
-    state.biobankReport = biobank
-  },
-  SetCollectionReport (state, collection) {
-    state.collectionReport = collection
-  },
   SetNetworkReport (state, network) {
     state.networkReport.network = network
   },
@@ -164,40 +116,6 @@ export default {
   },
   SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
-  },
-  // methods for rehydrating bookmark
-  SetCollectionIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.collectionIdsWithSelectedQuality = []
-      state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
-    } else {
-      const collectionQualityFilter = state.filters.selections.collection_quality
-      const isCollectionQualityFilterActive = (collectionQualityFilter && collectionQualityFilter.length > 0) || state.route.query.collection_quality
-
-      state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
-    }
-  },
-  SetBiobankIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.biobankIdsWithSelectedQuality = []
-      state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
-    } else {
-      const biobankQualityFilter = state.filters.selections.biobank_quality
-      const isBiobankQualityFilterActive = (biobankQualityFilter && biobankQualityFilter.length > 0) || state.route.query.biobank_quality
-
-      state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
-    }
-  },
-  SetCollectionsToSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const currentIds = state.selectedCollections.map(sc => sc.value)
-    const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
-    state.selectedCollections = state.selectedCollections.concat(newCollections)
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
-    }
   },
   SetCartValidationStatus (state, status) {
     state.cartValid = status
@@ -213,16 +131,6 @@ export default {
     } else {
       // we can safely write history here.
       state.searchHistory.push(history)
-    }
-  },
-  RemoveCollectionsFromSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const collectionsToRemove = collections.map(c => c.value)
-    state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
     }
   },
   /**
@@ -263,7 +171,7 @@ export default {
       const decoded = decodeURIComponent(query.cart)
       const cartIdString = atob(decoded)
       const cartIds = cartIdString.split(',')
-      state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
+      state.selectedCollections = cartIds.map(id => ({ label: state.collectionNameDictionary[id], value: id }))
 
       // add the beginning of history if from a link-back url
       if (state.searchHistory.length === 0) {
@@ -322,9 +230,6 @@ export default {
   },
   SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
-  },
-  SetPodiumCollections (state, response) {
-    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   },
   SetNegotiatorEntities (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {

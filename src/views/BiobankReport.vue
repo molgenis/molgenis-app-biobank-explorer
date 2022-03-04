@@ -40,7 +40,7 @@
                     :title="collection.name"
                     :id="collection.id"/>
 
-                  <collection-view-generator :collection="collection" />
+                  <view-generator :viewmodel="collection.viewmodel" />
                 </div>
               </div>
               <!-- Right side card -->
@@ -86,7 +86,7 @@ import ReportDescription from '../components/report-components/ReportDescription
 import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
-import CollectionViewGenerator from '../components/generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../components/generators/ViewGenerator.vue'
 
 import {
   getCollectionDetails,
@@ -104,7 +104,7 @@ export default {
     ReportDescription,
     ReportDetailsList,
     Loading,
-    CollectionViewGenerator,
+    ViewGenerator,
     CollectionTitle
   },
   data () {

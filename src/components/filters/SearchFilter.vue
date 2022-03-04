@@ -12,6 +12,11 @@ export default {
   components: {
     StringFilter
   },
+  data () {
+    return {
+      debounce: undefined
+    }
+  },
   computed: {
     ...mapGetters(['activeFilters']),
     search: {
