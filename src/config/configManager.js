@@ -34,7 +34,7 @@ export const bbmriConfig = () => {
     config.removeFreemarkerMargin = INITIAL_STATE.removeFreemarkerMargin
   }
 
-  if (Object.hasOwnProperty.call(INITIAL_STATE, 'menuHeight') && INITIAL_STATE.menuHeight.length) {
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'menuHeight') && typeof INITIAL_STATE.menuHeight === 'number') {
     config.menuHeight = INITIAL_STATE.menuHeight
   }
 
