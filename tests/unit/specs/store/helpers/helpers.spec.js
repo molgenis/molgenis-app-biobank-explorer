@@ -144,6 +144,24 @@ describe('store', () => {
         expect(actual).toBe(expected)
       })
 
+      it('should create a query with only a network type filter', () => {
+        state.filters.selections.network = ['network_1', 'network_2', 'network_3']
+
+        const actual = helpers.createRSQLQuery(state)
+        const expected = 'combined_network=in=(network_1,network_2,network_3)'
+
+        expect(actual).toBe(expected)
+      })
+
+      it('should create a query with only a colection_network type filter', () => {
+        state.filters.selections.collection_network = ['network_1', 'network_2', 'network_3']
+
+        const actual = helpers.createRSQLQuery(state)
+        const expected = 'network=in=(network_1,network_2,network_3)'
+
+        expect(actual).toBe(expected)
+      })
+
       it('should create a query with no filters and no search', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = ''
@@ -203,6 +221,17 @@ describe('store', () => {
 
         expect(actual).toBe(expected)
       })
+
+      it('should create a query with network and collection_network, the first with the satisfyAll flag enabled and the second not', () => {
+        state.filters.selections.network = ['network_1', 'network_2', 'network_3']
+        state.filters.satisfyAll = ['network']
+        state.filters.selections.collection_network = ['network_1']
+
+        const actual = helpers.createRSQLQuery(state)
+        const expected = 'combined_network==network_1;combined_network==network_2;combined_network==network_3;network=in=(network_1)'
+
+        expect(actual).toBe(expected)
+      })
     })
 
     describe('createBiobankRSQLQuery', () => {
@@ -213,28 +242,6 @@ describe('store', () => {
 
         const actual = helpers.createBiobankRSQLQuery(state)
         const expected = 'covid19biobank==covid_1;covid19biobank==covid_2'
-
-        expect(actual).toBe(expected)
-      })
-
-      it('should create a Biobank query with a covid19 filter and a network filter, both with the satisfy all flag enabled', () => {
-        state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.selections.biobank_network = ['network_1', 'network_2']
-        state.filters.satisfyAll = ['covid19', 'biobank_network']
-
-        const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'network==network_1;network==network_2;covid19biobank==covid_1;covid19biobank==covid_2'
-
-        expect(actual).toBe(expected)
-      })
-
-      it('should create a Biobank query with a covid19 filter and a network filter, the first with satisfyAll flag enabled, the second not', () => {
-        state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.selections.biobank_network = ['network_1', 'network_2']
-        state.filters.satisfyAll = ['covid19']
-
-        const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'network=in=(network_1,network_2);covid19biobank==covid_1;covid19biobank==covid_2'
 
         expect(actual).toBe(expected)
       })

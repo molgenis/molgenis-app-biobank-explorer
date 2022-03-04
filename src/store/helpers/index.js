@@ -24,6 +24,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available', state.filters.satisfyAll.includes('diagnosis_available')),
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
+    createQuery(state.filters.selections.network, 'combined_network', state.filters.satisfyAll.includes('network')),
     createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
     state.filters.selections.search ? [{
       operator: 'OR',
@@ -51,7 +52,6 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
     createInQuery('id', state.biobankIdsWithSelectedQuality),
-    createQuery(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.includes('biobank_network')),
     createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.includes('covid19'))
   ])
 })

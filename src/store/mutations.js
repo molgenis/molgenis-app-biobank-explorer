@@ -149,6 +149,12 @@ export default {
       .filter(name => keysInQuery.includes(name))
       .filter(fr => !['search', 'nToken'].includes(fr)) // remove specific filters, else we are doing them again.
 
+    // collection_network does not have a specific filter facets and it's directly set by CovidNetworkFilter
+    // so we add it manually
+    if (query.collection_network) {
+      filters.push('collection_network')
+    }
+
     if (query.search) {
       Vue.set(state.filters.selections, 'search', decodeURIComponent(query.search))
     }

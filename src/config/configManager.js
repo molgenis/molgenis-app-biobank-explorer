@@ -21,6 +21,10 @@ export const bbmriConfig = () => {
     config.collectionColumns = INITIAL_STATE.collectionColumns
   }
 
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'biobankColumns') && INITIAL_STATE.biobankColumns.length) {
+    config.biobankColumns = INITIAL_STATE.biobankColumns
+  }
+
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'customCollectionFilterFacets') && INITIAL_STATE.customCollectionFilterFacets.length) {
     config.customCollectionFilterFacets = INITIAL_STATE.customCollectionFilterFacets
   }
