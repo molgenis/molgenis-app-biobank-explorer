@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container border-bottom p-3 molgenis-menu-adjustment">
+  <div class="biobank-cards-container border-bottom p-3" :style="`margin-top:${menuHeight}px;`">
     <div v-if="!loading && foundBiobanks > 0">
       <biobank-card
         v-for="biobank in biobanksShown"
@@ -33,7 +33,7 @@ export default {
     ...mapMutations(['SetCurrentPage'])
   },
   computed: {
-    ...mapState(['pageSize', 'currentPage']),
+    ...mapState(['pageSize', 'currentPage', 'menuHeight']),
     ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
     biobanksShown () {
       return this.loading
@@ -76,9 +76,5 @@ export default {
   text-align: center;
   justify-content: center;
   padding: 1rem;
-}
-
-.molgenis-menu-adjustment {
-  margin-top: 50px;
 }
 </style>

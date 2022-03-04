@@ -1,6 +1,6 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="p-3 mx-3 header-bar card sticky-top">
+  <div class="p-3 mx-3 header-bar card sticky-top" :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
@@ -82,7 +82,7 @@
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
 import Pagination from './buttons/Pagination.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import ResultHeader from './ResultHeader.vue'
 
 /** Components used for filters */
@@ -114,6 +114,7 @@ export default {
       'getFilters',
       'selectedCollections'
     ]),
+    ...mapState(['menuHeight']),
     filters () {
       return this.getFilters.filter(facet => facet.component)
     },
@@ -183,9 +184,5 @@ export default {
   display: inline-flex;
   position: relative;
   top: 2px; /* aligning it with the dropwdowns */
-}
-
-.sticky-top {
-  top:50px; /* adjust for molgenis menubar */
 }
 </style>

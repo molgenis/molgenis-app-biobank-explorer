@@ -9,7 +9,8 @@ export const bbmriConfig = () => {
     collectionColumns: initialCollectionColumns,
     biobankColumns: initialBiobankColumns,
     customCollectionFilterFacets: [],
-    removeFreemarkerMargin: false
+    removeFreemarkerMargin: false,
+    menuHeight: 50
   }
 
   // check if property is in database and has a value
@@ -31,6 +32,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'removeFreemarkerMargin') && INITIAL_STATE.removeFreemarkerMargin === true) {
     config.removeFreemarkerMargin = INITIAL_STATE.removeFreemarkerMargin
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'menuHeight') && INITIAL_STATE.menuHeight.length) {
+    config.menuHeight = INITIAL_STATE.menuHeight
   }
 
   return config
