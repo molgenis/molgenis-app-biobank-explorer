@@ -4,14 +4,13 @@
     <td>
       <template v-if="attribute.badgeColor">
         <span
-          class="m-1 badge"
+          class="badge"
           :class="'badge-' + badgeColor">
           {{ attribute.value }}
         </span>
       </template>
       <template v-else>
-        <span
-          class="m-1">
+        <span>
           {{ attribute.value }}
         </span>
       </template>

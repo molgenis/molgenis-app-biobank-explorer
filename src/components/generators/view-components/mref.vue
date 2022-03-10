@@ -10,18 +10,19 @@
           tabindex="0"
           :href="item.uri"
           target="_blank"
-          class="m-1 badge text-break"
+          class="badge text-break mr-2 mb-2 p-2"
           :class="'badge-' + badgeColor"
           :key="`${index}-${displayName(item)}`">
           {{ displayName(item) }}
-          <span class="ml-1 fa fa-external-link" aria-hidden="true"></span>
+          <span class="fa fa-external-link" aria-hidden="true"></span>
         </a>
       </template>
       <template v-else>
         <span
+          @click.stop
           tabindex="0"
           v-for="(value, index) in attribute.value"
-          class="m-1 badge text-break"
+          class="badge text-break mr-2 mb-2 p-2"
           :key="index"
           :class="'badge-' + badgeColor">
           {{ value }}

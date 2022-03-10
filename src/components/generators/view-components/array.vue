@@ -3,7 +3,7 @@
     <th scope="row" class="pr-1 align-top text-nowrap">
       {{ displayName(attribute) }}
     </th>
-    <td class="pl-1">
+    <td>
       <span>
         {{ attribute.value.join(', ') }}
       </span>

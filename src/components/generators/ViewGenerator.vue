@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="mg-report-details-list mb-4">
+    <table class="mb-4 layout-table">
       <component
         v-for="attribute in renderObject.attributes"
         :is="component(attribute.type)"
@@ -9,7 +9,9 @@
     </table>
 
     <div
-      v-if="renderObject.sub_collections && renderObject.sub_collections.length > 0"
+      v-if="
+        renderObject.sub_collections && renderObject.sub_collections.length > 0
+      "
       class="mt-3">
       <h3>Subcollections</h3>
 
@@ -25,6 +27,7 @@
 import mref from './view-components/mref.vue'
 import array from './view-components/array.vue'
 import string from './view-components/string.vue'
+import longtext from './view-components/longtext.vue'
 import hyperlink from './view-components/hyperlink.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
@@ -32,6 +35,7 @@ export default {
   name: 'ViewGenerator',
   components: {
     mref,
+    longtext,
     array,
     string,
     hyperlink,
@@ -54,6 +58,7 @@ export default {
         case 'categoricalmref': {
           return 'mref'
         }
+        case 'longtext':
         case 'array':
         case 'mref':
         case 'hyperlink': {
@@ -67,3 +72,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.layout-table {
+  border-collapse: unset;
+}
+</style>

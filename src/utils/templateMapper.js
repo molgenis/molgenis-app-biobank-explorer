@@ -107,7 +107,7 @@ export const getViewmodel = (object, columns) => {
       }
     }
 
-    const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
+    const attribute = { ...columnInfo, label: columnInfo.label, type: columnInfo.type, value: attributeValue }
 
     // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
     if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {

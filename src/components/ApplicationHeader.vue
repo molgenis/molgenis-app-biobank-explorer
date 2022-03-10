@@ -1,6 +1,8 @@
 <template>
   <!-- using container for bootstrap's max-width -->
-  <div class="p-3 mx-3 header-bar card sticky-top" :style="`top:${menuHeight}px;`">
+  <div
+    class="p-3 mx-3 header-bar card sticky-top"
+    :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
@@ -170,6 +172,7 @@ export default {
 <style>
 .header-bar {
   background-color: white;
+  z-index: 9900;
 }
 ::v-deep span {
   white-space: nowrap;
