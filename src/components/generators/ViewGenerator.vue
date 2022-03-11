@@ -9,9 +9,7 @@
     </table>
 
     <div
-      v-if="
-        renderObject.sub_collections && renderObject.sub_collections.length > 0
-      "
+      v-if="renderObject.sub_collections && renderObject.sub_collections.length > 0"
       class="mt-3">
       <h3>Subcollections</h3>
 

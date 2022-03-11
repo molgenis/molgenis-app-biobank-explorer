@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'text',
+  name: 'longtext',
   props: {
     attribute: {
       type: Object
