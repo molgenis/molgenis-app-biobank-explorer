@@ -115,6 +115,14 @@ export default {
           )
         }
       }
+
+      // override for badges for homescreen card, else it will be a christmas tree.
+      attributes.forEach(attribute => {
+        if (attribute.badgeColor) {
+          attribute.badgeColor = 'light'
+        }
+      })
+
       return { attributes }
     },
     biobankInSelection () {

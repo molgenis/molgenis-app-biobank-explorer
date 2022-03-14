@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import BiobankCard from './BiobankCard.vue'
+import BiobankCard from '../components/cards/BiobankCard.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 
 export default {
