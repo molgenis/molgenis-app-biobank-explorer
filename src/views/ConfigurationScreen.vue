@@ -1,12 +1,15 @@
 <template>
-<span>TODO</span>
+<span>{{ appConfig}}</span>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   methods: {
     ...mapActions(['GetApplicationConfiguration'])
+  },
+  computed: {
+    ...mapState(['appConfig'])
   },
   mounted () {
     this.GetApplicationConfiguration()

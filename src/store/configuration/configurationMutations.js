@@ -1,6 +1,6 @@
 
 export const configurationMutations = {
   SetAppConfig (state, response) {
-    state.SetAppConfig = response.appConfig
+    state.appConfig = response.items[0].data.appConfig
   }
 }
