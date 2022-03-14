@@ -69,21 +69,6 @@ describe('BiobankReport', () => {
         const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
         expect(wrapper.vm.query).toEqual('some-query')
       })
-
-      it('should expose a list of covid19 types if available', () => {
-        biobankReport.covid19biobank = [{ label: 'Member of the COVID-19 network' }, { name: 'COVID-19' }]
-        const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.availableCovidTypes).toStrictEqual({
-          Covid19: {
-            badgeColor: 'warning',
-            type: 'list',
-            value: [
-              'Member of the COVID-19 network',
-              'COVID-19'
-            ]
-          }
-        })
-      })
     })
 
     describe('collectionsData', () => {

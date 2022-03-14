@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-import BiobankCardsContainer from '@/components/cards/BiobankCardsContainer'
+import BiobankCardsContainer from '@/views/BiobankCardsContainer'
 
 const localVue = createLocalVue()
 

@@ -116,6 +116,7 @@ export const getViewmodel = (object, columns) => {
       /* Badgecolor can be overridden in config */
       attribute.badgeColor = columnInfo.badgeColor ? columnInfo.badgeColor : generatedBadgeColor.badgeColor
     }
+
     attributes.push(attribute)
   }
 

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import BiobankCardsContainer from './cards/BiobankCardsContainer.vue'
+import BiobankCardsContainer from '../views/BiobankCardsContainer.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
 import ApplicationHeader from './ApplicationHeader.vue'
