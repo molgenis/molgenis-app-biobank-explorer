@@ -1,10 +1,4 @@
 <template>
-  <!-- <p v-if="attribute && attribute.value && attribute.value.length">
-    <b>{{ displayName(attribute) }}</b>{{ textToDisplay }}
-
-  </p>
-</template> -->
-
   <tr v-if="attribute && attribute.value && attribute.value.length">
     <th scope="row" class="pr-1 align-top text-nowrap">{{ displayName(attribute) }}</th>
     <td>
