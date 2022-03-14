@@ -21,7 +21,8 @@ export default {
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
-      'GetQualityStandardInformation'
+      'GetQualityStandardInformation',
+      'GetCurrentContext'
     ])
   },
   watch: {

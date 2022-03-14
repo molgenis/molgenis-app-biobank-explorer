@@ -4,12 +4,14 @@ import filterDefinitions from '../utils/filterDefinitions'
 import { customCheckboxFilters } from '../config/configurableFacets'
 import { collectionMutations } from './collection/collectionMutations'
 import { biobankMutations } from './biobank/biobankMutations'
+import { configurationMutations } from './configuration/configurationMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
   ...biobankMutations,
   ...collectionMutations,
+  ...configurationMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;

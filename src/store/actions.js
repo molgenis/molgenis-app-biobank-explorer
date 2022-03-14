@@ -4,6 +4,8 @@ import helpers from './helpers'
 import 'array-flat-polyfill'
 
 import { biobankActions } from './biobank/biobankActions'
+
+import { configurationActions } from './configuration/configurationActions'
 import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/collectionActions'
 
 /* API PATHS */
@@ -26,6 +28,7 @@ export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materia
 export default {
   ...collectionActions,
   ...biobankActions,
+  ...configurationActions,
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)

@@ -107,6 +107,10 @@ module.exports = {
         target: PROXY_TARGET,
         changeOrigin: true
       },
+      '/app-ui-context': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
       '/logout': {
         target: PROXY_TARGET,
         changeOrigin: true
