@@ -74,7 +74,7 @@ export default {
 .badge:focus {
   position: relative;
   transform: scale(1.5);
-  z-index: 9000;
+  z-index: 900;
 }
 .fa-external-link {
   top: 1px;

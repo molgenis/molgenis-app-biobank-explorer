@@ -172,7 +172,7 @@ export default {
 <style>
 .header-bar {
   background-color: white;
-  z-index: 9900;
+  z-index: 1000;
 }
 ::v-deep span {
   white-space: nowrap;
