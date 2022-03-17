@@ -1,5 +1,4 @@
 <template>
-  <!-- using container for bootstrap's max-width -->
   <div
     class="p-3 mx-3 header-bar card sticky-top"
     :style="`top:${menuHeight}px;`">
@@ -25,9 +24,14 @@
           variant="outline-secondary"
           @click="ClearActiveFilters">Clear all filters</b-button>
         <collection-select-all
-          class="d-inline"
+          class="d-inline mr-2"
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
+
+        <button class="btn btn-light border mb-2">
+          <span class="mr-2">Settings</span>
+          <font-awesome-icon icon="cog" />
+        </button>
       </div>
       <div class="col-4">
         <pagination />
@@ -116,7 +120,10 @@ export default {
       'getFilters',
       'selectedCollections'
     ]),
-    ...mapState(['menuHeight']),
+    ...mapState(['menuHeight', 'appConfig']),
+    showSettings () {
+      return this.appConfig.roles.includes('ROLE_SU')
+    },
     filters () {
       return this.getFilters.filter(facet => facet.component)
     },

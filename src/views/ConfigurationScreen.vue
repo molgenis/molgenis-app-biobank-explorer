@@ -5,6 +5,7 @@
 </template>
 
 <script>
+
 import { mapActions, mapState } from 'vuex'
 export default {
   data () {
@@ -23,7 +24,7 @@ export default {
   },
   async mounted () {
     this.GetApplicationConfiguration()
-    const monaco = await import('monaco-editor')
+    const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
     this.editor = monaco.editor.create(this.$refs.editor, {
       value: this.appConfig,

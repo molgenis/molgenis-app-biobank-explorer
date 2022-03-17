@@ -22,7 +22,7 @@ export default {
       'GetNegotiatorType',
       'GetNegotiatorEntities',
       'GetQualityStandardInformation',
-      'GetCurrentContext'
+      'GetApplicationContext'
     ])
   },
   watch: {
@@ -38,6 +38,7 @@ export default {
   beforeMount () {
     this.ConfigureFilters()
     this.MapQueryToState()
+    this.GetApplicationContext()
   },
   mounted () {
     this.GetNegotiatorType()

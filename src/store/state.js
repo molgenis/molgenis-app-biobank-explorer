@@ -5,7 +5,7 @@ const config = bbmriConfig()
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
-  context: {}, // app context
+  applicationContext: {},
   appConfig: {},
   cartValid: true,
   negotiatorCollectionEntityId: '',

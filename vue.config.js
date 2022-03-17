@@ -63,7 +63,8 @@ module.exports = {
         publicPath: process.env.NODE_ENV === 'production'
           ? '/plugin/app/' + pkgName + '/js/' // we need to change this path for webworkers to work on molgenis app
           : '/',
-        languages: ['json']
+        languages: ['json'],
+        features: []
       }),
       new BannerPlugin({
         banner: bannerText
