@@ -28,10 +28,10 @@
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
 
-        <button class="btn btn-light border mb-2">
+        <router-link v-if="showSettings" class="btn btn-light border mb-2" to="/configuration">
           <span class="mr-2">Settings</span>
           <font-awesome-icon icon="cog" />
-        </button>
+        </router-link>
       </div>
       <div class="col-4">
         <pagination />
@@ -120,9 +120,9 @@ export default {
       'getFilters',
       'selectedCollections'
     ]),
-    ...mapState(['menuHeight', 'appConfig']),
+    ...mapState(['menuHeight', 'applicationContext']),
     showSettings () {
-      return this.appConfig.roles.includes('ROLE_SU')
+      return this.applicationContext.roles.includes('ROLE_SU')
     },
     filters () {
       return this.getFilters.filter(facet => facet.component)

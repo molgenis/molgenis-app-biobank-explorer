@@ -6,7 +6,9 @@ export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
   applicationContext: {},
+  appConfigId: '',
   appConfig: {},
+  configUpdateStatus: 0,
   cartValid: true,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',

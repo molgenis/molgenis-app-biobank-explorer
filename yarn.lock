@@ -1118,15 +1118,15 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@molgenis/molgenis-api-client@^3.0.0":
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/@molgenis/molgenis-api-client/-/molgenis-api-client-3.1.4.tgz#f67499d0068caa57fa2d3d9600d3e3be2f8c0e67"
-  integrity sha512-X5qhO6yuep4APMaODaXlFMFwfJ8UeAp4THwlstE958mL/dx1l6SY0T8olaSDQsu7lfOn/ukPyKsx6gEjCxMVDg==
+"@molgenis/molgenis-api-client@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@molgenis/molgenis-api-client/-/molgenis-api-client-3.2.0.tgz#b96b015ecc01e98d1df518fea6e9f752d05c856f"
+  integrity sha512-UPbu+iEYU7irDtt/nys2yRoYZuXGP+E45Mp5oY/PvbhCjUQfDck3aQ/BkSAjCw6JOU1F1DaNhkfGoO0AxozGxQ==
   dependencies:
     babel-runtime "^6.26.0"
     form-data "^2.3.1"
     isomorphic-fetch "^2.2.1"
-    lodash "^4.17.4"
+    lodash "^4.17.21"
 
 "@molgenis/molgenis-i18n-js@^0.0.5":
   version "0.0.5"
@@ -7833,7 +7833,7 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
+lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
