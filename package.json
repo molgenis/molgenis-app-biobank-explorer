@@ -16,7 +16,6 @@
     "unit": "vue-cli-service test:unit --collectCoverage"
   },
   "dependencies": {
-    "-": "^0.0.1",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
@@ -26,7 +25,6 @@
     "@molgenis/molgenis-api-client": "^3.2.0",
     "@molgenis/molgenis-i18n-js": "^0.0.5",
     "@molgenis/rsql": "^0.1.1",
-    "D": "^1.0.0",
     "array-flat-polyfill": "^1.0.1",
     "bootstrap-vue": "^2.0.0-rc.23",
     "core-js": "^3.6.4",
