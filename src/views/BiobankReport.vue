@@ -1,6 +1,6 @@
 <template>
   <div class="mg-biobank-card container">
-    <script :text="bioschemasJsonld" type="application/ld+json" />
+    <script v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"
       loader="dots"
