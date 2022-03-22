@@ -1,11 +1,21 @@
 <template>
   <div class="container-fluid">
-    <div class="row px-5 pb-3">
-      <div ref="editor" class="editor" @keyup.ctrl.f="format"></div>
+    <div class="row px-5 pb-3" @keyup.ctrl.f="format">
+      <div ref="editor" class="editor" @keyup="dirty = true"></div>
     </div>
     <div class="row px-5">
-      <button class="btn btn-primary mr-3 save-button" @click="save">Save configuration</button>
-      <button class="btn btn-dark" @click="cancel">Undo changes</button>
+      <div class="col pl-0">
+        <button
+          class="btn btn-primary mr-3 save-button"
+          @click="save"
+          :disabled="saveDisabled">
+          Save configuration
+        </button>
+        <button class="btn btn-dark" @click="cancel">Undo changes</button>
+      </div>
+      <div>
+        <small class="float-right">To format your file press ctrl + f</small>
+      </div>
     </div>
     <div class="row px-5 mt-3" v-if="showNotification">
       <div class="col-md-12 p-0">
@@ -15,7 +25,7 @@
           role="alert"
           @click="statusClosed = true">
           <span>Configuration saved!</span>
-       <b class="float-right">X</b>
+          <b class="float-right">X</b>
         </div>
         <div
           v-else
@@ -36,7 +46,8 @@ export default {
   data () {
     return {
       editor: {},
-      statusClosed: true
+      statusClosed: true,
+      dirty: false
     }
   },
   methods: {
@@ -48,8 +59,10 @@ export default {
       this.editor.getAction('editor.action.formatDocument').run()
     },
     save () {
+      this.format()
       this.statusClosed = false
       this.SaveApplicationConfiguration(this.editor.getValue())
+      this.dirty = false
     },
     cancel () {
       this.editor.getModel().setValue(this.appConfig)
@@ -57,6 +70,10 @@ export default {
   },
   computed: {
     ...mapState(['appConfig', 'configUpdateStatus']),
+    saveDisabled () {
+      if (this.dirty) return false
+      else return true
+    },
     showNotification () {
       return this.configUpdateStatus !== 0 && !this.statusClosed
     }
@@ -64,7 +81,10 @@ export default {
   watch: {
     configUpdateStatus (newStatus) {
       if (newStatus !== 0) {
-        const timer = setTimeout(() => { this.statusClosed = true; clearTimeout(timer) }, 5000)
+        const timer = setTimeout(() => {
+          this.statusClosed = true
+          clearTimeout(timer)
+        }, 5000)
       }
     }
   },
@@ -78,7 +98,10 @@ export default {
       language: 'json'
     })
 
-    this.format()
+    const formatTimer = setTimeout(() => {
+      this.format()
+      clearTimeout(formatTimer)
+    }, 500)
   }
 }
 </script>

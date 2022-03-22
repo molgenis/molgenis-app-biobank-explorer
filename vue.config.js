@@ -30,7 +30,7 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-const PROXY_TARGET = 'https://bbmri-acc.gcc.rug.nl'
+const PROXY_TARGET = 'https://jelmer.gcc.rug.nl'
 
 const apiDevServerProxyConf = {
   target: PROXY_TARGET,
@@ -60,7 +60,7 @@ module.exports = {
   configureWebpack: config => {
     config.plugins.push(
       new MonacoEditorWebpackPlugin({
-        publicPath: process.env.NODE_ENV === 'production'
+        publicPath: process.env.NODE_ENV !== 'development'
           ? '/plugin/app/' + pkgName + '/js/' // we need to change this path for webworkers to work on molgenis app
           : '/',
         languages: ['json'],
