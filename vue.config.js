@@ -27,7 +27,7 @@ const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
   if (process.env.NODE_ENV === 'development') return 'public/index.html'
-  if (process.env.NODE_ENV === 'test') return 'public/preview.html'
+  if (process.env.NODE_ENV === 'test') return 'public/index.html'
 }
 
 const PROXY_TARGET = 'https://jelmer.gcc.rug.nl'
