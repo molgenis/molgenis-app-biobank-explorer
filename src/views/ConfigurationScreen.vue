@@ -32,7 +32,7 @@
           class="alert alert-warning"
           role="alert"
           @click="statusClosed = true">
-          <span>We could not save the configuration, make sure you are logged with
+          <span>We could not save the configuration, make sure you are logged in with
             sufficient rights.</span><b class="float-right">X</b>
         </div>
       </div>
