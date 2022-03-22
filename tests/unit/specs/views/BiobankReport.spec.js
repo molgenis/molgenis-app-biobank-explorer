@@ -13,6 +13,7 @@ describe('BiobankReport', () => {
 
   beforeEach(() => {
     biobankReport = {
+      id: 'b-001',
       collections: [],
       contact: {
         first_name: 'first_name',
@@ -107,6 +108,24 @@ describe('BiobankReport', () => {
         store.state.biobankReport = undefined
         const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
         expect(wrapper.vm.networks).toStrictEqual([])
+      })
+    })
+
+    describe('bioschemas', () => {
+      it('should add bioschemas data', () => {
+        const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
+        expect(wrapper.vm.bioschemasJsonld['@context']).toStrictEqual('https://schema.org')
+        expect(wrapper.vm.bioschemasJsonld['@type']).toStrictEqual('DataCatalog')
+        expect(wrapper.vm.bioschemasJsonld['@id']).toStrictEqual('http://localhost/#/biobank/b-001')
+        expect(wrapper.html()).toContain('<script type="application/ld+json">')
+        expect(wrapper.html()).toContain('"@context": "https://schema.org",')
+      })
+
+      it('should add bioschemas data', () => {
+        store.state.biobankReport = undefined
+        const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
+        expect(wrapper.vm.bioschemasJsonld).toStrictEqual(undefined)
+        expect(wrapper.html()).not.toContain('<script type="application/ld+json">')
       })
     })
   })

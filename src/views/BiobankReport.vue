@@ -1,6 +1,6 @@
 <template>
   <div class="mg-biobank-card container">
-    <script :text="bioschemasJsonld" type="application/ld+json" />
+    <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"
       loader="dots"
@@ -144,7 +144,7 @@ export default {
     bioschemasJsonld () {
       return this.biobankDataAvailable
         ? mapBiobankToBioschemas(this.biobank)
-        : {}
+        : undefined
     }
   },
   methods: {
