@@ -122,7 +122,7 @@ export default {
     ]),
     ...mapState(['menuHeight', 'applicationContext']),
     showSettings () {
-      return this.applicationContext.roles.includes('ROLE_SU')
+      return this.applicationContext.roles ? this.applicationContext.roles.includes('ROLE_SU') : false
     },
     filters () {
       return this.getFilters.filter(facet => facet.component)
