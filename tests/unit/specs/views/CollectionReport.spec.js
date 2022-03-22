@@ -83,4 +83,22 @@ describe('CollectionReport', () => {
       })
     })
   })
+
+  describe('bioschemas', () => {
+    it('should add bioschemas data', () => {
+      const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
+      expect(wrapper.vm.bioschemasJsonld['@context']).toStrictEqual('https://schema.org')
+      expect(wrapper.vm.bioschemasJsonld['@type']).toStrictEqual('Dataset')
+      expect(wrapper.vm.bioschemasJsonld['@id']).toStrictEqual('http://localhost/#/collection/c-001')
+      expect(wrapper.html()).toContain('<script type="application/ld+json">')
+      expect(wrapper.html()).toContain('"@context": "https://schema.org",')
+    })
+
+    it('should add bioschemas data', () => {
+      store.state.collectionReport = undefined
+      const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
+      expect(wrapper.vm.bioschemasJsonld).toStrictEqual(undefined)
+      expect(wrapper.html()).not.toContain('<script type="application/ld+json">')
+    })
+  })
 })
