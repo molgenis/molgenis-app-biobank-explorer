@@ -21,7 +21,8 @@ import {
   faSpinner,
   faTimes,
   faCheck,
-  faCheckSquare
+  faCheckSquare,
+  faCog
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -32,7 +33,7 @@ import {
   faCreativeCommonsNcEu
 } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare)
+library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare, faCog)
 
 if (INITIAL_STATE.googleAnalyticsKey) {
   Vue.use(VueAnalytics, {

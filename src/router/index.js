@@ -5,6 +5,7 @@ import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
 import { INITIAL_STATE } from '../store/state'
+import api from '@molgenis/molgenis-api-client'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
@@ -33,6 +34,14 @@ const router = new VueRouter({
       path: '/network/:id',
       name: 'network',
       component: NetworkReportCard
+    },
+    {
+      path: '/configuration',
+      component: () => import(/* webpackChunkName: "configuration-screen" */ '../views/ConfigurationScreen'),
+      beforeEnter: async (to, from, next) => {
+        const response = await api.get('/app-ui-context')
+        if (response.roles.includes('ROLE_SU')) { next() } else next('/')
+      }
     },
     {
       path: '/',
