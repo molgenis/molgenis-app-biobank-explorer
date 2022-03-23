@@ -125,7 +125,7 @@ export const mapCollectionToBioschemas = (collection) => {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     '@id': `${getBaseUrl()}/collection/${collection.id}`,
-    description: collection.description,
+    description: collection.description || collection.name,
     identifier: collection.id,
     keywords: 'sample, collection',
     name: collection.name,
@@ -188,7 +188,7 @@ export const mapBiobankToBioschemas = (biobank) => {
         url: `${getBaseUrl()}/collection/${collection.id}`,
         identifier: collection.id,
         name: collection.name,
-        description: collection.description
+        description: collection.description || collection.name
       }
     }),
     identifier: biobank.id
