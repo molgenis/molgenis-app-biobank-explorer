@@ -14,6 +14,7 @@ describe('BiobankReport', () => {
   beforeEach(() => {
     biobankReport = {
       id: 'b-001',
+      pid: '21.12110/b-001',
       collections: [],
       contact: {
         first_name: 'first_name',
@@ -116,7 +117,7 @@ describe('BiobankReport', () => {
         const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
         expect(wrapper.vm.bioschemasJsonld['@context']).toStrictEqual('https://schema.org')
         expect(wrapper.vm.bioschemasJsonld['@type']).toStrictEqual('DataCatalog')
-        expect(wrapper.vm.bioschemasJsonld['@id']).toStrictEqual('http://localhost/#/biobank/b-001')
+        expect(wrapper.vm.bioschemasJsonld['@id']).toStrictEqual('http://hdl.handle.net/21.12110/b-001')
         expect(wrapper.html()).toContain('<script type="application/ld+json">')
         expect(wrapper.html()).toContain('"@context": "https://schema.org",')
       })

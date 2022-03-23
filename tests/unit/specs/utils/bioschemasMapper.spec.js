@@ -130,6 +130,7 @@ describe('bioschemasMapper', () => {
   const biobankData = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -190,6 +191,7 @@ describe('bioschemasMapper', () => {
   const biobankDataNoContact = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -222,6 +224,7 @@ describe('bioschemasMapper', () => {
   const biobankDataIncompleteContact = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -385,7 +388,7 @@ describe('bioschemasMapper', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',
@@ -429,7 +432,7 @@ describe('bioschemasMapper', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',
@@ -473,7 +476,7 @@ describe('bioschemasMapper', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',

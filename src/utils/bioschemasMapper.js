@@ -157,7 +157,7 @@ export const mapBiobankToBioschemas = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
-    '@id': `${getBaseUrl()}/biobank/${biobank.id}`, // TODO: Change with the persistent identifier
+    '@id': `http://hdl.handle.net/${biobank.pid}`,
     description: biobank.description || biobank.name, // some collections doesn't have a description
     keywords: 'biobank',
     name: biobank.name,
