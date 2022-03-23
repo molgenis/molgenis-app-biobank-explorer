@@ -119,7 +119,9 @@ export const getViewmodel = (object, columns) => {
       /* Badgecolor can be overridden in config */
       attribute.badgeColor = columnInfo.badgeColor ? columnInfo.badgeColor : generatedBadgeColor.badgeColor
     }
-
+    if (columnInfo.showCopyIcon) {
+      attribute.linkValue = columnInfo.copyValuePrefix ? `${columnInfo.copyValuePrefix}${attributeValue}` : attributeValue
+    }
     attributes.push(attribute)
   }
 

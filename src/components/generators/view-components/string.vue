@@ -14,6 +14,17 @@
           {{ attribute.value }}
         </span>
       </template>
+      <template v-if="attribute.linkValue">
+        <span
+          id="copy-icon"
+          @click.prevent="copyOnClipboard(attribute.linkValue, $event)"
+          v-b-tooltip.hover="'Copy on clipboard'"
+          class="fa fa-clipboard">
+        </span>
+        <b-toast id="feedback-toast" static auto-hide>
+          Copied {{ attribute.linkValue }}
+        </b-toast>
+      </template>
     </td>
   </tr>
 </template>
@@ -33,12 +44,35 @@ export default {
   methods: {
     displayName (item) {
       return item.label || item.name || item.id
+    },
+    copyOnClipboard (link, event) {
+      navigator.clipboard.writeText(link)
+      this.$bvToast.toast(`Copied ${link}`, {
+        variant: 'primary',
+        autoHideDelay: 100,
+        appendToast: false,
+        noCloseButton: true,
+        toaster: 'b-toaster-top-center'
+      })
     }
+  },
+  mounted () {
+    console.log(this.attribute)
   }
 }
 </script>
 
 <style scoped>
+
+.fa-clipboard {
+  margin-left: 5px;
+  position: relative;
+  font-size: large;
+}
+
+.fa-clipboard:hover {
+  cursor: pointer;
+}
 
 .fa-external-link {
   top: 1px;
