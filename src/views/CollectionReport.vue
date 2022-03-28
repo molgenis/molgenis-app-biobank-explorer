@@ -1,6 +1,6 @@
 <template>
   <div class="container mg-collection-report-card">
-    <script v-text="bioschemasJsonld" type="application/ld+json" />
+    <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"
       loader="dots"
@@ -69,7 +69,7 @@ export default {
       return splittedUrl[splittedUrl.length - 1]
     },
     bioschemasJsonld () {
-      return this.collection ? mapCollectionToBioschemas(this.collection) : {}
+      return this.collection ? mapCollectionToBioschemas(this.collection) : undefined
     }
   },
   // needed because if we route back the component is not destroyed but its props are updated for other collection
