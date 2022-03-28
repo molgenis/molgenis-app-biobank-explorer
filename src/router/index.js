@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import BiobankExplorerContainer from '../components/BiobankExplorerContainer'
+import BiobankExplorer from '../views/BiobankExplorer'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
@@ -14,7 +14,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/biobankexplorer',
-      component: BiobankExplorerContainer
+      component: BiobankExplorer
     },
     {
       path: '/biobank/report/:id',
@@ -45,7 +45,7 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      component: BiobankExplorerContainer
+      component: BiobankExplorer
     }
   ]
 })

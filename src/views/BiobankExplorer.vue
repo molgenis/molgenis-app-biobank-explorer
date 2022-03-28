@@ -6,13 +6,13 @@
 </template>
 
 <script>
-import BiobankCardsContainer from '../views/BiobankCardsContainer.vue'
+import BiobankCardsContainer from '../components/BiobankCardsContainer.vue'
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { createBookmark } from '../utils/bookmarkMapper'
-import ApplicationHeader from './ApplicationHeader.vue'
+import ApplicationHeader from '../components/ApplicationHeader.vue'
 
 export default {
-  name: 'biobank-explorer-container',
+  name: 'biobank-explorer',
   components: {
     BiobankCardsContainer,
     ApplicationHeader
