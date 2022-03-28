@@ -97,6 +97,9 @@ export const getViewmodel = (object, columns) => {
         attributeValue = object[columnInfo.column]
         break
       }
+      case 'quality':
+        attributeValue = object.quality
+        break
       case 'mref':
       case 'categoricalmref': {
         attributeValue = mapObjArray(object[columnInfo.column])
@@ -174,8 +177,12 @@ function extractCollectionTypes (collections, extractedTypes) {
 }
 
 export const getBiobankDetails = (biobank) => {
+  // check if biobank is only the id (lazy loading)
+  if (typeof biobank === 'string') {
+    return biobank
+  }
   /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
-  biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+  biobank.collection_types = biobank.collections ? [...new Set(extractCollectionTypes(biobank.collections))] : []
 
   return {
     ...biobank,

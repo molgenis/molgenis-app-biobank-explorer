@@ -26,6 +26,7 @@ import mref from './view-components/mref.vue'
 import array from './view-components/array.vue'
 import string from './view-components/string.vue'
 import longtext from './view-components/longtext.vue'
+import quality from './view-components/quality.vue'
 import hyperlink from './view-components/hyperlink.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
@@ -34,6 +35,7 @@ export default {
   components: {
     mref,
     longtext,
+    quality,
     array,
     string,
     hyperlink,
@@ -57,6 +59,7 @@ export default {
           return 'mref'
         }
         case 'longtext':
+        case 'quality':
         case 'array':
         case 'mref':
         case 'hyperlink': {

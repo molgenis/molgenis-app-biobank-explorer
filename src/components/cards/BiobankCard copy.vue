@@ -1,32 +1,70 @@
 <template>
   <div
-    :class="[
-      { 'border-secondary': biobankInSelection },
-      'card biobank-card w-25',
-    ]">
-    <header class="border border-dark">
-      <h5 class="pt-1 pl-2">
-        <router-link :to="'/biobank/' + biobank.id">
-          <span
-            class="fa fa-table mr-2 icon-alignment text-dark pt-1"
-            aria-hidden="true"
-            aria-labelledby="biobank-name"></span>
-          <span id="biobank-name">{{ biobank.name }}</span>
-        </router-link>
-      </h5>
-    </header>
-    <section>
-      <small>
-        <view-generator :viewmodel="biobankcardViewmodel" />
-      </small>
-    </section>
+    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']">
+    <div
+      class="card-header biobank-card-header"
+      @click.prevent="collapsed = !collapsed">
+      <div class="row" v-if="!loading">
+        <div class="col-6 d-flex">
+          <div class="mr-3">
+            <font-awesome-icon
+              icon="caret-right"
+              :style="iconStyle"
+              class="collapse-button"/>
+          </div>
+          <div class="mb-2">
+            <h5>
+              <router-link :to="'/biobank/' + biobank.id">
+                <span
+                  class="fa fa-table mr-2 icon-alignment text-dark"
+                  aria-hidden="true"
+                  aria-labelledby="biobank-name"></span>
+                <span id="biobank-name">{{ biobank.name }}</span>
+              </router-link>
+            </h5>
+            <small>
+              <quality :attribute="biobank" summary />
+            </small>
+            <span
+              v-if="biobank.covid19biobank && biobank.covid19biobank.length > 0">
+              <b-img
+                class="biobank-icon covid-icon"
+                :src="require('../../assets/custom_icons/covid19.png')"
+                title="Covid-19"/>
+            </span>
+          </div>
+        </div>
+        <div class="col-5">
+          <small>
+            <view-generator :viewmodel="biobankcardViewmodel" />
+          </small>
+        </div>
+        <div class="col-1 px-1">
+          <collection-selector
+            class="mt-auto text-right"
+            v-if="biobank.collections.length > 0"
+            :collectionData="biobank.collections"
+            icon-only
+            bookmark
+            @checked="handleCheckAll"></collection-selector>
+        </div>
+      </div>
+      <div v-else class="col-12 text-center">
+        <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="card-body table-card" v-if="!collapsed && !loading">
+      <collections-table
+        v-if="biobank.collections.length > 0"
+        :collections="sortedCollections"></collections-table>
+    </div>
   </div>
 </template>
 
 <script>
-// import CollectionSelector from '../buttons/CollectionSelector'
-// import CollectionsTable from '../tables/CollectionsTable.vue'
-// import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
+import CollectionSelector from '../buttons/CollectionSelector'
+import CollectionsTable from '../tables/CollectionsTable.vue'
+import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
 import { mapGetters, mapState } from 'vuex'
 import { sortCollectionsByName } from '../../utils/sorting'
 import { getBiobankDetails } from '../../utils/templateMapper'
@@ -35,9 +73,9 @@ import ViewGenerator from '../generators/ViewGenerator.vue'
 export default {
   name: 'biobank-card',
   components: {
-    // CollectionsTable,
-    // quality
-    // CollectionSelector,
+    CollectionsTable,
+    quality,
+    CollectionSelector,
     ViewGenerator
   },
   props: {
@@ -67,9 +105,6 @@ export default {
     ...mapState(['qualityStandardsDictionary', 'biobankColumns']),
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
-      // check if biobank is only the id (lazy loading)
-      if (typeof this.biobank === 'string') return {}
-
       const { viewmodel } = getBiobankDetails(this.biobank)
       const attributes = []
 
