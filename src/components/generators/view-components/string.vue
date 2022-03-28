@@ -21,9 +21,17 @@
           v-b-tooltip.hover="'Copy on clipboard'"
           class="fa fa-clipboard">
         </span>
-        <b-toast id="feedback-toast" static auto-hide>
-          Copied {{ attribute.linkValue }}
-        </b-toast>
+        <div class="d-flex justify-content-center align-items-center">
+          <Transition>
+              <div v-show="copyPidShown" role="alert" aria-live="assertive" aria-atomic="true" class="toast-container toast-container-top-center">
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="toast-body">
+                    Copied {{ attribute.linkValue }}
+                  </div>
+                </div>
+              </div>
+          </Transition>
+        </div>
       </template>
     </td>
   </tr>
@@ -31,6 +39,11 @@
 
 <script>
 export default {
+  data () {
+    return {
+      copyPidShown: false
+    }
+  },
   props: {
     attribute: {
       type: Object
@@ -47,17 +60,11 @@ export default {
     },
     copyOnClipboard (link, event) {
       navigator.clipboard.writeText(link)
-      this.$bvToast.toast(`Copied ${link}`, {
-        variant: 'primary',
-        autoHideDelay: 100,
-        appendToast: false,
-        noCloseButton: true,
-        toaster: 'b-toaster-top-center'
-      })
+      this.copyPidShown = true
+      setTimeout(() => {
+        this.copyPidShown = false
+      }, 1000)
     }
-  },
-  mounted () {
-    console.log(this.attribute)
   }
 }
 </script>
@@ -92,5 +99,38 @@ export default {
 
 .badge-light {
   border: 1px solid #000;
+}
+
+.toast-container {
+  display: block;
+  max-width: 350px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background-clip: padding-box;
+  z-index: 1;
+  border-radius: 0.25rem;
+}
+
+.toast-container-top-center {
+  position: fixed;
+  min-height: 200px;
+  top: 0.2;
+}
+
+.toast-container .toast {
+    background-color: rgba(230, 242, 255, 0.85);
+    border-color: rgba(184, 218, 255, 0.85);
+    color: #004085;
+    opacity: 1;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
