@@ -26,14 +26,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
-  faSquare
+  faSquare,
+  faArrowAltCircleRight
 } from '@fortawesome/free-regular-svg-icons'
 
 import {
   faCreativeCommonsNcEu
 } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare, faCog)
+library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare, faCog, faArrowAltCircleRight)
 
 if (INITIAL_STATE.googleAnalyticsKey) {
   Vue.use(VueAnalytics, {

@@ -1,5 +1,5 @@
 <template>
-  <ul class="list-unstyled text-nowrap">
+  <ul class="list-unstyled text-nowrap m-0">
     <li
       v-for="quality in qualities"
       :style="margin"
@@ -7,7 +7,7 @@
       class="d-flex">
        <info-popover
         v-if="qualityInfo && Object.keys(qualityInfo).length"
-        class="pl-1 mr-3"
+        class="mr-2"
         popover-placement="left">
         <table>
           <tbody>

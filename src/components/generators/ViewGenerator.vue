@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="mb-4 layout-table">
+    <table class="mb-4 layout-table w-100">
       <component
         v-for="attribute in renderObject.attributes"
         :is="component(attribute.type)"
@@ -9,7 +9,9 @@
     </table>
 
     <div
-      v-if="renderObject.sub_collections && renderObject.sub_collections.length > 0"
+      v-if="
+        renderObject.sub_collections && renderObject.sub_collections.length > 0
+      "
       class="mt-3">
       <h3>Subcollections</h3>
 
@@ -77,5 +79,9 @@ export default {
 <style scoped>
 .layout-table {
   border-collapse: unset;
+}
+
+::v-deep > th {
+  width:40%;
 }
 </style>

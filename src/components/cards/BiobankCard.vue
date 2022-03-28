@@ -2,20 +2,20 @@
   <div
     :class="[
       { 'border-secondary': biobankInSelection },
-      'card biobank-card w-25',
+      'card border-dark biobank-card',
     ]">
-    <header class="border border-dark">
-      <h5 class="pt-1 pl-2">
+    <header class="border-bottom border-dark bg-secondary">
+      <h5 class="pt-1 pl-2 pr-1 mt-1">
         <router-link :to="'/biobank/' + biobank.id">
-          <span
-            class="fa fa-table mr-2 icon-alignment text-dark pt-1"
-            aria-hidden="true"
-            aria-labelledby="biobank-name"></span>
-          <span id="biobank-name">{{ biobank.name }}</span>
+          <span id="biobank-name" class="text-light">{{ biobank.name }}</span>
+                <font-awesome-icon
+                  title="Biobank details"
+                  class="float-right m-1 text-light"
+                  :icon="['far', 'arrow-alt-circle-right']"/>
         </router-link>
       </h5>
     </header>
-    <section>
+    <section class="px-2 pt-4">
       <small>
         <view-generator :viewmodel="biobankcardViewmodel" />
       </small>
@@ -82,11 +82,11 @@ export default {
       }
 
       // override for badges for homescreen card, else it will be a christmas tree.
-      attributes.forEach(attribute => {
-        if (attribute.badgeColor) {
-          attribute.badgeColor = 'light'
-        }
-      })
+      // attributes.forEach(attribute => {
+      //   if (attribute.badgeColor) {
+      //     attribute.badgeColor = 'light'
+      //   }
+      // })
 
       return { attributes }
     },
@@ -130,12 +130,21 @@ export default {
   border-radius: 50%;
 }
 
+#biobank-name {
+  display: inline-block;
+  width: 92%;
+}
+
 .biobank-card {
+  width: 30%;
   margin-bottom: 1em;
 }
 
-.biobank-card-header {
-  background-color: #f5f5f5;
+.biobank-card > header {
+  display: flex;
+  min-height: 3rem;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .biobank-card-header:hover {

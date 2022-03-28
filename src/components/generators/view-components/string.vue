@@ -39,13 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.badge {
-  transition: transform 0.1s;
-  box-shadow: 0 0 0 1px white;
-}
-.badge:hover {
-  transform: scale(1.4);
-}
 .fa-external-link {
   top: 1px;
   position: relative;
@@ -53,5 +46,9 @@ export default {
 
 .fa-external-link:hover {
   cursor: pointer;
+}
+
+.badge {
+  padding: 0.5rem;
 }
 </style>
