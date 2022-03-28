@@ -7,7 +7,8 @@ import {
   mapUrl,
   getSize,
   getNameOfHead,
-  collectionReportInformation
+  collectionReportInformation,
+  getViewmodel
 } from '../../../../src/utils/templateMapper'
 
 let collectionsReport
@@ -813,6 +814,22 @@ describe('templateMapper', () => {
       const element = {}
       const actual = getNameOfHead(element)
       expect(actual).toBe(undefined)
+    })
+  })
+
+  describe('getViewmodel', () => {
+    it('adds linkValue attribute when showLink is present', () => {
+      const config = [{ label: 'PID', column: 'pid', type: 'string', showCopyIcon: true }]
+      const expected = { attributes: [{ label: 'PID', type: 'string', value: '123', linkValue: '123' }] }
+      const actual = getViewmodel({ pid: '123' }, config)
+      expect(actual).toEqual(expected)
+    })
+
+    it('adds a prefix to the linkValue when copyValuePrefix is present', () => {
+      const config = [{ label: 'PID', column: 'pid', type: 'string', showCopyIcon: true, copyValuePrefix: 'http://prefix/' }]
+      const expected = { attributes: [{ label: 'PID', type: 'string', value: '123', linkValue: 'http://prefix/123' }] }
+      const actual = getViewmodel({ pid: '123' }, config)
+      expect(actual).toEqual(expected)
     })
   })
 })
