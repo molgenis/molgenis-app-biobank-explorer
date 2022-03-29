@@ -196,11 +196,11 @@ export default {
 }
 
 /* Theme override */
-.dropdown-toggle {
+::v-deep .dropdown-toggle {
   padding-right:1.5rem;
 }
 
-.dropdown-toggle::after {
+::v-deep .dropdown-toggle::after {
   content: "";
   position: absolute;
   border-bottom: 0;
