@@ -1,6 +1,6 @@
 <template>
   <div class="biobank-cards-container border-bottom p-3" :style="`margin-top:${menuHeight}px;`">
-    <div v-if="!loading && foundBiobanks > 0">
+    <div v-if="!loading && foundBiobanks > 0" class="d-flex justify-content-between flex-wrap align-items-start">
       <biobank-card
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"

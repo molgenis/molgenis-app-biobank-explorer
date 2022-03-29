@@ -1,13 +1,13 @@
 <template>
   <div
-    class="p-3 mx-3 header-bar card sticky-top"
+    class="p-3 mx-3 header-bar card sticky-top border-0"
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
           class="mr-2 mb-2"
           v-b-toggle.filters
-          variant="outline-info"
+          variant="info"
           @click="filtersCollapsed = !filtersCollapsed">
           <font-awesome-icon
             icon="caret-right"
@@ -15,7 +15,7 @@
             class="collapse-button mr-2"/>
           <span>Filters</span>
 
-          <span class="badge badge-info ml-2" v-if="numberOfActiveFilters > 0">
+          <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
         </b-button>
         <b-button
@@ -28,7 +28,10 @@
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
 
-        <router-link v-if="showSettings" class="btn btn-light border mb-2" to="/configuration">
+        <router-link
+          v-if="showSettings"
+          class="btn btn-light border mb-2"
+          to="/configuration">
           <span class="mr-2">Settings</span>
           <font-awesome-icon icon="cog" />
         </router-link>
@@ -42,7 +45,7 @@
       </div>
     </div>
     <div class="row my-2">
-      <b-collapse id="filters" visible>
+      <b-collapse id="filters">
         <div class="col-12">
           <div class="w-25 search-container mr-2">
             <search-filter />
@@ -122,7 +125,9 @@ export default {
     ]),
     ...mapState(['menuHeight', 'applicationContext']),
     showSettings () {
-      return this.applicationContext.roles ? this.applicationContext.roles.includes('ROLE_SU') : false
+      return this.applicationContext.roles
+        ? this.applicationContext.roles.includes('ROLE_SU')
+        : false
     },
     filters () {
       return this.getFilters.filter(facet => facet.component)
@@ -141,7 +146,7 @@ export default {
   data () {
     return {
       filterBarShown: false,
-      filtersCollapsed: false,
+      filtersCollapsed: true,
       showCart: false
     }
   },
@@ -159,10 +164,10 @@ export default {
     },
     filterVariant (filterName) {
       if (filterName.toLowerCase().includes('covid')) {
-        return 'warning'
+        return 'outline-warning'
       }
 
-      return 'secondary'
+      return 'outline-secondary'
     },
     filterSelectionCount (filterName) {
       const filtersActive = this.activeFilters[filterName]
@@ -188,6 +193,27 @@ export default {
 .dropdown-contents {
   max-width: 50rem;
   overflow: auto;
+}
+
+/* Theme override */
+.dropdown-toggle {
+  padding-right:1.5rem;
+}
+
+.dropdown-toggle::after {
+  content: "";
+  position: absolute;
+  border-bottom: 0;
+  border-left: 0.4rem solid transparent;
+  border-left-color: transparent;
+  border-left-style: solid;
+  border-left-width: 0.4rem;
+  border-right: 0.4rem solid transparent;
+  border-top: 0.4rem solid;
+  content: "";
+  display: inline-block;
+  margin-left: 0.4rem;
+  margin-top: 0.6rem;
 }
 
 .search-container {

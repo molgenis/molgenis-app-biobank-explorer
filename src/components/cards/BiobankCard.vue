@@ -4,14 +4,13 @@
       { 'border-secondary': biobankInSelection },
       'card border-dark biobank-card',
     ]">
-    <header class="border-bottom border-dark bg-secondary">
+    <header class="border-bottom border-dark card-header p-0">
       <h5 class="pt-1 pl-2 pr-1 mt-1">
-        <router-link :to="'/biobank/' + biobank.id">
-          <span id="biobank-name" class="text-light">{{ biobank.name }}</span>
-                <font-awesome-icon
-                  title="Biobank details"
-                  class="float-right m-1 text-light"
-                  :icon="['far', 'arrow-alt-circle-right']"/>
+        <router-link :to="'/biobank/' + biobank.id" title="Biobank details">
+          <span id="biobank-name">{{ biobank.name }}</span>
+          <font-awesome-icon
+            class="float-right m-1 text-dark"
+            :icon="['far', 'arrow-alt-circle-right']"/>
         </router-link>
       </h5>
     </header>
@@ -136,7 +135,7 @@ export default {
 }
 
 .biobank-card {
-  width: 30%;
+  width: 32.7%;
   margin-bottom: 1em;
 }
 
