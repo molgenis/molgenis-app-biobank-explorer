@@ -1,7 +1,6 @@
 <template>
   <div
-    class="p-3 mx-3 header-bar card sticky-top border-0"
-    :style="`top:${menuHeight}px;`">
+    class="p-3 mx-3 header-bar card sticky-top border-0">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
@@ -123,7 +122,7 @@ export default {
       'getFilters',
       'selectedCollections'
     ]),
-    ...mapState(['menuHeight', 'applicationContext']),
+    ...mapState(['applicationContext']),
     showSettings () {
       return this.applicationContext.roles
         ? this.applicationContext.roles.includes('ROLE_SU')
@@ -181,7 +180,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .header-bar {
   background-color: white;
   z-index: 1000;

@@ -9,8 +9,7 @@ const initialState = {
   collectionColumns: initialCollectionColumns,
   biobankColumns: initialBiobankColumns,
   customCollectionFilterFacets: [],
-  removeFreemarkerMargin: true,
-  menuHeight: 50
+  removeFreemarkerMargin: true
 }
 
 describe('Config Manager', () => {
