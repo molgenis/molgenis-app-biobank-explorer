@@ -89,7 +89,8 @@ module.exports = {
           collectionColumns: initialCollectionColumns,
           biobankColumns: initialBiobankColumns,
           googleAnalyticsKey: '',
-          removeFreemarkerMargin: true
+          removeFreemarkerMargin: true,
+          menuHeight: 50
         }
       }, null, 4),
       new CopyPlugin({

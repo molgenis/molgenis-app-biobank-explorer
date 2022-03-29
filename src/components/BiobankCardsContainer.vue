@@ -1,5 +1,5 @@
 <template>
-  <div class="biobank-cards-container border-bottom p-3">
+  <div class="biobank-cards-container border-bottom p-3" :style="`margin-top:${menuHeight}px;`">
     <div v-if="!loading && foundBiobanks > 0" class="d-flex justify-content-between flex-wrap align-items-start">
       <biobank-card
         v-for="biobank in biobanksShown"
@@ -33,7 +33,7 @@ export default {
     ...mapMutations(['SetCurrentPage'])
   },
   computed: {
-    ...mapState(['pageSize', 'currentPage']),
+    ...mapState(['pageSize', 'currentPage', 'menuHeight']),
     ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
     biobanksShown () {
       return this.loading

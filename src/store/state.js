@@ -26,6 +26,7 @@ export default {
   biobankColumns: config.biobankColumns,
   collectionColumns: config.collectionColumns,
   customCollectionFilterFacets: config.customCollectionFilterFacets,
+  menuHeight: config.menuHeight, // standard menu height in pixels for use in sticky-position
   biobanks: {}, // Map ID to biobank
   biobankIds: undefined, // IDs of biobanks matching the biobank filters
   collectionInfo: undefined, // IDs of collections matching the collection filters
