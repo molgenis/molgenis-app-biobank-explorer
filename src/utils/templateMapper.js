@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import state from '../store/state'
+import { sortCollectionsByName } from './sorting'
 import { generateBadgeColor } from '../utils/generatorUtils'
 
 export const getSize = obj => {
@@ -152,7 +153,7 @@ const mapSubcollections = (collections, level) => {
 
 export const getCollectionDetails = collection => {
   const viewmodel = getViewmodel(collection, state.collectionColumns)
-  viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
+  viewmodel.sub_collections = sortCollectionsByName(mapSubcollections(collection.sub_collections, 1))
 
   return {
     ...collection,
@@ -182,7 +183,17 @@ export const getBiobankDetails = (biobank) => {
     return biobank
   }
   /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
-  biobank.collection_types = biobank.collections ? [...new Set(extractCollectionTypes(biobank.collections))] : []
+  biobank.collection_types = []
+
+  if (biobank.collections.length) {
+    biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+    biobank.collections = sortCollectionsByName(biobank.collections)
+    biobank.collectionDetails = []
+
+    for (const collection of biobank.collections) {
+      biobank.collectionDetails.push(getCollectionDetails(collection))
+    }
+  }
 
   return {
     ...biobank,

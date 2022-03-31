@@ -195,12 +195,20 @@ export default {
   overflow: auto;
 }
 
+.search-container {
+  display: inline-flex;
+  position: relative;
+  top: 2px; /* aligning it with the dropwdowns */
+}
+</style>
+
+<style>
 /* Theme override */
-::v-deep .dropdown-toggle {
+#filters .dropdown-toggle {
   padding-right:1.5rem;
 }
 
-::v-deep .dropdown-toggle::after {
+#filters .filter-dropdown .dropdown-toggle::after {
   content: "";
   position: absolute;
   border-bottom: 0;
@@ -216,9 +224,4 @@ export default {
   margin-top: 0.6rem;
 }
 
-.search-container {
-  display: inline-flex;
-  position: relative;
-  top: 2px; /* aligning it with the dropwdowns */
-}
 </style>

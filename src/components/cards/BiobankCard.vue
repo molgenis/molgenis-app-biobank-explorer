@@ -4,61 +4,106 @@
       { 'border-secondary': biobankInSelection },
       'card border-dark biobank-card',
     ]">
-    <header class="border-bottom border-dark card-header p-0">
-      <h5 class="pt-1 pl-2 pr-1 mt-1">
-        <router-link :to="'/biobank/' + biobank.id" title="Biobank details">
-          <span id="biobank-name">{{ biobank.name }}</span>
-          <font-awesome-icon
-            class="float-right m-1 text-dark"
-            :icon="['far', 'arrow-alt-circle-right']"/>
-        </router-link>
-      </h5>
-    </header>
-    <section class="px-2 pt-4">
-      <small>
-        <view-generator :viewmodel="biobankcardViewmodel" />
-      </small>
-    </section>
+    <div v-if="loading" class="text-center p-5">
+      <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+    </div>
+    <div v-else>
+      <header class="border-bottom border-dark card-header p-1">
+        <h5 class="pt-1 pl-2 pr-1 mt-1">
+          <router-link :to="'/biobank/' + biobank.id" title="Biobank details">
+            <span class="biobank-name">{{ biobank.name }}</span>
+            <font-awesome-icon
+              class="float-right m-1 text-dark"
+              :icon="['far', 'arrow-alt-circle-right']"/>
+          </router-link>
+        </h5>
+      </header>
+
+      <ul class="nav nav-tabs mt-1" v-if="biobank.collections.length">
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            :class="{
+              active: !showCollections,
+              'border bg-white': showCollections,
+            }"
+            @click.prevent="showCollections = false">
+            Details
+          </button>
+        </li>
+        <li class="nav-item ml-1">
+          <button
+            class="nav-link"
+            :class="{
+              active: showCollections,
+              'border bg-white': !showCollections,
+            }"
+            @click.prevent="showCollections = true">
+            Collections
+          </button>
+        </li>
+      </ul>
+      <section v-show="!showCollections" class="p-2 pt-1 biobank-section">
+        <small>
+          <view-generator :viewmodel="biobankcardViewmodel" />
+        </small>
+      </section>
+      <section class="card-body collections-section pt-0">
+        <div
+          class="collection-items"
+          v-for="collectionDetail of biobank.collectionDetails"
+          :key="collectionDetail.id">
+          <div v-show="showCollections" class="mb-2">
+            <div class="my-2 collection-header">
+              <router-link
+                :to="'/collection/' + collectionDetail.id"
+                title="Collection details">
+                <span class="collection-name">{{ collectionDetail.name }}</span>
+                <font-awesome-icon
+                  class="float-right m-1 text-dark"
+                  :icon="['far', 'arrow-alt-circle-right']"/>
+              </router-link>
+            </div>
+            <hr class="mt-0" />
+            <small>
+              <view-generator :viewmodel="collectionDetail.viewmodel" />
+            </small>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
 <script>
-// import CollectionSelector from '../buttons/CollectionSelector'
-// import CollectionsTable from '../tables/CollectionsTable.vue'
-// import quality from '../generators/view-components/quality.vue' /* soon will turn into a generated view */
 import { mapGetters, mapState } from 'vuex'
-import { sortCollectionsByName } from '../../utils/sorting'
-import { getBiobankDetails } from '../../utils/templateMapper'
+import {
+  getBiobankDetails,
+  getCollectionDetails
+} from '../../utils/templateMapper'
 import ViewGenerator from '../generators/ViewGenerator.vue'
 
 export default {
   name: 'biobank-card',
   components: {
-    // CollectionsTable,
-    // quality
-    // CollectionSelector,
     ViewGenerator
   },
   props: {
     biobank: {
       type: [Object, String]
-    },
-    initCollapsed: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
   data () {
     return {
       biobankSelected: false,
-      collapsed: this.initCollapsed
+      showCollections: false
     }
   },
   methods: {
+    getCollectionDetails,
     handleCheckAll: function (checked) {
       if (checked === true) {
-        this.collapsed = false
+        this.showCollections = false
       }
     }
   },
@@ -79,14 +124,6 @@ export default {
           )
         }
       }
-
-      // override for badges for homescreen card, else it will be a christmas tree.
-      // attributes.forEach(attribute => {
-      //   if (attribute.badgeColor) {
-      //     attribute.badgeColor = 'light'
-      //   }
-      // })
-
       return { attributes }
     },
     biobankInSelection () {
@@ -98,9 +135,6 @@ export default {
       return this.selectedCollections
         .map(sc => sc.value)
         .some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
-    },
-    sortedCollections () {
-      return sortCollectionsByName(this.biobank.collections)
     },
     loading () {
       return typeof this.biobank === 'string'
@@ -116,8 +150,24 @@ export default {
 </script>
 
 <style>
-.table-card {
-  padding: 0.1rem;
+.collections-section,
+.biobank-section {
+  max-height: 25rem;
+  overflow: auto;
+}
+
+.collapse-icon {
+  position: relative;
+  top: 2px;
+  font-size: 1.4rem;
+}
+
+.collection-items {
+  word-break: break-word;
+}
+
+.collection-items th {
+  width: 25%;
 }
 
 .added-to-selection {
@@ -129,17 +179,23 @@ export default {
   border-radius: 50%;
 }
 
-#biobank-name {
+.biobank-name,
+.collection-name {
   display: inline-block;
   width: 92%;
 }
 
 .biobank-card {
   width: 32.7%;
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
 }
 
-.biobank-card > header {
+.show-collections:focus {
+  box-shadow: none;
+}
+
+.biobank-card > header,
+.collection-header {
   display: flex;
   min-height: 3rem;
   flex-direction: column;

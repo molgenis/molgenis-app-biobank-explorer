@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="mb-4 layout-table w-100">
+    <table class="layout-table w-100">
       <component
         v-for="attribute in renderObject.attributes"
         :is="component(attribute.type)"
