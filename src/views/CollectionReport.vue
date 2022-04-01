@@ -1,5 +1,5 @@
 <template>
-  <div class="container mg-collection-report-card">
+  <div class="container mg-collection-report-card pb-4">
     <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"

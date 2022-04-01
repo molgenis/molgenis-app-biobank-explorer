@@ -1,5 +1,5 @@
 <template>
-  <div class="mg-biobank-card container">
+  <div class="mg-biobank-card container pb-4">
     <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"

@@ -22,7 +22,7 @@
       <ul class="nav nav-tabs mt-1" v-if="biobank.collections.length">
         <li class="nav-item">
           <button
-            class="nav-link"
+            class="nav-link text-dark"
             :class="{
               active: !showCollections,
               'border bg-white': showCollections,
@@ -33,7 +33,7 @@
         </li>
         <li class="nav-item ml-1">
           <button
-            class="nav-link"
+            class="nav-link text-dark"
             :class="{
               active: showCollections,
               'border bg-white': !showCollections,
@@ -43,18 +43,18 @@
           </button>
         </li>
       </ul>
-      <section v-show="!showCollections" class="p-2 pt-1 biobank-section">
+      <section v-if="!showCollections" class="p-2 pt-1 biobank-section">
         <small>
           <view-generator :viewmodel="biobankcardViewmodel" />
         </small>
       </section>
       <section class="card-body collections-section pt-0">
         <div
-          class="collection-items"
+          class="collection-items mt-4"
           v-for="collectionDetail of biobank.collectionDetails"
           :key="collectionDetail.id">
-          <div v-show="showCollections" class="mb-2">
-            <div class="my-2 collection-header">
+          <div v-if="showCollections" class="mb-2">
+            <div class="collection-header card-header border border-dark p-2">
               <router-link
                 :to="'/collection/' + collectionDetail.id"
                 title="Collection details">
@@ -64,9 +64,22 @@
                   :icon="['far', 'arrow-alt-circle-right']"/>
               </router-link>
             </div>
-            <hr class="mt-0" />
             <small>
-              <view-generator :viewmodel="collectionDetail.viewmodel" />
+              <div
+                class="
+                  pt-2
+                  px-2
+                  border border-dark border-top-0 border-bottom-0
+                  d-flex
+                ">
+                <collection-selector
+                  class="ml-auto"
+                  :collectionData="collectionDetail"
+                  bookmark></collection-selector>
+              </div>
+              <view-generator
+                class="border border-dark p-2 border-top-0 pt-2"
+                :viewmodel="collectionViewmodel(collectionDetail)"/>
             </small>
           </div>
         </div>
@@ -82,11 +95,13 @@ import {
   getCollectionDetails
 } from '../../utils/templateMapper'
 import ViewGenerator from '../generators/ViewGenerator.vue'
+import CollectionSelector from '../buttons/CollectionSelector.vue'
 
 export default {
   name: 'biobank-card',
   components: {
-    ViewGenerator
+    ViewGenerator,
+    CollectionSelector
   },
   props: {
     biobank: {
@@ -105,10 +120,28 @@ export default {
       if (checked === true) {
         this.showCollections = false
       }
+    },
+    collectionViewmodel (collectiondetails) {
+      const attributes = []
+
+      for (const item of this.collectionColumns) {
+        if (item.showOnBiobankCard) {
+          attributes.push(
+            collectiondetails.viewmodel.attributes.find(
+              vm => vm.label === item.label
+            )
+          )
+        }
+      }
+      return { attributes }
     }
   },
   computed: {
-    ...mapState(['qualityStandardsDictionary', 'biobankColumns']),
+    ...mapState([
+      'qualityStandardsDictionary',
+      'biobankColumns',
+      'collectionColumns'
+    ]),
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
       // check if biobank is only the id (lazy loading)

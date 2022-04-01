@@ -1,5 +1,6 @@
 const initialBiobankColumns = [
   { label: 'Id:', column: 'id', type: 'string' },
+  { label: 'PID:', column: 'pid', type: 'string' },
   { label: 'Name:', column: 'name', type: 'string' },
   { label: 'Description:', column: 'description', type: 'longtext' },
   { label: 'Quality marks:', column: 'quality', type: 'quality', showOnBiobankCard: true },

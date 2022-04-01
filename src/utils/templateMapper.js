@@ -153,7 +153,7 @@ const mapSubcollections = (collections, level) => {
 
 export const getCollectionDetails = collection => {
   const viewmodel = getViewmodel(collection, state.collectionColumns)
-  viewmodel.sub_collections = sortCollectionsByName(mapSubcollections(collection.sub_collections, 1))
+  viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
 
   return {
     ...collection,

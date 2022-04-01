@@ -5,22 +5,16 @@
       :style="margin"
       :key="quality.id"
       class="d-flex">
-       <info-popover
+      <info-popover
         v-if="qualityInfo && Object.keys(qualityInfo).length"
         class="mr-2"
-        popover-placement="left">
-        <table>
-          <tbody>
-            <tr>
-              <td class="align-top font-weight-bold p-2">
-                {{ quality.label }}
-              </td>
-              <td class="py-2">
-                {{ qualityInfo[quality.label] }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        popover-placement="top">
+        <div class="popover-content">
+          <b>{{ quality.label }}</b>
+          <p class="mt-1">
+            {{ qualityInfo[quality.label] }}
+          </p>
+        </div>
       </info-popover>
       <a
         :href="quality.certification_report"
@@ -49,7 +43,6 @@
         </span>
       </span>
       <span class="fa fa-check text-success pl-2"></span>
-
     </li>
   </ul>
 </template>
@@ -91,8 +84,13 @@ export default {
   max-height: 4rem;
 }
 
+.popover-content {
+  max-width: 20rem;
+  word-break: break-word;
+}
+
 .fa-check {
   position: relative;
-  top:2px;
+  top: 2px;
 }
 </style>

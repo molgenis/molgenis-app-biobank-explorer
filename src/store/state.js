@@ -15,7 +15,7 @@ export default {
   removeFreemarkerMargin: config.removeFreemarkerMargin,
   isLoading: false,
   currentPage: 1,
-  pageSize: 12,
+  pageSize: 9,
   initialBiobankCount: 0,
   initialBiobankIds: [],
   biobankCount: 0,
