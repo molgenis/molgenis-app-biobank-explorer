@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-3 mx-3 header-bar card sticky-top border-0"
+    class="p-3 mx-3 header-bar card sticky-top border-0 shadow-sm"
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">

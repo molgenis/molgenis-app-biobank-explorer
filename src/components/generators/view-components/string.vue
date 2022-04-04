@@ -4,7 +4,7 @@
     <td>
       <template v-if="attribute.badgeColor">
         <span
-          class="badge mb-2"
+          class="badge rounded-pill mb-2"
           :class="'badge-' + badgeColor">
           {{ attribute.value }}
         </span>

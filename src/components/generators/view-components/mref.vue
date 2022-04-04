@@ -10,7 +10,7 @@
           tabindex="0"
           :href="item.uri"
           target="_blank"
-          class="badge text-break mr-2 mb-2 p-2"
+          class="badge rounded-pill text-break mr-2 mb-2 p-2"
           :class="'badge-' + badgeColor"
           :key="`${index}-${displayName(item)}`">
           {{ displayName(item) }}
@@ -22,7 +22,7 @@
           @click.stop
           tabindex="0"
           v-for="(value, index) in attribute.value"
-          class="badge text-break mr-2 mb-2"
+          class="badge rounded-pill text-break mr-2 mb-2"
           :key="index"
           :class="'badge-' + badgeColor">
           {{ value }}

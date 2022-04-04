@@ -25,7 +25,7 @@
                 <view-generator :viewmodel="biobank.viewmodel" />
 
                 <!-- Collection Part -->
-                <h3>Collections</h3>
+                <h3 class="mt-4">Collections</h3>
                 <div
                   v-for="(collection, index) in collectionsData"
                   :key="collection.id">
@@ -34,7 +34,7 @@
                     :title="collection.name"
                     :id="collection.id"/>
 
-                  <view-generator :viewmodel="collection.viewmodel" />
+                  <view-generator class="collection-view" :viewmodel="collection.viewmodel" />
                 </div>
               </div>
               <!-- Right side card -->

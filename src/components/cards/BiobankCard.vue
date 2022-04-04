@@ -1,14 +1,17 @@
 <template>
   <div
     :class="[
-      { 'border-secondary': biobankInSelection },
-      'card border-dark biobank-card',
+      {
+        'border-secondary': biobankInSelection,
+        'border-light': !biobankInSelection,
+      },
+      'card biobank-card shadow-sm',
     ]">
     <div v-if="loading" class="text-center p-5">
       <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
     </div>
     <div v-else>
-      <header class="border-bottom border-dark card-header p-1">
+      <header class="border-0 card-header p-1">
         <h5 class="pt-1 pl-2 pr-1 mt-1">
           <router-link :to="'/biobank/' + biobank.id" title="Biobank details">
             <span class="biobank-name">{{ biobank.name }}</span>
@@ -19,30 +22,34 @@
         </h5>
       </header>
 
-      <ul class="nav nav-tabs mt-1" v-if="biobank.collections.length">
-        <li class="nav-item">
-          <button
-            class="nav-link text-dark"
-            :class="{
-              active: !showCollections,
-              'border bg-white': showCollections,
-            }"
-            @click.prevent="showCollections = false">
-            Details
-          </button>
-        </li>
-        <li class="nav-item ml-1">
-          <button
-            class="nav-link text-dark"
-            :class="{
-              active: showCollections,
-              'border bg-white': !showCollections,
-            }"
-            @click.prevent="showCollections = true">
-            Collections
-          </button>
-        </li>
-      </ul>
+      <div class="d-flex mt-1" v-if="biobank.collections.length">
+        <button
+          class="btn ml-1"
+          :class="{
+            'btn-outline-secondary': !showCollections,
+            'btn-light border': showCollections,
+          }"
+          @click.prevent="showCollections = false">
+          Biobank details
+        </button>
+
+        <button
+          class="btn ml-1"
+          :class="{
+            'btn-outline-secondary': showCollections,
+            'btn-light border': !showCollections,
+          }"
+          @click.prevent="showCollections = true">
+          Collections details
+        </button>
+
+        <collection-selector
+          class="text-right ml-auto mr-2 align-self-center"
+          v-if="biobank.collections.length > 0"
+          :collectionData="biobank.collections"
+          bookmark
+          @checked="handleCheckAll"></collection-selector>
+      </div>
       <section v-if="!showCollections" class="p-2 pt-1 biobank-section">
         <small>
           <view-generator :viewmodel="biobankcardViewmodel" />
@@ -161,6 +168,8 @@ export default {
     },
     biobankInSelection () {
       if (!this.biobank.collections) return false
+
+      console.log('!')
 
       const biobankCollectionSelection = this.biobank.collections
         .filter(bcf => !bcf.parent_collection)

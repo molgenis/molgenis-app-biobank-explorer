@@ -76,12 +76,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .layout-table {
   border-collapse: unset;
 }
 
-::v-deep > th {
+::v-deep th {
   width:40%;
 }
 </style>
