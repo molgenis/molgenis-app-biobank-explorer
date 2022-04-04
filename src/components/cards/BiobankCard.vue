@@ -145,7 +145,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'qualityStandardsDictionary',
       'biobankColumns',
       'collectionColumns'
     ]),
@@ -169,8 +168,6 @@ export default {
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
-      console.log('!')
-
       const biobankCollectionSelection = this.biobank.collections
         .filter(bcf => !bcf.parent_collection)
         .map(bc => ({ label: bc.label || bc.name, value: bc.id }))
@@ -180,12 +177,6 @@ export default {
     },
     loading () {
       return typeof this.biobank === 'string'
-    },
-    iconStyle () {
-      return {
-        transform: `rotate(${this.collapsed ? 0 : 90}deg)`,
-        transition: 'transform 0.2s'
-      }
     }
   }
 }
@@ -198,27 +189,12 @@ export default {
   overflow: auto;
 }
 
-.collapse-icon {
-  position: relative;
-  top: 2px;
-  font-size: 1.4rem;
-}
-
 .collection-items {
   word-break: break-word;
 }
 
 .collection-items th {
   width: 25%;
-}
-
-.added-to-selection {
-  position: absolute;
-  z-index: 2;
-  top: 9px;
-  right: -5px;
-  background: white;
-  border-radius: 50%;
 }
 
 .biobank-name,
@@ -232,10 +208,6 @@ export default {
   margin-bottom: 1rem;
 }
 
-.show-collections:focus {
-  box-shadow: none;
-}
-
 .biobank-card > header,
 .collection-header {
   display: flex;
@@ -247,24 +219,5 @@ export default {
 /* TODO put in theme */
 .card-header {
     background-color: #efefef;
-}
-
-.biobank-card-header:hover {
-  cursor: pointer;
-}
-
-.biobank-icon:hover {
-  cursor: pointer;
-}
-
-.covid-icon {
-  height: 1.5rem;
-  width: auto;
-}
-
-.icon-alignment {
-  position: relative;
-  top: 1px;
-  left: 2px;
 }
 </style>
