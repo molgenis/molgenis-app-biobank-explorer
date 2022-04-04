@@ -3,7 +3,6 @@ RUN apt-get update && apt-get install -y curl && apt-get clean
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm -rf /etc/nginx/conf.d/default.conf 
 RUN mkdir -p /usr/share/nginx/html/js/
-RUN mkdir -p /usr/share/nginx/html/img/
 COPY docker/config/default.conf.template /etc/nginx/conf.d/
 COPY docker/entry.sh /
 RUN chmod +x entry.sh
