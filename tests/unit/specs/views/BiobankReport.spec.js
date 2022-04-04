@@ -61,7 +61,7 @@ describe('BiobankReport', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(BiobankReport, { mocks, stubs, store, localVue })
-    expect(wrapper.html()).toContain('class="mg-biobank-card container"')
+    expect(wrapper.html()).toContain('class="mg-biobank-card container')
   })
 
   describe('computed', () => {

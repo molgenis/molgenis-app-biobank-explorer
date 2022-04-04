@@ -101,7 +101,7 @@ export default {
     }
 
   },
-  mounted () {
+  beforeMount () {
     let initialData
 
     if (Array.isArray(this.collectionData)) {

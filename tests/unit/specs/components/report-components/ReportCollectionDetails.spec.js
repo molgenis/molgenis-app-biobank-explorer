@@ -105,6 +105,11 @@ const expected = {
         value: ''
       },
       {
+        label: 'Quality marks:',
+        type: 'quality',
+        value: undefined
+      },
+      {
         badgeColor: 'info',
         label: 'Size:',
         type: 'object',
@@ -203,6 +208,11 @@ const expected = {
               label: 'Website:',
               type: 'hyperlink',
               value: ''
+            },
+            {
+              label: 'Quality marks:',
+              type: 'quality',
+              value: undefined
             },
             {
               badgeColor: 'info',
@@ -310,6 +320,11 @@ const expected = {
               label: 'Website:',
               type: 'hyperlink',
               value: ''
+            },
+            {
+              label: 'Quality marks:',
+              type: 'quality',
+              value: undefined
             },
             {
               badgeColor: 'info',
