@@ -244,6 +244,11 @@ export default {
   justify-content: center;
 }
 
+/* TODO put in theme */
+.card-header {
+    background-color: #efefef;
+}
+
 .biobank-card-header:hover {
   cursor: pointer;
 }
