@@ -47,8 +47,7 @@
           class="text-right ml-auto mr-2 align-self-center"
           v-if="biobank.collections.length > 0"
           :collectionData="biobank.collections"
-          bookmark
-          @checked="handleCheckAll"></collection-selector>
+          bookmark></collection-selector>
       </div>
       <section v-if="!showCollections" class="p-2 pt-1 biobank-section">
         <small>
@@ -123,11 +122,6 @@ export default {
   },
   methods: {
     getCollectionDetails,
-    handleCheckAll: function (checked) {
-      if (checked === true) {
-        this.showCollections = false
-      }
-    },
     collectionViewmodel (collectiondetails) {
       const attributes = []
 
@@ -150,8 +144,8 @@ export default {
     ]),
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
-      // check if biobank is only the id (lazy loading)
-      if (typeof this.biobank === 'string') return {}
+      // check if biobank is still loading
+      if (this.loading) return {}
 
       const { viewmodel } = getBiobankDetails(this.biobank)
       const attributes = []
