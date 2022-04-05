@@ -198,8 +198,9 @@ export default {
 }
 
 .biobank-card {
-  width: 32.7%;
+  width: 25rem;
   margin-bottom: 1rem;
+  margin-right: 1rem;
 }
 
 .biobank-card > header,
