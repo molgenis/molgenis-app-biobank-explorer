@@ -68,7 +68,6 @@ export default {
   },
   data: () => {
     return {
-      isChecked: false,
       collections: [],
       identifier: ''
     }
@@ -98,6 +97,11 @@ export default {
     ...mapGetters(['selectedCollections']),
     checkboxIdentifier () {
       return this.identifier
+    },
+    isChecked () {
+      const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
+      return this.collections.map(collection => collection.value)
+        .every(id => selectedCollectionIds.includes(id))
     }
 
   },
@@ -117,9 +121,6 @@ export default {
       value: collection.id
     })
     )
-    const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
-    this.isChecked = this.collections.map(collection => collection.value)
-      .every(id => selectedCollectionIds.includes(id))
   }
 }
 </script>

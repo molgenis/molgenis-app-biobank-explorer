@@ -22,9 +22,9 @@
         </h5>
       </header>
 
-      <div class="d-flex mt-1" v-if="biobank.collections.length">
+      <div class="d-flex mt-2" v-if="biobank.collections.length">
         <button
-          class="btn ml-1"
+          class="btn ml-2"
           :class="{
             'btn-outline-secondary': !showCollections,
             'btn-light border': showCollections,
@@ -44,7 +44,7 @@
         </button>
 
         <collection-selector
-          class="text-right ml-auto mr-2 align-self-center"
+          class="text-right ml-auto mr-2 mt-1 align-self-center"
           v-if="biobank.collections.length > 0"
           :collectionData="biobank.collections"
           bookmark></collection-selector>
