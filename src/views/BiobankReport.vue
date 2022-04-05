@@ -80,6 +80,7 @@ import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ViewGenerator from '../components/generators/ViewGenerator.vue'
+import { sortCollectionsByName } from '../utils/sorting'
 
 import {
   getBiobankDetails,
@@ -128,7 +129,7 @@ export default {
     },
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
-        ? this.biobank.collections
+        ? sortCollectionsByName(this.biobank.collections)
           .filter(it => !it.parent_collection)
           .map(col => getCollectionDetails(col))
         : []

@@ -24,13 +24,12 @@
 
 <script>
 import BiobankCard from './cards/BiobankCard.vue'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
   methods: {
-    ...mapActions(['GetBiobanks']),
-    ...mapMutations(['SetCurrentPage'])
+    ...mapActions(['GetBiobanks'])
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
@@ -54,14 +53,6 @@ export default {
     BiobankCard
   },
   watch: {
-    biobankIds (newValue, oldValue) {
-      if (
-        newValue.length !== oldValue.length ||
-        !newValue.every((element, index) => element === oldValue[index])
-      ) {
-        this.SetCurrentPage(1)
-      }
-    },
     biobankIdsToFetch (value) {
       if (value.length) {
         this.GetBiobanks(value)

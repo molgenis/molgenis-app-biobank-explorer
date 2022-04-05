@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import state from '../store/state'
-import { sortCollectionsByName } from './sorting'
 import { generateBadgeColor } from '../utils/generatorUtils'
 
 export const getSize = obj => {
@@ -168,7 +167,9 @@ function extractCollectionTypes (collections, extractedTypes) {
   let collectionTypes = extractedTypes || []
 
   for (const collection of collections) {
-    collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+    if (collection.type) {
+      collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+    }
 
     if (collection.sub_collections && collection.sub_collections.length) {
       collectionTypes = collectionTypes.concat(extractCollectionTypes(collection.sub_collections, collectionTypes))
@@ -187,7 +188,6 @@ export const getBiobankDetails = (biobank) => {
 
   if (biobank.collections.length) {
     biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
-    biobank.collections = sortCollectionsByName(biobank.collections)
     biobank.collectionDetails = []
 
     for (const collection of biobank.collections) {
