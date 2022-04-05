@@ -23,7 +23,7 @@
         </span>
         <div class="d-flex justify-content-center align-items-center">
           <Transition>
-              <div v-show="copyPidShown" role="alert" aria-live="assertive" aria-atomic="true" class="toast-container toast-container-top-center">
+              <div v-show="copyPidShown" ref="copy-link-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast-container toast-container-top-center">
                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                   <div class="toast-body">
                     Copied {{ attribute.linkValue }}
@@ -63,7 +63,7 @@ export default {
       this.copyPidShown = true
       setTimeout(() => {
         this.copyPidShown = false
-      }, 1000)
+      }, 1500)
     }
   }
 }
@@ -114,7 +114,8 @@ export default {
 .toast-container-top-center {
   position: fixed;
   min-height: 200px;
-  top: 0.2;
+  margin-top: 5px;
+  top: 0;
 }
 
 .toast-container .toast {
