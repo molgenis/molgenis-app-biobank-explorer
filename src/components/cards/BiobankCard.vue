@@ -60,7 +60,7 @@
           v-for="collectionDetail of biobank.collectionDetails"
           :key="collectionDetail.id">
           <div v-if="showCollections" class="mb-2">
-            <div class="collection-header card-header border border-dark p-2">
+            <div class="collection-header card-header border p-2">
               <router-link
                 :to="'/collection/' + collectionDetail.id"
                 title="Collection details">
@@ -75,7 +75,7 @@
                 class="
                   pt-2
                   px-2
-                  border border-dark border-top-0 border-bottom-0
+                  border border-top-0 border-bottom-0
                   d-flex
                 ">
                 <collection-selector
@@ -84,7 +84,7 @@
                   bookmark></collection-selector>
               </div>
               <view-generator
-                class="border border-dark p-2 border-top-0 pt-2"
+                class="border p-2 border-top-0 pt-2"
                 :viewmodel="collectionViewmodel(collectionDetail)"/>
             </small>
           </div>

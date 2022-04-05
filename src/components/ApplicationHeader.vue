@@ -205,7 +205,7 @@ export default {
 <style>
 /* Theme override */
 #filters .dropdown-toggle {
-  padding-right:1.5rem;
+  padding-right: 1.5rem;
 }
 
 #filters .filter-dropdown .dropdown-toggle::after {
@@ -223,5 +223,4 @@ export default {
   margin-left: 0.4rem;
   margin-top: 0.6rem;
 }
-
 </style>

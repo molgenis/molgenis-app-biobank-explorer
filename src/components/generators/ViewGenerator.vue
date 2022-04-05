@@ -78,10 +78,6 @@ export default {
 
 <style>
 .layout-table {
-  border-collapse: unset;
-}
-
-::v-deep th {
-  width:40%;
+  border-collapse: unset; /* override theme */
 }
 </style>

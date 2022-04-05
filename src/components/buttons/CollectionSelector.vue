@@ -85,10 +85,8 @@ export default {
       const collectionData = { collections: this.collections, bookmark: this.bookmark }
 
       if (checked) {
-        this.isChecked = true
         this.AddCollectionsToSelection(collectionData)
       } else {
-        this.isChecked = false
         this.RemoveCollectionsFromSelection(collectionData)
       }
     }
