@@ -60,7 +60,7 @@
             <template #button-content>
               <span>{{ filter.label || filter.name }}</span>
               <span
-                class="badge badge-light ml-2"
+                class="badge badge-light border ml-2"
                 v-if="filterSelectionCount(filter.name) > 0">
                 {{ filterSelectionCount(filter.name) }}</span>
             </template>
