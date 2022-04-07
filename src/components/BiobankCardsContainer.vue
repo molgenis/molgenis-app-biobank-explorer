@@ -4,8 +4,7 @@
       <biobank-card
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
-        :biobank="biobank"
-        :initCollapsed="true">
+        :biobank="biobank">
       </biobank-card>
     </div>
 
@@ -33,14 +32,18 @@ export default {
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
-    ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
+    ...mapGetters(['biobanks', 'foundBiobanks', 'loading', 'biobankRsql', 'rsql']),
     biobanksShown () {
-      return this.loading
-        ? []
-        : this.biobanks.slice(
+      if (this.loading) return []
+
+      if (this.biobankRsql || this.rsql) {
+        return this.biobanks.slice(
           this.pageSize * (this.currentPage - 1),
           this.pageSize * this.currentPage
         )
+      } else {
+        return this.biobanks
+      }
     },
     biobankIds () {
       return this.loading ? [] : this.biobanks.map(it => it.id || it)
