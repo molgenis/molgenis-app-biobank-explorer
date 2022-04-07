@@ -17,7 +17,7 @@ export const biobankActions = {
       size = 10000
     }
 
-    let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage}&size=${size}&sort=name`
+    let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name`
     if (getters.biobankRsql) {
       url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`
     }
