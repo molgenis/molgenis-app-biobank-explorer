@@ -19,13 +19,18 @@
           id="copy-icon"
           @click.prevent="copyOnClipboard(attribute.linkValue, $event)"
           v-b-tooltip.hover="'Copy on clipboard'"
-          class="fa fa-clipboard">
+          class="fa fa-clipboard ml-1">
         </span>
         <div class="d-flex justify-content-center align-items-center">
           <Transition>
-              <div v-show="copyPidShown" ref="copy-link-toast" role="alert" aria-live="assertive" aria-atomic="true" class="toast-container toast-container-top-center">
+              <div v-show="copiedValueShown"
+                  ref="copy-link-toast"
+                  role="alert"
+                  aria-live="assertive"
+                  aria-atomic="true"
+                  class="toast-container toast-container-top-center mt-1 alert-info">
                 <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                  <div class="toast-body">
+                  <div class="toast-body alert-info">
                     Copied {{ attribute.linkValue }}
                   </div>
                 </div>
@@ -41,7 +46,7 @@
 export default {
   data () {
     return {
-      copyPidShown: false
+      copiedValueShown: false
     }
   },
   props: {
@@ -58,11 +63,12 @@ export default {
     displayName (item) {
       return item.label || item.name || item.id
     },
-    copyOnClipboard (link, event) {
+    copyOnClipboard (link) {
       navigator.clipboard.writeText(link)
-      this.copyPidShown = true
-      setTimeout(() => {
-        this.copyPidShown = false
+      this.copiedValueShown = true
+      const copiedValueTimer = setTimeout(() => {
+        this.copiedValueShown = false
+        clearTimeout(copiedValueTimer)
       }, 1500)
     }
   }
@@ -72,7 +78,6 @@ export default {
 <style scoped>
 
 .fa-clipboard {
-  margin-left: 5px;
   position: relative;
   font-size: large;
 }
@@ -103,7 +108,7 @@ export default {
 
 .toast-container {
   display: block;
-  max-width: 350px;
+  max-width: 25rem;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background-clip: padding-box;
@@ -113,16 +118,12 @@ export default {
 
 .toast-container-top-center {
   position: fixed;
-  min-height: 200px;
-  margin-top: 5px;
   top: 0;
 }
 
 .toast-container .toast {
-    background-color: rgba(230, 242, 255, 0.85);
-    border-color: rgba(184, 218, 255, 0.85);
-    color: #004085;
-    opacity: 1;
+  max-width: 25rem;
+  opacity: 1;
 }
 
 .v-enter-active,

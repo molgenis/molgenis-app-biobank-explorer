@@ -58,7 +58,8 @@ describe('Generator view-components', () => {
 
       expect(flattendHtml.includes('>Description:<')).toBeTruthy()
       expect(flattendHtml.includes('>test')).toBeTruthy()
-      expect(flattendHtml.includes('class="toast-body">Copiedhttp://test.com/123')).toBeTruthy()
+      expect(flattendHtml.includes('class="fafa-clipboardml-1">')).toBeTruthy()
+      expect(wrapper.find('.toast-container').isVisible()).toBeFalsy()
     })
 
     it('copy the link value on clipboard when the icon is clicked', async () => {
@@ -71,17 +72,17 @@ describe('Generator view-components', () => {
       }
 
       const wrapper = mount(string, { propsData: { attribute } })
-      expect(wrapper.find('.toast-container').isVisible()).toBeFalsy()
-      expect(wrapper.vm.copyPidShown).toBeFalsy()
+      var toastContainer = wrapper.find('.toast-container')
+      expect(toastContainer.isVisible()).toBeFalsy()
+      expect(wrapper.vm.copiedValueShown).toBeFalsy()
 
       await wrapper.find('#copy-icon').trigger('click')
-      expect(wrapper.vm.copyPidShown).toBeTruthy()
-      expect(wrapper.find('.toast-container').isVisible()).toBeTruthy()
+      expect(toastContainer.isVisible()).toBeTruthy()
+      expect(wrapper.vm.copiedValueShown).toBeTruthy()
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(attribute.linkValue)
 
       jest.runAllTimers()
-      expect(wrapper.vm.copyPidShown).toBeFalsy()
-      // expect(wrapper.find('.toast-container').isVisible()).toBeFalsy()
+      expect(wrapper.vm.copiedValueShown).toBeFalsy()
     })
 
     it('use alternatives values as label', () => {
