@@ -184,6 +184,15 @@ describe('templateMapper', () => {
             value: ''
           },
           {
+            label: 'Quality marks:',
+            type: 'quality',
+            value: [
+              {
+                label: 'Order of the rose'
+              }
+            ]
+          },
+          {
             badgeColor: 'info',
             label: 'Size:',
             type: 'object',
@@ -318,6 +327,11 @@ describe('templateMapper', () => {
                   value: ''
                 },
                 {
+                  label: 'Quality marks:',
+                  type: 'quality',
+                  value: undefined
+                },
+                {
                   badgeColor: 'info',
                   label: 'Size:',
                   type: 'object',
@@ -445,6 +459,11 @@ describe('templateMapper', () => {
                   value: ''
                 },
                 {
+                  label: 'Quality marks:',
+                  type: 'quality',
+                  value: undefined
+                },
+                {
                   badgeColor: 'info',
                   label: 'Size:',
                   type: 'object',
@@ -543,6 +562,11 @@ describe('templateMapper', () => {
                         label: 'Website:',
                         type: 'hyperlink',
                         value: ''
+                      },
+                      {
+                        label: 'Quality marks:',
+                        type: 'quality',
+                        value: undefined
                       },
                       {
                         badgeColor: 'info',

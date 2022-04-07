@@ -72,7 +72,7 @@ describe('CollectionReport', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-    expect(wrapper.html()).toContain('class="container mg-collection-report-card"')
+    expect(wrapper.html()).toContain('class="container mg-collection-report-card')
   })
 
   describe('computed', () => {

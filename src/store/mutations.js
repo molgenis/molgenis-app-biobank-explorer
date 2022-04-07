@@ -21,6 +21,9 @@ export default {
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
   UpdateFilterSelection (state, filterUpdate) {
+    // reset the page as we query new results.
+    state.currentPage = 1
+
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
 

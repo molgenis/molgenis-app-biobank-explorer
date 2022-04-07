@@ -1,6 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import BiobankCard from '@/components/cards/BiobankCard'
-import CollectionSelector from '@/components/buttons/CollectionSelector'
 import { mockState } from '../../mockData'
 import Vuex from 'vuex'
 
@@ -10,11 +9,13 @@ localVue.use(Vuex)
 describe('BiobankCard', () => {
   let propsData, stubs, store
 
+  const selectedCollections = jest.fn().mockReturnValue([])
+
   beforeEach(() => {
     store = new Vuex.Store({
       state: mockState(),
       getters: {
-        selectedCollections: () => []
+        selectedCollections
       }
     })
 
@@ -39,55 +40,18 @@ describe('BiobankCard', () => {
         }]
       }
     }
-    stubs = ['router-link', 'router-view', 'b-img', 'font-awesome-icon']
+    stubs = ['router-link', 'router-view', 'font-awesome-icon']
   })
 
-  it('should initialize the collapsed prop to true if none is passed', () => {
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.props().initCollapsed).toBe(true)
-  })
-
-  it('should use the passed collapsed setting if passed', () => {
-    propsData.initCollapsed = false
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.props().initCollapsed).toBe(false)
-  })
-  it('should sort collections based by name alphabeticaly', () => {
-    const result = [{
-      name: 'a',
-      type: [{ label: 'col-type-d' }],
-      sub_collections: [{
-        type: [{ label: 'col-type-e' }],
-        sub_collections: []
-      }]
-    },
-    {
-      name: 'z',
-      type: [{ label: 'col-type-a' }],
-      sub_collections: [{
-        type: [{ label: 'col-type-b' }],
-        sub_collections: []
-      }]
-    }]
+  it('can check if any collection of the biobank has been selected', () => {
+    selectedCollections.mockReturnValue(['a'])
 
     const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.vm.sortedCollections).toStrictEqual(result)
+    expect(wrapper.vm.biobankInSelection).toBeTruthy()
   })
-  it('should open the card when the checkbox for selection is set to true', () => {
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    wrapper.findComponent(CollectionSelector).vm.$emit('checked', true)
-    expect(wrapper.vm.collapsed).toBe(false)
-  })
-  it('should keep the card in the same state when the checkbox for selection is set to false', async () => {
-    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    const collectionSelector = wrapper.findComponent(CollectionSelector)
 
-    await wrapper.setData({ collapsed: false })
-    collectionSelector.vm.$emit('checked', false)
-    expect(wrapper.vm.collapsed).toBe(false)
-
-    await wrapper.setData({ collapsed: true })
-    collectionSelector.vm.$emit('checked', false)
-    expect(wrapper.vm.collapsed).toBe(true)
+  it('can create a biobank viewmodel based on columns that are marked showOnBiobankCard', () => {
+    const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
+    expect(wrapper.vm.biobankcardViewmodel).toStrictEqual({ attributes: [{ label: 'Quality marks:', type: 'quality', value: undefined }, { label: 'Collection types:', type: 'array', value: ['col-type-a', 'col-type-b', 'col-type-d', 'col-type-e'] }, { label: 'Juridical person:', type: 'string', value: '' }, { label: 'Covid-19:', type: 'mref', value: [] }] })
   })
 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="mg-biobank-card container">
+  <div class="mg-biobank-card container pb-4">
     <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
     <loading
       :active="isLoading"
@@ -25,7 +25,7 @@
                 <view-generator :viewmodel="biobank.viewmodel" />
 
                 <!-- Collection Part -->
-                <h3>Collections</h3>
+                <h3 class="mt-4">Collections</h3>
                 <div
                   v-for="(collection, index) in collectionsData"
                   :key="collection.id">
@@ -34,7 +34,7 @@
                     :title="collection.name"
                     :id="collection.id"/>
 
-                  <view-generator :viewmodel="collection.viewmodel" />
+                  <view-generator class="collection-view" :viewmodel="collection.viewmodel" />
                 </div>
               </div>
               <!-- Right side card -->
@@ -80,6 +80,7 @@ import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ViewGenerator from '../components/generators/ViewGenerator.vue'
+import { sortCollectionsByName } from '../utils/sorting'
 
 import {
   getBiobankDetails,
@@ -128,7 +129,7 @@ export default {
     },
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
-        ? this.biobank.collections
+        ? sortCollectionsByName(this.biobank.collections)
           .filter(it => !it.parent_collection)
           .map(col => getCollectionDetails(col))
         : []

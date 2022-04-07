@@ -90,6 +90,13 @@ export default {
   border-left-color: white !important;
 }
 
+.info-popover[x-placement^='right'] > .arrow::before {
+  border-right-color: black !important;
+}
+.info-popover[x-placement^='right'] > .arrow::after {
+  border-right-color: white !important;
+}
+
 /** Fixes popover styles for quality-marks, even autoplaced. */
 [x-placement^="top"] > .arrow::before {
   border-top-color: black !important;

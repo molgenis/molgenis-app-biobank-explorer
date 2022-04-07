@@ -97,6 +97,9 @@ export const getViewmodel = (object, columns) => {
         attributeValue = object[columnInfo.column]
         break
       }
+      case 'quality':
+        attributeValue = object.quality
+        break
       case 'mref':
       case 'categoricalmref': {
         attributeValue = mapObjArray(object[columnInfo.column])
@@ -164,7 +167,9 @@ function extractCollectionTypes (collections, extractedTypes) {
   let collectionTypes = extractedTypes || []
 
   for (const collection of collections) {
-    collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+    if (collection.type) {
+      collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+    }
 
     if (collection.sub_collections && collection.sub_collections.length) {
       collectionTypes = collectionTypes.concat(extractCollectionTypes(collection.sub_collections, collectionTypes))
@@ -174,8 +179,21 @@ function extractCollectionTypes (collections, extractedTypes) {
 }
 
 export const getBiobankDetails = (biobank) => {
+  // check if biobank is only the id (lazy loading)
+  if (typeof biobank === 'string') {
+    return biobank
+  }
   /* new Set makes a hashmap out of an array which makes every entry unique, then we convert it back to an array */
-  biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+  biobank.collection_types = []
+
+  if (biobank.collections.length) {
+    biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+    biobank.collectionDetails = []
+
+    for (const collection of biobank.collections) {
+      biobank.collectionDetails.push(getCollectionDetails(collection))
+    }
+  }
 
   return {
     ...biobank,

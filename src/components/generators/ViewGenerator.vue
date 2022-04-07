@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="mb-4 layout-table">
+    <table class="layout-table w-100">
       <component
         v-for="attribute in renderObject.attributes"
         :is="component(attribute.type)"
@@ -9,7 +9,9 @@
     </table>
 
     <div
-      v-if="renderObject.sub_collections && renderObject.sub_collections.length > 0"
+      v-if="
+        renderObject.sub_collections && renderObject.sub_collections.length > 0
+      "
       class="mt-3">
       <h3>Subcollections</h3>
 
@@ -26,6 +28,7 @@ import mref from './view-components/mref.vue'
 import array from './view-components/array.vue'
 import string from './view-components/string.vue'
 import longtext from './view-components/longtext.vue'
+import quality from './view-components/quality.vue'
 import hyperlink from './view-components/hyperlink.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
@@ -34,6 +37,7 @@ export default {
   components: {
     mref,
     longtext,
+    quality,
     array,
     string,
     hyperlink,
@@ -57,6 +61,7 @@ export default {
           return 'mref'
         }
         case 'longtext':
+        case 'quality':
         case 'array':
         case 'mref':
         case 'hyperlink': {
@@ -71,8 +76,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .layout-table {
-  border-collapse: unset;
+  border-collapse: unset; /* override theme */
 }
 </style>

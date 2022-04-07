@@ -11,7 +11,11 @@ export const biobankActions = {
   QueryBiobanks ({ state, commit, getters }) {
     commit('SetBiobankIds', undefined)
 
-    const size = getters.biobankRsql ? state.pageSize : 10000
+    let size = state.pageSize
+
+    if (getters.biobankRsql) {
+      size = 10000
+    }
 
     let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name`
     if (getters.biobankRsql) {

@@ -1,11 +1,10 @@
 <template>
-  <div class="biobank-cards-container border-bottom p-3" :style="`margin-top:${menuHeight}px;`">
-    <div v-if="!loading && foundBiobanks > 0">
+  <div class="biobank-cards-container border-bottom p-3">
+    <div v-if="!loading && foundBiobanks > 0" class="d-flex justify-content-center flex-wrap">
       <biobank-card
         v-for="biobank in biobanksShown"
         :key="biobank.id || biobank"
-        :biobank="biobank"
-        :initCollapsed="true">
+        :biobank="biobank">
       </biobank-card>
     </div>
 
@@ -23,25 +22,28 @@
 </template>
 
 <script>
-import BiobankCard from '../components/cards/BiobankCard.vue'
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import BiobankCard from './cards/BiobankCard.vue'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
   methods: {
-    ...mapActions(['GetBiobanks']),
-    ...mapMutations(['SetCurrentPage'])
+    ...mapActions(['GetBiobanks', 'QueryBiobanks'])
   },
   computed: {
-    ...mapState(['pageSize', 'currentPage', 'menuHeight']),
-    ...mapGetters(['biobanks', 'foundBiobanks', 'loading']),
+    ...mapState(['pageSize', 'currentPage']),
+    ...mapGetters(['biobanks', 'foundBiobanks', 'loading', 'biobankRsql', 'rsql']),
     biobanksShown () {
-      return this.loading
-        ? []
-        : this.biobanks.slice(
+      if (this.loading) return []
+
+      if (this.biobankRsql || this.rsql) {
+        return this.biobanks.slice(
           this.pageSize * (this.currentPage - 1),
           this.pageSize * this.currentPage
         )
+      } else {
+        return this.biobanks
+      }
     },
     biobankIds () {
       return this.loading ? [] : this.biobanks.map(it => it.id || it)
@@ -54,12 +56,9 @@ export default {
     BiobankCard
   },
   watch: {
-    biobankIds (newValue, oldValue) {
-      if (
-        newValue.length !== oldValue.length ||
-        !newValue.every((element, index) => element === oldValue[index])
-      ) {
-        this.SetCurrentPage(1)
+    currentPage () {
+      if (!this.biobankRsql && !this.rsql) {
+        this.QueryBiobanks()
       }
     },
     biobankIdsToFetch (value) {

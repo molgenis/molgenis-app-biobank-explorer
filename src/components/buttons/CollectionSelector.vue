@@ -6,7 +6,7 @@
       :id="checkboxIdentifier"
       class="add-to-cart"
       @change.prevent="handleCollectionStatus"
-      :checked="checkboxState"
+      :checked="isChecked"
       :value="false"
       hidden/>
     <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary px-2" :for="checkboxIdentifier">
@@ -89,7 +89,6 @@ export default {
       } else {
         this.RemoveCollectionsFromSelection(collectionData)
       }
-      this.$emit('checked', checked)
     }
   },
   computed: {
@@ -97,12 +96,12 @@ export default {
     checkboxIdentifier () {
       return this.identifier
     },
-    checkboxState () {
+    isChecked () {
       const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
-
       return this.collections.map(collection => collection.value)
         .every(id => selectedCollectionIds.includes(id))
     }
+
   },
   beforeMount () {
     let initialData

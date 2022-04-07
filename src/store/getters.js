@@ -19,8 +19,6 @@ export default {
       ids = collectionInfo
       // biobank IDs present in collectionIds
         .map(({ biobankId }) => biobankId)
-      // also present in biobankIds
-        .filter(biobankId => biobankIds.includes(biobankId))
       // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
     }
