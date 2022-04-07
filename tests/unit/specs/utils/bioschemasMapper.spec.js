@@ -383,7 +383,7 @@ describe('bioschemasMapper', () => {
     })
   })
   describe('mapCollectionsDataMissingDescription', () => {
-    it('should use name as description in case the collection doesn\t have one', () => {
+    it("should use name as description in case the collection doesn't have one", () => {
       collectionData.description = undefined
       const actual = mapCollectionToBioschemas(collectionData)
       expect(actual.description).toStrictEqual(collectionData.name)
