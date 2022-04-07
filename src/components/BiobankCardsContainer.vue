@@ -28,7 +28,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 export default {
   name: 'biobank-cards-container',
   methods: {
-    ...mapActions(['GetBiobanks'])
+    ...mapActions(['GetBiobanks', 'QueryBiobanks'])
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
@@ -56,6 +56,11 @@ export default {
     BiobankCard
   },
   watch: {
+    currentPage () {
+      if (!this.biobankRsql && !this.rsql) {
+        this.QueryBiobanks()
+      }
+    },
     biobankIdsToFetch (value) {
       if (value.length) {
         this.GetBiobanks(value)
