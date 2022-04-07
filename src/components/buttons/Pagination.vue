@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState(['currentPage', 'pageSize']),
@@ -21,13 +21,11 @@ export default {
       },
       set (pageNumber) {
         this.SetCurrentPage(pageNumber)
-        this.QueryBiobanks()
       }
     }
   },
   methods: {
-    ...mapMutations(['SetCurrentPage']),
-    ...mapActions(['QueryBiobanks'])
+    ...mapMutations(['SetCurrentPage'])
   }
 }
 </script>
