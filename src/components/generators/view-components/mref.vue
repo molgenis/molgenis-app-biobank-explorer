@@ -7,7 +7,6 @@
       <template v-if="dataContainsUri">
         <a
           v-for="(item, index) in attribute.value"
-          tabindex="0"
           :href="item.uri"
           target="_blank"
           class="badge rounded-pill text-break mr-2 mb-2 p-2"
@@ -20,7 +19,6 @@
       <template v-else>
         <span
           @click.stop
-          tabindex="0"
           v-for="(value, index) in attribute.value"
           class="badge rounded-pill text-break mr-2 mb-2"
           :key="index"
@@ -68,6 +66,8 @@ export default {
   white-space: normal;
   text-align: left;
   padding: 0.5rem;
+  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
 }
 
 .fa-external-link {
