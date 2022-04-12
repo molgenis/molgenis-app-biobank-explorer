@@ -90,6 +90,7 @@
                       class="p-2 pt-2"
                       :viewmodel="collectionViewmodel(collectionDetail)"/>
                   </small>
+                  <hr />
                 </div>
               </div>
             </div>
