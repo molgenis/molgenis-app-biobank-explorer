@@ -41,7 +41,7 @@ describe('Generator view-components', () => {
       const wrapper = mount(string, { propsData: { attribute } })
 
       expect(wrapper.html().includes('Description:')).toBeTruthy()
-      expect(wrapper.html().includes('<span class="badge badge-red"')).toBeTruthy()
+      expect(wrapper.html().includes('<span class="badge rounded-pill mb-2 badge-red"')).toBeTruthy()
       expect(wrapper.vm.badgeColor).toBe('red')
     })
 
