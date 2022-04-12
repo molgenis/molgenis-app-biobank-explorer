@@ -17,8 +17,8 @@
       <template v-if="attribute.linkValue">
         <span
           id="copy-icon"
-          @click.prevent="copyOnClipboard(attribute.linkValue, $event)"
-          v-b-tooltip.hover="'Copy on clipboard'"
+          @click.prevent="copyToClipboard(attribute.linkValue)"
+          v-b-tooltip.hover="'Copy to clipboard'"
           class="fa fa-clipboard ml-1">
         </span>
         <div class="d-flex justify-content-center align-items-center">
@@ -63,7 +63,7 @@ export default {
     displayName (item) {
       return item.label || item.name || item.id
     },
-    copyOnClipboard (link) {
+    copyToClipboard (link) {
       navigator.clipboard.writeText(link)
       this.copiedValueShown = true
       const copiedValueTimer = setTimeout(() => {
