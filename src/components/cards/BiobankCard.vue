@@ -79,8 +79,7 @@
               </div>
               <view-generator
                 class="border p-2 border-top-0 pt-2"
-                :viewmodel="collectionViewmodel(collectionDetail)"
-                flattenSubcollections/>
+                :viewmodel="collectionViewmodel(collectionDetail)"/>
             </small>
           </div>
         </div>
