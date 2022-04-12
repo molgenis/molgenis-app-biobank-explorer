@@ -1,5 +1,5 @@
 import state from '../../../src/store/state'
-import filterDefinitions from '../../../src/utils/filterDefinitions'
+import filterDefinitions from '../../../src/config/initialFilterFacets'
 
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
@@ -11,7 +11,7 @@ const mockStateTemplate = {
   ...state
 }
 
-mockStateTemplate.filterFacets = filterDefinitions(mockStateTemplate)
+mockStateTemplate.filterFacets = filterDefinitions
 
 export const mockState = () => JSON.parse(JSON.stringify(mockStateTemplate))
 

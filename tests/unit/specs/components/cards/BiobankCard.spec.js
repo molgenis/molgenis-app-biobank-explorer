@@ -52,6 +52,6 @@ describe('BiobankCard', () => {
 
   it('can create a biobank viewmodel based on columns that are marked showOnBiobankCard', () => {
     const wrapper = shallowMount(BiobankCard, { localVue, store, propsData, stubs })
-    expect(wrapper.vm.biobankcardViewmodel).toStrictEqual({ attributes: [{ label: 'Quality marks:', type: 'quality', value: undefined }, { label: 'Collection types:', type: 'array', value: ['col-type-a', 'col-type-b', 'col-type-d', 'col-type-e'] }, { label: 'Juridical person:', type: 'string', value: '' }, { label: 'Covid-19:', type: 'mref', value: [] }] })
+    expect(wrapper.vm.biobankcardViewmodel).toStrictEqual({ attributes: [{ label: 'Quality labels:', type: 'quality', value: undefined }, { label: 'Collection types:', type: 'array', value: ['col-type-a', 'col-type-b', 'col-type-d', 'col-type-e'] }, { label: 'Juridical person:', type: 'string', value: '' }, { label: 'Covid-19:', type: 'mref', value: [] }] })
   })
 })

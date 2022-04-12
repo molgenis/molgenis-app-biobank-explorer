@@ -105,7 +105,7 @@ const expected = {
         value: ''
       },
       {
-        label: 'Quality marks:',
+        label: 'Quality labels:',
         type: 'quality',
         value: undefined
       },
@@ -210,7 +210,7 @@ const expected = {
               value: ''
             },
             {
-              label: 'Quality marks:',
+              label: 'Quality labels:',
               type: 'quality',
               value: undefined
             },
@@ -322,7 +322,7 @@ const expected = {
               value: ''
             },
             {
-              label: 'Quality marks:',
+              label: 'Quality labels:',
               type: 'quality',
               value: undefined
             },
