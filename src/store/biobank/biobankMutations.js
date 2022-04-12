@@ -8,7 +8,7 @@ export const biobankMutations = {
     biobanks.forEach(biobank => {
       biobankLookup[biobank.id] = fixCollectionTree(biobank)
     })
-    state.biobanks = biobankLookup
+    state.biobanks = { ...state.biobanks, ...biobankLookup }
   },
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
