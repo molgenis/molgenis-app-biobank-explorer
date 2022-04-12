@@ -1,21 +1,16 @@
 import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
+import initialFilterFacets from './initialFilterFacets'
 
 export const bbmriConfig = () => {
   const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
   const config = {
-    disabledFilters: [],
     collectionColumns: initialCollectionColumns,
     biobankColumns: initialBiobankColumns,
-    customCollectionFilterFacets: [],
+    filterFacets: initialFilterFacets,
     removeFreemarkerMargin: false,
     menuHeight: 50
-  }
-
-  // check if property is in database and has a value
-  if (Object.hasOwnProperty.call(INITIAL_STATE, 'disabledFilters') && INITIAL_STATE.disabledFilters.length) {
-    config.disabledFilters = INITIAL_STATE.disabledFilters
   }
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'collectionColumns') && INITIAL_STATE.collectionColumns.length) {
@@ -26,8 +21,8 @@ export const bbmriConfig = () => {
     config.biobankColumns = INITIAL_STATE.biobankColumns
   }
 
-  if (Object.hasOwnProperty.call(INITIAL_STATE, 'customCollectionFilterFacets') && INITIAL_STATE.customCollectionFilterFacets.length) {
-    config.customCollectionFilterFacets = INITIAL_STATE.customCollectionFilterFacets
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'filterFacets') && INITIAL_STATE.filterFacets.length) {
+    config.filterFacets = INITIAL_STATE.filterFacets
   }
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'removeFreemarkerMargin') && INITIAL_STATE.removeFreemarkerMargin === true) {

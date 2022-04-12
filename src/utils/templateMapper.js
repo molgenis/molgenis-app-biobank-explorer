@@ -163,16 +163,24 @@ export const getCollectionDetails = collection => {
 /**
  * Get all the types available within the collection tree
  */
-function extractCollectionTypes (collections, extractedTypes) {
-  let collectionTypes = extractedTypes || []
+function extractCollectionTypes (collections, prevCollectionHashmap) {
+  let collectionTypes = prevCollectionHashmap && Object.keys(prevCollectionHashmap).length ? prevCollectionHashmap : {}
 
   for (const collection of collections) {
     if (collection.type) {
-      collectionTypes = collectionTypes.concat(collection.type.map(type => type.label))
+      const foundTypes = collection.type.map(type => type.label)
+
+      for (const type of foundTypes) {
+        // use it as a hashmap
+        if (!collectionTypes[type]) {
+          collectionTypes[type] = ''
+        }
+      }
     }
 
     if (collection.sub_collections && collection.sub_collections.length) {
-      collectionTypes = collectionTypes.concat(extractCollectionTypes(collection.sub_collections, collectionTypes))
+      const newHashmap = extractCollectionTypes(collection.sub_collections, collectionTypes)
+      collectionTypes = { ...collectionTypes, ...newHashmap }
     }
   }
   return collectionTypes
@@ -187,7 +195,7 @@ export const getBiobankDetails = (biobank) => {
   biobank.collection_types = []
 
   if (biobank.collections.length) {
-    biobank.collection_types = [...new Set(extractCollectionTypes(biobank.collections))]
+    biobank.collection_types = Object.keys(extractCollectionTypes(biobank.collections))
     biobank.collectionDetails = []
 
     for (const collection of biobank.collections) {

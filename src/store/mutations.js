@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import filterDefinitions from '../utils/filterDefinitions'
-import { customCheckboxFilters } from '../config/configurableFacets'
+import { createFilters } from '../config/facetConfigurator'
 import { collectionMutations } from './collection/collectionMutations'
 import { biobankMutations } from './biobank/biobankMutations'
 import { configurationMutations } from './configuration/configurationMutations'
@@ -201,23 +200,7 @@ export default {
     }
   },
   ConfigureFilters (state) {
-    const filterFacets = filterDefinitions(state)
-    const customFilters = customCheckboxFilters(state)
-
-    for (const customFilter of customFilters) {
-      if (customFilter.insertBefore) {
-        const filterIndex = filterFacets.findIndex(filter => filter.name === customFilter.insertBefore)
-
-        if (filterIndex !== -1) {
-          filterFacets.splice(filterIndex, 0, customFilter)
-        } else {
-          filterFacets.push(customFilter)
-        }
-      } else {
-        filterFacets.push(customFilter)
-      }
-    }
-    state.filterFacets = filterFacets
+    state.filterFacets = createFilters(state)
   },
   ClearActiveFilters (state) {
     state.filters.selections = {}

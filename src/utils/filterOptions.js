@@ -38,7 +38,7 @@ function checkForBookmarkFilter (filterName, filterOptions) {
 export const genericFilterOptions = (tableName, filterName) => {
   return () => new Promise((resolve) => {
     const cachedOptions = retrieveFromCache(filterName)
-
+    console.log(tableName, filterName)
     if (!cachedOptions.length) {
       api.get(`/api/v2/${tableName}`).then(response => {
         const filterOptions = response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } })

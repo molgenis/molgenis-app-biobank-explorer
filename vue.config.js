@@ -23,6 +23,7 @@ BUILD: ${process.env.BUILD_NUMBER}`
 
 const initialCollectionColumns = require('./src/config/initialCollectionColumns')
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
+const initialFilterFacets = require('./src/config/initialFilterFacets')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -84,8 +85,7 @@ module.exports = {
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',
-          disabledFilters: [],
-          customCollectionFilterFacets: [],
+          filterFacets: initialFilterFacets,
           collectionColumns: initialCollectionColumns,
           biobankColumns: initialBiobankColumns,
           googleAnalyticsKey: '',

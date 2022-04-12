@@ -5,7 +5,6 @@ import initialCollectionColumns from '../../../../src/config/initialCollectionCo
 let windowSpy
 
 const initialState = {
-  disabledFilters: ['country'],
   collectionColumns: initialCollectionColumns,
   biobankColumns: initialBiobankColumns,
   customCollectionFilterFacets: [],

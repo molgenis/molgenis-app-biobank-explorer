@@ -71,13 +71,7 @@
               </router-link>
             </div>
             <small>
-              <div
-                class="
-                  pt-2
-                  px-2
-                  border border-top-0 border-bottom-0
-                  d-flex
-                ">
+              <div class="pt-2 px-2 border border-top-0 border-bottom-0 d-flex">
                 <collection-selector
                   class="ml-auto"
                   :collectionData="collectionDetail"
@@ -85,7 +79,8 @@
               </div>
               <view-generator
                 class="border p-2 border-top-0 pt-2"
-                :viewmodel="collectionViewmodel(collectionDetail)"/>
+                :viewmodel="collectionViewmodel(collectionDetail)"
+                flattenSubcollections/>
             </small>
           </div>
         </div>
@@ -138,10 +133,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'biobankColumns',
-      'collectionColumns'
-    ]),
+    ...mapState(['biobankColumns', 'collectionColumns']),
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
       // check if biobank is still loading
@@ -213,6 +205,6 @@ export default {
 
 /* TODO put in theme */
 .card-header {
-    background-color: #efefef;
+  background-color: #efefef;
 }
 </style>
