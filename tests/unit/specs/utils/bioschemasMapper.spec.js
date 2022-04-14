@@ -130,6 +130,7 @@ describe('bioschemasMapper', () => {
   const biobankData = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -190,6 +191,7 @@ describe('bioschemasMapper', () => {
   const biobankDataNoContact = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -222,6 +224,7 @@ describe('bioschemasMapper', () => {
   const biobankDataIncompleteContact = {
     _href: '/api/v2/eu_bbmri_eric_biobanks/b-001',
     id: 'b-001',
+    pid: '21.12110/b-001',
     name: 'beautiful biobank',
     acronym: 'BB',
     description: 'cool biobank description',
@@ -379,13 +382,20 @@ describe('bioschemasMapper', () => {
       expect(actual).toStrictEqual(expected)
     })
   })
+  describe('mapCollectionsDataMissingDescription', () => {
+    it("should use name as description in case the collection doesn't have one", () => {
+      collectionData.description = undefined
+      const actual = mapCollectionToBioschemas(collectionData)
+      expect(actual.description).toStrictEqual(collectionData.name)
+    })
+  })
 
   describe('mapBiobankData', () => {
     it('should generate bioschemas for biobank', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',
@@ -424,12 +434,57 @@ describe('bioschemasMapper', () => {
     })
   })
 
+  describe('mapBiobankDataNoCollectionDescription', () => {
+    it('should generate bioschemas for biobank and use the collection name as description', () => {
+      const expected = {
+        '@context': 'https://schema.org',
+        '@type': 'DataCatalog',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
+        description: 'cool biobank description',
+        keywords: 'biobank',
+        name: 'beautiful biobank',
+        provider: {
+          '@type': 'Organization',
+          description: 'cool biobank description',
+          legalName: 'BB LTD',
+          name: 'beautiful biobank',
+          sameAs: 'http://localhost/#/biobank/b-001',
+          topic: 'http://edamontology.org/topic_3337',
+          contactPoint: {
+            '@type': 'ContactPoint',
+            email: 'email@emal.com'
+          },
+          location: {
+            '@type': 'PostalAddress',
+            contactType: 'juridical person',
+            addressLocality: 'Rome, Italy',
+            streetAddress: 'via delle vie 10'
+          }
+        },
+        url: 'http://localhost/#/biobank/b-001',
+        alternateName: 'BB',
+        dataset: [{
+          '@type': 'Dataset',
+          '@id': 'http://localhost/#/collection/c-001',
+          url: 'http://localhost/#/collection/c-001',
+          identifier: 'c-001',
+          name: 'beautiful collection',
+          description: 'beautiful collection'
+        }],
+        identifier: 'b-001'
+      }
+      biobankData.collections[0].description = undefined
+      const actual = mapBiobankToBioschemas(biobankData)
+      expect(actual).toStrictEqual(expected)
+    })
+  })
+
   describe('mapBiobankDataContactIncomplete', () => {
     it('should generate bioschemas for biobank that misses some contact info', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',
@@ -473,7 +528,7 @@ describe('bioschemasMapper', () => {
       const expected = {
         '@context': 'https://schema.org',
         '@type': 'DataCatalog',
-        '@id': 'http://localhost/#/biobank/b-001',
+        '@id': 'http://hdl.handle.net/21.12110/b-001',
         description: 'cool biobank description',
         keywords: 'biobank',
         name: 'beautiful biobank',

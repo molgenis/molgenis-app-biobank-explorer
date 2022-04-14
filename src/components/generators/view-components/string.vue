@@ -1,11 +1,11 @@
 <template>
   <tr v-if="attribute && attribute.value && attribute.value.length">
-    <th scope="row" class="pr-1 align-top text-nowrap">{{ displayName(attribute) }}</th>
+    <th scope="row" class="pr-1 align-top text-nowrap">
+      {{ displayName(attribute) }}
+    </th>
     <td>
       <template v-if="attribute.badgeColor">
-        <span
-          class="badge rounded-pill mb-2"
-          :class="'badge-' + badgeColor">
+        <span class="badge rounded-pill mb-2" :class="'badge-' + badgeColor">
           {{ attribute.value }}
         </span>
       </template>
@@ -39,6 +39,11 @@ export default {
 </script>
 
 <style scoped>
+.badge {
+  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
+}
+
 .fa-external-link {
   top: 1px;
   position: relative;

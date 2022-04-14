@@ -125,7 +125,7 @@ export const mapCollectionToBioschemas = (collection) => {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     '@id': `${getBaseUrl()}/collection/${collection.id}`,
-    description: collection.description,
+    description: collection.description || collection.name,
     identifier: collection.id,
     keywords: 'sample, collection',
     name: collection.name,
@@ -157,7 +157,7 @@ export const mapBiobankToBioschemas = (biobank) => {
   return {
     '@context': 'https://schema.org',
     '@type': 'DataCatalog',
-    '@id': `${getBaseUrl()}/biobank/${biobank.id}`, // TODO: Change with the persistent identifier
+    '@id': `http://hdl.handle.net/${biobank.pid}`,
     description: biobank.description || biobank.name, // some collections doesn't have a description
     keywords: 'biobank',
     name: biobank.name,
@@ -188,7 +188,7 @@ export const mapBiobankToBioschemas = (biobank) => {
         url: `${getBaseUrl()}/collection/${collection.id}`,
         identifier: collection.id,
         name: collection.name,
-        description: collection.description
+        description: collection.description || collection.name
       }
     }),
     identifier: biobank.id
