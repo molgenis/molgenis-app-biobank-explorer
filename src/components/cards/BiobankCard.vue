@@ -56,7 +56,7 @@
 
               <collection-selector
                 class="text-right ml-auto mr-2 mt-1 align-self-center"
-                v-if="biobank.collections.length > 0"
+                v-if="biobank.collections && biobank.collections.length > 0"
                 :collectionData="biobank.collections"
                 bookmark
                 multi></collection-selector>
