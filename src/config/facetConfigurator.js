@@ -8,9 +8,10 @@ export const createFilters = (state) => {
       {
         headerClass: facet.headerClass || '',
         component: facet.component || 'CheckboxFilter',
-        name: facet.columnName,
+        name: facet.columnName || facet.name,
         label: facet.facetTitle || facet.label || facet.columnName,
-        type: facet.type || 'checkbox-filter',
+        tableName: facet.tableName,
+        columnName: facet.columnName,
         options: getFilterOptions(facet),
         filters: state.filters.selections[facet.columnName],
         satisfyAll: state.filters.satisfyAll.includes(facet.columnName),
@@ -29,7 +30,7 @@ export const createFilters = (state) => {
 function getFilterOptions (filterFacet) {
   let options
 
-  switch (filterFacet.name) {
+  switch (filterFacet.columnName) {
     case 'diagnosis_available':
       options = diagnosisAvailableFilterOptions(filterFacet.tableName, filterFacet.columnName)
       break

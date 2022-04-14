@@ -43,7 +43,7 @@ function createCustomRSQLQuery (state) {
   const queries = []
 
   for (const facet of state.filterFacets) {
-    if (activeFilterSelection.includes(facet.name) && !initialFilters.includes(facet.name)) {
+    if (activeFilterSelection.includes(facet.columnName) && !initialFilters.includes(facet.name)) {
       queries.push(createQuery(state.filters.selections[facet.columnName], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
     }
   }

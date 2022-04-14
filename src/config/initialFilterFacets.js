@@ -2,7 +2,6 @@ const filterDefinitions = [
   {
     name: 'search',
     label: 'Search',
-    type: 'string-filter',
     humanReadableString: 'Text search is',
     custom: true,
     hideFacet: true // search should not be generated
@@ -27,7 +26,6 @@ const filterDefinitions = [
     component: 'MultiFilter',
     name: 'diagnosis_available',
     label: 'Diagnosis available',
-    type: 'multi-filter',
     maxVisibleOptions: 100,
     tableName: 'eu_bbmri_eric_disease_types',
     columnName: 'diagnosis_available',
