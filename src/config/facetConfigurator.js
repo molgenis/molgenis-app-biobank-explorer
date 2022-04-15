@@ -8,7 +8,7 @@ export const createFilters = (state) => {
       {
         headerClass: facet.headerClass || '',
         component: facet.component || 'CheckboxFilter',
-        name: facet.name || facet.columnName, // name is needed fordisplaying the bookmark as of now. EG commercial_use is a boolean.
+        name: facet.name || facet.columnName, // name is needed for displaying the bookmark as of now. EG commercial_use is a boolean.
         label: facet.facetTitle || facet.label || facet.columnName,
         tableName: facet.tableName,
         columnName: facet.columnName,
