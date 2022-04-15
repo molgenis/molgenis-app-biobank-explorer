@@ -19,7 +19,7 @@ export const createFilters = (state) => {
         initialDisplayItems: facet.initialDisplayItems || 100,
         maxVisibleOptions: facet.maxVisibleOptions || 25,
         showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
-        humanReadableString: facet.negotiatorDescription,
+        humanReadableString: facet.humanReadableString,
         hideFacet: facet.hideFacet,
         custom: facet.custom || false
       })
