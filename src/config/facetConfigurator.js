@@ -14,14 +14,13 @@ export const createFilters = (state) => {
         columnName: facet.columnName,
         filterLabelAttribute: facet.filterLabelAttribute || '',
         options: getFilterOptions(facet),
-        filters: state.filters.selections[facet.columnName],
-        satisfyAll: state.filters.satisfyAll.includes(facet.columnName),
+        filters: state.filters.selections[facet.name],
+        satisfyAll: state.filters.satisfyAll.includes(facet.name),
         initialDisplayItems: facet.initialDisplayItems || 100,
         maxVisibleOptions: facet.maxVisibleOptions || 25,
         showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
         humanReadableString: facet.humanReadableString,
-        hideFacet: facet.hideFacet,
-        custom: facet.custom || false
+        hideFacet: facet.hideFacet
       })
   }
 

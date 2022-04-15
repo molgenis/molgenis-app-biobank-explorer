@@ -96,6 +96,8 @@ You can find the complete default list [here](https://github.com/molgenis/molgen
 > mind the correctness in the config using " around the key and value
 
 ### Configuring filter facets for collections
+You can remove the standard filters by deleting the filter config.
+If you deleted them and want them back, check src/config/initialFilterFacets.js
 
 If you want to customize the collection table with additional columns containing an (categorical) mref,
 you can add these to the view using the following configuration:
@@ -103,26 +105,24 @@ you can add these to the view using the following configuration:
 ```js
 "appOptions": {
     ...
-    "customCollectionFilterFacets": [{
-    "tableName": "eu_bbmri_eric_data_types",
-    "columnName": "data_categories",
-    "negotiatorDescription": "Where data category is: ",
-    "facetTitle": "Data Categories",
-    "insertBefore": "dataType"
+    "filterFacets": [
+    ...
+    {
+        "headerClass": facet.headerClass || '',
+        "component": facet.component || 'CheckboxFilter',
+        "name": "name of the filter as shown in the bookmark, defaults to columnName if ommitted"
+        "label": facet.facetTitle || facet.label || facet.columnName,
+        "tableName": "table name for the values of the filter",
+        "columnName": "column name of the collection table to apply filter to",
+        "filterLabelAttribute": "If the source table of the options does not have a label or name, specify column here",
+        "initialDisplayItems": "for  multifilters, defaults to 100",
+        "maxVisibleOptions": "Maximum amount of options to show per filter before the show more, default 25",
+        "showSatisfyAllCheckbox": "If the and / or checkbox is shown ",
+        "humanReadableString": "The header for the applied filters sent to the negotiator. EG: Sample(s):",
+        "hideFacet": "Should the facet be hidden or not on start.",
     }]
     ...
 ```
-**tableName** is the table where the (categorical) mref is declared
-> The table needs to have a unique id per row and either a name and/or a label
-
-**columnName** the column name in the collection entity (table) that refers to the (categorical) mref.
-
-**negotiatorDescription** when sending the query to the negotiator or podium this will be sent as a header along with a comma separated list with the selected id's
-
-**facetTitle** is the text on top of the filter facet.
-
-**insertBefore** *(optional)* the name of the facet where you want this to be in front of.
-You can find the names here in [the filter definitions on github.](https://github.com/molgenis/molgenis-app-biobank-explorer/blob/master/src/utils/filterDefinitions.js)
 
 ## Contributing
 There are 2 ways to test and develop in apps for MOLGENIS.
