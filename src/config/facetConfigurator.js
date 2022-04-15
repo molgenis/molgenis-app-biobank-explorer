@@ -8,10 +8,11 @@ export const createFilters = (state) => {
       {
         headerClass: facet.headerClass || '',
         component: facet.component || 'CheckboxFilter',
-        name: facet.columnName || facet.name,
+        name: facet.name || facet.columnName, // name is needed fordisplaying the bookmark as of now. EG commercial_use is a boolean.
         label: facet.facetTitle || facet.label || facet.columnName,
         tableName: facet.tableName,
         columnName: facet.columnName,
+        filterLabelAttribute: facet.filterLabelAttribute || '',
         options: getFilterOptions(facet),
         filters: state.filters.selections[facet.columnName],
         satisfyAll: state.filters.satisfyAll.includes(facet.columnName),
@@ -30,7 +31,7 @@ export const createFilters = (state) => {
 function getFilterOptions (filterFacet) {
   let options
 
-  switch (filterFacet.columnName) {
+  switch (filterFacet.name) {
     case 'diagnosis_available':
       options = diagnosisAvailableFilterOptions(filterFacet.tableName, filterFacet.columnName)
       break
@@ -38,7 +39,7 @@ function getFilterOptions (filterFacet) {
       options = collaborationTypeFilterOptions()
       break
     default:
-      options = genericFilterOptions(filterFacet.tableName, filterFacet.columnName)
+      options = genericFilterOptions(filterFacet)
   }
   return options
 }

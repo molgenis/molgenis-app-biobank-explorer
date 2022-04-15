@@ -11,9 +11,9 @@
     ]">
     <div tabindex="0">
       <section>
-        <div class="front">
-          <div v-if="loading" class="text-center p-5">
-            <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+        <div class="front h-100">
+          <div v-if="loading" class="loading-screen p-5">
+            <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
           </div>
           <div v-else>
             <header class="border-0 card-header p-1">
@@ -181,6 +181,14 @@ export default {
 </script>
 
 <style>
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .btn-link:focus {
   box-shadow: none;
 }

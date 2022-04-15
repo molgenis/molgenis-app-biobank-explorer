@@ -35,13 +35,14 @@ function checkForBookmarkFilter (filterName, filterOptions) {
   }
 }
 
-export const genericFilterOptions = (tableName, filterName) => {
+export const genericFilterOptions = (filterFacet) => {
+  const { tableName, filterName, filterLabelAttribute } = filterFacet
   return () => new Promise((resolve) => {
     const cachedOptions = retrieveFromCache(filterName)
 
     if (!cachedOptions.length) {
       api.get(`/api/v2/${tableName}`).then(response => {
-        const filterOptions = response.items.map((obj) => { return { text: obj.label || obj.name, value: obj.id } })
+        const filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
         cache({ filterName, filterOptions })
         resolve(filterOptions)
       })
