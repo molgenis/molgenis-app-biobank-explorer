@@ -52,7 +52,7 @@
           </div>
           <b-dropdown
             :variant="filterVariant(filter.label || filter.name)"
-            v-for="filter in filters"
+            v-for="filter in facetsToRender"
             :key="filter.name"
             boundary="window"
             no-flip
@@ -120,17 +120,16 @@ export default {
       'loading',
       'foundCollectionIds',
       'activeFilters',
-      'getFilters',
       'selectedCollections'
     ]),
-    ...mapState(['menuHeight', 'applicationContext']),
+    ...mapState(['menuHeight', 'applicationContext', 'filterFacets']),
     showSettings () {
       return this.applicationContext.roles
         ? this.applicationContext.roles.includes('ROLE_SU')
         : false
     },
-    filters () {
-      return this.getFilters.filter(facet => facet.component)
+    facetsToRender () {
+      return this.filterFacets.filter(filter => !filter.hideFacet)
     },
     iconStyle () {
       return {

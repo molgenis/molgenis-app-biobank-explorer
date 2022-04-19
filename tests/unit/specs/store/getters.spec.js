@@ -316,14 +316,5 @@ describe('store', () => {
         expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
       })
     })
-
-    describe('Filters', () => {
-      it('should exclude the country filters if the country filter facet is in the disabledFilters list', () => {
-        state = { ...mockState(), disabledFilters: ['country'] }
-
-        const filters = getters.getFilters(state)
-        expect(filters.find((filter) => filter.name === 'country')).toEqual(undefined)
-      })
-    })
   })
 })

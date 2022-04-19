@@ -1,7 +1,7 @@
 const initialCollectionColumns = [
   { label: 'Id:', column: 'id', type: 'string' },
   { label: 'Website:', column: 'url', type: 'hyperlink' },
-  { label: 'Quality marks:', column: 'quality', type: 'quality', showOnBiobankCard: true },
+  { label: 'Quality labels:', column: 'quality', type: 'quality', showOnBiobankCard: true },
   { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size', display: 'badge' },
   { label: 'Available:', column: 'size', type: 'int', display: 'badge', suffix: 'samples', showOnBiobankCard: true },
   { label: 'Donor size:', column: 'order_of_magnitude_donors', type: 'object', property: 'size', display: 'badge' },

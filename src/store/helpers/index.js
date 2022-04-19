@@ -1,6 +1,7 @@
 import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
+import initialFilterFacets from '../../config/initialFilterFacets'
 
 export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
@@ -36,11 +37,14 @@ export const createRSQLQuery = (state) => transformToRSQL({
 
 function createCustomRSQLQuery (state) {
   const activeFilterSelection = Object.keys(state.filters.selections)
+
+  const initialFilters = initialFilterFacets.map(filter => filter.name)
+
   const queries = []
 
-  for (const customFacet of state.customCollectionFilterFacets) {
-    if (activeFilterSelection.includes(customFacet.columnName)) {
-      queries.push(createQuery(state.filters.selections[customFacet.columnName], customFacet.columnName, state.filters.satisfyAll.includes(customFacet.columnName)))
+  for (const facet of state.filterFacets) {
+    if (activeFilterSelection.includes(facet.columnName) && !initialFilters.includes(facet.name)) {
+      queries.push(createQuery(state.filters.selections[facet.columnName], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
     }
   }
 

@@ -22,10 +22,9 @@ export default {
   isPodium: false,
   podiumCollectionIds: [],
   error: null,
-  disabledFilters: config.disabledFilters,
   biobankColumns: config.biobankColumns,
   collectionColumns: config.collectionColumns,
-  customCollectionFilterFacets: config.customCollectionFilterFacets,
+  filterFacets: config.filterFacets,
   menuHeight: config.menuHeight, // standard menu height in pixels for use in sticky-position
   biobanks: {}, // Map ID to biobank
   biobankIds: undefined, // IDs of biobanks matching the biobank filters

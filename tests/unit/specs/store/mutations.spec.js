@@ -352,37 +352,20 @@ describe('store', () => {
     })
 
     describe('ConfigureFilters', () => {
-      it('can add custom filter facets based on config', () => {
-        state.customCollectionFilterFacets = [{
+      it('can add a custom filter and assign a function to options based on config', () => {
+        state.filterFacets.push({
           tableName: 'eu_bbmri_eric_data_types',
           columnName: 'data_categories',
           negotiatorDescription: 'Where data category is: ',
           facetTitle: 'Test facet'
-        }]
+        })
 
         mutations.ConfigureFilters(state)
 
-        const result = state.filterFacets.find(f => f.label === 'Test facet')
+        const configFilter = state.filterFacets.find(f => f.label === 'Test facet')
 
-        expect(result).not.toBeUndefined()
-      })
-
-      it('can add custom filter at a specific place based on config', () => {
-        state.customCollectionFilterFacets = [{
-          tableName: 'eu_bbmri_eric_data_types',
-          columnName: 'data_categories',
-          negotiatorDescription: 'Where data category is: ',
-          facetTitle: 'Test facet',
-          insertBefore: 'diagnosis_available'
-        }]
-
-        mutations.ConfigureFilters(state)
-
-        const configFilter = state.filterFacets.findIndex(f => f.label === 'Test facet')
-        const filter = state.filterFacets.findIndex(f => f.name === 'diagnosis_available')
-
-        // assert that the configFilter is indeed 1 above the selected filter
-        expect(configFilter === (filter - 1)).toBeTruthy()
+        // assert that the configFilter has an options function
+        expect(typeof configFilter.options).toBe('function')
       })
     })
 

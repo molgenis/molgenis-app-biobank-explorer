@@ -184,7 +184,7 @@ describe('templateMapper', () => {
             value: ''
           },
           {
-            label: 'Quality marks:',
+            label: 'Quality labels:',
             type: 'quality',
             value: [
               {
@@ -327,7 +327,7 @@ describe('templateMapper', () => {
                   value: ''
                 },
                 {
-                  label: 'Quality marks:',
+                  label: 'Quality labels:',
                   type: 'quality',
                   value: undefined
                 },
@@ -459,7 +459,7 @@ describe('templateMapper', () => {
                   value: ''
                 },
                 {
-                  label: 'Quality marks:',
+                  label: 'Quality labels:',
                   type: 'quality',
                   value: undefined
                 },
@@ -564,7 +564,7 @@ describe('templateMapper', () => {
                         value: ''
                       },
                       {
-                        label: 'Quality marks:',
+                        label: 'Quality labels:',
                         type: 'quality',
                         value: undefined
                       },
