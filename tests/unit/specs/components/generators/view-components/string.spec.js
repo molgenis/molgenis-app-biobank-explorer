@@ -1,5 +1,10 @@
-import { mount } from '@vue/test-utils'
 import string from '../../../../../../src/components/generators/view-components/string.vue'
+import { mount, createLocalVue } from '@vue/test-utils'
+import Vuex from 'vuex'
+
+const localVue = createLocalVue()
+
+localVue.use(Vuex)
 
 let attribute
 
@@ -59,30 +64,27 @@ describe('Generator view-components', () => {
       expect(flattendHtml.includes('>Description:<')).toBeTruthy()
       expect(flattendHtml.includes('>test')).toBeTruthy()
       expect(flattendHtml.includes('class="fafa-clipboardml-1">')).toBeTruthy()
-      expect(wrapper.find('.toast-container').isVisible()).toBeFalsy()
     })
 
-    it('copy the link value on clipboard when the icon is clicked', async () => {
+    it('set notification message when the icon is clicked', async () => {
+      const SetNotification = jest.fn()
+      const store = new Vuex.Store({
+        mutations: {
+          SetNotification
+        }
+      })
+
       jest.spyOn(navigator.clipboard, 'writeText')
-      jest.useFakeTimers()
       attribute = {
         label: 'Description:',
         value: 'test',
         linkValue: 'http://test.com/123'
       }
 
-      const wrapper = mount(string, { propsData: { attribute } })
-      var toastContainer = wrapper.find('.toast-container')
-      expect(toastContainer.isVisible()).toBeFalsy()
-      expect(wrapper.vm.copiedValueShown).toBeFalsy()
-
+      const wrapper = mount(string, { propsData: { attribute }, store, localVue })
       await wrapper.find('#copy-icon').trigger('click')
-      expect(toastContainer.isVisible()).toBeTruthy()
-      expect(wrapper.vm.copiedValueShown).toBeTruthy()
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(attribute.linkValue)
-
-      jest.runAllTimers()
-      expect(wrapper.vm.copiedValueShown).toBeFalsy()
+      expect(SetNotification).toHaveBeenCalledWith(expect.anything(), `Copied ${attribute.linkValue}`)
     })
 
     it('use alternatives values as label', () => {

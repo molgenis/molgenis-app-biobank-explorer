@@ -119,5 +119,6 @@ export default {
       return state.error.message
     }
     return 'Something went wrong'
-  }
+  },
+  getNotificationMessage: state => state.notification
 }

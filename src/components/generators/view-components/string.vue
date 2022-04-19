@@ -21,34 +21,15 @@
           v-b-tooltip.hover="'Copy to clipboard'"
           class="fa fa-clipboard ml-1">
         </span>
-        <div class="d-flex justify-content-center align-items-center">
-          <Transition>
-              <div v-show="copiedValueShown"
-                  ref="copy-link-toast"
-                  role="alert"
-                  aria-live="assertive"
-                  aria-atomic="true"
-                  class="toast-container toast-container-top-center mt-1 alert-info">
-                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                  <div class="toast-body alert-info">
-                    Copied {{ attribute.linkValue }}
-                  </div>
-                </div>
-              </div>
-          </Transition>
-        </div>
       </template>
     </td>
   </tr>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  data () {
-    return {
-      copiedValueShown: false
-    }
-  },
   props: {
     attribute: {
       type: Object
@@ -60,16 +41,13 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SetNotification']),
     displayName (item) {
       return item.label || item.name || item.id
     },
     copyToClipboard (link) {
       navigator.clipboard.writeText(link)
-      this.copiedValueShown = true
-      const copiedValueTimer = setTimeout(() => {
-        this.copiedValueShown = false
-        clearTimeout(copiedValueTimer)
-      }, 1500)
+      this.SetNotification(`Copied ${link}`)
     }
   }
 }
@@ -104,35 +82,5 @@ export default {
 
 .badge-light {
   border: 1px solid #000;
-}
-
-.toast-container {
-  display: block;
-  max-width: 25rem;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  background-clip: padding-box;
-  z-index: 1;
-  border-radius: 0.25rem;
-}
-
-.toast-container-top-center {
-  position: fixed;
-  top: 0;
-}
-
-.toast-container .toast {
-  max-width: 25rem;
-  opacity: 1;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 </style>

@@ -228,5 +228,8 @@ export default {
       state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
       state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
     }
+  },
+  SetNotification (state, notification) {
+    state.notification = notification
   }
 }

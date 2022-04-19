@@ -408,5 +408,13 @@ describe('store', () => {
         expect(state.cartValid).toBeTruthy()
       })
     })
+
+    describe('SetNotification', () => {
+      it('should set the loading boolean in the state', () => {
+        expect(state.notification).toBe(undefined)
+        mutations.SetNotification(state, 'notify this message')
+        expect(state.notification).toStrictEqual('notify this message')
+      })
+    })
   })
 })

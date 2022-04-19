@@ -52,5 +52,6 @@ export default {
   },
   searchHistory: [], // hold the current search history
   filterOptionDictionary: {}, // caching filter options for performance
-  diagnosisAvailableFetched: false // whenever a user returns from a bookmark with diagnosis available in the active filter, there is no label. fetch it once for performance.
+  diagnosisAvailableFetched: false, // whenever a user returns from a bookmark with diagnosis available in the active filter, there is no label. fetch it once for performance.
+  notification: undefined
 }
