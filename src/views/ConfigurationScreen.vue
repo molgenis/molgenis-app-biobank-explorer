@@ -2,25 +2,44 @@
   <div class="container-fluid">
     <a href="" ref="download" class="hidden"></a>
     <div class="row px-5 pb-3" @keyup.ctrl.f="format">
-      <div ref="editor" class="editor" @keyup="dirty = true"></div>
+      <div
+        v-show="!diff"
+        ref="editor"
+        class="editor"
+        @keyup="dirty = true"></div>
+      <div v-if="diff" ref="diff-editor" class="editor"></div>
     </div>
-    <div class="row px-5">
+
+    <div v-if="!diff" class="row px-5">
       <div class="col pl-0">
-        <button
-          class="btn btn-primary mr-3 save-button"
-          @click="save"
-          :disabled="saveDisabled">
+        <button class="btn btn-primary mr-3 save-button" @click="save">
           Save configuration
         </button>
         <button class="btn btn-dark mr-3" @click="cancel">Undo changes</button>
-        <button class="btn btn-outline-dark mr-3" @click="download">Download config</button>
-        <button class="btn btn-outline-dark" @click="upload">Upload config</button>
-        <input type="file" id="file-selector" accept=".json" @change="processUpload">
+        <button class="btn btn-outline-dark mr-3" @click="download">
+          Download config
+        </button>
+        <button class="btn btn-outline-dark" @click="upload">
+          Upload config
+        </button>
+        <input
+          type="file"
+          id="file-selector"
+          accept=".json"
+          @change="processUpload"/>
       </div>
       <div>
         <small class="float-right">To format your file press ctrl + f</small>
       </div>
     </div>
+
+    <div v-if="diff" class="row px-5">
+      <button class="btn btn-primary mr-3 save-button" @click="saveDiff">
+        Save changes
+      </button>
+      <button class="btn btn-dark mr-3" @click="diff = false">Cancel</button>
+    </div>
+
     <div class="row px-5 mt-3" v-if="showNotification">
       <div class="col-md-12 p-0">
         <div
@@ -36,8 +55,15 @@
           class="alert alert-warning"
           role="alert"
           @click="statusClosed = true">
-          <span>We could not save the configuration, make sure you are logged in with
-            sufficient rights.</span><b class="float-right">X</b>
+          <span>We could not save the configuration, make sure you are logged in
+            with sufficient rights.</span><b class="float-right">X</b>
+        </div>
+      </div>
+    </div>
+    <div class="row px-5 mt-3">
+      <div class="col-md-12 p-0">
+        <div v-if="dirty" class="alert alert-warning" role="alert">
+          <span>You have unsaved changes</span>
         </div>
       </div>
     </div>
@@ -50,8 +76,10 @@ export default {
   data () {
     return {
       editor: {},
+      diffEditor: {},
       statusClosed: true,
-      dirty: false
+      dirty: false,
+      diff: false
     }
   },
   methods: {
@@ -67,6 +95,14 @@ export default {
       this.statusClosed = false
       this.SaveApplicationConfiguration(this.editor.getValue())
       this.dirty = false
+    },
+    saveDiff () {
+      const changesToSave = this.diffEditor.getModifiedEditor().getValue()
+      this.SaveApplicationConfiguration(changesToSave)
+      this.dirty = false
+      // set it back to the original editor as well, so we do not need to query
+      this.editor.getModel().setValue(changesToSave)
+      this.diff = false
     },
     cancel () {
       this.editor.getModel().setValue(this.appConfig)
@@ -88,20 +124,36 @@ export default {
       const fileInput = document.getElementById('file-selector')
       fileInput.click()
     },
-    processUpload (event) {
+    async processUpload (event) {
+      const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
+      this.diff = true
       const reader = new FileReader()
-      reader.addEventListener('load', (event) => {
-        this.editor.getModel().setValue(atob(event.target.result.split(',')[1]))
+      reader.addEventListener('load', event => {
+        const newFile = atob(event.target.result.split(',')[1])
+
+        const originalModel = monaco.editor.createModel(
+          this.editor.getValue(),
+          'application/json'
+        )
+        const modifiedModel = monaco.editor.createModel(
+          newFile,
+          'application/json'
+        )
+
+        this.diffEditor = monaco.editor.createDiffEditor(
+          this.$refs['diff-editor']
+        )
+
+        this.diffEditor.setModel({
+          original: originalModel,
+          modified: modifiedModel
+        })
       })
       reader.readAsDataURL(event.target.files[0])
     }
   },
   computed: {
     ...mapState(['appConfig', 'configUpdateStatus']),
-    saveDisabled () {
-      if (this.dirty) return false
-      else return true
-    },
     showNotification () {
       return this.configUpdateStatus !== 0 && !this.statusClosed
     }
@@ -135,9 +187,12 @@ export default {
 </script>
 
 <style scoped >
-
 #file-selector {
   display: none;
+}
+::v-deep .original-in-monaco-diff-editor .view-lines,
+::v-deep .original-in-monaco-diff-editor .margin-view-overlays {
+  background-color: #fafafa;
 }
 
 .editor {
