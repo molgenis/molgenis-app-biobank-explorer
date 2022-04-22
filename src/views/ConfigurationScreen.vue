@@ -93,7 +93,6 @@ export default {
       reader.addEventListener('load', (event) => {
         this.editor.getModel().setValue(atob(event.target.result.split(',')[1]))
       })
-      console.log(event.target.files[0])
       reader.readAsDataURL(event.target.files[0])
     }
   },
