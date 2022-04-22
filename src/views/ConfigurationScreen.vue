@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    <a href="" ref="download" class="hidden"></a>
     <div class="row px-5 pb-3" @keyup.ctrl.f="format">
       <div ref="editor" class="editor" @keyup="dirty = true"></div>
     </div>
@@ -11,7 +12,10 @@
           :disabled="saveDisabled">
           Save configuration
         </button>
-        <button class="btn btn-dark" @click="cancel">Undo changes</button>
+        <button class="btn btn-dark mr-3" @click="cancel">Undo changes</button>
+        <button class="btn btn-outline-dark mr-3" @click="download">Download config</button>
+        <button class="btn btn-outline-dark" @click="upload">Upload config</button>
+        <input type="file" id="file-selector" accept=".json" @change="processUpload">
       </div>
       <div>
         <small class="float-right">To format your file press ctrl + f</small>
@@ -66,6 +70,31 @@ export default {
     },
     cancel () {
       this.editor.getModel().setValue(this.appConfig)
+    },
+    download () {
+      const file = new Blob([this.editor.getValue()], { type: 'json' })
+      const a = document.createElement('a')
+      const url = URL.createObjectURL(file)
+      a.href = url
+      a.download = `${window.location.host}-config.json`
+      document.body.appendChild(a)
+      a.click()
+      setTimeout(function () {
+        document.body.removeChild(a)
+        window.URL.revokeObjectURL(url)
+      }, 0)
+    },
+    upload () {
+      const fileInput = document.getElementById('file-selector')
+      fileInput.click()
+    },
+    processUpload (event) {
+      const reader = new FileReader()
+      reader.addEventListener('load', (event) => {
+        this.editor.getModel().setValue(atob(event.target.result.split(',')[1]))
+      })
+      console.log(event.target.files[0])
+      reader.readAsDataURL(event.target.files[0])
     }
   },
   computed: {
@@ -107,6 +136,11 @@ export default {
 </script>
 
 <style scoped >
+
+#file-selector {
+  display: none;
+}
+
 .editor {
   margin: 0 auto;
   border: 1px solid black;
