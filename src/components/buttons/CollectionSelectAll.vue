@@ -8,10 +8,10 @@
       @change="handleCollectionStatus"
       :checked="allCollectionsSelected"
       hidden/>
-    <label class="add-to-cart-label btn btn-outline-success m-0 mb-2" for="select-deselect-all">
+    <label class="add-to-cart-label btn btn-outline-success m-0" for="select-deselect-all">
       <span>Select all collections</span>
     </label>
-    <label class="remove-from-cart-label btn btn-outline-danger m-0 mb-2" for="select-deselect-all">
+    <label class="remove-from-cart-label btn btn-outline-danger m-0" for="select-deselect-all">
       <span>Deselect all collections</span>
     </label>
   </div>
