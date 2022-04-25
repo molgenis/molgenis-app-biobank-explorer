@@ -53,10 +53,6 @@ export default {
   padding-top: 0 !important;
 }
 
-body {
-  background-color: #fafafa;
-}
-
 .custom-control-label::before {
   border-color: black; /* makes checkboxes stand out more for better UX */
 }

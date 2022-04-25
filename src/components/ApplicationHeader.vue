@@ -1,11 +1,11 @@
 <template>
   <div
-    class="p-3 mx-3 header-bar card sticky-top border-0 shadow-sm"
+    class="p-3 header-bar card sticky-top border-0 shadow-sm"
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-5" aria-label="action-bar">
         <b-button
-          class="mr-2 mb-2"
+          class="mr-2"
           v-b-toggle.filters
           variant="info"
           @click="filtersCollapsed = !filtersCollapsed">
@@ -18,6 +18,9 @@
           <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
         </b-button>
+        <div class="w-50 search-container mr-2 mb-2">
+          <search-filter />
+        </div>
         <b-button
           v-if="numberOfActiveFilters > 0"
           class="mr-2 mb-2"
@@ -27,19 +30,18 @@
           class="d-inline mr-2"
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
-
-        <router-link
-          v-if="showSettings"
-          class="btn btn-light border mb-2"
-          to="/configuration">
-          <span class="mr-2">Settings</span>
-          <font-awesome-icon icon="cog" />
-        </router-link>
       </div>
       <div class="col-4">
         <pagination />
       </div>
       <div class="col text-right">
+        <router-link
+          v-if="showSettings"
+          class="btn btn-light border mr-2"
+          to="/configuration">
+          <span class="mr-2">Settings</span>
+          <font-awesome-icon icon="cog" />
+        </router-link>
         <b-button variant="primary" @click="showCart = !showCart"><span>Checkout</span><span class="badge badge-light ml-2">
             {{ selectedCollections.length }}</span></b-button>
       </div>
@@ -47,9 +49,6 @@
     <div class="row my-2">
       <b-collapse id="filters">
         <div class="col-12">
-          <div class="w-25 search-container mr-2">
-            <search-filter />
-          </div>
           <b-dropdown
             :variant="filterVariant(filter.label || filter.name)"
             v-for="filter in facetsToRender"

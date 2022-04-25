@@ -11,87 +11,91 @@
     ]">
     <div tabindex="0">
       <section>
-        <div class="front h-100">
-          <div v-if="loading" class="loading-screen p-5">
-            <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
-          </div>
-          <div v-else>
-            <header class="border-0 card-header p-1">
-              <h5 class="pt-1 pl-2 pr-1 mt-1">
-                <router-link
-                  :to="'/biobank/' + biobank.id"
-                  title="Biobank details">
-                  <span class="biobank-name">{{ biobank.name }}</span>
-                  <font-awesome-icon
-                    class="float-right m-1 text-dark"
-                    :icon="['far', 'arrow-alt-circle-right']"/>
-                </router-link>
-              </h5>
-            </header>
+        <div v-if="loading" class="loading-screen">
+          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
+        </div>
+        <div v-else>
+          <header class="border-0 card-header p-1">
+            <h5 class="p-1 pb-0 mt-1">
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                title="Biobank details">
+                <span class="biobank-name">{{ biobank.name }}</span>
+              </router-link>
+            </h5>
+          </header>
 
-            <div class="mt-2 shadow-sm" v-if="biobank.collections.length">
-              <button
-                class="btn btn-link text-info"
-                @click.prevent="showCollections = true">
-                Go to Collections
-              </button>
-            </div>
-            <div v-if="!showCollections" class="p-2 pt-1 biobank-section">
-              <small>
-                <view-generator :viewmodel="biobankcardViewmodel" />
-              </small>
-            </div>
+          <div class="shadow-sm" v-if="biobank.collections.length">
+            <button
+              class="btn btn-link text-info pl-2"
+              @click.prevent="showCollections = true">
+              View biobank collections
+            </button>
+          </div>
+          <div class="p-2 pt-1 biobank-section">
+            <small>
+              <view-generator :viewmodel="biobankcardViewmodel" />
+            </small>
           </div>
         </div>
       </section>
       <section>
-        <div class="back">
-          <div class="pt-0">
-            <div class="d-flex mt-2 mb-2 shadow-sm">
-              <button
-                class="btn btn-link text-info"
-                @click.prevent="showCollections = false">
-                Back to biobank
-              </button>
-
+        <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
+        <div v-if="showCollections">
+          <header class="border-0 card-header p-1">
+            <h5 class="pt-1 pl-2 pr-1 mt-1">
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                title="Biobank details">
+                <span class="biobank-name">{{ biobank.name }}</span>
+              </router-link>
+            </h5>
+          </header>
+          <div class="d-flex mb-1 shadow-sm">
+            <button
+              class="btn btn-link text-info pl-2"
+              @click.prevent="showCollections = false">
+              Back to biobank details
+            </button>
+          </div>
+          <div class="collections-section">
+            <div class="pl-2 pt-2 d-flex">
+              <h4>Collections</h4>
               <collection-selector
-                class="text-right ml-auto mr-2 mt-1 align-self-center"
+                class="text-right ml-auto mr-1 align-self-center"
                 v-if="biobank.collections && biobank.collections.length > 0"
                 :collectionData="biobank.collections"
                 bookmark
+                iconOnly
                 multi></collection-selector>
             </div>
-            <div class="collections-section">
-              <div
-                class="collection-items mx-1"
-                v-for="collectionDetail of biobank.collectionDetails"
-                :key="collectionDetail.id">
-                <div v-if="showCollections" class="mb-2">
-                  <div class="collection-header card-header border-0 p-2">
-                    <router-link
-                      :to="'/collection/' + collectionDetail.id"
-                      title="Collection details">
-                      <span class="collection-name">{{
-                        collectionDetail.name
-                      }}</span>
-                      <font-awesome-icon
-                        class="float-right m-1 text-dark"
-                        :icon="['far', 'arrow-alt-circle-right']"/>
-                    </router-link>
+            <div
+              class="collection-items mx-1"
+              v-for="collectionDetail of biobank.collectionDetails"
+              :key="collectionDetail.id">
+              <div v-if="showCollections" class="mb-2">
+                <div class="pl-2 py-2 d-flex">
+                  <router-link
+                    :to="'/collection/' + collectionDetail.id"
+                    title="Collection details">
+                    <span class="collection-name">{{
+                      collectionDetail.name
+                    }}</span>
+                  </router-link>
+                  <div class="ml-auto">
+                    <collection-selector
+                      class="ml-auto"
+                      :collectionData="collectionDetail"
+                      iconOnly
+                      bookmark></collection-selector>
                   </div>
-                  <small>
-                    <div class="pt-2 px-2 border-0 d-flex">
-                      <collection-selector
-                        class="ml-auto"
-                        :collectionData="collectionDetail"
-                        bookmark></collection-selector>
-                    </div>
-                    <view-generator
-                      class="p-2 pt-2"
-                      :viewmodel="collectionViewmodel(collectionDetail)"/>
-                  </small>
-                  <hr />
                 </div>
+                <small>
+                  <view-generator
+                    class="p-2 pt-2"
+                    :viewmodel="collectionViewmodel(collectionDetail)"/>
+                </small>
+                <hr />
               </div>
             </div>
           </div>
@@ -194,14 +198,14 @@ export default {
 }
 
 .biobank-section {
-  height: 22rem;
   max-height: 22rem;
+  height: 22rem;
   overflow: auto;
 }
 
 .collections-section {
-  height: 24.5rem;
-  max-height: 24.5rem;
+  height: 22.2rem;
+  max-height: 22.2rem;
   overflow: auto;
 }
 
@@ -211,12 +215,6 @@ export default {
 
 .collection-items th {
   width: 25%;
-}
-
-.biobank-name,
-.collection-name {
-  display: inline-block;
-  width: 92%;
 }
 
 .biobank-card {
