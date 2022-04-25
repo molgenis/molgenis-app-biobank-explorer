@@ -14,6 +14,9 @@ const SaveApplicationConfiguration = jest.fn()
 const editorGetValue = jest.fn()
 const editorSetValue = jest.fn()
 
+const mockDiffText = 'Diff editor test data'
+const diffEditorGetValue = jest.fn().mockReturnValue(mockDiffText)
+
 const mockEditor = {
   create: jest.fn().mockReturnValue(
     {
@@ -21,6 +24,13 @@ const mockEditor = {
       getValue: editorGetValue,
       getModel: jest.fn().mockReturnValue({ setValue: editorSetValue })
     })
+}
+
+const mockDiffEditor = {
+
+  getAction: jest.fn().mockReturnValue({ run: jest.fn() }),
+  getModifiedEditor: () => ({ getValue: diffEditorGetValue })
+
 }
 
 describe('ConfigurationScreen', () => {
@@ -62,5 +72,15 @@ describe('ConfigurationScreen', () => {
     wrapper.vm.cancel()
 
     expect(editorSetValue).toHaveBeenCalledWith(mockAppConfig)
+  })
+
+  it('calls setvalue on diff-editor and sets the value on editor on diffSave', async () => {
+    const wrapper = shallowMount(ConfigurationScreen, { store, localVue, data: () => ({ diffEditor: mockDiffEditor }) })
+    await flushPromises()
+    wrapper.vm.saveDiff()
+
+    expect(diffEditorGetValue).toHaveBeenCalled()
+    expect(SaveApplicationConfiguration).toHaveBeenCalledWith(expect.anything(), mockDiffText)
+    expect(editorSetValue).toHaveBeenCalledWith(mockDiffText)
   })
 })
