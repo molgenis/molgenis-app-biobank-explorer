@@ -9,7 +9,7 @@
           v-for="(item, index) in attribute.value"
           :href="item.uri"
           target="_blank"
-          class="badge rounded-pill text-break mr-2 mb-2 p-2"
+          class="badge text-break mr-2 mb-2 p-2"
           :class="'badge-' + badgeColor"
           :key="`${index}-${displayName(item)}`">
           {{ displayName(item) }}
@@ -20,7 +20,7 @@
         <span
           @click.stop
           v-for="(value, index) in attribute.value"
-          class="badge rounded-pill text-break mr-2 mb-2"
+          class="badge text-break mr-2 mb-2"
           :key="index"
           :class="'badge-' + badgeColor">
           {{ value }}
@@ -66,8 +66,11 @@ export default {
   white-space: normal;
   text-align: left;
   padding: 0.5rem;
-  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
-    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
+  border-radius: 0;
+}
+
+.badge-light {
+  border: 1px solid #000;
 }
 
 .fa-external-link {
