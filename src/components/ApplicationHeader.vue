@@ -18,12 +18,12 @@
           <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
         </b-button>
-        <div class="w-50 search-container mr-2">
+        <div class="w-50 search-container mr-2 mb-2">
           <search-filter />
         </div>
         <b-button
           v-if="numberOfActiveFilters > 0"
-          class="mr-2"
+          class="mr-2 mb-2"
           variant="outline-secondary"
           @click="ClearActiveFilters">Clear all filters</b-button>
         <collection-select-all
