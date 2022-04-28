@@ -7,6 +7,12 @@
         ref="editor"
         class="editor"
         @keyup="dirty = true"></div>
+
+      <div v-if="diff" class="row w-100 mt-1">
+        <div class="col-6 pr-0"><h3>Current config</h3></div>
+        <div class="col-6 pl-0"><h3>New config</h3></div>
+      </div>
+
       <div v-if="diff" ref="diff-editor" class="editor"></div>
     </div>
 
@@ -192,7 +198,7 @@ export default {
 }
 ::v-deep .original-in-monaco-diff-editor .view-lines,
 ::v-deep .original-in-monaco-diff-editor .margin-view-overlays {
-  background-color: #fafafa;
+  background-color: #eaeaea;
 }
 
 .editor {
