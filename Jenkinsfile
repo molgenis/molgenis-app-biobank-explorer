@@ -40,7 +40,7 @@ pipeline {
         container('node') {
           sh "yarn install"
           sh "yarn test:unit"
-          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium --network-timeout 120000"
+          sh "yarn test:e2e --env ci_chrome,ci_firefox --use-selenium"
         }
       }
       post {
