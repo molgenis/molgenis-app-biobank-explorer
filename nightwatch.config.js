@@ -13,9 +13,10 @@ module.exports = {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
         port: '80',
-        timeout: 120000,
-        retry_attempts: 1
-
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,
@@ -32,8 +33,10 @@ module.exports = {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
         port: '80',
-        timeout: 120000,
-        retry_attempts: 1
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,
@@ -50,8 +53,10 @@ module.exports = {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
         port: '80',
-        timeout: 120000,
-        retry_attempts: 1
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,
