@@ -5,8 +5,8 @@
         <em>
           {{ foundBiobanks }} organisations with
           {{ parentCollections.length }} collection(s)
-          <template v-if="numberOfSubCollections > 0">
-            and {{ numberOfSubCollections }} subcollection(s)
+          <template v-if="subcollections.length > 0">
+            and {{ subcollections.length }} subcollection(s)
           </template>
           matching the search criteria
         </em>
@@ -20,10 +20,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['foundBiobanks', 'foundCollectionIds', 'parentCollections']),
-    numberOfSubCollections () {
-      return this.foundCollectionIds.length - this.parentCollections.length
-    }
+    ...mapGetters(['foundBiobanks', 'subcollections', 'parentCollections'])
   }
 }
 </script>
