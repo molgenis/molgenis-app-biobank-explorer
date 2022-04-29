@@ -5,8 +5,8 @@
         <em>
           {{ foundBiobanks }} organisations with
           {{ parentCollections.length }} collection(s)
-          <template v-if="subCollections.length > 0">
-            and {{ subCollections.length }} subcollection(s)
+          <template v-if="subcollections.length > 0">
+            and {{ subcollections.length }} subcollection(s)
           </template>
           matching the search criteria
         </em>
