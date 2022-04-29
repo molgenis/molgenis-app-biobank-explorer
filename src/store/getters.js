@@ -37,6 +37,14 @@ export default {
     })
     return flattenedCollections
   },
+  subCollections: (state) => {
+    const allSubCollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection).map(fci => fci.collectionId)
+    let flattenedCollections = []
+    allSubCollections.forEach(function (subCollection) {
+      flattenedCollections = flattenedCollections.concat(subCollection)
+    })
+    return flattenedCollections
+  },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   foundBiobanks: (state) => {
