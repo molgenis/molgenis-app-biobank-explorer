@@ -6,7 +6,7 @@ const localVue = createLocalVue()
 
 localVue.use(Vuex)
 
-describe('BiobankCardsContainer', () => {
+describe('ResultHeader', () => {
   let store
   const biobanks = []
   const collectionsWithBiobank = [{ collectionId: 'A', biobankId: 'B' }, { collectionId: 'C', biobankId: 'B' }, { collectionId: 'D', biobankId: 'E' }]
@@ -15,9 +15,7 @@ describe('BiobankCardsContainer', () => {
     store = new Vuex.Store({
       state: {},
       getters: {
-        rsql: () => '',
-        getFoundBiobankIds: () => ['B'],
-        foundCollectionIds: () => [],
+        subcollections: () => [],
         parentCollections: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         foundBiobanks: () => biobanks
       }

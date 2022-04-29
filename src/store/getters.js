@@ -37,10 +37,10 @@ export default {
     })
     return flattenedCollections
   },
-  subCollections: (state) => {
-    const allSubCollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection).map(fci => fci.collectionId)
+  subcollections: (state) => {
+    const allSubcollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection).map(fci => fci.collectionId)
     let flattenedCollections = []
-    allSubCollections.forEach(function (subCollection) {
+    allSubcollections.forEach(function (subCollection) {
       flattenedCollections = flattenedCollections.concat(subCollection)
     })
     return flattenedCollections

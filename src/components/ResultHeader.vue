@@ -20,7 +20,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['foundBiobanks', 'subCollections', 'parentCollections'])
+    ...mapGetters(['foundBiobanks', 'subcollections', 'parentCollections'])
   }
 }
 </script>
