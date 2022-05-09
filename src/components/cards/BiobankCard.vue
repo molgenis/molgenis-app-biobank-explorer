@@ -46,7 +46,7 @@
         <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
         <div v-if="showCollections">
           <header class="border-0 card-header p-1">
-            <h5 class="pt-1 pl-2 pr-1 mt-1">
+            <h5 class="pt-1 pl-1 pr-1 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
                 title="Biobank details">
