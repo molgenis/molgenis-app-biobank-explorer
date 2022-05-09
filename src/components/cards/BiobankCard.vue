@@ -40,10 +40,13 @@
         </div>
       </section>
       <section>
+        <div v-if="loading" class="loading-screen">
+          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
+        </div>
         <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
         <div v-if="showCollections">
           <header class="border-0 card-header p-1">
-            <h5 class="pt-1 pl-2 pr-1 mt-1">
+            <h5 class="pt-1 pl-1 pr-1 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
                 title="Biobank details">
@@ -55,7 +58,7 @@
             <button
               class="btn btn-link text-info pl-2"
               @click.prevent="showCollections = false">
-              Back to biobank details
+              View biobank details
             </button>
           </div>
           <div class="collections-section">
@@ -68,6 +71,9 @@
                 bookmark
                 iconOnly
                 multi></collection-selector>
+            </div>
+            <div class="pl-2" v-if="!biobank.collections || !biobank.collections.length">
+              This biobank has no collections yet.
             </div>
             <div
               class="collection-items mx-1"
@@ -149,7 +155,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['biobankColumns', 'collectionColumns']),
+    ...mapState([
+      'biobankColumns',
+      'collectionColumns',
+      'biobankCardShowCollections'
+    ]),
     ...mapGetters(['selectedCollections']),
     biobankcardViewmodel () {
       // check if biobank is still loading
@@ -180,6 +190,9 @@ export default {
     loading () {
       return typeof this.biobank === 'string'
     }
+  },
+  mounted () {
+    this.showCollections = this.biobankCardShowCollections
   }
 }
 </script>

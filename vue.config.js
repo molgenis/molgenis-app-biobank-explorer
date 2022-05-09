@@ -88,6 +88,7 @@ module.exports = {
           filterFacets: initialFilterFacets,
           collectionColumns: initialCollectionColumns,
           biobankColumns: initialBiobankColumns,
+          biobankCardShowCollections: true,
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true,
           menuHeight: 50
