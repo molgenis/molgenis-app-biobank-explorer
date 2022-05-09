@@ -13,6 +13,7 @@ export default {
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
   removeFreemarkerMargin: config.removeFreemarkerMargin,
+  biobankCardShowCollections: config.biobankCardShowCollections,
   isLoading: false,
   currentPage: 1,
   pageSize: 12,

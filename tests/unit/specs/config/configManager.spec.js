@@ -8,6 +8,7 @@ let windowSpy
 const initialState = {
   collectionColumns: initialCollectionColumns,
   biobankColumns: initialBiobankColumns,
+  biobankCardShowCollections: true,
   filterFacets: filterDefinitions,
   removeFreemarkerMargin: true,
   menuHeight: 50

@@ -10,6 +10,7 @@ export const bbmriConfig = () => {
     biobankColumns: initialBiobankColumns,
     filterFacets: initialFilterFacets,
     removeFreemarkerMargin: false,
+    biobankCardShowCollections: true,
     menuHeight: 50
   }
 
@@ -31,6 +32,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'menuHeight') && typeof INITIAL_STATE.menuHeight === 'number') {
     config.menuHeight = INITIAL_STATE.menuHeight
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'biobankCardShowCollections') && typeof INITIAL_STATE.biobankCardShowCollections === 'boolean') {
+    config.biobankCardShowCollections = INITIAL_STATE.biobankCardShowCollections
   }
 
   return config
