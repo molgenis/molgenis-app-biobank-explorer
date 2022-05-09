@@ -14,11 +14,21 @@
           {{ attribute.value }}
         </span>
       </template>
+      <template v-if="attribute.linkValue">
+        <span
+          id="copy-icon"
+          @click.prevent="copyToClipboard(attribute.linkValue)"
+          v-b-tooltip.hover="'Copy to clipboard'"
+          class="fa fa-clipboard ml-1">
+        </span>
+      </template>
     </td>
   </tr>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   props: {
     attribute: {
@@ -31,14 +41,28 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SetNotification']),
     displayName (item) {
       return item.label || item.name || item.id
+    },
+    copyToClipboard (link) {
+      navigator.clipboard.writeText(link)
+      this.SetNotification(`Copied ${link}`)
     }
   }
 }
 </script>
 
 <style scoped>
+
+.fa-clipboard {
+  position: relative;
+  font-size: large;
+}
+
+.fa-clipboard:hover {
+  cursor: pointer;
+}
 
 .fa-external-link {
   top: 1px;
