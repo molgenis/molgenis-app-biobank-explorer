@@ -1,13 +1,17 @@
 <template>
   <div class="biobank-cards-container border-bottom p-3">
-    <div v-if="!loading && foundBiobanks > 0" class="d-flex justify-content-center flex-wrap">
-      <biobank-card
-        v-for="biobank in biobanksShown"
-        :key="biobank.id || biobank"
-        :biobank="biobank">
-      </biobank-card>
-    </div>
+    <div v-if="!loading && foundBiobanks > 0">
+      <pagination class="mb-3" />
 
+      <div class="d-flex justify-content-center flex-wrap">
+        <biobank-card
+          v-for="biobank in biobanksShown"
+          :key="biobank.id || biobank"
+          :biobank="biobank">
+        </biobank-card>
+      </div>
+      <pagination />
+    </div>
     <div v-else-if="!loading && foundBiobanks === 0" class="status-text">
       <h4>No biobanks were found</h4>
     </div>
@@ -23,16 +27,27 @@
 
 <script>
 import BiobankCard from './cards/BiobankCard.vue'
+import Pagination from './buttons/Pagination.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
+  components: {
+    BiobankCard,
+    Pagination
+  },
   methods: {
     ...mapActions(['GetBiobanks', 'QueryBiobanks'])
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
-    ...mapGetters(['biobanks', 'foundBiobanks', 'loading', 'biobankRsql', 'rsql']),
+    ...mapGetters([
+      'biobanks',
+      'foundBiobanks',
+      'loading',
+      'biobankRsql',
+      'rsql'
+    ]),
     biobanksShown () {
       if (this.loading) return []
 
@@ -51,9 +66,6 @@ export default {
     biobankIdsToFetch () {
       return this.biobanksShown.filter(it => typeof it === 'string')
     }
-  },
-  components: {
-    BiobankCard
   },
   watch: {
     currentPage () {

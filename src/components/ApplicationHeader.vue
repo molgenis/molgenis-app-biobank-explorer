@@ -3,7 +3,7 @@
     class="p-3 header-bar card sticky-top border-0 shadow-sm"
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
-      <div class="col-5" aria-label="action-bar">
+      <div class="col-8" aria-label="action-bar">
         <b-button
           class="mr-2"
           v-b-toggle.filters
@@ -23,16 +23,13 @@
         </div>
         <b-button
           v-if="numberOfActiveFilters > 0"
-          class="mr-2 mb-2"
+          class="mr-2"
           variant="outline-secondary"
           @click="ClearActiveFilters">Clear all filters</b-button>
         <collection-select-all
           class="d-inline mr-2"
           v-if="!loading && foundCollectionIds.length"
           bookmark/>
-      </div>
-      <div class="col-4">
-        <pagination />
       </div>
       <div class="col text-right">
         <router-link
@@ -89,7 +86,6 @@
 
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
-import Pagination from './buttons/Pagination.vue'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import ResultHeader from './ResultHeader.vue'
 
@@ -105,7 +101,6 @@ import NegotiatorSelection from './popovers/NegotiatorSelection.vue'
 export default {
   components: {
     CollectionSelectAll,
-    Pagination,
     ResultHeader,
     SearchFilter,
     CheckboxFilter,
