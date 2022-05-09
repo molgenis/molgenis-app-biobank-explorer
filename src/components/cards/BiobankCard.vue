@@ -72,6 +72,9 @@
                 iconOnly
                 multi></collection-selector>
             </div>
+            <div class="pl-2" v-if="!biobank.collections || !biobank.collections.length">
+              This biobank has no collections yet.
+            </div>
             <div
               class="collection-items mx-1"
               v-for="collectionDetail of biobank.collectionDetails"
