@@ -24,7 +24,7 @@
         <td v-else-if="value.type === 'email'" colspan="2">
           <a :href="'mailto:' + value.value">
             <i class="fa fa-fw fa-paper-plane" aria-hidden="true"></i>
-            <span class="mg-icon-text">Email</span>
+            <span class="mg-icon-text">{{ uiText['email'] }}</span>
           </a>
         </td>
         <!--Type phone-->
@@ -59,6 +59,7 @@
 </style>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'ReportDetailsList',
   // Object with as key the variable, as value an object with two keys: value and type
@@ -96,6 +97,9 @@ export default {
     showKey (type) {
       return ['bool', 'string-with-key', 'list'].includes(type)
     }
+  },
+  computed: {
+    ...mapGetters(['uiText'])
   }
 }
 </script>

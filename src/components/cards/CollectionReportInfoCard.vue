@@ -19,7 +19,7 @@
               <li v-if="info.contact.email">
                 <span class="fa fa-fw fa-paper-plane mr-2" aria-hidden="true"></span>
                 <a :href="'mailto:' + info.contact.email">
-                  <span>Email</span>
+                  <span>{{ uiText['email'] }}</span>
                 </a>
                 <div v-if="info.contact.phone">
                   <span class="fa fa-fw fa-phone mr-1" aria-hidden="true"></span>
@@ -47,7 +47,7 @@
                 <div v-if="info.biobank.report">
                   <span class="fa fa-fw fa-address-card mr-2" aria-hidden="true"></span>
                   <router-link :to="info.biobank.report">
-                    <span>View {{ info.biobank.name }}</span>
+                    <span>{{ uiText['view'] }} {{ info.biobank.name }}</span>
                   </router-link>
                 </div>
                 <div v-if="info.biobank.website">
@@ -59,7 +59,7 @@
                 <div v-if="info.biobank.email">
                   <span class="fa fa-fw fa-paper-plane mr-2" aria-hidden="true"></span>
                   <a :href="'mailto:' + info.biobank.email">
-                    <span>Email</span>
+                    <span>{{ uiText['email'] }}</span>
                   </a>
                 </div>
               </li>
@@ -91,7 +91,7 @@
                   <div>
                     <span class="fa fa-fw fa-address-card mr-2" aria-hidden="true"></span>
                     <router-link :to="network.report">
-                      <span>View {{ network.name }} network</span>
+                      <span>{{ uiText['view'] }} {{ network.name }} network</span>
                     </router-link>
                   </div>
                 </div>
@@ -131,6 +131,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'CollectionReportInfoCard',
   props: {
@@ -138,6 +139,9 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    ...mapGetters(['uiText'])
   }
 }
 </script>

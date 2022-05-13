@@ -2,6 +2,7 @@ import { bbmriConfig } from '../../../../src/config/configManager'
 import initialBiobankColumns from '../../../../src/config/initialBiobankColumns'
 import initialCollectionColumns from '../../../../src/config/initialCollectionColumns'
 import filterDefinitions from '../../../../src/config/initialFilterFacets'
+import i18n from '../../../../src/config/i18n'
 
 let windowSpy
 
@@ -11,7 +12,8 @@ const initialState = {
   biobankCardShowCollections: true,
   filterFacets: filterDefinitions,
   removeFreemarkerMargin: true,
-  menuHeight: 50
+  menuHeight: 50,
+  i18n
 }
 
 describe('Config Manager', () => {

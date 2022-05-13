@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import NegotiatorSelection from '@/components/popovers/NegotiatorSelection.vue'
 import BootstrapVue from 'bootstrap-vue'
-import { mockState } from '../../mockData'
+import { mockState, baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -18,6 +18,7 @@ describe('Negotiator Selection Modal', () => {
     store = new Vuex.Store({
       state: mockState(),
       getters: {
+        ...baseGetters,
         selectedCollections: selectedCollectionMock,
         collectionsInPodium: podiumCollectionsMock,
         collectionBiobankDictionary: () => []

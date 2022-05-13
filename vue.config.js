@@ -24,6 +24,7 @@ BUILD: ${process.env.BUILD_NUMBER}`
 const initialCollectionColumns = require('./src/config/initialCollectionColumns')
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 const initialFilterFacets = require('./src/config/initialFilterFacets')
+const i18n = require('./src/config/i18n')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -91,7 +92,8 @@ module.exports = {
           biobankCardShowCollections: true,
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true,
-          menuHeight: 50
+          menuHeight: 50,
+          i18n: i18n
         }
       }, null, 4),
       new CopyPlugin({

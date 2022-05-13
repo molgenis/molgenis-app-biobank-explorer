@@ -29,7 +29,7 @@
             <button
               class="btn btn-link text-info pl-2"
               @click.prevent="showCollections = true">
-              View biobank collections
+              {{ uiText["card_collections_details"] }}
             </button>
           </div>
           <div class="p-2 pt-1 biobank-section">
@@ -58,7 +58,7 @@
             <button
               class="btn btn-link text-info pl-2"
               @click.prevent="showCollections = false">
-              View biobank details
+              {{ uiText["card_biobank_details"] }}
             </button>
           </div>
           <div class="collections-section">
@@ -72,7 +72,9 @@
                 iconOnly
                 multi></collection-selector>
             </div>
-            <div class="pl-2" v-if="!biobank.collections || !biobank.collections.length">
+            <div
+              class="pl-2"
+              v-if="!biobank.collections || !biobank.collections.length">
               This biobank has no collections yet.
             </div>
             <div
@@ -160,7 +162,7 @@ export default {
       'collectionColumns',
       'biobankCardShowCollections'
     ]),
-    ...mapGetters(['selectedCollections']),
+    ...mapGetters(['selectedCollections', 'uiText']),
     biobankcardViewmodel () {
       // check if biobank is still loading
       if (this.loading) return {}

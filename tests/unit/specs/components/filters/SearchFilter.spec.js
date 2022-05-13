@@ -2,7 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils'
 import SearchFilter from '../../../../../src/components/filters/SearchFilter.vue'
 import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
-import { mockState } from '../../mockData'
+import { baseGetters, mockState } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
@@ -20,6 +20,7 @@ describe('SearchFilter.vue', () => {
     const store = new Vuex.Store({
       state: mockState(),
       getters: {
+        ...baseGetters,
         activeFilters
       },
       mutations: {

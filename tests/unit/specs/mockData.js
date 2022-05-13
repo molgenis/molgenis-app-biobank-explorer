@@ -1,14 +1,19 @@
 import state from '../../../src/store/state'
 import filterDefinitions from '../../../src/config/initialFilterFacets'
-
+import i18n from '../../../src/config/i18n'
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
+
+export const baseGetters = {
+  uiText: () => i18n.en
+}
 
 const mockStateTemplate = {
   // routersync
   route: {
     query: {}
   },
-  ...state
+  ...state,
+  i18n
 }
 
 mockStateTemplate.filterFacets = filterDefinitions

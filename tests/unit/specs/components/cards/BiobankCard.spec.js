@@ -1,6 +1,6 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 import BiobankCard from '@/components/cards/BiobankCard'
-import { mockState } from '../../mockData'
+import { baseGetters, mockState } from '../../mockData'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
@@ -15,6 +15,7 @@ describe('BiobankCard', () => {
     store = new Vuex.Store({
       state: mockState(),
       getters: {
+        ...baseGetters,
         selectedCollections
       }
     })

@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import BiobankReport from '../../../../src/views/BiobankReport'
+import { baseGetters } from '../mockData'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -47,6 +48,9 @@ describe('BiobankReport', () => {
             id: 'my-id'
           }
         }
+      },
+      getters: {
+        ...baseGetters
       },
       actions: {
         GetBiobankReport: () => {}

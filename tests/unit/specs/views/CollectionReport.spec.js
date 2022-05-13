@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import CollectionReport from '@/views/CollectionReport'
+import { baseGetters } from '../mockData'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -59,6 +60,7 @@ describe('CollectionReport', () => {
         GetCollectionReport: () => {}
       },
       getters: {
+        ...baseGetters,
         selectedCollections: jest.fn().mockReturnValue([])
       }
     })
