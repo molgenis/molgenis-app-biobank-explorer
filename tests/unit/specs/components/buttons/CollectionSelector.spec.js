@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import Vuex from 'vuex'
+import { baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,6 +31,7 @@ describe('CollectionSelector', () => {
     store = new Vuex.Store({
       state: {},
       getters: {
+        ...baseGetters,
         selectedCollections
       },
       actions: {
@@ -60,6 +62,7 @@ describe('CollectionSelector', () => {
     // you can't alter a method after the store has been initialized
     store = new Vuex.Store({
       getters: {
+        ...baseGetters,
         selectedCollections: jest.fn().mockReturnValue(collectionResolveData)
       },
       mutations: {

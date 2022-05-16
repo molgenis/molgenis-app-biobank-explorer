@@ -1,6 +1,9 @@
 <template>
   <div class="mg-biobank-card container pb-4">
-    <script v-if="bioschemasJsonld && !isLoading" v-text="bioschemasJsonld" type="application/ld+json" />
+    <script
+      v-if="bioschemasJsonld && !isLoading"
+      v-text="bioschemasJsonld"
+      type="application/ld+json"/>
     <loading
       :active="isLoading"
       loader="dots"
@@ -11,7 +14,8 @@
         <div class="col">
           <!-- Back to previous page buttons -->
           <button class="btn btn-link" @click="back">
-            <i class="fa fa-angle-left" aria-hidden="true"></i> Back
+            <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>
+            <span>{{ uiText["back"] }}</span>
           </button>
         </div>
       </div>
@@ -34,7 +38,9 @@
                     :title="collection.name"
                     :id="collection.id"/>
 
-                  <view-generator class="collection-view" :viewmodel="collection.viewmodel" />
+                  <view-generator
+                    class="collection-view"
+                    :viewmodel="collection.viewmodel"/>
                 </div>
               </div>
               <!-- Right side card -->
@@ -73,7 +79,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportTitle from '../components/report-components/ReportTitle.vue'
@@ -108,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState(['biobankReport', 'isLoading']),
+    ...mapGetters(['uiText']),
     biobank () {
       return this.biobankReport ? getBiobankDetails(this.biobankReport) : {}
     },

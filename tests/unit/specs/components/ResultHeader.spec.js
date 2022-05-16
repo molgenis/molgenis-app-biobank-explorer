@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import ResultHeader from '@/components/ResultHeader'
+import { baseGetters } from '../mockData'
 
 const localVue = createLocalVue()
 
@@ -15,6 +16,7 @@ describe('ResultHeader', () => {
     store = new Vuex.Store({
       state: {},
       getters: {
+        ...baseGetters,
         subcollections: () => [],
         parentCollections: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
         foundBiobanks: () => biobanks

@@ -53,7 +53,7 @@
       Sorry, none of the samples are currently in Podium.
     </p>
     <template v-slot:modal-footer>
-      <b-button class="btn btn-dark mr-auto" @click="removeAllCollections">Remove all</b-button>
+      <b-button class="btn btn-dark mr-auto" @click="removeAllCollections">{{ uiText['remove_all']}}</b-button>
       <div>
         <span class="text-white font-weight-bold d-block">{{
           modalFooterText
@@ -67,7 +67,7 @@
         </span>
       </div>
       <div class="ml-auto">
-        <b-button class="btn btn-dark mr-2" @click="cartVisible = false">Close</b-button>
+        <b-button class="btn btn-dark mr-2" @click="cartVisible = false">{{ uiText['close'] }}</b-button>
         <b-button
           :disabled="
             (isPodium && !collectionsInPodium.length) ||
@@ -150,7 +150,8 @@ export default {
       'collectionsInPodium',
       'selectedCollections',
       'selectedNonCommercialCollections',
-      'collectionBiobankDictionary'
+      'collectionBiobankDictionary',
+      'uiText'
     ]),
     ...mapState(['isPodium', 'nonCommercialCollections']),
     modalFooterText () {
@@ -162,7 +163,7 @@ export default {
         : `${collectionCount} collection(s) selected`
     },
     negotiatorButtonText () {
-      return this.isPodium ? 'Send to Podium' : 'Send to the Negotiator'
+      return this.isPodium ? this.uiText.send_to_podium : this.uiText.send_to_negotiator
     },
     currentSelectedCollections () {
       return this.isPodium ? this.collectionsInPodium : this.selectedCollections

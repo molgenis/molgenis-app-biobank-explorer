@@ -5,6 +5,7 @@ const config = bbmriConfig()
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
 export default {
+  language: 'en',
   applicationContext: {},
   appConfigId: '',
   appConfig: {},
@@ -12,6 +13,7 @@ export default {
   cartValid: true,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
+  i18n: config.i18n,
   removeFreemarkerMargin: config.removeFreemarkerMargin,
   biobankCardShowCollections: config.biobankCardShowCollections,
   isLoading: false,

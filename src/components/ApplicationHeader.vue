@@ -13,7 +13,7 @@
             icon="caret-right"
             :style="iconStyle"
             class="collapse-button mr-2"/>
-          <span>Filters</span>
+          <span>{{ uiText["filters"] }}</span>
 
           <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
@@ -39,7 +39,7 @@
           <span class="mr-2">Settings</span>
           <font-awesome-icon icon="cog" />
         </router-link>
-        <b-button variant="primary" @click="showCart = !showCart"><span>Checkout</span><span class="badge badge-light ml-2">
+        <b-button variant="primary" @click="showCart = !showCart"><span>{{ uiText["request"] }}</span><span class="badge badge-light ml-2">
             {{ selectedCollections.length }}</span></b-button>
       </div>
     </div>
@@ -114,7 +114,8 @@ export default {
       'loading',
       'foundCollectionIds',
       'activeFilters',
-      'selectedCollections'
+      'selectedCollections',
+      'uiText'
     ]),
     ...mapState(['menuHeight', 'applicationContext', 'filterFacets']),
     showSettings () {

@@ -13,8 +13,8 @@
       v-if="!iconOnly"
       class="add-to-cart-label btn btn-outline-secondary px-2"
       :for="checkboxIdentifier">
-      <span v-if="!multi">Add</span>
-      <span v-else>Add all</span>
+      <span v-if="!multi">{{ uiText['add'] }}</span>
+      <span v-else>{{ uiText['add_all'] }}</span>
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -26,8 +26,8 @@
       v-if="!iconOnly"
       class="btn remove-from-cart-label btn-outline-danger px-2"
       :for="checkboxIdentifier">
-      <span v-if="!multi">Remove</span>
-      <span v-else>Remove all</span>
+      <span v-if="!multi">{{ uiText["remove"] }}</span>
+      <span v-else>{{ uiText["remove_all"] }}</span>
     </label>
     <label v-else class="btn remove-from-cart-label" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedCollections']),
+    ...mapGetters(['selectedCollections', 'uiText']),
     checkboxIdentifier () {
       return this.identifier
     },

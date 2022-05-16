@@ -4,6 +4,9 @@ import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   getHumanReadableString,
+  uiText: (state) => {
+    return state.i18n[state.language]
+  },
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {

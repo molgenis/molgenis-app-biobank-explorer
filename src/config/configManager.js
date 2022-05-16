@@ -1,6 +1,7 @@
 import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
 import initialFilterFacets from './initialFilterFacets'
+import i18n from './i18n.js'
 
 export const bbmriConfig = () => {
   const INITIAL_STATE = window.__INITIAL_STATE__ || {}
@@ -11,7 +12,8 @@ export const bbmriConfig = () => {
     filterFacets: initialFilterFacets,
     removeFreemarkerMargin: false,
     biobankCardShowCollections: true,
-    menuHeight: 50
+    menuHeight: 50,
+    i18n
   }
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'collectionColumns') && INITIAL_STATE.collectionColumns.length) {
@@ -36,6 +38,10 @@ export const bbmriConfig = () => {
 
   if (Object.hasOwnProperty.call(INITIAL_STATE, 'biobankCardShowCollections') && typeof INITIAL_STATE.biobankCardShowCollections === 'boolean') {
     config.biobankCardShowCollections = INITIAL_STATE.biobankCardShowCollections
+  }
+
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'i18n') && Object.keys(INITIAL_STATE.i18n)) {
+    config.i18n = INITIAL_STATE.i18n
   }
 
   return config
