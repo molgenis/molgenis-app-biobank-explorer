@@ -45,5 +45,9 @@ export const bbmriConfig = () => {
     config.i18n = INITIAL_STATE.i18n
   }
 
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'filterMenuInitiallyFolded')) {
+    config.filterMenuInitiallyFolded = INITIAL_STATE.filterMenuInitiallyFolded
+  }
+
   return config
 }
