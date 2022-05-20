@@ -6,7 +6,6 @@
       <div class="col-8" aria-label="action-bar">
         <b-button
           class="mr-2"
-          v-b-toggle.filters
           variant="info"
           @click="filtersCollapsed = !filtersCollapsed">
           <font-awesome-icon
@@ -44,7 +43,7 @@
       </div>
     </div>
     <div class="row my-2">
-      <b-collapse id="filters">
+      <vue-slide-up-down :active="!filtersCollapsed" :duration="300">
         <div class="col-12">
           <b-dropdown
             :variant="filterVariant(filter.label || filter.name)"
@@ -76,7 +75,7 @@
             </div>
           </b-dropdown>
         </div>
-      </b-collapse>
+      </vue-slide-up-down>
     </div>
 
     <result-header v-if="!loading" />
@@ -117,7 +116,12 @@ export default {
       'selectedCollections',
       'uiText'
     ]),
-    ...mapState(['menuHeight', 'applicationContext', 'filterFacets']),
+    ...mapState([
+      'menuHeight',
+      'applicationContext',
+      'filterFacets',
+      'filterMenuInitiallyFolded'
+    ]),
     showSettings () {
       return this.applicationContext.roles
         ? this.applicationContext.roles.includes('ROLE_SU')
@@ -139,7 +143,6 @@ export default {
   },
   data () {
     return {
-      filterBarShown: false,
       filtersCollapsed: true,
       showCart: false
     }
@@ -171,11 +174,14 @@ export default {
         return filtersActive.length
       }
     }
+  },
+  created () {
+    this.filtersCollapsed = this.filterMenuInitiallyFolded
   }
 }
 </script>
 
-<style>
+<style scoped>
 .header-bar {
   background-color: white;
   z-index: 1000;

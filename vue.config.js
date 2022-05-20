@@ -92,6 +92,7 @@ module.exports = {
           biobankCardShowCollections: true,
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true,
+          filterMenuInitiallyFolded: false,
           menuHeight: 50,
           i18n: i18n
         }

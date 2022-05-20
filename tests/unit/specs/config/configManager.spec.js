@@ -13,6 +13,7 @@ const initialState = {
   filterFacets: filterDefinitions,
   removeFreemarkerMargin: true,
   menuHeight: 50,
+  filterMenuInitiallyFolded: false,
   i18n
 }
 
