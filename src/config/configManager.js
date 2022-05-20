@@ -10,6 +10,7 @@ export const bbmriConfig = () => {
     collectionColumns: initialCollectionColumns,
     biobankColumns: initialBiobankColumns,
     filterFacets: initialFilterFacets,
+    filterMenuInitiallyFolded: false,
     removeFreemarkerMargin: false,
     biobankCardShowCollections: true,
     menuHeight: 50,

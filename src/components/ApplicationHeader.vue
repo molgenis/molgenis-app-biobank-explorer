@@ -6,7 +6,6 @@
       <div class="col-8" aria-label="action-bar">
         <b-button
           class="mr-2"
-          v-b-toggle.filters
           variant="info"
           @click="filtersCollapsed = !filtersCollapsed">
           <font-awesome-icon
@@ -44,39 +43,41 @@
       </div>
     </div>
     <div class="row my-2">
-      <b-collapse id="filters">
-        <div class="col-12">
-          <b-dropdown
-            :variant="filterVariant(filter.label || filter.name)"
-            v-for="filter in facetsToRender"
-            :key="filter.name"
-            boundary="window"
-            no-flip
-            class="mr-2 mb-1 mt-1 filter-dropdown">
-            <template #button-content>
-              <span>{{ filter.label || filter.name }}</span>
-              <span
-                class="badge badge-light border ml-2"
-                v-if="filterSelectionCount(filter.name) > 0">
-                {{ filterSelectionCount(filter.name) }}</span>
-            </template>
-            <div class="bg-white p-2 dropdown-contents">
-              <component
-                :is="filter.component"
-                :value="activeFilters[filter.name]"
-                v-bind="filter"
-                @input="(value) => filterChange(filter.name, value)"
-                @satisfy-all="
-                  (satisfyAllValue) =>
-                    filterSatisfyAllChange(filter.name, satisfyAllValue)
-                "
-                :returnTypeAsObject="true"
-                :bulkOperation="true">
-              </component>
-            </div>
-          </b-dropdown>
+      <Transition name="slide-fade" v-bind:duration="75">
+        <div v-show="!filtersCollapsed">
+          <div class="col-12">
+            <b-dropdown
+              :variant="filterVariant(filter.label || filter.name)"
+              v-for="filter in facetsToRender"
+              :key="filter.name"
+              boundary="window"
+              no-flip
+              class="mr-2 mb-1 mt-1 filter-dropdown">
+              <template #button-content>
+                <span>{{ filter.label || filter.name }}</span>
+                <span
+                  class="badge badge-light border ml-2"
+                  v-if="filterSelectionCount(filter.name) > 0">
+                  {{ filterSelectionCount(filter.name) }}</span>
+              </template>
+              <div class="bg-white p-2 dropdown-contents">
+                <component
+                  :is="filter.component"
+                  :value="activeFilters[filter.name]"
+                  v-bind="filter"
+                  @input="(value) => filterChange(filter.name, value)"
+                  @satisfy-all="
+                    (satisfyAllValue) =>
+                      filterSatisfyAllChange(filter.name, satisfyAllValue)
+                  "
+                  :returnTypeAsObject="true"
+                  :bulkOperation="true">
+                </component>
+              </div>
+            </b-dropdown>
+          </div>
         </div>
-      </b-collapse>
+      </Transition>
     </div>
 
     <result-header v-if="!loading" />
@@ -117,7 +118,12 @@ export default {
       'selectedCollections',
       'uiText'
     ]),
-    ...mapState(['menuHeight', 'applicationContext', 'filterFacets']),
+    ...mapState([
+      'menuHeight',
+      'applicationContext',
+      'filterFacets',
+      'filterMenuInitiallyFolded'
+    ]),
     showSettings () {
       return this.applicationContext.roles
         ? this.applicationContext.roles.includes('ROLE_SU')
@@ -139,7 +145,6 @@ export default {
   },
   data () {
     return {
-      filterBarShown: false,
       filtersCollapsed: true,
       showCart: false
     }
@@ -171,6 +176,9 @@ export default {
         return filtersActive.length
       }
     }
+  },
+  created () {
+    this.filtersCollapsed = this.filterMenuInitiallyFolded
   }
 }
 </script>

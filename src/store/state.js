@@ -16,6 +16,7 @@ export default {
   i18n: config.i18n,
   removeFreemarkerMargin: config.removeFreemarkerMargin,
   biobankCardShowCollections: config.biobankCardShowCollections,
+  filterMenuInitiallyFolded: config.filterMenuInitiallyFolded,
   isLoading: false,
   currentPage: 1,
   pageSize: 12,
