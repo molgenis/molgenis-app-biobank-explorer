@@ -57,6 +57,10 @@ export default {
     isPodium: {
       immediate: true,
       handler: 'GetPodiumCollections'
+    },
+    activeFilters: {
+      immediate: true,
+      handler: 'GetFilterReduction'
     }
   },
   methods: {
@@ -66,7 +70,8 @@ export default {
       'QueryBiobanks',
       'GetPodiumCollections',
       'GetBiobankIdsForQuality',
-      'GetCollectionIdsForQuality'
+      'GetCollectionIdsForQuality',
+      'GetFilterReduction'
     ])
   },
   mounted () {

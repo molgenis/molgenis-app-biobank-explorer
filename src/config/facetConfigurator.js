@@ -20,7 +20,8 @@ export const createFilters = (state) => {
         maxVisibleOptions: facet.maxVisibleOptions || 25,
         showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
         humanReadableString: facet.humanReadableString,
-        hideFacet: facet.hideFacet
+        hideFacet: facet.hideFacet,
+        dynamic: facet.dynamic
       })
   }
 

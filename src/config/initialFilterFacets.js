@@ -36,14 +36,16 @@ const filterDefinitions = [
     label: 'Materials',
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
-    humanReadableString: 'Material type(s):'
+    humanReadableString: 'Material type(s):',
+    dynamic: true
   },
   {
     name: 'country',
     label: 'Countries',
     tableName: 'eu_bbmri_eric_countries',
     columnName: 'country',
-    humanReadableString: 'Countries:'
+    humanReadableString: 'Countries:',
+    dynamic: true
   },
   {
     name: 'biobank_quality',

@@ -92,5 +92,71 @@ export const collectionActions = {
         commit('SetPodiumCollections', response)
       })
     }
+  },
+  GetFilterReduction ({ commit, getters }) {
+    // prepare async function and build correct query URLs for
+    // the api/v2 - implementation of sql: DISTINCT command.
+    // E.G. for country: ?aggs=x==country;distinct==country
+    async function fetchData (url, filterName) {
+      // asnyc function so we can load data and commit it right away
+      api.get(url).then(response => {
+        const load = { filter: filterName, options: response.aggs.xLabels }
+        commit('SetFilterReduction', load)
+      }, error => {
+        commit('SetError', error)
+      })
+    }
+    // prepare baseUrl and set list for dynamic filters that will be updated
+    const baseUrl = '/api/v2/eu_bbmri_eric_collections'
+    const dynamicFilters = []
+    const dynFilt = getters.getFilters
+    console.log('getfilters:')
+    console.log(dynFilt)
+
+    for (const filter in dynFilt) {
+      if (dynFilt[filter].dynamic) {
+        dynamicFilters.push(dynFilt[filter].name)
+      }
+    }
+    // if there is no activeFilter (anymore):
+    // reset the dynamic filters:
+    commit('ResetDynamicFilters', dynamicFilters)
+    if (Object.keys(getters.activeFilters).length === 0) {
+      return 0
+    }
+
+    // iterate over previously defined dynamic filters
+    // and create one query URL for each dynamic filter
+    for (const filter in dynamicFilters) {
+      const filterName = dynamicFilters[filter]
+      const unique = `?aggs=x==${filterName};distinct==${filterName}`
+      // const unique = `?distinct==${filterName}`
+
+      var additionalFilters = '&q='
+
+      for (const activeFilter in getters.activeFilters) {
+      // skip the filter that was just changed
+        if (activeFilter !== filterName) {
+          var tempList = ''
+          // iterate over active filters and add its ID to tempList (E.G: DNA,SERUM,)
+          for (const option in getters.activeFilters[activeFilter]) {
+            tempList = tempList + `${getters.activeFilters[activeFilter][option]},`
+          }
+          // remove the last comma from URL:
+          tempList = tempList.slice(0, -1)
+          additionalFilters = additionalFilters + `${activeFilter}=in=(${tempList});`
+        }
+      }
+
+      // remove the last semicolon from URL:
+      additionalFilters = additionalFilters.slice(0, -1)
+      // construct query URL and fetch data for each dynamic filter:
+      var url = baseUrl + unique + additionalFilters
+      if (url.at(url.length - 1) === 'q') {
+        url = url.slice(0, -2)
+      }
+
+      fetchData(url, filterName)
+    }
   }
 }

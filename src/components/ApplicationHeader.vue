@@ -69,6 +69,7 @@
                   (satisfyAllValue) =>
                     filterSatisfyAllChange(filter.name, satisfyAllValue)
                 "
+                :optionsFilter="dynamicFilters[filter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -114,7 +115,8 @@ export default {
       'foundCollectionIds',
       'activeFilters',
       'selectedCollections',
-      'uiText'
+      'uiText',
+      'dynamicFilters'
     ]),
     ...mapState([
       'menuHeight',

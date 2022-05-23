@@ -1,0 +1,17 @@
+proxy for localhost: http://localhost:80
+
+How the dynamic filters work:
+-> activeFilters are watched in biobankExplorerContainer
+-> collectionAction: "getFilterReduction" is called if activeFilters change
+-> getFilterReduction constructs the query URL (E.G.: /api/v2/rd_connect_collections?aggs=x==country;distinct==country&q=ressource_types=in=(BIOBANK);materials=in=(DNA,PLASMA) )
+-> also it has an async function "fetchData" in it that calls api.get() with the constructed URL
+-> with the response the mutation "setFilterReduction" is commited, providing a load dictionary with the current filtername and the filter options
+-> the mutation "setFilterReduction" unpacks the load dictionary and sets pushes the filter items into the correct list in the states object ( state[filterName] )
+-> state: empty dictionary "dynamicFilters"
+-> initialFilterFacets: set "dynamicFilter": True for each filter that is supposed to be adaptive
+-> applicationHeader: use :optionsFilter="dynamicFilters[filter.name]"
+
+-> IMPORTANT:   the sql query "aggs" is used to directly query the specific values.
+                this requires "aggregatable" data fields to work.
+                the file eu_bbmri_eric_responsive.xlsx holds a dataset with "country" and "materials"
+                set to "aggregatable" for testing purposes.
