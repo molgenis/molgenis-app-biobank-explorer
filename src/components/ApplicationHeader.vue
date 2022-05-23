@@ -17,17 +17,19 @@
           <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
         </b-button>
-        <div class="w-50 search-container mr-2 mb-2">
-          <search-filter />
-        </div>
         <b-button
           v-if="numberOfActiveFilters > 0"
           class="mr-2"
-          variant="outline-secondary"
+          variant="outline-dark"
           @click="ClearActiveFilters">Clear all filters</b-button>
+        <div class="w-50 search-container mr-2 mb-2">
+          <search-filter />
+        </div>
         <collection-select-all
           class="d-inline mr-2"
-          v-if="!loading && foundCollectionIds.length"
+          v-if="
+            !loading && foundCollectionIds.length && numberOfActiveFilters > 0
+          "
           bookmark/>
       </div>
       <div class="col text-right">
@@ -42,11 +44,11 @@
             {{ selectedCollections.length }}</span></b-button>
       </div>
     </div>
-    <div class="row my-2">
+    <div class="row my-2" id="filters">
       <vue-slide-up-down :active="!filtersCollapsed" :duration="300">
         <div class="col-12">
           <b-dropdown
-            :variant="filterVariant(filter.label || filter.name)"
+            :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
             boundary="window"
@@ -74,6 +76,45 @@
               </component>
             </div>
           </b-dropdown>
+
+          <span v-show="showAllFilters">
+            <b-dropdown
+              :variant="filterVariant(additionalFilter.name)"
+              v-for="additionalFilter in moreFacets"
+              :key="additionalFilter.name"
+              boundary="window"
+              no-flip
+              class="mr-2 mb-1 mt-1 filter-dropdown">
+              <template #button-content>
+                <span>{{ additionalFilter.label || additionalFilter.name }}</span>
+                <span
+                  class="badge badge-light border ml-2"
+                  v-if="filterSelectionCount(additionalFilter.name) > 0">
+                  {{ filterSelectionCount(additionalFilter.name) }}</span>
+              </template>
+              <div class="bg-white p-2 dropdown-contents">
+                <component
+                  :is="additionalFilter.component"
+                  :value="activeFilters[additionalFilter.name]"
+                  v-bind="additionalFilter"
+                  @input="(value) => filterChange(additionalFilter.name, value)"
+                  @satisfy-all="
+                    (satisfyAllValue) =>
+                      filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
+                  "
+                  :returnTypeAsObject="true"
+                  :bulkOperation="true">
+                </component>
+              </div>
+            </b-dropdown>
+          </span>
+
+          <button
+            @click="showAllFilters = !showAllFilters"
+            class="btn btn-link text-info">
+            <span v-if="showAllFilters">Less filters</span>
+            <span v-else>More filters</span>
+          </button>
         </div>
       </vue-slide-up-down>
     </div>
@@ -128,7 +169,13 @@ export default {
         : false
     },
     facetsToRender () {
-      return this.filterFacets.filter(filter => !filter.hideFacet)
+      return this.filterFacets.filter(
+        filter => !filter.builtIn).filter(filter => !filter.hideFacet)
+    },
+    moreFacets () {
+      return this.filterFacets.filter(
+        filter => filter.hideFacet
+      )
     },
     iconStyle () {
       return {
@@ -143,6 +190,7 @@ export default {
   },
   data () {
     return {
+      showAllFilters: false,
       filtersCollapsed: true,
       showCart: false
     }
@@ -160,11 +208,14 @@ export default {
       this.UpdateFilterSatisfyAll({ name, value })
     },
     filterVariant (filterName) {
+      const prefix = this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
+      let facetColor = 'secondary'
+
       if (filterName.toLowerCase().includes('covid')) {
-        return 'outline-warning'
+        facetColor = 'warning'
       }
 
-      return 'outline-secondary'
+      return `${prefix}${facetColor}`
     },
     filterSelectionCount (filterName) {
       const filtersActive = this.activeFilters[filterName]
@@ -181,7 +232,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .header-bar {
   background-color: white;
   z-index: 1000;
