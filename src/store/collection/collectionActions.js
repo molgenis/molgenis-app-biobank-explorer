@@ -110,8 +110,6 @@ export const collectionActions = {
     const baseUrl = '/api/v2/eu_bbmri_eric_collections'
     const dynamicFilters = []
     const dynFilt = getters.getFilters
-    console.log('getfilters:')
-    console.log(dynFilt)
 
     for (const filter in dynFilt) {
       if (dynFilt[filter].dynamic) {
