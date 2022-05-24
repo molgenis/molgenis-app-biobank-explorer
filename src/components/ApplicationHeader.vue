@@ -209,13 +209,8 @@ export default {
       this.UpdateFilterSatisfyAll({ name, value })
     },
     filterVariant (filterName) {
+      const facetColor = 'secondary'
       const prefix = this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
-      let facetColor = 'secondary'
-
-      if (filterName.toLowerCase().includes('covid')) {
-        facetColor = 'warning'
-      }
-
       return `${prefix}${facetColor}`
     },
     filterSelectionCount (filterName) {
