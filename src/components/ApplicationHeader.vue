@@ -12,7 +12,8 @@
             icon="caret-right"
             :style="iconStyle"
             class="collapse-button mr-2"/>
-          <span>{{ uiText["filters"] }}</span>
+          <span v-if="!filtersCollapsed">{{ uiText["hide_filters"] }}</span>
+          <span v-else>{{ uiText["show_filters"] }}</span>
 
           <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
             {{ numberOfActiveFilters }}</span>
