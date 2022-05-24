@@ -57,7 +57,7 @@ describe('Generator view-components', () => {
         linkValue: 'http://test.com/123'
       }
 
-      const wrapper = mount(string, { propsData: { attribute } })
+      const wrapper = mount(string, { propsData: { attribute }, directives: { 'b-tooltip': () => {} } })
       // remove whitespace and newlines for easy check
       const flattendHtml = wrapper.html().replace(/\s/gmi, '')
 
@@ -81,7 +81,7 @@ describe('Generator view-components', () => {
         linkValue: 'http://test.com/123'
       }
 
-      const wrapper = mount(string, { propsData: { attribute }, store, localVue })
+      const wrapper = mount(string, { propsData: { attribute }, store, localVue, directives: { 'b-tooltip': () => {} } })
       await wrapper.find('#copy-icon').trigger('click')
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(attribute.linkValue)
       expect(SetNotification).toHaveBeenCalledWith(expect.anything(), `Copied ${attribute.linkValue}`)
