@@ -23,7 +23,7 @@
           class="mr-2"
           variant="outline-dark"
           @click="ClearActiveFilters">Clear all filters</b-button>
-        <div class="w-50 search-container mr-2 mb-2">
+        <div class="search-container mr-2 mb-2">
           <search-filter />
         </div>
         <collection-select-all
@@ -246,6 +246,7 @@ export default {
   display: inline-flex;
   position: relative;
   top: 2px; /* aligning it with the dropwdowns */
+  width: 44%;
 }
 </style>
 
