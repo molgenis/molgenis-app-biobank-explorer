@@ -27,8 +27,13 @@ describe('ApplicationHeader', () => {
     })
   })
 
-  it('should initialize component', () => {
+  it('should correctly divide the filterFacets in initial filters and more filters', () => {
     const wrapper = shallowMount(ApplicationHeader, { store, localVue, stubs: ['b-dropdown', 'b-button', 'font-awesome-icon', 'vue-slide-up-down'] })
-    expect(wrapper.html()).toContain('header-bar')
+    const facetCount = store.state.filterFacets.length
+    const hiddenFacetCount = store.state.filterFacets.filter(facet => facet.hideFacet).length
+    const builtinFacetCount = store.state.filterFacets.filter(facet => facet.builtIn).length
+
+    expect(wrapper.vm.facetsToRender.length).toBe(facetCount - hiddenFacetCount - builtinFacetCount)
+    expect(wrapper.vm.moreFacets.length).toBe(hiddenFacetCount)
   })
 })
