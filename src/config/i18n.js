@@ -2,7 +2,8 @@ const i18n = {
   en: {
     select_all_collections: 'Select all collections',
     deselect_all_collections: 'Deselect all collections',
-    filters: 'Filters',
+    show_filters: 'Show filters',
+    hide_filters: 'Hide filters',
     request: 'Request',
     close: 'Close',
     back: 'Back',
