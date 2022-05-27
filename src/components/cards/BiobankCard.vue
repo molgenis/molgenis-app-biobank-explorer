@@ -39,6 +39,12 @@
           <div class="p-2 pt-1 biobank-section">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
+                <router-link
+                  :to="'/biobank/' + biobank.id"
+                  :title="`${biobank.name} details`"
+                  class="text-info ml-2 pl-1">
+                  <span>More details</span>
+                </router-link>
             </small>
           </div>
         </div>
@@ -54,7 +60,7 @@
               <router-link
                 :to="'/biobank/' + biobank.id"
                 title="Biobank details"
-                class=" text-dark">
+                class="text-dark">
                 <span
                   class="fa fa-server mr-2 text-primary"
                   aria-hidden="true"></span>
@@ -94,7 +100,7 @@
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
                     title="Collection details"
-                    class=" text-dark">
+                    class="text-dark">
                     <span
                       class="
                         fa fa-server
@@ -116,10 +122,17 @@
                       bookmark></collection-selector>
                   </div>
                 </div>
+
                 <small>
                   <view-generator
                     class="p-2 pt-2"
                     :viewmodel="collectionViewmodel(collectionDetail)"/>
+                <router-link
+                  :to="'/collection/' + collectionDetail.id"
+                  :title="`${collectionDetail.name} details`"
+                  class="text-info ml-2 pl-1">
+                  <span>More details</span>
+                </router-link>
                 </small>
                 <hr />
               </div>
@@ -218,7 +231,6 @@ export default {
 </script>
 
 <style scoped>
-
 .fa-server {
   transform: rotateY(180deg);
 }
