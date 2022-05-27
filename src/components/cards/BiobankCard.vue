@@ -42,7 +42,7 @@
                 <router-link
                   :to="'/biobank/' + biobank.id"
                   :title="`${biobank.name} details`"
-                  class="text-info ml-2 pl-1">
+                  class="text-info ml-1">
                   <span>More details</span>
                 </router-link>
             </small>
