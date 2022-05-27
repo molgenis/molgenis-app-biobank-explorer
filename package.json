@@ -1,7 +1,7 @@
 {
   "name": "molgenis-app-biobank-explorer",
   "license": "LGPL-3.0",
-  "version": "7.9.1",
+  "version": "7.10.2",
   "description": "Vue application for the biobank explorer; A card detail view on BBMRI-ERIC biobank / collection data",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -62,7 +62,7 @@
     "flush-promises": "^1.0.2",
     "geckodriver": "^2.0.1",
     "generate-json-webpack-plugin": "^1.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^8.0.2",
     "selenium-server": "^3.141.59",
     "vue-template-compiler": "^2.6.11",

@@ -33,21 +33,6 @@ describe('Generator view-components', () => {
 
       expect(flattendHtml.includes('>Description:<')).toBeTruthy()
       expect(flattendHtml.includes('>test')).toBeTruthy()
-      expect(wrapper.vm.badgeColor).toBe('info')
-    })
-
-    it('can render the value as a badge if the attribute is present', () => {
-      attribute = {
-        label: 'Description:',
-        value: 'test',
-        badgeColor: 'red'
-      }
-
-      const wrapper = mount(string, { propsData: { attribute } })
-
-      expect(wrapper.html().includes('Description:')).toBeTruthy()
-      expect(wrapper.html().includes('<span class="badge mb-2 badge-red"')).toBeTruthy()
-      expect(wrapper.vm.badgeColor).toBe('red')
     })
 
     it('can create a copy icon to copy a link to clipboard if the attribute is present', () => {
@@ -57,7 +42,7 @@ describe('Generator view-components', () => {
         linkValue: 'http://test.com/123'
       }
 
-      const wrapper = mount(string, { propsData: { attribute } })
+      const wrapper = mount(string, { propsData: { attribute }, directives: { 'b-tooltip': () => {} } })
       // remove whitespace and newlines for easy check
       const flattendHtml = wrapper.html().replace(/\s/gmi, '')
 
@@ -81,7 +66,7 @@ describe('Generator view-components', () => {
         linkValue: 'http://test.com/123'
       }
 
-      const wrapper = mount(string, { propsData: { attribute }, store, localVue })
+      const wrapper = mount(string, { propsData: { attribute }, store, localVue, directives: { 'b-tooltip': () => {} } })
       await wrapper.find('#copy-icon').trigger('click')
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(attribute.linkValue)
       expect(SetNotification).toHaveBeenCalledWith(expect.anything(), `Copied ${attribute.linkValue}`)

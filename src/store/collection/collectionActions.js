@@ -128,7 +128,6 @@ export const collectionActions = {
     for (const filter in dynamicFilters) {
       const filterName = dynamicFilters[filter]
       const unique = `?aggs=x==${filterName};distinct==${filterName}`
-      // const unique = `?distinct==${filterName}`
 
       var additionalFilters = '&q='
 

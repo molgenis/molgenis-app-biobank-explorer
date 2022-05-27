@@ -14,7 +14,7 @@
       <span>{{ uiText["select_all_collections"] }}</span>
     </label>
     <label
-      class="remove-from-cart-label btn btn-outline-danger m-0"
+      class="remove-from-cart-label btn btn-danger m-0"
       for="select-deselect-all">
       <span>{{ uiText["deselect_all_collections"] }}</span>
     </label>

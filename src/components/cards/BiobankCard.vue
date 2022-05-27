@@ -19,7 +19,11 @@
             <h5 class="p-1 pb-0 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
-                title="Biobank details">
+                title="Biobank details"
+                class="text-dark">
+                <span
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
               </router-link>
             </h5>
@@ -35,6 +39,12 @@
           <div class="p-2 pt-1 biobank-section">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
+                <router-link
+                  :to="'/biobank/' + biobank.id"
+                  :title="`${biobank.name} details`"
+                  class="text-info ml-1">
+                  <span>More details</span>
+                </router-link>
             </small>
           </div>
         </div>
@@ -44,12 +54,16 @@
           <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
         </div>
         <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
-        <div v-if="showCollections">
+        <div v-if="!loading && showCollections">
           <header class="border-0 card-header p-1">
             <h5 class="pt-1 pl-1 pr-1 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
-                title="Biobank details">
+                title="Biobank details"
+                class="text-dark">
+                <span
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
               </router-link>
             </h5>
@@ -79,13 +93,23 @@
             </div>
             <div
               class="collection-items mx-1"
-              v-for="collectionDetail of biobank.collectionDetails"
+              v-for="(collectionDetail, index) of biobank.collectionDetails"
               :key="collectionDetail.id">
               <div v-if="showCollections" class="mb-2">
                 <div class="pl-2 py-2 d-flex">
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
-                    title="Collection details">
+                    title="Collection details"
+                    class="text-dark">
+                    <span
+                      class="
+                        fa fa-server
+                        collection-icon
+                        fa-lg
+                        mr-2
+                        text-primary
+                      "
+                      aria-hidden="true"></span>
                     <span class="collection-name">{{
                       collectionDetail.name
                     }}</span>
@@ -98,12 +122,19 @@
                       bookmark></collection-selector>
                   </div>
                 </div>
+
                 <small>
                   <view-generator
                     class="p-2 pt-2"
                     :viewmodel="collectionViewmodel(collectionDetail)"/>
+                <router-link
+                  :to="'/collection/' + collectionDetail.id"
+                  :title="`${collectionDetail.name} details`"
+                  class="text-info ml-2 pl-1">
+                  <span>More details</span>
+                </router-link>
                 </small>
-                <hr />
+                <hr v-if="index != lastCollection" />
               </div>
             </div>
           </div>
@@ -163,6 +194,9 @@ export default {
       'biobankCardShowCollections'
     ]),
     ...mapGetters(['selectedCollections', 'uiText']),
+    lastCollection () {
+      return this.biobank.collectionDetails.length - 1
+    },
     biobankcardViewmodel () {
       // check if biobank is still loading
       if (this.loading) return {}
@@ -199,6 +233,27 @@ export default {
 }
 </script>
 
+<style scoped>
+.fa-server {
+  transform: rotateY(180deg);
+}
+
+.collection-icon {
+  position: relative;
+  top: 0.25em;
+}
+
+.collection-icon:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  height: 75%;
+  background-color: white;
+}
+</style>
+
 <style>
 .loading-screen {
   display: flex;
@@ -212,15 +267,10 @@ export default {
   box-shadow: none;
 }
 
-.biobank-section {
-  max-height: 22rem;
-  height: 22rem;
-  overflow: auto;
-}
-
+.biobank-section,
 .collections-section {
-  height: 22.2rem;
-  max-height: 22.2rem;
+  height: 20.5rem;
+  max-height: 20.5rem;
   overflow: auto;
 }
 

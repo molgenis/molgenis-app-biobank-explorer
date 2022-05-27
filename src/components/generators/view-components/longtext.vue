@@ -4,7 +4,7 @@
     <td>
       {{ textToDisplay }}
        <span v-if="attribute.value.length > maxLength">
-      <button @click="textClosed = !textClosed" class="btn btn-link p-0">
+      <button @click="textClosed = !textClosed" class="btn btn-link p-0 pb-1">
         <span v-if="textClosed">... show more <i class="fa fa-angle-down" aria-hidden="true"></i></span>
         <span v-else>
           show less <i class="fa fa-angle-up" aria-hidden="true"></i></span>

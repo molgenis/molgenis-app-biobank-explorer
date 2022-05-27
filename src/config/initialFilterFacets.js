@@ -4,14 +4,15 @@ const filterDefinitions = [
     label: 'Search',
     humanReadableString: 'Text search is',
     custom: true,
-    hideFacet: true // search should not be generated
+    builtIn: true // search should not be generated
   },
   {
     headerClass: 'bg-warning text-white',
     component: 'CovidNetworkFilter',
     name: 'covid19network',
     label: 'COVID-19',
-    custom: true
+    custom: true,
+    hideFacet: true
   },
   {
     headerClass: 'bg-warning text-white',
@@ -20,7 +21,8 @@ const filterDefinitions = [
     label: 'COVID-19 Services',
     tableName: 'eu_bbmri_eric_COVID_19',
     columnName: 'covid19',
-    humanReadableString: 'Covid-19 service(s):'
+    humanReadableString: 'Covid-19 service(s):',
+    hideFacet: true
   },
   {
     component: 'MultiFilter',
@@ -37,7 +39,8 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
-    dynamic: true
+    dynamic: true,
+    hideFacet: true
   },
   {
     name: 'country',
@@ -52,14 +55,16 @@ const filterDefinitions = [
     label: 'Biobank quality labels',
     tableName: 'eu_bbmri_eric_assess_level_bio',
     columnName: 'biobank_quality',
-    humanReadableString: 'Biobank quality label(s):'
+    humanReadableString: 'Biobank quality label(s):',
+    hideFacet: true
   },
   {
     name: 'collection_quality',
     label: 'Collection quality labels',
     tableName: 'eu_bbmri_eric_assess_level_col',
     columnName: 'collection_quality',
-    humanReadableString: 'Collection quality label(s):'
+    humanReadableString: 'Collection quality label(s):',
+    hideFacet: true
   },
   {
     name: 'type',
@@ -79,14 +84,16 @@ const filterDefinitions = [
     label: 'Network',
     tableName: 'eu_bbmri_eric_networks',
     columnName: 'network',
-    humanReadableString: 'Network(s):'
+    humanReadableString: 'Network(s):',
+    hideFacet: true
   },
   {
     name: 'dataType',
     label: 'Data types',
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'dataType',
-    humanReadableString: 'Data type(s):'
+    humanReadableString: 'Data type(s):',
+    hideFacet: true
   }
 ]
 
