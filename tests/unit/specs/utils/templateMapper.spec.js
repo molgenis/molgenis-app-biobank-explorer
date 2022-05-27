@@ -194,7 +194,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'info',
             label: 'Size:',
             type: 'object',
             value: '777'
@@ -220,7 +219,6 @@ describe('templateMapper', () => {
             value: '0-20 years'
           },
           {
-            badgeColor: 'secondary',
             label: 'Type:',
             type: 'mref',
             value: [
@@ -229,7 +227,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'danger',
             label: 'Sex:',
             type: 'categoricalmref',
             value: [
@@ -238,7 +235,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'primary',
             label: 'Materials:',
             type: 'categoricalmref',
             value: [
@@ -247,7 +243,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'success',
             label: 'Storage:',
             type: 'categoricalmref',
             value: [
@@ -255,7 +250,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'info',
             label: 'Data:',
             type: 'categoricalmref',
             value: [
@@ -263,7 +257,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'secondary',
             label: 'Diagnosis:',
             type: 'mref',
             value: [
@@ -273,7 +266,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            badgeColor: 'danger',
             label: 'Data use conditions:',
             type: 'mref',
             value: [
@@ -333,7 +325,7 @@ describe('templateMapper', () => {
                   value: undefined
                 },
                 {
-                  badgeColor: 'info',
+
                   label: 'Size:',
                   type: 'object',
                   value: '10.000 - 100.000'
@@ -369,7 +361,7 @@ describe('templateMapper', () => {
                   value: []
                 },
                 {
-                  badgeColor: 'secondary',
+
                   label: 'Materials:',
                   type: 'categoricalmref',
                   value: [
@@ -382,7 +374,7 @@ describe('templateMapper', () => {
                   value: []
                 },
                 {
-                  badgeColor: 'danger',
+
                   label: 'Data:',
                   type: 'categoricalmref',
                   value: [
@@ -465,7 +457,7 @@ describe('templateMapper', () => {
                   value: undefined
                 },
                 {
-                  badgeColor: 'info',
+
                   label: 'Size:',
                   type: 'object',
                   value: '10.000 - 100.000'
@@ -501,7 +493,7 @@ describe('templateMapper', () => {
                   value: []
                 },
                 {
-                  badgeColor: 'secondary',
+
                   label: 'Materials:',
                   type: 'categoricalmref',
                   value: [
@@ -514,7 +506,7 @@ describe('templateMapper', () => {
                   value: []
                 },
                 {
-                  badgeColor: 'danger',
+
                   label: 'Data:',
                   type: 'categoricalmref',
                   value: [
@@ -570,7 +562,7 @@ describe('templateMapper', () => {
                         value: undefined
                       },
                       {
-                        badgeColor: 'info',
+
                         label: 'Size:',
                         type: 'object',
                         value: '10.000 - 100.000'
@@ -606,7 +598,7 @@ describe('templateMapper', () => {
                         value: []
                       },
                       {
-                        badgeColor: 'secondary',
+
                         label: 'Materials:',
                         type: 'categoricalmref',
                         value: [

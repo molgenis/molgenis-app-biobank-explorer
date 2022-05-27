@@ -9,7 +9,7 @@ describe('Generator view-components', () => {
       attribute = { }
     })
 
-    it('can create a tr with badges for an mref attribute', () => {
+    it('can create a comma concatenated strong for an mref attribute', () => {
       attribute = {
         label: 'Count: ',
         value: [1, 2, 3]
@@ -21,12 +21,10 @@ describe('Generator view-components', () => {
       const flattendHtml = wrapper.html().replace(/\s/gmi, '')
 
       expect(flattendHtml.includes('>Count:<')).toBeTruthy()
-      expect(flattendHtml.includes('>1<')).toBeTruthy()
-      expect(flattendHtml.includes('>2<')).toBeTruthy()
-      expect(flattendHtml.includes('>3<')).toBeTruthy()
+      expect(flattendHtml.includes('1,2,3')).toBeTruthy()
     })
 
-    it('can create a tr with badges for a categorical mref attribute object with id/label/name and a uri', () => {
+    it('can create a tr for a categorical mref attribute object with id/label/name and a uri', () => {
       attribute = {
         label: 'Count: ',
         value: [

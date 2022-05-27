@@ -110,7 +110,6 @@ const expected = {
         value: undefined
       },
       {
-        badgeColor: 'info',
         label: 'Size:',
         type: 'object',
         value: '777'
@@ -215,7 +214,6 @@ const expected = {
               value: undefined
             },
             {
-              badgeColor: 'info',
               label: 'Size:',
               type: 'object',
               value: '10.000 - 100.000'
@@ -251,7 +249,6 @@ const expected = {
               value: []
             },
             {
-              badgeColor: 'secondary',
               label: 'Materials:',
               type: 'categoricalmref',
               value: [
@@ -264,7 +261,6 @@ const expected = {
               value: []
             },
             {
-              badgeColor: 'danger',
               label: 'Data:',
               type: 'categoricalmref',
               value: [
@@ -327,7 +323,6 @@ const expected = {
               value: undefined
             },
             {
-              badgeColor: 'info',
               label: 'Size:',
               type: 'object',
               value: '10.000 - 100.000'
@@ -363,7 +358,6 @@ const expected = {
               value: []
             },
             {
-              badgeColor: 'secondary',
               label: 'Materials:',
               type: 'categoricalmref',
               value: [
@@ -376,7 +370,6 @@ const expected = {
               value: []
             },
             {
-              badgeColor: 'danger',
               label: 'Data:',
               type: 'categoricalmref',
               value: [

@@ -5,25 +5,17 @@
     </th>
     <td>
       <template v-if="dataContainsUri">
-        <a
+        <div
           v-for="(item, index) in attribute.value"
-          :href="item.uri"
-          target="_blank"
-          class="badge text-break mr-2 mb-2 p-2"
-          :class="'badge-' + badgeColor"
           :key="`${index}-${displayName(item)}`">
-          {{ displayName(item) }}
-          <span class="fa fa-external-link" aria-hidden="true"></span>
-        </a>
+          <a :href="item.uri" target="_blank" class="text-break mr-2 mb-2">
+            {{ displayName(item) }}
+          </a>
+        </div>
       </template>
       <template v-else>
-        <span
-          @click.stop
-          v-for="(value, index) in attribute.value"
-          class="badge text-break mr-2 mb-2"
-          :key="index"
-          :class="'badge-' + badgeColor">
-          {{ value }}
+        <span class="text-break mr-2 mb-2">
+          {{ attribute.value.join(", ") }}
         </span>
       </template>
     </td>
@@ -47,9 +39,6 @@ export default {
       } else {
         return ''
       }
-    },
-    badgeColor () {
-      return this.attribute.badgeColor || 'info'
     }
   },
   methods: {
@@ -61,18 +50,6 @@ export default {
 </script>
 
 <style scoped>
-.badge {
-  font-size: 0.75rem;
-  white-space: normal;
-  text-align: left;
-  padding: 0.5rem;
-  border-radius: 0;
-}
-
-.badge-light {
-  border: 1px solid #000;
-}
-
 .fa-external-link {
   top: 1px;
   position: relative;
