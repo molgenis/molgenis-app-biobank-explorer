@@ -19,7 +19,11 @@
             <h5 class="p-1 pb-0 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
-                title="Biobank details">
+                title="Biobank details"
+                class="text-dark">
+                <span
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
               </router-link>
             </h5>
@@ -49,7 +53,11 @@
             <h5 class="pt-1 pl-1 pr-1 mt-1">
               <router-link
                 :to="'/biobank/' + biobank.id"
-                title="Biobank details">
+                title="Biobank details"
+                class=" text-dark">
+                <span
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
               </router-link>
             </h5>
@@ -85,7 +93,17 @@
                 <div class="pl-2 py-2 d-flex">
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
-                    title="Collection details">
+                    title="Collection details"
+                    class=" text-dark">
+                    <span
+                      class="
+                        fa fa-server
+                        collection-icon
+                        fa-lg
+                        mr-2
+                        text-primary
+                      "
+                      aria-hidden="true"></span>
                     <span class="collection-name">{{
                       collectionDetail.name
                     }}</span>
@@ -198,6 +216,28 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.fa-server {
+  transform: rotateY(180deg);
+}
+
+.collection-icon {
+  position: relative;
+  top: 0.25em;
+}
+
+.collection-icon:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  height: 75%;
+  background-color: white;
+}
+</style>
 
 <style>
 .loading-screen {
