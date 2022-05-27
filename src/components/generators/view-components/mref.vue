@@ -14,9 +14,9 @@
         </div>
       </template>
       <template v-else>
-        <span class="text-break mr-2 mb-2">
-          {{ attribute.value.join(", ") }}
-        </span>
+        <p class="text-break mr-2 mb-2" v-for="value of attribute.value" :key="value">
+          {{ value }}
+        </p>
       </template>
     </td>
   </tr>

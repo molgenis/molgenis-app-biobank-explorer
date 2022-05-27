@@ -93,7 +93,7 @@
             </div>
             <div
               class="collection-items mx-1"
-              v-for="collectionDetail of biobank.collectionDetails"
+              v-for="(collectionDetail, index) of biobank.collectionDetails"
               :key="collectionDetail.id">
               <div v-if="showCollections" class="mb-2">
                 <div class="pl-2 py-2 d-flex">
@@ -134,7 +134,7 @@
                   <span>More details</span>
                 </router-link>
                 </small>
-                <hr />
+                <hr v-if="index != lastCollection" />
               </div>
             </div>
           </div>
@@ -194,6 +194,9 @@ export default {
       'biobankCardShowCollections'
     ]),
     ...mapGetters(['selectedCollections', 'uiText']),
+    lastCollection () {
+      return this.biobank.collectionDetails.length - 1
+    },
     biobankcardViewmodel () {
       // check if biobank is still loading
       if (this.loading) return {}
