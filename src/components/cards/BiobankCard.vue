@@ -212,15 +212,10 @@ export default {
   box-shadow: none;
 }
 
-.biobank-section {
-  max-height: 22rem;
-  height: 22rem;
-  overflow: auto;
-}
-
+.biobank-section,
 .collections-section {
-  height: 22.2rem;
-  max-height: 22.2rem;
+  height: 20.5rem;
+  max-height: 20.5rem;
   overflow: auto;
 }
 
