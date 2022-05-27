@@ -9,7 +9,7 @@ describe('Generator view-components', () => {
       attribute = { }
     })
 
-    it('can create a comma concatenated strong for an mref attribute', () => {
+    it('can create a paragraph list for an mref attribute', () => {
       attribute = {
         label: 'Count: ',
         value: [1, 2, 3]
