@@ -1,11 +1,14 @@
-import Vue from 'vue'
+
 import { fixCollectionTree } from '../helpers'
 
 export const biobankMutations = {
   SetBiobanks (state, biobanks) {
+    const biobankLookup = {}
+
     biobanks.forEach(biobank => {
-      Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
+      biobankLookup[biobank.id] = fixCollectionTree(biobank)
     })
+    state.biobanks = { ...state.biobanks, ...biobankLookup }
   },
   SetBiobankIds (state, biobankIds) {
     state.biobankIds = biobankIds
