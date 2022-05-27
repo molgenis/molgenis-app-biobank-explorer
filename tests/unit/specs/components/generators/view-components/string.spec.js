@@ -33,21 +33,6 @@ describe('Generator view-components', () => {
 
       expect(flattendHtml.includes('>Description:<')).toBeTruthy()
       expect(flattendHtml.includes('>test')).toBeTruthy()
-      expect(wrapper.vm.badgeColor).toBe('info')
-    })
-
-    it('can render the value as a badge if the attribute is present', () => {
-      attribute = {
-        label: 'Description:',
-        value: 'test',
-        badgeColor: 'red'
-      }
-
-      const wrapper = mount(string, { propsData: { attribute } })
-
-      expect(wrapper.html().includes('Description:')).toBeTruthy()
-      expect(wrapper.html().includes('<span class="badge mb-2 badge-red"')).toBeTruthy()
-      expect(wrapper.vm.badgeColor).toBe('red')
     })
 
     it('can create a copy icon to copy a link to clipboard if the attribute is present', () => {

@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import state from '../store/state'
-import { generateBadgeColor } from '../utils/generatorUtils'
 
 export const getSize = obj => {
   return obj.size
@@ -76,8 +75,6 @@ export const mapRange = (min, max, unit) => {
  * @returns viewmodel
  */
 export const getViewmodel = (object, columns) => {
-  // for generating badgecolors for (categorical)mrefs
-  let previousBadgeColor = -1
   const attributes = []
 
   for (const columnInfo of columns) {
@@ -112,13 +109,6 @@ export const getViewmodel = (object, columns) => {
 
     const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
 
-    // Check if it's a form of mref, or it has been explicity added to config, omit the ones without value
-    if ((attribute.type.includes('mref') || (columnInfo.display && columnInfo.display === 'badge')) && attribute.value.length) {
-      const generatedBadgeColor = generateBadgeColor(previousBadgeColor)
-      previousBadgeColor = generatedBadgeColor.prevBadgeColor
-      /* Badgecolor can be overridden in config */
-      attribute.badgeColor = columnInfo.badgeColor ? columnInfo.badgeColor : generatedBadgeColor.badgeColor
-    }
     if (columnInfo.showCopyIcon) {
       attribute.linkValue = columnInfo.copyValuePrefix ? `${columnInfo.copyValuePrefix}${attributeValue}` : attributeValue
     }
