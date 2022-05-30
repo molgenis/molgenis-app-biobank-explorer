@@ -234,10 +234,6 @@ export default {
 </script>
 
 <style scoped>
-.fa-server {
-  transform: rotateY(180deg);
-}
-
 .collection-icon {
   position: relative;
   top: 0.25em;
