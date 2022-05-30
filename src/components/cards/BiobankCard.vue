@@ -39,12 +39,12 @@
           <div class="p-2 pt-1 biobank-section">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
-                <router-link
-                  :to="'/biobank/' + biobank.id"
-                  :title="`${biobank.name} details`"
-                  class="text-info ml-1">
-                  <span>More details</span>
-                </router-link>
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                :title="`${biobank.name} details`"
+                class="text-info ml-1">
+                <span>More details</span>
+              </router-link>
             </small>
           </div>
         </div>
@@ -127,12 +127,12 @@
                   <view-generator
                     class="p-2 pt-2"
                     :viewmodel="collectionViewmodel(collectionDetail)"/>
-                <router-link
-                  :to="'/collection/' + collectionDetail.id"
-                  :title="`${collectionDetail.name} details`"
-                  class="text-info ml-2 pl-1">
-                  <span>More details</span>
-                </router-link>
+                  <router-link
+                    :to="'/collection/' + collectionDetail.id"
+                    :title="`${collectionDetail.name} details`"
+                    class="text-info ml-2 pl-1">
+                    <span>More details</span>
+                  </router-link>
                 </small>
                 <hr v-if="index != lastCollection" />
               </div>
@@ -237,16 +237,7 @@ export default {
 .collection-icon {
   position: relative;
   top: 0.25em;
-}
-
-.collection-icon:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  right: 0;
-  height: 75%;
-  background-color: white;
+  clip-path: inset(-15% 0% 75% 0%);
 }
 </style>
 
