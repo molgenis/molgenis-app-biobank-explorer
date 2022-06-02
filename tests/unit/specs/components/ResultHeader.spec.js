@@ -26,6 +26,6 @@ describe('ResultHeader', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(ResultHeader, { store, localVue })
-    expect(wrapper.html()).toContain('<div class="search-box-container">')
+    expect(wrapper.html()).toContain('<table')
   })
 })
