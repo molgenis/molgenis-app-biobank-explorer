@@ -45,7 +45,7 @@
             {{ selectedCollections.length }}</span></b-button>
       </div>
     </div>
-    <div class="row my-2" id="filters">
+    <div class="row mb-2" id="filters">
       <vue-slide-up-down :active="!filtersCollapsed" :duration="300">
         <div class="col-12">
           <b-dropdown
@@ -54,7 +54,7 @@
             :key="filter.name"
             boundary="window"
             no-flip
-            class="mr-2 mb-1 mt-1 filter-dropdown">
+            class="mr-2 mb-1 filter-dropdown">
             <template #button-content>
               <span>{{ filter.label || filter.name }}</span>
               <span
@@ -85,7 +85,7 @@
               :key="additionalFilter.name"
               boundary="window"
               no-flip
-              class="mr-2 mb-1 mt-1 filter-dropdown">
+              class="mr-2 mb-1 filter-dropdown">
               <template #button-content>
                 <span>{{ additionalFilter.label || additionalFilter.name }}</span>
                 <span
