@@ -3,7 +3,7 @@
     <table class="text-right">
       <thead>
         <tr>
-          <th colspan="2">Results for criteria</th>
+          <th colspan="2">Search results</th>
         </tr>
       </thead>
       <tbody>
