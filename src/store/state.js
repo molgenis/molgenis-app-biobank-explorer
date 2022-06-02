@@ -1,6 +1,4 @@
-import { bbmriConfig } from '../config/configManager'
-
-const config = bbmriConfig()
+import { configurationState } from './configuration/configurationState'
 
 export const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
@@ -13,10 +11,6 @@ export default {
   cartValid: true,
   negotiatorCollectionEntityId: '',
   negotiatorBiobankEntityId: '',
-  i18n: config.i18n,
-  removeFreemarkerMargin: config.removeFreemarkerMargin,
-  biobankCardShowCollections: config.biobankCardShowCollections,
-  filterMenuInitiallyFolded: config.filterMenuInitiallyFolded,
   isLoading: false,
   currentPage: 1,
   pageSize: 12,
@@ -26,10 +20,6 @@ export default {
   isPodium: false,
   podiumCollectionIds: [],
   error: null,
-  biobankColumns: config.biobankColumns,
-  collectionColumns: config.collectionColumns,
-  filterFacets: config.filterFacets,
-  menuHeight: config.menuHeight, // standard menu height in pixels for use in sticky-position
   biobanks: {}, // Map ID to biobank
   biobankIds: undefined, // IDs of biobanks matching the biobank filters
   collectionInfo: undefined, // IDs of collections matching the collection filters
@@ -57,5 +47,6 @@ export default {
   searchHistory: [], // hold the current search history
   filterOptionDictionary: {}, // caching filter options for performance
   diagnosisAvailableFetched: false, // whenever a user returns from a bookmark with diagnosis available in the active filter, there is no label. fetch it once for performance.
-  notification: undefined
+  notification: undefined,
+  ...configurationState
 }
