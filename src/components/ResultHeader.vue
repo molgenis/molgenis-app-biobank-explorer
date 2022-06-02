@@ -1,18 +1,29 @@
 <template>
-  <div class="search-box-container">
-    <div class="biobank-number-report-container">
-      <small class="biobank-number-report">
-        <em>
-          {{ foundBiobanks }} organisations with
-          {{ parentCollections.length }} collection(s)
-          <template v-if="subcollections.length > 0">
-            and {{ subcollections.length }} subcollection(s)
-          </template>
-          matching the search criteria
-        </em>
-      </small>
-    </div>
-  </div>
+  <small class="d-inline">
+    <table class="text-right">
+      <thead>
+        <tr>
+          <th colspan="2">Results for criteria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="pr-1">Organisations:</td>
+          <td>{{ foundBiobanks }}</td>
+        </tr>
+        <tr>
+          <td class="pr-1">Collection(s):</td>
+          <td>{{ parentCollections.length }}</td>
+        </tr>
+        <tr v-if="subcollections.length > 0">
+          <td class="pr-1">Subcollection(s):</td>
+          <td>{{ subcollections.length }}</td>
+        </tr>
+      </tbody>
+
+      <tbody></tbody>
+    </table>
+  </small>
 </template>
 
 <script>
@@ -24,10 +35,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.biobank-number-report-container {
-  border-bottom: solid 1px black;
-  width: 100%;
-}
-</style>

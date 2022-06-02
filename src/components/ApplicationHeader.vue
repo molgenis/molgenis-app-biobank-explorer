@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-3 header-bar card sticky-top border-0 shadow-sm"
+    class="px-3 pt-1 header-bar card sticky-top border-0 shadow-sm"
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-8" aria-label="action-bar">
@@ -119,8 +119,6 @@
         </div>
       </vue-slide-up-down>
     </div>
-
-    <result-header v-if="!loading" />
     <negotiator-selection v-model="showCart" />
   </div>
 </template>
@@ -128,7 +126,6 @@
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import ResultHeader from './ResultHeader.vue'
 
 /** Components used for filters */
 import SearchFilter from './filters/SearchFilter.vue'
@@ -142,7 +139,6 @@ import NegotiatorSelection from './popovers/NegotiatorSelection.vue'
 export default {
   components: {
     CollectionSelectAll,
-    ResultHeader,
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
