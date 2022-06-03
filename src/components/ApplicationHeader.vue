@@ -167,11 +167,11 @@ export default {
     },
     facetsToRender () {
       return this.filterFacets.filter(
-        filter => !filter.builtIn).filter(filter => !filter.hideFacet)
+        filter => !filter.builtIn).filter(filter => filter.showFacet)
     },
     moreFacets () {
       return this.filterFacets.filter(
-        filter => filter.hideFacet
+        filter => !filter.showFacet
       )
     },
     iconStyle () {

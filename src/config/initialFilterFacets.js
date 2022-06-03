@@ -1,10 +1,36 @@
 const filterDefinitions = [
   {
-    name: 'search',
-    label: 'Search',
-    humanReadableString: 'Text search is',
-    custom: true,
-    builtIn: true // search should not be generated
+    component: 'MultiFilter',
+    name: 'diagnosis_available',
+    label: 'Diagnosis available',
+    maxVisibleOptions: 100,
+    tableName: 'eu_bbmri_eric_disease_types',
+    columnName: 'diagnosis_available',
+    humanReadableString: 'Disease type(s):',
+    showFacet: true
+  },
+  {
+    name: 'country',
+    label: 'Countries',
+    tableName: 'eu_bbmri_eric_countries',
+    columnName: 'country',
+    humanReadableString: 'Countries:',
+    showFacet: true
+  },
+  {
+    name: 'type',
+    label: 'Collection types',
+    tableName: 'eu_bbmri_eric_collection_types',
+    columnName: 'type',
+    humanReadableString: 'Collection type(s):',
+    showFacet: true
+  },
+  {
+    name: 'commercial_use',
+    label: 'Collaboration type',
+    columnName: 'collaboration_type',
+    humanReadableString: 'Biobank collaboration type(s):',
+    showFacet: true
   },
   {
     headerClass: 'bg-warning text-white',
@@ -12,7 +38,7 @@ const filterDefinitions = [
     name: 'covid19network',
     label: 'COVID-19',
     custom: true,
-    hideFacet: true
+    showFacet: false
   },
   {
     headerClass: 'bg-warning text-white',
@@ -22,16 +48,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_COVID_19',
     columnName: 'covid19',
     humanReadableString: 'Covid-19 service(s):',
-    hideFacet: true
-  },
-  {
-    component: 'MultiFilter',
-    name: 'diagnosis_available',
-    label: 'Diagnosis available',
-    maxVisibleOptions: 100,
-    tableName: 'eu_bbmri_eric_disease_types',
-    columnName: 'diagnosis_available',
-    humanReadableString: 'Disease type(s):'
+    showFacet: false
   },
   {
     name: 'materials',
@@ -39,14 +56,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
-    hideFacet: true
-  },
-  {
-    name: 'country',
-    label: 'Countries',
-    tableName: 'eu_bbmri_eric_countries',
-    columnName: 'country',
-    humanReadableString: 'Countries:'
+    showFacet: false
   },
   {
     name: 'biobank_quality',
@@ -54,7 +64,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_assess_level_bio',
     columnName: 'biobank_quality',
     humanReadableString: 'Biobank quality label(s):',
-    hideFacet: true
+    showFacet: false
   },
   {
     name: 'collection_quality',
@@ -62,20 +72,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_assess_level_col',
     columnName: 'collection_quality',
     humanReadableString: 'Collection quality label(s):',
-    hideFacet: true
-  },
-  {
-    name: 'type',
-    label: 'Collection types',
-    tableName: 'eu_bbmri_eric_collection_types',
-    columnName: 'type',
-    humanReadableString: 'Collection type(s):'
-  },
-  {
-    name: 'commercial_use',
-    label: 'Collaboration type',
-    columnName: 'collaboration_type',
-    humanReadableString: 'Biobank collaboration type(s):'
+    showFacet: false
   },
   {
     name: 'network',
@@ -83,7 +80,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_networks',
     columnName: 'network',
     humanReadableString: 'Network(s):',
-    hideFacet: true
+    showFacet: false
   },
   {
     name: 'dataType',
@@ -91,7 +88,14 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'dataType',
     humanReadableString: 'Data type(s):',
-    hideFacet: true
+    showFacet: false
+  },
+  {
+    name: 'search',
+    label: 'Search',
+    humanReadableString: 'Text search is',
+    custom: true,
+    builtIn: true // search should not be generated
   }
 ]
 

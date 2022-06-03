@@ -21,7 +21,7 @@ export const createFilters = (state) => {
         showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
         humanReadableString: facet.humanReadableString,
         builtIn: facet.builtIn,
-        hideFacet: facet.hideFacet
+        showFacet: facet.showFacet
       })
   }
 
