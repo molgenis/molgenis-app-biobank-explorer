@@ -30,6 +30,11 @@ export const collectionMutations = {
     state.nonCommercialCollections = nonCommercialUseCollections
     state.collectionRelationData = collectionRelationData
   },
+  setDynamicFilterData (state, { response_, filterOption }) {
+    // console.log('Updating filter data...')
+    console.log(filterOption)
+    console.log(response_.total)
+  },
   SetCollectionInfo (state, response) {
     if (response === undefined) {
       state.collectionInfo = response

@@ -27,6 +27,39 @@ export const collectionActions = {
     const response = await api.get(url).catch(error => commit('SetError', error))
     commit('SetAllCollectionRelationData', response)
   },
+  async updateCollectionRelationData ({ state, getters, commit }) {
+    // &q=ressource_types=in=(BIOBANK);materials=in=(DNA,PLASMA)
+    // biobank_label is a mapping in the collection table to the name column of biobank table
+    if (Object.keys(getters.activeFilters).length > 0) {
+      const dynamicFilters = []
+      const allFilt = getters.getFilters
+      for (const filter in allFilt) {
+        if (allFilt[filter].dynamic) {
+          dynamicFilters.push(allFilt[filter])
+        }
+      }
+      console.log(state.filterOptionDictionary)
+      // for (const filter in dynamicFilters) {
+      //   for (const activeFilter in getters.activeFilters) {
+      //     // skip the filter that was just changed
+      //     const dynamicFilterName = dynamicFilters[filter].name
+      //     if (activeFilter !== dynamicFilterName) {
+      //       // var tempList = ''
+      //       const table = dynamicFilters[filter].tableName
+      //       const query = '/api/v2/' + table + '?filter=id'
+      //       const response = await api.get(query).catch(error => commit('SetError', error))
+      //       for (const item in response.items) {
+      //         const filterOption = response.items[item].id
+      //         const url = '/api/v2/eu_bbmri_eric_collections?q=country=in=(AT)'
+      //         const optionString = ';materials=in=(' + filterOption + ')'
+      //         const response_ = await api.get(url + optionString).catch(error => commit('SetError', error))
+      //         commit('setDynamicFilterData', { response_, filterOption })
+      //       }
+      //     }
+      //   }
+      // }
+    }
+  },
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
@@ -93,7 +126,7 @@ export const collectionActions = {
       })
     }
   },
-  GetFilterReduction ({ commit, getters }) {
+  GetFilterReduction ({ state, commit, getters }) {
     // prepare async function and build correct query URLs for
     // the api/v2 - implementation of sql: DISTINCT command.
     // E.G. for country: ?aggs=x==country;distinct==country
@@ -153,6 +186,11 @@ export const collectionActions = {
       if (url.at(url.length - 1) === 'q') {
         url = url.slice(0, -2)
       }
+
+      // /api/v2/eu_bbmri_eric_collections?aggs=x==materials;distinct==materials&q=country=in=(DE)
+      // /api/v2/eu_bbmri_eric_collections?aggs=x==country;distinct==country&q=materials=in=(DNA)
+      console.log(state.collectionRelationData)
+      // console.log(state.biobanks)
 
       fetchData(url, filterName)
     }

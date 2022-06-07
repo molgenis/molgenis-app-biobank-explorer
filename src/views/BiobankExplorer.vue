@@ -60,7 +60,7 @@ export default {
     },
     activeFilters: {
       immediate: true,
-      handler: 'GetFilterReduction'
+      handler: 'updateCollectionRelationData'
     }
   },
   methods: {
@@ -71,7 +71,7 @@ export default {
       'GetPodiumCollections',
       'GetBiobankIdsForQuality',
       'GetCollectionIdsForQuality',
-      'GetFilterReduction'
+      'updateCollectionRelationData'
     ])
   },
   mounted () {
