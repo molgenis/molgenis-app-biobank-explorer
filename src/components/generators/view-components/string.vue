@@ -4,16 +4,10 @@
       {{ displayName(attribute) }}
     </th>
     <td>
-      <template v-if="attribute.badgeColor">
-        <span class="badge mb-2" :class="'badge-' + badgeColor">
-          {{ attribute.value }}
-        </span>
-      </template>
-      <template v-else>
-        <span>
-          {{ attribute.value }}
-        </span>
-      </template>
+      <span>
+        {{ attribute.value }}
+      </span>
+
       <template v-if="attribute.linkValue">
         <span
           id="copy-icon"
@@ -35,11 +29,6 @@ export default {
       type: Object
     }
   },
-  computed: {
-    badgeColor () {
-      return this.attribute.badgeColor || 'info'
-    }
-  },
   methods: {
     ...mapMutations(['SetNotification']),
     displayName (item) {
@@ -54,7 +43,6 @@ export default {
 </script>
 
 <style scoped>
-
 .fa-clipboard {
   position: relative;
   font-size: large;
@@ -71,16 +59,5 @@ export default {
 
 .fa-external-link:hover {
   cursor: pointer;
-}
-
-.badge {
-  text-align: left;
-  padding: 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 0;
-}
-
-.badge-light {
-  border: 1px solid #000;
 }
 </style>
