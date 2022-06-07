@@ -9,6 +9,7 @@ export const createFilters = (state) => {
         headerClass: facet.headerClass || '',
         component: facet.component || 'CheckboxFilter',
         name: facet.name || facet.columnName, // name is needed for displaying the bookmark as of now. EG commercial_use is a boolean.
+        filterName: facet.name || facet.columnName, // refactor this to either name of filterName
         label: facet.facetTitle || facet.label || facet.columnName,
         tableName: facet.tableName,
         columnName: facet.columnName,
@@ -21,7 +22,7 @@ export const createFilters = (state) => {
         showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
         humanReadableString: facet.humanReadableString,
         builtIn: facet.builtIn,
-        hideFacet: facet.hideFacet
+        showFacet: facet.showFacet
       })
   }
 
