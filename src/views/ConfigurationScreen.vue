@@ -127,7 +127,6 @@ export default {
       }, 200)
 
       if (view === 'editor') {
-        console.log('!!')
         this.editor.getModel().setValue(this.newAppConfig || this.appConfig)
         this.format()
       }
