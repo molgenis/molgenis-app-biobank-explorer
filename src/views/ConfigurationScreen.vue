@@ -61,13 +61,15 @@
       v-show="editorType === 'editor'"
       class="row px-5 pb-3"
       @keyup.ctrl.f="format">
-      <div
-        ref="editor"
-        class="editor"
-        @keyup="dirty = true"></div>
+      <div ref="editor" class="editor" @keyup="dirty = true"></div>
     </div>
 
-    <diff-editor v-if="editorType === 'diff'" :currentConfig="currentConfig" :newConfig="uploadedAppConfig" @save="saveDiff" @cancel="switchView('editor')" />
+    <diff-editor
+      v-if="editorType === 'diff'"
+      :currentConfig="currentConfig"
+      :newConfig="uploadedAppConfig"
+      @save="saveDiff"
+      @cancel="switchView('editor')"/>
     <!-- End Advanced Editor -->
 
     <div v-if="editorType !== 'diff'" class="row px-5 pb-5">
@@ -119,7 +121,11 @@ export default {
       'SaveApplicationConfiguration'
     ]),
     switchView (view) {
-      this.editorType = view
+      const viewTimer = setTimeout(() => {
+        this.editorType = view
+        clearTimeout(viewTimer)
+      }, 200)
+
       if (view === 'editor') {
         this.editor.getModel().setValue(this.newAppConfig || this.appConfig)
         this.format()
@@ -148,9 +154,9 @@ export default {
       this.newAppConfig = JSON.stringify(newConfig)
     },
     saveDiff (changesToSave) {
+      this.newAppConfig = changesToSave
       this.SaveApplicationConfiguration(changesToSave)
       this.dirty = false
-      this.newAppConfig = changesToSave
       this.switchView('editor')
     },
     cancel () {
