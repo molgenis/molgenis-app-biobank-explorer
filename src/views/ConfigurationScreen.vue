@@ -78,12 +78,14 @@
           Save configuration
         </button>
         <button class="btn btn-dark mr-3" @click="cancel">Undo changes</button>
-        <button class="btn btn-outline-dark mr-3" @click="download">
-          Download config
-        </button>
-        <button class="btn btn-outline-dark" @click="upload">
-          Upload config
-        </button>
+        <template v-if="editorType === 'editor'">
+          <button class="btn btn-outline-dark mr-3" @click="download">
+            Download config
+          </button>
+          <button class="btn btn-outline-dark" @click="upload">
+            Upload config
+          </button>
+        </template>
         <input
           type="file"
           id="file-selector"
