@@ -171,7 +171,7 @@ export default {
     },
     moreFacets () {
       return this.filterFacets.filter(
-        filter => !filter.showFacet
+        filter => !filter.showFacet && !filter.builtIn
       )
     },
     iconStyle () {

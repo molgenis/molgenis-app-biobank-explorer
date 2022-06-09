@@ -4,6 +4,7 @@ import ConfigurationScreen from '@/views/ConfigurationScreen'
 import { mockState } from '../mockData'
 import flushPromises from 'flush-promises'
 
+jest.useFakeTimers()
 const localVue = createLocalVue()
 
 localVue.use(Vuex)
@@ -15,7 +16,6 @@ const editorGetValue = jest.fn()
 const editorSetValue = jest.fn()
 
 const mockDiffText = 'Diff editor test data'
-const diffEditorGetValue = jest.fn().mockReturnValue(mockDiffText)
 
 const mockEditor = {
   create: jest.fn().mockReturnValue(
@@ -24,13 +24,6 @@ const mockEditor = {
       getValue: editorGetValue,
       getModel: jest.fn().mockReturnValue({ setValue: editorSetValue })
     })
-}
-
-const mockDiffEditor = {
-
-  getAction: jest.fn().mockReturnValue({ run: jest.fn() }),
-  getModifiedEditor: () => ({ getValue: diffEditorGetValue })
-
 }
 
 describe('ConfigurationScreen', () => {
@@ -57,7 +50,7 @@ describe('ConfigurationScreen', () => {
   })
 
   it('should set statusClosed to false, get the editor value and call save when saving, so that notification can be shown', async () => {
-    const wrapper = shallowMount(ConfigurationScreen, { store, localVue })
+    const wrapper = shallowMount(ConfigurationScreen, { store, localVue, data: () => ({ editorType: 'editor' }) })
     await flushPromises() // needed for async mounted.
     wrapper.vm.save()
 
@@ -69,17 +62,17 @@ describe('ConfigurationScreen', () => {
   it('calls setvalue on editor and sets the appconfig back on cancel', async () => {
     const wrapper = shallowMount(ConfigurationScreen, { store, localVue })
     await flushPromises()
-    wrapper.vm.cancel()
+    wrapper.vm.switchView('editor')
+    jest.runAllTimers()
 
     expect(editorSetValue).toHaveBeenCalledWith(mockAppConfig)
   })
 
-  it('calls setvalue on diff-editor and sets the value on editor on diffSave', async () => {
-    const wrapper = shallowMount(ConfigurationScreen, { store, localVue, data: () => ({ diffEditor: mockDiffEditor }) })
+  it('calls saveDiff when diff-editor emits save and sets the value on the regular editor', async () => {
+    const wrapper = shallowMount(ConfigurationScreen, { store, localVue })
     await flushPromises()
-    wrapper.vm.saveDiff()
+    wrapper.vm.saveDiff(mockDiffText)
 
-    expect(diffEditorGetValue).toHaveBeenCalled()
     expect(SaveApplicationConfiguration).toHaveBeenCalledWith(expect.anything(), mockDiffText)
     expect(editorSetValue).toHaveBeenCalledWith(mockDiffText)
   })

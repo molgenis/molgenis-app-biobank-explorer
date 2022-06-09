@@ -30,10 +30,10 @@ describe('ApplicationHeader', () => {
   it('should correctly divide the filterFacets in initial filters and more filters', () => {
     const wrapper = shallowMount(ApplicationHeader, { store, localVue, stubs: ['b-dropdown', 'b-button', 'font-awesome-icon', 'vue-slide-up-down'] })
     const facetCount = store.state.filterFacets.length
-    const hiddenFacetCount = store.state.filterFacets.filter(facet => facet.hideFacet).length
+    const shownFacetCount = store.state.filterFacets.filter(facet => facet.showFacet).length
     const builtinFacetCount = store.state.filterFacets.filter(facet => facet.builtIn).length
 
-    expect(wrapper.vm.facetsToRender.length).toBe(facetCount - hiddenFacetCount - builtinFacetCount)
-    expect(wrapper.vm.moreFacets.length).toBe(hiddenFacetCount)
+    expect(wrapper.vm.facetsToRender.length).toBe(shownFacetCount)
+    expect(wrapper.vm.moreFacets.length).toBe(facetCount - shownFacetCount - builtinFacetCount)
   })
 })
