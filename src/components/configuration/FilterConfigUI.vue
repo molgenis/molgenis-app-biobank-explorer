@@ -15,7 +15,7 @@
         class="list-group-item d-flex"
         v-for="(element, index) in appConfig.filterFacets"
         :key="element.name">
-        {{ index }}. {{ element.label || element.name }}
+        {{ index + 1 }}. {{ element.label || element.name }}
         <small class="ml-auto" v-if="element.builtIn">Rearranging this has no effect in the application.</small>
        <label v-if="!element.builtIn" class="ml-auto"><input type="checkbox" v-model="appConfig.filterFacets[index].showFacet" @change="sync"></label>
       </div>

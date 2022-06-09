@@ -58,22 +58,16 @@
 
     <!-- Advanced Editor -->
     <div
-      v-show="editorType !== 'ui'"
+      v-show="editorType === 'editor'"
       class="row px-5 pb-3"
       @keyup.ctrl.f="format">
       <div
-        v-show="editorType !== 'diff'"
         ref="editor"
         class="editor"
         @keyup="dirty = true"></div>
-
-      <div v-if="editorType === 'diff'" class="row w-100 mt-1">
-        <div class="col-6 pr-0"><h3>Current config</h3></div>
-        <div class="col-6 pl-0"><h3>New config</h3></div>
-      </div>
-
-      <div v-if="editorType === 'diff'" ref="diff-editor" class="editor"></div>
     </div>
+
+    <diff-editor v-if="editorType === 'diff'" :currentConfig="currentConfig" :newConfig="uploadedAppConfig" @save="saveDiff" @cancel="switchView('editor')" />
     <!-- End Advanced Editor -->
 
     <div v-if="editorType !== 'diff'" class="row px-5 pb-5">
@@ -98,33 +92,25 @@
         <small class="float-right">To format your file press ctrl + f</small>
       </div>
     </div>
-
-    <div v-if="editorType === 'diff'" class="row px-5 pb-5">
-      <button class="btn btn-primary mr-3 save-button" @click="saveDiff">
-        Save changes
-      </button>
-      <button class="btn btn-dark mr-3" @click="editorType = 'ui'">
-        Cancel
-      </button>
-    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import DiffEditor from '../components/configuration/DiffEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
 export default {
-  components: { FilterConfigUI },
+  components: { FilterConfigUI, DiffEditor },
   data () {
     return {
       editor: {},
-      diffEditor: {},
       statusClosed: true,
       dirty: false,
       undoFilterSort: 0,
       editorType: 'ui', // ui / editor / diff
       newAppConfig: '',
-      config: ''
+      config: '',
+      uploadedAppConfig: ''
     }
   },
   methods: {
@@ -133,6 +119,7 @@ export default {
       'SaveApplicationConfiguration'
     ]),
     switchView (view) {
+      this.editorType = view
       if (view === 'editor') {
         this.editor.getModel().setValue(this.newAppConfig || this.appConfig)
         this.format()
@@ -141,7 +128,6 @@ export default {
       if (view === 'ui') {
         this.config = this.editor.getValue()
       }
-      this.editorType = view
     },
     format () {
       this.editor.getAction('editor.action.formatDocument').run()
@@ -161,8 +147,7 @@ export default {
       this.dirty = true
       this.newAppConfig = JSON.stringify(newConfig)
     },
-    saveDiff () {
-      const changesToSave = this.diffEditor.getModifiedEditor().getValue()
+    saveDiff (changesToSave) {
       this.SaveApplicationConfiguration(changesToSave)
       this.dirty = false
       this.newAppConfig = changesToSave
@@ -196,29 +181,11 @@ export default {
       fileInput.click()
     },
     async processUpload (event) {
-      const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
-      this.editorType = 'diff'
       const reader = new FileReader()
       reader.addEventListener('load', event => {
-        const newFile = atob(event.target.result.split(',')[1])
+        this.uploadedAppConfig = atob(event.target.result.split(',')[1])
 
-        const originalModel = monaco.editor.createModel(
-          this.editor.getValue(),
-          'application/json'
-        )
-        const modifiedModel = monaco.editor.createModel(
-          newFile,
-          'application/json'
-        )
-
-        this.diffEditor = monaco.editor.createDiffEditor(
-          this.$refs['diff-editor']
-        )
-
-        this.diffEditor.setModel({
-          original: originalModel,
-          modified: modifiedModel
-        })
+        this.switchView('diff')
       })
       reader.readAsDataURL(event.target.files[0])
     }
@@ -227,6 +194,12 @@ export default {
     ...mapState(['appConfig', 'configUpdateStatus']),
     showNotification () {
       return this.configUpdateStatus !== 0 && !this.statusClosed
+    },
+    currentConfig () {
+      return this.editor.getValue()
+    },
+    newConfig () {
+      return this.uploadedAppConfig
     }
   },
   watch: {
