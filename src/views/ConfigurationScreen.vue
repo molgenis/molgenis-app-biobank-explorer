@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid p-0">
-    <nav class="navbar bg-dark justify-content-start">
+    <nav class="navbar bg-dark justify-content-start mb-4">
       <button
         type="button"
         @click="switchView('ui')"
@@ -17,37 +17,9 @@
       </button>
     </nav>
 
-    <div class="row px-5 mt-3" v-show="showNotification">
-      <div class="col-md-12 p-0">
-        <div
-          v-if="configUpdateStatus === 204"
-          class="alert alert-success m-0"
-          role="alert"
-          @click="statusClosed = true">
-          <span>Configuration saved!</span>
-          <b class="float-right">X</b>
-        </div>
-        <div
-          v-else
-          class="alert alert-warning m-0"
-          role="alert"
-          @click="statusClosed = true">
-          <span>We could not save the configuration, make sure you are logged in
-            with sufficient rights.</span><b class="float-right">X</b>
-        </div>
-      </div>
-    </div>
-    <div class="row px-5 mt-3">
-      <div class="col-md-12 p-0">
-        <div v-if="dirty" class="alert alert-warning" role="alert">
-          <span>You have unsaved changes</span>
-        </div>
-      </div>
-    </div>
-
     <a href="" ref="download" class="hidden"></a>
 
-    <div v-if="editorType === 'ui'" class="row px-5 pb-3">
+    <div v-show="editorType === 'ui'" class="row px-5 pb-3">
       <div class="col-6">
         <FilterConfigUI
           :config="config"
@@ -77,15 +49,17 @@
         <button class="btn btn-primary mr-3 save-button" @click="save">
           Save configuration
         </button>
-        <button class="btn btn-dark mr-3" @click="cancel">Undo changes</button>
-        <template v-if="editorType === 'editor'">
-          <button class="btn btn-outline-dark mr-3" @click="download">
-            Download config
-          </button>
-          <button class="btn btn-outline-dark" @click="upload">
-            Upload config
-          </button>
-        </template>
+        <button v-if="dirty" class="btn btn-dark mr-3" @click="cancel">
+          Cancel
+        </button>
+
+        <button class="btn btn-outline-dark mr-3" @click="download">
+          Download config
+        </button>
+        <button class="btn btn-outline-dark" @click="upload">
+          Upload config
+        </button>
+
         <input
           type="file"
           id="file-selector"
@@ -93,7 +67,30 @@
           @change="processUpload"/>
       </div>
       <div>
-        <small class="float-right">To format your file press ctrl + f</small>
+        <div class="row">
+          <div v-show="showNotification">
+            <div
+              v-if="configUpdateStatus === 204"
+              class="alert alert-success m-0"
+              role="alert"
+              @click="statusClosed = true">
+              <span>Configuration saved!</span>
+            </div>
+            <div
+              v-else
+              class="alert alert-warning m-0"
+              role="alert"
+              @click="statusClosed = true">
+              <span>We could not save the configuration, make sure you are logged
+                in with sufficient rights.</span>
+            </div>
+          </div>
+
+          <div v-show="dirty" class="alert alert-warning m-0" role="alert">
+            <span>You have unsaved changes</span>
+          </div>
+        </div>
+        <small class="mt-4 float-right">To format your file press ctrl + f</small>
       </div>
     </div>
   </div>
