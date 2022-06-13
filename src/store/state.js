@@ -39,6 +39,7 @@ export default {
   qualityStandardsDictionary: {},
   nonCommercialCollections: [],
   selectedCollections: [],
+  dynamicFilters: {},
   filters: {
     selections: {},
     satisfyAll: [],

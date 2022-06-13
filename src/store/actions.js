@@ -68,6 +68,30 @@ export default {
         commit('SetError', error)
       })
   },
+  async GetUpdateFilter ({ state, commit }, { filterName, activeFilters }) {
+    // const tempList = []
+    const tempList = []
+
+    const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
+    let url = '/api/v2/eu_bbmri_eric_collections?q=' // + filterName + '=in=' + state.activeFilters[filterName]
+
+    for (const activeFilterName in activeFilterNames) {
+      const name = activeFilterNames[activeFilterName]
+      url = url + name + '=in=(' + activeFilters[name] + ');'
+    }
+    for (const num in state.filterOptionDictionary[filterName]) {
+      const filterOption = state.filterOptionDictionary[filterName][num].value
+      // const filterOption = response.items[item].id
+      const optionString = filterName + '=in=(' + filterOption + ')'
+      // console.log(url + optionString)
+      const response_ = await api.get(url + optionString)
+      if (response_.total > 0) {
+        tempList.push(filterOption)
+      }
+    }
+    console.log(tempList)
+    commit('SetUpdateFilter', { filterName, tempList })
+  },
   /**
    * Transform the state into a NegotiatorQuery object.
    * Calls the DirectoryController method '/export' which answers with a URL

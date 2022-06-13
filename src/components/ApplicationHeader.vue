@@ -52,6 +52,7 @@
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
+            @shown="loadOptions(dynamicFilters, filter)"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
@@ -72,6 +73,7 @@
                   (satisfyAllValue) =>
                     filterSatisfyAllChange(filter.name, satisfyAllValue)
                 "
+                :optionsFilter="dynamicFilters[filter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -83,6 +85,7 @@
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
+              @shown="loadOptions(dynamicFilters, additionalFilter)"
               boundary="window"
               no-flip
               class="mr-2 mb-1 filter-dropdown">
@@ -103,6 +106,7 @@
                     (satisfyAllValue) =>
                       filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
                   "
+                  :optionsFilter="dynamicFilters[additionalFilter.name]"
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>
@@ -125,7 +129,7 @@
 
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 
 /** Components used for filters */
 import SearchFilter from './filters/SearchFilter.vue'
@@ -152,7 +156,8 @@ export default {
       'foundCollectionIds',
       'activeFilters',
       'selectedCollections',
-      'uiText'
+      'uiText',
+      'dynamicFilters'
     ]),
     ...mapState([
       'menuHeight',
@@ -198,6 +203,9 @@ export default {
       'ClearActiveFilters',
       'UpdateFilterSatisfyAll'
     ]),
+    ...mapActions([
+      'GetUpdateFilter'
+    ]),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
     },
@@ -216,6 +224,13 @@ export default {
       } else {
         return filtersActive.length
       }
+    },
+    loadOptions (dynamicFilters, filter) {
+      const filterName = filter.name
+      const activeFilters = this.activeFilters
+      console.log('Filters')
+      console.log(activeFilters)
+      this.GetUpdateFilter({ filterName, activeFilters })
     }
   },
   created () {

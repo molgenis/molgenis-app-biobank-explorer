@@ -27,6 +27,44 @@ export const collectionActions = {
     const response = await api.get(url).catch(error => commit('SetError', error))
     commit('SetAllCollectionRelationData', response)
   },
+  async updateCollectionRelationData ({ state, getters, commit }) {
+    // &q=ressource_types=in=(BIOBANK);materials=in=(DNA,PLASMA)
+    // biobank_label is a mapping in the collection table to the name column of biobank table
+    if (Object.keys(getters.activeFilters).length > 0) {
+      const dynamicFilters = []
+      const allFilt = getters.getFilters
+      for (const filter in allFilt) {
+        if (allFilt[filter].dynamic) {
+          dynamicFilters.push(allFilt[filter])
+        }
+      }
+      console.log('Update')
+      console.log(state.filterOptionDictionary)
+      for (const filter in dynamicFilters) {
+        for (const activeFilter in getters.activeFilters) {
+          // skip the filter that was just changed
+          const dynamicFilterName = dynamicFilters[filter].name
+          console.log(dynamicFilterName)
+          console.log(activeFilter)
+          if (activeFilter !== dynamicFilterName) {
+            // var tempList = ''
+            // const table = dynamicFilters[filter].tableName
+            // const query = '/api/v2/' + table + '?filter=id'
+            // const response = await api.get(query).catch(error => commit('SetError', error))
+            for (const num in state.filterOptionDictionary[dynamicFilterName]) {
+              const filterOption = state.filterOptionDictionary[dynamicFilterName][num].value
+              // const filterOption = response.items[item].id
+              const url = '/api/v2/eu_bbmri_eric_collections?q=' + activeFilter + '=in=' + state.activeFilters[dynamicFilterName]
+              const optionString = ';' + dynamicFilterName + '=in=(' + filterOption + ')'
+              console.log(url + optionString)
+              const response_ = await api.get(url + optionString).catch(error => commit('SetError', error))
+              commit('setDynamicFilterData', { response_, filterOption })
+            }
+          }
+        }
+      }
+    }
+  },
   /*
    * Retrieves all collection identifiers matching the collection filters, and their biobanks
    */
@@ -91,6 +129,74 @@ export const collectionActions = {
       api.get("/api/data/eu_bbmri_eric_collections?num=10000&filter=id&q=podium!=''").then(response => {
         commit('SetPodiumCollections', response)
       })
+    }
+  },
+  GetFilterReduction ({ state, commit, getters }) {
+    // prepare async function and build correct query URLs for
+    // the api/v2 - implementation of sql: DISTINCT command.
+    // E.G. for country: ?aggs=x==country;distinct==country
+    async function fetchData (url, filterName) {
+      // asnyc function so we can load data and commit it right away
+      api.get(url).then(response => {
+        const load = { filter: filterName, options: response.aggs.xLabels }
+        commit('SetFilterReduction', load)
+      }, error => {
+        commit('SetError', error)
+      })
+    }
+    // prepare baseUrl and set list for dynamic filters that will be updated
+    const baseUrl = '/api/v2/eu_bbmri_eric_collections'
+    const dynamicFilters = []
+    const dynFilt = getters.getFilters
+
+    for (const filter in dynFilt) {
+      if (dynFilt[filter].dynamic) {
+        dynamicFilters.push(dynFilt[filter].name)
+      }
+    }
+    // if there is no activeFilter (anymore):
+    // reset the dynamic filters:
+    commit('ResetDynamicFilters', dynamicFilters)
+    if (Object.keys(getters.activeFilters).length === 0) {
+      return 0
+    }
+
+    // iterate over previously defined dynamic filters
+    // and create one query URL for each dynamic filter
+    for (const filter in dynamicFilters) {
+      const filterName = dynamicFilters[filter]
+      const unique = `?aggs=x==${filterName};distinct==${filterName}`
+
+      var additionalFilters = '&q='
+
+      for (const activeFilter in getters.activeFilters) {
+      // skip the filter that was just changed
+        if (activeFilter !== filterName) {
+          var tempList = ''
+          // iterate over active filters and add its ID to tempList (E.G: DNA,SERUM,)
+          for (const option in getters.activeFilters[activeFilter]) {
+            tempList = tempList + `${getters.activeFilters[activeFilter][option]},`
+          }
+          // remove the last comma from URL:
+          tempList = tempList.slice(0, -1)
+          additionalFilters = additionalFilters + `${activeFilter}=in=(${tempList});`
+        }
+      }
+
+      // remove the last semicolon from URL:
+      additionalFilters = additionalFilters.slice(0, -1)
+      // construct query URL and fetch data for each dynamic filter:
+      var url = baseUrl + unique + additionalFilters
+      if (url.at(url.length - 1) === 'q') {
+        url = url.slice(0, -2)
+      }
+
+      // /api/v2/eu_bbmri_eric_collections?aggs=x==materials;distinct==materials&q=country=in=(DE)
+      // /api/v2/eu_bbmri_eric_collections?aggs=x==country;distinct==country&q=materials=in=(DNA)
+      console.log(state.collectionRelationData)
+      // console.log(state.biobanks)
+
+      fetchData(url, filterName)
     }
   }
 }
