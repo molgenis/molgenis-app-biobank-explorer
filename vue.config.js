@@ -32,7 +32,7 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-const PROXY_TARGET = 'https://bbmri-acc.gcc.rug.nl'
+const PROXY_TARGET = 'http://localhost:80' // 'https:bbmri-acc.gcc.rug.nl'
 
 const apiDevServerProxyConf = {
   target: PROXY_TARGET,

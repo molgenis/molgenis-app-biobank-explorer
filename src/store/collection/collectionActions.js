@@ -38,26 +38,31 @@ export const collectionActions = {
           dynamicFilters.push(allFilt[filter])
         }
       }
+      console.log('Update')
       console.log(state.filterOptionDictionary)
-      // for (const filter in dynamicFilters) {
-      //   for (const activeFilter in getters.activeFilters) {
-      //     // skip the filter that was just changed
-      //     const dynamicFilterName = dynamicFilters[filter].name
-      //     if (activeFilter !== dynamicFilterName) {
-      //       // var tempList = ''
-      //       const table = dynamicFilters[filter].tableName
-      //       const query = '/api/v2/' + table + '?filter=id'
-      //       const response = await api.get(query).catch(error => commit('SetError', error))
-      //       for (const item in response.items) {
-      //         const filterOption = response.items[item].id
-      //         const url = '/api/v2/eu_bbmri_eric_collections?q=country=in=(AT)'
-      //         const optionString = ';materials=in=(' + filterOption + ')'
-      //         const response_ = await api.get(url + optionString).catch(error => commit('SetError', error))
-      //         commit('setDynamicFilterData', { response_, filterOption })
-      //       }
-      //     }
-      //   }
-      // }
+      for (const filter in dynamicFilters) {
+        for (const activeFilter in getters.activeFilters) {
+          // skip the filter that was just changed
+          const dynamicFilterName = dynamicFilters[filter].name
+          console.log(dynamicFilterName)
+          console.log(activeFilter)
+          if (activeFilter !== dynamicFilterName) {
+            // var tempList = ''
+            // const table = dynamicFilters[filter].tableName
+            // const query = '/api/v2/' + table + '?filter=id'
+            // const response = await api.get(query).catch(error => commit('SetError', error))
+            for (const num in state.filterOptionDictionary[dynamicFilterName]) {
+              const filterOption = state.filterOptionDictionary[dynamicFilterName][num].value
+              // const filterOption = response.items[item].id
+              const url = '/api/v2/eu_bbmri_eric_collections?q=' + activeFilter + '=in=' + state.activeFilters[dynamicFilterName]
+              const optionString = ';' + dynamicFilterName + '=in=(' + filterOption + ')'
+              console.log(url + optionString)
+              const response_ = await api.get(url + optionString).catch(error => commit('SetError', error))
+              commit('setDynamicFilterData', { response_, filterOption })
+            }
+          }
+        }
+      }
     }
   },
   /*

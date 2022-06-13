@@ -32,7 +32,7 @@ export const collectionMutations = {
   },
   setDynamicFilterData (state, { response_, filterOption }) {
     // console.log('Updating filter data...')
-    console.log(filterOption)
+    // only options if response_.total > 0
     console.log(response_.total)
   },
   SetCollectionInfo (state, response) {

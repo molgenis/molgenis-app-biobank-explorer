@@ -76,6 +76,13 @@ export default {
 
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
+  SetUpdateFilter (state, { filterName, tempList }) {
+    state.dynamicFilters[filterName] = []
+    // state.dynamicFilters = Object.assign({}, { ...state.dynamicFilters, ...{ [filterName]: tempList } })
+    // Vue.set(state.dynamicFilters, filterName, tempList)
+    console.log(state.dynamicFilters)
+    Vue.set(state, 'dynamicFilters', { ...state.dynamicFilters, ...{ [filterName]: tempList } })
+  },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
@@ -101,13 +108,12 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { name, filterOptions }) {
     // only cache it once
-    if (!state.filterOptionDictionary[filterName]) {
-      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
-
+    if (!state.filterOptionDictionary[name]) {
+      Vue.set(state.filterOptionDictionary, name, filterOptions)
       // to let the filter know, no more caching needed
-      if (filterName === 'diagnosis_available') {
+      if (name === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
     }
