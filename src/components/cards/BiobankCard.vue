@@ -297,7 +297,7 @@ article footer {
 article.flip {
   padding: 0;
   position: relative;
-  height: 28rem;
+  height: 32rem;
   perspective: 1000px;
 }
 
