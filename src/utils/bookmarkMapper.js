@@ -1,4 +1,3 @@
-import state from '../store/state'
 import Router from '../router'
 
 function setBookmark (bookmark) {
@@ -11,9 +10,6 @@ function setBookmark (bookmark) {
     // to prevent error, which occurs on routing to same page (Vue issue)
     () => { }
   )
-  if (state.isIE11) {
-    state.ie11Bookmark = `${window.location.host}/#${Router.currentRoute.fullPath}`
-  }
 }
 export const createBookmark = (filters, selection, satisfyAllSelection) => {
   const bookmark = {}

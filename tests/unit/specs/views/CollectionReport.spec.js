@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import CollectionReport from '@/views/CollectionReport'
+import { baseGetters } from '../mockData'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -59,6 +60,7 @@ describe('CollectionReport', () => {
         GetCollectionReport: () => {}
       },
       getters: {
+        ...baseGetters,
         selectedCollections: jest.fn().mockReturnValue([])
       }
     })
@@ -72,7 +74,7 @@ describe('CollectionReport', () => {
 
   it('should initialize component', () => {
     const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
-    expect(wrapper.html()).toContain('class="container mg-collection-report-card"')
+    expect(wrapper.html()).toContain('class="container mg-collection-report-card')
   })
 
   describe('computed', () => {
@@ -81,6 +83,24 @@ describe('CollectionReport', () => {
         const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
         expect(wrapper.vm.collectionId).toBe('c-001')
       })
+    })
+  })
+
+  describe('bioschemas', () => {
+    it('should add bioschemas data', () => {
+      const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
+      expect(wrapper.vm.bioschemasJsonld['@context']).toStrictEqual('https://schema.org')
+      expect(wrapper.vm.bioschemasJsonld['@type']).toStrictEqual('Dataset')
+      expect(wrapper.vm.bioschemasJsonld['@id']).toStrictEqual('http://localhost/#/collection/c-001')
+      expect(wrapper.html()).toContain('<script type="application/ld+json">')
+      expect(wrapper.html()).toContain('"@context": "https://schema.org",')
+    })
+
+    it('should add bioschemas data', () => {
+      store.state.collectionReport = undefined
+      const wrapper = shallowMount(CollectionReport, { mocks, stubs, store, localVue })
+      expect(wrapper.vm.bioschemasJsonld).toStrictEqual(undefined)
+      expect(wrapper.html()).not.toContain('<script type="application/ld+json">')
     })
   })
 })

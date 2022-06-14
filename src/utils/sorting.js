@@ -1,5 +1,7 @@
 export const sortCollectionsByName = function (collectionArray) {
-  return collectionArray.sort((a, b) => {
+  const newArray = [...new Set(collectionArray)] // remove the in place sorting
+
+  return newArray.sort((a, b) => {
     if (a.name.toLowerCase() < b.name.toLowerCase()) {
       return -1
     }

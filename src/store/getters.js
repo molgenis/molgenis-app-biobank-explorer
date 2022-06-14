@@ -4,11 +4,12 @@ import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   getFilters: (state) => {
-    return state.filterFacets.filter((facet) => {
-      return !state.disabledFilters.includes(facet.name)
-    })
+    return state.filterFacets
   },
   getHumanReadableString,
+  uiText: (state) => {
+    return state.i18n[state.language]
+  },
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
   biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
     if (loading) {
@@ -19,12 +20,11 @@ export default {
       ids = collectionInfo
       // biobank IDs present in collectionIds
         .map(({ biobankId }) => biobankId)
-      // also present in biobankIds
-        .filter(biobankId => biobankIds.includes(biobankId))
       // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
     }
     return ids.map(biobankId => {
+      // lazy loading, return only the id, which will be fetched on demand
       if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
         return biobankId
       }
@@ -43,11 +43,18 @@ export default {
     })
     return flattenedCollections
   },
+  subcollections: (state) => {
+    const allSubcollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection).map(fci => fci.collectionId)
+    let flattenedCollections = []
+    allSubcollections.forEach(function (subCollection) {
+      flattenedCollections = flattenedCollections.concat(subCollection)
+    })
+    return flattenedCollections
+  },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
-  collectionDictionary: state => state.collectionDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
-  foundBiobanks: (_, { biobanks }) => {
-    return biobanks.length
+  foundBiobanks: (state) => {
+    return state.biobankCount
   },
   foundCollectionIds (state, { getFoundBiobankIds }) {
     // only if there are biobanks, then there are collections. we can't have rogue collections :)
@@ -67,9 +74,9 @@ export default {
     const selectedNonCommercialCollections = selectedCollections.map(sc => sc.value).filter(sid => state.nonCommercialCollections.includes(sid))
     return selectedNonCommercialCollections.length
   },
-  foundCollectionsAsSelection: (_, { parentCollections, foundCollectionIds, collectionDictionary }) => {
+  foundCollectionsAsSelection: (state, { parentCollections, foundCollectionIds }) => {
     const parentCollectionIds = foundCollectionIds.filter(fci => parentCollections.includes(fci))
-    return parentCollectionIds.map(colId => ({ label: collectionDictionary[colId], value: colId }))
+    return parentCollectionIds.map(colId => ({ label: state.collectionNameDictionary[colId], value: colId }))
   },
   collectionsInPodium ({ podiumCollectionIds, collectionInfo, isPodium }, { foundCollectionIds, selectedCollections }) {
     if (isPodium && podiumCollectionIds && collectionInfo && foundCollectionIds) {
@@ -103,11 +110,11 @@ export default {
   satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
-  resetPage: state => !state.isPaginating,
   /**
    * Get map of active filters
    */
   activeFilters: state => state.filters.selections,
+  filterOptionsOverride: state => state.filterOptionsOverride,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined
@@ -119,5 +126,6 @@ export default {
       return state.error.message
     }
     return 'Something went wrong'
-  }
+  },
+  getNotificationMessage: state => state.notification
 }

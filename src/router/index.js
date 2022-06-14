@@ -1,19 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import BiobankExplorerContainer from '../components/BiobankExplorerContainer'
+import BiobankExplorer from '../views/BiobankExplorer'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
 import { INITIAL_STATE } from '../store/state'
+import api from '@molgenis/molgenis-api-client'
 
 Vue.use(VueRouter)
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'hash',
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
       path: '/biobankexplorer',
-      component: BiobankExplorerContainer
+      component: BiobankExplorer
     },
     {
       path: '/biobank/report/:id',
@@ -35,8 +36,18 @@ export default new VueRouter({
       component: NetworkReportCard
     },
     {
+      path: '/configuration',
+      component: () => import(/* webpackChunkName: "configuration-screen" */ '../views/ConfigurationScreen'),
+      beforeEnter: async (to, from, next) => {
+        const response = await api.get('/app-ui-context')
+        if (response.roles.includes('ROLE_SU')) { next() } else next('/')
+      }
+    },
+    {
       path: '/',
-      component: BiobankExplorerContainer
+      component: BiobankExplorer
     }
   ]
 })
+
+export default router

@@ -1,18 +1,19 @@
 <template>
   <tr v-if="attribute && attribute.value && attribute.value.length">
-    <th scope="row" class="pr-1 align-top text-nowrap">{{ displayName(attribute) }}</th>
+    <th scope="row" class="pr-1 align-top text-nowrap">
+      {{ displayName(attribute) }}
+    </th>
     <td>
-      <template v-if="attribute.badgeColor">
+      <span>
+        {{ attribute.value }}
+      </span>
+
+      <template v-if="attribute.linkValue">
         <span
-          class="m-1 badge"
-          :class="'badge-' + badgeColor">
-          {{ attribute.value }}
-        </span>
-      </template>
-      <template v-else>
-        <span
-          class="m-1">
-          {{ attribute.value }}
+          id="copy-icon"
+          @click.prevent="copyToClipboard(attribute.linkValue)"
+          v-b-tooltip.hover="'Copy to clipboard'"
+          class="fa fa-clipboard ml-1">
         </span>
       </template>
     </td>
@@ -20,33 +21,37 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   props: {
     attribute: {
       type: Object
     }
   },
-  computed: {
-    badgeColor () {
-      return this.attribute.badgeColor || 'info'
-    }
-  },
   methods: {
+    ...mapMutations(['SetNotification']),
     displayName (item) {
       return item.label || item.name || item.id
+    },
+    copyToClipboard (link) {
+      navigator.clipboard.writeText(link)
+      this.SetNotification(`Copied ${link}`)
     }
   }
 }
 </script>
 
 <style scoped>
-.badge {
-  transition: transform 0.1s;
-  box-shadow: 0 0 0 1px white;
+.fa-clipboard {
+  position: relative;
+  font-size: large;
 }
-.badge:hover {
-  transform: scale(1.4);
+
+.fa-clipboard:hover {
+  cursor: pointer;
 }
+
 .fa-external-link {
   top: 1px;
   position: relative;

@@ -8,11 +8,15 @@
       @change="handleCollectionStatus"
       :checked="allCollectionsSelected"
       hidden/>
-    <label class="add-to-cart-label btn btn-outline-secondary" for="select-deselect-all">
-      <span>Select all collections</span>
+    <label
+      class="add-to-cart-label btn btn-outline-success m-0"
+      for="select-deselect-all">
+      <span>{{ uiText["select_all_collections"] }}</span>
     </label>
-    <label class="remove-from-cart-label btn btn-outline-danger" for="select-deselect-all">
-      <span>Deselect all collections</span>
+    <label
+      class="remove-from-cart-label btn btn-danger m-0"
+      for="select-deselect-all">
+      <span>{{ uiText["deselect_all_collections"] }}</span>
     </label>
   </div>
 </template>
@@ -30,15 +34,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'AddCollectionsToSelection'
-    ]),
-    ...mapMutations([
-      'RemoveCollectionsFromSelection'
-    ]),
+    ...mapActions(['AddCollectionsToSelection']),
+    ...mapMutations(['RemoveCollectionsFromSelection']),
     handleCollectionStatus (event) {
       const { checked } = event.target
-      const collectionData = { collections: this.foundCollectionsAsSelection, bookmark: this.bookmark }
+      const collectionData = {
+        collections: this.foundCollectionsAsSelection,
+        bookmark: this.bookmark
+      }
 
       if (checked) {
         this.AddCollectionsToSelection(collectionData)
@@ -48,7 +51,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['allCollectionsSelected', 'foundCollectionsAsSelection'])
+    ...mapGetters([
+      'allCollectionsSelected',
+      'foundCollectionsAsSelection',
+      'uiText'
+    ])
   }
 }
 </script>

@@ -9,22 +9,22 @@ describe('store', () => {
   describe('mutations', () => {
     describe('UpdateFilterSelection', () => {
       it('should set covid19 network filter for biobank if it is not present already', async () => {
-        expect(state.filters.selections.biobank_network).toBe(undefined)
+        expect(state.filters.selections.network).toBe(undefined)
 
-        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: 'COVID_19' } })
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
-        expect(state.filters.labels.biobank_network).toStrictEqual(['Covid-19'])
+        mutations.UpdateFilterSelection(state, { name: 'network', value: { text: 'Covid-19', value: 'COVID_19' } })
+        expect(state.filters.selections.network).toStrictEqual(['COVID_19'])
+        expect(state.filters.labels.network).toStrictEqual(['Covid-19'])
       })
 
       it('should remove covid19 network filter for biobank when unchecked', () => {
-        state.filters.selections.biobank_network = ['COVID_19']
-        state.filters.labels.biobank_network = ['Covid-19']
+        state.filters.selections.network = ['COVID_19']
+        state.filters.labels.network = ['Covid-19']
 
-        expect(state.filters.selections.biobank_network).toStrictEqual(['COVID_19'])
+        expect(state.filters.selections.network).toStrictEqual(['COVID_19'])
 
-        mutations.UpdateFilterSelection(state, { name: 'biobank_network', value: { text: 'Covid-19', value: [] } })
-        expect(state.filters.selections.biobank_network).toBeUndefined()
-        expect(state.filters.labels.biobank_network).toBeUndefined()
+        mutations.UpdateFilterSelection(state, { name: 'network', value: { text: 'Covid-19', value: [] } })
+        expect(state.filters.selections.network).toBeUndefined()
+        expect(state.filters.labels.network).toBeUndefined()
       })
 
       it('should update the list of filters for a specific state key and map its text as label', () => {
@@ -87,7 +87,7 @@ describe('store', () => {
       })
     })
 
-    describe('ResetFilters', () => {
+    describe('ClearActiveFilters', () => {
       it('should reset all the filters in the state', () => {
         state.filters.selections = {
           country: ['AT'],
@@ -100,57 +100,8 @@ describe('store', () => {
           dataType: ['type']
         }
         expect(state.filters.selections.country).toEqual(['AT'])
-        mutations.ResetFilters(state)
+        mutations.ClearActiveFilters(state)
         expect(state.filters.selections).toStrictEqual({})
-      })
-    })
-
-    describe('SetBiobanks', () => {
-      it('should add the biobanks to the store', () => {
-        const biobank1 = { id: 'biobank1', collections: [] }
-        const biobank2 = { id: 'biobank2', collections: [] }
-        state.biobanks = {
-          biobank1
-        }
-
-        const biobanks = [biobank2]
-
-        mutations.SetBiobanks(state, biobanks)
-
-        expect(state.biobanks).toStrictEqual({ biobank1, biobank2 })
-      })
-      it('should reconstruct the collections tree', () => {
-        const biobanks = [{
-          id: 'biobank1',
-          collections: [
-            { id: 1, sub_collections: [{ id: 2 }] },
-            { id: 2, parent: 1, sub_collections: [{ id: 3 }] },
-            { id: 3, parent: 2, sub_collections: [{ id: 4 }] },
-            { id: 4, parent: 3, sub_collections: [] }]
-        }]
-        const expected = {
-          id: 'biobank1',
-          collections: [
-            {
-              id: 1,
-              sub_collections: [{
-                id: 2,
-                parent: 1,
-                sub_collections: [{
-                  id: 3,
-                  parent: 2,
-                  sub_collections: [{
-                    id: 4,
-                    parent: 3,
-                    sub_collections: []
-                  }]
-                }]
-              }]
-            }]
-        }
-        mutations.SetBiobanks(state, biobanks)
-
-        expect(state.biobanks.biobank1).toStrictEqual(expected)
       })
     })
 
@@ -165,7 +116,7 @@ describe('store', () => {
 
     describe('MapQueryToState', () => {
       it('should map everything from router query to state', () => {
-        state.collectionDictionary = {
+        state.collectionNameDictionary = {
           'bbmri-eric:ID:TR_ACU:collection:covid19': 'My test collection'
         }
 
@@ -178,7 +129,7 @@ describe('store', () => {
             type: 'BIRTH_COHORT',
             dataType: 'BIOLOGICAL_SAMPLES',
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
-            biobank_network: 'networkA,networkB',
+            network: 'networkA,networkB',
             biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
             covid19: 'covid19',
@@ -196,7 +147,7 @@ describe('store', () => {
         expect(state.filters.selections.dataType).toStrictEqual(['BIOLOGICAL_SAMPLES'])
         expect(state.filters.selections.collection_quality).toStrictEqual(['eric', 'self'])
         expect(state.filters.selections.covid19).toStrictEqual(['covid19'])
-        expect(state.filters.selections.biobank_network).toStrictEqual(['networkA', 'networkB'])
+        expect(state.filters.selections.network).toStrictEqual(['networkA', 'networkB'])
         expect(state.filters.selections.biobank_quality).toStrictEqual(['qualityA'])
         expect(state.filters.selections.search).toBe('search')
         expect(state.nToken).toBe('29djgCm29104958f7dLqopf92JDJKS')
@@ -220,55 +171,13 @@ describe('store', () => {
       })
     })
 
-    describe('Set Dictionaries', () => {
+    describe('SetAllCollectionRelationData', () => {
       it('Can set a dictionary for Collection & Biobank', () => {
         const response = mockCollectionResponse
-        mutations.SetDictionaries(state, response)
+        mutations.SetAllCollectionRelationData(state, response)
 
         expect(state.collectionBiobankDictionary).toEqual({ 'bbmri-eric:ID:NL_AAAACXPAF5YXYACQK2ME25QAAM:collection:124': 'AMC Renal Transplant Biobank', 'bbmri-eric:ID:NL_AAAACXPJ3VCTUACQK2ME25QAAE:collection:211': 'ARGOS Biobank', 'bbmri-eric:ID:NL_AAAACXPKMVPYIACQK2ME25QAAE:collection:92': 'ARREST Biobank', 'bbmri-eric:ID:NL_AAAACYWY5TBZGACQK2MDM4QAAE:collection:89': 'AGNES Biobank', 'bbmri-eric:ID:NL_AMCBB:collection:AB17-022': 'Amsterdam UMC Biobank: Location AMC' })
-        expect(state.collectionDictionary).toEqual({ 'bbmri-eric:ID:NL_AAAACXPAF5YXYACQK2ME25QAAM:collection:124': 'AMC Renal Transplant Biobank', 'bbmri-eric:ID:NL_AAAACXPJ3VCTUACQK2ME25QAAE:collection:211': 'Association study of coronary heart disease Risk factors in the Genome using an Old-versus-young Setting', 'bbmri-eric:ID:NL_AAAACXPKMVPYIACQK2ME25QAAE:collection:92': 'Amsterdam Ressucitation Studies', 'bbmri-eric:ID:NL_AAAACYWY5TBZGACQK2MDM4QAAE:collection:89': 'Arrhythmia genetics in the Netherlands', 'bbmri-eric:ID:NL_AMCBB:collection:AB17-022': 'Physical Activity and Dietary intervention in OVArian cancer (PADOVA): a RCT evaluating effects on body composition, physical function, and fatigue' })
-      })
-    })
-
-    describe('SetBiobankIdsWithSelectedQuality', () => {
-      it('should set the biobanks that match the applied quality standards filter', () => {
-        state.filters.selections.biobank_quality = ['eric']
-
-        const payload = {
-          items: [
-            {
-              biobank: { id: 'biobank-1' },
-              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
-              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-            },
-            {
-              biobank: { id: 'biobank-1' },
-              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
-            },
-            {
-              biobank: { id: 'biobank-2' },
-              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-            }
-          ]
-        }
-
-        const expected = ['biobank-1', 'biobank-2']
-
-        mutations.SetBiobankIdsWithSelectedQuality(state, payload)
-
-        expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
-      })
-
-      it('should set an invalid biobank id when the filter applied on the biobank quality standards returns no matching biobanks', () => {
-        state.filters.selections.biobank_quality = ['eric']
-        const payload = {}
-        const expected = ['no-biobank-found']
-
-        mutations.SetBiobankIdsWithSelectedQuality(state, payload)
-
-        expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
+        expect(state.collectionNameDictionary).toEqual({ 'bbmri-eric:ID:NL_AAAACXPAF5YXYACQK2ME25QAAM:collection:124': 'AMC Renal Transplant Biobank', 'bbmri-eric:ID:NL_AAAACXPJ3VCTUACQK2ME25QAAE:collection:211': 'Association study of coronary heart disease Risk factors in the Genome using an Old-versus-young Setting', 'bbmri-eric:ID:NL_AAAACXPKMVPYIACQK2ME25QAAE:collection:92': 'Amsterdam Ressucitation Studies', 'bbmri-eric:ID:NL_AAAACYWY5TBZGACQK2MDM4QAAE:collection:89': 'Arrhythmia genetics in the Netherlands', 'bbmri-eric:ID:NL_AMCBB:collection:AB17-022': 'Physical Activity and Dietary intervention in OVArian cancer (PADOVA): a RCT evaluating effects on body composition, physical function, and fatigue' })
       })
     })
 
@@ -335,14 +244,6 @@ describe('store', () => {
 
         mutations.SetQualityStandardDictionary(state, response)
         expect(state.qualityStandardsDictionary).toStrictEqual(expected)
-      })
-    })
-
-    describe('SetBiobankReport', () => {
-      it('should set the biobank report value in the state with the payload', () => {
-        const payload = { id: 'biobank-1-other' }
-        mutations.SetBiobankReport(state, payload)
-        expect(state.biobankReport).toStrictEqual(payload)
       })
     })
 
@@ -451,37 +352,20 @@ describe('store', () => {
     })
 
     describe('ConfigureFilters', () => {
-      it('can add custom filter facets based on config', () => {
-        state.customCollectionFilterFacets = [{
+      it('can add a custom filter and assign a function to options based on config', () => {
+        state.filterFacets.push({
           tableName: 'eu_bbmri_eric_data_types',
           columnName: 'data_categories',
           negotiatorDescription: 'Where data category is: ',
           facetTitle: 'Test facet'
-        }]
+        })
 
         mutations.ConfigureFilters(state)
 
-        const result = state.filterFacets.find(f => f.label === 'Test facet')
+        const configFilter = state.filterFacets.find(f => f.label === 'Test facet')
 
-        expect(result).not.toBeUndefined()
-      })
-
-      it('can add custom filter at a specific place based on config', () => {
-        state.customCollectionFilterFacets = [{
-          tableName: 'eu_bbmri_eric_data_types',
-          columnName: 'data_categories',
-          negotiatorDescription: 'Where data category is: ',
-          facetTitle: 'Test facet',
-          insertBefore: 'diagnosis_available'
-        }]
-
-        mutations.ConfigureFilters(state)
-
-        const configFilter = state.filterFacets.findIndex(f => f.label === 'Test facet')
-        const filter = state.filterFacets.findIndex(f => f.name === 'diagnosis_available')
-
-        // assert that the configFilter is indeed 1 above the selected filter
-        expect(configFilter === (filter - 1)).toBeTruthy()
+        // assert that the configFilter has an options function
+        expect(typeof configFilter.options).toBe('function')
       })
     })
 
@@ -522,6 +406,14 @@ describe('store', () => {
         mutations.RemoveCollectionsFromSelection(state, { collections: ['collectionA'], bookmark: true })
         expect(state.selectedCollections).toEqual([])
         expect(state.cartValid).toBeTruthy()
+      })
+    })
+
+    describe('SetNotification', () => {
+      it('should set the loading boolean in the state', () => {
+        expect(state.notification).toBe(undefined)
+        mutations.SetNotification(state, 'notify this message')
+        expect(state.notification).toStrictEqual('notify this message')
       })
     })
   })
