@@ -52,7 +52,7 @@
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
-            @shown="loadOptions(dynamicFilters, filter)"
+            @shown="loadOptions(filter)"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
@@ -73,7 +73,7 @@
                   (satisfyAllValue) =>
                     filterSatisfyAllChange(filter.name, satisfyAllValue)
                 "
-                :optionsFilter="dynamicFilters[filter.name]"
+                :optionsFilter="filterOptionsOverride[filter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -85,7 +85,7 @@
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
-              @shown="loadOptions(dynamicFilters, additionalFilter)"
+              @shown="loadOptions(additionalFilter)"
               boundary="window"
               no-flip
               class="mr-2 mb-1 filter-dropdown">
@@ -106,7 +106,7 @@
                     (satisfyAllValue) =>
                       filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
                   "
-                  :optionsFilter="dynamicFilters[additionalFilter.name]"
+                  :optionsFilter="filterOptionsOverride[additionalFilter.name]"
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>
@@ -157,7 +157,7 @@ export default {
       'activeFilters',
       'selectedCollections',
       'uiText',
-      'dynamicFilters'
+      'filterOptionsOverride'
     ]),
     ...mapState([
       'menuHeight',
@@ -225,11 +225,13 @@ export default {
         return filtersActive.length
       }
     },
-    loadOptions (dynamicFilters, filter) {
+    loadOptions (filter) {
+      /**
+       * Each time a filter is expanded (shown=True) this function is triggered
+       * GetUpdateFilter checks how many search results each of the filter options will generate
+       */
       const filterName = filter.name
       const activeFilters = this.activeFilters
-      console.log('Filters')
-      console.log(activeFilters)
       this.GetUpdateFilter({ filterName, activeFilters })
     }
   },
