@@ -6,7 +6,6 @@
       :satisfy-all-label="satisfyAllLabel"
       @input="(value) => $emit('satisfy-all', value)"/>
     <b-form-checkbox-group
-      class="checkbox-group"
       v-model="selection"
       stacked
       :options="visibleOptions"/>
@@ -208,11 +207,6 @@ export default {
 </script>
 
 <style>
-.checkbox-group {
-  max-height: 15rem;
-  overflow-y: auto;
-}
-
 .card-link {
   font-size: small;
   font-style: italic;

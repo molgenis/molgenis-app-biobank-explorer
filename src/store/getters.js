@@ -3,6 +3,9 @@ import { groupCollectionsByBiobankId } from '../utils/grouping'
 import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
+  getFilters: (state) => {
+    return state.filterFacets
+  },
   getHumanReadableString,
   uiText: (state) => {
     return state.i18n[state.language]
@@ -111,6 +114,7 @@ export default {
    * Get map of active filters
    */
   activeFilters: state => state.filters.selections,
+  filterOptionsOverride: state => state.filterOptionsOverride,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined
