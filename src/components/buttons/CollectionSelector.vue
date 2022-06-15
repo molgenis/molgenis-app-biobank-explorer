@@ -6,11 +6,15 @@
       :id="checkboxIdentifier"
       class="add-to-cart"
       @change.prevent="handleCollectionStatus"
-      :checked="checkboxState"
+      :checked="isChecked"
       :value="false"
       hidden/>
-    <label v-if="!iconOnly" class="add-to-cart-label btn btn-outline-secondary px-2" :for="checkboxIdentifier">
-      <span>Add</span>
+    <label
+      v-if="!iconOnly"
+      class="add-to-cart-label btn btn-outline-secondary px-2"
+      :for="checkboxIdentifier">
+      <span v-if="!multi">{{ uiText['add'] }}</span>
+      <span v-else>{{ uiText['add_all'] }}</span>
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -22,12 +26,10 @@
       v-if="!iconOnly"
       class="btn remove-from-cart-label btn-outline-danger px-2"
       :for="checkboxIdentifier">
-      <span>Remove</span>
+      <span v-if="!multi">{{ uiText["remove"] }}</span>
+      <span v-else>{{ uiText["remove_all"] }}</span>
     </label>
-    <label
-      v-else
-      class="btn remove-from-cart-label"
-      :for="checkboxIdentifier">
+    <label v-else class="btn remove-from-cart-label" :for="checkboxIdentifier">
       <font-awesome-icon
         :style="checkboxFaStyle"
         :icon="['fas', 'check-square']"
@@ -64,6 +66,11 @@ export default {
           color: 'var(--secondary)'
         }
       }
+    },
+    multi: {
+      type: Boolean,
+      required: false,
+      default: () => false
     }
   },
   data: () => {
@@ -73,34 +80,32 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'AddCollectionsToSelection'
-    ]),
-    ...mapMutations([
-      'RemoveCollectionsFromSelection'
-    ]),
+    ...mapActions(['AddCollectionsToSelection']),
+    ...mapMutations(['RemoveCollectionsFromSelection']),
     handleCollectionStatus (event) {
       const { checked } = event.target
 
-      const collectionData = { collections: this.collections, bookmark: this.bookmark }
+      const collectionData = {
+        collections: this.collections,
+        bookmark: this.bookmark
+      }
 
       if (checked) {
         this.AddCollectionsToSelection(collectionData)
       } else {
         this.RemoveCollectionsFromSelection(collectionData)
       }
-      this.$emit('checked', checked)
     }
   },
   computed: {
-    ...mapGetters(['selectedCollections']),
+    ...mapGetters(['selectedCollections', 'uiText']),
     checkboxIdentifier () {
       return this.identifier
     },
-    checkboxState () {
+    isChecked () {
       const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
-
-      return this.collections.map(collection => collection.value)
+      return this.collections
+        .map(collection => collection.value)
         .every(id => selectedCollectionIds.includes(id))
     }
   },
@@ -109,17 +114,18 @@ export default {
 
     if (Array.isArray(this.collectionData)) {
       initialData = this.collectionData
-      this.identifier = `selector-${Math.random().toString().substr(2)}`
+      this.identifier = `selector-${Math.random()
+        .toString()
+        .substr(2)}`
     } else {
       initialData = [this.collectionData]
       this.identifier = this.collectionData.id
     }
 
-    this.collections = initialData.map((collection) => ({
+    this.collections = initialData.map(collection => ({
       label: collection.label || collection.name,
       value: collection.id
-    })
-    )
+    }))
   }
 }
 </script>

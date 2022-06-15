@@ -3,6 +3,8 @@ const BannerPlugin = require('webpack').BannerPlugin
 const ZipPlugin = require('zip-webpack-plugin')
 const packageJson = require('./package.json')
 const GenerateJsonWebpackPlugin = require('generate-json-webpack-plugin')
+const MonacoEditorWebpackPlugin = require('monaco-editor-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 const pkgVersion = packageJson.version
 const pkgName = packageJson.name
 
@@ -20,6 +22,9 @@ PR: ${process.env.CHANGE_ID}
 BUILD: ${process.env.BUILD_NUMBER}`
 
 const initialCollectionColumns = require('./src/config/initialCollectionColumns')
+const initialBiobankColumns = require('./src/config/initialBiobankColumns')
+const initialFilterFacets = require('./src/config/initialFilterFacets')
+const i18n = require('./src/config/i18n')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -27,7 +32,7 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-const PROXY_TARGET = 'https://bbmri-acc.gcc.rug.nl' // 'https://master.dev.molgenis.org'
+const PROXY_TARGET = 'https://bbmri-acc.gcc.rug.nl'
 
 const apiDevServerProxyConf = {
   target: PROXY_TARGET,
@@ -56,6 +61,13 @@ module.exports = {
   },
   configureWebpack: config => {
     config.plugins.push(
+      new MonacoEditorWebpackPlugin({
+        publicPath: process.env.NODE_ENV !== 'development'
+          ? '/plugin/app/' + pkgName + '/js/' // we need to change this path for webworkers to work on molgenis app
+          : '/',
+        languages: ['json'],
+        features: []
+      }),
       new BannerPlugin({
         banner: bannerText
       }),
@@ -74,11 +86,22 @@ module.exports = {
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',
-          disabledFilters: [],
-          customCollectionFilterFacets: [],
-          collectionColumns: initialCollectionColumns
+          filterFacets: initialFilterFacets,
+          collectionColumns: initialCollectionColumns,
+          biobankColumns: initialBiobankColumns,
+          biobankCardShowCollections: true,
+          googleAnalyticsKey: '',
+          removeFreemarkerMargin: true,
+          filterMenuInitiallyFolded: false,
+          menuHeight: 50,
+          i18n: i18n
         }
       }, null, 4),
+      new CopyPlugin({
+        patterns: [
+          { from: 'monaco-files/', to: 'js' } // this is a hack, because we can't load js files from the home dir as app
+        ]
+      }),
       new ZipPlugin({
         filename: `${packageJson.name}.v${packageJson.version}`
       })
@@ -99,6 +122,10 @@ module.exports = {
         changeOrigin: true
       },
       '/api': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
+      '/app-ui-context': {
         target: PROXY_TARGET,
         changeOrigin: true
       },

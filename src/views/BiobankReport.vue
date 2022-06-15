@@ -1,6 +1,9 @@
 <template>
-  <div class="mg-biobank-card container">
-    <script :text="bioschemasJsonld" type="application/ld+json" />
+  <div class="mg-biobank-card container pb-4">
+    <script
+      v-if="bioschemasJsonld && !isLoading"
+      v-text="bioschemasJsonld"
+      type="application/ld+json"/>
     <loading
       :active="isLoading"
       loader="dots"
@@ -11,7 +14,8 @@
         <div class="col">
           <!-- Back to previous page buttons -->
           <button class="btn btn-link" @click="back">
-            <i class="fa fa-angle-left" aria-hidden="true"></i> Back
+            <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>
+            <span>{{ uiText["back"] }}</span>
           </button>
         </div>
       </div>
@@ -22,16 +26,10 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8">
-                <p><b>Id: </b>{{ biobank.id }}</p>
-                <p><b>PID: </b>{{ biobank.pid }}</p>
-                <report-description
-                  :description="biobank.description"
-                  :maxLength="500"></report-description>
-                <p v-if="availableCovidTypes">
-                  <report-details-list
-                    :reportDetails="availableCovidTypes"></report-details-list>
-                </p>
-                <h3>Collections</h3>
+                <view-generator :viewmodel="biobank.viewmodel" />
+
+                <!-- Collection Part -->
+                <h3 class="mt-4">Collections</h3>
                 <div
                   v-for="(collection, index) in collectionsData"
                   :key="collection.id">
@@ -40,7 +38,9 @@
                     :title="collection.name"
                     :id="collection.id"/>
 
-                  <collection-view-generator :collection="collection" />
+                  <view-generator
+                    class="collection-view"
+                    :viewmodel="collection.viewmodel"/>
                 </div>
               </div>
               <!-- Right side card -->
@@ -79,16 +79,17 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import ReportDescription from '../components/report-components/ReportDescription.vue'
 import ReportTitle from '../components/report-components/ReportTitle.vue'
 import ReportDetailsList from '../components/report-components/ReportDetailsList.vue'
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
-import CollectionViewGenerator from '../components/generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../components/generators/ViewGenerator.vue'
+import { sortCollectionsByName } from '../utils/sorting'
 
 import {
+  getBiobankDetails,
   getCollectionDetails,
   mapContactInfo,
   mapNetworkInfo,
@@ -101,10 +102,9 @@ export default {
   name: 'biobank-report-card',
   components: {
     ReportTitle,
-    ReportDescription,
     ReportDetailsList,
     Loading,
-    CollectionViewGenerator,
+    ViewGenerator,
     CollectionTitle
   },
   data () {
@@ -113,12 +113,13 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      biobank: 'biobankReport',
-      isLoading: 'isLoading'
-    }),
+    ...mapState(['biobankReport', 'isLoading']),
+    ...mapGetters(['uiText']),
+    biobank () {
+      return this.biobankReport ? getBiobankDetails(this.biobankReport) : {}
+    },
     biobankDataAvailable () {
-      return this.biobank && this.biobank
+      return Object.keys(this.biobank).length
     },
     query () {
       return this.$route.query
@@ -135,7 +136,7 @@ export default {
     },
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
-        ? this.biobank.collections
+        ? sortCollectionsByName(this.biobank.collections)
           .filter(it => !it.parent_collection)
           .map(col => getCollectionDetails(col))
         : []
@@ -148,26 +149,10 @@ export default {
         }
       }
     },
-    availableCovidTypes () {
-      if (
-        this.biobank.covid19biobank &&
-        this.biobank.covid19biobank.length > 0
-      ) {
-        return {
-          Covid19: {
-            badgeColor: 'warning',
-            type: 'list',
-            value: this.biobank.covid19biobank.map(
-              covidItem => covidItem.label || covidItem.name
-            )
-          }
-        }
-      } else return ''
-    },
     bioschemasJsonld () {
       return this.biobankDataAvailable
         ? mapBiobankToBioschemas(this.biobank)
-        : {}
+        : undefined
     }
   },
   methods: {

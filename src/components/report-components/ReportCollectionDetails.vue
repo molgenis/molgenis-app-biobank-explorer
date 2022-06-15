@@ -10,7 +10,7 @@
       :maxLength="500"></report-description>
 
     <!-- collection information -->
-    <collection-view-generator :collection="collectionModel" />
+    <view-generator :viewmodel="collectionModel.viewmodel" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import { mapState } from 'vuex'
 import { getCollectionDetails } from '../../utils/templateMapper'
 import CollectionSelector from '../buttons/CollectionSelector.vue'
 import ReportDescription from '../report-components/ReportDescription.vue'
-import CollectionViewGenerator from '../generators/CollectionViewGenerator.vue'
+import ViewGenerator from '../generators/ViewGenerator.vue'
 
 export default {
   name: 'ReportCollectionDetails',
@@ -32,7 +32,7 @@ export default {
   components: {
     CollectionSelector,
     ReportDescription,
-    CollectionViewGenerator
+    ViewGenerator
   },
   computed: {
     ...mapState(['collectionColumns']),

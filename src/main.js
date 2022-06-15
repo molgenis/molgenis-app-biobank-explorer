@@ -1,4 +1,5 @@
 import 'es6-promise/auto'
+import VueSlideUpDown from 'vue-slide-up-down'
 import 'regenerator-runtime'
 import Vue from 'vue'
 import store from './store'
@@ -21,7 +22,9 @@ import {
   faSpinner,
   faTimes,
   faCheck,
-  faCheckSquare
+  faCheckSquare,
+  faCog,
+  faServer
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -32,11 +35,11 @@ import {
   faCreativeCommonsNcEu
 } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare)
+library.add(faServer, faCaretRight, faTimes, faSpinner, faExclamationCircle, faCreativeCommonsNcEu, faCheck, faSquare, faCheckSquare, faCog)
 
-if (INITIAL_STATE.GA_KEY) {
+if (INITIAL_STATE.googleAnalyticsKey) {
   Vue.use(VueAnalytics, {
-    id: INITIAL_STATE.GA_KEY,
+    id: INITIAL_STATE.googleAnalyticsKey,
     router,
     // TODO Use MOLGENIS settings for this
     set: [
@@ -59,6 +62,7 @@ if (window.__webpack_public_path__) {
 }
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('vue-slide-up-down', VueSlideUpDown)
 
 Vue.use(i18n, {
   lng: INITIAL_STATE.lng,

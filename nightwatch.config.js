@@ -12,7 +12,11 @@ module.exports = {
       selenium: {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
-        port: '80'
+        port: '80',
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,
@@ -28,32 +32,17 @@ module.exports = {
       selenium: {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
-        port: '80'
+        port: '80',
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,
         build: buildName,
         tunnelIdentifier: process.env.TUNNEL_IDENTIFIER,
         browserName: 'firefox'
-      }
-    },
-    ci_ie11: {
-      silent: true,
-      username: process.env.SAUCE_CRED_USR,
-      access_key: process.env.SAUCE_CRED_PSW,
-      selenium: {
-        start_process: false,
-        host: 'ondemand.us-west-1.saucelabs.com',
-        port: '80'
-      },
-      desiredCapabilities: {
-        name: packageJson.name,
-        build: buildName,
-        tunnelIdentifier: process.env.TUNNEL_IDENTIFIER,
-        // https://saucelabs.com/platform/platform-configurator#/
-        browserName: 'internet explorer',
-        platformName: 'Windows 10',
-        browserVersion: '11.285'
       }
     },
     ci_safari: {
@@ -63,7 +52,11 @@ module.exports = {
       selenium: {
         start_process: false,
         host: 'ondemand.us-west-1.saucelabs.com',
-        port: '80'
+        port: '80',
+        timeout_options: {
+          timeout: 120000,
+          retry_attempts: 1
+        }
       },
       desiredCapabilities: {
         name: packageJson.name,

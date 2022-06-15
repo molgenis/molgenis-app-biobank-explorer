@@ -1,12 +1,16 @@
 import Vue from 'vue'
 import { createBookmark } from '../utils/bookmarkMapper'
-import { fixCollectionTree } from './helpers'
-import filterDefinitions from '../utils/filterDefinitions'
-import { customCheckboxFilters } from '../config/configurableFacets'
+import { createFilters } from '../config/facetConfigurator'
+import { collectionMutations } from './collection/collectionMutations'
+import { biobankMutations } from './biobank/biobankMutations'
+import { configurationMutations } from './configuration/configurationMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
 export default {
+  ...biobankMutations,
+  ...collectionMutations,
+  ...configurationMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
@@ -16,6 +20,9 @@ export default {
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
   UpdateFilterSelection (state, filterUpdate) {
+    // reset the page as we query new results.
+    state.currentPage = 1
+
     const currentFilterSelection = state.filters.selections
     const currentLabels = state.filters.labels
 
@@ -37,7 +44,7 @@ export default {
         filterValue === '' ||
         (Array.isArray(filterValue) && !filterValue.length) ||
         (!Array.isArray(filterValue) && typeof filterValue === 'object' &&
-        (!filterValue.value.length || !filterValue.value[0].length))) {
+          (!filterValue.value.length || !filterValue.value[0].length))) {
         // remove the empty filter and the label
         delete currentFilterSelection[propertyName]
         delete currentLabels[propertyName]
@@ -69,6 +76,12 @@ export default {
 
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
+  SetUpdateFilter (state, { filterName, reducedFilterOptions }) {
+    // initialize empty list for reduced set of filter options
+    state.filterOptionsOverride[filterName] = []
+    // set reduced filter options for corresponding filter (filerName)
+    Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+  },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
@@ -77,42 +90,9 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
-  /**
-   * Reset all filters in the state
-   */
-  ResetFilters (state) {
-    state.filters.selections = {}
-    state.filters.satisfyAll = []
-  },
-  SetBiobanks (state, biobanks) {
-    biobanks.forEach(biobank => {
-      Vue.set(state.biobanks, biobank.id, fixCollectionTree(biobank))
-    })
-  },
-  SetBiobankIds (state, biobankIds) {
-    state.biobankIds = biobankIds
-  },
-  // TODO name more specifically
-  SetDictionaries (state, response) {
-    const collections = response.items.map(item => (
-      {
-        id: item.data.id,
-        label: item.data.label || item.data.name,
-        biobankName: item.data.biobank.data.label || item.data.biobank.data.name,
-        commercialUse: item.data.collaboration_commercial
-      }))
 
-    collections.forEach(function (collection) {
-      state.collectionBiobankDictionary[collection.id] = collection.biobankName
-      state.collectionDictionary[collection.id] = collection.label
-    })
-
-    const newNonCommercialCollections = state.nonCommercialCollections.concat(collections.filter(collection => !collection.commercialUse).map(collection => collection.id))
-    state.nonCommercialCollections = [...new Set(newNonCommercialCollections)]
-  },
   SetQualityStandardDictionary (state, response) {
     // Combine arrays from two tables and deduplicate
     const allStandards = [...new Set(
@@ -127,41 +107,15 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { name, filterOptions }) {
     // only cache it once
-    if (!state.filterOptionDictionary[filterName]) {
-      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
-
+    if (!state.filterOptionDictionary[name]) {
+      Vue.set(state.filterOptionDictionary, name, filterOptions)
       // to let the filter know, no more caching needed
-      if (filterName === 'diagnosis_available') {
+      if (name === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
     }
-  },
-  SetCollectionInfo (state, response) {
-    if (response === undefined) {
-      state.collectionInfo = response
-      return
-    }
-
-    const collectionInfo = response.items.map(item => ({
-      collectionId: item.data.id,
-      collectionName: item.data.label || item.data.name,
-      biobankId: item.data.biobank.data.id,
-      isSubcollection: item.data.parent_collection !== undefined
-    }))
-    state.collectionInfo = collectionInfo
-  },
-  /**
-   * Store a single biobank in the state for showing a biobank report
-   * @param state
-   * @param biobank response object from the server containing meta and items for a single biobank
-   */
-  SetBiobankReport (state, biobank) {
-    state.biobankReport = biobank
-  },
-  SetCollectionReport (state, collection) {
-    state.collectionReport = collection
   },
   SetNetworkReport (state, network) {
     state.networkReport.network = network
@@ -172,39 +126,8 @@ export default {
   SetNetworkBiobanks (state, biobanks) {
     state.networkReport.biobanks = biobanks
   },
-  // methods for rehydrating bookmark
-  SetCollectionIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.collectionIdsWithSelectedQuality = []
-      state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
-    } else {
-      const collectionQualityFilter = state.filters.selections.collection_quality
-      const isCollectionQualityFilterActive = (collectionQualityFilter && collectionQualityFilter.length > 0) || state.route.query.collection_quality
-
-      state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
-    }
-  },
-  SetBiobankIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.biobankIdsWithSelectedQuality = []
-      state.biobankIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.biobank.id))]
-    } else {
-      const biobankQualityFilter = state.filters.selections.biobank_quality
-      const isBiobankQualityFilterActive = (biobankQualityFilter && biobankQualityFilter.length > 0) || state.route.query.biobank_quality
-
-      state.biobankIdsWithSelectedQuality = isBiobankQualityFilterActive ? ['no-biobank-found'] : []
-    }
-  },
-  SetCollectionsToSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const currentIds = state.selectedCollections.map(sc => sc.value)
-    const newCollections = collections.filter(cf => !currentIds.includes(cf.value))
-    state.selectedCollections = state.selectedCollections.concat(newCollections)
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
-    }
+  SetCartValidationStatus (state, status) {
+    state.cartValid = status
   },
   SetSearchHistory (state, history) {
     if (history === '') {
@@ -219,31 +142,27 @@ export default {
       state.searchHistory.push(history)
     }
   },
-  RemoveCollectionsFromSelection (state, { collections, bookmark }) {
-    state.cartValid = false
-    const collectionsToRemove = collections.map(c => c.value)
-    state.selectedCollections = state.selectedCollections.filter(sc => !collectionsToRemove.includes(sc.value))
-
-    if (bookmark) {
-      state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
-    }
-  },
   /**
    *
    * @param state
    * @param params
    */
-  MapQueryToState (state, ie11Query) {
+  MapQueryToState (state) {
     // bookmark has been altered in another view
     if (!state.cartValid) return
-    const query = ie11Query || state.route.query
+    const query = state.route.query
 
     const keysInQuery = Object.keys(query)
-    // we load the filterdefinitions, grab the names, so we can loop over it to map the selections
+    // we load the filters, grab the names, so we can loop over it to map the selections
     const filters = state.filterFacets.map(fd => fd.name)
       .filter(name => keysInQuery.includes(name))
       .filter(fr => !['search', 'nToken'].includes(fr)) // remove specific filters, else we are doing them again.
+
+    // collection_network does not have a specific filter facets and it's directly set by CovidNetworkFilter
+    // so we add it manually
+    if (query.collection_network) {
+      filters.push('collection_network')
+    }
 
     if (query.search) {
       Vue.set(state.filters.selections, 'search', decodeURIComponent(query.search))
@@ -261,7 +180,7 @@ export default {
       const decoded = decodeURIComponent(query.cart)
       const cartIdString = atob(decoded)
       const cartIds = cartIdString.split(',')
-      state.selectedCollections = cartIds.map(id => ({ label: state.collectionDictionary[id], value: id }))
+      state.selectedCollections = cartIds.map(id => ({ label: state.collectionNameDictionary[id], value: id }))
 
       // add the beginning of history if from a link-back url
       if (state.searchHistory.length === 0) {
@@ -286,23 +205,12 @@ export default {
     }
   },
   ConfigureFilters (state) {
-    const filterFacets = filterDefinitions(state)
-    const customFilters = customCheckboxFilters(state)
-
-    for (const customFilter of customFilters) {
-      if (customFilter.insertBefore) {
-        const filterIndex = filterFacets.findIndex(filter => filter.name === customFilter.insertBefore)
-
-        if (filterIndex !== -1) {
-          filterFacets.splice(filterIndex, 0, customFilter)
-        } else {
-          filterFacets.push(customFilter)
-        }
-      } else {
-        filterFacets.push(customFilter)
-      }
-    }
-    state.filterFacets = filterFacets
+    state.filterFacets = createFilters(state)
+  },
+  ClearActiveFilters (state) {
+    state.filters.selections = {}
+    state.filters.satisfyAll = []
+    createBookmark(state.filters.selections, state.selectedCollections)
   },
   SetError (state, error) {
     state.error = error
@@ -310,11 +218,11 @@ export default {
   SetLoading (state, loading) {
     state.isLoading = loading
   },
+  SetCurrentPage (state, currentPage) {
+    state.currentPage = currentPage
+  },
   SetPodium (state, response) {
     state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
-  },
-  SetPodiumCollections (state, response) {
-    state.podiumCollectionIds = response.items.map(pc => pc.data.id)
   },
   SetNegotiatorEntities (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {
@@ -325,5 +233,25 @@ export default {
       state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
       state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
     }
+  },
+  SetNotification (state, notification) {
+    state.notification = notification
+  },
+  ResetDynamicFilters (state, filters) {
+    for (var filterName in filters) {
+      // state.dynamicFilters[filters[filterName]] = []
+      Vue.set(state.dynamicFilters, filters[filterName], [])
+    }
+  },
+  SetFilterReduction (state, load) {
+    // unpack load and push item.id OR item.name
+    // to state[filtername] (which is initialized as list)
+    // ToDO create array, push once to state
+    const filtername = load.filter
+    state.dynamicFilters[filtername] = []
+    load.options.forEach((item) => {
+      state.dynamicFilters[filtername].push(item.id || item.name)
+    })
+    state.dynamicFilters[filtername].push.apply(state.dynamicFilters[filtername], state.filters.selections[filtername])
   }
 }

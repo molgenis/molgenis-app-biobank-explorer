@@ -1,6 +1,9 @@
 <template>
-  <div class="container mg-collection-report-card">
-    <script v-text="bioschemasJsonld" type="application/ld+json" />
+  <div class="container mg-collection-report-card pb-4">
+    <script
+      v-if="bioschemasJsonld && !isLoading"
+      v-text="bioschemasJsonld"
+      type="application/ld+json"/>
     <loading
       :active="isLoading"
       loader="dots"
@@ -10,7 +13,8 @@
     <div class="container-fluid">
       <!-- Back to previous page buttons -->
       <button class="btn btn-link pl-0" @click="back">
-        <i class="fa fa-angle-left" aria-hidden="true"></i> Back
+        <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>
+        <span>{{ uiText["back"] }}</span>
       </button>
 
       <div class="row" v-if="this.collection && !this.isLoading">
@@ -36,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportTitle from '../components/report-components/ReportTitle'
@@ -61,6 +65,7 @@ export default {
   },
   computed: {
     ...mapState({ collection: 'collectionReport', isLoading: 'isLoading' }),
+    ...mapGetters(['uiText']),
     info () {
       return collectionReportInformation(this.collection)
     },
@@ -69,7 +74,9 @@ export default {
       return splittedUrl[splittedUrl.length - 1]
     },
     bioschemasJsonld () {
-      return this.collection ? mapCollectionToBioschemas(this.collection) : {}
+      return this.collection
+        ? mapCollectionToBioschemas(this.collection)
+        : undefined
     }
   },
   // needed because if we route back the component is not destroyed but its props are updated for other collection

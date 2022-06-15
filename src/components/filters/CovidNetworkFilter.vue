@@ -2,8 +2,8 @@
   <div>
     <b-form-checkbox
       id="covidBiobankNetwork"
-      :checked="biobankNetwork"
-      @change="setBiobankNetwork($event)"
+      :checked="network"
+      @change="setNetwork($event)"
       name="covidBiobankNetwork">
       Biobanks providing COVID-19 services
     </b-form-checkbox>
@@ -28,15 +28,15 @@ export default {
   methods: {
     ...mapMutations(['UpdateFilterSelection']),
 
-    setBiobankNetwork (checked) {
-      let biobankNetworkSelection = this.filters.selections.biobank_network || []
+    setNetwork (checked) {
+      let networkSelection = this.filters.selections.network || []
 
-      if (checked && !biobankNetworkSelection.includes(covid19NetworkId)) {
-        biobankNetworkSelection.push(covid19NetworkId)
+      if (checked && !networkSelection.includes(covid19NetworkId)) {
+        networkSelection.push(covid19NetworkId)
       } else if (!checked) {
-        biobankNetworkSelection = biobankNetworkSelection.filter(network => network !== covid19NetworkId)
+        networkSelection = networkSelection.filter(network => network !== covid19NetworkId)
       }
-      this.UpdateFilterSelection({ name: 'biobank_network', value: biobankNetworkSelection })
+      this.UpdateFilterSelection({ name: 'network', value: networkSelection })
     },
     setCollectionNetwork (checked) {
       let collectionNetworkSelection = this.filters.selections.collection_network || []
@@ -51,10 +51,14 @@ export default {
   },
   computed: {
     ...mapState(['filters']),
-    biobankNetwork: {
+    network: {
       get () {
-        const network = this.filters.selections.biobank_network
-        if (network && network.length > 0 && network.includes(covid19NetworkId)) {
+        const network = this.filters.selections.network
+        if (
+          network &&
+          network.length > 0 &&
+          network.includes(covid19NetworkId)
+        ) {
           return true
         }
         return false
@@ -63,7 +67,11 @@ export default {
     collectionNetwork: {
       get () {
         const network = this.filters.selections.collection_network
-        if (network && network.length > 0 && network.includes(covid19NetworkId)) {
+        if (
+          network &&
+          network.length > 0 &&
+          network.includes(covid19NetworkId)
+        ) {
           return true
         }
         return false

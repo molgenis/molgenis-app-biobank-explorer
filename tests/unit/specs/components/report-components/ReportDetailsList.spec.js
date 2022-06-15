@@ -1,59 +1,72 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import ReportDetailsList from '@/components/report-components/ReportDetailsList'
+import Vuex from 'vuex'
+import { baseGetters } from '../../mockData'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 describe('ReportDetailsList', () => {
-  let wrapper
+  let wrapper, store
   beforeEach(() => {
+    store = new Vuex.Store({
+      getters: {
+        ...baseGetters
+      }
+    })
+
     const stubs = ['router-link']
     wrapper = shallowMount(ReportDetailsList,
       {
+        store,
+        localVue,
         stubs,
         propsData:
-          {
-            reportDetails: {
-              name: {
-                value: 'Some Name',
-                type: 'string'
-              },
-              website: {
-                value: 'http://myWebsite.com',
-                type: 'url'
-              },
-              email: {
-                value: 'myEmail@myWebsite.com',
-                type: 'email'
-              },
-              phone: {
-                value: '+1234567890',
-                type: 'phone'
-              },
-              bool_true: {
-                value: true,
-                type: 'bool'
-              },
-              bool_false: {
-                value: false,
-                type: 'bool'
-              },
-              list: {
-                value: ['val1', 'val2'],
-                type: 'list'
-              },
-              list_color: {
-                value: ['val3'],
-                type: 'list',
-                badgeColor: 'primary'
-              },
-              report: {
-                value: '/biobank/somebiobank',
-                type: 'report'
-              },
-              string_with_key: {
-                value: 'string',
-                type: 'string-with-key'
-              }
+        {
+          reportDetails: {
+            name: {
+              value: 'Some Name',
+              type: 'string'
+            },
+            website: {
+              value: 'http://myWebsite.com',
+              type: 'url'
+            },
+            email: {
+              value: 'myEmail@myWebsite.com',
+              type: 'email'
+            },
+            phone: {
+              value: '+1234567890',
+              type: 'phone'
+            },
+            bool_true: {
+              value: true,
+              type: 'bool'
+            },
+            bool_false: {
+              value: false,
+              type: 'bool'
+            },
+            list: {
+              value: ['val1', 'val2'],
+              type: 'list'
+            },
+            list_color: {
+              value: ['val3'],
+              type: 'list',
+              badgeColor: 'primary'
+            },
+            report: {
+              value: '/biobank/somebiobank',
+              type: 'report'
+            },
+            string_with_key: {
+              value: 'string',
+              type: 'string-with-key'
             }
           }
+        }
       })
   })
   it('should initialize', () => {

@@ -1,6 +1,7 @@
 import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
+import initialFilterFacets from '../../config/initialFilterFacets'
 
 export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
@@ -24,6 +25,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
     diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available', state.filters.satisfyAll.includes('diagnosis_available')),
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
+    createQuery(state.filters.selections.network, 'combined_network', state.filters.satisfyAll.includes('network')),
     createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
     state.filters.selections.search ? [{
       operator: 'OR',
@@ -35,11 +37,14 @@ export const createRSQLQuery = (state) => transformToRSQL({
 
 function createCustomRSQLQuery (state) {
   const activeFilterSelection = Object.keys(state.filters.selections)
+
+  const initialFilters = initialFilterFacets.map(filter => filter.name)
+
   const queries = []
 
-  for (const customFacet of state.customCollectionFilterFacets) {
-    if (activeFilterSelection.includes(customFacet.columnName)) {
-      queries.push(createQuery(state.filters.selections[customFacet.columnName], customFacet.columnName, state.filters.satisfyAll.includes(customFacet.columnName)))
+  for (const facet of state.filterFacets) {
+    if (activeFilterSelection.includes(facet.columnName) && !initialFilters.includes(facet.name)) {
+      queries.push(createQuery(state.filters.selections[facet.columnName], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
     }
   }
 
@@ -51,7 +56,6 @@ export const createBiobankRSQLQuery = (state) => transformToRSQL({
   operands: flatten([
     createInQuery('country', state.filters.selections.country || []),
     createInQuery('id', state.biobankIdsWithSelectedQuality),
-    createQuery(state.filters.selections.biobank_network, 'network', state.filters.satisfyAll.includes('biobank_network')),
     createQuery(state.filters.selections.covid19, 'covid19biobank', state.filters.satisfyAll.includes('covid19'))
   ])
 })

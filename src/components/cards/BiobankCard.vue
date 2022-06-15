@@ -1,267 +1,345 @@
 <template>
-  <div
-    :class="[{ 'border-secondary': biobankInSelection }, 'card biobank-card']">
-    <div
-      class="card-header biobank-card-header"
-      @click.prevent="collapsed = !collapsed">
-      <div class="row">
-        <div class="col-6 d-flex" v-if="!loading">
-          <div class="mr-3" v-if="!loading">
-            <font-awesome-icon
-              icon="caret-right"
-              :style="iconStyle"
-              class="collapse-button"/>
-          </div>
-          <div class="mb-2">
-            <h5>
-              <router-link :to="'/biobank/' + biobank.id">
+  <!-- template -->
+  <article
+    :class="[
+      {
+        'border-secondary': biobankInSelection,
+        'border-light': !biobankInSelection,
+        'back-side': showCollections,
+      },
+      'biobank-card flip',
+    ]">
+    <div tabindex="0">
+      <section>
+        <div v-if="loading" class="loading-screen">
+          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
+        </div>
+        <div v-else>
+          <header class="border-0 card-header p-1">
+            <h5 class="p-1 pb-0 mt-1">
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                title="Biobank details"
+                class="text-dark">
                 <span
-                  class="fa fa-table mr-2 icon-alignment"
-                  aria-hidden="true"
-                  aria-labelledby="biobank-name"></span>
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
+                <span class="biobank-name">{{ biobank.name }}</span>
               </router-link>
-              <span id="biobank-name">{{ biobank.name }}</span>
             </h5>
+          </header>
 
-            <small v-if="biobank.quality && biobank.quality.length > 0">
-              <info-popover label="Quality mark(s):" bold-text icon-before-label>
-                <table>
-                  <tbody>
-                    <tr
-                      :key="`${biobank.id}-${quality.label}`"
-                      v-for="quality in biobank.quality">
-                      <td class="text-nowrap align-top font-weight-bold p-2">
-                        {{ quality.label }}
-                      </td>
-                      <td class="py-2">
-                        {{ qualityStandardsDictionary[quality.label] }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </info-popover>
-              <quality-column
-                :qualities="biobank.quality"
-                :spacing="0"></quality-column>
+          <div class="shadow-sm" v-if="biobank.collections.length">
+            <button
+              class="btn btn-link text-info pl-2"
+              @click.prevent="showCollections = true">
+              {{ uiText["card_collections_details"] }}
+            </button>
+          </div>
+          <div class="p-2 pt-1 biobank-section">
+            <small>
+              <view-generator :viewmodel="biobankcardViewmodel" />
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                :title="`${biobank.name} details`"
+                class="text-info ml-1">
+                <span>More details</span>
+              </router-link>
             </small>
-            <span v-if="availableCovidTypes">
-              <b-img
-                class="biobank-icon covid-icon"
-                :src="require('../../assets/custom_icons/covid19.png')"
-                title="Covid-19"/>
-            </span>
           </div>
         </div>
-        <div class="col-5" v-if="!loading">
-          <p>
-            <small class="mr-2">
-              <span class="font-weight-bold">Collection types:</span>
-            </small>
-            <small>{{ collectionTypes }}</small>
-            <br />
-            <small class="mr-2">
-              <span class="font-weight-bold">Juridical person:</span>
-            </small>
-            <small>{{ biobank['juridical_person'] }}</small>
-            <template v-if="availableCovidTypes">
-              <br />
-              <small class="mr-2">
-                <span class="font-weight-bold">Covid-19:</span>
-              </small>
-              <small>{{ availableCovidTypes }}</small>
-            </template>
-          </p>
+      </section>
+      <section>
+        <div v-if="loading" class="loading-screen">
+          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
         </div>
-        <div class="col-1 px-1"  v-if="!loading">
-          <collection-selector
-            class="mt-auto text-right"
-            v-if="biobank.collections.length > 0"
-            :collectionData="biobank.collections"
-            icon-only
-            bookmark
-            @checked="handleCheckAll"></collection-selector>
+        <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
+        <div v-if="!loading && showCollections">
+          <header class="border-0 card-header p-1">
+            <h5 class="pt-1 pl-1 pr-1 mt-1">
+              <router-link
+                :to="'/biobank/' + biobank.id"
+                title="Biobank details"
+                class="text-dark">
+                <span
+                  class="fa fa-server mr-2 text-primary"
+                  aria-hidden="true"></span>
+                <span class="biobank-name">{{ biobank.name }}</span>
+              </router-link>
+            </h5>
+          </header>
+          <div class="d-flex mb-1 shadow-sm">
+            <button
+              class="btn btn-link text-info pl-2"
+              @click.prevent="showCollections = false">
+              {{ uiText["card_biobank_details"] }}
+            </button>
+          </div>
+          <div class="collections-section">
+            <div class="pl-2 pt-2 d-flex">
+              <h4>Collections</h4>
+              <collection-selector
+                class="text-right ml-auto mr-1 align-self-center"
+                v-if="biobank.collections && biobank.collections.length > 0"
+                :collectionData="biobank.collections"
+                bookmark
+                iconOnly
+                multi></collection-selector>
+            </div>
+            <div
+              class="pl-2"
+              v-if="!biobank.collections || !biobank.collections.length">
+              This biobank has no collections yet.
+            </div>
+            <div
+              class="collection-items mx-1"
+              v-for="(collectionDetail, index) of biobank.collectionDetails"
+              :key="collectionDetail.id">
+              <div v-if="showCollections" class="mb-2">
+                <div class="pl-2 py-2 d-flex">
+                  <router-link
+                    :to="'/collection/' + collectionDetail.id"
+                    title="Collection details"
+                    class="text-dark">
+                    <span
+                      class="
+                        fa fa-server
+                        collection-icon
+                        fa-lg
+                        mr-2
+                        text-primary
+                      "
+                      aria-hidden="true"></span>
+                    <span class="collection-name">{{
+                      collectionDetail.name
+                    }}</span>
+                  </router-link>
+                  <div class="ml-auto">
+                    <collection-selector
+                      class="ml-auto"
+                      :collectionData="collectionDetail"
+                      iconOnly
+                      bookmark></collection-selector>
+                  </div>
+                </div>
+
+                <small>
+                  <view-generator
+                    class="p-2 pt-2"
+                    :viewmodel="collectionViewmodel(collectionDetail)"/>
+                  <router-link
+                    :to="'/collection/' + collectionDetail.id"
+                    :title="`${collectionDetail.name} details`"
+                    class="text-info ml-2 pl-1">
+                    <span>More details</span>
+                  </router-link>
+                </small>
+                <hr v-if="index != lastCollection" />
+              </div>
+            </div>
+          </div>
         </div>
-        <div v-else class="col-12 text-center">
-          <span class="fa fa-spinner fa-spin" aria-hidden="true"></span>
-        </div>
-      </div>
+      </section>
     </div>
-    <div class="card-body table-card" v-if="!collapsed && !loading">
-      <collections-table
-        v-if="biobank.collections.length > 0"
-        :collections="sortedCollections"></collections-table>
-    </div>
-  </div>
+  </article>
 </template>
 
 <script>
-import CollectionSelector from '../buttons/CollectionSelector'
-import CollectionsTable from '../tables/CollectionsTable.vue'
 import { mapGetters, mapState } from 'vuex'
-import utils from '../../utils'
-import { sortCollectionsByName } from '../../utils/sorting'
-import QualityColumn from '../tables/QualityColumn'
-import 'array-flat-polyfill'
-import InfoPopover from '../popovers/InfoPopover.vue'
+import {
+  getBiobankDetails,
+  getCollectionDetails
+} from '../../utils/templateMapper'
+import ViewGenerator from '../generators/ViewGenerator.vue'
+import CollectionSelector from '../buttons/CollectionSelector.vue'
 
 export default {
   name: 'biobank-card',
   components: {
-    CollectionsTable,
-    QualityColumn,
-    CollectionSelector,
-    InfoPopover
+    ViewGenerator,
+    CollectionSelector
   },
   props: {
     biobank: {
       type: [Object, String]
-    },
-    initCollapsed: {
-      type: Boolean,
-      required: false,
-      default: true
     }
   },
   data () {
     return {
       biobankSelected: false,
-      collapsed: this.initCollapsed
+      showCollections: false
     }
   },
   methods: {
-    handleCheckAll: function (checked) {
-      if (checked === true) {
-        this.collapsed = false
+    getCollectionDetails,
+    collectionViewmodel (collectiondetails) {
+      const attributes = []
+
+      for (const item of this.collectionColumns) {
+        if (item.showOnBiobankCard) {
+          attributes.push(
+            collectiondetails.viewmodel.attributes.find(
+              vm => vm.label === item.label
+            )
+          )
+        }
       }
+      return { attributes }
     }
   },
   computed: {
-    ...mapState(['qualityStandardsDictionary']),
-    ...mapGetters(['selectedCollections']),
+    ...mapState([
+      'biobankColumns',
+      'collectionColumns',
+      'biobankCardShowCollections'
+    ]),
+    ...mapGetters(['selectedCollections', 'uiText']),
+    lastCollection () {
+      return this.biobank.collectionDetails.length - 1
+    },
+    biobankcardViewmodel () {
+      // check if biobank is still loading
+      if (this.loading) return {}
+
+      const { viewmodel } = getBiobankDetails(this.biobank)
+      const attributes = []
+
+      for (const item of this.biobankColumns) {
+        if (item.showOnBiobankCard) {
+          attributes.push(
+            viewmodel.attributes.find(vm => vm.label === item.label)
+          )
+        }
+      }
+      return { attributes }
+    },
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
       const biobankCollectionSelection = this.biobank.collections
-        .filter((bcf) => !bcf.parent_collection)
-        .map((bc) => ({ label: bc.label || bc.name, value: bc.id }))
+        .filter(bcf => !bcf.parent_collection)
+        .map(bc => ({ label: bc.label || bc.name, value: bc.id }))
       return this.selectedCollections
-        .map((sc) => sc.value)
-        .some((id) =>
-          biobankCollectionSelection.map((pc) => pc.value).includes(id)
-        )
-    },
-    sortedCollections () {
-      return sortCollectionsByName(this.biobank.collections)
+        .map(sc => sc.value)
+        .some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
     },
     loading () {
       return typeof this.biobank === 'string'
-    },
-    collectionTypes () {
-      const getSubCollections = (collection) => [
-        collection,
-        ...collection.sub_collections.flatMap(getSubCollections)
-      ]
-      const types = this.biobank.collections
-        .flatMap(getSubCollections)
-        .flatMap((collection) => collection.type)
-        .map((type) => type.label)
-      return utils.getUniqueIdArray(types).join(', ')
-    },
-    availableCovidTypes () {
-      if (
-        this.biobank.covid19biobank &&
-        this.biobank.covid19biobank.length > 0
-      ) {
-        return this.biobank.covid19biobank
-          .map((covidItem) => covidItem.label || covidItem.name)
-          .join(', ')
-      } else return ''
-    },
-    iconStyle () {
-      return {
-        transform: `rotate(${this.collapsed ? 0 : 90}deg)`,
-        transition: 'transform 0.2s'
-      }
     }
+  },
+  mounted () {
+    this.showCollections = this.biobankCardShowCollections
   }
 }
 </script>
 
+<style scoped>
+.collection-icon {
+  position: relative;
+  top: 0.25em;
+  clip-path: inset(-15% 0% 75% 0%);
+}
+</style>
+
 <style>
-.table-card {
-  padding: 0.1rem;
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
-.added-to-selection {
-  position: absolute;
-  z-index: 2;
-  top: 9px;
-  right: -5px;
-  background: white;
-  border-radius: 50%;
+.btn-link:focus {
+  box-shadow: none;
+}
+
+.biobank-section,
+.collections-section {
+  height: 20.5rem;
+  max-height: 20.5rem;
+  overflow: auto;
+}
+
+.collection-items {
+  word-break: break-word;
+}
+
+.collection-items th {
+  width: 25%;
 }
 
 .biobank-card {
-  margin-bottom: 1em;
+  width: 25rem;
 }
 
-.biobank-card-header {
-  background-color: #f5f5f5;
+.biobank-card > header,
+.collection-header {
+  display: flex;
+  min-height: 3rem;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.biobank-card-header:hover {
-  cursor: pointer;
+/* TODO put in theme */
+.card-header {
+  background-color: #efefef;
 }
 
-.biobank-icon:hover {
-  cursor: pointer;
+/** Flip card */
+article {
+  padding: 1.5rem;
 }
 
-.covid-icon {
-  height: 1.5rem;
-  width: auto;
+article footer {
+  padding: 1.5rem 0 0 0;
 }
-
-.icon-alignment {
+article.flip {
+  padding: 0;
   position: relative;
-  top: 1px;
-  left: 2px;
+  height: 28rem;
+  perspective: 1000px;
 }
 
-/* can go: */
-
-/* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */
-.quality-marks-popover {
-  background-color: white !important;
-  border: solid black 0.5px;
-  max-width: 40rem;
+article.flip div[tabindex="0"] {
+  box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
+    0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
 }
 
-.quality-marks-popover[x-placement^='top'] > .arrow::before {
-  border-top-color: black !important;
-}
-.quality-marks-popover[x-placement^='top'] > .arrow::after {
-  border-top-color: white !important;
+article.flip div[tabindex="0"]:focus {
+  outline: none !important;
 }
 
-.quality-marks-popover[x-placement^='bottom'] > .arrow::before {
-  border-bottom-color: black !important;
-}
-.quality-marks-popover[x-placement^='bottom'] > .arrow::after {
-  border-bottom-color: white !important;
+article.flip [tabindex="0"] section {
+  background-color: #fff;
+  border: 0.1px solid #fff;
 }
 
-.popover-trigger-area {
+article.flip.back-side > [tabindex="0"] {
+  transform: rotateY(180deg);
+}
+article.flip [tabindex="0"] {
   position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
 }
 
-/* for touch screens, so you have a nice area to press and still get a popover */
-.popover-trigger-area::after {
-  content: '';
+article.flip [tabindex="0"] section {
   position: absolute;
-  top: -0.5rem;
-  bottom: -1rem;
-  right: -7rem;
-  left: -0.5rem;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  /* Safari */
+  backface-visibility: hidden;
+  box-sizing: border-box;
 }
+
+article.flip [tabindex="0"] section:last-child {
+  transform: rotateY(180deg);
+}
+
+/** ~~~ */
 </style>

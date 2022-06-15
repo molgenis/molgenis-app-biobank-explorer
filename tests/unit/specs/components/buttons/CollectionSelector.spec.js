@@ -1,6 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import CollectionSelector from '@/components/buttons/CollectionSelector'
 import Vuex from 'vuex'
+import { baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -30,6 +31,7 @@ describe('CollectionSelector', () => {
     store = new Vuex.Store({
       state: {},
       getters: {
+        ...baseGetters,
         selectedCollections
       },
       actions: {
@@ -60,6 +62,7 @@ describe('CollectionSelector', () => {
     // you can't alter a method after the store has been initialized
     store = new Vuex.Store({
       getters: {
+        ...baseGetters,
         selectedCollections: jest.fn().mockReturnValue(collectionResolveData)
       },
       mutations: {
@@ -95,17 +98,5 @@ describe('CollectionSelector', () => {
     label.trigger('click')
 
     expect(wrapper.vm.$data.collections).toEqual([{ value: 'single_collection', label: 'Single Collection' }])
-  })
-
-  it('should emit checked event when the checkbox change its value', async () => {
-    const propsData = { collectionData: { id: 'single_collection', label: 'Single Collection' } }
-
-    const wrapper = mount(CollectionSelector, { store, propsData, localVue })
-    const label = wrapper.find('label')
-    await label.trigger('click')
-    expect(wrapper.emitted().checked[0]).toEqual([true])
-
-    await label.trigger('click')
-    expect(wrapper.emitted().checked[1]).toEqual([false])
   })
 })

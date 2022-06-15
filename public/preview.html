@@ -13,6 +13,7 @@
       <%= htmlWebpackPlugin.options.version %>
     </code>
   </pre>
+
   <div id="app"></div>
 
   <script src="https://use.fontawesome.com/4b6985a594.js"></script>
@@ -27,9 +28,14 @@
     crossorigin="anonymous"></script>
 
   <script>
-    window.__INITIAL_STATE__ = {
+      window.__INITIAL_STATE__ = {
       language: 'en',
-      disabledFilters: []
+      disabledFilters: [],
+      collectionColumns: [],
+      biobankColumns: [],
+      googleAnalyticsKey: '',
+      removeFreemarkerMargin: false,
+      menuHeight: 0
     }
   </script>
 </body>
