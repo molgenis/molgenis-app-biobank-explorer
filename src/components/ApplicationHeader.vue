@@ -52,6 +52,7 @@
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
+            @shown="loadOptions(filter)"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
@@ -72,6 +73,7 @@
                   (satisfyAllValue) =>
                     filterSatisfyAllChange(filter.name, satisfyAllValue)
                 "
+                :optionsFilter="filterOptionsOverride[filter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -83,6 +85,7 @@
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
+              @shown="loadOptions(additionalFilter)"
               boundary="window"
               no-flip
               class="mr-2 mb-1 filter-dropdown">
@@ -103,6 +106,7 @@
                     (satisfyAllValue) =>
                       filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
                   "
+                  :optionsFilter="filterOptionsOverride[additionalFilter.name]"
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>

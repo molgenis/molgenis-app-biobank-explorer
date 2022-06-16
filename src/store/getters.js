@@ -111,6 +111,7 @@ export default {
    * Get map of active filters
    */
   activeFilters: state => state.filters.selections,
+  filterOptionsOverride: state => state.filterOptionsOverride,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined
