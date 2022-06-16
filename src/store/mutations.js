@@ -142,7 +142,7 @@ export default {
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
-    // only cache it once
+    /** only cache it once */
     if (!state.filterOptionDictionary[filterName]) {
       Vue.set(state.filterOptionDictionary, filterName, filterOptions)
 

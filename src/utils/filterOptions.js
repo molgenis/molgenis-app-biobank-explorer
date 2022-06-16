@@ -7,11 +7,13 @@ import { createTextSearchQuery } from '.'
 
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
+  console.log('filterData:')
+  console.log(filterData)
   store.commit('SetFilterOptionDictionary', filterData)
 }
 
-function retrieveFromCache (filterName) {
-  return store.state.filterOptionDictionary[filterName] ?? []
+function retrieveFromCache (name) {
+  return store.state.filterOptionDictionary[name] ?? []
 }
 
 function checkForBookmarkFilter (filterName, filterOptions) {
