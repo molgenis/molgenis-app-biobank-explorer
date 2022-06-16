@@ -68,6 +68,36 @@ export default {
         commit('SetError', error)
       })
   },
+  async GetUpdateFilter ({ state, commit }, { filterName, activeFilters }) {
+    /**
+     * Construct query for all filter options of the currently expanded filter
+     * query the results using molgenis API and use "total" attribute to create a list
+     * of filter options: If result.total > 0 : append the corresponding filter option to the reduced list
+     * if result.total == 0, exclude the specific option (dont display it for corresponding filter)
+     */
+    const reducedFilterOptions = []
+
+    // exclude active filters from current expanded filter
+    const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
+    let url = '/api/v2/eu_bbmri_eric_collections?q='
+
+    // iterate over all active filter options and create query from current selection(s)
+    for (const activeFilterName in activeFilterNames) {
+      const name = activeFilterNames[activeFilterName]
+      url = url + name + '=in=(' + activeFilters[name] + ');'
+    }
+    // iterate over options of the ONE filter that is currently expanded and construct query for each option
+    for (const num in state.filterOptionDictionary[filterName]) {
+      const filterOption = state.filterOptionDictionary[filterName][num].value
+      const optionString = filterName + '=in=(' + filterOption + ')'
+      // append URLs to list, use Promise.all on list
+      const response_ = await api.get(url + optionString)
+      if (response_.total > 0) {
+        reducedFilterOptions.push(filterOption)
+      }
+    }
+    commit('SetUpdateFilter', { filterName, reducedFilterOptions })
+  },
   /**
    * Transform the state into a NegotiatorQuery object.
    * Calls the DirectoryController method '/export' which answers with a URL

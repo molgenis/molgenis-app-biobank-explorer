@@ -76,6 +76,12 @@ export default {
 
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
+  SetUpdateFilter (state, { filterName, reducedFilterOptions }) {
+    // initialize empty list for reduced set of filter options
+    state.filterOptionsOverride[filterName] = []
+    // set reduced filter options for corresponding filter (filerName)
+    Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+  },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
@@ -101,13 +107,12 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { name, filterOptions }) {
     // only cache it once
-    if (!state.filterOptionDictionary[filterName]) {
-      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
-
+    if (!state.filterOptionDictionary[name]) {
+      Vue.set(state.filterOptionDictionary, name, filterOptions)
       // to let the filter know, no more caching needed
-      if (filterName === 'diagnosis_available') {
+      if (name === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
     }
@@ -231,5 +236,22 @@ export default {
   },
   SetNotification (state, notification) {
     state.notification = notification
+  },
+  ResetDynamicFilters (state, filters) {
+    for (var filterName in filters) {
+      // state.dynamicFilters[filters[filterName]] = []
+      Vue.set(state.dynamicFilters, filters[filterName], [])
+    }
+  },
+  SetFilterReduction (state, load) {
+    // unpack load and push item.id OR item.name
+    // to state[filtername] (which is initialized as list)
+    // ToDO create array, push once to state
+    const filtername = load.filter
+    state.dynamicFilters[filtername] = []
+    load.options.forEach((item) => {
+      state.dynamicFilters[filtername].push(item.id || item.name)
+    })
+    state.dynamicFilters[filtername].push.apply(state.dynamicFilters[filtername], state.filters.selections[filtername])
   }
 }
