@@ -85,6 +85,12 @@ export default {
     Vue.set(state.filters, 'labels', labels)
     createBookmark(state.filters, state.selectedCollections)
   },
+  SetUpdateFilter (state, { filterName, reducedFilterOptions }) {
+    // initialize empty list for reduced set of filter options
+    state.filterOptionsOverride[filterName] = []
+    // set reduced filter options for corresponding filter (filerName)
+    Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+  },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)

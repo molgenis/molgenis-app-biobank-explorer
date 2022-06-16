@@ -133,6 +133,7 @@ export default {
    */
   activeFilters: state => state.filters.selections,
   activeSatisfyAll: state => state.filters.satisfyAll,
+  filterOptionsOverride: state => state.filterOptionsOverride,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined

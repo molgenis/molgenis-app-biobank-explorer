@@ -35,6 +35,7 @@ export default {
   collectionRelationData: [], /** All the data of the structure of the model is here. */
   nonCommercialCollections: [],
   selectedCollections: [],
+  filterOptionsOverride: {},
   filters: {
     selections: {},
     satisfyAll: [],
