@@ -7,18 +7,20 @@ import { createTextSearchQuery } from '.'
 
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
+  console.log('filterData:')
+  console.log(filterData)
   store.commit('SetFilterOptionDictionary', filterData)
 }
 
-function retrieveFromCache (filterName) {
-  return store.state.filterOptionDictionary[filterName] ?? []
+function retrieveFromCache (name) {
+  return store.state.filterOptionDictionary[name] ?? []
 }
 
-function checkForBookmarkFilter (filterName, filterOptions) {
+function checkForBookmarkFilter (name, filterOptions) {
   if (!store.state.diagnosisAvailableFetched) {
     // If we have a cold start with a bookmark
     // we need to have the label for the selected filter
-    const activeDiagnosisFilter = store.getters.activeFilters[filterName]
+    const activeDiagnosisFilter = store.getters.activeFilters[name]
 
     if (activeDiagnosisFilter) {
       let options = []
@@ -29,21 +31,21 @@ function checkForBookmarkFilter (filterName, filterOptions) {
         }
       }
       if (options.length) {
-        cache({ filterName, filterOptions: options })
+        cache({ name, filterOptions: options })
       }
     }
   }
 }
 
 export const genericFilterOptions = (filterFacet) => {
-  const { tableName, filterName, filterLabelAttribute } = filterFacet
+  const { tableName, name, filterLabelAttribute } = filterFacet
   return () => new Promise((resolve) => {
-    const cachedOptions = retrieveFromCache(filterName)
+    const cachedOptions = retrieveFromCache(name)
 
     if (!cachedOptions.length) {
       api.get(`/api/v2/${tableName}`).then(response => {
         const filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
-        cache({ filterName, filterOptions })
+        cache({ name, filterOptions })
         resolve(filterOptions)
       })
     } else {
@@ -57,7 +59,7 @@ const createDiagnosisLabelQuery = (query) => transformToRSQL(createTextSearchQue
 const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 /** */
 
-export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
+export const diagnosisAvailableFilterOptions = (tableName, name) => {
   // destructure the query part from the multi-filter
   return ({ query, queryType }) => new Promise((resolve) => {
     let url = `/api/v2/${tableName}`
@@ -75,7 +77,7 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
-      checkForBookmarkFilter(filterName, filterOptions)
+      checkForBookmarkFilter(name, filterOptions)
       resolve(filterOptions)
     })
   })

@@ -107,13 +107,13 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { name, filterOptions }) {
     // only cache it once
-    if (!state.filterOptionDictionary[filterName]) {
-      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
+    if (!state.filterOptionDictionary[name]) {
+      Vue.set(state.filterOptionDictionary, name, filterOptions)
 
       // to let the filter know, no more caching needed
-      if (filterName === 'diagnosis_available') {
+      if (name === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
     }
