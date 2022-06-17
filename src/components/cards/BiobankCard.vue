@@ -174,7 +174,6 @@ export default {
     getCollectionDetails,
     collectionViewmodel (collectiondetails) {
       const attributes = []
-
       for (const item of this.collectionColumns) {
         if (item.showOnBiobankCard) {
           attributes.push(
@@ -184,6 +183,7 @@ export default {
           )
         }
       }
+
       return { attributes }
     }
   },
