@@ -17,6 +17,12 @@
       </button>
     </nav>
 
+    <div class="row">
+      <div v-if="jsonError" class="alert alert-danger ml-5" role="alert">
+        <span>{{ jsonError }}</span>
+      </div>
+    </div>
+
     <a href="" ref="download" class="hidden"></a>
 
     <div v-show="editorType === 'ui'" class="row px-5 pb-3">
@@ -71,7 +77,7 @@
           <div v-show="showNotification">
             <div
               v-if="configUpdateStatus === 204"
-              class="alert alert-success m-0"
+              class="alert alert-success m-0 mr-3"
               role="alert"
               @click="statusClosed = true">
               <span>Configuration saved!</span>
@@ -111,7 +117,8 @@ export default {
       editorType: 'ui', // ui / editor / diff
       newAppConfig: '',
       config: '',
-      uploadedAppConfig: ''
+      uploadedAppConfig: '',
+      jsonError: ''
     }
   },
   methods: {
@@ -141,12 +148,11 @@ export default {
       this.format()
       this.statusClosed = false
       if (this.editorType === 'editor') {
-        this.SaveApplicationConfiguration(this.editor.getValue())
+        this.saveToDatabase(this.editor.getValue())
       }
       if (this.editorType === 'ui') {
-        this.SaveApplicationConfiguration(this.newAppConfig)
+        this.saveToDatabase(this.newAppConfig)
       }
-      this.dirty = false
     },
     updateFilters (newConfig) {
       this.dirty = true
@@ -154,9 +160,24 @@ export default {
     },
     saveDiff (changesToSave) {
       this.newAppConfig = changesToSave
-      this.SaveApplicationConfiguration(changesToSave)
-      this.dirty = false
+      this.saveToDatabase(changesToSave)
+
       this.switchView('editor')
+    },
+    checkJSONStructure (jsonString) {
+      try {
+        JSON.parse(jsonString)
+        this.jsonError = ''
+      } catch (e) {
+        this.jsonError = e
+      }
+    },
+    saveToDatabase (newConfiguration) {
+      this.checkJSONStructure(newConfiguration)
+      if (!this.jsonError) {
+        this.SaveApplicationConfiguration(newConfiguration)
+        this.dirty = false
+      }
     },
     cancel () {
       this.dirty = false

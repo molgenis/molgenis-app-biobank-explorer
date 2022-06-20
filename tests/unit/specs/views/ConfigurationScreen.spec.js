@@ -10,12 +10,12 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 const mockAppConfig = { test: 'data' }
+const mockDiffText = JSON.stringify({ text: 'Diff editor test data' })
+
 const GetApplicationConfiguration = jest.fn().mockReturnValue(mockAppConfig)
 const SaveApplicationConfiguration = jest.fn()
-const editorGetValue = jest.fn()
+const editorGetValue = jest.fn().mockReturnValue(JSON.stringify(mockAppConfig))
 const editorSetValue = jest.fn()
-
-const mockDiffText = 'Diff editor test data'
 
 const mockEditor = {
   create: jest.fn().mockReturnValue(
