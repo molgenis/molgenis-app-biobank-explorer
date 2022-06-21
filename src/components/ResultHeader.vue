@@ -20,8 +20,6 @@
           <td>{{ subcollections.length }}</td>
         </tr>
       </tbody>
-
-      <tbody></tbody>
     </table>
   </small>
 </template>
