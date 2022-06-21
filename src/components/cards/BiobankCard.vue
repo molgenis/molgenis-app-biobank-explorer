@@ -36,7 +36,7 @@
               {{ uiText["card_collections_details"] }}
             </button>
           </div>
-          <div class="p-2 pt-1 biobank-section">
+          <div class="p-2 pt-1 biobank-section" :style="cardContainerHeight">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
               <router-link
@@ -75,7 +75,7 @@
               {{ uiText["card_biobank_details"] }}
             </button>
           </div>
-          <div class="collections-section">
+          <div class="collections-section" :style="cardContainerHeight">
             <div class="pl-2 pt-2 d-flex">
               <h4>Collections</h4>
               <collection-selector
@@ -197,6 +197,22 @@ export default {
     lastCollection () {
       return this.biobank.collectionDetails.length - 1
     },
+    cardContainerHeight () {
+      const charactersInName = this.biobank.name.length
+
+      let height = 20.5 // default
+
+      if (charactersInName <= 30) {
+        height = 22.2
+      }
+
+      /** When a biobank name is too long it will take three rows (most of the time), tipping point is 83 characters. */
+      if (charactersInName > 83) {
+        height = 19
+      }
+
+      return `height: ${height}rem;max-height: ${height}rem;`
+    },
     biobankcardViewmodel () {
       // check if biobank is still loading
       if (this.loading) return {}
@@ -256,8 +272,6 @@ export default {
 
 .biobank-section,
 .collections-section {
-  height: 20.5rem;
-  max-height: 20.5rem;
   overflow: auto;
 }
 
@@ -297,7 +311,7 @@ article footer {
 article.flip {
   padding: 0;
   position: relative;
-  height: 32rem;
+  height: 28rem;
   perspective: 1000px;
 }
 
