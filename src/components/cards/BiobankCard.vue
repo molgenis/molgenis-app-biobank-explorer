@@ -29,7 +29,7 @@
             </h5>
           </header>
 
-          <div class="shadow-sm" v-if="biobank.collections.length">
+          <div class="shadow-sm" v-if="numberOfCollections">
             <button
               class="btn btn-link text-info pl-2"
               @click.prevent="showCollections = true">
@@ -76,19 +76,23 @@
             </button>
           </div>
           <div class="collections-section" :style="cardContainerHeight">
-            <div class="pl-2 pt-2 d-flex">
-              <h4>Collections</h4>
+            <div class="pl-2 pt-2 d-flex" v-if="numberOfCollections">
+              <h5>
+                {{ numberOfCollections }} collection{{
+                  numberOfCollections === 1 ? "" : "s"
+                }}
+                available
+              </h5>
+
               <collection-selector
-                class="text-right ml-auto mr-1 align-self-center"
-                v-if="biobank.collections && biobank.collections.length > 0"
+                v-if="numberOfCollections > 1"
+                class="text-right mr-1 ml-auto align-self-center"
                 :collectionData="biobank.collections"
                 bookmark
                 iconOnly
                 multi></collection-selector>
             </div>
-            <div
-              class="pl-2"
-              v-if="!biobank.collections || !biobank.collections.length">
+            <div class="pl-2" v-if="!numberOfCollections">
               This biobank has no collections yet.
             </div>
             <div
@@ -174,7 +178,6 @@ export default {
     getCollectionDetails,
     collectionViewmodel (collectiondetails) {
       const attributes = []
-
       for (const item of this.collectionColumns) {
         if (item.showOnBiobankCard) {
           attributes.push(
@@ -196,6 +199,9 @@ export default {
     ...mapGetters(['selectedCollections', 'uiText']),
     lastCollection () {
       return this.biobank.collectionDetails.length - 1
+    },
+    numberOfCollections () {
+      return this.biobank.collections ? this.biobank.collections.length : 0
     },
     cardContainerHeight () {
       const charactersInName = this.biobank.name.length

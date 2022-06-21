@@ -144,7 +144,10 @@ const mapSubcollections = (collections, level) => {
 
 export const getCollectionDetails = collection => {
   const viewmodel = getViewmodel(collection, state.collectionColumns)
-  viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
+
+  if (collection.sub_collections && collection.sub_collections.length) {
+    viewmodel.sub_collections = mapSubcollections(collection.sub_collections, 1)
+  }
 
   return {
     ...collection,
@@ -190,7 +193,9 @@ export const getBiobankDetails = (biobank) => {
     biobank.collection_types = Object.keys(extractCollectionTypes(biobank.collections))
     biobank.collectionDetails = []
 
-    for (const collection of biobank.collections) {
+    const parentCollections = biobank.collections.filter(collection => !collection.parent_collection)
+
+    for (const collection of parentCollections) {
       biobank.collectionDetails.push(getCollectionDetails(collection))
     }
   }
