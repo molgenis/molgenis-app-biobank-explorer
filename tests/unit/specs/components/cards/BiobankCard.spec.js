@@ -23,6 +23,7 @@ describe('BiobankCard', () => {
     propsData = {
       biobank: {
         id: 'biobank-1',
+        name: 'Dummy biobank',
         collections: [{
           name: 'z',
           type: [{ label: 'col-type-a' }],
