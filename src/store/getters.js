@@ -33,15 +33,31 @@ export default {
     })
   },
   parentCollections: (state) => {
-    const allParentCollections = state.collectionInfo.filter(colInfo => !colInfo.isSubcollection).map(fci => fci.collectionId)
+    let allParentCollections = state.collectionInfo.filter(colInfo => !colInfo.isSubcollection)
     let flattenedCollections = []
+
+    /**  check if we have any search result, then all biobankIds will be available.
+    * Else we can just use the initial state.
+    */
+    if (state.initialBiobankCount !== state.biobankCount) {
+      allParentCollections = allParentCollections.filter(subCollection => state.biobankIds.includes(subCollection.biobankId))
+    }
+
     allParentCollections.forEach(function (apc) {
-      flattenedCollections = flattenedCollections.concat(apc)
+      flattenedCollections = flattenedCollections.concat(apc.collectionId)
     })
     return flattenedCollections
   },
   subcollections: (state) => {
-    const allSubcollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection).map(fci => fci.collectionId)
+    let allSubcollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection)
+
+    /**  check if we have any search result, then all biobankIds will be available.
+    * Else we can just use the initial state.
+    */
+    if (state.initialBiobankCount !== state.biobankCount) {
+      allSubcollections = allSubcollections.filter(subCollection => state.biobankIds.includes(subCollection.biobankId))
+    }
+
     let flattenedCollections = []
     allSubcollections.forEach(function (subCollection) {
       flattenedCollections = flattenedCollections.concat(subCollection)
