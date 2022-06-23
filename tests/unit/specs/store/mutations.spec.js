@@ -74,14 +74,14 @@ describe('store', () => {
 
     describe('UpdateFilterSatisfyAll', () => {
       it('can set to a specific filter the satisfy all value to true/false', () => {
-        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: true })
-        expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(true)
+        mutations.UpdateFilterSatisfyAll(state, { name: 'biobank_capabilities', value: true })
+        expect(state.filters.satisfyAll.includes('biobank_capabilities')).toStrictEqual(true)
       })
 
       it('can delete the entry in the satisfyAll array if its filter\'s satisfyAll flag value changes', () => {
-        state.filters.satisfyAll = ['diagnosis_available', 'covid19', 'materials']
-        mutations.UpdateFilterSatisfyAll(state, { name: 'covid19', value: false })
-        expect(state.filters.satisfyAll.includes('covid19')).toStrictEqual(false)
+        state.filters.satisfyAll = ['diagnosis_available', 'biobank_capabilities', 'materials']
+        mutations.UpdateFilterSatisfyAll(state, { name: 'biobank_capabilities', value: false })
+        expect(state.filters.satisfyAll.includes('biobank_capabilities')).toStrictEqual(false)
         expect(state.filters.satisfyAll.includes('diagnosis_available')).toStrictEqual(true)
         expect(state.filters.satisfyAll.includes('materials')).toStrictEqual(true)
       })
@@ -96,7 +96,7 @@ describe('store', () => {
           collection_quality: ['Awesome standard'],
           biobank_quality: ['Awesome standard'],
           type: ['type'],
-          covid19: ['covid19'],
+          biobank_capabilities: ['biobank_capabilities'],
           dataType: ['type']
         }
         expect(state.filters.selections.country).toEqual(['AT'])
@@ -132,7 +132,7 @@ describe('store', () => {
             network: 'networkA,networkB',
             biobank_quality: 'qualityA',
             collection_network: 'networkC,networkD',
-            covid19: 'covid19',
+            biobank_capabilities: 'covid19',
             cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5',
             satisfyAll: 'covid19,materials'
           }
@@ -143,10 +143,10 @@ describe('store', () => {
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.selections.materials).toStrictEqual(['RNA', 'PLASMA'])
         expect(state.filters.selections.type).toStrictEqual(['BIRTH_COHORT'])
-        expect(state.filters.selections.covid19).toStrictEqual(['covid19'])
+        expect(state.filters.selections.biobank_capabilities).toStrictEqual(['covid19'])
         expect(state.filters.selections.dataType).toStrictEqual(['BIOLOGICAL_SAMPLES'])
         expect(state.filters.selections.collection_quality).toStrictEqual(['eric', 'self'])
-        expect(state.filters.selections.covid19).toStrictEqual(['covid19'])
+        expect(state.filters.selections.biobank_capabilities).toStrictEqual(['covid19'])
         expect(state.filters.selections.network).toStrictEqual(['networkA', 'networkB'])
         expect(state.filters.selections.biobank_quality).toStrictEqual(['qualityA'])
         expect(state.filters.selections.search).toBe('search')

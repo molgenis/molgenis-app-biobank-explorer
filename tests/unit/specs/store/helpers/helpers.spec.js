@@ -236,23 +236,23 @@ describe('store', () => {
 
     describe('createBiobankRSQLQuery', () => {
       afterEach(() => { state = getInitialState() })
-      it('should create a Biobank query with a covid19 filter and the satisfy all flag enabled', () => {
-        state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll = ['covid19']
+      it('should create a Biobank query with a capabilities filter and the satisfy all flag enabled', () => {
+        state.filters.selections.biobank_capabilities = ['covid_1', 'covid_2']
+        state.filters.satisfyAll = ['biobank_capabilities']
 
         const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'covid19biobank==covid_1;covid19biobank==covid_2'
+        const expected = 'capabilities==covid_1;capabilities==covid_2'
 
         expect(actual).toBe(expected)
       })
 
       it('should create a Biobank query with a covid19 filter and country filter. For country, satisfyAll is not supported', () => {
-        state.filters.selections.covid19 = ['covid_1', 'covid_2']
-        state.filters.satisfyAll = ['covid19']
+        state.filters.selections.biobank_capabilities = ['covid_1', 'covid_2']
+        state.filters.satisfyAll = ['biobank_capabilities']
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createBiobankRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);covid19biobank==covid_1;covid19biobank==covid_2'
+        const expected = 'country=in=(NL,BE);capabilities==covid_1;capabilities==covid_2'
 
         expect(actual).toBe(expected)
       })

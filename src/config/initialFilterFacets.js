@@ -33,7 +33,6 @@ const filterDefinitions = [
     showFacet: true
   },
   {
-    headerClass: 'bg-warning text-white',
     component: 'CovidNetworkFilter',
     name: 'covid19network',
     label: 'COVID-19',
@@ -41,13 +40,11 @@ const filterDefinitions = [
     showFacet: false
   },
   {
-    headerClass: 'bg-warning text-white',
-    component: 'CovidFilter',
-    name: 'covid19',
-    label: 'COVID-19 Services',
-    tableName: 'eu_bbmri_eric_COVID_19',
-    columnName: 'covid19',
-    humanReadableString: 'Covid-19 service(s):',
+    name: 'biobank_capabilities',
+    label: 'Biobank Capabilities',
+    tableName: 'eu_bbmri_eric_capabilities',
+    columnName: 'capabilities',
+    humanReadableString: 'Biobank capabilities:',
     showFacet: false
   },
   {
