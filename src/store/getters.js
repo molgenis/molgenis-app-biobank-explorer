@@ -32,15 +32,14 @@ export default {
       }
     })
   },
-  parentCollections: (state) => {
+  parentCollections: (state, { biobankRsql }) => {
     let allParentCollections = state.collectionInfo.filter(colInfo => !colInfo.isSubcollection)
     let flattenedCollections = []
-
     /**  check if we have any search result, then all biobankIds will be available.
     * Else we can just use the initial state.
     */
-    if (state.initialBiobankCount !== state.biobankCount) {
-      allParentCollections = allParentCollections.filter(subCollection => state.biobankIds.includes(subCollection.biobankId))
+    if (state.initialBiobankCount !== state.biobankCount && biobankRsql) {
+      allParentCollections = allParentCollections.filter(parentCollection => state.biobankIds.includes(parentCollection.biobankId))
     }
 
     allParentCollections.forEach(function (apc) {
@@ -48,13 +47,13 @@ export default {
     })
     return flattenedCollections
   },
-  subcollections: (state) => {
+  subcollections: (state, { biobankRsql }) => {
     let allSubcollections = state.collectionInfo.filter(colInfo => colInfo.isSubcollection)
 
     /**  check if we have any search result, then all biobankIds will be available.
     * Else we can just use the initial state.
     */
-    if (state.initialBiobankCount !== state.biobankCount) {
+    if (state.initialBiobankCount !== state.biobankCount && biobankRsql) {
       allSubcollections = allSubcollections.filter(subCollection => state.biobankIds.includes(subCollection.biobankId))
     }
 
