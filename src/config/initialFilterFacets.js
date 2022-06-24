@@ -15,6 +15,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_countries',
     columnName: 'country',
     humanReadableString: 'Countries:',
+    queryOptions: '?sort=name',
     showFacet: true
   },
   {

@@ -36,12 +36,12 @@ function checkForBookmarkFilter (filterName, filterOptions) {
 }
 
 export const genericFilterOptions = (filterFacet) => {
-  const { tableName, name, filterLabelAttribute } = filterFacet
+  const { tableName, name, filterLabelAttribute, queryOptions } = filterFacet
   return () => new Promise((resolve) => {
     const cachedOptions = retrieveFromCache(name)
 
     if (!cachedOptions.length) {
-      api.get(`/api/v2/${tableName}`).then(response => {
+      api.get(`/api/v2/${tableName}${queryOptions || ''}`).then(response => {
         const filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
         cache({ filterName: name, filterOptions })
         resolve(filterOptions)
@@ -82,7 +82,7 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 }
 
 export const collaborationTypeFilterOptions = () => {
-  const filterOptions = [{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use', value: 'false' }]
+  const filterOptions = [{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use only', value: 'false' }]
 
   return () => new Promise((resolve) => {
     resolve(filterOptions)
