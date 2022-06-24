@@ -113,7 +113,7 @@
           <button
             @click="showAllFilters = !showAllFilters"
             class="btn btn-link text-info">
-            <span v-if="showAllFilters">Less filters</span>
+            <span v-if="showAllFilters">Fewer filters</span>
             <span v-else>More filters</span>
           </button>
         </div>
