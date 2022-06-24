@@ -254,7 +254,9 @@ export default {
       return { attributes }
     },
     hasBiobankQuality () {
-      return this.biobankcardViewmodel.attributes.some(attr => attr.type === 'quality' && attr.value.length)
+      return this.biobankcardViewmodel.attributes.some(
+        attr => attr.type === 'quality' && attr.value && attr.value.length
+      )
     },
     /** broken */
     biobankInSelection () {
