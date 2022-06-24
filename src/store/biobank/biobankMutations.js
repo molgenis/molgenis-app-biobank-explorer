@@ -30,7 +30,7 @@ export const biobankMutations = {
     state.biobankCount = response.page.totalElements
   },
   CalculateBiobankCount (state, getters) {
-    if (getters.biobankRsql) {
+    if (getters.biobankRsql && !getters.rsql) {
       // calculation has already been done.
     } else if (getters.rsql) {
       state.biobankCount = [...new Set(state.collectionInfo.map(collection => collection.biobankId))].length

@@ -38,7 +38,7 @@ export default {
     /**  check if we have any search result, then all biobankIds will be available.
     * Else we can just use the initial state.
     */
-    if (state.initialBiobankCount !== state.biobankCount && biobankRsql) {
+    if (biobankRsql) {
       allParentCollections = allParentCollections.filter(parentCollection => state.biobankIds.includes(parentCollection.biobankId))
     }
 
@@ -53,7 +53,7 @@ export default {
     /**  check if we have any search result, then all biobankIds will be available.
     * Else we can just use the initial state.
     */
-    if (state.initialBiobankCount !== state.biobankCount && biobankRsql) {
+    if (biobankRsql) {
       allSubcollections = allSubcollections.filter(subCollection => state.biobankIds.includes(subCollection.biobankId))
     }
 
