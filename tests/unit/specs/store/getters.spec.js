@@ -280,7 +280,7 @@ describe('store', () => {
       ]
 
       it('should return only parent collection ids', () => {
-        const result = getters.parentCollections(state)
+        const result = getters.parentCollections(state, getters)
         expect(result).toStrictEqual(['col-1'])
       })
       it('Should return filters as label + value objects', () => {
