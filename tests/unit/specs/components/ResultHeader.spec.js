@@ -19,7 +19,7 @@ describe('ResultHeader', () => {
         ...baseGetters,
         subcollections: () => [],
         parentCollections: () => collectionsWithBiobank.map(cb => cb.collectionsWithBiobank),
-        biobanks: () => biobanks
+        foundBiobanks: () => biobanks
       }
     })
   })
