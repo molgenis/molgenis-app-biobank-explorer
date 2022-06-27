@@ -8,18 +8,23 @@ export default {
     return state.i18n[state.language]
   },
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
-  biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
+  biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql, biobankRsql }) => {
     if (loading) {
       return []
     }
     let ids = biobankIds
-    if (rsql && rsql.length) {
+    if (rsql) {
       ids = collectionInfo
       // biobank IDs present in collectionIds
         .map(({ biobankId }) => biobankId)
       // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
     }
+
+    if (biobankRsql) {
+      ids = ids.filter(id => biobankIds.includes(id))
+    }
+
     return ids.map(biobankId => {
       // lazy loading, return only the id, which will be fetched on demand
       if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
