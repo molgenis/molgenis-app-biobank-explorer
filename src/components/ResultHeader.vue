@@ -9,7 +9,7 @@
       <tbody>
         <tr>
           <td class="pr-1">Organisations:</td>
-          <td>{{ biobanks.length }}</td>
+          <td>{{ foundBiobanks }}</td>
         </tr>
         <tr>
           <td class="pr-1">Collection(s):</td>
@@ -29,7 +29,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['biobanks', 'subcollections', 'parentCollections'])
+    ...mapGetters(['foundBiobanks', 'subcollections', 'parentCollections'])
   }
 }
 </script>
