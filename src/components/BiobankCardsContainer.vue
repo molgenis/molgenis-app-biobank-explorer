@@ -69,9 +69,6 @@ export default {
         return this.biobanks
       }
     },
-    biobankIds () {
-      return this.loading ? [] : this.biobanks.map(it => it.id || it)
-    },
     biobankIdsToFetch () {
       return this.biobanksShown.filter(it => typeof it === 'string')
     }

@@ -15,14 +15,23 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_countries',
     columnName: 'country',
     humanReadableString: 'Countries:',
+    queryOptions: '?sort=name',
     showFacet: true
   },
   {
     name: 'type',
-    label: 'Collection types',
+    label: 'Collection type',
     tableName: 'eu_bbmri_eric_collection_types',
     columnName: 'type',
     humanReadableString: 'Collection type(s):',
+    showFacet: true
+  },
+  {
+    name: 'categories',
+    label: 'Categories',
+    tableName: 'eu_bbmri_eric_category',
+    columnName: 'categories',
+    humanReadableString: 'Categories:',
     showFacet: true
   },
   {
@@ -41,15 +50,15 @@ const filterDefinitions = [
   },
   {
     name: 'biobank_capabilities',
-    label: 'Biobank Capabilities',
+    label: 'Biobank services',
     tableName: 'eu_bbmri_eric_capabilities',
     columnName: 'capabilities',
-    humanReadableString: 'Biobank capabilities:',
+    humanReadableString: 'Biobank services:',
     showFacet: false
   },
   {
     name: 'materials',
-    label: 'Materials',
+    label: 'Material type',
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
@@ -81,7 +90,7 @@ const filterDefinitions = [
   },
   {
     name: 'dataType',
-    label: 'Data types',
+    label: 'Data type',
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'dataType',
     humanReadableString: 'Data type(s):',

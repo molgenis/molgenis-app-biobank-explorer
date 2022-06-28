@@ -25,6 +25,15 @@
                   class="fa fa-server mr-2 text-primary"
                   aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
+                <sup
+                  v-if="hasBiobankQuality"
+                  class="
+                    fa fa-check-circle-o
+                    text-success
+                    certificate-icon
+                    ml-1
+                  "
+                  aria-hidden="true"></sup>
               </router-link>
             </h5>
           </header>
@@ -65,6 +74,15 @@
                   class="fa fa-server mr-2 text-primary"
                   aria-hidden="true"></span>
                 <span class="biobank-name">{{ biobank.name }}</span>
+                <sup
+                  v-if="hasBiobankQuality"
+                  class="
+                    fa fa-check-circle-o
+                    text-success
+                    certificate-icon
+                    ml-1
+                  "
+                  aria-hidden="true"></sup>
               </router-link>
             </h5>
           </header>
@@ -212,8 +230,8 @@ export default {
         height = 22.2
       }
 
-      /** When a biobank name is too long it will take three rows (most of the time), tipping point is 83 characters. */
-      if (charactersInName > 83) {
+      /** When a biobank name is too long it will take three rows (most of the time), tipping point is 80 characters. */
+      if (charactersInName >= 80) {
         height = 19
       }
 
@@ -235,6 +253,12 @@ export default {
       }
       return { attributes }
     },
+    hasBiobankQuality () {
+      return this.biobankcardViewmodel.attributes.some(
+        attr => attr.type === 'quality' && attr.value && attr.value.length
+      )
+    },
+    /** broken */
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
@@ -260,6 +284,10 @@ export default {
   position: relative;
   top: 0.25em;
   clip-path: inset(-15% 0% 75% 0%);
+}
+
+.certificate-icon {
+  font-size: 0.8rem;
 }
 </style>
 
@@ -355,6 +383,9 @@ article.flip [tabindex="0"] section {
   /* Safari */
   backface-visibility: hidden;
   box-sizing: border-box;
+  visibility: visible;
+  -webkit-perspective: 0;
+  perspective: 0;
 }
 
 article.flip [tabindex="0"] section:last-child {

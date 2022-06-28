@@ -8,18 +8,23 @@ export default {
     return state.i18n[state.language]
   },
   loading: ({ collectionInfo, biobankIds }) => !(biobankIds && collectionInfo),
-  biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql }) => {
+  biobanks: ({ collectionInfo, biobankIds, biobanks }, { loading, rsql, biobankRsql }) => {
     if (loading) {
       return []
     }
     let ids = biobankIds
-    if (rsql && rsql.length) {
+    if (rsql) {
       ids = collectionInfo
       // biobank IDs present in collectionIds
         .map(({ biobankId }) => biobankId)
       // first occurrence of ID only
         .filter((value, index, self) => self.indexOf(value) === index)
     }
+
+    if (biobankRsql) {
+      ids = ids.filter(id => biobankIds.includes(id))
+    }
+
     return ids.map(biobankId => {
       // lazy loading, return only the id, which will be fetched on demand
       if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
@@ -65,8 +70,15 @@ export default {
   },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
-  foundBiobanks: (state) => {
-    return state.biobankCount
+  foundBiobanks: (state, { biobankRsql, parentCollections }) => {
+    // there are no collections found, so nothing to show.
+    if (!parentCollections.length) {
+      return 0
+    }
+
+    if (biobankRsql) {
+      return state.biobankIds.length
+    } else { return state.biobankCount }
   },
   foundCollectionIds (state, { getFoundBiobankIds }) {
     // only if there are biobanks, then there are collections. we can't have rogue collections :)
