@@ -96,6 +96,7 @@ const expected = {
     attributes: [
       {
         label: 'Id:',
+        linkValue: 'c-001',
         type: 'string',
         value: 'c-001'
       },
@@ -200,6 +201,7 @@ const expected = {
           attributes: [
             {
               label: 'Id:',
+              linkValue: '1',
               type: 'string',
               value: '1'
             },
@@ -309,6 +311,7 @@ const expected = {
           attributes: [
             {
               label: 'Id:',
+              linkValue: '2',
               type: 'string',
               value: '2'
             },

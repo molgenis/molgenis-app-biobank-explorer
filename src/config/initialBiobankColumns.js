@@ -1,7 +1,5 @@
 const initialBiobankColumns = [
-  { label: 'Id:', column: 'id', type: 'string' },
-  { label: 'PID:', column: 'pid', type: 'string' },
-  { label: 'Name:', column: 'name', type: 'string' },
+  { label: 'Id:', column: 'id', type: 'string', showCopyIcon: true },
   { label: 'PID:', column: 'pid', type: 'string', showCopyIcon: true, copyValuePrefix: 'http://hdl.handle.net/' },
   { label: 'Description:', column: 'description', type: 'longtext' },
   { label: 'Quality labels:', column: 'quality', type: 'quality', showOnBiobankCard: true },

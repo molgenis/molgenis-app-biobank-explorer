@@ -176,6 +176,7 @@ describe('templateMapper', () => {
         attributes: [
           {
             label: 'Id:',
+            linkValue: 'c-001',
             type: 'string',
             value: 'c-001'
           },
@@ -311,6 +312,7 @@ describe('templateMapper', () => {
               attributes: [
                 {
                   label: 'Id:',
+                  linkValue: '1',
                   type: 'string',
                   value: '1'
                 },
@@ -443,6 +445,7 @@ describe('templateMapper', () => {
               attributes: [
                 {
                   label: 'Id:',
+                  linkValue: '2',
                   type: 'string',
                   value: '2'
                 },
@@ -548,6 +551,7 @@ describe('templateMapper', () => {
                     attributes: [
                       {
                         label: 'Id:',
+                        linkValue: '3',
                         type: 'string',
                         value: '3'
                       },
