@@ -231,7 +231,7 @@ export default {
       }
 
       /** When a biobank name is too long it will take three rows (most of the time), tipping point is 83 characters. */
-      if (charactersInName > 83) {
+      if (charactersInName >= 80) {
         height = 19
       }
 
@@ -383,6 +383,9 @@ article.flip [tabindex="0"] section {
   /* Safari */
   backface-visibility: hidden;
   box-sizing: border-box;
+  visibility: visible;
+  -webkit-perspective: 0;
+  perspective: 0;
 }
 
 article.flip [tabindex="0"] section:last-child {
