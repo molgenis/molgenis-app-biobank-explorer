@@ -1,5 +1,5 @@
 const initialCollectionColumns = [
-  { label: 'Id:', column: 'id', type: 'string' },
+  { label: 'Id:', column: 'id', type: 'string', showCopyIcon: true },
   { label: 'Website:', column: 'url', type: 'hyperlink' },
   { label: 'Quality labels:', column: 'quality', type: 'quality', showOnBiobankCard: true },
   { label: 'Size:', column: 'order_of_magnitude', type: 'object', property: 'size' },
