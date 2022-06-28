@@ -70,7 +70,12 @@ export default {
   },
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
-  foundBiobanks: (state, { biobankRsql }) => {
+  foundBiobanks: (state, { biobankRsql, parentCollections }) => {
+    // there are no collections found, so nothing to show.
+    if (!parentCollections.length) {
+      return 0
+    }
+
     if (biobankRsql) {
       return state.biobankIds.length
     } else { return state.biobankCount }
