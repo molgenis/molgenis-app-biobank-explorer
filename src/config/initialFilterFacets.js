@@ -92,7 +92,7 @@ const filterDefinitions = [
     name: 'dataType',
     label: 'Data type',
     tableName: 'eu_bbmri_eric_data_types',
-    columnName: 'dataType',
+    columnName: 'data_categories',
     humanReadableString: 'Data type(s):',
     showFacet: false
   },
