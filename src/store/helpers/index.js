@@ -16,6 +16,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createCustomRSQLQuery(state),
+    createQuery(state.filters.selections.categories, 'categories'),
     createInQuery('country', state.filters.selections.country || []),
     createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
     createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
