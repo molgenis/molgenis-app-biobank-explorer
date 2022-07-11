@@ -24,6 +24,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_collection_types',
     columnName: 'type',
     humanReadableString: 'Collection type(s):',
+    removeOptions: ['other'],
     showFacet: true
   },
   {
