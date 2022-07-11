@@ -2,7 +2,7 @@
   <StringFilter
     name="Search"
     v-model="search"
-    placeholder="Search by name, id, acronym"></StringFilter>
+    placeholder="Search"></StringFilter>
 </template>
 
 <script>
