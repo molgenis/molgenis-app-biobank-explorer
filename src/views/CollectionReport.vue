@@ -11,11 +11,38 @@
       color="var(--secondary)"
       background-color="var(--light)"></loading>
     <div class="container-fluid">
-      <!-- Back to previous page buttons -->
-      <button class="btn btn-link pl-0" @click="back">
-        <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>
-        <span>{{ uiText["back"] }}</span>
-      </button>
+      <div class="row">
+        <div class="col my-3 shadow-sm">
+          <nav aria-label="breadcrumb" v-if="collection">
+            <ol class="breadcrumb my-1">
+              <li class="breadcrumb-item">
+                <router-link
+                  to="/biobankexplorer"
+                  title="Back to biobank explorer">
+                  {{ uiText["home"] }}
+                </router-link>
+              </li>
+              <li class="breadcrumb-item">
+                <router-link
+                  :to="'/biobank/' + collection.biobank.id"
+                  :title="'Go to biobank ' + collection.biobank.name">
+                  {{ collection.biobank.name }}
+                </router-link>
+              </li>
+              <li class="breadcrumb-item" v-if="info.parentCollection">
+                <router-link
+                  :to="'/collection/' + info.parentCollection.id"
+                  :title="'Go to parent collection ' + info.parentCollection.name">
+                  {{ info.parentCollection.name }}
+                </router-link>
+              </li>
+              <li class="breadcrumb-item active text-dark" aria-current="page">
+                {{ collection.name }}
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       <div class="row" v-if="this.collection && !this.isLoading">
         <div class="col">

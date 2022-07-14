@@ -11,12 +11,19 @@
       background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
-        <div class="col">
-          <!-- Back to previous page buttons -->
-          <button class="btn btn-link" @click="back">
-            <i class="fa fa-angle-left mr-1" aria-hidden="true"></i>
-            <span>{{ uiText["back"] }}</span>
-          </button>
+        <div class="col my-3 shadow-sm">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb my-1">
+              <li class="breadcrumb-item">
+                <router-link to="/biobankexplorer" title="Back to biobank explorer">
+                  {{ uiText["home"] }}
+                </router-link>
+              </li>
+              <li class="breadcrumb-item active text-dark" aria-current="page">
+                {{ biobank.name }}
+              </li>
+            </ol>
+          </nav>
         </div>
       </div>
 
@@ -156,10 +163,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['GetBiobankReport']),
-    back () {
-      this.$router.go(-1)
-    }
+    ...mapActions(['GetBiobankReport'])
   },
   mounted () {
     this.GetBiobankReport(this.$store.state.route.params.id)

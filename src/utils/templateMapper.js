@@ -248,6 +248,11 @@ export const collectionReportInformation = collection => {
   if (collection.collaboration_commercial) { collectionReport.collaboration.push({ name: 'Commercial', value: 'yes' }) }
   if (collection.collaboration_non_for_profit) { collectionReport.collaboration.push({ name: 'Not for profit', value: 'yes' }) }
 
+  // Give this information to the report, so we can use it in the breadcrumb.
+  if (collection.parent_collection) {
+    collectionReport.parentCollection = collection.parent_collection
+  }
+
   return collectionReport
 }
 export const mapNetworkInfo = data => {
