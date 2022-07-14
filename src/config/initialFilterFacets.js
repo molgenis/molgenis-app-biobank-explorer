@@ -63,6 +63,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
+    removeOptions: ['other'],
     showFacet: false
   },
   {
@@ -95,6 +96,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'data_categories',
     humanReadableString: 'Data type(s):',
+    removeOptions: ['other'],
     showFacet: false
   },
   {
