@@ -14,6 +14,16 @@ function retrieveFromCache (filterName) {
   return store.state.filterOptionDictionary[filterName] ?? []
 }
 
+// Configurable array of values to filter out, for example 'Other, unknown' that make no sense to the user.
+function removeOptions (filterOptions, filterFacet) {
+  const optionsToRemove = filterFacet.removeOptions
+
+  if (!optionsToRemove || !optionsToRemove.length) return filterOptions
+
+  optionsToRemove.map(option => option.toLowerCase())
+  return filterOptions.filter(filterOption => !optionsToRemove.includes(filterOption.text.toLowerCase()))
+}
+
 function checkForBookmarkFilter (filterName, filterOptions) {
   if (!store.state.diagnosisAvailableFetched) {
     // If we have a cold start with a bookmark
@@ -42,7 +52,11 @@ export const genericFilterOptions = (filterFacet) => {
 
     if (!cachedOptions.length) {
       api.get(`/api/v2/${tableName}${queryOptions || ''}`).then(response => {
-        const filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
+        let filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
+
+        // remove unwanted options if applicable
+        filterOptions = removeOptions(filterOptions, filterFacet)
+
         cache({ filterName: name, filterOptions })
         resolve(filterOptions)
       })
@@ -75,6 +89,7 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
+
       checkForBookmarkFilter(filterName, filterOptions)
       resolve(filterOptions)
     })
