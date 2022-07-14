@@ -173,7 +173,7 @@ describe('store', () => {
         state.filters.selections.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\''
+        const expected = 'name=like=\'test search\',id=like=\'test search\',acronym=like=\'test search\',diagnosis_available.id=like=\'test search\',diagnosis_available.code=like=\'test search\',diagnosis_available.label=like=\'test search\',diagnosis_available.ontology=like=\'test search\',materials.id=like=\'test search\',materials.label=like=\'test search\',biobank.name=like=\'test search\',biobank.id=like=\'test search\',biobank.acronym=like=\'test search\''
 
         expect(actual).toBe(expected)
       })
@@ -183,7 +183,7 @@ describe('store', () => {
         state.filters.selections.search = 'test search'
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);(name=q=\'test search\',id=q=\'test search\',acronym=q=\'test search\',biobank.name=q=\'test search\',biobank.id=q=\'test search\',biobank.acronym=q=\'test search\')'
+        const expected = '(name=like=\'test search\',id=like=\'test search\',acronym=like=\'test search\',diagnosis_available.id=like=\'test search\',diagnosis_available.code=like=\'test search\',diagnosis_available.label=like=\'test search\',diagnosis_available.ontology=like=\'test search\',materials.id=like=\'test search\',materials.label=like=\'test search\',biobank.name=like=\'test search\',biobank.id=like=\'test search\',biobank.acronym=like=\'test search\');country=in=(NL,BE)'
 
         expect(actual).toBe(expected)
       })

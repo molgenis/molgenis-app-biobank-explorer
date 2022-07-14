@@ -37,7 +37,7 @@ export const collectionActions = {
     }
 
     commit('SetCollectionInfo', undefined)
-    let url = '/api/data/eu_bbmri_eric_collections?filter=id&size=10000&sort=biobank_label'
+    let url = '/api/data/eu_bbmri_eric_collections?filter=id&size=10000&sort=biobank_label&expand=materials,diagnosis_available'
     if (getters.rsql) {
       url = `${url}&q=${encodeRsqlValue(getters.rsql)}`
     }

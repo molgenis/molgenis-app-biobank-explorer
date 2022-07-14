@@ -1,4 +1,4 @@
-import { diagnosisAvailableQuery, createInQuery, createQuery } from '../../utils'
+import { diagnosisAvailableQuery, createInQuery, createQuery, createLikeQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
 import initialFilterFacets from '../../config/initialFilterFacets'
@@ -16,6 +16,7 @@ export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
     createCustomRSQLQuery(state),
+    createSearchInputQuery(state, ['name', 'id', 'acronym', 'diagnosis_available.id', 'diagnosis_available.code', 'diagnosis_available.label', 'diagnosis_available.ontology', 'materials.id', 'materials.label', 'biobank.name', 'biobank.id', 'biobank.acronym']),
     createQuery(state.filters.selections.categories, 'categories'),
     createInQuery('country', state.filters.selections.country || []),
     createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
@@ -27,14 +28,32 @@ export const createRSQLQuery = (state) => transformToRSQL({
     createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
     createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
     createQuery(state.filters.selections.network, 'combined_network', state.filters.satisfyAll.includes('network')),
-    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network')),
-    state.filters.selections.search ? [{
-      operator: 'OR',
-      operands: ['name', 'id', 'acronym', 'biobank.name', 'biobank.id', 'biobank.acronym']
-        .map(attr => ({ selector: attr, comparison: '=q=', arguments: state.filters.selections.search || '' }))
-    }] : []
+    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network'))
   ])
 })
+
+/**
+ *
+ * @param {*} state
+ * @param {Array<string>} columns
+ * @returns
+ */
+function createSearchInputQuery (state, columns) {
+  const searchString = state.filters.selections.search
+
+  if (!searchString) return []
+
+  const queries = []
+
+  for (const column of columns) {
+    queries.push(createLikeQuery(column, searchString))
+  }
+
+  return [{
+    operator: 'OR',
+    operands: queries.flatMap(q => q)
+  }]
+}
 
 function createCustomRSQLQuery (state) {
   const activeFilterSelection = Object.keys(state.filters.selections)
