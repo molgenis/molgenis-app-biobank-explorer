@@ -1,7 +1,6 @@
 import { diagnosisAvailableQuery, createInQuery, createQuery, createLikeQuery } from '../../utils'
 import { flatten } from 'lodash'
 import { transformToRSQL } from '@molgenis/rsql'
-import initialFilterFacets from '../../config/initialFilterFacets'
 
 export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\d{0,3})?|\d+)?$/i
 
@@ -15,20 +14,11 @@ export const isCodeRegex = /^(ORPHA|[A-Z]|[XVI]+):?(\d{0,2}(-([A-Z]\d{0,2})?|\.\
 export const createRSQLQuery = (state) => transformToRSQL({
   operator: 'AND',
   operands: flatten([
-    createCustomRSQLQuery(state),
-    createSearchInputQuery(state, ['name', 'id', 'acronym', 'diagnosis_available.id', 'diagnosis_available.code', 'diagnosis_available.label', 'diagnosis_available.ontology', 'materials.id', 'materials.label', 'biobank.name', 'biobank.id', 'biobank.acronym']),
-    createQuery(state.filters.selections.categories, 'categories'),
-    createInQuery('country', state.filters.selections.country || []),
-    createQuery(state.filters.selections.materials, 'materials', state.filters.satisfyAll.includes('materials')),
-    createQuery(state.filters.selections.type, 'type', state.filters.satisfyAll.includes('type')),
-    createQuery(state.filters.selections.dataType, 'data_categories', state.filters.satisfyAll.includes('dataType')),
     // diagnosis_availabe uses a dynamic decorator to do automatic tree expansion. Therefor it MUST be on the column from collection itself.
     // And NOT on the column from the EntityType (table) it references to
     diagnosisAvailableQuery(state.filters.selections.diagnosis_available, 'diagnosis_available', state.filters.satisfyAll.includes('diagnosis_available')),
-    createQuery(state.collectionIdsWithSelectedQuality, 'id', state.filters.satisfyAll.includes('collection_quality')),
-    createInQuery('collaboration_commercial', state.filters.selections.commercial_use || []),
-    createQuery(state.filters.selections.network, 'combined_network', state.filters.satisfyAll.includes('network')),
-    createQuery(state.filters.selections.collection_network, 'network', state.filters.satisfyAll.includes('collection_network'))
+    createSearchInputQuery(state, ['name', 'id', 'acronym', 'diagnosis_available.id', 'diagnosis_available.code', 'diagnosis_available.label', 'diagnosis_available.ontology', 'materials.id', 'materials.label', 'biobank.name', 'biobank.id', 'biobank.acronym']),
+    createRsqlQueriesFromState(state)
   ])
 })
 
@@ -55,16 +45,14 @@ function createSearchInputQuery (state, columns) {
   }]
 }
 
-function createCustomRSQLQuery (state) {
+function createRsqlQueriesFromState (state) {
   const activeFilterSelection = Object.keys(state.filters.selections)
-
-  const initialFilters = initialFilterFacets.map(filter => filter.name)
 
   const queries = []
 
   for (const facet of state.filterFacets) {
-    if (activeFilterSelection.includes(facet.columnName) && !initialFilters.includes(facet.name)) {
-      queries.push(createQuery(state.filters.selections[facet.columnName], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
+    if (activeFilterSelection.includes(facet.name)) {
+      queries.push(createQuery(state.filters.selections[facet.name], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
     }
   }
 

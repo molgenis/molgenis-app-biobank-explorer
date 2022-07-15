@@ -38,7 +38,7 @@ const filterDefinitions = [
   {
     name: 'commercial_use',
     label: 'Collaboration type',
-    columnName: 'collaboration_type',
+    columnName: 'collaboration_commercial',
     humanReadableString: 'Biobank collaboration type(s):',
     showFacet: true
   },
