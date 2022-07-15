@@ -6,7 +6,7 @@ const i18n = {
     hide_filters: 'Hide filters',
     request: 'Request',
     close: 'Close',
-    back: 'Back',
+    home: 'Back to the biobank explorer',
     view: 'View',
     email: 'Email',
     add: 'Add',
