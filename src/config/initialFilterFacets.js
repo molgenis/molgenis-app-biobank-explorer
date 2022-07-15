@@ -43,13 +43,6 @@ const filterDefinitions = [
     showFacet: true
   },
   {
-    component: 'CovidNetworkFilter',
-    name: 'covid19network',
-    label: 'COVID-19',
-    custom: true,
-    showFacet: false
-  },
-  {
     name: 'biobank_capabilities',
     label: 'Biobank services',
     tableName: 'eu_bbmri_eric_capabilities',
