@@ -105,7 +105,7 @@ describe('store', () => {
     })
 
     describe('createRSQLQuery', () => {
-      afterEach(() => { state = getInitialState() })
+      beforeEach(() => { state = getInitialState() })
 
       it('should create a query with only a country filter', () => {
         state.filters.selections.country = ['NL', 'BE']
@@ -153,15 +153,6 @@ describe('store', () => {
         expect(actual).toBe(expected)
       })
 
-      it('should create a query with only a colection_network type filter', () => {
-        state.filters.selections.collection_network = ['network_1', 'network_2', 'network_3']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'network=in=(network_1,network_2,network_3)'
-
-        expect(actual).toBe(expected)
-      })
-
       it('should create a query with no filters and no search', () => {
         const actual = helpers.createRSQLQuery(state)
         const expected = ''
@@ -194,7 +185,7 @@ describe('store', () => {
         state.filters.selections.country = ['NL', 'BE']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'country=in=(NL,BE);diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100'
+        const expected = 'diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100;country=in=(NL,BE)'
 
         expect(actual).toBe(expected)
       })
@@ -217,7 +208,7 @@ describe('store', () => {
         state.filters.selections.type = ['Cohort', 'Longitudinal']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'materials==cDNA;materials==mRNA;materials==Cells;type=in=(Cohort,Longitudinal)'
+        const expected = 'type=in=(Cohort,Longitudinal);materials==cDNA;materials==mRNA;materials==Cells'
 
         expect(actual).toBe(expected)
       })
@@ -225,10 +216,9 @@ describe('store', () => {
       it('should create a query with network and collection_network, the first with the satisfyAll flag enabled and the second not', () => {
         state.filters.selections.network = ['network_1', 'network_2', 'network_3']
         state.filters.satisfyAll = ['network']
-        state.filters.selections.collection_network = ['network_1']
 
         const actual = helpers.createRSQLQuery(state)
-        const expected = 'combined_network==network_1;combined_network==network_2;combined_network==network_3;network=in=(network_1)'
+        const expected = 'combined_network==network_1;combined_network==network_2;combined_network==network_3'
 
         expect(actual).toBe(expected)
       })

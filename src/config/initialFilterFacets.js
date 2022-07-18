@@ -71,7 +71,7 @@ const filterDefinitions = [
     name: 'collection_quality',
     label: 'Collection quality labels',
     tableName: 'eu_bbmri_eric_assess_level_col',
-    columnName: 'collection_quality',
+    columnName: 'id',
     humanReadableString: 'Collection quality label(s):',
     showFacet: false
   },
@@ -79,7 +79,7 @@ const filterDefinitions = [
     name: 'network',
     label: 'Network',
     tableName: 'eu_bbmri_eric_networks',
-    columnName: 'network',
+    columnName: 'combined_network',
     humanReadableString: 'Network(s):',
     showFacet: false
   },

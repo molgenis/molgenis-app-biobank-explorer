@@ -46,7 +46,8 @@ function createSearchInputQuery (state, columns) {
 }
 
 function createRsqlQueriesFromState (state) {
-  const activeFilterSelection = Object.keys(state.filters.selections)
+  const hardcodedFilters = ['search', 'diagnosis_available']
+  const activeFilterSelection = Object.keys(state.filters.selections).filter(selection => !hardcodedFilters.includes(selection))
 
   const queries = []
 
