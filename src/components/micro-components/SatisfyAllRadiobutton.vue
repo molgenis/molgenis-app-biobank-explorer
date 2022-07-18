@@ -1,20 +1,20 @@
 <template>
   <div class="mb-2 d-flex">
     <div class="ml-auto d-flex">
-      <label for="all">
+      <label :for="idAll">
         <input
           type="radio"
-          id="all"
-          name="satisfy-selector"
+          :id="idAll"
+          :name="selector"
           v-model="satisfy"
           value="all"/>
         {{ uiText["satisfyAll"] }}
       </label>
-      <label for="any">
+      <label :for="idAny">
         <input
           type="radio"
-          id="any"
-          name="satisfy-selector"
+          :id="idAny"
+          :name="selector"
           v-model="satisfy"
           value="any"/>
         {{ uiText["satisfyAny"] }}
@@ -31,6 +31,14 @@ export default {
     value: {
       type: Boolean,
       default: () => false
+    }
+  },
+  data: function () {
+    return {
+      // need to generate random ids so that every filter has its own radiobutton group
+      selector: new Date().getMilliseconds() + Math.random(),
+      idAny: new Date().getMilliseconds() + Math.random(),
+      idAll: new Date().getMilliseconds() + Math.random()
     }
   },
   computed: {
