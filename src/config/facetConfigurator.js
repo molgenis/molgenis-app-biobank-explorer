@@ -18,7 +18,7 @@ export const createFilters = (state) => {
         satisfyAll: state.filters.satisfyAll.includes(facet.name),
         initialDisplayItems: facet.initialDisplayItems || 100,
         maxVisibleOptions: facet.maxVisibleOptions || 25,
-        showSatisfyAllCheckbox: facet.showSatisfyAllCheckbox || true,
+        showSatisfyAllSelector: facet.showSatisfyAllSelector || true,
         humanReadableString: facet.humanReadableString,
         builtIn: facet.builtIn,
         showFacet: facet.showFacet

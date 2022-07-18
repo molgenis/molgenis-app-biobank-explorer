@@ -129,8 +129,6 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 
 /** Components used for filters */
 import SearchFilter from './filters/SearchFilter.vue'
-import CovidFilter from './filters/CovidFilter.vue'
-import CovidNetworkFilter from './filters/CovidNetworkFilter.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
 import NegotiatorSelection from './popovers/NegotiatorSelection.vue'
@@ -142,8 +140,6 @@ export default {
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
-    CovidFilter,
-    CovidNetworkFilter,
     NegotiatorSelection
   },
   computed: {

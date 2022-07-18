@@ -16,7 +16,9 @@ const i18n = {
     send_to_negotiator: 'Send to the Negotiator',
     send_to_podium: 'Send to Podium',
     card_biobank_details: 'View biobank',
-    card_collections_details: 'View biobank collections'
+    card_collections_details: 'View biobank collections',
+    satisfyAll: 'Match all',
+    satisfyAny: 'Match any'
   }
 }
 
