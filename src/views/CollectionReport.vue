@@ -17,7 +17,7 @@
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
                 <router-link
-                  to="/biobankexplorer"
+                  to="/"
                   title="Back to biobank explorer">
                   {{ uiText["home"] }}
                 </router-link>
