@@ -52,7 +52,7 @@ function createRsqlQueriesFromState (state) {
 
   for (const facet of state.filterFacets) {
     if (activeFilterSelection.includes(facet.name)) {
-      queries.push(createQuery(state.filters.selections[facet.name], facet.columnName, state.filters.satisfyAll.includes(facet.columnName)))
+      queries.push(createQuery(state.filters.selections[facet.name], facet.columnName, state.filters.satisfyAll.includes(facet.name)))
     }
   }
 
