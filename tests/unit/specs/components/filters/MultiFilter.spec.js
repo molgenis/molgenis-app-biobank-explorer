@@ -2,7 +2,7 @@ import { createLocalVue, mount } from '@vue/test-utils'
 import MultiFilter from '@/components/filters/MultiFilter.vue'
 import SatisfyAllRadiobutton from '@/components/micro-components/SatisfyAllRadiobutton.vue'
 import BootstrapVue from 'bootstrap-vue'
-import Vuex from 'Vuex'
+import Vuex from 'vuex'
 import { baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
