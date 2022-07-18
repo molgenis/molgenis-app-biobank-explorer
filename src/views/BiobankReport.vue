@@ -15,7 +15,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
-                <router-link to="/biobankexplorer" title="Back to biobank explorer">
+                <router-link to="/" title="Back to biobank explorer">
                   {{ uiText["home"] }}
                 </router-link>
               </li>
