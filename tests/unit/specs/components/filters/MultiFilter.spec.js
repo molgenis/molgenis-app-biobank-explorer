@@ -195,7 +195,7 @@ describe('MultiFilter.vue', () => {
         type: 'multi-filter'
       }
       wrapper = mount(MultiFilter, { localVue, store, stubs, propsData })
-      const satisfyAllButton = wrapper.find('#all')
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       expect(satisfyAllButton.exists()).toBe(false)
     })
 
@@ -212,7 +212,7 @@ describe('MultiFilter.vue', () => {
         showSatisfyAllSelector: true
       }
       wrapper = mount(MultiFilter, { localVue, store, stubs, propsData })
-      const satisfyAllButton = wrapper.find('#all')
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       await satisfyAllButton.trigger('click')
       expect(wrapper.emitted('satisfy-all')).toEqual([[true]])
     })

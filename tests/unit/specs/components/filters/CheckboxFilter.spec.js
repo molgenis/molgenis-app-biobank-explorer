@@ -98,13 +98,13 @@ describe('CheckboxFilter.vue', () => {
   describe('SatisfyAllRadiobutton', () => {
     it('checks that the satisfyAll radiobutton is not shown by default ', () => {
       const wrapper = getWrapper()
-      const satisfyAllButton = wrapper.find('#any')
+      const satisfyAllButton = wrapper.find('input[value="any"]')
       expect(satisfyAllButton.exists()).toBe(false)
     })
 
     it('triggers the proper emit when the satisfyAll radiobutton is clicked', async () => {
       const wrapper = getWrapper({ showSatisfyAllSelector: true })
-      const satisfyAllButton = wrapper.find('#all')
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       await satisfyAllButton.trigger('click')
       expect(wrapper.emitted('satisfy-all')).toEqual([[true]])
     })
