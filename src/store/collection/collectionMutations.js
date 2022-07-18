@@ -2,7 +2,6 @@ import { createBookmark } from '../../utils/bookmarkMapper'
 
 export const collectionMutations = {
   SetAllCollectionRelationData (state, response) {
-    console.log({ response })
     const collectionRelationData = response.items.map(item => ({
       collectionId: item.data.id,
       collectionName: item.data.label || item.data.name,
