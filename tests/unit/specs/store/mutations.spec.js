@@ -131,7 +131,6 @@ describe('store', () => {
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
             network: 'networkA,networkB',
             biobank_quality: 'qualityA',
-            collection_network: 'networkC,networkD',
             biobank_capabilities: 'covid19',
             cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5',
             satisfyAll: 'covid19,materials'

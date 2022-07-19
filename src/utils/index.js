@@ -79,7 +79,9 @@ export const getBaseUrl = () => {
  * 'country==IT;country==NL' if the satisfyAll parameter is set to true; else, it returns 'country=in=(IT,NL)'
  */
 export const createQuery = (filterSelection, columnName, satisfyAll) => {
-  if (filterSelection && filterSelection.length && satisfyAll) {
+  if (!filterSelection || !filterSelection.length) return []
+
+  if (satisfyAll) {
     return {
       operator: 'AND',
       operands: createComparisons(columnName, filterSelection || [])

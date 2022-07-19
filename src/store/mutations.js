@@ -155,6 +155,7 @@ export default {
 
     // collection_network does not have a specific filter facets and it's directly set by CovidNetworkFilter
     // so we add it manually
+    // TODO: Reroute this to combined_network
     if (query.collection_network) {
       filters.push('collection_network')
     }

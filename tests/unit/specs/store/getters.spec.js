@@ -15,7 +15,7 @@ describe('store', () => {
         state.filters.selections.country = ['AT', 'BE']
         state.filters.selections.biobank_capabilities = ['covid19']
 
-        expect(getters.rsql(state)).toEqual('(name=like=Cell&Co,id=like=Cell&Co,acronym=like=Cell&Co,diagnosis_available.id=like=Cell&Co,diagnosis_available.code=like=Cell&Co,diagnosis_available.label=like=Cell&Co,diagnosis_available.ontology=like=Cell&Co,materials.id=like=Cell&Co,materials.label=like=Cell&Co,biobank.name=like=Cell&Co,biobank.id=like=Cell&Co,biobank.acronym=like=Cell&Co);country=in=(AT,BE)')
+        expect(getters.rsql(state)).toEqual('(name=like=Cell&Co,id=like=Cell&Co,acronym=like=Cell&Co,diagnosis_available.id=like=Cell&Co,diagnosis_available.code=like=Cell&Co,diagnosis_available.label=like=Cell&Co,diagnosis_available.ontology=like=Cell&Co,materials.id=like=Cell&Co,materials.label=like=Cell&Co,biobank.name=like=Cell&Co,biobank.id=like=Cell&Co,biobank.acronym=like=Cell&Co);country=in=(AT,BE);capabilities=in=(covid19)')
       })
       it('should return the empty string if no filters are selected', () => {
         expect(getters.rsql(state)).toEqual('')
