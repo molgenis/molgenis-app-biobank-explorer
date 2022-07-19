@@ -1,7 +1,7 @@
 <template>
   <div>
-    <satisfy-all-checkbox
-      v-if="showSatisfyAllCheckbox"
+    <satisfy-all-radiobutton
+      v-if="showSatisfyAllSelector"
       :value="satisfyAllValue"
       :satisfy-all-label="satisfyAllLabel"
       @input="(value) => $emit('satisfy-all', value)"/>
@@ -60,12 +60,12 @@
 </template>
 
 <script>
-import SatisfyAllCheckbox from '../micro-components/SatisfyAllCheckbox.vue'
+import SatisfyAllRadiobutton from '../micro-components/SatisfyAllRadiobutton.vue'
 
 export default {
   name: 'MultiFilter',
   components: {
-    SatisfyAllCheckbox
+    SatisfyAllRadiobutton
   },
   props: {
     /**
@@ -141,7 +141,7 @@ export default {
      * Whether to show the SatisfyAll checkbox or not.
      * If checked it emits 'satisfyAll' with a boolean
      */
-    showSatisfyAllCheckbox: {
+    showSatisfyAllSelector: {
       type: Boolean,
       required: false,
       default: () => false
@@ -217,7 +217,9 @@ export default {
       }
 
       if (!queryValue || !queryValue.length) {
-        this.inputOptions = this.sort(this.initialOptions.concat(this.inputOptions))
+        this.inputOptions = this.sort(
+          this.initialOptions.concat(this.inputOptions)
+        )
         return
       }
 

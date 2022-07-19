@@ -1,10 +1,13 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import MultiFilter from '@/components/filters/MultiFilter.vue'
-import SatisfyAllCheckbox from '@/components/micro-components/SatisfyAllCheckbox.vue'
+import SatisfyAllRadiobutton from '@/components/micro-components/SatisfyAllRadiobutton.vue'
 import BootstrapVue from 'bootstrap-vue'
+import Vuex from 'vuex'
+import { baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+localVue.use(Vuex)
 jest.useFakeTimers()
 
 const checkboxLotsOptions = [
@@ -16,6 +19,12 @@ const checkboxLotsOptions = [
   { value: 'purple', text: 'Purple' },
   { value: 'black', text: 'Black' }
 ]
+
+const store = new Vuex.Store({
+  getters: {
+    ...baseGetters
+  }
+})
 
 describe('MultiFilter.vue', () => {
   let wrapper
@@ -34,7 +43,7 @@ describe('MultiFilter.vue', () => {
   }
 
   beforeEach(() => {
-    wrapper = mount(MultiFilter, { localVue, stubs, propsData, components: { SatisfyAllCheckbox } })
+    wrapper = mount(MultiFilter, { localVue, store, stubs, propsData, components: { SatisfyAllRadiobutton } })
   })
 
   it('does not show checkbox fields when input options are not resolved yet', () => {
@@ -173,8 +182,8 @@ describe('MultiFilter.vue', () => {
     })
   })
 
-  describe('SatisfyAllCheckbox', () => {
-    it('checks that the satisfyAll checkbox is not shown by default', () => {
+  describe('SatisfyAllRadiobutton', () => {
+    it('checks that the satisfyAll radiobutton is not shown by default', () => {
       const propsData = {
         name: 'multi-filter',
         label: 'Filter with multiple options',
@@ -185,12 +194,12 @@ describe('MultiFilter.vue', () => {
           { value: 'green', text: 'Green' }])),
         type: 'multi-filter'
       }
-      wrapper = mount(MultiFilter, { localVue, stubs, propsData })
-      const satisfyAllButton = wrapper.find('input[name="satisfy-all"]')
+      wrapper = mount(MultiFilter, { localVue, store, stubs, propsData })
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       expect(satisfyAllButton.exists()).toBe(false)
     })
 
-    it('triggers the proper emit when the satisfyAll checkbox is clicked', async () => {
+    it('triggers the proper emit when the satisfyAll radiobutton is clicked', async () => {
       const propsData = {
         name: 'multi-filter',
         label: 'Filter with multiple options',
@@ -200,10 +209,10 @@ describe('MultiFilter.vue', () => {
           { value: 'red', text: 'Red' },
           { value: 'green', text: 'Green' }])),
         type: 'multi-filter',
-        showSatisfyAllCheckbox: true
+        showSatisfyAllSelector: true
       }
-      wrapper = mount(MultiFilter, { localVue, stubs, propsData })
-      const satisfyAllButton = wrapper.find('input[name="satisfy-all"]')
+      wrapper = mount(MultiFilter, { localVue, store, stubs, propsData })
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       await satisfyAllButton.trigger('click')
       expect(wrapper.emitted('satisfy-all')).toEqual([[true]])
     })

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <satisfy-all-checkbox
-      v-if="showSatisfyAllCheckbox"
+    <satisfy-all-radiobutton
+      v-if="showSatisfyAllSelector"
       :value="satisfyAllValue"
       :satisfy-all-label="satisfyAllLabel"
       @input="(value) => $emit('satisfy-all', value)"/>
@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import SatisfyAllCheckbox from '../micro-components/SatisfyAllCheckbox.vue'
+import SatisfyAllRadiobutton from '../micro-components/SatisfyAllRadiobutton.vue'
 
 export default {
   name: 'CheckboxFilter',
   components: {
-    SatisfyAllCheckbox
+    SatisfyAllRadiobutton
   },
   props: {
     /**
@@ -90,10 +90,10 @@ export default {
       default: () => false
     },
     /**
-     * Whether to show the SatisfyAll checkbox or not.
+     * Whether to show the SatisfyAll selector.
      * If checked it emits 'satisfyAll' with a boolean
      */
-    showSatisfyAllCheckbox: {
+    showSatisfyAllSelector: {
       type: Boolean,
       required: false,
       default: () => false

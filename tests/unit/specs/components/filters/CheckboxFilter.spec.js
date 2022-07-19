@@ -1,10 +1,19 @@
 import { createLocalVue, mount } from '@vue/test-utils'
 import CheckboxFilter from '@/components/filters/CheckboxFilter.vue'
-import SatisfyAllCheckbox from '@/components/micro-components/SatisfyAllCheckbox.vue'
+import SatisfyAllRadiobutton from '@/components/micro-components/SatisfyAllRadiobutton.vue'
 import BootstrapVue from 'bootstrap-vue'
+import Vuex from 'vuex'
+import { baseGetters } from '../../mockData'
 
 const localVue = createLocalVue()
 localVue.use(BootstrapVue)
+localVue.use(Vuex)
+
+const store = new Vuex.Store({
+  getters: {
+    ...baseGetters
+  }
+})
 
 function getWrapper (props = {}) {
   const propsData = {
@@ -21,7 +30,8 @@ function getWrapper (props = {}) {
 
   const wrapper = mount(CheckboxFilter, {
     localVue,
-    components: { SatisfyAllCheckbox },
+    store,
+    components: { SatisfyAllRadiobutton },
     stubs: ['font-awesome-icon'],
     propsData,
     listeners: {
@@ -85,16 +95,16 @@ describe('CheckboxFilter.vue', () => {
     })
   })
 
-  describe('SatisfyAllCheckbox', () => {
-    it('checks that the satisfyAll checkbox is not shown by default ', () => {
+  describe('SatisfyAllRadiobutton', () => {
+    it('checks that the satisfyAll radiobutton is not shown by default ', () => {
       const wrapper = getWrapper()
-      const satisfyAllButton = wrapper.find('input[name="satisfy-all"]')
+      const satisfyAllButton = wrapper.find('input[value="any"]')
       expect(satisfyAllButton.exists()).toBe(false)
     })
 
-    it('triggers the proper emit when the satisfyAll checkbox is clicked', async () => {
-      const wrapper = getWrapper({ showSatisfyAllCheckbox: true })
-      const satisfyAllButton = wrapper.find('input[name="satisfy-all"]')
+    it('triggers the proper emit when the satisfyAll radiobutton is clicked', async () => {
+      const wrapper = getWrapper({ showSatisfyAllSelector: true })
+      const satisfyAllButton = wrapper.find('input[value="all"]')
       await satisfyAllButton.trigger('click')
       expect(wrapper.emitted('satisfy-all')).toEqual([[true]])
     })
