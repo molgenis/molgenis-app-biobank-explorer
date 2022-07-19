@@ -93,6 +93,7 @@ module.exports = {
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true,
           filterMenuInitiallyFolded: false,
+          applicationNotification: '',
           menuHeight: 50,
           i18n: i18n
         }

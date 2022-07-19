@@ -10,5 +10,6 @@ export const configurationState = {
   biobankColumns: config.biobankColumns,
   collectionColumns: config.collectionColumns,
   filterFacets: config.filterFacets,
+  applicationNotification: config.applicationNotification || '',
   menuHeight: config.menuHeight // standard menu height in pixels for use in sticky-position
 }

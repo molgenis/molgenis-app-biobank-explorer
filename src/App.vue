@@ -1,17 +1,31 @@
 <template>
-  <div @click="$root.$emit('bv::hide::popover')" :class="{ 'molgenis-negative-top-margin': removeFreemarkerMargin }">
+  <div
+    @click="$root.$emit('bv::hide::popover')"
+    :class="{ 'molgenis-negative-top-margin': removeFreemarkerMargin }">
+    <div
+      v-if="applicationNotification"
+      class="alert alert-warning"
+      role="alert">
+      {{ applicationNotification }}
+    </div>
     <b-alert v-if="errorMessage" show variant="danger" dismissible>
       {{ errorMessage }}
     </b-alert>
     <Transition>
-      <div v-if="notificationMessage" class="d-flex justify-content-center align-items-center">
+      <div
+        v-if="notificationMessage"
+        class="d-flex justify-content-center align-items-center">
         <div
-            ref="copy-link-toast"
+          ref="copy-link-toast"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          class="toast-container toast-container-top-center mt-1 alert-info">
+          <div
+            class="toast"
             role="alert"
             aria-live="assertive"
-            aria-atomic="true"
-            class="toast-container toast-container-top-center mt-1 alert-info">
-          <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            aria-atomic="true">
             <div class="toast-body alert-info">
               {{ notificationMessage }}
             </div>
@@ -29,8 +43,12 @@ import { mapGetters, mapActions, mapMutations, mapState } from 'vuex'
 export default {
   name: 'biobank-explorer',
   computed: {
-    ...mapGetters({ errorMessage: 'getErrorMessage', loading: 'loading', notificationMessage: 'getNotificationMessage' }),
-    ...mapState(['removeFreemarkerMargin'])
+    ...mapGetters({
+      errorMessage: 'getErrorMessage',
+      loading: 'loading',
+      notificationMessage: 'getNotificationMessage'
+    }),
+    ...mapState(['removeFreemarkerMargin', 'applicationNotification'])
   },
   methods: {
     ...mapMutations(['MapQueryToState', 'ConfigureFilters', 'SetNotification']),
