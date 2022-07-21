@@ -49,5 +49,9 @@ export const bbmriConfig = () => {
     config.filterMenuInitiallyFolded = INITIAL_STATE.filterMenuInitiallyFolded
   }
 
+  if (Object.hasOwnProperty.call(INITIAL_STATE, 'applicationNotification')) {
+    config.applicationNotification = INITIAL_STATE.applicationNotification
+  }
+
   return config
 }
