@@ -101,12 +101,26 @@ export default {
     }
     createBookmark(state.filters, state.selectedCollections)
   },
+  SetQualityStandardDictionary (state, response) {
+    // Combine arrays from two tables and deduplicate
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
+    const qualityStandardsDictionary = {}
+
+    allStandards.forEach((standard) => {
+      qualityStandardsDictionary[standard.label] = standard.description || ''
+    })
+
+    state.qualityStandardsDictionary = qualityStandardsDictionary
+  },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
-    /** only cache it once */
+    // only cache it once
     if (!state.filterOptionDictionary[filterName]) {
       Vue.set(state.filterOptionDictionary, filterName, filterOptions)
 
-      /** to let the filter know, no more caching needed */
+      // to let the filter know, no more caching needed
       if (filterName === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
