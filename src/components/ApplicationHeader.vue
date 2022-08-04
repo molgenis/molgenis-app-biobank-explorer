@@ -52,6 +52,7 @@
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
+            @shown="loadOptions(filter)"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
@@ -72,6 +73,7 @@
                   (satisfyAllValue) =>
                     filterSatisfyAllChange(filter.name, satisfyAllValue)
                 "
+                :optionsFilter="filterOptionsOverride[filter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
@@ -83,6 +85,7 @@
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
+              @shown="loadOptions(additionalFilter)"
               boundary="window"
               no-flip
               class="mr-2 mb-1 filter-dropdown">
@@ -103,6 +106,7 @@
                     (satisfyAllValue) =>
                       filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
                   "
+                  :optionsFilter="filterOptionsOverride[additionalFilter.name]"
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>
@@ -125,7 +129,7 @@
 
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 
 /** Components used for filters */
 import SearchFilter from './filters/SearchFilter.vue'
@@ -148,7 +152,8 @@ export default {
       'foundCollectionIds',
       'activeFilters',
       'selectedCollections',
-      'uiText'
+      'uiText',
+      'filterOptionsOverride'
     ]),
     ...mapState([
       'menuHeight',
@@ -194,6 +199,9 @@ export default {
       'ClearActiveFilters',
       'UpdateFilterSatisfyAll'
     ]),
+    ...mapActions([
+      'GetUpdateFilter'
+    ]),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
     },
@@ -212,6 +220,15 @@ export default {
       } else {
         return filtersActive.length
       }
+    },
+    loadOptions (filter) {
+      /**
+       * Each time a filter is expanded (shown=True) this function is triggered
+       * GetUpdateFilter checks how many search results each of the filter options will generate
+       */
+      const filterName = filter.name
+      const activeFilters = this.activeFilters
+      this.GetUpdateFilter({ filterName, activeFilters })
     }
   },
   created () {

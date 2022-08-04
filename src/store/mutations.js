@@ -76,6 +76,12 @@ export default {
 
     createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
+  SetUpdateFilter (state, { filterName, reducedFilterOptions }) {
+    // initialize empty list for reduced set of filter options
+    state.filterOptionsOverride[filterName] = []
+    // set reduced filter options for corresponding filter (filerName)
+    Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+  },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
       state.filters.satisfyAll.push(name)
@@ -101,13 +107,13 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
-  SetFilterOptionDictionary (state, { filterName, filterOptions }) {
+  SetFilterOptionDictionary (state, { name, filterOptions }) {
     // only cache it once
-    if (!state.filterOptionDictionary[filterName]) {
-      Vue.set(state.filterOptionDictionary, filterName, filterOptions)
+    if (!state.filterOptionDictionary[name]) {
+      Vue.set(state.filterOptionDictionary, name, filterOptions)
 
       // to let the filter know, no more caching needed
-      if (filterName === 'diagnosis_available') {
+      if (name === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
     }
