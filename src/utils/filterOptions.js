@@ -12,8 +12,8 @@ async function cache (filterData) {
   store.commit('SetFilterOptionDictionary', filterData)
 }
 
-function retrieveFromCache (name) {
-  return store.state.filterOptionDictionary[name] ?? []
+function retrieveFromCache (filterName) {
+  return store.state.filterOptionDictionary[filterName] ?? []
 }
 
 function checkForBookmarkFilter (filterName, filterOptions) {
