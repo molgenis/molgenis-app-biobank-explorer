@@ -12,8 +12,8 @@ async function cache (filterData) {
   store.commit('SetFilterOptionDictionary', filterData)
 }
 
-function retrieveFromCache (name) {
-  return store.state.filterOptionDictionary[name] ?? []
+function retrieveFromCache (filterName) {
+  return store.state.filterOptionDictionary[filterName] ?? []
 }
 
 // Configurable array of values to filter out, for example 'Other, unknown' that make no sense to the user.
