@@ -29,8 +29,17 @@
       <div class="col-6">
         <FilterConfigUI
           :config="config"
-          :undo="undoFilterSort"
-          @update="updateFilters"/>
+          @update="updateFilters"
+          @edit="setFilterEditIndex"/>
+      </div>
+      <div class="col-6" v-if="filterIndex !== -1">
+        <h3>
+          {{ config.filterFacets[this.filterIndex].label }} filter configuration
+        </h3>
+        <filter-editor
+          class="filter-editor"
+          :value="config.filterFacets[this.filterIndex]"
+          @input="applyChanges"/>
       </div>
     </div>
 
@@ -105,9 +114,10 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DiffEditor from '../components/configuration/DiffEditor.vue'
+import FilterEditor from '../components/configuration/FilterEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
 export default {
-  components: { FilterConfigUI, DiffEditor },
+  components: { FilterConfigUI, DiffEditor, FilterEditor },
   data () {
     return {
       editor: {},
@@ -116,9 +126,10 @@ export default {
       undoFilterSort: 0,
       editorType: 'ui', // ui / editor / diff
       newAppConfig: '',
-      config: '',
+      config: {},
       uploadedAppConfig: '',
-      jsonError: ''
+      jsonError: '',
+      filterIndex: -1
     }
   },
   methods: {
@@ -138,11 +149,19 @@ export default {
       }
 
       if (view === 'ui') {
-        this.config = this.editor.getValue()
+        this.config = JSON.parse(this.editor.getValue())
       }
     },
     format () {
       this.editor.getAction('editor.action.formatDocument').run()
+    },
+    applyChanges (filterObject) {
+      this.dirty = true
+      this.config.filterFacets[this.filterIndex] = filterObject
+      /**  apply config to draggables */
+      this.config = Object.assign({}, this.config)
+      /** apply changes to the json editor */
+      this.newAppConfig = JSON.stringify(this.config)
     },
     save () {
       this.format()
@@ -181,13 +200,10 @@ export default {
     },
     cancel () {
       this.dirty = false
-      switch (this.editorType) {
-        case 'ui':
-          this.undoFilterSort = new Date().getMilliseconds()
-          break
-        default:
-          this.editor.getModel().setValue(this.appConfig)
-      }
+      this.newAppConfig = ''
+
+      this.config = Object.assign({}, JSON.parse(this.appConfig))
+      this.editor.getModel().setValue(this.appConfig)
     },
     download () {
       const file = new Blob([this.editor.getValue()], { type: 'json' })
@@ -214,6 +230,9 @@ export default {
         this.switchView('diff')
       })
       reader.readAsDataURL(event.target.files[0])
+    },
+    setFilterEditIndex (newIndex) {
+      this.filterIndex = newIndex
     }
   },
   computed: {
@@ -238,9 +257,12 @@ export default {
       }
     }
   },
+  destroyed () {
+    this.filterIndex = -1
+  },
   async mounted () {
     await this.GetApplicationConfiguration()
-    this.config = this.appConfig
+    this.config = JSON.parse(this.appConfig)
 
     const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
@@ -281,6 +303,13 @@ export default {
   border: 1px solid black;
   height: 65vh;
   width: 100%;
+}
+
+.filter-editor {
+  margin-top: 3.1rem;
+  height: 40%;
+  width: 100%;
+  border: 1px solid black;
 }
 
 .alert:hover {
