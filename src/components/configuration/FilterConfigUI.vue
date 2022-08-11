@@ -2,7 +2,7 @@
   <div>
     <div class="mb-3">
       <h3>Filters</h3>
-      <small>Rearrange the filters by dragging and dropping. Unchecking a filter
+      <small class="d-inline-block">Rearrange the filters by dragging and dropping. Unchecking a filter
         means it will be hidden by default.</small>
       <button @click="emitAdd" class="btn btn-info mt-2">
         Add new filter

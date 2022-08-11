@@ -42,8 +42,8 @@
           :value="config.filterFacets[this.filterIndex]"
           @input="applyChanges"
           @delete="deleteFilter"/>
-
-        <pre class="code-help">
+        <small>
+          <pre class="code-help">
 {
     "component": "CheckboxFilter",  /** component to render                                                                                     */
     "name": "",                     /** The name of the filter                                                                                  */
@@ -56,11 +56,12 @@
     "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                 */
     "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                            */
     "headerClass": "",              /** optional: you can add bootstrap classes here                                                            */
-    "showSatisfyAllSelector": true, /** optional: set this to false to 'disable match all / match any', defaults to true                        */
+    "showSatisfyAllSelector": true, /** optional: set this to false to disable 'match all / match any', defaults to true                        */
     "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                      */
     "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown' */
 }
           </pre>
+        </small>
       </div>
     </div>
 
