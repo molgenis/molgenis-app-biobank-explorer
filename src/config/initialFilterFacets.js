@@ -96,7 +96,6 @@ const filterDefinitions = [
     name: 'search',
     label: 'Search',
     humanReadableString: 'Text search is',
-    custom: true,
     builtIn: true // search should not be generated
   }
 ]

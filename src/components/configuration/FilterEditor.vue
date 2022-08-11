@@ -5,6 +5,11 @@
     <button class="btn btn-info mt-3" :disabled="!dirty" @click="apply">
       Apply changes to {{ value.label }}
     </button>
+    <button
+      class="btn btn-danger ml-3 mt-3"
+      @click="deleteFilter">
+      Delete {{ value.label }}
+    </button>
   </div>
 </template>
 
@@ -24,6 +29,9 @@ export default {
     },
     apply () {
       this.$emit('input', JSON.parse(this.filterEditor.getValue()))
+    },
+    deleteFilter () {
+      this.$emit('delete')
     }
   },
   data () {

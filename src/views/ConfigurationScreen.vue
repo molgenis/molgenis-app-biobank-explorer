@@ -30,6 +30,7 @@
         <FilterConfigUI
           :config="config"
           @update="updateFilters"
+          @add="addFilter"
           @edit="setFilterEditIndex"/>
       </div>
       <div class="col-6" v-if="filterIndex !== -1">
@@ -39,7 +40,8 @@
         <filter-editor
           class="filter-editor"
           :value="config.filterFacets[this.filterIndex]"
-          @input="applyChanges"/>
+          @input="applyChanges"
+          @delete="deleteFilter"/>
       </div>
     </div>
 
@@ -116,6 +118,8 @@ import { mapActions, mapState } from 'vuex'
 import DiffEditor from '../components/configuration/DiffEditor.vue'
 import FilterEditor from '../components/configuration/FilterEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
+import { filterTemplate } from '../config/facetConfigurator'
+
 export default {
   components: { FilterConfigUI, DiffEditor, FilterEditor },
   data () {
@@ -158,6 +162,15 @@ export default {
     applyChanges (filterObject) {
       this.dirty = true
       this.config.filterFacets[this.filterIndex] = filterObject
+      this.syncCurrentConfigState()
+    },
+    deleteFilter () {
+      this.dirty = true
+      this.config.filterFacets.splice(this.filterIndex, 1)
+      this.filterIndex = -1
+      this.syncCurrentConfigState()
+    },
+    syncCurrentConfigState () {
       /**  apply config to draggables */
       this.config = Object.assign({}, this.config)
       /** apply changes to the json editor */
@@ -233,6 +246,12 @@ export default {
     },
     setFilterEditIndex (newIndex) {
       this.filterIndex = newIndex
+    },
+    addFilter () {
+      const filterCount = this.config.filterFacets.length
+      this.config.filterFacets.push(filterTemplate)
+      this.syncCurrentConfigState()
+      this.filterIndex = filterCount
     }
   },
   computed: {
