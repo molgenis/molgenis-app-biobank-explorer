@@ -3,18 +3,19 @@ import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTyp
 export const filterTemplate = {
 
   component: 'CheckboxFilter',
-  headerClass: '',
   name: '',
   label: 'New filter',
-  maxVisibleOptions: 100,
   tableName: '',
   columnName: '',
-  filterLabelAttribute: '',
   humanReadableString: '',
+  showFacet: true,
+  filterLabelAttribute: '',
+  initialDisplayItems: 100,
+  maxVisibleOptions: 25,
+  headerClass: '',
   showSatisfyAllSelector: true,
   queryOptions: '',
-  removeOptions: [],
-  showFacet: true
+  removeOptions: []
 }
 
 export const createFilters = (state) => {

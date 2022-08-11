@@ -42,6 +42,25 @@
           :value="config.filterFacets[this.filterIndex]"
           @input="applyChanges"
           @delete="deleteFilter"/>
+
+        <pre class="code-help">
+{
+    "component": "CheckboxFilter",  /** component to render                                                                                     */
+    "name": "",                     /** The name of the filter                                                                                  */
+    "label": "New filter",          /** the name to show on the dropdown, defaults to name property                                             */
+    "tableName": "",                /** name of the table where the mref leads to. This table contains the filter options                       */
+    "columnName": "",               /** name of the column in the collections table                                                             */
+    "humanReadableString": "",      /** sentence that you / biobanks will see in the negotiator that describe the selected filters              */
+    "showFacet": true,              /** Set this to false if the filter should not be immediatly visible                                        */
+    "initialDisplayItems": 100,     /** optional: the amount of prefetched options                                                              */
+    "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                 */
+    "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                            */
+    "headerClass": "",              /** optional: you can add bootstrap classes here                                                            */
+    "showSatisfyAllSelector": true, /** optional: set this to false to 'disable match all / match any', defaults to true                        */
+    "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                      */
+    "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown' */
+}
+          </pre>
       </div>
     </div>
 
@@ -217,6 +236,7 @@ export default {
 
       this.config = Object.assign({}, JSON.parse(this.appConfig))
       this.editor.getModel().setValue(this.appConfig)
+      this.filterIndex = -1
     },
     download () {
       const file = new Blob([this.editor.getValue()], { type: 'json' })
@@ -248,6 +268,7 @@ export default {
       this.filterIndex = newIndex
     },
     addFilter () {
+      this.dirty = true
       const filterCount = this.config.filterFacets.length
       this.config.filterFacets.push(filterTemplate)
       this.syncCurrentConfigState()
@@ -300,6 +321,9 @@ export default {
 </script>
 
 <style scoped >
+.code-help {
+  margin-top: 4rem;
+}
 .editor-active {
   text-decoration: underline;
 }
