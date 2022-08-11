@@ -51,7 +51,7 @@
     "tableName": "",                /** name of the table where the mref leads to. This table contains the filter options                       */
     "columnName": "",               /** name of the column in the collections table                                                             */
     "humanReadableString": "",      /** sentence that you / biobanks will see in the negotiator that describe the selected filters              */
-    "showFacet": true,              /** Set this to false if the filter should not be immediatly visible                                        */
+    "showFacet": true,              /** Set this to false if the filter should not be immediately visible                                        */
     "initialDisplayItems": 100,     /** optional: the amount of prefetched options                                                              */
     "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                 */
     "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                            */
