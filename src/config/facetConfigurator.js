@@ -1,5 +1,23 @@
 import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions } from '../utils/filterOptions'
 
+export const filterTemplate = {
+
+  component: 'CheckboxFilter',
+  name: '',
+  label: 'New filter',
+  tableName: '',
+  columnName: '',
+  humanReadableString: '',
+  showFacet: true,
+  filterLabelAttribute: '',
+  initialDisplayItems: 100,
+  maxVisibleOptions: 25,
+  headerClass: '',
+  showSatisfyAllSelector: true,
+  queryOptions: '',
+  removeOptions: []
+}
+
 export const createFilters = (state) => {
   const filterFacets = []
 
@@ -13,8 +31,8 @@ export const createFilters = (state) => {
         tableName: facet.tableName,
         columnName: facet.columnName,
         filterLabelAttribute: facet.filterLabelAttribute || '',
-        options: getFilterOptions(facet),
-        filters: state.filters.selections[facet.name],
+        options: getFilterOptions(facet), // uses the removeOptions array
+        filters: state.filters.selections[facet.name], // adds the currently active options
         satisfyAll: state.filters.satisfyAll.includes(facet.name),
         initialDisplayItems: facet.initialDisplayItems || 100,
         maxVisibleOptions: facet.maxVisibleOptions || 25,
