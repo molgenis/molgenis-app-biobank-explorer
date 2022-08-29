@@ -21,7 +21,7 @@ export const bbmriConfig = () => {
     const configEntry = INITIAL_STATE[key]
 
     // 0 is not false in this case.
-    if (isNaN(configEntry) && !configEntry) continue
+    if (configEntry !== 0 && !configEntry) continue
     else if (Array.isArray(configEntry) && !configEntry.length) continue
     else config[key] = configEntry
   }
