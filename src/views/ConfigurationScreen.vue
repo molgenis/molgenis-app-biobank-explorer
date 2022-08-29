@@ -45,20 +45,21 @@
         <small>
           <pre class="code-help">
 {
-    "component": "CheckboxFilter",  /** component to render                                                                                     */
-    "name": "",                     /** The name of the filter                                                                                  */
-    "label": "New filter",          /** the name to show on the dropdown, defaults to name property                                             */
-    "tableName": "",                /** name of the table where the mref leads to. This table contains the filter options                       */
-    "columnName": "",               /** name of the column in the collections table                                                             */
-    "humanReadableString": "",      /** sentence that you / biobanks will see in the negotiator that describe the selected filters              */
+    "component": "CheckboxFilter",  /** component to render                                                                                      */
+    "name": "",                     /** The name of the filter                                                                                   */
+    "label": "New filter",          /** the name to show on the dropdown, defaults to name property                                              */
+    "tableName": "",                /** name of the table where the mref leads to. This table contains the filter options                        */
+    "columnName": "",               /** name of the column in the collections table                                                              */
+    "humanReadableString": "",      /** sentence that you / biobanks will see in the negotiator that describe the selected filters               */
     "showFacet": true,              /** Set this to false if the filter should not be immediately visible                                        */
-    "initialDisplayItems": 100,     /** optional: the amount of prefetched options                                                              */
-    "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                 */
-    "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                            */
-    "headerClass": "",              /** optional: you can add bootstrap classes here                                                            */
-    "showSatisfyAllSelector": true, /** optional: set this to false to disable 'match all / match any', defaults to true                        */
-    "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                      */
-    "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown' */
+    "initialDisplayItems": 100,     /** optional: the amount of prefetched options                                                               */
+    "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                  */
+    "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                             */
+    "headerClass": "",              /** optional: you can add bootstrap classes here                                                             */
+    "showSatisfyAllSelector": true, /** optional: set this to false to disable 'match all / match any', defaults to true                         */
+    "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                       */
+    "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown'  */
+    "applyTo": []                   /** optional: specify on which table or tables it should apply to. Defaults to ['eu_bbmri_eric_collections'] */
 }
           </pre>
         </small>

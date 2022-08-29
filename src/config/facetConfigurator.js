@@ -15,7 +15,8 @@ export const filterTemplate = {
   headerClass: '',
   showSatisfyAllSelector: true,
   queryOptions: '',
-  removeOptions: []
+  removeOptions: [],
+  applyTo: []
 }
 
 export const createFilters = (state) => {
@@ -39,6 +40,7 @@ export const createFilters = (state) => {
         showSatisfyAllSelector: facet.showSatisfyAllSelector || true,
         humanReadableString: facet.humanReadableString,
         builtIn: facet.builtIn,
+        applyTo: facet.applyTo || ['eu_bbmri_eric_collections'],
         showFacet: facet.showFacet
       })
   }

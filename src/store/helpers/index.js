@@ -47,12 +47,13 @@ function createSearchInputQuery (state, columns) {
 
 function createRsqlQueriesFromState (state) {
   const hardcodedFilters = ['search', 'diagnosis_available']
+
   const activeFilterSelection = Object.keys(state.filters.selections).filter(selection => !hardcodedFilters.includes(selection))
 
   const queries = []
 
   for (const facet of state.filterFacets) {
-    if (activeFilterSelection.includes(facet.name)) {
+    if (activeFilterSelection.includes(facet.name) && facet.applyTo.includes('eu_bbmri_eric_collections')) {
       queries.push(createQuery(state.filters.selections[facet.name], facet.columnName, state.filters.satisfyAll.includes(facet.name)))
     }
   }
