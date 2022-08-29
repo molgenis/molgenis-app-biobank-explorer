@@ -1,14 +1,13 @@
 <template>
   <b-input-group>
     <b-form-input
+      :disabled="disabled"
       v-model="model"
       :name="name"
       :placeholder="placeholder"
       trim/>
     <b-input-group-append>
-      <b-button
-        variant="outline-secondary"
-        @click.prevent="model=''">
+      <b-button variant="outline-secondary" @click.prevent="model = ''">
         <font-awesome-icon icon="times" />
       </b-button>
     </b-input-group-append>
@@ -19,6 +18,11 @@
 export default {
   name: 'StringFilter',
   props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: () => false
+    },
     /**
      * The HTML input element name.
      */

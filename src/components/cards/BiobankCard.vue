@@ -7,7 +7,7 @@
         'border-light': !biobankInSelection,
         'back-side': showCollections,
       },
-      fullSize ? 'w-75' : 'biobank-card',
+      fullSize ? 'biobank-card-large' : 'biobank-card',
       'flip',
     ]">
     <div tabindex="0">
@@ -324,6 +324,10 @@ export default {
 
 .biobank-card {
   width: 25rem;
+}
+
+.biobank-card-large {
+  width: 90% ;
 }
 
 .biobank-card > header,
