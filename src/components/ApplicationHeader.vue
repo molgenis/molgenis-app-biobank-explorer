@@ -49,6 +49,7 @@
       <vue-slide-up-down :active="!filtersCollapsed" :duration="300">
         <div class="col-12">
           <b-dropdown
+            :disabled="loading"
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
@@ -80,6 +81,7 @@
 
           <span v-show="showAllFilters">
             <b-dropdown
+              :disabled="loading"
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
@@ -87,7 +89,9 @@
               no-flip
               class="mr-2 mb-1 filter-dropdown">
               <template #button-content>
-                <span>{{ additionalFilter.label || additionalFilter.name }}</span>
+                <span>{{
+                  additionalFilter.label || additionalFilter.name
+                }}</span>
                 <span
                   class="badge badge-light border ml-2"
                   v-if="filterSelectionCount(additionalFilter.name) > 0">
@@ -101,7 +105,10 @@
                   @input="(value) => filterChange(additionalFilter.name, value)"
                   @satisfy-all="
                     (satisfyAllValue) =>
-                      filterSatisfyAllChange(additionalFilter.name, satisfyAllValue)
+                      filterSatisfyAllChange(
+                        additionalFilter.name,
+                        satisfyAllValue
+                      )
                   "
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
@@ -162,8 +169,9 @@ export default {
         : false
     },
     facetsToRender () {
-      return this.filterFacets.filter(
-        filter => !filter.builtIn).filter(filter => filter.showFacet)
+      return this.filterFacets
+        .filter(filter => !filter.builtIn)
+        .filter(filter => filter.showFacet)
     },
     moreFacets () {
       return this.filterFacets.filter(

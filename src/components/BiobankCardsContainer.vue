@@ -14,7 +14,8 @@
         <biobank-card
           v-for="biobank in biobanksShown"
           :key="biobank.id || biobank"
-          :biobank="biobank">
+          :biobank="biobank"
+          :fullSize="biobanksShown.length === 1">
         </biobank-card>
       </div>
       <pagination class="mt-4" />
