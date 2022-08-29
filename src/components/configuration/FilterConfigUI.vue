@@ -4,7 +4,7 @@
       <h3>Filters</h3>
       <div class="d-flex justify-content-between flex-wrap">
         <small class="d-inline-block">Rearrange the filters by dragging and dropping. Unchecking a filter
-          means it will be hidden by default.</small>
+          means it will be shown under <i>More filters</i> by default.</small>
         <button @click="emitAdd" class="btn btn-info mt-2">
           Add new filter
           <span class="fa fa-plus fa-lg ml-1" aria-hidden="true"></span>

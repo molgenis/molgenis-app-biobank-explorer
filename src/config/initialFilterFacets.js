@@ -16,6 +16,7 @@ const filterDefinitions = [
     columnName: 'country',
     humanReadableString: 'Countries:',
     queryOptions: '?sort=name',
+    applyTo: ['eu_bbmri_eric_collections', 'eu_bbmri_eric_biobanks'],
     showFacet: true
   },
   {
@@ -48,6 +49,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_capabilities',
     columnName: 'capabilities',
     humanReadableString: 'Biobank services:',
+    applyTo: ['eu_bbmri_eric_biobanks'],
     showFacet: false
   },
   {

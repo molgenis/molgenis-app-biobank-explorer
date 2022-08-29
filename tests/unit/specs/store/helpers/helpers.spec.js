@@ -1,18 +1,16 @@
+
+import { createFilters } from '../../../../../src/config/facetConfigurator'
 import helpers, {
   filterCollectionTree,
   isCodeRegex
 } from '../../../../../src/store/helpers'
 import { mockState } from '../../mockData'
 
-const getInitialState = () => {
-  return mockState()
-}
-
 let state
 
 describe('store', () => {
   beforeEach(() => {
-    state = getInitialState()
+    state = mockState()
   })
   describe('Vuex store helper functions', () => {
     describe('filterCollectionTree', () => {
@@ -105,7 +103,7 @@ describe('store', () => {
     })
 
     describe('createRSQLQuery', () => {
-      beforeEach(() => { state = getInitialState() })
+      beforeEach(() => { state = { ...mockState(), filterFacets: createFilters(mockState()) } })
 
       it('should create a query with only a country filter', () => {
         state.filters.selections.country = ['NL', 'BE']
@@ -225,7 +223,7 @@ describe('store', () => {
     })
 
     describe('createBiobankRSQLQuery', () => {
-      afterEach(() => { state = getInitialState() })
+      afterEach(() => { state = mockState() })
       it('should create a Biobank query with a capabilities filter and the satisfy all flag enabled', () => {
         state.filters.selections.biobank_capabilities = ['covid_1', 'covid_2']
         state.filters.satisfyAll = ['biobank_capabilities']
@@ -297,7 +295,7 @@ describe('store', () => {
       let getters
 
       beforeEach(() => {
-        state = getInitialState()
+        state = mockState()
         state.filters.labels = { materials: ['PLASMA', ' RNA'] }
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']
