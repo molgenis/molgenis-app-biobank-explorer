@@ -7,8 +7,6 @@ import { createTextSearchQuery } from '.'
 
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
-  console.log('filterData:')
-  console.log(filterData)
   store.commit('SetFilterOptionDictionary', filterData)
 }
 

@@ -36,6 +36,7 @@ export default {
   nonCommercialCollections: [],
   selectedCollections: [],
   filterOptionsOverride: {},
+  activeFilters: [],
   filters: {
     selections: {},
     satisfyAll: [],
