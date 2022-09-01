@@ -83,26 +83,8 @@ export default {
 
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
-    createBookmark(state.filters, state.selectedCollections)
-  },
-  SetFilterLoading (state, { filterName }) {
-    Vue.set(state, 'filterLoading', filterName)
-  },
-  SetFilterActivation (state, { filterName, activation }) {
-    if (activation) {
-      Vue.set(state, 'filterExpanded', filterName)
-    } else {
-      Vue.set(state, 'filterExpanded', 'None')
-    }
-  },
-  ResetFilterLoading (state) {
-    // const filterLoadingDict = {}
-    // const filters = state.filterFacets.map(fd => fd.name)
-    // for (const f of filters) {
-    //   filterLoadingDict[f] = false
-    // }
-    // console.log(filters)
-    Vue.set(state, 'filterLoading', 'None')
+
+    createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
   },
   ResetFilterOptionsOverride (state) {
     Vue.set(state, 'filterOptionsOverride', {})
