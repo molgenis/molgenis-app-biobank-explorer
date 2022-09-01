@@ -52,16 +52,20 @@
             :variant="filterVariant(filter.name)"
             v-for="filter in facetsToRender"
             :key="filter.name"
-            @shown="loadOptions(filter)"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
             <template #button-content>
+              <div
+              class="d-inline-block"
+              @mouseenter="loadOptions(filter)">
               <span>{{ filter.label || filter.name }}</span>
               <span
                 class="badge badge-light border ml-2"
                 v-if="filterSelectionCount(filter.name) > 0">
-                {{ filterSelectionCount(filter.name) }}</span>
+                {{ filterSelectionCount(filter.name) }}
+              </span>
+              </div>
             </template>
             <div class="bg-white p-2 dropdown-contents">
               <component
