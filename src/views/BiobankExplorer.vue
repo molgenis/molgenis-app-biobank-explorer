@@ -21,31 +21,11 @@ export default {
     ...mapGetters([
       'rsql',
       'biobankRsql',
-      'activeFilters',
-      'selectedBiobankQuality',
-      'selectedCollectionQuality',
-      'satisfyAllBiobankQuality',
-      'satisfyAllCollectionQuality'
+      'activeFilters'
     ]),
     ...mapState(['isPodium'])
   },
   watch: {
-    selectedBiobankQuality: {
-      immediate: true,
-      handler: 'GetBiobankIdsForQuality'
-    },
-    selectedCollectionQuality: {
-      immediate: true,
-      handler: 'GetCollectionIdsForQuality'
-    },
-    satisfyAllBiobankQuality: {
-      immediate: true,
-      handler: 'GetBiobankIdsForQuality'
-    },
-    satisfyAllCollectionQuality: {
-      immediate: true,
-      handler: 'GetCollectionIdsForQuality'
-    },
     rsql: {
       immediate: true,
       handler: 'GetCollectionInfo'
@@ -70,7 +50,7 @@ export default {
     ])
   },
   mounted () {
-    // check if collections have been added off-screen.
+    /** check if collections have been added off-screen. */
     createBookmark(this.activeFilters, this.selectedCollections)
   }
 }

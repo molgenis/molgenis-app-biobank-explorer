@@ -15,9 +15,9 @@ export default {
     let ids = biobankIds
     if (rsql) {
       ids = collectionInfo
-      // biobank IDs present in collectionIds
+        /** biobank IDs present in collectionIds */
         .map(({ biobankId }) => biobankId)
-      // first occurrence of ID only
+        /** first occurrence of ID only */
         .filter((value, index, self) => self.indexOf(value) === index)
     }
 
@@ -26,7 +26,7 @@ export default {
     }
 
     return ids.map(biobankId => {
-      // lazy loading, return only the id, which will be fetched on demand
+      /** lazy loading, return only the id, which will be fetched on demand */
       if (!Object.prototype.hasOwnProperty.call(biobanks, biobankId)) {
         return biobankId
       }
@@ -71,7 +71,7 @@ export default {
   collectionBiobankDictionary: state => state.collectionBiobankDictionary,
   getFoundBiobankIds: (_, { biobanks }) => biobanks.map(b => b.id || b).filter(bid => bid !== undefined),
   foundBiobanks: (state, { getFoundBiobankIds, biobankRsql, parentCollections }) => {
-    // there are no collections found, so nothing to show.
+    /**  there are no collections found, so nothing to show. */
     if (!parentCollections.length) {
       return 0
     }
@@ -81,7 +81,7 @@ export default {
     } else { return state.biobankCount }
   },
   foundCollectionIds (state, { getFoundBiobankIds }) {
-    // only if there are biobanks, then there are collections. we can't have rogue collections :)
+    /** only if there are biobanks, then there are collections. we can't have rogue collections :) */
     if (getFoundBiobankIds.length && state.collectionInfo.length) {
       const biobanksWithCollections = groupCollectionsByBiobankId(state.collectionInfo)
 
@@ -117,18 +117,14 @@ export default {
   },
   selectedCollections: state => state.selectedCollections,
   allCollectionsSelected: (_, { parentCollections, selectedCollections }) => {
-    // if we don't have any selections present in our cart
+    /** if we don't have any selections present in our cart */
     if (selectedCollections.length === 0) return false
 
     const selectedCollectionIds = selectedCollections.map(sc => sc.value)
-    // parent collections are the collections currently shown based on filters, compared to the cart
+    /** parent collections are the collections currently shown based on filters, compared to the cart */
     const allIdsPresentInSelection = parentCollections.every(cid => selectedCollectionIds.includes(cid))
 
     return allIdsPresentInSelection
-  },
-  selectedBiobankQuality: state => state.filters.selections.biobank_quality,
-  selectedCollectionQuality: state => {
-    return state.filters.selections.collection_quality
   },
   satisfyAllBiobankQuality: state => state.filters.satisfyAll.includes('biobank_quality'),
   satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),

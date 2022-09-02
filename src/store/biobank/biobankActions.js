@@ -1,11 +1,9 @@
-import utils, { createQuery, createInQuery } from '../../utils'
+import utils from '../../utils'
 import api from '@molgenis/molgenis-api-client'
-import { flatten } from 'lodash'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
 import { COLLECTION_ATTRIBUTE_SELECTOR } from '../actions'
 
 export const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
-export const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
 export const biobankActions = {
   QueryBiobanks ({ state, commit, getters }) {
@@ -41,27 +39,6 @@ export const biobankActions = {
       }, error => {
         commit('SetError', error)
       })
-  },
-  GetBiobankIdsForQuality ({ state, commit }) {
-    const biobankQuality = state.route.query.biobank_quality ? state.route.query.biobank_quality : null
-    const qualityIds = state.filters.selections.biobank_quality ?? biobankQuality
-    const selection = 'assess_level_bio'
-    if (qualityIds && qualityIds.length > 0) {
-      const query = encodeRsqlValue(transformToRSQL({
-        operator: 'AND',
-        operands: flatten([
-          state.filters.satisfyAll.includes('biobank_quality')
-            ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('biobank_quality'))
-            : createInQuery(selection, qualityIds)
-        ])
-      }
-      ))
-      api.get(`${BIOBANK_QUALITY_INFO_API_PATH}?attrs=biobank(id)&q=` + query).then(response => {
-        commit('SetBiobankIdsWithSelectedQuality', response)
-      })
-    } else {
-      commit('SetBiobankIdsWithSelectedQuality', [])
-    }
   },
   GetBiobankReport ({ commit, state }, biobankId) {
     if (state.allBiobanks) {

@@ -11,18 +11,13 @@ import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './colle
 /* API PATHS */
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
-const BIOBANK_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_ops_standards'
-const COLLECTION_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_lab_standards'
-
-export const COLLECTION_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_col_qual_info'
-export const BIOBANK_QUALITY_INFO_API_PATH = '/api/v2/eu_bbmri_eric_bio_qual_info'
 
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig?attrs=*,biobankId(refEntityType)'
 /**/
 
-/* Query Parameters */
+/**  Query Parameters */
 export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
 
 export default {
@@ -34,14 +29,6 @@ export default {
       commit('SetNegotiatorEntities', response)
     })
   },
-  async GetQualityStandardInformation ({ commit }) {
-    const biobankQualityInfo = api.get(`${BIOBANK_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
-    const collectionQualityInfo = api.get(`${COLLECTION_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
-    const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
-
-    commit('SetQualityStandardDictionary', response)
-  },
-
   GetNegotiatorType ({ commit }) {
     api.get(`${NEGOTIATOR_API_PATH}`).then(response => {
       commit('SetPodium', response)

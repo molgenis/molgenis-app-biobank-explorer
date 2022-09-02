@@ -62,19 +62,11 @@ const filterDefinitions = [
     showFacet: false
   },
   {
-    name: 'biobank_quality',
-    label: 'Biobank quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_bio',
-    columnName: 'biobank_quality',
-    humanReadableString: 'Biobank quality label(s):',
-    showFacet: false
-  },
-  {
-    name: 'collection_quality',
-    label: 'Collection quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_col',
-    columnName: 'id',
-    humanReadableString: 'Collection quality label(s):',
+    name: 'combined_quality',
+    label: 'Quality labels',
+    tableName: 'eu_bbmri_eric_assessment_levels',
+    columnName: 'combined_quality',
+    humanReadableString: 'Quality label(s):',
     showFacet: false
   },
   {
