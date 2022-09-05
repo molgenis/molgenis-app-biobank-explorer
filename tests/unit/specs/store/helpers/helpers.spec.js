@@ -123,16 +123,6 @@ describe('store', () => {
         expect(actual).toBe(expected)
       })
 
-      it('should create a query with only a collection quality filter', () => {
-        state.filters.selections.collection_quality = ['collection1']
-        state.collectionIdsWithSelectedQuality = ['collection1']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'id=in=(collection1)'
-
-        expect(actual).toBe(expected)
-      })
-
       it('should create a query with only a disease type filter', () => {
         state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
 
@@ -184,18 +174,6 @@ describe('store', () => {
 
         const actual = helpers.createRSQLQuery(state)
         const expected = 'diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100;country=in=(NL,BE)'
-
-        expect(actual).toBe(expected)
-      })
-
-      it('should create a query with disease type and collection quality filters, both with the satisfyAll option enabled', () => {
-        state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
-        state.filters.selections.collection_quality = ['collection1', 'collection2']
-        state.collectionIdsWithSelectedQuality = ['collection1', 'collection2']
-        state.filters.satisfyAll = ['diagnosis_available', 'collection_quality']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100;id==collection1;id==collection2'
 
         expect(actual).toBe(expected)
       })

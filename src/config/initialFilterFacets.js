@@ -37,6 +37,15 @@ const filterDefinitions = [
     showFacet: true
   },
   {
+    name: 'materials',
+    label: 'Material type',
+    tableName: 'eu_bbmri_eric_material_types',
+    columnName: 'materials',
+    humanReadableString: 'Material type(s):',
+    removeOptions: ['other'],
+    showFacet: true
+  },
+  {
     name: 'commercial_use',
     label: 'Collaboration type',
     columnName: 'collaboration_commercial',
@@ -53,28 +62,11 @@ const filterDefinitions = [
     showFacet: false
   },
   {
-    name: 'materials',
-    label: 'Material type',
-    tableName: 'eu_bbmri_eric_material_types',
-    columnName: 'materials',
-    humanReadableString: 'Material type(s):',
-    removeOptions: ['other'],
-    showFacet: false
-  },
-  {
-    name: 'biobank_quality',
-    label: 'Biobank quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_bio',
-    columnName: 'biobank_quality',
-    humanReadableString: 'Biobank quality label(s):',
-    showFacet: false
-  },
-  {
-    name: 'collection_quality',
-    label: 'Collection quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_col',
-    columnName: 'id',
-    humanReadableString: 'Collection quality label(s):',
+    name: 'combined_quality',
+    label: 'Quality labels',
+    tableName: 'eu_bbmri_eric_assessment_levels',
+    columnName: 'combined_quality',
+    humanReadableString: 'Quality label(s):',
     showFacet: false
   },
   {

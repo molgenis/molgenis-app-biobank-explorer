@@ -39,7 +39,7 @@ export const collectionMutations = {
     const collectionIds = response.items.map(item => item.data.id)
     const collectionInfo = []
 
-    // retrieve data from the 'cache'
+    /**  retrieve data from the 'cache' */
     state.collectionRelationData.forEach((collection) => {
       if (collectionIds.includes(collection.collectionId)) {
         collectionInfo.push(collection)
@@ -48,21 +48,8 @@ export const collectionMutations = {
 
     state.collectionInfo = collectionInfo
   },
-
   SetCollectionReport (state, collection) {
     state.collectionReport = collection
-  },
-  // methods for rehydrating bookmark
-  SetCollectionIdsWithSelectedQuality (state, response) {
-    if (response.items && response.items.length > 0) {
-      state.collectionIdsWithSelectedQuality = []
-      state.collectionIdsWithSelectedQuality = [...new Set(response.items.map(ri => ri.collection.id))]
-    } else {
-      const collectionQualityFilter = state.filters.selections.collection_quality
-      const isCollectionQualityFilterActive = (collectionQualityFilter && collectionQualityFilter.length > 0) || state.route.query.collection_quality
-
-      state.collectionIdsWithSelectedQuality = isCollectionQualityFilterActive ? ['no-collection-found'] : []
-    }
   },
   SetCollectionsToSelection (state, { collections, bookmark }) {
     state.cartValid = false

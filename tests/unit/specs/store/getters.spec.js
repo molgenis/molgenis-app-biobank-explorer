@@ -210,8 +210,6 @@ describe('store', () => {
           search: 'test searchterm',
           country: ['AT'],
           materials: ['PLASMA'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS']
@@ -224,8 +222,6 @@ describe('store', () => {
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           search: 'test searchterm'
         }
 
@@ -290,30 +286,6 @@ describe('store', () => {
         const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds })
 
         expect(result).toStrictEqual([{ label: 'Collection A', value: 'col-1' }])
-      })
-    })
-    describe('Biobank Quality Getters', () => {
-      const state = mockState()
-      state.filters.selections.biobank_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll = ['biobank_quality']
-
-      it('should return biobank quality and satisfyAll flag', () => {
-        const biobankQualityInfo = getters.selectedBiobankQuality(state)
-        expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
-        const biobankQualitySatisfyAllInfo = getters.satisfyAllBiobankQuality(state)
-        expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
-      })
-    })
-    describe('Collections Quality Getters', () => {
-      const state = mockState()
-      state.filters.selections.collection_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll = ['collection_quality']
-
-      it('should return biobank quality and satisfyAll flag', () => {
-        const biobankQualityInfo = getters.selectedCollectionQuality(state)
-        expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
-        const biobankQualitySatisfyAllInfo = getters.satisfyAllCollectionQuality(state)
-        expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
       })
     })
   })

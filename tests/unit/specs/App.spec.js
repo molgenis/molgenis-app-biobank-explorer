@@ -99,7 +99,6 @@ describe('App', () => {
     expect(MapQueryToState).toHaveBeenCalledTimes(1) // Only first call during beforeMount
   })
 
-
   it('should call MapQueryState when $route changes', () => {
     const MapQueryToState = jest.fn()
     store = new Vuex.Store({
@@ -126,6 +125,5 @@ describe('App', () => {
     shallowMount(App, { store, localVue })
     expect(GetNegotiatorType).toHaveBeenCalled()
     expect(GetNegotiatorEntities).toHaveBeenCalled()
-    expect(GetQualityStandardInformation).toHaveBeenCalled()
   })
 })

@@ -18,9 +18,10 @@ export const queryBuilder = (attribute, filters, comparison) => filters.length >
  * @example in query for country filter
  * country=in=(NL,BE,DE)
  */
-export const createInQuery = (attribute, filters) => filters.length > 0
-  ? queryBuilder(attribute, filters, '=in=')
-  : []
+export const createInQuery = (attribute, filters) => {
+  if (!filters || filters.length === 0) return []
+  else return queryBuilder(attribute, filters, '=in=')
+}
 
 /**
  * Create an RSQL 'like' query for filters
