@@ -7,6 +7,16 @@ import { configurationMutations } from './configuration/configurationMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
+function mapLegacyFilterToNewFilter (state, query, oldFilterName, newFilterName) {
+  const queryValues = decodeURIComponent(query[oldFilterName]).split(',')
+
+  if (state.filters.selections[newFilterName]) {
+    state.filters.selections[newFilterName] = [...new Set(state.filters.selections[newFilterName].concat(queryValues))]
+  } else {
+    state.filters.selections[newFilterName] = queryValues
+  }
+}
+
 export default {
   ...biobankMutations,
   ...collectionMutations,
@@ -86,21 +96,6 @@ export default {
     }
     createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
   },
-
-  SetQualityStandardDictionary (state, response) {
-    /** combine arrays from two tables and deduplicate */
-    const allStandards = [...new Set(
-      response.map(response => response.items)
-        .reduce((prev, next) => prev.concat(next)))
-    ]
-    const qualityStandardsDictionary = {}
-
-    allStandards.forEach((standard) => {
-      qualityStandardsDictionary[standard.label] = standard.description || ''
-    })
-
-    state.qualityStandardsDictionary = qualityStandardsDictionary
-  },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
     /** only cache it once */
     if (!state.filterOptionDictionary[filterName]) {
@@ -153,19 +148,6 @@ export default {
       .filter(name => keysInQuery.includes(name))
       .filter(fr => !['search', 'nToken'].includes(fr)) /** remove specific filters, else we are doing them again. */
 
-    // TODO: Reroute this to combined_network and CovidNetworkFilter
-    if (query.collection_quality) {
-      // do stuff
-    }
-
-    if (query.biobank_quality) {
-      // do stuff
-    }
-
-    if (query.collection_network) {
-      filters.push('collection_network')
-    }
-
     if (query.search) {
       Vue.set(state.filters.selections, 'search', decodeURIComponent(query.search))
     }
@@ -205,6 +187,23 @@ export default {
         Vue.set(state.filters.selections, filterName, queryValues)
       }
     }
+
+    /** legacy mappings */
+    if (query.collection_quality) {
+      mapLegacyFilterToNewFilter(state, query, 'collection_quality', 'combined_quality')
+    }
+
+    if (query.biobank_quality) {
+      mapLegacyFilterToNewFilter(state, query, 'biobank_quality', 'combined_quality')
+    }
+
+    if (query.collection_network) {
+      mapLegacyFilterToNewFilter(state, query, 'collection_network', 'network')
+    }
+    if (query.biobank_network) {
+      mapLegacyFilterToNewFilter(state, query, 'biobank_network', 'network')
+    }
+    /** end legacy mappings */
   },
   ConfigureFilters (state) {
     state.filterFacets = createFilters(state)

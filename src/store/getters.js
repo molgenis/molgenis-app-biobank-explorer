@@ -126,8 +126,6 @@ export default {
 
     return allIdsPresentInSelection
   },
-  satisfyAllBiobankQuality: state => state.filters.satisfyAll.includes('biobank_quality'),
-  satisfyAllCollectionQuality: state => state.filters.satisfyAll.includes('collection_quality'),
   rsql: createRSQLQuery,
   biobankRsql: createBiobankRSQLQuery,
   /**

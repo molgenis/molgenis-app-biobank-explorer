@@ -37,6 +37,15 @@ const filterDefinitions = [
     showFacet: true
   },
   {
+    name: 'materials',
+    label: 'Material type',
+    tableName: 'eu_bbmri_eric_material_types',
+    columnName: 'materials',
+    humanReadableString: 'Material type(s):',
+    removeOptions: ['other'],
+    showFacet: true
+  },
+  {
     name: 'commercial_use',
     label: 'Collaboration type',
     columnName: 'collaboration_commercial',
@@ -50,15 +59,6 @@ const filterDefinitions = [
     columnName: 'capabilities',
     humanReadableString: 'Biobank services:',
     applyTo: ['eu_bbmri_eric_biobanks'],
-    showFacet: false
-  },
-  {
-    name: 'materials',
-    label: 'Material type',
-    tableName: 'eu_bbmri_eric_material_types',
-    columnName: 'materials',
-    humanReadableString: 'Material type(s):',
-    removeOptions: ['other'],
     showFacet: false
   },
   {

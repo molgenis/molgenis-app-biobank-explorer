@@ -93,8 +93,6 @@ describe('store', () => {
           country: ['AT'],
           materials: ['PLASMA'],
           diagnosis_available: ['C18'],
-          collection_quality: ['Awesome standard'],
-          biobank_quality: ['Awesome standard'],
           type: ['type'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['type']
@@ -122,15 +120,19 @@ describe('store', () => {
 
         state.route = {
           query: {
+            /** legacy: can be in negotiator url */
+            collection_quality: 'eric,qualityA',
+            biobank_network: 'legacyBiobankNetworkA,legacyNetworkA',
+            collection_network: 'legacyCollectionNetworkA,legacyNetworkA',
+            biobank_quality: 'qualityA',
+            /** end legacy */
             country: 'NL,BE',
             materials: 'RNA,PLASMA',
-            collection_quality: 'eric,self',
             search: 'search',
             type: 'BIRTH_COHORT',
             dataType: 'BIOLOGICAL_SAMPLES',
             nToken: '29djgCm29104958f7dLqopf92JDJKS',
             network: 'networkA,networkB',
-            biobank_quality: 'qualityA',
             biobank_capabilities: 'covid19',
             cart: 'YmJtcmktZXJpYzpJRDpUUl9BQ1U6Y29sbGVjdGlvbjpjb3ZpZDE5',
             satisfyAll: 'covid19,materials'
@@ -142,12 +144,10 @@ describe('store', () => {
         expect(state.filters.selections.country).toStrictEqual(['NL', 'BE'])
         expect(state.filters.selections.materials).toStrictEqual(['RNA', 'PLASMA'])
         expect(state.filters.selections.type).toStrictEqual(['BIRTH_COHORT'])
-        expect(state.filters.selections.biobank_capabilities).toStrictEqual(['covid19'])
         expect(state.filters.selections.dataType).toStrictEqual(['BIOLOGICAL_SAMPLES'])
-        expect(state.filters.selections.collection_quality).toStrictEqual(['eric', 'self'])
+        expect(state.filters.selections.combined_quality).toStrictEqual(['eric', 'qualityA'])
         expect(state.filters.selections.biobank_capabilities).toStrictEqual(['covid19'])
-        expect(state.filters.selections.network).toStrictEqual(['networkA', 'networkB'])
-        expect(state.filters.selections.biobank_quality).toStrictEqual(['qualityA'])
+        expect(state.filters.selections.network).toStrictEqual(['networkA', 'networkB', 'legacyCollectionNetworkA', 'legacyNetworkA', 'legacyBiobankNetworkA'])
         expect(state.filters.selections.search).toBe('search')
         expect(state.nToken).toBe('29djgCm29104958f7dLqopf92JDJKS')
         expect(state.selectedCollections).toEqual([{
@@ -177,72 +177,6 @@ describe('store', () => {
 
         expect(state.collectionBiobankDictionary).toEqual({ 'bbmri-eric:ID:NL_AAAACXPAF5YXYACQK2ME25QAAM:collection:124': 'AMC Renal Transplant Biobank', 'bbmri-eric:ID:NL_AAAACXPJ3VCTUACQK2ME25QAAE:collection:211': 'ARGOS Biobank', 'bbmri-eric:ID:NL_AAAACXPKMVPYIACQK2ME25QAAE:collection:92': 'ARREST Biobank', 'bbmri-eric:ID:NL_AAAACYWY5TBZGACQK2MDM4QAAE:collection:89': 'AGNES Biobank', 'bbmri-eric:ID:NL_AMCBB:collection:AB17-022': 'Amsterdam UMC Biobank: Location AMC' })
         expect(state.collectionNameDictionary).toEqual({ 'bbmri-eric:ID:NL_AAAACXPAF5YXYACQK2ME25QAAM:collection:124': 'AMC Renal Transplant Biobank', 'bbmri-eric:ID:NL_AAAACXPJ3VCTUACQK2ME25QAAE:collection:211': 'Association study of coronary heart disease Risk factors in the Genome using an Old-versus-young Setting', 'bbmri-eric:ID:NL_AAAACXPKMVPYIACQK2ME25QAAE:collection:92': 'Amsterdam Ressucitation Studies', 'bbmri-eric:ID:NL_AAAACYWY5TBZGACQK2MDM4QAAE:collection:89': 'Arrhythmia genetics in the Netherlands', 'bbmri-eric:ID:NL_AMCBB:collection:AB17-022': 'Physical Activity and Dietary intervention in OVArian cancer (PADOVA): a RCT evaluating effects on body composition, physical function, and fatigue' })
-      })
-    })
-
-    describe('SetCollectionQualityCollections', () => {
-      it('should set the cols that match the applied quality standards filter', () => {
-        const payload = {
-          items: [
-            {
-              collection: { id: 'col-1' },
-              quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
-              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-            },
-            {
-              collection: { id: 'col-1' },
-              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-              assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
-            },
-            {
-              collection: { id: 'col-2' },
-              quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-              assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-            }
-          ]
-        }
-
-        const expected = ['col-1', 'col-2']
-
-        mutations.SetCollectionIdsWithSelectedQuality(state, payload)
-
-        expect(state.collectionIdsWithSelectedQuality).toStrictEqual(expected)
-      })
-
-      it('should set an invalid collection id when the filter applied on the col quality standards returns no matching cols', () => {
-        state.filters.selections.collection_quality = ['eric']
-
-        const payload = []
-
-        const expected = ['no-collection-found']
-
-        mutations.SetCollectionIdsWithSelectedQuality(state, payload)
-
-        expect(state.collectionIdsWithSelectedQuality).toStrictEqual(expected)
-      })
-    })
-
-    describe('Set Quality Standards Dictionary', () => {
-      it('Creates a dictionary based on a response containing multiple objects in an array', () => {
-        const response = [
-          {
-            items: [{ id: 'qs-1', label: 'ISO-9001', description: "I'm a high quality standard" },
-              { id: 'qs-2', label: 'ISO-9010', description: "I'm a good quality standard" }]
-          },
-          // data is joined from two tables, so can overlap
-          {
-            items: [{ id: 'qs-3', label: 'ISO-9010', description: "I'm a good quality standard" },
-              { id: 'qs-4', label: 'ISO-9020', description: "I'm a fair quality standard" }]
-          }]
-
-        const expected = {
-          'ISO-9001': "I'm a high quality standard",
-          'ISO-9010': "I'm a good quality standard",
-          'ISO-9020': "I'm a fair quality standard"
-        }
-
-        mutations.SetQualityStandardDictionary(state, response)
-        expect(state.qualityStandardsDictionary).toStrictEqual(expected)
       })
     })
 

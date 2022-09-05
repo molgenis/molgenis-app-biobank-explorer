@@ -76,48 +76,6 @@ describe('store', () => {
     })
   })
 
-  describe('SetBiobankIdsWithSelectedQuality', () => {
-    it('should set the biobanks that match the applied quality standards filter', () => {
-      state.filters.selections.biobank_quality = ['eric']
-
-      const payload = {
-        items: [
-          {
-            biobank: { id: 'biobank-1' },
-            quality_standard: { id: 'iso-15189', label: 'ISO 15189:2012' },
-            assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-          },
-          {
-            biobank: { id: 'biobank-1' },
-            quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-            assess_level_col: { id: 'accredited', label: 'Certified by accredited body' }
-          },
-          {
-            biobank: { id: 'biobank-2' },
-            quality_standard: { id: 'iso-17043-2010', label: 'ISO 17043:2010' },
-            assess_level_col: { id: 'eric', label: 'BBMRI-ERIC audited' }
-          }
-        ]
-      }
-
-      const expected = ['biobank-1', 'biobank-2']
-
-      mutations.SetBiobankIdsWithSelectedQuality(state, payload)
-
-      expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
-    })
-
-    it('should set an invalid biobank id when the filter applied on the biobank quality standards returns no matching biobanks', () => {
-      state.filters.selections.biobank_quality = ['eric']
-      const payload = {}
-      const expected = ['no-biobank-found']
-
-      mutations.SetBiobankIdsWithSelectedQuality(state, payload)
-
-      expect(state.biobankIdsWithSelectedQuality).toStrictEqual(expected)
-    })
-  })
-
   describe('SetBiobankReport', () => {
     it('should set the biobank report value in the state with the payload', () => {
       const payload = { id: 'biobank-1-other' }

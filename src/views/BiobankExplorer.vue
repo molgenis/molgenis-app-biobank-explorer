@@ -44,9 +44,7 @@ export default {
     ...mapActions([
       'GetCollectionInfo',
       'QueryBiobanks',
-      'GetPodiumCollections',
-      'GetBiobankIdsForQuality',
-      'GetCollectionIdsForQuality'
+      'GetPodiumCollections'
     ])
   },
   mounted () {

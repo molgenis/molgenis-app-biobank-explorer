@@ -57,28 +57,6 @@ export const collectionActions = {
       commit('SetLoading', false)
     })
   },
-  // We need to get id's to use in RSQL later, because we can't do a join on this table
-  // GetCollectionIdsForQuality ({ state, commit }) {
-  //   const collectionQuality = state.route.query.collection_quality ? state.route.query.collection_quality : null
-  //   const qualityIds = state.filters.selections.collection_quality ?? collectionQuality
-  //   const selection = 'assess_level_col'
-  //   if (qualityIds && qualityIds.length > 0) {
-  //     const query = encodeRsqlValue(transformToRSQL({
-  //       operator: 'AND',
-  //       operands: flatten([
-  //         state.filters.satisfyAll.includes('collection_quality')
-  //           ? createQuery(qualityIds, selection, state.filters.satisfyAll.includes('collection_quality'))
-  //           : createInQuery(selection, qualityIds)
-  //       ])
-  //     }
-  //     ))
-  //     api.get(`${COLLECTION_QUALITY_INFO_API_PATH}?attrs=collection(id)&q` + query).then(response => {
-  //       commit('SetCollectionIdsWithSelectedQuality', response)
-  //     })
-  //   } else {
-  //     commit('SetCollectionIdsWithSelectedQuality', [])
-  //   }
-  // },
   AddCollectionsToSelection ({ commit, getters }, { collections, bookmark }) {
     commit('SetCartValidationStatus', false)
     commit('SetCollectionsToSelection', { collections, bookmark })

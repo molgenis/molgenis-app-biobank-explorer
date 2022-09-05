@@ -210,8 +210,6 @@ describe('store', () => {
           search: 'test searchterm',
           country: ['AT'],
           materials: ['PLASMA'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS']
@@ -224,8 +222,6 @@ describe('store', () => {
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           search: 'test searchterm'
         }
 
