@@ -29,8 +29,40 @@
       <div class="col-6">
         <FilterConfigUI
           :config="config"
-          :undo="undoFilterSort"
-          @update="updateFilters"/>
+          @update="updateFilters"
+          @add="addFilter"
+          @edit="setFilterEditIndex"/>
+      </div>
+      <div class="col-6" v-if="filterIndex !== -1">
+        <h3>
+          {{ config.filterFacets[this.filterIndex].label }} filter configuration
+        </h3>
+        <filter-editor
+          class="filter-editor"
+          :value="config.filterFacets[this.filterIndex]"
+          @input="applyChanges"
+          @delete="deleteFilter"/>
+        <small>
+          <pre class="code-help">
+{
+    "component": "CheckboxFilter",  /** component to render                                                                                      */
+    "name": "",                     /** The name of the filter                                                                                   */
+    "label": "New filter",          /** the name to show on the dropdown, defaults to name property                                              */
+    "tableName": "",                /** name of the table where the mref leads to. This table contains the filter options                        */
+    "columnName": "",               /** name of the column in the collections table                                                              */
+    "humanReadableString": "",      /** sentence that you / biobanks will see in the negotiator that describe the selected filters               */
+    "showFacet": true,              /** Set this to false if the filter should not be immediately visible                                        */
+    "initialDisplayItems": 100,     /** optional: the amount of prefetched options                                                               */
+    "maxVisibleOptions": 25,        /** optional: number of options before you see 'see more..'                                                  */
+    "filterLabelAttribute": "",     /** optional: column name of the mref table, defaults to 'label'                                             */
+    "headerClass": "",              /** optional: you can add bootstrap classes here                                                             */
+    "showSatisfyAllSelector": true, /** optional: set this to false to disable 'match all / match any', defaults to true                         */
+    "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                       */
+    "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown'  */
+    "applyTo": []                   /** optional: specify on which table or tables it should apply to. Defaults to ['eu_bbmri_eric_collections'] */
+}
+          </pre>
+        </small>
       </div>
     </div>
 
@@ -105,9 +137,12 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import DiffEditor from '../components/configuration/DiffEditor.vue'
+import FilterEditor from '../components/configuration/FilterEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
+import { filterTemplate } from '../config/facetConfigurator'
+
 export default {
-  components: { FilterConfigUI, DiffEditor },
+  components: { FilterConfigUI, DiffEditor, FilterEditor },
   data () {
     return {
       editor: {},
@@ -116,9 +151,10 @@ export default {
       undoFilterSort: 0,
       editorType: 'ui', // ui / editor / diff
       newAppConfig: '',
-      config: '',
+      config: {},
       uploadedAppConfig: '',
-      jsonError: ''
+      jsonError: '',
+      filterIndex: -1
     }
   },
   methods: {
@@ -138,11 +174,28 @@ export default {
       }
 
       if (view === 'ui') {
-        this.config = this.editor.getValue()
+        this.config = JSON.parse(this.editor.getValue())
       }
     },
     format () {
       this.editor.getAction('editor.action.formatDocument').run()
+    },
+    applyChanges (filterObject) {
+      this.dirty = true
+      this.config.filterFacets[this.filterIndex] = filterObject
+      this.syncCurrentConfigState()
+    },
+    deleteFilter () {
+      this.dirty = true
+      this.config.filterFacets.splice(this.filterIndex, 1)
+      this.filterIndex = -1
+      this.syncCurrentConfigState()
+    },
+    syncCurrentConfigState () {
+      /**  apply config to draggables */
+      this.config = Object.assign({}, this.config)
+      /** apply changes to the json editor */
+      this.newAppConfig = JSON.stringify(this.config)
     },
     save () {
       this.format()
@@ -181,13 +234,11 @@ export default {
     },
     cancel () {
       this.dirty = false
-      switch (this.editorType) {
-        case 'ui':
-          this.undoFilterSort = new Date().getMilliseconds()
-          break
-        default:
-          this.editor.getModel().setValue(this.appConfig)
-      }
+      this.newAppConfig = ''
+
+      this.config = Object.assign({}, JSON.parse(this.appConfig))
+      this.editor.getModel().setValue(this.appConfig)
+      this.filterIndex = -1
     },
     download () {
       const file = new Blob([this.editor.getValue()], { type: 'json' })
@@ -214,6 +265,16 @@ export default {
         this.switchView('diff')
       })
       reader.readAsDataURL(event.target.files[0])
+    },
+    setFilterEditIndex (newIndex) {
+      this.filterIndex = newIndex
+    },
+    addFilter () {
+      this.dirty = true
+      const filterCount = this.config.filterFacets.length
+      this.config.filterFacets.push(filterTemplate)
+      this.syncCurrentConfigState()
+      this.filterIndex = filterCount
     }
   },
   computed: {
@@ -238,9 +299,12 @@ export default {
       }
     }
   },
+  destroyed () {
+    this.filterIndex = -1
+  },
   async mounted () {
     await this.GetApplicationConfiguration()
-    this.config = this.appConfig
+    this.config = JSON.parse(this.appConfig)
 
     const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
@@ -259,6 +323,9 @@ export default {
 </script>
 
 <style scoped >
+.code-help {
+  margin-top: 4rem;
+}
 .editor-active {
   text-decoration: underline;
 }
@@ -281,6 +348,13 @@ export default {
   border: 1px solid black;
   height: 65vh;
   width: 100%;
+}
+
+.filter-editor {
+  margin-top: 3.1rem;
+  height: 40%;
+  width: 100%;
+  border: 1px solid black;
 }
 
 .alert:hover {

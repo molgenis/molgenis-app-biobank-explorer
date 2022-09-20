@@ -55,7 +55,6 @@ export default {
     ...mapActions([
       'GetNegotiatorType',
       'GetNegotiatorEntities',
-      'GetQualityStandardInformation',
       'GetApplicationContext'
     ])
   },
@@ -83,7 +82,6 @@ export default {
   mounted () {
     this.GetNegotiatorType()
     this.GetNegotiatorEntities()
-    this.GetQualityStandardInformation()
   }
 }
 </script>

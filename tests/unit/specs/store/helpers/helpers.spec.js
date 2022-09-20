@@ -1,18 +1,16 @@
+
+import { createFilters } from '../../../../../src/config/facetConfigurator'
 import helpers, {
   filterCollectionTree,
   isCodeRegex
 } from '../../../../../src/store/helpers'
 import { mockState } from '../../mockData'
 
-const getInitialState = () => {
-  return mockState()
-}
-
 let state
 
 describe('store', () => {
   beforeEach(() => {
-    state = getInitialState()
+    state = mockState()
   })
   describe('Vuex store helper functions', () => {
     describe('filterCollectionTree', () => {
@@ -105,7 +103,7 @@ describe('store', () => {
     })
 
     describe('createRSQLQuery', () => {
-      beforeEach(() => { state = getInitialState() })
+      beforeEach(() => { state = { ...mockState(), filterFacets: createFilters(mockState()) } })
 
       it('should create a query with only a country filter', () => {
         state.filters.selections.country = ['NL', 'BE']
@@ -121,16 +119,6 @@ describe('store', () => {
 
         const actual = helpers.createRSQLQuery(state)
         const expected = 'materials=in=(RNA,DNA)'
-
-        expect(actual).toBe(expected)
-      })
-
-      it('should create a query with only a collection quality filter', () => {
-        state.filters.selections.collection_quality = ['collection1']
-        state.collectionIdsWithSelectedQuality = ['collection1']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'id=in=(collection1)'
 
         expect(actual).toBe(expected)
       })
@@ -190,18 +178,6 @@ describe('store', () => {
         expect(actual).toBe(expected)
       })
 
-      it('should create a query with disease type and collection quality filters, both with the satisfyAll option enabled', () => {
-        state.filters.selections.diagnosis_available = ['id:G71', 'id:ORPHA:10', 'id:ORPHA:100']
-        state.filters.selections.collection_quality = ['collection1', 'collection2']
-        state.collectionIdsWithSelectedQuality = ['collection1', 'collection2']
-        state.filters.satisfyAll = ['diagnosis_available', 'collection_quality']
-
-        const actual = helpers.createRSQLQuery(state)
-        const expected = 'diagnosis_available==id:G71;diagnosis_available==id:ORPHA:10;diagnosis_available==id:ORPHA:100;id==collection1;id==collection2'
-
-        expect(actual).toBe(expected)
-      })
-
       it('should create a query with materials and type, the first with the satisfyAll flag enabled and the second not', () => {
         state.filters.selections.materials = ['cDNA', 'mRNA', 'Cells']
         state.filters.satisfyAll = ['materials']
@@ -225,7 +201,7 @@ describe('store', () => {
     })
 
     describe('createBiobankRSQLQuery', () => {
-      afterEach(() => { state = getInitialState() })
+      afterEach(() => { state = mockState() })
       it('should create a Biobank query with a capabilities filter and the satisfy all flag enabled', () => {
         state.filters.selections.biobank_capabilities = ['covid_1', 'covid_2']
         state.filters.satisfyAll = ['biobank_capabilities']
@@ -297,7 +273,7 @@ describe('store', () => {
       let getters
 
       beforeEach(() => {
-        state = getInitialState()
+        state = mockState()
         state.filters.labels = { materials: ['PLASMA', ' RNA'] }
         state.filters.selections.search = ['this is a free text search']
         state.filters.selections.materials = ['PLASMA', 'RNA']

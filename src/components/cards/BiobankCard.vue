@@ -7,7 +7,8 @@
         'border-light': !biobankInSelection,
         'back-side': showCollections,
       },
-      'biobank-card flip',
+      fullSize ? 'biobank-card-large' : 'biobank-card',
+      'flip',
     ]">
     <div tabindex="0">
       <section>
@@ -182,6 +183,10 @@ export default {
     CollectionSelector
   },
   props: {
+    fullSize: {
+      type: Boolean,
+      default: () => false
+    },
     biobank: {
       type: [Object, String]
     }
@@ -319,6 +324,10 @@ export default {
 
 .biobank-card {
   width: 25rem;
+}
+
+.biobank-card-large {
+  width: 90% ;
 }
 
 .biobank-card > header,

@@ -49,6 +49,9 @@ export default {
       this.$emit('cancel')
     }
   },
+  destroyed () {
+    this.diffEditor.dispose()
+  },
   async mounted () {
     const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 

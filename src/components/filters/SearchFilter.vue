@@ -1,5 +1,6 @@
 <template>
   <StringFilter
+    :disabled="loading"
     name="Search"
     v-model="search"
     placeholder="Search"></StringFilter>
@@ -18,7 +19,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['activeFilters']),
+    ...mapGetters(['activeFilters', 'loading']),
     search: {
       get () {
         return this.activeFilters.search

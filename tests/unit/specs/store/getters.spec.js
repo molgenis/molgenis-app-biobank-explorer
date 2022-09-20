@@ -15,7 +15,7 @@ describe('store', () => {
         state.filters.selections.country = ['AT', 'BE']
         state.filters.selections.biobank_capabilities = ['covid19']
 
-        expect(getters.rsql(state)).toEqual('(name=like=Cell&Co,id=like=Cell&Co,acronym=like=Cell&Co,diagnosis_available.id=like=Cell&Co,diagnosis_available.code=like=Cell&Co,diagnosis_available.label=like=Cell&Co,diagnosis_available.ontology=like=Cell&Co,materials.id=like=Cell&Co,materials.label=like=Cell&Co,biobank.name=like=Cell&Co,biobank.id=like=Cell&Co,biobank.acronym=like=Cell&Co);country=in=(AT,BE);capabilities=in=(covid19)')
+        expect(getters.rsql(state)).toEqual('(name=like=Cell&Co,id=like=Cell&Co,acronym=like=Cell&Co,diagnosis_available.id=like=Cell&Co,diagnosis_available.code=like=Cell&Co,diagnosis_available.label=like=Cell&Co,diagnosis_available.ontology=like=Cell&Co,materials.id=like=Cell&Co,materials.label=like=Cell&Co,biobank.name=like=Cell&Co,biobank.id=like=Cell&Co,biobank.acronym=like=Cell&Co);country=in=(AT,BE)')
       })
       it('should return the empty string if no filters are selected', () => {
         expect(getters.rsql(state)).toEqual('')
@@ -210,8 +210,6 @@ describe('store', () => {
           search: 'test searchterm',
           country: ['AT'],
           materials: ['PLASMA'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS']
@@ -224,8 +222,6 @@ describe('store', () => {
           type: ['BIRTH_COHORT', 'CASE_CONTROL'],
           biobank_capabilities: ['biobank_capabilities'],
           dataType: ['BIOLOGICAL_SAMPLES', 'GENEALOGICAL_RECORDS'],
-          collection_quality: ['eric'],
-          biobank_quality: ['eric'],
           search: 'test searchterm'
         }
 
@@ -290,30 +286,6 @@ describe('store', () => {
         const result = getters.foundCollectionsAsSelection(state, { parentCollections, foundCollectionIds })
 
         expect(result).toStrictEqual([{ label: 'Collection A', value: 'col-1' }])
-      })
-    })
-    describe('Biobank Quality Getters', () => {
-      const state = mockState()
-      state.filters.selections.biobank_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll = ['biobank_quality']
-
-      it('should return biobank quality and satisfyAll flag', () => {
-        const biobankQualityInfo = getters.selectedBiobankQuality(state)
-        expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
-        const biobankQualitySatisfyAllInfo = getters.satisfyAllBiobankQuality(state)
-        expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
-      })
-    })
-    describe('Collections Quality Getters', () => {
-      const state = mockState()
-      state.filters.selections.collection_quality = ['bq_1', 'bq_2']
-      state.filters.satisfyAll = ['collection_quality']
-
-      it('should return biobank quality and satisfyAll flag', () => {
-        const biobankQualityInfo = getters.selectedCollectionQuality(state)
-        expect(biobankQualityInfo).toStrictEqual(['bq_1', 'bq_2'])
-        const biobankQualitySatisfyAllInfo = getters.satisfyAllCollectionQuality(state)
-        expect(biobankQualitySatisfyAllInfo).toStrictEqual(true)
       })
     })
   })

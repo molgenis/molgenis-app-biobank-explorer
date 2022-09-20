@@ -16,6 +16,7 @@ const filterDefinitions = [
     columnName: 'country',
     humanReadableString: 'Countries:',
     queryOptions: '?sort=name',
+    applyTo: ['eu_bbmri_eric_collections', 'eu_bbmri_eric_biobanks'],
     showFacet: true
   },
   {
@@ -36,6 +37,15 @@ const filterDefinitions = [
     showFacet: true
   },
   {
+    name: 'materials',
+    label: 'Material type',
+    tableName: 'eu_bbmri_eric_material_types',
+    columnName: 'materials',
+    humanReadableString: 'Material type(s):',
+    removeOptions: ['other'],
+    showFacet: true
+  },
+  {
     name: 'commercial_use',
     label: 'Collaboration type',
     columnName: 'collaboration_commercial',
@@ -48,31 +58,15 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_capabilities',
     columnName: 'capabilities',
     humanReadableString: 'Biobank services:',
+    applyTo: ['eu_bbmri_eric_biobanks'],
     showFacet: false
   },
   {
-    name: 'materials',
-    label: 'Material type',
-    tableName: 'eu_bbmri_eric_material_types',
-    columnName: 'materials',
-    humanReadableString: 'Material type(s):',
-    removeOptions: ['other'],
-    showFacet: false
-  },
-  {
-    name: 'biobank_quality',
-    label: 'Biobank quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_bio',
-    columnName: 'biobank_quality',
-    humanReadableString: 'Biobank quality label(s):',
-    showFacet: false
-  },
-  {
-    name: 'collection_quality',
-    label: 'Collection quality labels',
-    tableName: 'eu_bbmri_eric_assess_level_col',
-    columnName: 'id',
-    humanReadableString: 'Collection quality label(s):',
+    name: 'combined_quality',
+    label: 'Quality labels',
+    tableName: 'eu_bbmri_eric_assessment_levels',
+    columnName: 'combined_quality',
+    humanReadableString: 'Quality label(s):',
     showFacet: false
   },
   {
@@ -96,7 +90,6 @@ const filterDefinitions = [
     name: 'search',
     label: 'Search',
     humanReadableString: 'Text search is',
-    custom: true,
     builtIn: true // search should not be generated
   }
 ]

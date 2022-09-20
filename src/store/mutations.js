@@ -7,6 +7,16 @@ import { configurationMutations } from './configuration/configurationMutations'
 
 const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
 
+function mapLegacyFilterToNewFilter (state, query, oldFilterName, newFilterName) {
+  const queryValues = decodeURIComponent(query[oldFilterName]).split(',')
+
+  if (state.filters.selections[newFilterName]) {
+    state.filters.selections[newFilterName] = [...new Set(state.filters.selections[newFilterName].concat(queryValues))]
+  } else {
+    state.filters.selections[newFilterName] = queryValues
+  }
+}
+
 export default {
   ...biobankMutations,
   ...collectionMutations,
@@ -20,7 +30,7 @@ export default {
    * to remove: { name: myFilterName, value: { text: 'MyFilterLabel', value: '' } }
    */
   UpdateFilterSelection (state, filterUpdate) {
-    // reset the page as we query new results.
+    /** reset the page as we query new results. */
     state.currentPage = 1
 
     const currentFilterSelection = state.filters.selections
@@ -28,7 +38,7 @@ export default {
 
     let tempFilterUpdate = filterUpdate
 
-    // check if it's single filter input
+    /** check if it's single filter input */
     if (Object.prototype.hasOwnProperty.call(filterUpdate, 'name')) {
       tempFilterUpdate = { [filterUpdate.name]: filterUpdate.value }
     }
@@ -39,34 +49,34 @@ export default {
     for (const propertyName in tempFilterUpdate) {
       const filterValue = tempFilterUpdate[propertyName]
 
-      // check if empty, taking care of a 0 value, in case of a number filter
+      /** check if empty, taking care of a 0 value, in case of a number filter */
       if (filterValue === undefined ||
         filterValue === '' ||
         (Array.isArray(filterValue) && !filterValue.length) ||
         (!Array.isArray(filterValue) && typeof filterValue === 'object' &&
           (!filterValue.value.length || !filterValue.value[0].length))) {
-        // remove the empty filter and the label
+        /** remove the empty filter and the label */
         delete currentFilterSelection[propertyName]
         delete currentLabels[propertyName]
         continue
       }
 
-      // check if it's an array of filter values, e.g. material
-      if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { // object array filter, e.g Collection Quality marks
+      /** check if it's an array of filter values, e.g. material */
+      if (Array.isArray(filterValue) && typeof filterValue[0] === 'object') { /** object array filter, e.g Collection Quality marks */
         newSelections[propertyName] = filterValue.map(filter => filter.value)
         newFilterLabels[propertyName] = filterValue.map(filter => filter.text)
-      } else if (!Array.isArray(filterValue) && typeof filterValue === 'object') { // single added filter e.g covid_19 network
+      } else if (!Array.isArray(filterValue) && typeof filterValue === 'object') { /** single added filter e.g covid_19 network */
         newSelections[propertyName] = [filterValue.value]
         newFilterLabels[propertyName] = [filterValue.text]
-      } else { // a filter with only one option e.g. search
+      } else { /** a filter with only one option e.g. search */
         newSelections[propertyName] = filterValue
-        // we only get one filter value, so we don't know which label is attached, clear all
-        // let humanReadableString figure it out.
+        /** we only get one filter value, so we don't know which label is attached, clear all
+         * let humanReadableString figure it out. */
         delete currentLabels[propertyName]
       }
     }
 
-    // create new filter selection object and then put that on the state
+    /** create new filter selection object and then put that on the state */
     const filterSelection = { ...currentFilterSelection, ...newSelections }
 
     Vue.set(state.filters, 'selections', filterSelection)
@@ -161,11 +171,11 @@ export default {
       history = 'No filters used.'
     }
 
-    // only add if this is a different query than before
+    /** only add if this is a different query than before */
     if (state.searchHistory.length && !state.searchHistory[state.searchHistory.length - 1] !== history) {
       state.searchHistory.push(history)
     } else {
-      // we can safely write history here.
+      /** we can safely write history here. */
       state.searchHistory.push(history)
     }
   },
@@ -175,22 +185,15 @@ export default {
    * @param params
    */
   MapQueryToState (state) {
-    // bookmark has been altered in another view
+    /** bookmark has been altered in another view */
     if (!state.cartValid) return
     const query = state.route.query
 
     const keysInQuery = Object.keys(query)
-    // we load the filters, grab the names, so we can loop over it to map the selections
+    /** we load the filters, grab the names, so we can loop over it to map the selections */
     const filters = state.filterFacets.map(fd => fd.name)
       .filter(name => keysInQuery.includes(name))
-      .filter(fr => !['search', 'nToken'].includes(fr)) // remove specific filters, else we are doing them again.
-
-    // collection_network does not have a specific filter facets and it's directly set by CovidNetworkFilter
-    // so we add it manually
-    // TODO: Reroute this to combined_network
-    if (query.collection_network) {
-      filters.push('collection_network')
-    }
+      .filter(fr => !['search', 'nToken'].includes(fr)) /** remove specific filters, else we are doing them again. */
 
     if (query.search) {
       Vue.set(state.filters.selections, 'search', decodeURIComponent(query.search))
@@ -210,7 +213,7 @@ export default {
       const cartIds = cartIdString.split(',')
       state.selectedCollections = cartIds.map(id => ({ label: state.collectionNameDictionary[id], value: id }))
 
-      // add the beginning of history if from a link-back url
+      /** add the beginning of history if from a link-back url */
       if (state.searchHistory.length === 0) {
         state.searchHistory.push('Starting with a preselected list of collections')
       }
@@ -219,8 +222,8 @@ export default {
     for (const filterName of filters) {
       if (query[filterName]) {
         let queryValues = decodeURIComponent(query[filterName]).split(',')
-        // if it's not ORPHA it's ICD-10, then we have to add urn:miriam:icd: to make it an id
-        // for backwards compatibility if it's not present
+        /** if it's not ORPHA it's ICD-10, then we have to add urn:miriam:icd: to make it an id
+         * for backwards compatibility if it's not present */
         if (filterName === 'diagnosis_available') {
           queryValues = queryValues.map(value => {
             const isOrphanet = value.match(/^ORPHA/g)
@@ -231,6 +234,23 @@ export default {
         Vue.set(state.filters.selections, filterName, queryValues)
       }
     }
+
+    /** legacy mappings */
+    if (query.collection_quality) {
+      mapLegacyFilterToNewFilter(state, query, 'collection_quality', 'combined_quality')
+    }
+
+    if (query.biobank_quality) {
+      mapLegacyFilterToNewFilter(state, query, 'biobank_quality', 'combined_quality')
+    }
+
+    if (query.collection_network) {
+      mapLegacyFilterToNewFilter(state, query, 'collection_network', 'network')
+    }
+    if (query.biobank_network) {
+      mapLegacyFilterToNewFilter(state, query, 'biobank_network', 'network')
+    }
+    /** end legacy mappings */
   },
   ConfigureFilters (state) {
     state.filterFacets = createFilters(state)
