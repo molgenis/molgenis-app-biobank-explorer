@@ -41,6 +41,11 @@ export default {
   selectedCollections: [],
   filterOptionsOverride: {},
   activeFilters: [],
+  filterLoadingDict: {},
+  filterLoading: 'None',
+  filterExpanded: 'None',
+  lastUpdatedFilter: 'None',
+  lastBaseQuery: 'None',
   filters: {
     selections: {},
     satisfyAll: [],

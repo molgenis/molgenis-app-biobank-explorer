@@ -68,6 +68,9 @@ export default {
         commit('SetError', error)
       })
   },
+  setFilterActivation ({ state, commit }, { filterName, activation }) {
+    commit('SetFilterActivation', { filterName, activation })
+  },
   async GetUpdateFilter ({ state, commit }, { filterName, activeFilters }) {
     /**
      * Construct query for all filter options of the currently expanded filter
@@ -75,18 +78,17 @@ export default {
      * of filter options: If result.total > 0 : append the corresponding filter option to the reduced list
      * if result.total == 0, exclude the specific option (dont display it for corresponding filter)
      */
-    console.log(filterName)
     const filterCheckPromises = []
     const reducedFilterOptions = []
 
     if (Object.keys(activeFilters).length === 0) {
       console.log('Resetting...')
+      commit('ResetFilterLoading')
       commit('ResetFilterOptionsOverride', { filterName, reducedFilterOptions })
       return 0
     }
     // exclude active filters from current expanded filter
     const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
-    console.log(Object.keys(activeFilters))
     // if (Object.keys(activeFilters).length === 0) {
     //   console.log('Resetting...')
     //   return 0
@@ -103,8 +105,6 @@ export default {
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
       if (state.filters.satisfyAll.includes(name)) {
-        console.log('Match all:')
-        console.log(name)
         const orQueryString = []
         for (const option of activeFilters[name]) {
           orQueryString.push(name + '=in=(' + option + ')')
@@ -112,12 +112,16 @@ export default {
         const orOptions = orQueryString.join(';')
         url = url + orOptions + ';'
       } else {
-        console.log('Match any:')
-        console.log(name)
         url = url + name + '=in=(' + activeFilters[name] + ');'
       }
     }
-    console.log(url)
+    // check constructed URL for changes (compared to last udate)
+    if (state.lastUpdatedFilter === filterName && url === state.lastBaseQuery) {
+      console.log('Not Updating...')
+      return 0
+    }
+    commit('SetFilterLoading', { filterName })
+    const lastBaseQuery = url
     // const activeOptions = activeFilters[name].join(operator === 'OR' ? ',' : ';')
     // .join(operator === 'OR' ? ',' : ';')
     // iterate over options of the ONE filter that is currently expanded and construct query for each option
@@ -152,7 +156,7 @@ export default {
           reducedFilterOptions.push(state.filterOptionDictionary[filterName][val].value)
         }
       }
-      commit('SetUpdateFilter', { filterName, reducedFilterOptions })
+      commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
     })
   },
   /**
