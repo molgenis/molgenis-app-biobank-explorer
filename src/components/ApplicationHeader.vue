@@ -51,6 +51,8 @@
           <b-dropdown
             :disabled="loading"
             :variant="filterVariant(filter.name)"
+            @shown="loadOptions(filter)"
+            @hidden="setInactive(filter)"
             v-for="filter in facetsToRender"
             :key="filter.name"
             boundary="window"
@@ -58,8 +60,7 @@
             class="mr-2 mb-1 filter-dropdown">
             <template #button-content>
               <div
-              class="d-inline-block"
-              @mouseenter="loadOptions(filter)">
+              class="d-inline-block">
               <span>{{ filter.label || filter.name }}</span>
               <span
                 class="badge badge-light border ml-2"
@@ -69,7 +70,7 @@
               </div>
             </template>
             <div class="bg-white p-2 dropdown-contents">
-              <component
+              <component v-if="filterLoading != filter.name"
                 :is="filter.component"
                 :value="activeFilters[filter.name]"
                 :satisfyAllValue="
@@ -85,30 +86,39 @@
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
+              <div
+              class="d-inline-block"
+              v-if="filterLoading === filter.name">
+                {{ uiText["filter_loading"] }}
+                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+              </div>
             </div>
           </b-dropdown>
 
           <span v-show="showAllFilters">
             <b-dropdown
               :disabled="loading"
+              @shown="loadOptions(additionalFilter)"
+              @hidden="setInactive(additionalFilter)"
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
               :key="additionalFilter.name"
-              @shown="loadOptions(additionalFilter)"
               boundary="window"
               no-flip
               class="mr-2 mb-1 filter-dropdown">
               <template #button-content>
-                <span>{{
-                  additionalFilter.label || additionalFilter.name
-                }}</span>
+                <div
+                class="d-inline-block">
+                <span>{{ additionalFilter.label || additionalFilter.name }}</span>
                 <span
                   class="badge badge-light border ml-2"
                   v-if="filterSelectionCount(additionalFilter.name) > 0">
-                  {{ filterSelectionCount(additionalFilter.name) }}</span>
+                  {{ filterSelectionCount(additionalFilter.name) }}
+                </span>
+              </div>
               </template>
               <div class="bg-white p-2 dropdown-contents">
-                <component
+                <component v-if="filterLoading !== additionalFilter.name"
                   :is="additionalFilter.component"
                   :value="activeFilters[additionalFilter.name]"
                   v-bind="additionalFilter"
@@ -124,7 +134,12 @@
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>
-              </div>
+                <div
+              class="d-inline-block"
+              v-if="filterLoading === additionalFilter.name">
+                {{ uiText["filter_loading"] }}
+                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+              </div>              </div>
             </b-dropdown>
           </span>
 
@@ -168,7 +183,9 @@ export default {
       'activeSatisfyAll',
       'selectedCollections',
       'uiText',
-      'filterOptionsOverride'
+      'filterOptionsOverride',
+      'filterLoading',
+      'lastUpdatedFilter'
     ]),
     ...mapState([
       'menuHeight',
@@ -216,7 +233,8 @@ export default {
       'UpdateFilterSatisfyAll'
     ]),
     ...mapActions([
-      'GetUpdateFilter'
+      'GetUpdateFilter',
+      'setFilterActivation'
     ]),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
@@ -243,8 +261,19 @@ export default {
        * GetUpdateFilter checks how many search results each of the filter options will generate
        */
       const filterName = filter.name
+      // if (this.lastUpdatedFilter === filterName) {
+      //   console.log('Not Updating')
+      //   return 0
+      // }
       const activeFilters = this.activeFilters
+      const activation = true
+      this.setFilterActivation({ filterName, activation })
       this.GetUpdateFilter({ filterName, activeFilters })
+    },
+    setInactive (filter) {
+      const filterName = filter.name
+      const activation = false
+      this.setFilterActivation({ filterName, activation })
     }
   },
   created () {

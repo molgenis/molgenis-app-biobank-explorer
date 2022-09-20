@@ -85,14 +85,36 @@ export default {
     Vue.set(state.filters, 'labels', labels)
     createBookmark(state.filters, state.selectedCollections)
   },
+  SetFilterLoading (state, { filterName }) {
+    Vue.set(state, 'filterLoading', filterName)
+  },
+  SetFilterActivation (state, { filterName, activation }) {
+    if (activation) {
+      Vue.set(state, 'filterExpanded', filterName)
+    } else {
+      Vue.set(state, 'filterExpanded', 'None')
+    }
+  },
+  ResetFilterLoading (state) {
+    // const filterLoadingDict = {}
+    // const filters = state.filterFacets.map(fd => fd.name)
+    // for (const f of filters) {
+    //   filterLoadingDict[f] = false
+    // }
+    // console.log(filters)
+    Vue.set(state, 'filterLoading', 'None')
+  },
   ResetFilterOptionsOverride (state) {
     Vue.set(state, 'filterOptionsOverride', {})
   },
-  SetUpdateFilter (state, { filterName, reducedFilterOptions }) {
+  SetUpdateFilter (state, { filterName, reducedFilterOptions, lastBaseQuery }) {
     // initialize empty list for reduced set of filter options
     state.filterOptionsOverride[filterName] = []
     // set reduced filter options for corresponding filter (filerName)
     Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+    Vue.set(state, 'filterLoading', 'None')
+    Vue.set(state, 'lastUpdatedFilter', filterName)
+    Vue.set(state, 'lastBaseQuery', lastBaseQuery)
     // state.filterOptionsOverride[filterName] = reducedFilterOptions
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
