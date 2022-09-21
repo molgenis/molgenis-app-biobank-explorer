@@ -68,19 +68,9 @@ export default {
     }
     // exclude active filters from current expanded filter
     const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
-    // if (Object.keys(activeFilters).length === 0) {
-    //   console.log('Resetting...')
-    //   return 0
-    // }
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     // iterate over all active filter options and create query from current selection(s)
     // type=in=(COHORT);
-    // for (const activeFilterName in activeFilterNames) {
-    //   const name = activeFilterNames[activeFilterName]
-    //   const orQueryString = []
-    //   const orOptions = orQueryString.join(';')
-    //   url = url + orOptions + ';'
-    // }
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
       if (state.filters.satisfyAll.includes(name)) {
@@ -94,12 +84,15 @@ export default {
         url = url + name + '=in=(' + activeFilters[name] + ');'
       }
     }
+    console.log('FilterLoadingDict:')
+    console.log(state.filterLoadingDict)
     // check constructed URL for changes (compared to last udate)
-    if (state.lastUpdatedFilter === filterName && url === state.lastBaseQuery) {
+    if (url === state.filterLoadingDict[filterName]) {
       console.log('Not Updating...')
       return 0
+    } else {
+      commit('SetFilterLoading', { filterName })
     }
-    commit('SetFilterLoading', { filterName })
     const lastBaseQuery = url
     // const activeOptions = activeFilters[name].join(operator === 'OR' ? ',' : ';')
     // .join(operator === 'OR' ? ',' : ';')
