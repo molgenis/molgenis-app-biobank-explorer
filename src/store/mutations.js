@@ -97,12 +97,13 @@ export default {
     }
   },
   ResetFilterLoading (state) {
-    // const filterLoadingDict = {}
-    // const filters = state.filterFacets.map(fd => fd.name)
-    // for (const f of filters) {
-    //   filterLoadingDict[f] = false
-    // }
-    // console.log(filters)
+    const filterLoadingDict = {}
+    const filters = state.filterFacets.map(fd => fd.name)
+    for (const f of filters) {
+      filterLoadingDict[f] = 'None'
+    }
+    console.log('Resetting')
+    Vue.set(state, 'filterLoadingDict', filterLoadingDict)
     Vue.set(state, 'filterLoading', 'None')
   },
   ResetFilterOptionsOverride (state) {
@@ -116,6 +117,7 @@ export default {
     Vue.set(state, 'filterLoading', 'None')
     Vue.set(state, 'lastUpdatedFilter', filterName)
     Vue.set(state, 'lastBaseQuery', lastBaseQuery)
+    Vue.set(state, 'filterLoadingDict', { ...state.filterLoadingDict, ...{ [filterName]: lastBaseQuery } })
     // state.filterOptionsOverride[filterName] = reducedFilterOptions
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
