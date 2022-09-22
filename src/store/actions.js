@@ -69,16 +69,16 @@ export default {
     const reducedFilterOptions = []
 
     if (Object.keys(activeFilters).length === 0) {
-      console.log('Resetting...')
       commit('ResetFilterLoading')
       commit('ResetFilterOptionsOverride', { filterName, reducedFilterOptions })
       return 0
     }
-    // exclude active filters from current expanded filter
+    /** exclude active filters from current expanded filter
+     *  iterate over all active filter options and create query from current selection(s)
+     *  type=in=(COHORT);
+     */
     const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
-    // iterate over all active filter options and create query from current selection(s)
-    // type=in=(COHORT);
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
       if (state.filters.satisfyAll.includes(name)) {
@@ -92,27 +92,23 @@ export default {
         url = url + name + '=in=(' + activeFilters[name] + ');'
       }
     }
-    console.log('FilterLoadingDict:')
-    console.log(state.filterLoadingDict)
-    // check constructed URL for changes (compared to last udate)
+    /**
+     * check constructed URL for changes (compared to last udate)
+     */
     if (url === state.filterLoadingDict[filterName]) {
-      console.log('Not Updating...')
       return 0
     } else {
       commit('SetFilterLoading', { filterName })
     }
     const lastBaseQuery = url
-    // const activeOptions = activeFilters[name].join(operator === 'OR' ? ',' : ';')
-    // .join(operator === 'OR' ? ',' : ';')
-    // iterate over options of the ONE filter that is currently expanded and construct query for each option
+    /**
+     * iterate over options of the ONE filter that is currently expanded and construct query for each option
+     * and append URLs to list, use Promise.all on list
+     */
     for (const option of state.filterOptionDictionary[filterName]) {
       const filterOption = option.value
       const optionString = filterName + '=in=(' + filterOption + ')'
-      // append URLs to list, use Promise.all on list
       const response = api.get(url + optionString)
-      // if (response_.total > 0) {
-      //   reducedFilterOptions.push(filterOption)
-      // }
       filterCheckPromises.push(response)
     }
 
@@ -123,12 +119,6 @@ export default {
         }
       }
     }
-    // for (const keep of activeFilters[filterName]) {
-    //   console.log(keep)
-    //   reducedFilterOptions.push(keep)
-    // }
-    // Promise.all(filterCheckPromises).then((values) => { console.log(values) })
-    // Promise.all(filterCheckPromises).then((values) => { values.filter(val => val.page.totalElements > 0 ? reducedFilterOptions.push(state.filterOptionDictionary[filterName][val].value) : null) })
 
     Promise.all(filterCheckPromises).then((values) => {
       for (const val in values) {

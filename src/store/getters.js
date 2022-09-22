@@ -132,12 +132,6 @@ export default {
    * Get map of active filters
    */
   activeFilters: state => state.filters.selections,
-  filterLoadingDict: state => state.filterLoadingDict,
-  filterLoading: state => state.filterLoading,
-  filterExpanded: state => state.filterExpanded,
-  filterOptionsOverride: state => state.filterOptionsOverride,
-  lastUpdatedFilter: state => state.lastUpdatedFilter,
-  lastBaseQuery: state => state.lastBaseQuery,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined

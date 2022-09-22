@@ -181,16 +181,16 @@ export default {
       'foundCollectionIds',
       'activeFilters',
       'selectedCollections',
-      'uiText',
-      'filterOptionsOverride',
-      'filterLoading',
-      'lastUpdatedFilter'
+      'uiText'
     ]),
     ...mapState([
       'menuHeight',
       'applicationContext',
       'filterFacets',
-      'filterMenuInitiallyFolded'
+      'filterMenuInitiallyFolded',
+      'filterLoading',
+      'filterOptionsOverride',
+      'lastUpdatedFilter'
     ]),
     showSettings () {
       return this.applicationContext.roles
@@ -259,20 +259,11 @@ export default {
        * Each time a filter is expanded (shown=True) this function is triggered
        * GetUpdateFilter checks how many search results each of the filter options will generate
        */
-      const filterName = filter.name
-      // if (this.lastUpdatedFilter === filterName) {
-      //   console.log('Not Updating')
-      //   return 0
-      // }
-      const activeFilters = this.activeFilters
-      const activation = true
-      this.setFilterActivation({ filterName, activation })
-      this.GetUpdateFilter({ filterName, activeFilters })
+      this.setFilterActivation({ filterName: filter.name, activation: true })
+      this.GetUpdateFilter({ filterName: filter.name, activeFilters: this.activeFilters })
     },
     setInactive (filter) {
-      const filterName = filter.name
-      const activation = false
-      this.setFilterActivation({ filterName, activation })
+      this.setFilterActivation({ filterName: filter.name, activation: false })
     }
   },
   created () {
