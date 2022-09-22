@@ -102,7 +102,6 @@ export default {
     for (const f of filters) {
       filterLoadingDict[f] = 'None'
     }
-    console.log('Resetting')
     Vue.set(state, 'filterLoadingDict', filterLoadingDict)
     Vue.set(state, 'filterLoading', 'None')
   },
@@ -110,15 +109,12 @@ export default {
     Vue.set(state, 'filterOptionsOverride', {})
   },
   SetUpdateFilter (state, { filterName, reducedFilterOptions, lastBaseQuery }) {
-    // initialize empty list for reduced set of filter options
     state.filterOptionsOverride[filterName] = []
-    // set reduced filter options for corresponding filter (filerName)
     Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
     Vue.set(state, 'filterLoading', 'None')
     Vue.set(state, 'lastUpdatedFilter', filterName)
     Vue.set(state, 'lastBaseQuery', lastBaseQuery)
     Vue.set(state, 'filterLoadingDict', { ...state.filterLoadingDict, ...{ [filterName]: lastBaseQuery } })
-    // state.filterOptionsOverride[filterName] = reducedFilterOptions
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
@@ -131,7 +127,7 @@ export default {
     createBookmark(state.filters, state.selectedCollections)
   },
   SetQualityStandardDictionary (state, response) {
-    // Combine arrays from two tables and deduplicate
+    /** Combine arrays from two tables and deduplicate */
     const allStandards = [...new Set(
       response.map(response => response.items)
         .reduce((prev, next) => prev.concat(next)))
@@ -145,11 +141,11 @@ export default {
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
-    // only cache it once
+    /** only cache it once */
     if (!state.filterOptionDictionary[filterName]) {
       Vue.set(state.filterOptionDictionary, filterName, filterOptions)
 
-      // to let the filter know, no more caching needed
+      /** to let the filter know, no more caching needed */
       if (filterName === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
