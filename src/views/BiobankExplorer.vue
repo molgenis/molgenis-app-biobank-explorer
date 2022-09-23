@@ -23,7 +23,7 @@ export default {
       'biobankRsql',
       'activeFilters'
     ]),
-    ...mapState(['isPodium'])
+    ...mapState(['isPodium', 'filters'])
   },
   watch: {
     rsql: {
@@ -49,7 +49,7 @@ export default {
   },
   mounted () {
     /** check if collections have been added off-screen. */
-    createBookmark(this.activeFilters, this.selectedCollections)
+    createBookmark(this.filters, this.selectedCollections)
   }
 }
 </script>

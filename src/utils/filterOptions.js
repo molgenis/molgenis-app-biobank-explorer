@@ -26,8 +26,9 @@ function removeOptions (filterOptions, filterFacet) {
 
 function checkForBookmarkFilter (filterName, filterOptions) {
   if (!store.state.diagnosisAvailableFetched) {
-    // If we have a cold start with a bookmark
-    // we need to have the label for the selected filter
+    /** If we have a cold start with a bookmark
+     * we need to have the label for the selected filter
+     */
     const activeDiagnosisFilter = store.getters.activeFilters[filterName]
 
     if (activeDiagnosisFilter) {

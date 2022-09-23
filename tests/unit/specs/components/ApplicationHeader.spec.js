@@ -22,7 +22,8 @@ describe('ApplicationHeader', () => {
         loading: () => false,
         foundCollectionIds: () => [],
         selectedCollections: () => [],
-        activeFilters: () => ({})
+        activeFilters: () => ({}),
+        activeSatisfyAll: () => []
       }
     })
   })

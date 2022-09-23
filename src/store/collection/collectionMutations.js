@@ -59,7 +59,7 @@ export const collectionMutations = {
 
     if (bookmark) {
       state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
+      createBookmark(state.filters, state.selectedCollections)
     }
   },
   RemoveCollectionsFromSelection (state, { collections, bookmark }) {
@@ -69,7 +69,7 @@ export const collectionMutations = {
 
     if (bookmark) {
       state.cartValid = true
-      createBookmark(state.filters.selections, state.selectedCollections)
+      createBookmark(state.filters, state.selectedCollections)
     }
   },
   SetPodiumCollections (state, response) {
