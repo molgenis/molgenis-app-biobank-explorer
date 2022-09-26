@@ -70,7 +70,7 @@
               </div>
             </template>
             <div class="bg-white p-2 dropdown-contents">
-              <component v-if="filterLoading != filter.name"
+              <component v-if="filterLoading !== filter.name"
                 :is="filter.component"
                 :value="activeFilters[filter.name]"
                 :satisfyAllValue="
@@ -134,12 +134,13 @@
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
                 </component>
-                <div
-              class="d-inline-block"
-              v-if="filterLoading === additionalFilter.name">
-                {{ uiText["filter_loading"] }}
-                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-              </div>              </div>
+              <div
+                class="d-inline-block"
+                  v-if="filterLoading === additionalFilter.name">
+                  {{ uiText["filter_loading"] }}
+                  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+              </div>
+            </div>
             </b-dropdown>
           </span>
 
