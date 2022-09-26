@@ -83,8 +83,7 @@ export default {
 
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
-
-    createBookmark(filterSelection, state.selectedCollections, state.filters.satisfyAll)
+    createBookmark(state.filters, state.selectedCollections)
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {
@@ -94,7 +93,7 @@ export default {
         state.filters.satisfyAll.splice(state.filters.satisfyAll.indexOf(name), 1)
       }
     }
-    createBookmark(state.filters.selections, state.selectedCollections, state.filters.satisfyAll)
+    createBookmark(state.filters, state.selectedCollections)
   },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
     /** only cache it once */
@@ -211,7 +210,7 @@ export default {
   ClearActiveFilters (state) {
     state.filters.selections = {}
     state.filters.satisfyAll = []
-    createBookmark(state.filters.selections, state.selectedCollections)
+    createBookmark(state.filters, state.selectedCollections)
   },
   SetError (state, error) {
     state.error = error

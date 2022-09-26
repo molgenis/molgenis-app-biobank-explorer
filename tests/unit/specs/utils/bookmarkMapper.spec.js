@@ -7,13 +7,13 @@ jest.mock('../../../../src/router', () => ({
 
 describe('bookmark mapper', () => {
   it('can create a bookmark', () => {
-    const filters = { country: ['AT'] }
-    const selection = [{
+    const selections = { country: ['AT'] }
+    const collectionCart = [{
       label: 'Ability to collect COVID-19 cases',
       value: 'bbmri-eric:ID:AT_MUG:collection:COVID19PROSPECTIVE'
     }]
 
-    createBookmark(filters, selection)
+    createBookmark({ selections }, collectionCart)
 
     expect(Router.push).toHaveBeenCalledWith({ name: 'Test', path: 'TestPath', query: { cart: 'YmJtcmktZXJpYzpJRDpBVF9NVUc6Y29sbGVjdGlvbjpDT1ZJRDE5UFJPU1BFQ1RJVkU=', country: 'AT' } }, expect.anything())
   })

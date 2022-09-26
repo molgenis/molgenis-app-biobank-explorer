@@ -67,11 +67,14 @@
               <component
                 :is="filter.component"
                 :value="activeFilters[filter.name]"
+                :satisfyAllValue="
+                  activeSatisfyAll.includes(filter.name)
+                "
                 v-bind="filter"
                 @input="(value) => filterChange(filter.name, value)"
                 @satisfy-all="
-                  (satisfyAllValue) =>
-                    filterSatisfyAllChange(filter.name, satisfyAllValue)
+                  (satisfyAll) =>
+                    filterSatisfyAllChange(filter.name, satisfyAll)
                 "
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
@@ -102,13 +105,13 @@
                   :is="additionalFilter.component"
                   :value="activeFilters[additionalFilter.name]"
                   v-bind="additionalFilter"
+                  :satisfyAllValue="
+                    activeSatisfyAll.includes(additionalFilter.name)
+                  "
                   @input="(value) => filterChange(additionalFilter.name, value)"
                   @satisfy-all="
-                    (satisfyAllValue) =>
-                      filterSatisfyAllChange(
-                        additionalFilter.name,
-                        satisfyAllValue
-                      )
+                    (satisfyAll) =>
+                      filterSatisfyAllChange(additionalFilter.name, satisfyAll)
                   "
                   :returnTypeAsObject="true"
                   :bulkOperation="true">
@@ -154,6 +157,7 @@ export default {
       'loading',
       'foundCollectionIds',
       'activeFilters',
+      'activeSatisfyAll',
       'selectedCollections',
       'uiText'
     ]),

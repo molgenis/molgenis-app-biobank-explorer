@@ -132,6 +132,7 @@ export default {
    * Get map of active filters
    */
   activeFilters: state => state.filters.selections,
+  activeSatisfyAll: state => state.filters.satisfyAll,
   getErrorMessage: state => {
     if (!state.error) {
       return undefined
