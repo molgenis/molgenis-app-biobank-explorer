@@ -80,7 +80,7 @@ export default {
     const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     for (const activeFilterName in activeFilterNames) {
-      const name = activeFilterNames[activeFilterName]
+      const name = activeFilterNames[activeFilterName].toLowerCase()
       if (state.filters.satisfyAll.includes(name)) {
         const orQueryString = []
         for (const option of activeFilters[name]) {
@@ -105,9 +105,15 @@ export default {
      * iterate over options of the ONE filter that is currently expanded and construct query for each option
      * and append URLs to list, use Promise.all on list
      */
+    let columnName = 'none'
+    for (const f of state.filterFacets) {
+      if (f.name === filterName) {
+        columnName = f.columnName
+      }
+    }
     for (const option of state.filterOptionDictionary[filterName]) {
       const filterOption = option.value
-      const optionString = filterName + '=in=(' + filterOption + ')'
+      const optionString = columnName + '=in=(' + filterOption + ')'
       const response = api.get(url + optionString)
       filterCheckPromises.push(response)
     }
