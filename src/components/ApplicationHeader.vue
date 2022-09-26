@@ -109,7 +109,6 @@
                 }}</span>
                 <div
                 class="d-inline-block">
-                <span>{{ additionalFilter.label || additionalFilter.name }}</span>
                 <span
                   class="badge badge-light border ml-2"
                   v-if="filterSelectionCount(additionalFilter.name) > 0">
