@@ -260,11 +260,19 @@ export default {
        * Each time a filter is expanded (shown=True) this function is triggered
        * GetUpdateFilter checks how many search results each of the filter options will generate
        */
-      this.setFilterActivation({ filterName: filter.name, activation: true })
-      this.GetUpdateFilter({ filterName: filter.name, activeFilters: this.activeFilters })
+      if (filter.name === 'diagnosis_available' || filter.name === 'commercial_use' || filter.name === 'biobank_capabilities') {
+        return 0
+      } else {
+        this.setFilterActivation({ filterName: filter.name, activation: true })
+        this.GetUpdateFilter({ filterName: filter.name, activeFilters: this.activeFilters })
+      }
     },
     setInactive (filter) {
-      this.setFilterActivation({ filterName: filter.name, activation: false })
+      if (filter.name === 'diagnosis_available' || filter.name === 'commercial_use' || filter.name === 'biobank_capabilities') {
+        return 0
+      } else {
+        this.setFilterActivation({ filterName: filter.name, activation: false })
+      }
     }
   },
   created () {
