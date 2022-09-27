@@ -13,7 +13,6 @@ const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
-const NEGOTIATOR_API_PATH = '/api/v2/sys_negotiator_NegotiatorConfig'
 const NEGOTIATOR_CONFIG_API_PATH = '/api/v2/sys_negotiator_NegotiatorEntityConfig?attrs=*,biobankId(refEntityType)'
 /**/
 
@@ -27,13 +26,6 @@ export default {
   GetNegotiatorEntities ({ commit }) {
     api.get(NEGOTIATOR_CONFIG_API_PATH).then(response => {
       commit('SetNegotiatorEntities', response)
-    })
-  },
-  GetNegotiatorType ({ commit }) {
-    api.get(`${NEGOTIATOR_API_PATH}`).then(response => {
-      commit('SetPodium', response)
-    }, error => {
-      commit('SetError', error)
     })
   },
   async GetNetworkReport ({ commit }, networkId) {

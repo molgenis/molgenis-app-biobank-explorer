@@ -11,5 +11,6 @@ export const configurationState = {
   collectionColumns: config.collectionColumns,
   filterFacets: config.filterFacets,
   applicationNotification: config.applicationNotification || '',
+  isPodium: config.negotiatorType === 'podium',
   menuHeight: config.menuHeight // standard menu height in pixels for use in sticky-position
 }
