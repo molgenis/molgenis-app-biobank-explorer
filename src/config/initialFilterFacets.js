@@ -17,7 +17,8 @@ const filterDefinitions = [
     humanReadableString: 'Countries:',
     queryOptions: '?sort=name',
     applyTo: ['eu_bbmri_eric_collections', 'eu_bbmri_eric_biobanks'],
-    showFacet: true
+    showFacet: true,
+    adaptive: true
   },
   {
     name: 'type',
@@ -26,7 +27,8 @@ const filterDefinitions = [
     columnName: 'type',
     humanReadableString: 'Collection type(s):',
     removeOptions: ['other'],
-    showFacet: true
+    showFacet: true,
+    adaptive: true
   },
   {
     name: 'categories',
@@ -34,7 +36,8 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_category',
     columnName: 'categories',
     humanReadableString: 'Categories:',
-    showFacet: true
+    showFacet: true,
+    adaptive: true
   },
   {
     name: 'materials',
@@ -43,7 +46,8 @@ const filterDefinitions = [
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
     removeOptions: ['other'],
-    showFacet: true
+    showFacet: true,
+    adaptive: true
   },
   {
     name: 'commercial_use',

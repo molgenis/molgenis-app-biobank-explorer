@@ -60,6 +60,7 @@
     "queryOptions": "",             /** optional: you can add additional RSQL query options like sort here                                       */
     "removeOptions": []             /** optional: Add options (case insensitive), that you do not want to have in your selection. E.g 'unknown'  */
     "applyTo": []                   /** optional: specify on which table or tables it should apply to. Defaults to ['eu_bbmri_eric_collections'] */
+    "adaptive:" false               /** optional: if a filter is adaptive (=true), a reduced list of options in calculated and show              */
 }
           </pre>
         </small>
