@@ -83,6 +83,7 @@ module.exports = {
         description: packageJson.description,
         version: packageJson.version,
         apiDependency: 'v2',
+        negotiatorType: 'eric-negotiator',
         includeMenuAndFooter: true,
         runtimeOptions: {
           language: 'en',

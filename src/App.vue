@@ -53,7 +53,6 @@ export default {
   methods: {
     ...mapMutations(['MapQueryToState', 'ConfigureFilters', 'SetNotification']),
     ...mapActions([
-      'GetNegotiatorType',
       'GetNegotiatorEntities',
       'GetApplicationContext'
     ])
@@ -80,7 +79,6 @@ export default {
     this.GetApplicationContext()
   },
   mounted () {
-    this.GetNegotiatorType()
     this.GetNegotiatorEntities()
   }
 }

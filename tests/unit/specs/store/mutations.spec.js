@@ -245,11 +245,6 @@ describe('store', () => {
     })
 
     describe('Negotiator logic', () => {
-      it('should set the Podium boolean if any row in the negotiator config includes podium', () => {
-        mutations.SetPodium(state, { items: [{ id: 'podium-identifier' }] })
-        expect(state.isPodium).toStrictEqual(true)
-      })
-
       it('should map podium collection ids from response', () => {
         const response = {
           items: [

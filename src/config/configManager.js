@@ -7,6 +7,7 @@ export const bbmriConfig = () => {
   const INITIAL_STATE = window.__INITIAL_STATE__ || {}
 
   const config = {
+    negotiatorType: 'eric-negotiator',
     collectionColumns: initialCollectionColumns,
     biobankColumns: initialBiobankColumns,
     filterFacets: initialFilterFacets,

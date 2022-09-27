@@ -12,6 +12,7 @@ const initialState = {
   biobankCardShowCollections: true,
   filterFacets: filterDefinitions,
   removeFreemarkerMargin: true,
+  negotiatorType: 'eric-negotiator',
   menuHeight: 50,
   filterMenuInitiallyFolded: false,
   i18n

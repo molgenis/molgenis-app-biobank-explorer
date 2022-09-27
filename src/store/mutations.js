@@ -221,9 +221,6 @@ export default {
   SetCurrentPage (state, currentPage) {
     state.currentPage = currentPage
   },
-  SetPodium (state, response) {
-    state.isPodium = response.items.map(item => item.id.toLowerCase()).some(id => id.includes('podium'))
-  },
   SetNegotiatorEntities (state, negotiatorConfig) {
     const negotiatorEntities = negotiatorConfig.items.map(nci => {
       return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table

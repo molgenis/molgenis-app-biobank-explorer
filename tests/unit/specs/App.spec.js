@@ -14,7 +14,6 @@ localVue.use(BootstrapVue)
 
 describe('App', () => {
   let store
-  const GetNegotiatorType = jest.fn()
   const GetNegotiatorEntities = jest.fn()
   const GetQualityStandardInformation = jest.fn()
 
@@ -22,7 +21,6 @@ describe('App', () => {
     store = new Vuex.Store({
       state: { ...mockState() },
       actions: {
-        GetNegotiatorType: GetNegotiatorType,
         GetNegotiatorEntities: GetNegotiatorEntities,
         GetQualityStandardInformation: GetQualityStandardInformation,
         GetApplicationContext: jest.fn()
@@ -123,7 +121,6 @@ describe('App', () => {
 
   it('should call some getters when mounted', () => {
     shallowMount(App, { store, localVue })
-    expect(GetNegotiatorType).toHaveBeenCalled()
     expect(GetNegotiatorEntities).toHaveBeenCalled()
   })
 })

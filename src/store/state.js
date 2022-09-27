@@ -17,7 +17,6 @@ export default {
   initialBiobankCount: 0,
   initialBiobankIds: [],
   biobankCount: 0,
-  isPodium: false,
   podiumCollectionIds: [],
   error: null,
   biobanks: {}, /** Map ID to biobank */
