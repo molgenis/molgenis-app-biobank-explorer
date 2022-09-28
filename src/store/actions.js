@@ -77,8 +77,12 @@ export default {
      *  iterate over all active filter options and create query from current selection(s)
      *  type=in=(COHORT);
      */
-    let activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
-    activeFilterNames = activeFilterNames.filter(e => e !== 'biobank_capabilities')
+    const dynamicFilterDict = state.filterFacets.filter(e => e.adaptive)
+    const activeFilterNames = []
+
+    for (const filter of dynamicFilterDict) {
+      activeFilterNames.push(filter.name)
+    }
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
