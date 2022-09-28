@@ -140,6 +140,21 @@ export default {
 
     state.qualityStandardsDictionary = qualityStandardsDictionary
   },
+
+  SetQualityStandardDictionary (state, response) {
+    /** Combine arrays from two tables and deduplicate */
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
+    const qualityStandardsDictionary = {}
+
+    allStandards.forEach((standard) => {
+      qualityStandardsDictionary[standard.label] = standard.description || ''
+    })
+
+    state.qualityStandardsDictionary = qualityStandardsDictionary
+  },
   SetFilterOptionDictionary (state, { filterName, filterOptions }) {
     /** only cache it once */
     if (!state.filterOptionDictionary[filterName]) {
