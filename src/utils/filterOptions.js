@@ -7,9 +7,7 @@ import { createTextSearchQuery } from '.'
 
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
-  const filterName = filterData.name
-  const filterOptions = filterData.filterOptions
-  store.commit('SetFilterOptionDictionary', { filterName, filterOptions })
+  store.commit('SetFilterOptionDictionary', filterData)
 }
 
 function retrieveFromCache (filterName) {
@@ -38,15 +36,29 @@ function checkForBookmarkFilter (filterName, filterOptions) {
   }
 }
 
+// Configurable array of values to filter out, for example 'Other, unknown' that make no sense to the user.
+function removeOptions (filterOptions, filterFacet) {
+  const optionsToRemove = filterFacet.removeOptions
+
+  if (!optionsToRemove || !optionsToRemove.length) return filterOptions
+
+  optionsToRemove.map(option => option.toLowerCase())
+  return filterOptions.filter(filterOption => !optionsToRemove.includes(filterOption.text.toLowerCase()))
+}
+
 export const genericFilterOptions = (filterFacet) => {
-  const { tableName, name, filterLabelAttribute } = filterFacet
+  const { tableName, name, filterLabelAttribute, queryOptions } = filterFacet
   return () => new Promise((resolve) => {
     const cachedOptions = retrieveFromCache(name)
 
     if (!cachedOptions.length) {
-      api.get(`/api/v2/${tableName}`).then(response => {
-        const filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
-        cache({ name, filterOptions })
+      api.get(`/api/v2/${tableName}${queryOptions || ''}`).then(response => {
+        let filterOptions = response.items.map((obj) => { return { text: obj[filterLabelAttribute] || obj.label || obj.name, value: obj.id } })
+
+        // remove unwanted options if applicable
+        filterOptions = removeOptions(filterOptions, filterFacet)
+
+        cache({ filterName: name, filterOptions })
         resolve(filterOptions)
       })
     } else {
