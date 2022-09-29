@@ -7,7 +7,9 @@ import { createTextSearchQuery } from '.'
 
 // Async so we can fire and forget for performance.
 async function cache (filterData) {
-  store.commit('SetFilterOptionDictionary', filterData)
+  const filterName = filterData.name
+  const filterOptions = filterData.filterOptions
+  store.commit('SetFilterOptionDictionary', { filterName, filterOptions })
 }
 
 function retrieveFromCache (filterName) {
@@ -30,7 +32,7 @@ function checkForBookmarkFilter (filterName, filterOptions) {
         }
       }
       if (options.length) {
-        cache({ name, filterOptions: options })
+        cache({ filterName, filterOptions: options })
       }
     }
   }

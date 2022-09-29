@@ -69,12 +69,20 @@ export default {
      *  iterate over all active filter options and create query from current selection(s)
      *  type=in=(COHORT);
      */
+    // const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
     const dynamicFilterDict = state.filterFacets.filter(e => e.adaptive)
     const activeFilterNames = []
 
     for (const filter of dynamicFilterDict) {
-      activeFilterNames.push(filter.name)
+      if (filter.name !== filterName && Object.keys(activeFilters).includes(filter.name)) {
+        activeFilterNames.push(filter.name)
+      }
     }
+
+    if (activeFilterNames.length === 0) {
+      return 0
+    }
+    
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
@@ -114,7 +122,6 @@ export default {
       const response = api.get(url + optionString)
       filterCheckPromises.push(response)
     }
-
     if (activeFilters[filterName]) {
       for (const activeOption of activeFilters[filterName]) {
         if (!reducedFilterOptions.includes(activeOption)) {
