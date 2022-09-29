@@ -14,6 +14,16 @@ function retrieveFromCache (filterName) {
   return store.state.filterOptionDictionary[filterName] ?? []
 }
 
+// Configurable array of values to filter out, for example 'Other, unknown' that make no sense to the user.
+function removeOptions (filterOptions, filterFacet) {
+  const optionsToRemove = filterFacet.removeOptions
+
+  if (!optionsToRemove || !optionsToRemove.length) return filterOptions
+
+  optionsToRemove.map(option => option.toLowerCase())
+  return filterOptions.filter(filterOption => !optionsToRemove.includes(filterOption.text.toLowerCase()))
+}
+
 function checkForBookmarkFilter (filterName, filterOptions) {
   if (!store.state.diagnosisAvailableFetched) {
     /** If we have a cold start with a bookmark
@@ -34,16 +44,6 @@ function checkForBookmarkFilter (filterName, filterOptions) {
       }
     }
   }
-}
-
-// Configurable array of values to filter out, for example 'Other, unknown' that make no sense to the user.
-function removeOptions (filterOptions, filterFacet) {
-  const optionsToRemove = filterFacet.removeOptions
-
-  if (!optionsToRemove || !optionsToRemove.length) return filterOptions
-
-  optionsToRemove.map(option => option.toLowerCase())
-  return filterOptions.filter(filterOption => !optionsToRemove.includes(filterOption.text.toLowerCase()))
 }
 
 export const genericFilterOptions = (filterFacet) => {
@@ -72,7 +72,7 @@ const createDiagnosisLabelQuery = (query) => transformToRSQL(createTextSearchQue
 const createDiagnosisCodeQuery = (query) => transformToRSQL({ selector: 'code', comparison: '=like=', arguments: query.toUpperCase() })
 /** */
 
-export const diagnosisAvailableFilterOptions = (tableName, name) => {
+export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
   // destructure the query part from the multi-filter
   return ({ query, queryType }) => new Promise((resolve) => {
     let url = `/api/v2/${tableName}`
@@ -90,7 +90,7 @@ export const diagnosisAvailableFilterOptions = (tableName, name) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
-      checkForBookmarkFilter(name, filterOptions)
+      checkForBookmarkFilter(filterName, filterOptions)
       resolve(filterOptions)
     })
   })
