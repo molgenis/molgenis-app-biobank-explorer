@@ -82,7 +82,6 @@ export default {
     if (activeFilterNames.length === 0) {
       return 0
     }
-    
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
