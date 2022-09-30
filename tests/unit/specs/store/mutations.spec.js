@@ -257,26 +257,6 @@ describe('store', () => {
         mutations.SetPodiumCollections(state, response)
         expect(state.podiumCollectionIds).toStrictEqual(['A', 'B', 'C'])
       })
-
-      it('should set the should get the correct tables from the negotiator config', () => {
-        const response = {
-          items: [{
-            id: 'bbmri-eric-model',
-            entity: {
-              id: 'table_for_collection'
-            },
-            biobankId: {
-              refEntityType: {
-                id: 'table_for_biobank'
-              }
-            }
-          }]
-        }
-
-        mutations.SetNegotiatorEntities(state, response)
-        expect(state.negotiatorCollectionEntityId).toStrictEqual('table_for_collection')
-        expect(state.negotiatorBiobankEntityId).toStrictEqual('table_for_biobank')
-      })
     })
 
     describe('ConfigureFilters', () => {

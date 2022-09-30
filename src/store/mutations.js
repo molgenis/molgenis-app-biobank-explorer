@@ -5,8 +5,6 @@ import { collectionMutations } from './collection/collectionMutations'
 import { biobankMutations } from './biobank/biobankMutations'
 import { configurationMutations } from './configuration/configurationMutations'
 
-const negotiatorConfigIds = ['directory', 'bbmri-eric-model']
-
 function mapLegacyFilterToNewFilter (state, query, oldFilterName, newFilterName) {
   const queryValues = decodeURIComponent(query[oldFilterName]).split(',')
 
@@ -220,16 +218,6 @@ export default {
   },
   SetCurrentPage (state, currentPage) {
     state.currentPage = currentPage
-  },
-  SetNegotiatorEntities (state, negotiatorConfig) {
-    const negotiatorEntities = negotiatorConfig.items.map(nci => {
-      return { id: nci.id, collectionEntityId: nci.entity.id, biobankEntityId: nci.biobankId.refEntityType.id } // We need to have the table
-    }).filter(ne => negotiatorConfigIds.includes(ne.id))[0]
-
-    if (negotiatorEntities) {
-      state.negotiatorCollectionEntityId = negotiatorEntities.collectionEntityId
-      state.negotiatorBiobankEntityId = negotiatorEntities.biobankEntityId
-    }
   },
   SetNotification (state, notification) {
     state.notification = notification

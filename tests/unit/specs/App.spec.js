@@ -14,14 +14,12 @@ localVue.use(BootstrapVue)
 
 describe('App', () => {
   let store
-  const GetNegotiatorEntities = jest.fn()
   const GetQualityStandardInformation = jest.fn()
 
   beforeEach(() => {
     store = new Vuex.Store({
       state: { ...mockState() },
       actions: {
-        GetNegotiatorEntities: GetNegotiatorEntities,
         GetQualityStandardInformation: GetQualityStandardInformation,
         GetApplicationContext: jest.fn()
       },
@@ -117,10 +115,5 @@ describe('App', () => {
     const wrapper = shallowMount(App, { store, localVue })
     expect(wrapper.vm.errorMessage).toEqual('error')
     expect(wrapper.findComponent({ name: 'b-alert' }).exists()).toBeTruthy()
-  })
-
-  it('should call some getters when mounted', () => {
-    shallowMount(App, { store, localVue })
-    expect(GetNegotiatorEntities).toHaveBeenCalled()
   })
 })
