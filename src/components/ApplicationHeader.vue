@@ -35,7 +35,6 @@
     <div class="row mb-2">
       <div class="col-12">
         <b-dropdown
-          :disabled="loading"
           :variant="filterVariant(filter.name)"
           v-for="filter in facetsToRender"
           :key="filter.name"
@@ -67,7 +66,6 @@
 
         <span v-show="showAllFilters">
           <b-dropdown
-            :disabled="loading"
             :variant="filterVariant(additionalFilter.name)"
             v-for="additionalFilter in moreFacets"
             :key="additionalFilter.name"
