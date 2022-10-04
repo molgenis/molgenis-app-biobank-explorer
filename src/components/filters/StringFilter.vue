@@ -4,8 +4,7 @@
       :disabled="disabled"
       v-model="model"
       :name="name"
-      :placeholder="placeholder"
-      trim/>
+      :placeholder="placeholder"/>
     <b-input-group-append>
       <b-button variant="outline-secondary" @click.prevent="model = ''">
         <font-awesome-icon icon="times" />
