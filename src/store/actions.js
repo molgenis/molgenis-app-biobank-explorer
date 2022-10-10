@@ -50,7 +50,7 @@ export default {
   setFilterActivation ({ state, commit }, { filterName, activation }) {
     commit('SetFilterActivation', { filterName, activation })
   },
-  async GetUpdateFilter ({ state, commit }, { filterName, activeFilters }) {
+  async getReducedFilterOptions ({ state, commit }, { filterName, activeFilters }) {
     /**
      * Construct query for all filter options of the currently expanded filter
      * query the results using molgenis API and use "total" attribute to create a list
@@ -82,6 +82,7 @@ export default {
     if (activeFilterNames.length === 0) {
       return 0
     }
+
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
     for (const activeFilterName in activeFilterNames) {
       const name = activeFilterNames[activeFilterName]
@@ -115,6 +116,7 @@ export default {
         columnName = f.columnName
       }
     }
+    console.log(state.filterOptionDictionary)
     for (const option of state.filterOptionDictionary[filterName]) {
       const filterOption = option.value
       const optionString = columnName + '=in=(' + filterOption + ')'
@@ -129,6 +131,7 @@ export default {
       }
     }
 
+    console.log('Promise?')
     Promise.all(filterCheckPromises).then((values) => {
       for (const val in values) {
         if (values[val].page.totalElements > 0) {
@@ -137,6 +140,7 @@ export default {
       }
       commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
     })
+    console.log('DONE')
   },
   /**
    * Transform the state into a NegotiatorQuery object.
