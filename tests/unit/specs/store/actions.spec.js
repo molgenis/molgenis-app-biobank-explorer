@@ -1,7 +1,11 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from '../../../../src/store/helpers'
-import { mockGetFilterDefinitions, mockState } from '../mockData'
+import { mockGetFilterDefinitions, mockState, baseGetters } from '../mockData'
+import { createFilters } from '../../../../src/config/facetConfigurator'
+import filterDefinitions from '../../../../src/config/initialFilterFacets'
 import actions from '../../../../src/store/actions'
+import Vuex from 'vuex'
+
 
 jest.mock('@molgenis/molgenis-api-client', () => {
   return {
@@ -247,5 +251,56 @@ describe('store', () => {
       expect(commit).toHaveBeenCalledWith('SetCollectionsToSelection', { bookmark: undefined, collections })
       expect(commit).toHaveBeenCalledWith('SetSearchHistory', getters.getHumanReadableString)
     })
+  })
+
+  describe('reduce filter options', () => {
+
+    let store
+    const filters = createFilters({ filterFacets: filterDefinitions, filters: { selections: {}, satisfyAll: [] } })
+    const filterLoadingDict = {'materials': '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA)'}
+
+    const setFilterActivation = jest.fn()
+    const getReducedFilterOptions = jest.fn()
+    beforeEach(() => {
+      store = new Vuex.Store({
+        state: { ...mockState(), filterFacets: filters, filterLoadingDict: filterLoadingDict},
+        getters: {
+          ...baseGetters,
+          loading: () => false,
+          foundCollectionIds: () => [],
+          selectedCollections: () => [],
+          activeFilters: () => ({}),
+          activeSatisfyAll: () => [],
+        },
+        actions: {
+          setFilterActivation,
+          getReducedFilterOptions
+        }
+      })
+    })
+
+    it('calls resetFilterLoading and resetFilterOptionsOverride', async () => {
+      const filterName = 'country'
+      const activeFilters = []
+
+      await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+
+      expect(commit).toHaveBeenCalledWith('ResetFilterLoading')
+      expect(commit).toHaveBeenCalledWith('ResetFilterOptionsOverride', { filterName:filterName, reducedFilterOptions:[] })
+    })
+
+    it('calls setFilterLoading', async () => {
+
+      const filterName = 'country'
+      const activeFilters = {'materials' : ['DNA']}
+
+      state.filterOptionDictionary = {'country' : ['AUT', 'NL']}
+
+      await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+
+      expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
+
+    })
+
   })
 })
