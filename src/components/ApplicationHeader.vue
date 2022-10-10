@@ -51,7 +51,7 @@
           <b-dropdown
             :disabled="loading"
             :variant="filterVariant(filter.name)"
-            @shown="loadOptions(filter)"
+            @shown="calculateOptions(filter)"
             @hidden="setInactive(filter)"
             v-for="filter in facetsToRender"
             :key="filter.name"
@@ -98,7 +98,7 @@
           <span v-show="showAllFilters">
             <b-dropdown
               :disabled="loading"
-              @shown="loadOptions(additionalFilter)"
+              @shown="calculateOptions(additionalFilter)"
               @hidden="setInactive(additionalFilter)"
               :variant="filterVariant(additionalFilter.name)"
               v-for="additionalFilter in moreFacets"
@@ -234,7 +234,7 @@ export default {
       'UpdateFilterSatisfyAll'
     ]),
     ...mapActions([
-      'GetUpdateFilter',
+      'getReducedFilterOptions',
       'setFilterActivation'
     ]),
     filterChange (name, value) {
@@ -256,14 +256,14 @@ export default {
         return filtersActive.length
       }
     },
-    loadOptions (filter) {
+    calculateOptions (filter) {
       /**
        * Each time a filter is expanded (shown=True) this function is triggered
        * GetUpdateFilter checks how many search results each of the filter options will generate
        */
       if (filter.adaptive) {
         this.setFilterActivation({ filterName: filter.name, activation: true })
-        this.GetUpdateFilter({ filterName: filter.name, activeFilters: this.activeFilters })
+        this.getReducedFilterOptions({ filterName: filter.name, activeFilters: this.activeFilters })
       } else {
         return 0
       }
