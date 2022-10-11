@@ -116,7 +116,7 @@ export default {
         columnName = f.columnName
       }
     }
-    console.log(state.filterOptionDictionary)
+    // comsole.log('ha')
     for (const option of state.filterOptionDictionary[filterName]) {
       const filterOption = option.value
       const optionString = columnName + '=in=(' + filterOption + ')'
@@ -131,7 +131,6 @@ export default {
       }
     }
 
-    console.log('Promise?')
     Promise.all(filterCheckPromises).then((values) => {
       for (const val in values) {
         if (values[val].page.totalElements > 0) {
@@ -139,8 +138,9 @@ export default {
         }
       }
       commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
+    }).catch((error) => {
+      commit('SetError', error)
     })
-    console.log('DONE')
   },
   /**
    * Transform the state into a NegotiatorQuery object.
