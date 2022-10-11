@@ -1,6 +1,6 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from '../../../../src/store/helpers'
-import { mockGetFilterDefinitions, mockState, baseGetters } from '../mockData'
+import { mockGetFilterDefinitions, mockState, baseGetters, mockFilterOptionDictionary } from '../mockData'
 import { createFilters } from '../../../../src/config/facetConfigurator'
 import filterDefinitions from '../../../../src/config/initialFilterFacets'
 import actions from '../../../../src/store/actions'
@@ -263,7 +263,7 @@ describe('store', () => {
     const getReducedFilterOptions = jest.fn()
     beforeEach(() => {
       store = new Vuex.Store({
-        state: { ...mockState(), filterFacets: filters, filterLoadingDict: filterLoadingDict},
+        state: { ...mockState(), filterFacets: filters, filterLoadingDict: filterLoadingDict },
         getters: {
           ...baseGetters,
           loading: () => false,
@@ -293,12 +293,16 @@ describe('store', () => {
 
       const filterName = 'country'
       const activeFilters = {'materials' : ['DNA']}
-
-      state.filterOptionDictionary = {'country' : ['AUT', 'NL']}
+      const filterError = new Error(TypeError)
+      state.filterOptionDictionary = mockFilterOptionDictionary
+      // state.filterOptionDictionary = {'country' : ['AT', 'CA']}
 
       await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
 
-      expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
+      await expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
+      await expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
+      await expect(commit).toHaveBeenCalledWith('SetUpdateFilter', { filterName:filterName, reducedFilterOptions: [], lastBaseQuery: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA)' })
+      // await expect(commit).toHaveBeenNthCalledWith(2, 'SetError', filterError)
 
     })
 
