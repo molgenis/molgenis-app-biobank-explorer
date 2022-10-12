@@ -69,7 +69,6 @@ export default {
      *  iterate over all active filter options and create query from current selection(s)
      *  type=in=(COHORT);
      */
-    // const activeFilterNames = Object.keys(activeFilters).filter(e => e !== filterName)
     const dynamicFilterDict = state.filterFacets.filter(e => e.adaptive)
     const activeFilterNames = []
 
@@ -116,7 +115,6 @@ export default {
         columnName = f.columnName
       }
     }
-    // comsole.log('ha')
     for (const option of state.filterOptionDictionary[filterName]) {
       const filterOption = option.value
       const optionString = columnName + '=in=(' + filterOption + ')'
@@ -131,16 +129,15 @@ export default {
       }
     }
 
-    Promise.all(filterCheckPromises).then((values) => {
-      for (const val in values) {
-        if (values[val].page.totalElements > 0) {
-          reducedFilterOptions.push(state.filterOptionDictionary[filterName][val].value)
-        }
-      }
-      commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
-    }).catch((error) => {
+    const responses = await Promise.all(filterCheckPromises).catch((error) => {
       commit('SetError', error)
     })
+    for (const [index, response] of responses.entries()) {
+      if (response.page.totalElements > 0) {
+        reducedFilterOptions.push(state.filterOptionDictionary[filterName][index].value)
+      }
+    }
+    commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
   },
   /**
    * Transform the state into a NegotiatorQuery object.
