@@ -129,12 +129,17 @@ export default {
       }
     }
 
-    const responses = await Promise.all(filterCheckPromises).catch((error) => {
+    let responses = []
+    responses = await Promise.all(filterCheckPromises).catch((error) => {
       commit('SetError', error)
     })
-    for (const [index, response] of responses.entries()) {
-      if (response.page.totalElements > 0) {
-        reducedFilterOptions.push(state.filterOptionDictionary[filterName][index].value)
+
+    /* check if responses are undefined (in case of a server error) */
+    if (responses) {
+      for (const [index, response] of responses.entries()) {
+        if (response.page.totalElements > 0) {
+          reducedFilterOptions.push(state.filterOptionDictionary[filterName][index].value)
+        }
       }
     }
     commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
