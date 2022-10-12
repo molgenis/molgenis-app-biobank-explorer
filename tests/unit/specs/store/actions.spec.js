@@ -1,6 +1,6 @@
 import api from '@molgenis/molgenis-api-client'
 import helpers from '../../../../src/store/helpers'
-import { mockGetFilterDefinitions, mockState, baseGetters, mockFilterOptionDictionary } from '../mockData'
+import { mockGetFilterDefinitions, mockState, baseGetters, mockFilterOptionDictionary, mockFilterLoadingDict } from '../mockData'
 import { createFilters } from '../../../../src/config/facetConfigurator'
 import filterDefinitions from '../../../../src/config/initialFilterFacets'
 import actions from '../../../../src/store/actions'
@@ -259,8 +259,6 @@ describe('store', () => {
     const filters = createFilters({ filterFacets: filterDefinitions, filters: { selections: {}, satisfyAll: [] } })
     const filterLoadingDict = {'materials': '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA)'}
 
-    const setFilterActivation = jest.fn()
-    const getReducedFilterOptions = jest.fn()
     beforeEach(() => {
       store = new Vuex.Store({
         state: { ...mockState(), filterFacets: filters, filterLoadingDict: filterLoadingDict },
@@ -271,10 +269,6 @@ describe('store', () => {
           selectedCollections: () => [],
           activeFilters: () => ({}),
           activeSatisfyAll: () => [],
-        },
-        actions: {
-          setFilterActivation,
-          getReducedFilterOptions
         }
       })
     })
@@ -289,22 +283,53 @@ describe('store', () => {
       expect(commit).toHaveBeenCalledWith('ResetFilterOptionsOverride', { filterName:filterName, reducedFilterOptions:[] })
     })
 
-    it('calls setFilterLoading', async () => {
+    it('calls setFilterLoading and then SetUpdateFilter', async () => {
+
+      const response = {
+        page: { totalElements: 2 }
+      }
+      
+      api.get.mockResolvedValueOnce(response)
 
       const filterName = 'country'
       const activeFilters = {'materials' : ['DNA']}
-      const filterError = new Error(TypeError)
       state.filterOptionDictionary = mockFilterOptionDictionary
-      // state.filterOptionDictionary = {'country' : ['AT', 'CA']}
 
       await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
 
-      await expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
-      await expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
-      await expect(commit).toHaveBeenCalledWith('SetUpdateFilter', { filterName:filterName, reducedFilterOptions: [], lastBaseQuery: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA)' })
-      // await expect(commit).toHaveBeenNthCalledWith(2, 'SetError', filterError)
-
+      expect(commit).toHaveBeenCalledWith('SetFilterLoading', { filterName:filterName })
+      expect(commit).toHaveBeenCalledWith('SetUpdateFilter', { filterName:filterName, reducedFilterOptions: ['AT'], lastBaseQuery: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA);' })
     })
 
+    it('returns 0 if activeFilter equals filterName (current filter)', async () => {
+      const filterName = 'materials'
+      const activeFilters = {'materials' : ['DNA']}
+      const result = await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+
+      expect(result).toEqual(0)
+    })
+
+    it('returns 0 if the constructed query url equals the last constructed query url for the same filter', async () => {
+      
+      const filterName = 'country'
+      const activeFilters = {'materials' : ['DNA']}
+      state.filterOptionDictionary = mockFilterOptionDictionary
+      state.filterLoadingDict = mockFilterLoadingDict
+
+      const result = await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+      expect(result).toEqual(0)
+    })
+
+    it('should commit the error if the server response was bad', async () => {
+      const filterName = 'country'
+      const activeFilters = {'materials' : ['DNA']}
+      const filterReductionError = new Error('No way!')
+      state.filterOptionDictionary = mockFilterOptionDictionary
+
+      api.get.mockRejectedValueOnce(filterReductionError)
+      await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+
+      expect(commit).toBeCalledWith('SetError', filterReductionError)
+    })
   })
 })
