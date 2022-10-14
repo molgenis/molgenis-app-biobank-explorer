@@ -301,14 +301,6 @@ describe('store', () => {
       expect(commit).toHaveBeenCalledWith('SetUpdateFilter', { filterName:filterName, reducedFilterOptions: ['AT'], lastBaseQuery: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA);' })
     })
 
-    it('returns 0 if activeFilter equals filterName (current filter)', async () => {
-      const filterName = 'materials'
-      const activeFilters = {'materials' : ['DNA']}
-      const result = await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
-
-      expect(result).toEqual(0)
-    })
-
     it('returns 0 if the constructed query url equals the last constructed query url for the same filter', async () => {
       
       const filterName = 'country'
@@ -316,8 +308,8 @@ describe('store', () => {
       state.filterOptionDictionary = mockFilterOptionDictionary
       state.filterLoadingDict = mockFilterLoadingDict
 
-      const result = await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
-      expect(result).toEqual(0)
+      await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
+      expect(commit).not.toHaveBeenCalledWith('SetFilterLoading', expect.anything())
     })
 
     it('should commit the error if the server response was bad', async () => {
