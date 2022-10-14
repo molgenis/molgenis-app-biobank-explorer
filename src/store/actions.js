@@ -63,7 +63,7 @@ export default {
     if (Object.keys(activeFilters).length === 0) {
       commit('ResetFilterLoading')
       commit('ResetFilterOptionsOverride', { filterName, reducedFilterOptions })
-      return 0
+      return
     }
     /** exclude active filters from current expanded filter
      *  iterate over all active filter options and create query from current selection(s)
@@ -79,7 +79,7 @@ export default {
     }
 
     if (activeFilterNames.length === 0) {
-      return 0
+      return
     }
 
     let url = '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q='
@@ -100,7 +100,7 @@ export default {
      * check constructed URL for changes (compared to last udate)
      */
     if (url === state.filterLoadingDict[filterName]) {
-      return 0
+      return
     } else {
       commit('SetFilterLoading', { filterName })
     }
