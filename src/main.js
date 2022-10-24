@@ -1,5 +1,4 @@
 import 'es6-promise/auto'
-import VueSlideUpDown from 'vue-slide-up-down'
 import 'regenerator-runtime'
 import Vue from 'vue'
 import store from './store'
@@ -62,7 +61,6 @@ if (window.__webpack_public_path__) {
 }
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.component('vue-slide-up-down', VueSlideUpDown)
 
 Vue.use(i18n, {
   lng: INITIAL_STATE.lng,

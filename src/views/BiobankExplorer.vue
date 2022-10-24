@@ -21,7 +21,8 @@ export default {
     ...mapGetters([
       'rsql',
       'biobankRsql',
-      'activeFilters'
+      'activeFilters',
+      'selectedCollections'
     ]),
     ...mapState(['isPodium', 'filters'])
   },

@@ -211,6 +211,7 @@ export default {
 .checkbox-group {
   max-height: 15rem;
   overflow-y: auto;
+  padding-left: 0.25rem;
 }
 
 .card-link {

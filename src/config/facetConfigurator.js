@@ -36,7 +36,7 @@ export const createFilters = (state) => {
         filters: state.filters.selections[facet.name], // adds the currently active options
         satisfyAll: state.filters.satisfyAll.includes(facet.name),
         initialDisplayItems: facet.initialDisplayItems || 100,
-        maxVisibleOptions: facet.maxVisibleOptions || 25,
+        maxVisibleOptions: facet.maxVisibleOptions || 50,
         showSatisfyAllSelector: facet.showSatisfyAllSelector || true,
         humanReadableString: facet.humanReadableString,
         builtIn: facet.builtIn,

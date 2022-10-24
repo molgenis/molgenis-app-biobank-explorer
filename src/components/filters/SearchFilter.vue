@@ -1,6 +1,5 @@
 <template>
   <StringFilter
-    :disabled="loading"
     name="Search"
     v-model="search"
     placeholder="Search"></StringFilter>
@@ -35,7 +34,7 @@ export default {
             name: 'search',
             value: search
           })
-        }, 500)
+        }, 750)
       }
     }
   },
