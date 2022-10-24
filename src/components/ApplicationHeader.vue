@@ -174,8 +174,7 @@ export default {
   data () {
     return {
       showAllFilters: false,
-      showCart: false,
-      debounce: 0
+      showCart: false
     }
   },
   methods: {
@@ -185,14 +184,7 @@ export default {
       'UpdateFilterSatisfyAll'
     ]),
     filterChange (name, value) {
-      if (this.debounce) {
-        clearTimeout(this.debounce)
-      }
-
-      this.debounce = setTimeout(async () => {
-        clearTimeout(this.debounce)
-        this.UpdateFilterSelection({ name, value })
-      }, 1000)
+      this.UpdateFilterSelection({ name, value })
     },
     filterSatisfyAllChange (name, value) {
       this.UpdateFilterSatisfyAll({ name, value })
