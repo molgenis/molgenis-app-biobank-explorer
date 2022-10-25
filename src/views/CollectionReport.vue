@@ -106,7 +106,7 @@ export default {
         : undefined
     }
   },
-  // needed because if we route back the component is not destroyed but its props are updated for other collection
+  /** needed because if we route back the component is not destroyed but its props are updated for other collection */
   watch: {
     $route (to, from) {
       if (from.name.indexOf('collection') >= 0) {
