@@ -53,7 +53,6 @@ export default {
   methods: {
     ...mapMutations(['MapQueryToState', 'ConfigureFilters', 'SetNotification']),
     ...mapActions([
-      'GetNegotiatorEntities',
       'GetApplicationContext'
     ])
   },
@@ -77,9 +76,6 @@ export default {
     this.ConfigureFilters()
     this.MapQueryToState()
     this.GetApplicationContext()
-  },
-  mounted () {
-    this.GetNegotiatorEntities()
   }
 }
 </script>

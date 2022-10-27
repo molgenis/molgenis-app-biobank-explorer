@@ -35,9 +35,11 @@ describe('templateMapper', () => {
       storage_temperatures: [{ label: '10 degrees' }],
       data_categories: [{ label: 'One type' }],
       diagnosis_available: [{ label: 'Common cold' }, { label: 'Mysterious illness' }, { label: 'Instaneous death' }],
-      head_lastname: 'Thermopolis Renaldi',
-      head_firstname: 'Amelia Mignonette',
-      head_role: 'Princess of Genovia',
+      head: {
+        last_name: 'Thermopolis Renaldi',
+        first_name: 'Amelia Mignonette',
+        role: 'Princess of Genovia'
+      },
       contact: {
         title_before_name: 'Princess of Genovia',
         last_name: 'Thermopolis Renaldi',
@@ -735,7 +737,7 @@ describe('templateMapper', () => {
         website: { value: 'https://website.com', type: 'url' },
         email: { value: 'email@email.com', type: 'email' },
         juridical_person: { value: 'blaat', type: 'string' },
-        name: { value: undefined, type: 'string' },
+        name: { value: '', type: 'string' },
         country: { value: 'Netherlands', type: 'string' }
       }
       const actual = mapContactInfo(instance)
@@ -780,9 +782,9 @@ describe('templateMapper', () => {
   describe('getNameOfHead', () => {
     it('should map full name', () => {
       const element = {
-        head_firstname: 'first',
-        head_lastname: 'last',
-        head_role: 'role'
+        first_name: 'first',
+        last_name: 'last',
+        role: 'role'
       }
       const actual = getNameOfHead(element)
       expect(actual).toBe('first last (role)')
@@ -790,8 +792,8 @@ describe('templateMapper', () => {
 
     it('should map last name and role', () => {
       const element = {
-        head_lastname: 'last',
-        head_role: 'role'
+        last_name: 'last',
+        role: 'role'
       }
       const actual = getNameOfHead(element)
       expect(actual).toBe('last (role)')
@@ -799,8 +801,8 @@ describe('templateMapper', () => {
 
     it('should return first and last name', () => {
       const element = {
-        head_firstname: 'first',
-        head_lastname: 'last'
+        first_name: 'first',
+        last_name: 'last'
       }
       const actual = getNameOfHead(element)
       expect(actual).toBe('first last')

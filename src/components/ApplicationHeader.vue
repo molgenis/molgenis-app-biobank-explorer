@@ -4,28 +4,15 @@
     :style="`top:${menuHeight}px;`">
     <div class="row my-2">
       <div class="col-8" aria-label="action-bar">
-        <b-button
-          class="mr-2"
-          variant="info"
-          @click="filtersCollapsed = !filtersCollapsed">
-          <font-awesome-icon
-            icon="caret-right"
-            :style="iconStyle"
-            class="collapse-button mr-2"/>
-          <span v-if="!filtersCollapsed">{{ uiText["hide_filters"] }}</span>
-          <span v-else>{{ uiText["show_filters"] }}</span>
-
-          <span class="badge badge-light ml-2" v-if="numberOfActiveFilters > 0">
-            {{ numberOfActiveFilters }}</span>
-        </b-button>
-        <b-button
-          v-if="numberOfActiveFilters > 0"
-          class="mr-2"
-          variant="outline-dark"
-          @click="ClearActiveFilters">Clear all filters</b-button>
         <div class="search-container mr-2 mb-2">
           <search-filter />
         </div>
+        <b-button
+          v-if="numberOfActiveFilters > 0"
+          class="mr-2"
+          variant="outline-danger"
+          @click="ClearActiveFilters">Clear all filters</b-button>
+
         <collection-select-all
           class="d-inline mr-2"
           v-if="
@@ -45,42 +32,78 @@
             {{ selectedCollections.length }}</span></b-button>
       </div>
     </div>
-    <div class="row mb-2" id="filters">
-      <vue-slide-up-down :active="!filtersCollapsed" :duration="300">
-        <div class="col-12">
+    <div class="row mb-2">
+      <div class="col-12">
+        <b-dropdown
+          :variant="filterVariant(filter.name)"
+          @shown="calculateOptions(filter)"
+          @hidden="setInactive(filter)"
+          v-for="filter in facetsToRender"
+          :key="filter.name"
+          boundary="window"
+          no-flip
+          class="mr-2 mb-1 filter-dropdown">
+          <template #button-content>
+            <span>{{ filter.label || filter.name }}</span>
+            <span
+              class="badge badge-light border ml-2"
+              v-if="filterSelectionCount(filter.name) > 0">
+              {{ filterSelectionCount(filter.name) }}</span>
+          </template>
+          <div class="bg-white p-2 dropdown-contents">
+            <component 
+              v-if="filterLoading !== filter.name"
+              :is="filter.component"
+              :value="activeFilters[filter.name]"
+              :satisfyAllValue="activeSatisfyAll.includes(filter.name)"
+              v-bind="filter"
+              @input="(value) => filterChange(filter.name, value)"
+              @satisfy-all="
+                (satisfyAll) => filterSatisfyAllChange(filter.name, satisfyAll)
+              "
+              :optionsFilter="filterOptionsOverride[filter.name]"
+              :returnTypeAsObject="true"
+              :bulkOperation="true">
+            </component>
+            <div
+              class="d-inline-block"
+              v-if="filterLoading === filter.name">
+                {{ uiText["filter_loading"] }}
+                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+            </div>
+          </div>
+        </b-dropdown>
+
+        <span v-show="showAllFilters">
           <b-dropdown
-            :disabled="loading"
-            :variant="filterVariant(filter.name)"
-            @shown="calculateOptions(filter)"
-            @hidden="setInactive(filter)"
-            v-for="filter in facetsToRender"
-            :key="filter.name"
+            :variant="filterVariant(additionalFilter.name)"
+            @shown="calculateOptions(additionalFilter)"
+            @hidden="setInactive(additionalFilter)"
+            v-for="additionalFilter in moreFacets"
+            :key="additionalFilter.name"
             boundary="window"
             no-flip
             class="mr-2 mb-1 filter-dropdown">
             <template #button-content>
-              <div
-              class="d-inline-block">
-              <span>{{ filter.label || filter.name }}</span>
+              <span>{{ additionalFilter.label || additionalFilter.name }}</span>
               <span
                 class="badge badge-light border ml-2"
-                v-if="filterSelectionCount(filter.name) > 0">
-                {{ filterSelectionCount(filter.name) }}
-              </span>
-              </div>
+                v-if="filterSelectionCount(additionalFilter.name) > 0">
+                {{ filterSelectionCount(additionalFilter.name) }}</span>
             </template>
             <div class="bg-white p-2 dropdown-contents">
-              <component v-if="filterLoading !== filter.name"
-                :is="filter.component"
-                :value="activeFilters[filter.name]"
+              <component 
+                v-if="filterLoading !== additionalFilter.name"
+                :is="additionalFilter.component"
+                :value="activeFilters[additionalFilter.name]"
+                v-bind="additionalFilter"
                 :satisfyAllValue="
-                  activeSatisfyAll.includes(filter.name)
+                  activeSatisfyAll.includes(additionalFilter.name)
                 "
-                v-bind="filter"
-                @input="(value) => filterChange(filter.name, value)"
+                @input="(value) => filterChange(additionalFilter.name, value)"
                 @satisfy-all="
                   (satisfyAll) =>
-                    filterSatisfyAllChange(filter.name, satisfyAll)
+                    filterSatisfyAllChange(additionalFilter.name, satisfyAll)
                 "
                 :optionsFilter="filterOptionsOverride[filter.name]"
                 :returnTypeAsObject="true"
@@ -94,64 +117,15 @@
               </div>
             </div>
           </b-dropdown>
+        </span>
 
-          <span v-show="showAllFilters">
-            <b-dropdown
-              :disabled="loading"
-              @shown="calculateOptions(additionalFilter)"
-              @hidden="setInactive(additionalFilter)"
-              :variant="filterVariant(additionalFilter.name)"
-              v-for="additionalFilter in moreFacets"
-              :key="additionalFilter.name"
-              boundary="window"
-              no-flip
-              class="mr-2 mb-1 filter-dropdown">
-              <template #button-content>
-                <div
-                class="d-inline-block">
-                <span>{{ additionalFilter.label || additionalFilter.name }}</span>
-                <span
-                  class="badge badge-light border ml-2"
-                  v-if="filterSelectionCount(additionalFilter.name) > 0">
-                  {{ filterSelectionCount(additionalFilter.name) }}
-                </span>
-              </div>
-              </template>
-              <div class="bg-white p-2 dropdown-contents">
-                <component v-if="filterLoading !== additionalFilter.name"
-                  :is="additionalFilter.component"
-                  :value="activeFilters[additionalFilter.name]"
-                  v-bind="additionalFilter"
-                  :satisfyAllValue="
-                    activeSatisfyAll.includes(additionalFilter.name)
-                  "
-                  @input="(value) => filterChange(additionalFilter.name, value)"
-                  @satisfy-all="
-                    (satisfyAll) =>
-                      filterSatisfyAllChange(additionalFilter.name, satisfyAll)
-                  "
-                  :optionsFilter="filterOptionsOverride[additionalFilter.name]"
-                  :returnTypeAsObject="true"
-                  :bulkOperation="true">
-                </component>
-              <div
-                class="d-inline-block"
-                  v-if="filterLoading === additionalFilter.name">
-                  {{ uiText["filter_loading"] }}
-                  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
-              </div>
-            </div>
-            </b-dropdown>
-          </span>
-
-          <button
-            @click="showAllFilters = !showAllFilters"
-            class="btn btn-link text-info">
-            <span v-if="showAllFilters">Fewer filters</span>
-            <span v-else>More filters</span>
-          </button>
-        </div>
-      </vue-slide-up-down>
+        <button
+          @click="showAllFilters = !showAllFilters"
+          class="btn btn-link text-info">
+          <span v-if="showAllFilters">Fewer filters</span>
+          <span v-else>More filters</span>
+        </button>
+      </div>
     </div>
     <negotiator-selection v-model="showCart" />
   </div>
@@ -223,7 +197,6 @@ export default {
   data () {
     return {
       showAllFilters: false,
-      filtersCollapsed: true,
       showCart: false
     }
   },
@@ -275,9 +248,6 @@ export default {
         return 0
       }
     }
-  },
-  created () {
-    this.filtersCollapsed = this.filterMenuInitiallyFolded
   }
 }
 </script>
@@ -306,11 +276,11 @@ export default {
 
 <style>
 /* Theme override */
-#filters .dropdown-toggle {
+.dropdown-toggle {
   padding-right: 1.5rem;
 }
 
-#filters .filter-dropdown .dropdown-toggle::after {
+.filter-dropdown .dropdown-toggle::after {
   content: "";
   position: absolute;
   border-bottom: 0;

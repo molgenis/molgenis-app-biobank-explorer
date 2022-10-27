@@ -26,14 +26,16 @@ export const mapObjArray = (objects) => {
 export const mapUrl = url =>
   url && (url.startsWith('http') ? url : 'http://' + url)
 
-export const getNameOfHead = element => {
-  const { head_firstname, head_lastname, head_role } = element
+export const getNameOfHead = head => {
+  if (!head) return ''
+
+  const { first_name, last_name, role } = head
 
   let name = ''
 
-  if (head_firstname) name += `${head_firstname} `
-  if (head_lastname) name += `${head_lastname} `
-  if (head_role) name += `(${head_role})`
+  if (first_name) name += `${first_name} `
+  if (last_name) name += `${last_name} `
+  if (role) name += `(${role})`
 
   return name !== '' ? name.trim() : undefined
 }
@@ -209,7 +211,7 @@ export const getBiobankDetails = (biobank) => {
 export const collectionReportInformation = collection => {
   const collectionReport = {}
 
-  collectionReport.head = getNameOfHead(collection) || undefined
+  collectionReport.head = getNameOfHead(collection.head) || undefined
 
   if (collection.contact) {
     collectionReport.contact = {
@@ -267,7 +269,7 @@ export const mapNetworkInfo = data => {
 export const mapContactInfo = instance => {
   return {
     name: {
-      value: getNameOfHead(instance),
+      value: getNameOfHead(instance.head),
       type: 'string'
     },
     website: { value: mapUrl(instance.url), type: 'url' },

@@ -46,7 +46,7 @@ export const biobankActions = {
       return
     }
     commit('SetLoading', true)
-    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),*`).then(response => {
+    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),head(first_name,last_name,role),*`).then(response => {
       commit('SetBiobankReport', response)
       commit('SetLoading', false)
     }, error => {

@@ -9,8 +9,6 @@ export default {
   appConfig: {},
   configUpdateStatus: 0,
   cartValid: true,
-  negotiatorCollectionEntityId: '',
-  negotiatorBiobankEntityId: '',
   isLoading: false,
   currentPage: 1,
   pageSize: 12,
