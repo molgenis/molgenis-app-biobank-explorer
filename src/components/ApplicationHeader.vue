@@ -51,7 +51,7 @@
               {{ filterSelectionCount(filter.name) }}</span>
           </template>
           <div class="bg-white p-2 dropdown-contents">
-            <component 
+            <component
               v-if="filterLoading !== filter.name"
               :is="filter.component"
               :value="activeFilters[filter.name]"
@@ -92,7 +92,7 @@
                 {{ filterSelectionCount(additionalFilter.name) }}</span>
             </template>
             <div class="bg-white p-2 dropdown-contents">
-              <component 
+              <component
                 v-if="filterLoading !== additionalFilter.name"
                 :is="additionalFilter.component"
                 :value="activeFilters[additionalFilter.name]"
