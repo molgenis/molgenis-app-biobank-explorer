@@ -301,7 +301,7 @@ describe('store', () => {
       expect(commit).toHaveBeenCalledWith('SetUpdateFilter', { filterName:filterName, reducedFilterOptions: ['AT'], lastBaseQuery: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA);' })
     })
 
-    it('returns 0 if the constructed query url equals the last constructed query url for the same filter', async () => {
+    it('should not call SetFIlterLoading if the constructed query url equals the last constructed query url for the same filter', async () => {
       
       const filterName = 'country'
       const activeFilters = {'materials' : ['DNA']}
