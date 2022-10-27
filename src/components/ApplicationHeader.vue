@@ -105,13 +105,13 @@
                   (satisfyAll) =>
                     filterSatisfyAllChange(additionalFilter.name, satisfyAll)
                 "
-                :optionsFilter="filterOptionsOverride[filter.name]"
+                :optionsFilter="filterOptionsOverride[additionalFilter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
               <div
               class="d-inline-block"
-              v-if="filterLoading === filter.name">
+              v-if="filterLoading === additionalFilter.name">
                 {{ uiText["filter_loading"] }}
                 <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
               </div>
