@@ -90,7 +90,6 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
 
     api.get(url).then(response => {
       const filterOptions = response.items.map((obj) => { return { text: `[ ${obj.code} ] - ${obj.label || obj.name}`, value: obj.id } })
-
       checkForBookmarkFilter(filterName, filterOptions)
       resolve(filterOptions)
     })

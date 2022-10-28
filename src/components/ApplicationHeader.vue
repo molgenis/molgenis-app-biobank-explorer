@@ -36,6 +36,8 @@
       <div class="col-12">
         <b-dropdown
           :variant="filterVariant(filter.name)"
+          @shown="calculateOptions(filter)"
+          @hidden="setInactive(filter)"
           v-for="filter in facetsToRender"
           :key="filter.name"
           boundary="window"
@@ -50,6 +52,7 @@
           </template>
           <div class="bg-white p-2 dropdown-contents">
             <component
+              v-if="filterLoading !== filter.name"
               :is="filter.component"
               :value="activeFilters[filter.name]"
               :satisfyAllValue="activeSatisfyAll.includes(filter.name)"
@@ -58,15 +61,24 @@
               @satisfy-all="
                 (satisfyAll) => filterSatisfyAllChange(filter.name, satisfyAll)
               "
+              :optionsFilter="filterOptionsOverride[filter.name]"
               :returnTypeAsObject="true"
               :bulkOperation="true">
             </component>
+            <div
+              class="d-inline-block"
+              v-if="filterLoading === filter.name">
+                {{ uiText["filter_loading"] }}
+                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+            </div>
           </div>
         </b-dropdown>
 
         <span v-show="showAllFilters">
           <b-dropdown
             :variant="filterVariant(additionalFilter.name)"
+            @shown="calculateOptions(additionalFilter)"
+            @hidden="setInactive(additionalFilter)"
             v-for="additionalFilter in moreFacets"
             :key="additionalFilter.name"
             boundary="window"
@@ -81,6 +93,7 @@
             </template>
             <div class="bg-white p-2 dropdown-contents">
               <component
+                v-if="filterLoading !== additionalFilter.name"
                 :is="additionalFilter.component"
                 :value="activeFilters[additionalFilter.name]"
                 v-bind="additionalFilter"
@@ -92,9 +105,16 @@
                   (satisfyAll) =>
                     filterSatisfyAllChange(additionalFilter.name, satisfyAll)
                 "
+                :optionsFilter="filterOptionsOverride[additionalFilter.name]"
                 :returnTypeAsObject="true"
                 :bulkOperation="true">
               </component>
+              <div
+              class="d-inline-block"
+              v-if="filterLoading === additionalFilter.name">
+                {{ uiText["filter_loading"] }}
+                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+              </div>
             </div>
           </b-dropdown>
         </span>
@@ -113,7 +133,7 @@
 
 <script>
 import CollectionSelectAll from './buttons/CollectionSelectAll.vue'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 
 /** Components used for filters */
 import SearchFilter from './filters/SearchFilter.vue'
@@ -143,7 +163,10 @@ export default {
       'menuHeight',
       'applicationContext',
       'filterFacets',
-      'filterMenuInitiallyFolded'
+      'filterMenuInitiallyFolded',
+      'filterLoading',
+      'filterOptionsOverride',
+      'lastUpdatedFilter'
     ]),
     showSettings () {
       return this.applicationContext.roles
@@ -183,6 +206,10 @@ export default {
       'ClearActiveFilters',
       'UpdateFilterSatisfyAll'
     ]),
+    ...mapActions([
+      'getReducedFilterOptions',
+      'setFilterActivation'
+    ]),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
     },
@@ -200,6 +227,25 @@ export default {
         return 0
       } else {
         return filtersActive.length
+      }
+    },
+    calculateOptions (filter) {
+      /**
+       * Each time a filter is expanded (shown=True) this function is triggered
+       * GetUpdateFilter checks how many search results each of the filter options will generate
+       */
+      if (filter.adaptive) {
+        this.setFilterActivation({ filterName: filter.name, activation: true })
+        this.getReducedFilterOptions({ filterName: filter.name, activeFilters: this.activeFilters })
+      } else {
+        return 0
+      }
+    },
+    setInactive (filter) {
+      if (filter.adaptive) {
+        this.setFilterActivation({ filterName: filter.name, activation: false })
+      } else {
+        return 0
       }
     }
   }

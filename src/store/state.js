@@ -33,6 +33,13 @@ export default {
   collectionRelationData: [], /** All the data of the structure of the model is here. */
   nonCommercialCollections: [],
   selectedCollections: [],
+  filterOptionsOverride: {},
+  activeFilters: [],
+  filterLoadingDict: {},
+  filterLoading: 'None',
+  filterExpanded: 'None',
+  lastUpdatedFilter: 'None',
+  lastBaseQuery: 'None',
   filters: {
     selections: {},
     satisfyAll: [],

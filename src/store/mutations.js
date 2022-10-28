@@ -81,7 +81,38 @@ export default {
 
     const labels = { ...currentLabels, ...newFilterLabels }
     Vue.set(state.filters, 'labels', labels)
+
     createBookmark(state.filters, state.selectedCollections)
+  },
+  SetFilterLoading (state, { filterName }) {
+    Vue.set(state, 'filterLoading', filterName)
+  },
+  SetFilterActivation (state, { filterName, activation }) {
+    if (activation) {
+      Vue.set(state, 'filterExpanded', filterName)
+    } else {
+      Vue.set(state, 'filterExpanded', 'None')
+    }
+  },
+  ResetFilterLoading (state) {
+    const filterLoadingDict = {}
+    const filters = state.filterFacets.map(fd => fd.name)
+    for (const f of filters) {
+      filterLoadingDict[f] = 'None'
+    }
+    Vue.set(state, 'filterLoadingDict', filterLoadingDict)
+    Vue.set(state, 'filterLoading', 'None')
+  },
+  ResetFilterOptionsOverride (state) {
+    Vue.set(state, 'filterOptionsOverride', {})
+  },
+  SetUpdateFilter (state, { filterName, reducedFilterOptions, lastBaseQuery }) {
+    state.filterOptionsOverride[filterName] = []
+    Vue.set(state, 'filterOptionsOverride', { ...state.filterOptionsOverride, ...{ [filterName]: reducedFilterOptions } })
+    Vue.set(state, 'filterLoading', 'None')
+    Vue.set(state, 'lastUpdatedFilter', filterName)
+    Vue.set(state, 'lastBaseQuery', lastBaseQuery)
+    Vue.set(state, 'filterLoadingDict', { ...state.filterLoadingDict, ...{ [filterName]: lastBaseQuery } })
   },
   UpdateFilterSatisfyAll (state, { name, value }) {
     if (value && !state.filters.satisfyAll.includes(name)) {

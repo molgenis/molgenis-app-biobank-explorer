@@ -16,7 +16,8 @@ const i18n = {
     card_biobank_details: 'View biobank',
     card_collections_details: 'View biobank collections',
     satisfyAll: 'Match all',
-    satisfyAny: 'Match any'
+    satisfyAny: 'Match any',
+    filter_loading: 'Loading filters'
   }
 }
 
