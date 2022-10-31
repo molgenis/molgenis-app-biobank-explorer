@@ -1,8 +1,9 @@
 pipeline {
   agent {
-    kubernetes {
-      inheritFrom 'node-erbium'
-    }
+      kubernetes {
+          inheritFrom 'shared'
+          yaml libraryResource("pod-templates/molgenis-frontend.yaml")
+      }
   }
   environment {
     IMAGE_NAME = "molgenis/bbmri-directory"
@@ -25,6 +26,7 @@ pipeline {
             env.REGISTRY_CRED_PSW = sh(script: 'vault read -field=password secret/ops/account/nexus', returnStdout: true)
             env.DOCKERHUB_AUTH = sh(script: 'vault read -field=value secret/gcc/token/dockerhub', returnStdout: true)
             env.NEXUS_AUTH = sh(script: 'vault read -field=base64 secret/ops/account/nexus', returnStdout: true)
+            env.SONAR_TOKEN = sh(script: 'vault read -field=value secret/ops/token/sonar', returnStdout: true)
           }
         }
         container('node') {
@@ -50,6 +52,15 @@ pipeline {
             sh "./codecov -c -F unit -K -C ${GIT_COMMIT}"
           }
         }
+      }
+    }
+    stage('Sonar Cube') {
+      steps {
+          container('sonar') {
+              // Fetch the target branch, sonar likes to take a look at it
+              sh "git fetch --no-tags origin ${CHANGE_TARGET}:refs/remotes/origin/${CHANGE_TARGET}"
+              sh "sonar-scanner -Dsonar.login=${env.SONAR_TOKEN} -Dsonar.github.oauth=${env.GITHUB_TOKEN} -Dsonar.pullrequest.base=${CHANGE_TARGET} -Dsonar.pullrequest.branch=${BRANCH_NAME} -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.provider=GitHub -Dsonar.pullrequest.github.repository=molgenis/molgenis-app-biobank-explorer"
+          }
       }
     }
     stage('Build container serving the artifacts [ PR ]') {
