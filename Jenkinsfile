@@ -55,6 +55,9 @@ pipeline {
       }
     }
     stage('Sonar Cube') {
+      when {
+          changeRequest()
+      }
       steps {
           container('sonar') {
               // Fetch the target branch, sonar likes to take a look at it
