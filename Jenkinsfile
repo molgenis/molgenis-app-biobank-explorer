@@ -6,6 +6,7 @@ pipeline {
       }
   }
   environment {
+    REPOSITORY = 'molgenis/molgenis-app-biobank-explorer'
     IMAGE_NAME = "molgenis/bbmri-directory"
     LOCAL_REPOSITORY = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
   }
@@ -32,6 +33,8 @@ pipeline {
         container('node') {
           startSauceConnect()
         }
+        sh "git remote set-url origin https://$GITHUB_TOKEN@github.com/${REPOSITORY}.git"
+        sh "git fetch --tags"
       }
     }
     stage('Build: [ pull request ]') {
