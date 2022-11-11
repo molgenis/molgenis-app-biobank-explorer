@@ -2,11 +2,17 @@
   <div>
     <table class="layout-table w-100">
       <component
-        v-for="attribute in renderObject.attributes"
+        v-for="attribute in attributes"
         :is="component(attribute.type)"
         :attribute="attribute"
         :key="attribute.id"/>
     </table>
+
+      <component
+        v-for="customComponent in customComponents"
+        :is="customComponent.component"
+        :attribute="customComponent"
+        :key="customComponent.id"/>
 
     <div
       v-if="
@@ -30,6 +36,7 @@ import string from './view-components/string.vue'
 import longtext from './view-components/longtext.vue'
 import quality from './view-components/quality.vue'
 import hyperlink from './view-components/hyperlink.vue'
+import FactsTable from './custom-view-components/FactsTable.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
 export default {
@@ -41,6 +48,7 @@ export default {
     array,
     string,
     hyperlink,
+    FactsTable,
     Subcollection
   },
   props: {
@@ -52,6 +60,12 @@ export default {
   computed: {
     renderObject () {
       return this.viewmodel
+    },
+    attributes () {
+      return this.renderObject.attributes.filter(attr => !attr.component)
+    },
+    customComponents () {
+      return this.renderObject.attributes.filter(attr => attr.component)
     }
   },
   methods: {
