@@ -11,7 +11,7 @@
       background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
-        <div class="col my-3 shadow-sm">
+        <div class="col my-3 shadow-sm d-flex p-2 align-items-center">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
@@ -24,6 +24,7 @@
               </li>
             </ol>
           </nav>
+          <check-out class="ml-auto" />
         </div>
       </div>
 
@@ -94,6 +95,7 @@ import ReportDetailsList from '../components/report-components/ReportDetailsList
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ViewGenerator from '../components/generators/ViewGenerator.vue'
 import { sortCollectionsByName } from '../utils/sorting'
+import CheckOut from '../components/checkout/CheckOut.vue'
 
 import {
   getBiobankDetails,
@@ -112,7 +114,8 @@ export default {
     ReportDetailsList,
     Loading,
     ViewGenerator,
-    CollectionTitle
+    CollectionTitle,
+    CheckOut
   },
   data () {
     return {
