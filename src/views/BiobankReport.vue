@@ -42,10 +42,12 @@
                   v-for="(collection, index) in collectionsData"
                   :key="collection.id">
                   <hr v-if="index" />
-                  <collection-title
-                    :title="collection.name"
-                    :id="collection.id"/>
-
+                  <div class="d-flex align-items-center">
+                    <collection-title
+                      :title="collection.name"
+                      :id="collection.id"/>
+                    <collection-selector class="pl-4 ml-auto" :collectionData="collection" />
+                  </div>
                   <view-generator
                     class="collection-view"
                     :viewmodel="collection.viewmodel"/>
@@ -95,6 +97,7 @@ import ReportDetailsList from '../components/report-components/ReportDetailsList
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ViewGenerator from '../components/generators/ViewGenerator.vue'
 import { sortCollectionsByName } from '../utils/sorting'
+import CollectionSelector from '../components/buttons/CollectionSelector.vue'
 import CheckOut from '../components/checkout/CheckOut.vue'
 
 import {
@@ -115,6 +118,7 @@ export default {
     Loading,
     ViewGenerator,
     CollectionTitle,
+    CollectionSelector,
     CheckOut
   },
   data () {
