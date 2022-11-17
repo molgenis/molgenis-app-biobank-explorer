@@ -38,7 +38,7 @@
                 @click="
                   RemoveCollectionsFromSelection({
                     collections: [collection],
-                    bookmark: true,
+                    bookmark: bookmark,
                   })
                 "></span>
             </div>
@@ -92,7 +92,13 @@ export default {
     biobankName: {
       type: String,
       required: false
+    },
+    bookmark: {
+      type: Boolean,
+      required: false,
+      default: () => true
     }
+
   },
   data: function () {
     return {
@@ -143,7 +149,7 @@ export default {
       this.cartVisible = false
       this.RemoveCollectionsFromSelection({
         collections: this.currentSelectedCollections,
-        bookmark: true
+        bookmark: this.bookmark
       })
     },
     sendRequest () {

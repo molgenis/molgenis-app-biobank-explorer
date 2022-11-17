@@ -41,7 +41,7 @@
               </li>
             </ol>
           </nav>
-            <check-out class="ml-auto" />
+            <check-out class="ml-auto" :bookmark="false" />
         </div>
       </div>
 
