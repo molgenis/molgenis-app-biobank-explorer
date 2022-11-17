@@ -11,7 +11,9 @@
           v-if="numberOfActiveFilters > 0"
           class="mr-2"
           variant="outline-danger"
-          @click="ClearActiveFilters">Clear all filters</b-button>
+          @click="ClearActiveFilters">
+          Clear all filters
+        </b-button>
 
         <collection-select-all
           class="d-inline mr-2"
@@ -28,8 +30,7 @@
           <span class="mr-2">Settings</span>
           <font-awesome-icon icon="cog" />
         </router-link>
-        <b-button variant="primary" @click="showCart = !showCart"><span>{{ uiText["request"] }}</span><span class="badge badge-light ml-2">
-            {{ selectedCollections.length }}</span></b-button>
+        <check-out />
       </div>
     </div>
     <div class="row mb-2">
@@ -65,11 +66,9 @@
               :returnTypeAsObject="true"
               :bulkOperation="true">
             </component>
-            <div
-              class="d-inline-block"
-              v-if="filterLoading === filter.name">
-                {{ uiText["filter_loading"] }}
-                <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+            <div class="d-inline-block" v-if="filterLoading === filter.name">
+              {{ uiText["filter_loading"] }}
+              <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
             </div>
           </div>
         </b-dropdown>
@@ -110,8 +109,8 @@
                 :bulkOperation="true">
               </component>
               <div
-              class="d-inline-block"
-              v-if="filterLoading === additionalFilter.name">
+                class="d-inline-block"
+                v-if="filterLoading === additionalFilter.name">
                 {{ uiText["filter_loading"] }}
                 <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
               </div>
@@ -127,7 +126,6 @@
         </button>
       </div>
     </div>
-    <negotiator-selection v-model="showCart" />
   </div>
 </template>
 
@@ -139,7 +137,7 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import SearchFilter from './filters/SearchFilter.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
-import NegotiatorSelection from './popovers/NegotiatorSelection.vue'
+import CheckOut from './checkout/CheckOut.vue'
 /** */
 
 export default {
@@ -148,7 +146,7 @@ export default {
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
-    NegotiatorSelection
+    CheckOut
   },
   computed: {
     ...mapGetters([
@@ -156,7 +154,6 @@ export default {
       'foundCollectionIds',
       'activeFilters',
       'activeSatisfyAll',
-      'selectedCollections',
       'uiText'
     ]),
     ...mapState([
@@ -196,8 +193,7 @@ export default {
   },
   data () {
     return {
-      showAllFilters: false,
-      showCart: false
+      showAllFilters: false
     }
   },
   methods: {
@@ -206,10 +202,7 @@ export default {
       'ClearActiveFilters',
       'UpdateFilterSatisfyAll'
     ]),
-    ...mapActions([
-      'getReducedFilterOptions',
-      'setFilterActivation'
-    ]),
+    ...mapActions(['getReducedFilterOptions', 'setFilterActivation']),
     filterChange (name, value) {
       this.UpdateFilterSelection({ name, value })
     },
@@ -236,7 +229,10 @@ export default {
        */
       if (filter.adaptive) {
         this.setFilterActivation({ filterName: filter.name, activation: true })
-        this.getReducedFilterOptions({ filterName: filter.name, activeFilters: this.activeFilters })
+        this.getReducedFilterOptions({
+          filterName: filter.name,
+          activeFilters: this.activeFilters
+        })
       } else {
         return 0
       }

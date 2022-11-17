@@ -12,7 +12,7 @@
       background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
-        <div class="col my-3 shadow-sm">
+        <div class="col my-3 shadow-sm d-flex p-2 align-items-center">
           <nav aria-label="breadcrumb" v-if="collection">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
@@ -41,6 +41,7 @@
               </li>
             </ol>
           </nav>
+            <check-out class="ml-auto" :bookmark="false" />
         </div>
       </div>
 
@@ -75,6 +76,7 @@ import CollectionReportInfoCard from '../components/cards/CollectionReportInfoCa
 import { collectionReportInformation } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
+import CheckOut from '../components/checkout/CheckOut.vue'
 
 export default {
   name: 'CollectionReport',
@@ -82,7 +84,8 @@ export default {
     ReportTitle,
     CollectionReportInfoCard,
     Loading,
-    ReportCollectionDetails
+    ReportCollectionDetails,
+    CheckOut
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
