@@ -102,7 +102,6 @@
                 }}
                 available
               </h5>
-
               <collection-selector
                 v-if="numberOfCollections > 1"
                 class="text-right mr-1 ml-auto align-self-center"
@@ -111,7 +110,8 @@
                 iconOnly
                 multi></collection-selector>
             </div>
-            <div class="pl-2" v-if="!numberOfCollections">
+            <hr class="mt-1" v-if="numberOfCollections" />
+            <div v-else class="pl-2">
               This biobank has no collections yet.
             </div>
             <div
@@ -327,7 +327,7 @@ export default {
 }
 
 .biobank-card-large {
-  width: 90% ;
+  width: 90%;
 }
 
 .biobank-card > header,

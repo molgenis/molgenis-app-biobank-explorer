@@ -1,6 +1,6 @@
 <template>
-  <div class="d-flex align-items-center ml-1" v-if="notEmpty">
-    <label class="mr-2 mb-0 font-weight-bold">Matches on:</label>
+  <div class="d-flex align-items-center ml-1 mt-2" v-if="notEmpty">
+    <label class="mr-2 mb-0 font-weight-bold">Because you searched for:</label>
 
     <span class="badge badge-info mr-2" v-for="match in matches" :key="match.name">
       {{match.name}}:
@@ -40,7 +40,13 @@ export default {
 
         const columnName = this.filterColumnDictionary[filterName]
         const potentialMatch = this.viewmodel.attributes.find(attr => attr.column === columnName)
-        if (!potentialMatch) continue /** no need to check further if there is no such attribute */
+
+        if (!potentialMatch) {
+          console.log({ attr: this.viewmodel.attributes, potentialMatch, activeFilterValues, columnName, filterName })
+
+          /** need to investigate if it is not a composite match */
+          continue
+        }
 
         const isArray = Array.isArray(potentialMatch.value)
 
@@ -66,7 +72,7 @@ export default {
       return matches
     },
     notEmpty () {
-      return Object.keys(this.viewmodel).length > 0
+      return this.matches.length > 0
     }
   }
 }
