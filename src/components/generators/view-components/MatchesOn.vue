@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-items-center ml-1 mt-2" v-if="notEmpty">
+  <div class="d-flex align-items-center ml-2" v-if="notEmpty">
     <label class="mr-2 mb-0 font-weight-bold">Because you searched for:</label>
 
     <span class="badge badge-info mr-2" v-for="match in matches" :key="match.name">
@@ -33,22 +33,19 @@ export default {
     matches () {
       const matches = []
       const filterNames = Object.keys(this.activeFilters)
-
       for (const filterName of filterNames) {
         const activeFilterValues = this.activeFilters[filterName]
         if (!activeFilterValues) continue /** no need to check further if there are no active filters */
 
         const columnName = this.filterColumnDictionary[filterName]
-        const potentialMatch = this.viewmodel.attributes.find(attr => attr.column === columnName)
+        const potentialMatch = this.viewmodel[columnName]
 
         if (!potentialMatch) {
-          console.log({ attr: this.viewmodel.attributes, potentialMatch, activeFilterValues, columnName, filterName })
-
           /** need to investigate if it is not a composite match */
           continue
         }
 
-        const isArray = Array.isArray(potentialMatch.value)
+        const isArray = Array.isArray(potentialMatch)
 
         const match = { name: filterName, value: [] }
 
@@ -57,10 +54,10 @@ export default {
           const filterOption = this.filterOptionDictionary[filterName].find(fo => fo.value === activeFilterValue)
           if (!filterOption) continue /** if the filteroption does not exist */
 
-          const filterValue = filterOption.text
-
-          if ((isArray && potentialMatch.value.some(value => value === filterValue)) || filterValue === potentialMatch.value) {
-            match.value.push(filterValue)
+          const filterValue = filterOption.value
+          console.log(filterValue)
+          if ((isArray && potentialMatch.some(item => item.id === filterValue)) || filterValue === potentialMatch.id) {
+            match.value.push(filterOption.text)
           }
         }
 

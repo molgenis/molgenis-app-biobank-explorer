@@ -7,7 +7,6 @@
         :attribute="attribute"
         :key="attribute.id"/>
     </table>
-    <matches-on :viewmodel="renderObject" />
 
     <div
       v-if="
@@ -32,7 +31,6 @@ import longtext from './view-components/longtext.vue'
 import quality from './view-components/quality.vue'
 import hyperlink from './view-components/hyperlink.vue'
 import Subcollection from './view-components/Subcollection.vue'
-import MatchesOn from './view-components/MatchesOn.vue'
 
 export default {
   name: 'ViewGenerator',
@@ -43,8 +41,7 @@ export default {
     array,
     string,
     hyperlink,
-    Subcollection,
-    MatchesOn
+    Subcollection
   },
   props: {
     viewmodel: {
