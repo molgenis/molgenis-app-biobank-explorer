@@ -178,20 +178,17 @@ describe('templateMapper', () => {
       const expected = {
         attributes: [
           {
-            column: 'id',
             label: 'Id:',
             linkValue: 'c-001',
             type: 'string',
             value: 'c-001'
           },
           {
-            column: 'url',
             label: 'Website:',
             type: 'hyperlink',
             value: ''
           },
           {
-            column: 'quality',
             label: 'Quality labels:',
             type: 'quality',
             value: [
@@ -201,38 +198,31 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'order_of_magnitude',
             label: 'Size:',
             type: 'object',
             value: '777'
           },
           {
-            column: 'size',
             label: 'Available:',
             type: 'int',
             value: ''
           },
           {
-
-            column: 'order_of_magnitude_donors',
             label: 'Donor size:',
             type: 'object',
             value: ''
           },
           {
-            column: 'number_of_donors',
             label: 'Donors:',
             type: 'int',
             value: ''
           },
           {
-            column: undefined,
             label: 'Age:',
             type: 'range',
             value: '0-20 years'
           },
           {
-            column: 'type',
             label: 'Type:',
             type: 'mref',
             value: [
@@ -241,7 +231,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'sex',
             label: 'Sex:',
             type: 'categoricalmref',
             value: [
@@ -250,7 +239,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'materials',
             label: 'Materials:',
             type: 'categoricalmref',
             value: [
@@ -259,7 +247,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'storage_temperatures',
             label: 'Storage:',
             type: 'categoricalmref',
             value: [
@@ -267,7 +254,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'data_categories',
             label: 'Data:',
             type: 'categoricalmref',
             value: [
@@ -275,7 +261,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'diagnosis_available',
             label: 'Diagnosis:',
             type: 'mref',
             value: [
@@ -285,7 +270,6 @@ describe('templateMapper', () => {
             ]
           },
           {
-            column: 'data_use',
             label: 'Data use conditions:',
             type: 'mref',
             value: [
@@ -330,68 +314,59 @@ describe('templateMapper', () => {
             viewmodel: {
               attributes: [
                 {
-                  column: 'id',
                   label: 'Id:',
                   linkValue: '1',
                   type: 'string',
                   value: '1'
                 },
                 {
-                  column: 'url',
                   label: 'Website:',
                   type: 'hyperlink',
                   value: ''
                 },
                 {
-                  column: 'quality',
                   label: 'Quality labels:',
                   type: 'quality',
                   value: undefined
                 },
                 {
-                  column: 'order_of_magnitude',
+
                   label: 'Size:',
                   type: 'object',
                   value: '10.000 - 100.000'
                 },
                 {
-                  column: 'size',
                   label: 'Available:',
                   type: 'int',
                   value: ''
                 },
                 {
-                  column: 'order_of_magnitude_donors',
                   label: 'Donor size:',
                   type: 'object',
                   value: ''
                 },
                 {
-                  column: 'number_of_donors',
                   label: 'Donors:',
                   type: 'int',
                   value: ''
                 },
                 {
-                  column: undefined,
                   label: 'Age:',
                   type: 'range',
                   value: ''
                 },
                 {
-                  column: 'type',
                   label: 'Type:',
                   type: 'mref',
                   value: []
                 },
                 {
-                  column: 'sex',
                   label: 'Sex:',
                   type: 'categoricalmref',
                   value: []
                 },
                 {
-                  column: 'materials',
+
                   label: 'Materials:',
                   type: 'categoricalmref',
                   value: [
@@ -399,13 +374,12 @@ describe('templateMapper', () => {
                   ]
                 },
                 {
-                  column: 'storage_temperatures',
                   label: 'Storage:',
                   type: 'categoricalmref',
                   value: []
                 },
                 {
-                  column: 'data_categories',
+
                   label: 'Data:',
                   type: 'categoricalmref',
                   value: [
@@ -413,13 +387,11 @@ describe('templateMapper', () => {
                   ]
                 },
                 {
-                  column: 'diagnosis_available',
                   label: 'Diagnosis:',
                   type: 'mref',
                   value: []
                 },
                 {
-                  column: 'data_use',
                   label: 'Data use conditions:',
                   type: 'mref',
                   value: []
@@ -475,68 +447,59 @@ describe('templateMapper', () => {
             viewmodel: {
               attributes: [
                 {
-                  column: 'id',
                   label: 'Id:',
                   linkValue: '2',
                   type: 'string',
                   value: '2'
                 },
                 {
-                  column: 'url',
                   label: 'Website:',
                   type: 'hyperlink',
                   value: ''
                 },
                 {
-                  column: 'quality',
                   label: 'Quality labels:',
                   type: 'quality',
                   value: undefined
                 },
                 {
-                  column: 'order_of_magnitude',
+
                   label: 'Size:',
                   type: 'object',
                   value: '10.000 - 100.000'
                 },
                 {
-                  column: 'size',
                   label: 'Available:',
                   type: 'int',
                   value: ''
                 },
                 {
-                  column: 'order_of_magnitude_donors',
                   label: 'Donor size:',
                   type: 'object',
                   value: ''
                 },
                 {
-                  column: 'number_of_donors',
                   label: 'Donors:',
                   type: 'int',
                   value: ''
                 },
                 {
-                  column: undefined,
                   label: 'Age:',
                   type: 'range',
                   value: ''
                 },
                 {
-                  column: 'type',
                   label: 'Type:',
                   type: 'mref',
                   value: []
                 },
                 {
-                  column: 'sex',
                   label: 'Sex:',
                   type: 'categoricalmref',
                   value: []
                 },
                 {
-                  column: 'materials',
+
                   label: 'Materials:',
                   type: 'categoricalmref',
                   value: [
@@ -544,13 +507,12 @@ describe('templateMapper', () => {
                   ]
                 },
                 {
-                  column: 'storage_temperatures',
                   label: 'Storage:',
                   type: 'categoricalmref',
                   value: []
                 },
                 {
-                  column: 'data_categories',
+
                   label: 'Data:',
                   type: 'categoricalmref',
                   value: [
@@ -558,13 +520,11 @@ describe('templateMapper', () => {
                   ]
                 },
                 {
-                  column: 'diagnosis_available',
                   label: 'Diagnosis:',
                   type: 'mref',
                   value: []
                 },
                 {
-                  column: 'data_use',
                   label: 'Data use conditions:',
                   type: 'mref',
                   value: []
@@ -593,68 +553,59 @@ describe('templateMapper', () => {
                   viewmodel: {
                     attributes: [
                       {
-                        column: 'id',
                         label: 'Id:',
                         linkValue: '3',
                         type: 'string',
                         value: '3'
                       },
                       {
-                        column: 'url',
                         label: 'Website:',
                         type: 'hyperlink',
                         value: ''
                       },
                       {
-                        column: 'quality',
                         label: 'Quality labels:',
                         type: 'quality',
                         value: undefined
                       },
                       {
-                        column: 'order_of_magnitude',
+
                         label: 'Size:',
                         type: 'object',
                         value: '10.000 - 100.000'
                       },
                       {
-                        column: 'size',
                         label: 'Available:',
                         type: 'int',
                         value: ''
                       },
                       {
-                        column: 'order_of_magnitude_donors',
                         label: 'Donor size:',
                         type: 'object',
                         value: ''
                       },
                       {
-                        column: 'number_of_donors',
                         label: 'Donors:',
                         type: 'int',
                         value: ''
                       },
                       {
-                        column: undefined,
                         label: 'Age:',
                         type: 'range',
                         value: ''
                       },
                       {
-                        column: 'type',
                         label: 'Type:',
                         type: 'mref',
                         value: []
                       },
                       {
-                        column: 'sex',
                         label: 'Sex:',
                         type: 'categoricalmref',
                         value: []
                       },
                       {
-                        column: 'materials',
+
                         label: 'Materials:',
                         type: 'categoricalmref',
                         value: [
@@ -662,25 +613,21 @@ describe('templateMapper', () => {
                         ]
                       },
                       {
-                        column: 'storage_temperatures',
                         label: 'Storage:',
                         type: 'categoricalmref',
                         value: []
                       },
                       {
-                        column: 'data_categories',
                         label: 'Data:',
                         type: 'categoricalmref',
                         value: []
                       },
                       {
-                        column: 'diagnosis_available',
                         label: 'Diagnosis:',
                         type: 'mref',
                         value: []
                       },
                       {
-                        column: 'data_use',
                         label: 'Data use conditions:',
                         type: 'mref',
                         value: []
@@ -872,14 +819,14 @@ describe('templateMapper', () => {
   describe('getViewmodel', () => {
     it('adds linkValue attribute when showLink is present', () => {
       const config = [{ label: 'PID', column: 'pid', type: 'string', showCopyIcon: true }]
-      const expected = { attributes: [{ column: 'pid', label: 'PID', type: 'string', value: '123', linkValue: '123' }] }
+      const expected = { attributes: [{ label: 'PID', type: 'string', value: '123', linkValue: '123' }] }
       const actual = getViewmodel({ pid: '123' }, config)
       expect(actual).toEqual(expected)
     })
 
     it('adds a prefix to the linkValue when copyValuePrefix is present', () => {
       const config = [{ label: 'PID', column: 'pid', type: 'string', showCopyIcon: true, copyValuePrefix: 'http://prefix/' }]
-      const expected = { attributes: [{ column: 'pid', label: 'PID', type: 'string', value: '123', linkValue: 'http://prefix/123' }] }
+      const expected = { attributes: [{ label: 'PID', type: 'string', value: '123', linkValue: 'http://prefix/123' }] }
       const actual = getViewmodel({ pid: '123' }, config)
       expect(actual).toEqual(expected)
     })

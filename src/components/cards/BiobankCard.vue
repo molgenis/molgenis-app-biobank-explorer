@@ -158,6 +158,7 @@
                   </router-link>
                 </small>
                 <hr v-if="index != lastCollection" />
+                <div v-else class="pb-3"></div>
               </div>
             </div>
           </div>
