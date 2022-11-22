@@ -133,6 +133,11 @@ export default {
       if (filterName === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
+    } else {
+      /** this filter is the only one that has more option that will be added at runtime. */
+      if (filterName === 'diagnosis_available') {
+        Vue.set(state.filterOptionDictionary, filterName, state.filterOptionDictionary[filterName].concat(filterOptions))
+      }
     }
   },
   SetNetworkReport (state, network) {

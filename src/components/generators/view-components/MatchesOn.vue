@@ -53,7 +53,6 @@ export default {
         }
 
         const isArray = Array.isArray(potentialMatch)
-        const isBoolean = typeof potentialMatch === 'boolean'
         const match = { name: filterLabel, value: [] }
 
         for (const activeFilterValue of activeFilterValues) {
@@ -66,6 +65,8 @@ export default {
             fo => fo.value === activeFilterValue
           )
 
+          if (!filterOption) continue
+
           const filterValue = filterOption.value
 
           if (
@@ -75,9 +76,7 @@ export default {
               )) /** if the value is an array */ ||
             (typeof potentialMatch === 'object' &&
               filterValue === potentialMatch.id) /** if value is an object */ ||
-            (isBoolean &&
-              filterValue.toString() === potentialMatch.toString()) ||
-            filterValue === potentialMatch /** if it is a single value */
+              filterValue.toString() === potentialMatch.toString()/** if it is a single value */
           ) {
             match.value.push(filterOption.text)
           }
