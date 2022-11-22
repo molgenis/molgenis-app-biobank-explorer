@@ -49,6 +49,7 @@
           <div class="p-2 pt-1 biobank-section" :style="cardContainerHeight">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
+              <matches-on :viewmodel="biobank" />
               <router-link
                 :to="'/biobank/' + biobank.id"
                 :title="`${biobank.name} details`"
@@ -239,8 +240,12 @@ export default {
       }
 
       /** When a biobank name is too long it will take three rows (most of the time), tipping point is 80 characters. */
-      if (charactersInName >= 80) {
-        height = 19
+      if (charactersInName >= 70) {
+        height = 19.2
+      }
+
+      if (charactersInName >= 100) {
+        height = 17.7
       }
 
       return `height: ${height}rem;max-height: ${height}rem;`

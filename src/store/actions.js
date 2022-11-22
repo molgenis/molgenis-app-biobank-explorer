@@ -15,9 +15,6 @@ export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 /**/
 
-/**  Query Parameters */
-export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
-
 export default {
   ...collectionActions,
   ...biobankActions,
