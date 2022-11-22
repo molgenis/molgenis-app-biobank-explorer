@@ -150,7 +150,7 @@
                     class="p-1"
                     :viewmodel="collectionViewmodel(collectionDetail)"/>
 
-                  <matches-on :viewmodel="collectionDetail" />
+                  <matches-on :viewmodel="collectionDetail" class="px-1 ml-1" />
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
                     :title="`${collectionDetail.name} details`"

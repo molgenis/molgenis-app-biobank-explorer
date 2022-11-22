@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2" v-if="notEmpty">
+  <div class="mx-1" v-if="notEmpty">
     <div class="d-flex align-items-center flex-wrap">
       <label class="font-weight-bold mr-1">Because you searched for:</label>
       <span
@@ -18,8 +18,7 @@ export default {
   props: {
     viewmodel: {
       type: Object,
-      required: false,
-      default: () => {}
+      required: true
     }
   },
   computed: {
@@ -27,13 +26,13 @@ export default {
     ...mapState(['filterFacets', 'filterOptionDictionary']),
     filterInfoDictionary () {
       const filterInfoDictionary = {}
+
       this.filterFacets.forEach(filter => {
         filterInfoDictionary[filter.name] = {
           column: filter.columnName,
           label: filter.label
         }
       })
-
       return filterInfoDictionary
     },
     matches () {
@@ -74,7 +73,9 @@ export default {
               potentialMatch.some(
                 item => item.id === filterValue
               )) /** if the value is an array */ ||
-            filterValue === potentialMatch.id /** if value is an object */ ||
+            (typeof potentialMatch === 'object' &&
+              filterValue ===
+                potentialMatch.id) /** if value is an object */ ||
             filterValue.toString() ===
               potentialMatch.toString() /** if it is a single value */
           ) {
