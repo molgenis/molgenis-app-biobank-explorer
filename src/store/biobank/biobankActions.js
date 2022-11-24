@@ -1,9 +1,10 @@
 import utils from '../../utils'
 import api from '@molgenis/molgenis-api-client'
 import { encodeRsqlValue, transformToRSQL } from '@molgenis/rsql'
-import { COLLECTION_ATTRIBUTE_SELECTOR } from '../actions'
 
 export const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
+
+const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(*,diagnosis_available(id,label,uri,code),order_of_magnitude(*),sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(id,label,uri))'
 
 export const biobankActions = {
   QueryBiobanks ({ state, commit, getters }) {

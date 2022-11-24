@@ -49,6 +49,7 @@
           <div class="p-2 pt-1 biobank-section" :style="cardContainerHeight">
             <small>
               <view-generator :viewmodel="biobankcardViewmodel" />
+              <matches-on :viewmodel="biobank" />
               <router-link
                 :to="'/biobank/' + biobank.id"
                 :title="`${biobank.name} details`"
@@ -102,7 +103,6 @@
                 }}
                 available
               </h5>
-
               <collection-selector
                 v-if="numberOfCollections > 1"
                 class="text-right mr-1 ml-auto align-self-center"
@@ -111,15 +111,14 @@
                 iconOnly
                 multi></collection-selector>
             </div>
-            <div class="pl-2" v-if="!numberOfCollections">
-              This biobank has no collections yet.
-            </div>
+            <hr class="mt-1" v-if="numberOfCollections" />
+            <div v-else class="pl-2">This biobank has no collections yet.</div>
             <div
               class="collection-items mx-1"
               v-for="(collectionDetail, index) of biobank.collectionDetails"
               :key="collectionDetail.id">
               <div v-if="showCollections" class="mb-2">
-                <div class="pl-2 py-2 d-flex">
+                <div class="pl-2 pt-2 d-flex">
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
                     title="Collection details"
@@ -148,16 +147,19 @@
 
                 <small>
                   <view-generator
-                    class="p-2 pt-2"
+                    class="p-1"
                     :viewmodel="collectionViewmodel(collectionDetail)"/>
+
+                  <matches-on :viewmodel="collectionDetail" class="px-1 ml-1" />
                   <router-link
                     :to="'/collection/' + collectionDetail.id"
                     :title="`${collectionDetail.name} details`"
-                    class="text-info ml-2 pl-1">
+                    class="text-info ml-1 pl-1">
                     <span>More details</span>
                   </router-link>
                 </small>
                 <hr v-if="index != lastCollection" />
+                <div v-else class="pb-3"></div>
               </div>
             </div>
           </div>
@@ -175,12 +177,14 @@ import {
 } from '../../utils/templateMapper'
 import ViewGenerator from '../generators/ViewGenerator.vue'
 import CollectionSelector from '../buttons/CollectionSelector.vue'
+import MatchesOn from '../generators/view-components/MatchesOn.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     ViewGenerator,
-    CollectionSelector
+    CollectionSelector,
+    MatchesOn
   },
   props: {
     fullSize: {
@@ -236,8 +240,12 @@ export default {
       }
 
       /** When a biobank name is too long it will take three rows (most of the time), tipping point is 80 characters. */
-      if (charactersInName >= 80) {
-        height = 19
+      if (charactersInName >= 70) {
+        height = 19.2
+      }
+
+      if (charactersInName >= 100) {
+        height = 17.7
       }
 
       return `height: ${height}rem;max-height: ${height}rem;`
@@ -327,7 +335,7 @@ export default {
 }
 
 .biobank-card-large {
-  width: 90% ;
+  width: 90%;
 }
 
 .biobank-card > header,

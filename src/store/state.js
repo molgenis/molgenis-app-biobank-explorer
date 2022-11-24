@@ -34,7 +34,6 @@ export default {
   nonCommercialCollections: [],
   selectedCollections: [],
   filterOptionsOverride: {},
-  activeFilters: [],
   filterLoadingDict: {},
   filterLoading: 'None',
   filterExpanded: 'None',
