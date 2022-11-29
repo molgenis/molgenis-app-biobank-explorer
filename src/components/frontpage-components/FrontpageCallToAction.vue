@@ -26,8 +26,9 @@ export default {
     }
   },
   mounted () {
+    /** retrieving the hexcode from the css property */
     const hexCode = getComputedStyle(this.$refs.cta).getPropertyValue('--info')
-
+    /** adding an opacity */
     this.$refs.cta.style.backgroundColor = `${hexCode}50`
   }
 }
