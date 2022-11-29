@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BiobankExplorer from '../views/BiobankExplorer'
+import FrontpageView from '../views/FrontpageView'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
@@ -45,7 +46,7 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      component: BiobankExplorer
+      component: FrontpageView
     }
   ]
 })
