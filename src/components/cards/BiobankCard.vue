@@ -228,7 +228,7 @@ export default {
       return this.biobank.collectionDetails.length - 1
     },
     numberOfCollections () {
-      return this.biobank.collections ? this.biobank.collections.length : 0
+      return this.biobank.collectionDetails ? this.biobank.collectionDetails.length : 0
     },
     cardContainerHeight () {
       const charactersInName = this.biobank.name.length
