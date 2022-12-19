@@ -7,6 +7,7 @@
           <th @click="sort('number_of_samples')">Samples</th>
           <th @click="sort('sex.CollectionSex')">Sex</th>
           <th @click="sort('number_of_donors')">Donors</th>
+          <th @click="sort('age.CollectionAgeRange')">Age range</th>
           <th @click="sort('disease.id')">Disease codes</th>
         </tr>
       </thead>
@@ -19,6 +20,7 @@
             <td>{{ fact.number_of_samples || "-" }}</td>
             <td>{{ fact.sex ? fact.sex.CollectionSex : "-" }}</td>
             <td>{{ fact.number_of_donors || "-" }}</td>
+            <td>{{ fact.age ? fact.age.CollectionAgeRange : "-" }}</td>
             <td v-if="fact.disease && fact.disease.length">
               <div
                 v-for="disease in fact.disease"
@@ -47,6 +49,7 @@
                 .reduce((a, b) => a + b)
             }}
           </td>
+          <td></td>
           <td></td>
         </tr>
       </tbody>
@@ -101,7 +104,7 @@ export default {
           factValueB = isNaN(factB[trail[0]])
             ? factB[trail[0]]
             : parseInt(factB[trail[0]])
-        } else {
+        } else if (trail.length === 2) {
           factValueA = isNaN(factA[trail[0]][trail[1]])
             ? factA[trail[0]][trail[1]]
             : parseInt(factA[trail[0]][trail[1]])
@@ -109,6 +112,14 @@ export default {
           factValueB = isNaN(factB[trail[0]][trail[1]])
             ? factB[trail[0]][trail[1]]
             : parseInt(factB[trail[0]][trail[1]])
+        } else {
+          factValueA = isNaN(factA[trail[0]][trail[1]][trail[2]])
+            ? factA[trail[0]][trail[1]][trail[2]]
+            : parseInt(factA[trail[0]][trail[1]][trail[2]])
+
+          factValueB = isNaN(factB[trail[0]][trail[1]][trail[2]])
+            ? factB[trail[0]][trail[1]][trail[2]]
+            : parseInt(factB[trail[0]][trail[1]][trail[2]])
         }
 
         if (factValueA > factValueB) {
