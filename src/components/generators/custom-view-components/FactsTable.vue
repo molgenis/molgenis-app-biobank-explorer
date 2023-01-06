@@ -14,7 +14,7 @@
     </table>
     <table class="table border w-100">
       <thead>
-        <tr class="facts-header bg-info text-white">
+        <tr class="facts-header bg-secondary text-white">
           <th @click="sort('sample_type.label')">Material type</th>
           <th @click="sort('number_of_samples')">Samples</th>
           <th @click="sort('sex.CollectionSex')">Sex</th>
