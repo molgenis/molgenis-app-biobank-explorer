@@ -7,11 +7,11 @@
     </section>
     <section class="d-flex justify-content-between mx-5 my-5 cta-container">
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Learn how'">
-        <h2>Submit data</h2>
-        <p>Make your data accessible</p>
+        <h2>Join BBMRI-Eric</h2>
+        <p>And make your data accessible</p>
       </frontpage-call-to-action>
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'References'">
-        <h2>References</h2>
+        <h2>Services we offer</h2>
         <p>Manuals &amp; templates</p>
       </frontpage-call-to-action>
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Support'">
