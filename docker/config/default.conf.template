@@ -2,7 +2,7 @@ server {
   server_name localhost;
 
   location /api {
-    proxy_pass https://bbmri-test.gcc.rug.nl;
+    proxy_pass https://jelmer.gcc.rug.nl;
   }
   location / {
     root /usr/share/nginx/html;

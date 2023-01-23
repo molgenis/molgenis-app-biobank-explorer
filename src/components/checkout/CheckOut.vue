@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="primary" @click="showCart = !showCart"><span>{{ uiText["request"] }}</span><span class="badge badge-light ml-2">
+    <b-button variant="primary" @click="showCart = !showCart" :disabled="disabled"><span>{{ uiText["request"] }}</span><span class="badge badge-light ml-2">
         {{ selectedCollections.length }}</span></b-button>
     <negotiator-selection v-model="showCart" :bookmark="bookmark" />
   </div>
@@ -15,6 +15,11 @@ export default {
     NegotiatorSelection
   },
   props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: () => false
+    },
     bookmark: {
       type: Boolean,
       required: false,
