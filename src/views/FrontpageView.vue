@@ -7,8 +7,9 @@
     </section>
     <section class="d-flex justify-content-between mx-5 my-5 cta-container">
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Learn how'">
-        <h2>Join BBMRI-ERIC</h2>
-        <p>And make your data accessible</p>
+        <h2>BBMRI Directory</h2>
+        <p>Make your biobank visible</p>
+        <p>Make your collections accessible</p>
       </frontpage-call-to-action>
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'References'">
         <h2>Services we offer</h2>
