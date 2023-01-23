@@ -1,6 +1,9 @@
 <template>
   <div class="container mg-collection-report-card pb-4">
-    <b-alert v-if="collection.biobank.withdrawn" show variant="warning">
+    <b-alert
+      v-if="collection && collection.biobank.withdrawn"
+      show
+      variant="warning">
       {{ uiText["collection_withdrawn"] }}
     </b-alert>
     <script
@@ -45,6 +48,7 @@
             </ol>
           </nav>
           <check-out
+            v-if="collection"
             class="ml-auto"
             :bookmark="false"
             :disabled="collection.biobank.withdrawn"/>
@@ -59,7 +63,9 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
-                <report-collection-details :collection="collection" />
+                <report-collection-details
+                  v-if="collection"
+                  :collection="collection"/>
               </div>
 
               <!-- Right side card -->

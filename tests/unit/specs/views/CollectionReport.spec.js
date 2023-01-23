@@ -57,7 +57,7 @@ describe('CollectionReport', () => {
         }
       },
       actions: {
-        GetCollectionReport: () => {}
+        GetCollectionReport: () => { }
       },
       getters: {
         ...baseGetters,
