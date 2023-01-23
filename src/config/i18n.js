@@ -18,7 +18,8 @@ const i18n = {
     satisfyAll: 'Match all',
     satisfyAny: 'Match any',
     filter_loading: 'Loading filters',
-    biobank_withdrawn: 'This biobank is no longer part of BBMRI-ERIC'
+    biobank_withdrawn: 'This biobank is no longer part of BBMRI-ERIC',
+    collection_withdrawn: 'This collection belongs to a biobank that is no longer part of BBMRI-ERIC'
   }
 }
 
