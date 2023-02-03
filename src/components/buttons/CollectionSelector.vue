@@ -8,13 +8,14 @@
       @change.prevent="handleCollectionStatus"
       :checked="isChecked"
       :value="false"
+      :disabled="disabled"
       hidden/>
     <label
       v-if="!iconOnly"
       class="add-to-cart-label btn btn-outline-secondary px-2"
       :for="checkboxIdentifier">
-      <span v-if="!multi">{{ uiText['add'] }}</span>
-      <span v-else>{{ uiText['add_all'] }}</span>
+      <span v-if="!multi">{{ uiText["add"] }}</span>
+      <span v-else>{{ uiText["add_all"] }}</span>
     </label>
     <label v-else class="add-to-cart-label btn" :for="checkboxIdentifier">
       <font-awesome-icon
@@ -44,6 +45,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CollectionSelector',
   props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     collectionData: {
       type: [Object, Array],
       required: true
@@ -103,10 +109,12 @@ export default {
       return this.identifier
     },
     isChecked () {
-      const selectedCollectionIds = this.selectedCollections.map(sc => sc.value)
+      const selectedCollectionIds = this.selectedCollections.map(
+        (sc) => sc.value
+      )
       return this.collections
-        .map(collection => collection.value)
-        .every(id => selectedCollectionIds.includes(id))
+        .map((collection) => collection.value)
+        .every((id) => selectedCollectionIds.includes(id))
     }
   },
   beforeMount () {
@@ -114,15 +122,13 @@ export default {
 
     if (Array.isArray(this.collectionData)) {
       initialData = this.collectionData
-      this.identifier = `selector-${Math.random()
-        .toString()
-        .substr(2)}`
+      this.identifier = `selector-${Math.random().toString().substr(2)}`
     } else {
       initialData = [this.collectionData]
       this.identifier = this.collectionData.id
     }
 
-    this.collections = initialData.map(collection => ({
+    this.collections = initialData.map((collection) => ({
       label: collection.label || collection.name,
       value: collection.id
     }))
