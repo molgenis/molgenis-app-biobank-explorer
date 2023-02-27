@@ -165,6 +165,20 @@ export default {
       state.searchHistory.push(history)
     }
   },
+  SetQualityStandardDictionary (state, response) {
+    /** Combine arrays from two tables and deduplicate */
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
+    const qualityStandardsDictionary = {}
+
+    allStandards.forEach((standard) => {
+      qualityStandardsDictionary[standard.label] = standard.description || ''
+    })
+
+    state.qualityStandardsDictionary = qualityStandardsDictionary
+  },
   /**
    *
    * @param state
