@@ -52,9 +52,7 @@ export default {
   },
   methods: {
     ...mapMutations(['MapQueryToState', 'ConfigureFilters', 'SetNotification']),
-    ...mapActions([
-      'GetApplicationContext'
-    ])
+    ...mapActions(['GetApplicationContext', 'GetQualityStandardInformation'])
   },
   watch: {
     $route () {
@@ -75,6 +73,7 @@ export default {
   beforeMount () {
     this.ConfigureFilters()
     this.MapQueryToState()
+    this.GetQualityStandardInformation()
     this.GetApplicationContext()
   }
 }
