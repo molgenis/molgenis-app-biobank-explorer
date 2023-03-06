@@ -4,11 +4,11 @@
       <tbody>
         <tr>
           <th>Number of samples:</th>
-          <td class="pl-4">{{ numberOfSamples }}</td>
+          <td class="pl-4">{{ numberOfSamples || "-"}}</td>
         </tr>
         <tr>
           <th>Number of donors:</th>
-          <td class="pl-4">{{ numberOfDonors }}</td>
+          <td class="pl-4">{{ numberOfDonors || "-" }}</td>
         </tr>
       </tbody>
     </table>
@@ -30,7 +30,7 @@
                 v-for="material of materialtypeOptions"
                 :key="material"
                 :value="material">
-                {{ material }}
+                {{ material || "-" }}
               </option>
             </select>
           </th>
@@ -41,7 +41,7 @@
               class="text-right">
               <option value="all">All</option>
               <option v-for="sex of sexOptions" :key="sex" :value="sex">
-                {{ sex }}
+                {{ sex || "-" }}
               </option>
             </select>
           </th>
@@ -55,7 +55,7 @@
                 v-for="ageRange of ageRangeOptions"
                 :key="ageRange"
                 :value="ageRange">
-                {{ ageRange }}
+                {{ ageRange || "-" }}
               </option>
             </select>
           </th>
@@ -106,7 +106,7 @@ export default {
   computed: {
     materialtypeOptions () {
       return [
-        ...new Set(this.attribute.value.map(attr => attr.sample_type.label))
+        ...new Set(this.attribute.value.map(attr => attr.sample_type?.label))
       ]
     },
     numberOfSamples () {
@@ -125,13 +125,13 @@ export default {
     },
     sexOptions () {
       return [
-        ...new Set(this.attribute.value.map(attr => attr.sex.CollectionSex))
+        ...new Set(this.attribute.value.map(attr => attr.sex?.CollectionSex))
       ]
     },
     ageRangeOptions () {
       return [
         ...new Set(
-          this.attribute.value.map(attr => attr.age.CollectionAgeRange)
+          this.attribute.value.map(attr => attr.age?.CollectionAgeRange)
         )
       ]
     },
