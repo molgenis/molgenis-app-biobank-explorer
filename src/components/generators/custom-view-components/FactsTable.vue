@@ -4,7 +4,7 @@
       <tbody>
         <tr>
           <th>Number of samples:</th>
-          <td class="pl-4">{{ numberOfSamples || "-"}}</td>
+          <td class="pl-4">{{ numberOfSamples || "-" }}</td>
         </tr>
         <tr>
           <th>Number of donors:</th>
@@ -29,7 +29,7 @@
               <option
                 v-for="material of materialtypeOptions"
                 :key="material"
-                :value="material">
+                :value="material || '-'">
                 {{ material || "-" }}
               </option>
             </select>
@@ -54,7 +54,7 @@
               <option
                 v-for="ageRange of ageRangeOptions"
                 :key="ageRange"
-                :value="ageRange">
+                :value="ageRange || '-'">
                 {{ ageRange || "-" }}
               </option>
             </select>
@@ -66,7 +66,7 @@
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
             <th scope="row" class="pr-1 align-top text-nowrap">
-              {{ fact.sample_type.label }}
+              {{ fact.sample_type ? fact.sample_type.label : "-" }}
             </th>
             <td>{{ fact.number_of_samples || "-" }}</td>
             <td>{{ fact.sex ? fact.sex.CollectionSex : "-" }}</td>
@@ -106,32 +106,32 @@ export default {
   computed: {
     materialtypeOptions () {
       return [
-        ...new Set(this.attribute.value.map(attr => attr.sample_type?.label))
+        ...new Set(this.attribute.value.map((attr) => attr.sample_type?.label))
       ]
     },
     numberOfSamples () {
       if (this.factsTable.length === 0) return 0
 
       return this.factsTable
-        .map(attr => parseInt(attr.number_of_samples))
+        .map((attr) => parseInt(attr.number_of_samples))
         .reduce((a, b) => a + b)
     },
     numberOfDonors () {
       if (this.factsTable.length === 0) return 0
 
       return this.factsTable
-        .map(attr => parseInt(attr.number_of_donors))
+        .map((attr) => parseInt(attr.number_of_donors))
         .reduce((a, b) => a + b)
     },
     sexOptions () {
       return [
-        ...new Set(this.attribute.value.map(attr => attr.sex?.CollectionSex))
+        ...new Set(this.attribute.value.map((attr) => attr.sex?.CollectionSex))
       ]
     },
     ageRangeOptions () {
       return [
         ...new Set(
-          this.attribute.value.map(attr => attr.age?.CollectionAgeRange)
+          this.attribute.value.map((attr) => attr.age?.CollectionAgeRange)
         )
       ]
     },
@@ -145,7 +145,9 @@ export default {
         for (const [index, filter] of this.filters.entries()) {
           const propertyValue = this.getPropertyValue(fact, filter.column)
           /** it did not match all filters, so goodbye. */
-          if (propertyValue !== filter.value) {
+          if (!propertyValue && filter.value === '-') {
+            filteredFacts.push(fact)
+          } else if (propertyValue !== filter.value) {
             break
           } else if (index === lastFilterIndex) {
             filteredFacts.push(fact)
@@ -165,10 +167,12 @@ export default {
       const facts = [hasSamples, hasDonors, fact.sex]
 
       /** return true, if any of the facts is filled it. */
-      return facts.some(fact => fact)
+      return facts.some((fact) => fact)
     },
     filter (column, event) {
-      const indexToRemove = this.filters.findIndex(fa => fa.column === column)
+      const indexToRemove = this.filters.findIndex(
+        (fa) => fa.column === column
+      )
 
       if (indexToRemove > -1) {
         this.filters.splice(indexToRemove, 1)
@@ -218,9 +222,15 @@ export default {
           return object[trail[0]]
         }
         case 2: {
+          if (!object[trail[0]]) return undefined
+
           return object[trail[0]][trail[1]]
         }
         case 3: {
+          if (!object[trail[0]] || !object[trail[0]][trail[1]]) {
+            return undefined
+          }
+
           return object[trail[0]][trail[1]][trail[2]]
         }
       }
