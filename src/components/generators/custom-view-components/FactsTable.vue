@@ -1,26 +1,14 @@
 <template>
   <div class="mt-4" v-if="attribute.value && attribute.value.length">
-    <table class="mb-4">
-      <tbody>
-        <tr>
-          <th>Number of samples:</th>
-          <td class="pl-4">{{ numberOfSamples || "-" }}</td>
-        </tr>
-        <tr>
-          <th>Number of donors:</th>
-          <td class="pl-4">{{ numberOfDonors || "-" }}</td>
-        </tr>
-      </tbody>
-    </table>
     <table class="table border w-100">
       <thead>
         <tr class="facts-header bg-secondary text-white">
           <th @click="sort('sample_type.label')">Material type</th>
-          <th @click="sort('number_of_samples')">Samples</th>
           <th @click="sort('sex.CollectionSex')">Sex</th>
-          <th @click="sort('number_of_donors')">Donors</th>
           <th @click="sort('age.CollectionAgeRange')">Age range</th>
           <th @click="sort('disease.id')">Disease codes</th>
+          <th @click="sort('number_of_donors')">Donors</th>
+          <th @click="sort('number_of_samples')">Samples</th>
         </tr>
         <tr class="filter-bar">
           <th>
@@ -34,7 +22,6 @@
               </option>
             </select>
           </th>
-          <th></th>
           <th>
             <select
               @change="filter('sex.CollectionSex', $event)"
@@ -45,7 +32,7 @@
               </option>
             </select>
           </th>
-          <th></th>
+
           <th>
             <select
               @change="filter('age.CollectionAgeRange', $event)"
@@ -60,6 +47,8 @@
             </select>
           </th>
           <th></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -68,9 +57,7 @@
             <th scope="row" class="pr-1 align-top text-nowrap">
               {{ fact.sample_type ? fact.sample_type.label : "-" }}
             </th>
-            <td>{{ fact.number_of_samples || "-" }}</td>
             <td>{{ fact.sex ? fact.sex.CollectionSex : "-" }}</td>
-            <td>{{ fact.number_of_donors || "-" }}</td>
             <td>{{ fact.age ? fact.age.CollectionAgeRange : "-" }}</td>
             <td v-if="fact.disease && fact.disease.length">
               <div
@@ -81,6 +68,8 @@
               </div>
             </td>
             <td v-else>-</td>
+            <td>{{ fact.number_of_donors || "-" }}</td>
+            <td>{{ fact.number_of_samples || "-" }}</td>
           </tr>
         </template>
       </tbody>
@@ -108,20 +97,6 @@ export default {
       return [
         ...new Set(this.attribute.value.map((attr) => attr.sample_type?.label))
       ]
-    },
-    numberOfSamples () {
-      if (this.factsTable.length === 0) return 0
-
-      return this.factsTable
-        .map((attr) => parseInt(attr.number_of_samples))
-        .reduce((a, b) => a + b)
-    },
-    numberOfDonors () {
-      if (this.factsTable.length === 0) return 0
-
-      return this.factsTable
-        .map((attr) => parseInt(attr.number_of_donors))
-        .reduce((a, b) => a + b)
     },
     sexOptions () {
       return [
