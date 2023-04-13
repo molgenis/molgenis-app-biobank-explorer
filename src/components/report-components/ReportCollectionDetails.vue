@@ -10,7 +10,7 @@
       :maxLength="500"></report-description>
 
     <!-- collection information -->
-    <view-generator :viewmodel="collectionModel.viewmodel" />
+    <view-generator :viewmodel="collectionModel.viewmodel" :excludeComponents="['FactsTable']" />
   </div>
 </template>
 

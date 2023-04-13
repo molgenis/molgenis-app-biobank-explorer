@@ -16,9 +16,7 @@
           <nav aria-label="breadcrumb" v-if="collection">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
-                <router-link
-                  to="/"
-                  title="Back to biobank explorer">
+                <router-link to="/" title="Back to biobank explorer">
                   {{ uiText["home"] }}
                 </router-link>
               </li>
@@ -32,7 +30,9 @@
               <li class="breadcrumb-item" v-if="info.parentCollection">
                 <router-link
                   :to="'/collection/' + info.parentCollection.id"
-                  :title="'Go to parent collection ' + info.parentCollection.name">
+                  :title="
+                    'Go to parent collection ' + info.parentCollection.name
+                  ">
                   {{ info.parentCollection.name }}
                 </router-link>
               </li>
@@ -59,6 +59,11 @@
               <collection-report-info-card
                 :info="info"></collection-report-info-card>
             </div>
+            <div
+              class="row"
+              v-if="factsData && Object.keys(factsData).length > 0">
+              <facts-table :attribute="factsData"></facts-table>
+            </div>
           </div>
         </div>
       </div>
@@ -75,6 +80,7 @@ import CollectionReportInfoCard from '../components/cards/CollectionReportInfoCa
 import { collectionReportInformation } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
+import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
 
 export default {
   name: 'CollectionReport',
@@ -82,7 +88,8 @@ export default {
     ReportTitle,
     CollectionReportInfoCard,
     Loading,
-    ReportCollectionDetails
+    ReportCollectionDetails,
+    FactsTable
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
@@ -104,6 +111,20 @@ export default {
       return this.collection
         ? mapCollectionToBioschemas(this.collection)
         : undefined
+    },
+    factsData () {
+      return { value: this.collection.facts }
+      // console.log('?')
+
+      // console.log(':D')
+      // const factsData = this.collection.viewmodel.attributes.filter(attr => attr.component === 'FactsTable')
+
+      // // .find(
+      // //   (attr) => attr.component === 'FactsTable'
+      // // )
+      // console.log(factsData)
+      // if (factsData.length) return factsData[0]
+      // else return {}
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */

@@ -17,8 +17,8 @@
               <option
                 v-for="material of materialtypeOptions"
                 :key="material"
-                :value="material || '-'">
-                {{ material || "-" }}
+                :value="material || 'Unknown'">
+                {{ material || "Unknown" }}
               </option>
             </select>
           </th>
@@ -28,7 +28,7 @@
               class="text-right">
               <option value="all">All</option>
               <option v-for="sex of sexOptions" :key="sex" :value="sex">
-                {{ sex || "-" }}
+                {{ sex || "Unknown" }}
               </option>
             </select>
           </th>
@@ -41,8 +41,8 @@
               <option
                 v-for="ageRange of ageRangeOptions"
                 :key="ageRange"
-                :value="ageRange || '-'">
-                {{ ageRange || "-" }}
+                :value="ageRange || 'Unknown'">
+                {{ ageRange || "Unknown" }}
               </option>
             </select>
           </th>
@@ -55,21 +55,18 @@
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
             <th scope="row" class="pr-1 align-top text-nowrap">
-              {{ fact.sample_type ? fact.sample_type.label : "-" }}
+              {{ fact.sample_type ? fact.sample_type.label : "Unknown" }}
             </th>
-            <td>{{ fact.sex ? fact.sex.CollectionSex : "-" }}</td>
-            <td>{{ fact.age ? fact.age.CollectionAgeRange : "-" }}</td>
-            <td v-if="fact.disease && fact.disease.length">
-              <div
-                v-for="disease in fact.disease"
-                :key="disease.id"
-                class="badge">
-                {{ disease.id }}
-              </div>
+            <td>{{ fact.sex ? fact.sex.CollectionSex : "Unknown" }}</td>
+            <td>{{ fact.age ? fact.age.CollectionAgeRange : "Unknown" }}</td>
+            <td v-if="fact.disease" class="text-nowrap">
+              <span :title="fact.disease.id">
+                {{ fact.disease.label }}
+              </span>
             </td>
             <td v-else>-</td>
-            <td>{{ fact.number_of_donors || "-" }}</td>
-            <td>{{ fact.number_of_samples || "-" }}</td>
+            <td>{{ fact.number_of_donors || "Unknown" }}</td>
+            <td>{{ fact.number_of_samples || "Unknown" }}</td>
           </tr>
         </template>
       </tbody>

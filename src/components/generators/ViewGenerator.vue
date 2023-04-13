@@ -8,11 +8,11 @@
         :key="attribute.id"/>
     </table>
 
-      <component
-        v-for="customComponent in customComponents"
-        :is="customComponent.component"
-        :attribute="customComponent"
-        :key="customComponent.id"/>
+    <component
+      v-for="customComponent in customComponents"
+      :is="customComponent.component"
+      :attribute="customComponent"
+      :key="customComponent.id"/>
 
     <div
       v-if="
@@ -55,6 +55,11 @@ export default {
     viewmodel: {
       type: Object,
       required: true
+    },
+    excludeComponents: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   computed: {
@@ -62,10 +67,12 @@ export default {
       return this.viewmodel
     },
     attributes () {
-      return this.renderObject.attributes.filter(attr => !attr.component)
+      return this.renderObject.attributes.filter((attr) => !attr.component)
     },
     customComponents () {
-      return this.renderObject.attributes.filter(attr => attr.component)
+      return this.renderObject.attributes.filter(
+        (attr) => !this.excludeComponents.includes(attr.component)
+      )
     }
   },
   methods: {
