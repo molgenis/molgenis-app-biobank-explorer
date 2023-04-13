@@ -6,7 +6,7 @@
           <th @click="sort('sample_type.label')">Material type</th>
           <th @click="sort('sex.CollectionSex')">Sex</th>
           <th @click="sort('age.CollectionAgeRange')">Age range</th>
-          <th @click="sort('disease.id')">Disease codes</th>
+          <th @click="sort('disease.label')">Disease codes</th>
           <th @click="sort('number_of_donors')">Donors</th>
           <th @click="sort('number_of_samples')">Samples</th>
         </tr>
@@ -46,7 +46,17 @@
               </option>
             </select>
           </th>
-          <th></th>
+          <th>
+            <select @change="filter('disease.label', $event)" class="text-right">
+              <option value="all">All</option>
+              <option
+                v-for="disease of diseaseOptions"
+                :key="disease"
+                :value="disease">
+                {{ disease || "Unknown" }}
+              </option>
+            </select>
+          </th>
           <th></th>
           <th></th>
         </tr>
@@ -64,7 +74,7 @@
                 {{ fact.disease.label }}
               </span>
             </td>
-            <td v-else>-</td>
+            <td v-else>Unknown</td>
             <td>{{ fact.number_of_donors || "Unknown" }}</td>
             <td>{{ fact.number_of_samples || "Unknown" }}</td>
           </tr>
@@ -107,6 +117,11 @@ export default {
         )
       ]
     },
+    diseaseOptions () {
+      return [
+        ...new Set(this.attribute.value.map((attr) => attr.disease?.label))
+      ]
+    },
     factsTable () {
       if (this.filters.length === 0) return this.facts
       const filteredFacts = []
@@ -117,7 +132,7 @@ export default {
         for (const [index, filter] of this.filters.entries()) {
           const propertyValue = this.getPropertyValue(fact, filter.column)
           /** it did not match all filters, so goodbye. */
-          if (!propertyValue && filter.value === '-') {
+          if (!propertyValue) {
             filteredFacts.push(fact)
           } else if (propertyValue !== filter.value) {
             break
