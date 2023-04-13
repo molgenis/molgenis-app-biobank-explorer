@@ -113,18 +113,8 @@ export default {
         : undefined
     },
     factsData () {
+      // TODO rework this so that facts are stand-alone, this is a workaround because @ReportCollectionDetails
       return { value: this.collection.facts }
-      // console.log('?')
-
-      // console.log(':D')
-      // const factsData = this.collection.viewmodel.attributes.filter(attr => attr.component === 'FactsTable')
-
-      // // .find(
-      // //   (attr) => attr.component === 'FactsTable'
-      // // )
-      // console.log(factsData)
-      // if (factsData.length) return factsData[0]
-      // else return {}
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */
