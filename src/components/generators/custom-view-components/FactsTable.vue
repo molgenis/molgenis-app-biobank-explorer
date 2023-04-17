@@ -47,7 +47,9 @@
             </select>
           </th>
           <th>
-            <select @change="filter('disease.label', $event)" class="text-right">
+            <select
+              @change="filter('disease.label', $event)"
+              class="text-right">
               <option value="all">All</option>
               <option
                 v-for="disease of diseaseOptions"
@@ -55,13 +57,14 @@
                 :value="disease">
                 {{ disease || "Unknown" }}
               </option>
+              <option value="collapse">Grouped together</option>
             </select>
           </th>
           <th></th>
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="collapsedFacts.length === 0">
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
             <th scope="row" class="pr-1 align-top text-nowrap">
@@ -81,6 +84,7 @@
         </template>
       </tbody>
     </table>
+    {{ this.collapsedFacts }}
   </div>
 </template>
 
@@ -96,7 +100,15 @@ export default {
       facts: [],
       sortColumn: '',
       sortAsc: false,
-      filters: []
+      filters: [],
+      collapseColumns: [],
+      collapsedFacts: [],
+      collapsableColumns: [
+        'sample_type.label',
+        'sex.CollectionSex',
+        'age.CollectionAgeRange',
+        'disease.label'
+      ]
     }
   },
   computed: {
@@ -165,6 +177,21 @@ export default {
         this.filters.splice(indexToRemove, 1)
       }
 
+      if (event.target.value === 'collapse') {
+        if (this.collapseColumns.includes(column)) return
+        else this.collapseColumns.push(column)
+
+        this.collapseRows()
+        return
+      } else {
+        const wasCollapsedIndex = this.collapseColumns.indexOf(column)
+
+        if (wasCollapsedIndex >= 0) {
+          this.collapseColumns.splice(wasCollapsedIndex, 1)
+          this.collapseRows()
+        }
+      }
+
       if (event.target.value !== 'all') {
         this.filters.push({ column, value: event.target.value })
       }
@@ -209,17 +236,123 @@ export default {
           return object[trail[0]]
         }
         case 2: {
-          if (!object[trail[0]]) return undefined
+          if (!object[trail[0]]) return 'Unknown'
 
           return object[trail[0]][trail[1]]
         }
         case 3: {
           if (!object[trail[0]] || !object[trail[0]][trail[1]]) {
-            return undefined
+            return 'Unknown'
           }
 
           return object[trail[0]][trail[1]][trail[2]]
         }
+      }
+    },
+    addValueToProperty (object, propertyString, value) {
+      const trail = propertyString.split('.')
+      const trailLength = trail.length
+
+      // could be recursive, but out of scope for now
+      switch (trailLength) {
+        case 1: {
+          if (Array.isArray(object[trail[0]])) {
+            object[trail[0]].push(value)
+          } else {
+            object[trail[0]] = [object[trail[0]], value]
+          }
+          break
+        }
+        case 2: {
+          if (!object[trail[0]]) {
+            object[trail[0]] = {}
+          }
+
+          if (
+            object[trail[0]][trail[1]] &&
+            Array.isArray(object[trail[0]][trail[1]])
+          ) {
+            object[trail[0]][trail[1]].push(value)
+          } else {
+            object[trail[0]][trail[1]] = [object[trail[0]][trail[1]], value]
+          }
+          break
+        }
+        case 3: {
+          if (!object[trail[0]]) {
+            object[trail[0]] = {}
+          }
+          if (!object[trail[0]][trail[1]]) {
+            object[trail[0]][trail[1]] = {}
+          }
+          if (!object[trail[0]][trail[1]][trail[2]]) {
+            object[trail[0]][trail[1]][trail[2]] = {}
+          }
+
+          if (Array.isArray(object[trail[0]][trail[1]])) {
+            object[trail[0]][trail[1]][trail[2]].push(value)
+          } else {
+            object[trail[0]][trail[1]][trail[2]] = [
+              object[trail[0]][trail[1]][trail[2]],
+              value
+            ]
+          }
+          break
+        }
+      }
+    },
+    hardcopy (value) {
+      return JSON.parse(JSON.stringify(value))
+    },
+    collapseRows () {
+      if (!this.collapseColumns.length) {
+        this.collapsedFacts = []
+        return
+      }
+      const columnsToGroupOn = this.collapsableColumns.filter(
+        (column) => !this.collapseColumns.includes(column)
+      )
+
+      const groupedFacts = {}
+      /** need a copy, so that we don't mutate the base */
+      const factsCopy = this.hardcopy(this.facts)
+
+      for (const fact of factsCopy) {
+        let groupKey = ''
+
+        for (const groupByColumn of columnsToGroupOn) {
+          groupKey += this.getPropertyValue(fact, groupByColumn)
+        }
+
+        if (!groupedFacts[groupKey]) {
+          groupedFacts[groupKey] = [fact]
+        } else {
+          groupedFacts[groupKey].push(fact)
+        }
+      }
+
+      const groupedFactKeys = Object.keys(groupedFacts)
+
+      for (const groupKey of groupedFactKeys) {
+        let collapsedFact = {}
+        const factsToCollapse = groupedFacts[groupKey]
+        const numberOfFacts = factsToCollapse.length
+
+        for (let factIndex = 0; factIndex < numberOfFacts; factIndex++) {
+          if (factIndex === 0) {
+            collapsedFact = factsToCollapse[factIndex]
+          } else {
+            const nextCollapsedFact = factsToCollapse[factIndex]
+            for (const column of this.collapseColumns) {
+              this.addValueToProperty(
+                collapsedFact,
+                column,
+                this.getPropertyValue(nextCollapsedFact, column)
+              )
+            }
+          }
+        }
+        this.collapsedFacts.push(collapsedFact)
       }
     }
   },
