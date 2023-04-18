@@ -1,5 +1,12 @@
 <template>
   <div class="mt-4" v-if="attribute.value && attribute.value.length">
+    <div
+      v-if="collapseColumns.length > 0"
+      class="alert alert-dark"
+      role="alert">
+      When you group one or more columns together, we are unable to calculate
+      the actual number of samples and donors.
+    </div>
     <table class="table border w-100">
       <thead>
         <tr class="facts-header bg-secondary text-white">
@@ -17,74 +24,99 @@
               <option
                 v-for="material of materialtypeOptions"
                 :key="material"
-                :value="material || 'Unknown'">
-                {{ material || "Unknown" }}
+                :value="renderValue(material)">
+                {{ renderValue(material) }}
               </option>
+              <option value="Unknown">Unknown</option>
+              <optgroup label="━━━━━━━━━━━━">
+                <option value="collapse" class="ml-0 pl-0">
+                  Grouped together
+                </option>
+              </optgroup>
             </select>
           </th>
           <th>
-            <select
-              @change="filter('sex.CollectionSex', $event)"
-              class="text-right">
+            <select @change="filter('sex.CollectionSex', $event)">
               <option value="all">All</option>
-              <option v-for="sex of sexOptions" :key="sex" :value="sex">
-                {{ sex || "Unknown" }}
+              <option
+                v-for="sex of sexOptions"
+                :key="sex"
+                :value="renderValue(sex)">
+                {{ renderValue(sex) }}
               </option>
+              <option value="Unknown">Unknown</option>
+              <optgroup label="━━━━━━━━━━━━">
+                <option value="collapse" class="ml-0 pl-0">
+                  Grouped together
+                </option>
+              </optgroup>
             </select>
           </th>
 
           <th>
-            <select
-              @change="filter('age.CollectionAgeRange', $event)"
-              class="text-right">
+            <select @change="filter('age.CollectionAgeRange', $event)">
               <option value="all">All</option>
               <option
                 v-for="ageRange of ageRangeOptions"
                 :key="ageRange"
-                :value="ageRange || 'Unknown'">
-                {{ ageRange || "Unknown" }}
+                :value="renderValue(ageRange)">
+                {{ renderValue(ageRange) }}
               </option>
+              <option value="Unknown">Unknown</option>
+              <optgroup label="━━━━━━━━━━━━">
+                <option value="collapse" class="ml-0 pl-0">
+                  Grouped together
+                </option>
+              </optgroup>
             </select>
           </th>
           <th>
-            <select
-              @change="filter('disease.label', $event)"
-              class="text-right">
+            <select @change="filter('disease.label', $event)">
               <option value="all">All</option>
               <option
                 v-for="disease of diseaseOptions"
                 :key="disease"
-                :value="disease">
-                {{ disease || "Unknown" }}
+                :value="renderValue(disease)">
+                {{ renderValue(disease) }}
               </option>
-              <option value="collapse">Grouped together</option>
+              <option value="Unknown">Unknown</option>
+              <optgroup label="━━━━━━━━━━━━">
+                <option value="collapse" class="ml-0 pl-0">
+                  Grouped together
+                </option>
+              </optgroup>
             </select>
           </th>
           <th></th>
           <th></th>
         </tr>
       </thead>
-      <tbody v-if="collapsedFacts.length === 0">
+      <tbody>
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
-            <th scope="row" class="pr-1 align-top text-nowrap">
-              {{ fact.sample_type ? fact.sample_type.label : "Unknown" }}
+            <th
+              scope="row"
+              class="pr-1 align-top"
+              :class="{
+                'text-nowrap': !collapseColumns.includes('sample_type.label'),
+              }">
+              {{ renderNestedValue(fact.sample_type, "label") }}
             </th>
-            <td>{{ fact.sex ? fact.sex.CollectionSex : "Unknown" }}</td>
-            <td>{{ fact.age ? fact.age.CollectionAgeRange : "Unknown" }}</td>
-            <td v-if="fact.disease" class="text-nowrap">
-              <span :title="fact.disease.id">
-                {{ fact.disease.label }}
-              </span>
+            <td>{{ renderNestedValue(fact.sex, "CollectionSex") }}</td>
+            <td>{{ renderNestedValue(fact.age, "CollectionAgeRange") }}</td>
+            <td
+              :class="{
+                'text-nowrap': !collapseColumns.includes('disease.label'),
+              }"
+              :title="renderNestedValue(fact.disease, 'id')">
+              {{ renderNestedValue(fact.disease, "label") }}
             </td>
-            <td v-else>Unknown</td>
-            <td>{{ fact.number_of_donors || "Unknown" }}</td>
-            <td>{{ fact.number_of_samples || "Unknown" }}</td>
+            <td>{{ renderValue(fact.number_of_donors) }}</td>
+            <td>{{ renderValue(fact.number_of_samples) }}</td>
           </tr>
         </template>
       </tbody>
     </table>
-    {{ this.collapsedFacts }}
   </div>
 </template>
 
@@ -102,7 +134,6 @@ export default {
       sortAsc: false,
       filters: [],
       collapseColumns: [],
-      collapsedFacts: [],
       collapsableColumns: [
         'sample_type.label',
         'sex.CollectionSex',
@@ -114,24 +145,38 @@ export default {
   computed: {
     materialtypeOptions () {
       return [
-        ...new Set(this.attribute.value.map((attr) => attr.sample_type?.label))
+        ...new Set(
+          this.attribute.value
+            .map((attr) => attr.sample_type?.label)
+            .filter((l) => l)
+        )
       ]
     },
     sexOptions () {
       return [
-        ...new Set(this.attribute.value.map((attr) => attr.sex?.CollectionSex))
+        ...new Set(
+          this.attribute.value
+            .map((attr) => attr.sex?.CollectionSex)
+            .filter((l) => l)
+        )
       ]
     },
     ageRangeOptions () {
       return [
         ...new Set(
-          this.attribute.value.map((attr) => attr.age?.CollectionAgeRange)
+          this.attribute.value
+            .map((attr) => attr.age?.CollectionAgeRange)
+            .filter((l) => l)
         )
       ]
     },
     diseaseOptions () {
       return [
-        ...new Set(this.attribute.value.map((attr) => attr.disease?.label))
+        ...new Set(
+          this.attribute.value
+            .map((attr) => attr.disease?.label)
+            .filter((l) => l)
+        )
       ]
     },
     factsTable () {
@@ -142,12 +187,14 @@ export default {
 
       for (const fact of this.facts) {
         for (const [index, filter] of this.filters.entries()) {
-          const propertyValue = this.getPropertyValue(fact, filter.column)
+          const propertyValue = this.getValue(fact, filter.column)
           /** it did not match all filters, so goodbye. */
-          if (!propertyValue) {
+          if (!propertyValue && filter.value !== 'Unknown') {
+            continue
+          } else if (!propertyValue && filter.value === 'Unknown') {
             filteredFacts.push(fact)
           } else if (propertyValue !== filter.value) {
-            break
+            continue
           } else if (index === lastFilterIndex) {
             filteredFacts.push(fact)
           }
@@ -188,6 +235,7 @@ export default {
 
         if (wasCollapsedIndex >= 0) {
           this.collapseColumns.splice(wasCollapsedIndex, 1)
+          this.copyFactsToComponentState()
           this.collapseRows()
         }
       }
@@ -206,8 +254,8 @@ export default {
       }
 
       this.facts.sort((factA, factB) => {
-        const factAProperty = this.getPropertyValue(factA, column)
-        const factBProperty = this.getPropertyValue(factB, column)
+        const factAProperty = this.getValue(factA, column)
+        const factBProperty = this.getValue(factB, column)
 
         const factValueA = isNaN(factAProperty)
           ? factAProperty
@@ -226,87 +274,87 @@ export default {
         return 0
       })
     },
-    getPropertyValue (object, propertyString) {
+    renderValue (value) {
+      if (!value) return 'Unknown'
+      /** we cannot collapse numbers, so handle it here instead if fixing it in the object itself */
+      if (!isNaN(value) && this.collapseColumns.length > 0) return '*'
+
+      if (Array.isArray(value)) {
+        return value.join(', ')
+      } else return value
+    },
+    renderNestedValue (object, property) {
+      if (!object || !object[property]) return 'Unknown'
+      const value = object[property]
+
+      if (Array.isArray(value)) {
+        return value.join(', ')
+      } else return value
+    },
+    getValue (object, propertyString) {
       const trail = propertyString.split('.')
       const trailLength = trail.length
 
-      // could be recursive, but out of scope for now
-      switch (trailLength) {
-        case 1: {
-          return object[trail[0]]
-        }
-        case 2: {
-          if (!object[trail[0]]) return 'Unknown'
+      let value
+      let next = object
+      for (let trailIndex = 0; trailIndex < trailLength; trailIndex++) {
+        const trailPart = trail[trailIndex]
 
-          return object[trail[0]][trail[1]]
-        }
-        case 3: {
-          if (!object[trail[0]] || !object[trail[0]][trail[1]]) {
-            return 'Unknown'
-          }
-
-          return object[trail[0]][trail[1]][trail[2]]
+        if (!next[trailPart]) return value
+        else {
+          value = next[trailPart]
+          next = next[trailPart]
         }
       }
+      return value
     },
-    addValueToProperty (object, propertyString, value) {
+    addValue (object, propertyString, value) {
+      value = value ?? 'Unknown'
+
+      let newValue = []
+      const currentValue = this.getValue(object, propertyString)
+      const currentValueIsArray = Array.isArray(currentValue)
+      const valueIsArray = Array.isArray(value)
+
+      if (currentValueIsArray && valueIsArray) {
+        newValue = currentValue.concat(value)
+      } else if (!currentValueIsArray && valueIsArray) {
+        newValue = value
+        newValue.push(currentValue)
+      } else if (currentValueIsArray && !valueIsArray) {
+        newValue = currentValue
+        newValue.push(value)
+      } else {
+        newValue = [currentValue, value]
+      }
+
+      /** deduplicate */
+      newValue = [...new Set(newValue)]
+
+      /** now traverse the path and assign it by reference */
       const trail = propertyString.split('.')
       const trailLength = trail.length
+      let next = object
 
-      // could be recursive, but out of scope for now
-      switch (trailLength) {
-        case 1: {
-          if (Array.isArray(object[trail[0]])) {
-            object[trail[0]].push(value)
-          } else {
-            object[trail[0]] = [object[trail[0]], value]
-          }
-          break
-        }
-        case 2: {
-          if (!object[trail[0]]) {
-            object[trail[0]] = {}
-          }
+      for (let trailIndex = 0; trailIndex < trailLength; trailIndex++) {
+        const trailPart = trail[trailIndex]
 
-          if (
-            object[trail[0]][trail[1]] &&
-            Array.isArray(object[trail[0]][trail[1]])
-          ) {
-            object[trail[0]][trail[1]].push(value)
-          } else {
-            object[trail[0]][trail[1]] = [object[trail[0]][trail[1]], value]
-          }
+        if (!next[trailPart] || trailIndex + 1 === trailLength) {
+          next[trailPart] = newValue
           break
-        }
-        case 3: {
-          if (!object[trail[0]]) {
-            object[trail[0]] = {}
-          }
-          if (!object[trail[0]][trail[1]]) {
-            object[trail[0]][trail[1]] = {}
-          }
-          if (!object[trail[0]][trail[1]][trail[2]]) {
-            object[trail[0]][trail[1]][trail[2]] = {}
-          }
-
-          if (Array.isArray(object[trail[0]][trail[1]])) {
-            object[trail[0]][trail[1]][trail[2]].push(value)
-          } else {
-            object[trail[0]][trail[1]][trail[2]] = [
-              object[trail[0]][trail[1]][trail[2]],
-              value
-            ]
-          }
-          break
+        } else {
+          next = next[trailPart]
         }
       }
     },
+
     hardcopy (value) {
       return JSON.parse(JSON.stringify(value))
     },
     collapseRows () {
       if (!this.collapseColumns.length) {
-        this.collapsedFacts = []
+        /** no group together selected, so reset the state */
+        this.copyFactsToComponentState()
         return
       }
       const columnsToGroupOn = this.collapsableColumns.filter(
@@ -314,14 +362,12 @@ export default {
       )
 
       const groupedFacts = {}
-      /** need a copy, so that we don't mutate the base */
-      const factsCopy = this.hardcopy(this.facts)
 
-      for (const fact of factsCopy) {
+      for (const fact of this.facts) {
         let groupKey = ''
 
         for (const groupByColumn of columnsToGroupOn) {
-          groupKey += this.getPropertyValue(fact, groupByColumn)
+          groupKey += this.getValue(fact, groupByColumn)
         }
 
         if (!groupedFacts[groupKey]) {
@@ -331,6 +377,7 @@ export default {
         }
       }
 
+      const collapsedFacts = []
       const groupedFactKeys = Object.keys(groupedFacts)
 
       for (const groupKey of groupedFactKeys) {
@@ -344,20 +391,26 @@ export default {
           } else {
             const nextCollapsedFact = factsToCollapse[factIndex]
             for (const column of this.collapseColumns) {
-              this.addValueToProperty(
+              this.addValue(
                 collapsedFact,
                 column,
-                this.getPropertyValue(nextCollapsedFact, column)
+                this.getValue(nextCollapsedFact, column)
               )
             }
           }
         }
-        this.collapsedFacts.push(collapsedFact)
+        collapsedFacts.push(collapsedFact)
       }
+      /** set the collapsed fact to the table */
+      this.facts = collapsedFacts
+    },
+    /** making a hardcopy, so we can alter it without issues */
+    copyFactsToComponentState () {
+      this.facts = this.hardcopy(this.attribute.value)
     }
   },
   mounted () {
-    this.facts = Object.assign([], this.attribute.value)
+    this.copyFactsToComponentState()
   }
 }
 </script>
@@ -365,7 +418,7 @@ export default {
 <style scoped>
 tr th:not(:first-child),
 tr td:not(:first-child) {
-  text-align: right;
+  text-align: left;
 }
 
 .facts-header th:hover {
