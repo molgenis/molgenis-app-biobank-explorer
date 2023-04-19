@@ -4,18 +4,61 @@
       v-if="collapseColumns.length > 0"
       class="alert alert-dark"
       role="alert">
-      When you group one or more columns together, we are unable to calculate
-      the actual number of samples and donors.
+      Because of the adopted method of data creation and collection the number
+      of donors presented in the table below should not be added as it may give
+      the wrong sums.
     </div>
     <table class="table border w-100">
       <thead>
         <tr class="facts-header bg-secondary text-white">
-          <th @click="sort('sample_type.label')">Material type</th>
-          <th @click="sort('sex.CollectionSex')">Sex</th>
-          <th @click="sort('age.CollectionAgeRange')">Age range</th>
-          <th @click="sort('disease.label')">Disease codes</th>
-          <th @click="sort('number_of_donors')">Donors</th>
-          <th @click="sort('number_of_samples')">Samples</th>
+          <th @click="sort('sample_type.label')">
+            Material type
+            <span
+              v-if="sortColumn === 'sample_type.label'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
+          <th @click="sort('sex.CollectionSex')">
+            Sex
+            <span
+              v-if="sortColumn === 'sex.CollectionSex'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
+          <th @click="sort('age.CollectionAgeRange')">
+            Age range
+            <span
+              v-if="sortColumn === 'age.CollectionAgeRange'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
+          <th @click="sort('disease.label')">
+            Disease codes
+            <span
+              v-if="sortColumn === 'disease.label'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
+          <th @click="sort('number_of_donors')">
+            #Donors
+            <span
+              v-if="sortColumn === 'number_of_donors'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
+          <th @click="sort('number_of_samples')">
+            #Samples
+            <span
+              v-if="sortColumn === 'number_of_samples'"
+              class="fa"
+              :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
+              aria-hidden="true"></span>
+          </th>
         </tr>
         <tr class="filter-bar">
           <th>
