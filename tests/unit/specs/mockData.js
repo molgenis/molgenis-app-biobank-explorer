@@ -21,10 +21,12 @@ mockStateTemplate.filterFacets = filterDefinitions
 export const mockState = () => JSON.parse(JSON.stringify(mockStateTemplate))
 
 export const mockFilters = { selections: { country: ['EU'], commercial_use: ['false'] }, satisfyAll: [], labels: { country: ['Europe'], commercial_use: ['Non-commercial use'] } }
-export const mockFilterOptionDictionary = { diagnosis_available: [{ text: '[ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome', value: 'ORPHA:352530' }],
-                                            country: [{ text: 'Austria', value: 'AT' }] }
+export const mockFilterOptionDictionary = {
+  diagnosis_available: [{ text: '[ ORPHA:352530 ] - Intellectual disability-obesity-brain malformations-facial dysmorphism syndrome', value: 'ORPHA:352530' }],
+  country: [{ text: 'Austria', value: 'AT' }]
+}
 
-export const mockFilterLoadingDict = { country: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA);'}
+export const mockFilterLoadingDict = { country: '/api/data/eu_bbmri_eric_collections?size=1&filter=id&q=materials=in=(DNA);' }
 
 export const mockSelectedCollections = [{ label: 'Collection A', value: 'A' }, { label: 'Collection B', value: 'B' }]
 

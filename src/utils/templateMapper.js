@@ -113,7 +113,11 @@ export const getViewmodel = (object, columns) => {
       }
     }
 
-    const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue, component: columnInfo.component }
+    const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
+
+    if (columnInfo.component) {
+      attribute.component = columnInfo.component
+    }
 
     if (columnInfo.showCopyIcon) {
       attribute.linkValue = columnInfo.copyValuePrefix ? `${columnInfo.copyValuePrefix}${attributeValue}` : attributeValue
