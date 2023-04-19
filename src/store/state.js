@@ -34,7 +34,6 @@ export default {
   nonCommercialCollections: [],
   selectedCollections: [],
   filterOptionsOverride: {},
-  activeFilters: [],
   filterLoadingDict: {},
   filterLoading: 'None',
   filterExpanded: 'None',
@@ -49,5 +48,6 @@ export default {
   filterOptionDictionary: {}, /** caching filter options for performance */
   diagnosisAvailableFetched: false, /** whenever a user returns from a bookmark with diagnosis available in the active filter, there is no label. fetch it once for performance. */
   notification: undefined,
+  qualityStandardsDictionary: {},
   ...configurationState
 }

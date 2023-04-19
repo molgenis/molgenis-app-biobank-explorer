@@ -13,6 +13,7 @@ import {
 
 let collectionsReport
 
+// TODO rewrite this completely
 describe('templateMapper', () => {
   beforeEach(() => {
     collectionsReport = {

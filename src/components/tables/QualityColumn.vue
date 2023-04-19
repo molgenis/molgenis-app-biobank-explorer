@@ -5,17 +5,6 @@
       :style="margin"
       :key="quality.id"
       class="d-flex">
-      <info-popover
-        v-if="qualityInfo && Object.keys(qualityInfo).length"
-        class="mr-2"
-        popover-placement="top">
-        <div class="popover-content">
-          <b>{{ quality.label }}</b>
-          <p class="mt-1">
-            {{ qualityInfo[quality.label] }}
-          </p>
-        </div>
-      </info-popover>
       <a
         :href="quality.certification_report"
         target="_blank"
@@ -42,7 +31,17 @@
             :alt="generateQualityLabel(quality)"/>
         </span>
       </span>
-      <span class="fa fa-check text-success pl-2"></span>
+      <info-popover
+        v-if="qualityInfo && Object.keys(qualityInfo).length"
+        class="ml-2"
+        popover-placement="top">
+        <div class="popover-content">
+          <b>{{ quality.label }}</b>
+          <p class="mt-1">
+            {{ qualityInfo[quality.label] }}
+          </p>
+        </div>
+      </info-popover>
     </li>
   </ul>
 </template>

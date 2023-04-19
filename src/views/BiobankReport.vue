@@ -1,5 +1,8 @@
 <template>
   <div class="mg-biobank-card container pb-4">
+    <b-alert v-if="biobank.withdrawn" show variant="warning">
+      {{ uiText["biobank_withdrawn"] }}
+    </b-alert>
     <script
       v-if="bioschemasJsonld && !isLoading"
       v-text="bioschemasJsonld"
@@ -11,7 +14,7 @@
       background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
-        <div class="col my-3 shadow-sm">
+        <div class="col my-3 shadow-sm d-flex p-2 align-items-center">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
@@ -24,6 +27,10 @@
               </li>
             </ol>
           </nav>
+          <check-out
+            class="ml-auto"
+            :disabled="biobank.withdrawn"
+            :bookmark="false"/>
         </div>
       </div>
 
@@ -41,10 +48,15 @@
                   v-for="(collection, index) in collectionsData"
                   :key="collection.id">
                   <hr v-if="index" />
-                  <collection-title
-                    :title="collection.name"
-                    :id="collection.id"/>
-
+                  <div class="d-flex align-items-center">
+                    <collection-title
+                      :title="collection.name"
+                      :id="collection.id"/>
+                    <collection-selector
+                      :disabled="biobank.withdrawn"
+                      class="pl-4 ml-auto"
+                      :collectionData="collection"/>
+                  </div>
                   <view-generator
                     class="collection-view"
                     :viewmodel="collection.viewmodel"/>
@@ -94,6 +106,8 @@ import ReportDetailsList from '../components/report-components/ReportDetailsList
 import CollectionTitle from '../components/report-components/CollectionTitle.vue'
 import ViewGenerator from '../components/generators/ViewGenerator.vue'
 import { sortCollectionsByName } from '../utils/sorting'
+import CollectionSelector from '../components/buttons/CollectionSelector.vue'
+import CheckOut from '../components/checkout/CheckOut.vue'
 
 import {
   getBiobankDetails,
@@ -112,7 +126,9 @@ export default {
     ReportDetailsList,
     Loading,
     ViewGenerator,
-    CollectionTitle
+    CollectionTitle,
+    CollectionSelector,
+    CheckOut
   },
   data () {
     return {
@@ -144,8 +160,8 @@ export default {
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
         ? sortCollectionsByName(this.biobank.collections)
-          .filter(it => !it.parent_collection)
-          .map(col => getCollectionDetails(col))
+          .filter((it) => !it.parent_collection)
+          .map((col) => getCollectionDetails(col))
         : []
     },
     quality () {

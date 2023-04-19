@@ -18,15 +18,11 @@ describe('CollectionView Generator', () => {
     expect(html.includes('>test-categorical-mref<')).toBeTruthy()
 
     // check if values rendered:
-    expect(html.includes('>a<')).toBeTruthy()
-    expect(html.includes('>b<')).toBeTruthy()
-    expect(html.includes('>c<')).toBeTruthy()
+    expect(html.includes('>a,b,c<')).toBeTruthy()
 
     // check mref
     expect(html.includes('>test-mref<')).toBeTruthy()
-    expect(html.includes('>d<')).toBeTruthy()
-    expect(html.includes('>e<')).toBeTruthy()
-    expect(html.includes('>f<')).toBeTruthy()
+    expect(html.includes('>d,e,f<')).toBeTruthy()
   })
 
   it('can generate a hyperlink', () => {

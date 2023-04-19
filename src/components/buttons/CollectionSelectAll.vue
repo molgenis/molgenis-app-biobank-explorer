@@ -7,6 +7,7 @@
       class="add-to-cart"
       @change="handleCollectionStatus"
       :checked="allCollectionsSelected"
+      :disabled="disabled"
       hidden/>
     <label
       class="add-to-cart-label btn btn-outline-success m-0"
@@ -27,6 +28,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CollectionSelectAll',
   props: {
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     bookmark: {
       type: Boolean,
       required: false,

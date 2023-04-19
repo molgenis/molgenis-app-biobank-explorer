@@ -9,14 +9,14 @@ import { configurationActions } from './configuration/configurationActions'
 import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/collectionActions'
 
 /* API PATHS */
+const BIOBANK_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_ops_standards'
+const COLLECTION_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_lab_standards'
+
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 /**/
-
-/**  Query Parameters */
-export const COLLECTION_ATTRIBUTE_SELECTOR = 'collections(id,description,materials,diagnosis_available(label,uri,code),name,type,order_of_magnitude(*),size,sub_collections(name,id,sub_collections(*),parent_collection,order_of_magnitude,materials(label,uri),data_categories),parent_collection,quality(*),data_categories(label,uri))'
 
 export default {
   ...collectionActions,
@@ -138,6 +138,14 @@ export default {
     }
     commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
   },
+  async GetQualityStandardInformation ({ commit }) {
+    const biobankQualityInfo = api.get(`${BIOBANK_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const collectionQualityInfo = api.get(`${COLLECTION_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
+
+    commit('SetQualityStandardDictionary', response)
+  },
+
   /**
    * Transform the state into a NegotiatorQuery object.
    * Calls the DirectoryController method '/export' which answers with a URL
