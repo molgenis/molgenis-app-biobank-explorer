@@ -7,6 +7,16 @@ import getters from '@/store/getters'
 import actions from '@/store/actions'
 import BootstrapVue from 'bootstrap-vue'
 
+/** need to mock this because it is imported in filteroptions but does not load completely due to test environment */
+import store from '@/store'
+import api from '@molgenis/molgenis-api-client'
+
+jest.mock('@/store')
+store.commit = jest.fn()
+
+jest.mock('@molgenis/molgenis-api-client')
+api.get = () => new Promise(resolve => resolve('finished'))
+
 const localVue = createLocalVue()
 
 localVue.use(Vuex)
@@ -51,12 +61,17 @@ describe('App', () => {
       state: { ...mockState() },
       actions,
       mutations: {
-        SetNotification: SetNotification
+        ...mutations,
+        SetNotification: SetNotification,
+        ConfigureFilters: jest.fn(),
+        MapQueryToState: jest.fn(),
+        SetQualityStandardDictionary: jest.fn(),
+        SetAppContext: jest.fn()
       },
       getters
     })
     const wrapper = shallowMount(App, { store, localVue })
-    wrapper.vm.$options.watch.notificationMessage.call(wrapper.vm, 'notify')
+    wrapper.vm.$options.watch.notificationMessage.call(wrapper.vm, null)
     jest.runAllTimers()
     expect(setTimeout).toHaveBeenCalledTimes(1)
     await wrapper.vm.$nextTick()
@@ -71,6 +86,7 @@ describe('App', () => {
       state: { ...mockState() },
       actions,
       mutations: {
+        ...mutations,
         MapQueryToState: MapQueryToState
       },
       getters
@@ -86,6 +102,7 @@ describe('App', () => {
       state: { ...mockState() },
       actions,
       mutations: {
+        ...mutations,
         MapQueryToState: MapQueryToState
       },
       getters
@@ -101,6 +118,7 @@ describe('App', () => {
       state: { ...mockState() },
       actions,
       mutations: {
+        ...mutations,
         MapQueryToState: MapQueryToState
       },
       getters

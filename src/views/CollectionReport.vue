@@ -72,6 +72,11 @@
               <collection-report-info-card
                 :info="info"></collection-report-info-card>
             </div>
+            <div
+              class="row"
+              v-if="factsData && Object.keys(factsData).length > 0">
+              <facts-table :attribute="factsData"></facts-table>
+            </div>
           </div>
         </div>
       </div>
@@ -88,6 +93,7 @@ import CollectionReportInfoCard from '../components/cards/CollectionReportInfoCa
 import { collectionReportInformation } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
+import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
 import CheckOut from '../components/checkout/CheckOut.vue'
 
 export default {
@@ -97,6 +103,7 @@ export default {
     CollectionReportInfoCard,
     Loading,
     ReportCollectionDetails,
+    FactsTable,
     CheckOut
   },
   methods: {
@@ -119,6 +126,10 @@ export default {
       return this.collection
         ? mapCollectionToBioschemas(this.collection)
         : undefined
+    },
+    factsData () {
+      // TODO rework this so that facts are stand-alone, this is a workaround because @ReportCollectionDetails
+      return { value: this.collection.facts }
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */

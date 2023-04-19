@@ -1,6 +1,10 @@
 import mutations from '../../../../src/store/mutations'
 import { mockCollectionResponse, mockState } from '../mockData'
 
+import store from '@/store'
+jest.mock('@/store')
+store.commit = jest.fn()
+
 let state
 describe('store', () => {
   beforeEach(() => {

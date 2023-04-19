@@ -92,6 +92,10 @@ export const getViewmodel = (object, columns) => {
         attributeValue = mapToString(object[columnInfo.column], columnInfo.property, columnInfo.prefix, columnInfo.suffix)
         break
       }
+      case 'custom': {
+        attributeValue = object[columnInfo.column]
+        break
+      }
       case 'array': {
         attributeValue = object[columnInfo.column]
         break
@@ -110,6 +114,10 @@ export const getViewmodel = (object, columns) => {
     }
 
     const attribute = { label: columnInfo.label, type: columnInfo.type, value: attributeValue }
+
+    if (columnInfo.component) {
+      attribute.component = columnInfo.component
+    }
 
     if (columnInfo.showCopyIcon) {
       attribute.linkValue = columnInfo.copyValuePrefix ? `${columnInfo.copyValuePrefix}${attributeValue}` : attributeValue

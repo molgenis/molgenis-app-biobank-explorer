@@ -13,6 +13,7 @@ const initialCollectionColumns = [
   { label: 'Storage:', column: 'storage_temperatures', type: 'categoricalmref' },
   { label: 'Data:', column: 'data_categories', type: 'categoricalmref' },
   { label: 'Diagnosis:', column: 'diagnosis_available', type: 'mref', rsql: 'diagnosis_available(label,uri,code)' },
-  { label: 'Data use conditions:', column: 'data_use', type: 'mref', rsql: 'data_use(label,uri)' }]
+  { label: 'Data use conditions:', column: 'data_use', type: 'mref', rsql: 'data_use(label,uri)' },
+  { label: 'Facts:', column: 'facts', type: 'custom', component: 'FactsTable' }]
 
 module.exports = initialCollectionColumns
