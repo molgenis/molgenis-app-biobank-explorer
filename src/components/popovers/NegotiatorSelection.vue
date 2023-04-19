@@ -38,7 +38,7 @@
                 @click="
                   RemoveCollectionsFromSelection({
                     collections: [collection],
-                    bookmark: true,
+                    bookmark: bookmark,
                   })
                 "></span>
             </div>
@@ -88,7 +88,17 @@ export default {
       type: Boolean,
       required: true,
       default: () => false
+    },
+    biobankName: {
+      type: String,
+      required: false
+    },
+    bookmark: {
+      type: Boolean,
+      required: false,
+      default: () => true
     }
+
   },
   data: function () {
     return {
@@ -98,10 +108,25 @@ export default {
   methods: {
     ...mapMutations(['RemoveCollectionsFromSelection']),
     ...mapActions(['SendToNegotiator']),
+    getNameForBiobank (collectionName) {
+      const entryInDictionary = this.collectionBiobankDictionary[collectionName]
+
+      if (entryInDictionary) return entryInDictionary
+
+      if (this.biobankReport) {
+        return this.biobankReport.label || this.biobankReport.name
+      }
+
+      if (this.collectionReport) {
+        return this.collectionReport.biobank_label
+      }
+
+      return ''
+    },
     groupCollectionsByBiobank (collectionSelectionArray) {
       const biobankWithSelectedCollections = []
       collectionSelectionArray.forEach(cs => {
-        const biobankLabel = this.collectionBiobankDictionary[cs.value]
+        const biobankLabel = this.getNameForBiobank(cs.value)
         const biobankPresent = biobankWithSelectedCollections.find(
           bsc => bsc.biobankLabel === biobankLabel
         )
@@ -124,7 +149,7 @@ export default {
       this.cartVisible = false
       this.RemoveCollectionsFromSelection({
         collections: this.currentSelectedCollections,
-        bookmark: true
+        bookmark: this.bookmark
       })
     },
     sendRequest () {
@@ -133,15 +158,15 @@ export default {
     }
   },
   watch: {
-    // if toggled from outside
+    /** if toggled from outside */
     value (newValue) {
-      // only trigger if different
+      /** only trigger if different */
       if (this.newValue !== this.cartVisible) {
         this.cartVisible = newValue
       }
     },
     cartVisible (visibility) {
-      // send back to parent
+      /** send back to parent */
       this.$emit('input', visibility)
     }
   },
@@ -153,7 +178,12 @@ export default {
       'collectionBiobankDictionary',
       'uiText'
     ]),
-    ...mapState(['isPodium', 'nonCommercialCollections']),
+    ...mapState([
+      'isPodium',
+      'nonCommercialCollections',
+      'biobankReport',
+      'collectionReport'
+    ]),
     modalFooterText () {
       const collectionCount = this.isPodium
         ? this.collectionsInPodium.length

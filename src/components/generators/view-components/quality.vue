@@ -5,7 +5,7 @@
       <quality-column
         :qualities="attribute.value"
         :spacing="0"
-        :quality-info="qualityStandardsDictionary"></quality-column>
+        :qualityInfo="qualityStandardsDictionary"></quality-column>
     </td>
   </tr>
 </template>

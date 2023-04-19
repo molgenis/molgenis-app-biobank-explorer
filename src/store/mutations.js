@@ -133,6 +133,11 @@ export default {
       if (filterName === 'diagnosis_available') {
         state.diagnosisAvailableFetched = true
       }
+    } else {
+      /** this filter is the only one that has more option that will be added at runtime. */
+      if (filterName === 'diagnosis_available') {
+        Vue.set(state.filterOptionDictionary, filterName, state.filterOptionDictionary[filterName].concat(filterOptions))
+      }
     }
   },
   SetNetworkReport (state, network) {
@@ -159,6 +164,20 @@ export default {
       /** we can safely write history here. */
       state.searchHistory.push(history)
     }
+  },
+  SetQualityStandardDictionary (state, response) {
+    /** Combine arrays from two tables and deduplicate */
+    const allStandards = [...new Set(
+      response.map(response => response.items)
+        .reduce((prev, next) => prev.concat(next)))
+    ]
+    const qualityStandardsDictionary = {}
+
+    allStandards.forEach((standard) => {
+      qualityStandardsDictionary[standard.label] = standard.description || ''
+    })
+
+    state.qualityStandardsDictionary = qualityStandardsDictionary
   },
   /**
    *

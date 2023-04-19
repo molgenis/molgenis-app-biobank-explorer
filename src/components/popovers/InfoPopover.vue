@@ -6,13 +6,8 @@
       }">
       <span v-if="label && !iconBeforeLabel">{{ label }}</span>
       <span
-        class="
-          fa fa-question-circle
-          text-info
-          position-relative
-          popover-trigger-area
-        "
-        :class="label ? iconBeforeLabel ? 'mr-1' : 'ml-1' : ''"
+        class="fa position-relative popover-trigger-area"
+        :class="[label ? (iconBeforeLabel ? 'mr-1' : 'ml-1') : '', faIcon, textColor]"
         aria-hidden="true"
         :id="`qm-${uniqueId}`"></span>
       <span v-if="label && iconBeforeLabel">{{ label }}</span>
@@ -38,6 +33,16 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    faIcon: {
+      type: String,
+      required: false,
+      default: () => 'fa-question-circle'
+    },
+    textColor: {
+      type: String,
+      required: false,
+      default: () => 'text-info'
     },
     /**
      * If set the ( ? ) icon wil be shown before the label
@@ -76,24 +81,24 @@ export default {
 }
 
 /* Styling to add a line around the triangle, cannot be scoped due to bootstrap */
-.info-popover[x-placement^='top'] > .arrow::before {
+.info-popover[x-placement^="top"] > .arrow::before {
   border-top-color: black !important;
 }
-.info-popover[x-placement^='top'] > .arrow::after {
+.info-popover[x-placement^="top"] > .arrow::after {
   border-top-color: white !important;
 }
 
-.info-popover[x-placement^='left'] > .arrow::before {
+.info-popover[x-placement^="left"] > .arrow::before {
   border-left-color: black !important;
 }
-.info-popover[x-placement^='left'] > .arrow::after {
+.info-popover[x-placement^="left"] > .arrow::after {
   border-left-color: white !important;
 }
 
-.info-popover[x-placement^='right'] > .arrow::before {
+.info-popover[x-placement^="right"] > .arrow::before {
   border-right-color: black !important;
 }
-.info-popover[x-placement^='right'] > .arrow::after {
+.info-popover[x-placement^="right"] > .arrow::after {
   border-right-color: white !important;
 }
 
@@ -118,12 +123,12 @@ export default {
 
 /* for touch screens, so you have a nice area to press and still get a popover */
 .popover-trigger-area::after {
-  content: '';
+  content: "";
   position: absolute;
-  top: -0.5rem;
+  top: -1rem;
   bottom: -1rem;
-  right: -7rem;
-  left: -0.5rem;
+  right: -1rem;
+  left: -1rem;
 }
 
 /* Add popover overrides so that it is always clearly visible in any theme (even custom ones) */

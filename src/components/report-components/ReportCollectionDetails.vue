@@ -3,7 +3,8 @@
     <collection-selector
       class="mb-2 float-right"
       v-if="isTopLevelCollection"
-      :collectionData="collection"/>
+      :collectionData="collection"
+      :disabled="collection.biobank.withdrawn"/>
 
     <report-description
       :description="collection.description"
@@ -37,9 +38,7 @@ export default {
   computed: {
     ...mapState(['collectionColumns']),
     collectionModel () {
-      return this.collection
-        ? getCollectionDetails(this.collection)
-        : {}
+      return this.collection ? getCollectionDetails(this.collection) : {}
     },
     isTopLevelCollection () {
       return this.collection.parent_collection === undefined

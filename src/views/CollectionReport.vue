@@ -1,5 +1,11 @@
 <template>
   <div class="container mg-collection-report-card pb-4">
+    <b-alert
+      v-if="collection && collection.biobank.withdrawn"
+      show
+      variant="warning">
+      {{ uiText["collection_withdrawn"] }}
+    </b-alert>
     <script
       v-if="bioschemasJsonld && !isLoading"
       v-text="bioschemasJsonld"
@@ -12,7 +18,7 @@
       background-color="var(--light)"></loading>
     <div class="container-fluid">
       <div class="row">
-        <div class="col my-3 shadow-sm">
+        <div class="col my-3 shadow-sm d-flex p-2 align-items-center">
           <nav aria-label="breadcrumb" v-if="collection">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
@@ -41,10 +47,15 @@
               </li>
             </ol>
           </nav>
+          <check-out
+            v-if="collection"
+            class="ml-auto"
+            :bookmark="false"
+            :disabled="collection.biobank.withdrawn"/>
         </div>
       </div>
 
-      <div class="row" v-if="this.collection && !this.isLoading">
+      <div class="row" v-if="collection && !isLoading">
         <div class="col">
           <report-title type="Collection" :name="collection.name">
           </report-title>
@@ -52,7 +63,9 @@
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
-                <report-collection-details :collection="collection" />
+                <report-collection-details
+                  v-if="collection"
+                  :collection="collection"/>
               </div>
 
               <!-- Right side card -->
@@ -81,6 +94,7 @@ import { collectionReportInformation } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
 import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
+import CheckOut from '../components/checkout/CheckOut.vue'
 
 export default {
   name: 'CollectionReport',
@@ -89,7 +103,8 @@ export default {
     CollectionReportInfoCard,
     Loading,
     ReportCollectionDetails,
-    FactsTable
+    FactsTable,
+    CheckOut
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
