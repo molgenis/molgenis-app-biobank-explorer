@@ -5,7 +5,8 @@ const initialBiobankColumns = [
   { label: 'Quality labels:', column: 'quality', type: 'quality', showOnBiobankCard: true },
   { label: 'Collection types:', column: 'collection_types', type: 'array', showOnBiobankCard: true },
   { label: 'Juridical person:', column: 'juridical_person', type: 'string', showOnBiobankCard: true },
-  { label: 'Biobank capabilities:', column: 'capabilities', type: 'mref', showOnBiobankCard: true }
+  { label: 'Biobank capabilities:', column: 'capabilities', type: 'mref', showOnBiobankCard: true },
+  { label: 'Also known as:', column: 'also_known', type: 'mref' }
 ]
 
 module.exports = initialBiobankColumns
