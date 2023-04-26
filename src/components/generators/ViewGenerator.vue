@@ -36,7 +36,6 @@ import string from './view-components/string.vue'
 import longtext from './view-components/longtext.vue'
 import quality from './view-components/quality.vue'
 import hyperlink from './view-components/hyperlink.vue'
-import FactsTable from './custom-view-components/FactsTable.vue'
 import Subcollection from './view-components/Subcollection.vue'
 
 export default {
@@ -48,7 +47,6 @@ export default {
     array,
     string,
     hyperlink,
-    FactsTable,
     Subcollection
   },
   props: {

@@ -1,6 +1,10 @@
 /* eslint-disable camelcase */
 import state from '../store/state'
 
+function getTextForUI (item) {
+  return item.label || item.name || item.id
+}
+
 export const getSize = obj => {
   return obj.size
     ? [`${obj.size} samples`]
@@ -19,8 +23,8 @@ export const mapToString = (object, property, prefix, suffix) => {
 
 export const mapObjArray = (objects) => {
   if (!objects) return []
-  if (!objects.some(o => o.uri)) return objects.map(item => item.label || item.name)
-  else return objects.map(item => ({ label: item.label || item.name, uri: item.uri || '#' }))
+  if (!objects.some(o => o.uri || o.url)) return objects.map(item => getTextForUI(item))
+  else return objects.map(item => ({ label: getTextForUI(item), uri: item.uri || item.url || '#' }))
 }
 
 export const mapUrl = url =>
