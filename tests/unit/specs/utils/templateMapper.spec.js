@@ -282,12 +282,6 @@ describe('templateMapper', () => {
                 uri: '#'
               }
             ]
-          },
-          {
-            component: 'FactsTable',
-            label: 'Facts:',
-            type: 'custom',
-            value: undefined
           }
         ],
         sub_collections: [
@@ -401,12 +395,6 @@ describe('templateMapper', () => {
                   label: 'Data use conditions:',
                   type: 'mref',
                   value: []
-                },
-                {
-                  component: 'FactsTable',
-                  label: 'Facts:',
-                  type: 'custom',
-                  value: undefined
                 }
               ]
             }
@@ -540,12 +528,6 @@ describe('templateMapper', () => {
                   label: 'Data use conditions:',
                   type: 'mref',
                   value: []
-                },
-                {
-                  component: 'FactsTable',
-                  label: 'Facts:',
-                  type: 'custom',
-                  value: undefined
                 }
               ],
               sub_collections: [
@@ -649,12 +631,6 @@ describe('templateMapper', () => {
                         label: 'Data use conditions:',
                         type: 'mref',
                         value: []
-                      },
-                      {
-                        component: 'FactsTable',
-                        label: 'Facts:',
-                        type: 'custom',
-                        value: undefined
                       }
                     ]
                   }
