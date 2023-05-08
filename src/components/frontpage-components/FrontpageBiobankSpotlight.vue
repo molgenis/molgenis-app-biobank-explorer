@@ -10,7 +10,7 @@
         :to="'/biobank/' + biobankId"
         :title="`Go to ${biobankName}`"
         class="btn btn-primary">
-        <span>Go to biobank</span>
+        <span>{{ buttonText }}</span>
       </router-link>
     </section>
   </div>
@@ -34,8 +34,13 @@ export default {
     bodyHtml: {
       type: String,
       required: false
+    },
+    buttonText: {
+      type: String,
+      required: true
     }
   }
+
 }
 </script>
 

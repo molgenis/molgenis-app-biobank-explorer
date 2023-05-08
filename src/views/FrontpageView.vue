@@ -29,7 +29,8 @@
         :headerText="biobankSpotlight.header"
         :biobankName="biobankSpotlight.biobankName"
         :biobankId="biobankSpotlight.biobankId"
-        :bodyHtml="biobankSpotlight.bodyHtml"/>
+        :bodyHtml="biobankSpotlight.bodyHtml"
+        :buttonText="biobankSpotlight.buttonText"/>
       <frontpage-collection-spotlight
         :headerText="collectionSpotlight.header"
         :collections="collectionSpotlight.collections"/>

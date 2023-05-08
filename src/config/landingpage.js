@@ -1,4 +1,4 @@
-export const landingpage = {
+const landingpage = {
   enabled: true,
   page_header: 'BBMRI-ERIC Directory',
   page_search: {
@@ -31,7 +31,8 @@ export const landingpage = {
     header: 'Biobank of interest',
     biobankName: 'A BioBank',
     biobankId: '',
-    bodyHtml: '<p>Lorum ipsum dolor amet</p>'
+    bodyHtml: '<p>Lorum ipsum dolor amet</p>',
+    buttonText: 'Go to biobank'
   },
   page_collection_spotlight: {
     header: 'New collections',
@@ -55,3 +56,5 @@ export const landingpage = {
     ]
   }
 }
+
+module.exports = landingpage
