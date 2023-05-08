@@ -6,23 +6,23 @@ const landingpage = {
     searchPlaceholder: 'Find a biobank or collection',
     ariaLabel: 'Searchbox for finding a biobank or collection'
   },
-  page_cta: [
+  page_call_to_actions: [
     {
-      buttonText: 'Learn how',
-      buttonUrl: '#',
+      ctaText: 'Learn how',
+      ctaUrl: '#',
       bodyHtml: `<h2>BBMRI Directory</h2>
         <p>Make your biobank visible</p>
         <p>Make your collections accessible</p>`
     },
     {
-      buttonText: 'References',
-      buttonUrl: '#',
+      ctaText: 'References',
+      ctaUrl: '#',
       bodyHtml: `<h2>Services we offer</h2>
         <p>Manuals &amp; templates</p>`
     },
     {
-      buttonText: 'Support',
-      buttonUrl: '#',
+      ctaText: 'Support',
+      ctaUrl: '#',
       bodyHtml: `<h2>Support</h2>
         <p>Contact the servicedesk</p>`
     }

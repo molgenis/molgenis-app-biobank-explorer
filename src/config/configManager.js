@@ -2,7 +2,7 @@ import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
 import initialFilterFacets from './initialFilterFacets'
 import i18n from './i18n.js'
-import { landingpage } from './landingpage'
+import landingpage from './landingpage'
 
 export const bbmriConfig = () => {
   const INITIAL_STATE = window.__INITIAL_STATE__ || {}

@@ -10,19 +10,7 @@
     </section>
     <section
       class="d-flex justify-content-between mx-5 my-5 cta-container w-75 mx-auto">
-      <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Learn how'">
-        <h2>BBMRI Directory</h2>
-        <p>Make your biobank visible</p>
-        <p>Make your collections accessible</p>
-      </frontpage-call-to-action>
-      <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'References'">
-        <h2>Services we offer</h2>
-        <p>Manuals &amp; templates</p>
-      </frontpage-call-to-action>
-      <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Support'">
-        <h2>Support</h2>
-        <p>Contact the servicedesk</p>
-      </frontpage-call-to-action>
+      <frontpage-call-to-action :key="index + cta.ctaText" v-for="(cta, index) in callToActions" :ctaUrl="cta.ctaUrl" :ctaText="cta.ctaText" :bodyHtml="cta.bodyHtml"/>
     </section>
     <section class="d-flex justify-content-between mx-auto mb-5 w-75">
       <frontpage-biobank-spotlight
@@ -45,7 +33,6 @@ import FrontpageHeader from '../components/frontpage-components/FrontpageHeader.
 import FrontpageCollectionSpotlight from '../components/frontpage-components/FrontpageCollectionSpotlight.vue'
 import FrontpageSearch from '../components/frontpage-components/FrontpageSearch.vue'
 import { mapState } from 'vuex'
-import { landingpage } from '../config/landingpage'
 
 export default {
   components: {
@@ -58,13 +45,16 @@ export default {
   computed: {
     ...mapState(['landingpage']),
     search () {
-      return landingpage.page_search
+      return this.landingpage.page_search
     },
     biobankSpotlight () {
-      return landingpage.page_biobank_spotlight
+      return this.landingpage.page_biobank_spotlight
     },
     collectionSpotlight () {
-      return landingpage.page_collection_spotlight
+      return this.landingpage.page_collection_spotlight
+    },
+    callToActions () {
+      return this.landingpage.page_call_to_actions
     }
   }
 }

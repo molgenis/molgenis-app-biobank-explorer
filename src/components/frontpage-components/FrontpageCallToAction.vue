@@ -1,12 +1,13 @@
 <template>
-  <div class="cta d-flex flex-column" :style="'background-color: var(--info);'" ref="cta">
-    <section class="m-4">
-      <slot></slot>
-    </section>
+  <div
+    class="cta d-flex flex-column"
+    :style="'background-color: var(--info);'"
+    ref="cta">
+    <section class="m-4" v-html="bodyHtml"></section>
     <section class="m-4 mt-auto">
       <a
         :href="ctaUrl"
-        class="btn btn-secondary "
+        class="btn btn-secondary"
         role="button"
         aria-pressed="true">{{ ctaText }}</a>
     </section>
@@ -21,6 +22,10 @@ export default {
       required: true
     },
     ctaText: {
+      type: String,
+      required: true
+    },
+    bodyHtml: {
       type: String,
       required: true
     }
