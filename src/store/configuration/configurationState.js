@@ -13,5 +13,6 @@ export const configurationState = {
   applicationNotification: config.applicationNotification || '',
   isPodium: config.negotiatorType === 'podium',
   negotiatorCollectionEntityId: config.negotiatorCollectionEntityId || 'eu_bbmri_eric_collections',
-  menuHeight: config.menuHeight // standard menu height in pixels for use in sticky-position
+  menuHeight: config.menuHeight, // standard menu height in pixels for use in sticky-position
+  landingpage: config.landingpage
 }

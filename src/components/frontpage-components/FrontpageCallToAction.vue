@@ -1,12 +1,12 @@
 <template>
-  <div class="cta" :style="'background-color: var(--info);'" ref="cta">
+  <div class="cta d-flex flex-column" :style="'background-color: var(--info);'" ref="cta">
     <section class="m-4">
       <slot></slot>
     </section>
-    <section class="m-4">
+    <section class="m-4 mt-auto">
       <a
         :href="ctaUrl"
-        class="btn btn-secondary"
+        class="btn btn-secondary "
         role="button"
         aria-pressed="true">{{ ctaText }}</a>
     </section>

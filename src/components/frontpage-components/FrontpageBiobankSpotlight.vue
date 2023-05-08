@@ -1,10 +1,11 @@
 <template>
-  <div class="background-image d-flex flex-column">
-    <h1 class="text-white ml-4 mt-4 header-text">
+  <div class="background-image d-flex flex-column text-white pl-4">
+    <h1 class="mt-4 header-text">
       <span>{{ headerText }}</span>
       <p>{{ biobankName }}</p>
     </h1>
-    <section class="mt-auto ml-4 mb-4">
+    <div v-if="bodyHtml" v-html="bodyHtml"></div>
+    <section class="mt-auto mb-4">
       <router-link
         :to="'/biobank/' + biobankId"
         :title="`Go to ${biobankName}`"
@@ -29,6 +30,10 @@ export default {
     biobankId: {
       type: String,
       required: true
+    },
+    bodyHtml: {
+      type: String,
+      required: false
     }
   }
 }

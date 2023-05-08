@@ -25,7 +25,7 @@ export default {
   background: url("../../../public/bacteria.jpg");
   background-size: cover;
   height: 30rem;
-  width: 71%;
+  width: 75%;
   border-radius: 1rem;
 }
 

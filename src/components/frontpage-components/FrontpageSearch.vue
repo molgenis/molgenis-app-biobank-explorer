@@ -3,20 +3,35 @@
     <input
       type="text"
       class="form-control border border-dark border-right-0"
-      placeholder="Find a biobank or collection"
-      aria-label="Searchbox for finding a biobank or collection"/>
+      :placeholder="searchPlaceholder"
+      :aria-label="ariaLabel"/>
     <div class="input-group-append">
       <button
         class="btn btn-primary search-button border border-dark border-left-0"
         type="button">
-        Search
+        {{ buttonText }}
       </button>
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    buttonText: {
+      type: String,
+      required: true
+    },
+    searchPlaceholder: {
+      type: String,
+      required: true
+    },
+    ariaLabel: {
+      type: String,
+      required: true
+    }
+  }
+}
 </script>
 <style scoped>
 .search-button {

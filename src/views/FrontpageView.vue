@@ -2,10 +2,14 @@
   <main>
     <section class="d-flex justify-content-center">
       <frontpage-header :header-text="'BBMRI-ERIC Directory'">
-        <frontpage-search />
+        <frontpage-search
+          :buttonText="search.buttonText"
+          :ariaLabel="search.ariaLabel"
+          :searchPlaceholder="search.searchPlaceholder"/>
       </frontpage-header>
     </section>
-    <section class="d-flex justify-content-between mx-5 my-5 cta-container">
+    <section
+      class="d-flex justify-content-between mx-5 my-5 cta-container w-75 mx-auto">
       <frontpage-call-to-action :ctaUrl="'#'" :ctaText="'Learn how'">
         <h2>BBMRI Directory</h2>
         <p>Make your biobank visible</p>
@@ -20,31 +24,15 @@
         <p>Contact the servicedesk</p>
       </frontpage-call-to-action>
     </section>
-    <section class="ml-5 mb-5 d-flex">
+    <section class="d-flex justify-content-between mx-auto mb-5 w-75">
       <frontpage-biobank-spotlight
-        :headerText="'Biobank of interest'"
-        :biobankName="'The Augsburg Central BioBank'"
-        :biobankId="'bbmri-eric:ID:DE_ACBB'"/>
-      <frontpage-new-collections
-        class="ml-auto mr-5"
-        :newCollections="[
-          {
-            id: 'bbmri-eric:ID:DE_BBM:collection:GHS',
-            name: 'Gutenberg Health Study',
-          },
-          {
-            id: 'bbmri-eric:ID:DE_BIOLIP:collection:NAPKON',
-            name: 'Bioprobensammlung der Klinikum-Lippe GmbH',
-          },
-          {
-            id: 'bbmri-eric:ID:DE_BioMaSOTA:collection:MainCollection',
-            name:'Biobank der Medizinischen Fakultät der Universität Köln' ,
-          },
-          {
-            id: 'bbmri-eric:ID:DE_BMBN:collection:Main_collection',
-            name: 'Main Collection of the BioMaterial Bank Nord',
-          },
-        ]"/>
+        :headerText="biobankSpotlight.header"
+        :biobankName="biobankSpotlight.biobankName"
+        :biobankId="biobankSpotlight.biobankId"
+        :bodyHtml="biobankSpotlight.bodyHtml"/>
+      <frontpage-collection-spotlight
+        :headerText="collectionSpotlight.header"
+        :collections="collectionSpotlight.collections"/>
     </section>
   </main>
 </template>
@@ -53,8 +41,10 @@
 import FrontpageBiobankSpotlight from '../components/frontpage-components/FrontpageBiobankSpotlight.vue'
 import FrontpageCallToAction from '../components/frontpage-components/FrontpageCallToAction.vue'
 import FrontpageHeader from '../components/frontpage-components/FrontpageHeader.vue'
-import FrontpageNewCollections from '../components/frontpage-components/FrontpageNewCollections.vue'
+import FrontpageCollectionSpotlight from '../components/frontpage-components/FrontpageCollectionSpotlight.vue'
 import FrontpageSearch from '../components/frontpage-components/FrontpageSearch.vue'
+import { mapState } from 'vuex'
+import { landingpage } from '../config/landingpage'
 
 export default {
   components: {
@@ -62,10 +52,19 @@ export default {
     FrontpageSearch,
     FrontpageCallToAction,
     FrontpageBiobankSpotlight,
-    FrontpageNewCollections
+    FrontpageCollectionSpotlight
+  },
+  computed: {
+    ...mapState(['landingpage']),
+    search () {
+      return landingpage.page_search
+    },
+    biobankSpotlight () {
+      return landingpage.page_biobank_spotlight
+    },
+    collectionSpotlight () {
+      return landingpage.page_collection_spotlight
+    }
   }
 }
 </script>
-
-<style scoped>
-</style>

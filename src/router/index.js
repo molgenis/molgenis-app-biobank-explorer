@@ -5,7 +5,7 @@ import FrontpageView from '../views/FrontpageView'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
-import { INITIAL_STATE } from '../store/state'
+import state, { INITIAL_STATE } from '../store/state'
 import api from '@molgenis/molgenis-api-client'
 
 Vue.use(VueRouter)
@@ -46,7 +46,14 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      component: FrontpageView
+      component: FrontpageView,
+      beforeEnter: async (to, from, next) => {
+        if (state.landingpage.enabled) {
+          next()
+        } else {
+          next('/biobankexplorer')
+        }
+      }
     }
   ]
 })

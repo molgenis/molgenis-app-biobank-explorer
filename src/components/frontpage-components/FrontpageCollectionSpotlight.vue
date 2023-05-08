@@ -4,20 +4,20 @@
     :style="'background-color: var(--info);'"
     ref="collectionSpotlight">
     <h1 class="ml-4 mt-4 header-text">
-      <span>New collections</span>
+      <span>{{ headerText }}</span>
     </h1>
     <section class="ml-4 mb-4">
-      <template v-for="collection of newCollections">
-        <h3 :key="collection.id" class="border-top mr-4 pt-4 mb-2 mt-1 collection-header">
-          {{ collection.name }}
-        </h3>
-        <router-link
-
-          :key="collection.id"
-          :to="'/collection/' + collection.id"
-          :title="`Go to ${collection.name}`">
-          <span class="text-info">See more details</span>
-        </router-link>
+      <template v-for="collection of collections">
+        <div :key="collection.id">
+          <h3 class="border-top mr-4 pt-4 mb-2 mt-1 collection-header">
+            {{ collection.name }}
+          </h3>
+          <router-link
+            :to="'/collection/' + collection.id"
+            :title="`Go to ${collection.name}`">
+            <span class="text-info">{{ buttonText }}</span>
+          </router-link>
+        </div>
       </template>
     </section>
   </div>
@@ -26,7 +26,16 @@
 <script>
 export default {
   props: {
-    newCollections: {
+    headerText: {
+      type: String,
+      required: true
+    },
+    buttonText: {
+      type: String,
+      required: false,
+      default: () => 'See more details'
+    },
+    collections: {
       type: Array,
       required: true
     }
@@ -44,12 +53,12 @@ export default {
 
 <style scoped>
 .collection-spotlight {
-  width: 43%;
+  width: 45%;
   border-radius: 1rem;
 }
 
 .collection-header {
-  font-size:1.2rem;
-  word-break: break-all
+  font-size: 1.2rem;
+  word-break: break-all;
 }
 </style>
