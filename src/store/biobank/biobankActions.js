@@ -16,9 +16,9 @@ export const biobankActions = {
       size = 10000
     }
 
-    let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name`
+    let url = `/api/data/eu_bbmri_eric_biobanks?filter=id&page=${state.currentPage - 1}&size=${size}&sort=name&q=withdrawn==false`
     if (getters.biobankRsql) {
-      url = `${url}&q=${encodeRsqlValue(getters.biobankRsql)}`
+      url = `${url};${encodeRsqlValue(getters.biobankRsql)}`
     }
 
     api.get(url)
@@ -47,7 +47,7 @@ export const biobankActions = {
       return
     }
     commit('SetLoading', true)
-    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},contact(*),head(first_name,last_name,role),*`).then(response => {
+    api.get(`${BIOBANK_API_PATH}/${biobankId}?attrs=${COLLECTION_ATTRIBUTE_SELECTOR},${utils.qualityAttributeSelector('bio')},*,contact(*),head(first_name,last_name,role),also_known(*)`).then(response => {
       commit('SetBiobankReport', response)
       commit('SetLoading', false)
     }, error => {

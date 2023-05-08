@@ -1,5 +1,8 @@
 <template>
   <div class="mg-biobank-card container pb-4">
+    <b-alert v-if="biobank.withdrawn" show variant="warning">
+      {{ uiText["biobank_withdrawn"] }}
+    </b-alert>
     <script
       v-if="bioschemasJsonld && !isLoading"
       v-text="bioschemasJsonld"
@@ -24,7 +27,10 @@
               </li>
             </ol>
           </nav>
-          <check-out class="ml-auto" :bookmark="false" />
+          <check-out
+            class="ml-auto"
+            :disabled="biobank.withdrawn"
+            :bookmark="false"/>
         </div>
       </div>
 
@@ -46,7 +52,10 @@
                     <collection-title
                       :title="collection.name"
                       :id="collection.id"/>
-                    <collection-selector class="pl-4 ml-auto" :collectionData="collection" />
+                    <collection-selector
+                      :disabled="biobank.withdrawn"
+                      class="pl-4 ml-auto"
+                      :collectionData="collection"/>
                   </div>
                   <view-generator
                     class="collection-view"
@@ -151,8 +160,8 @@ export default {
     collectionsData () {
       return this.biobankDataAvailable && this.biobank.collections
         ? sortCollectionsByName(this.biobank.collections)
-          .filter(it => !it.parent_collection)
-          .map(col => getCollectionDetails(col))
+          .filter((it) => !it.parent_collection)
+          .map((col) => getCollectionDetails(col))
         : []
     },
     quality () {

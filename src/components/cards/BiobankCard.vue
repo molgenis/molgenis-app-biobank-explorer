@@ -28,12 +28,7 @@
                 <span class="biobank-name">{{ biobank.name }}</span>
                 <sup
                   v-if="hasBiobankQuality"
-                  class="
-                    fa fa-check-circle-o
-                    text-success
-                    certificate-icon
-                    ml-1
-                  "
+                  class="fa fa-check-circle-o text-success certificate-icon ml-1"
                   aria-hidden="true"></sup>
               </router-link>
             </h5>
@@ -78,13 +73,21 @@
                 <span class="biobank-name">{{ biobank.name }}</span>
                 <sup
                   v-if="hasBiobankQuality"
-                  class="
-                    fa fa-check-circle-o
-                    text-success
-                    certificate-icon
-                    ml-1
-                  "
-                  aria-hidden="true"></sup>
+                  class="d-inline-block"
+                  aria-hidden="true">
+                  <info-popover
+                    faIcon="fa-check-circle-o"
+                    textColor="text-success"
+                    class="ml-1 certificate-icon"
+                    popover-placement="bottom">
+                    <div class="popover-content" v-for="quality of biobankQualities" :key="quality.label">
+                      <b>{{ quality.label }}</b>
+                      <p class="mt-1">
+                        {{ qualityStandardsDictionary[quality.label] }}
+                      </p>
+                    </div>
+                  </info-popover>
+                </sup>
               </router-link>
             </h5>
           </header>
@@ -124,13 +127,7 @@
                     title="Collection details"
                     class="text-dark">
                     <span
-                      class="
-                        fa fa-server
-                        collection-icon
-                        fa-lg
-                        mr-2
-                        text-primary
-                      "
+                      class="fa fa-server collection-icon fa-lg mr-2 text-primary"
                       aria-hidden="true"></span>
                     <span class="collection-name">{{
                       collectionDetail.name
@@ -178,13 +175,15 @@ import {
 import ViewGenerator from '../generators/ViewGenerator.vue'
 import CollectionSelector from '../buttons/CollectionSelector.vue'
 import MatchesOn from '../generators/view-components/MatchesOn.vue'
+import InfoPopover from '../popovers/InfoPopover.vue'
 
 export default {
   name: 'biobank-card',
   components: {
     ViewGenerator,
     CollectionSelector,
-    MatchesOn
+    MatchesOn,
+    InfoPopover
   },
   props: {
     fullSize: {
@@ -209,7 +208,7 @@ export default {
         if (item.showOnBiobankCard) {
           attributes.push(
             collectiondetails.viewmodel.attributes.find(
-              vm => vm.label === item.label
+              (vm) => vm.label === item.label
             )
           )
         }
@@ -221,14 +220,17 @@ export default {
     ...mapState([
       'biobankColumns',
       'collectionColumns',
-      'biobankCardShowCollections'
+      'biobankCardShowCollections',
+      'qualityStandardsDictionary'
     ]),
     ...mapGetters(['selectedCollections', 'uiText']),
     lastCollection () {
       return this.biobank.collectionDetails.length - 1
     },
     numberOfCollections () {
-      return this.biobank.collections ? this.biobank.collections.length : 0
+      return this.biobank.collectionDetails
+        ? this.biobank.collectionDetails.length
+        : 0
     },
     cardContainerHeight () {
       const charactersInName = this.biobank.name.length
@@ -260,7 +262,7 @@ export default {
       for (const item of this.biobankColumns) {
         if (item.showOnBiobankCard) {
           attributes.push(
-            viewmodel.attributes.find(vm => vm.label === item.label)
+            viewmodel.attributes.find((vm) => vm.label === item.label)
           )
         }
       }
@@ -268,19 +270,26 @@ export default {
     },
     hasBiobankQuality () {
       return this.biobankcardViewmodel.attributes.some(
-        attr => attr.type === 'quality' && attr.value && attr.value.length
+        (attr) => attr.type === 'quality' && attr.value && attr.value.length
       )
+    },
+    biobankQualities () {
+      return this.biobankcardViewmodel.attributes.find(
+        (attr) => attr.type === 'quality'
+      ).value
     },
     /** broken */
     biobankInSelection () {
       if (!this.biobank.collections) return false
 
       const biobankCollectionSelection = this.biobank.collections
-        .filter(bcf => !bcf.parent_collection)
-        .map(bc => ({ label: bc.label || bc.name, value: bc.id }))
+        .filter((bcf) => !bcf.parent_collection)
+        .map((bc) => ({ label: bc.label || bc.name, value: bc.id }))
       return this.selectedCollections
-        .map(sc => sc.value)
-        .some(id => biobankCollectionSelection.map(pc => pc.value).includes(id))
+        .map((sc) => sc.value)
+        .some((id) =>
+          biobankCollectionSelection.map((pc) => pc.value).includes(id)
+        )
     },
     loading () {
       return typeof this.biobank === 'string'

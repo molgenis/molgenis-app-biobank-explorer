@@ -2,11 +2,17 @@
   <div>
     <table class="layout-table w-100">
       <component
-        v-for="attribute in renderObject.attributes"
+        v-for="attribute in attributes"
         :is="component(attribute.type)"
         :attribute="attribute"
         :key="attribute.id"/>
     </table>
+
+    <component
+      v-for="customComponent in customComponents"
+      :is="customComponent.component"
+      :attribute="customComponent"
+      :key="customComponent.id"/>
 
     <div
       v-if="
@@ -47,11 +53,24 @@ export default {
     viewmodel: {
       type: Object,
       required: true
+    },
+    excludeComponents: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   computed: {
     renderObject () {
       return this.viewmodel
+    },
+    attributes () {
+      return this.renderObject.attributes.filter((attr) => !attr.component)
+    },
+    customComponents () {
+      return this.renderObject.attributes.filter(
+        (attr) => !this.excludeComponents.includes(attr.component)
+      )
     }
   },
   methods: {

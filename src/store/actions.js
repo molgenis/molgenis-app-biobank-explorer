@@ -9,6 +9,9 @@ import { configurationActions } from './configuration/configurationActions'
 import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/collectionActions'
 
 /* API PATHS */
+const BIOBANK_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_ops_standards'
+const COLLECTION_QUALITY_STANDARDS = '/api/v2/eu_bbmri_eric_lab_standards'
+
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
 
@@ -135,6 +138,14 @@ export default {
     }
     commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
   },
+  async GetQualityStandardInformation ({ commit }) {
+    const biobankQualityInfo = api.get(`${BIOBANK_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const collectionQualityInfo = api.get(`${COLLECTION_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
+    const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
+
+    commit('SetQualityStandardDictionary', response)
+  },
+
   /**
    * Transform the state into a NegotiatorQuery object.
    * Calls the DirectoryController method '/export' which answers with a URL
