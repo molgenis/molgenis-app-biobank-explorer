@@ -25,7 +25,7 @@ const initialCollectionColumns = require('./src/config/initialCollectionColumns'
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 const initialFilterFacets = require('./src/config/initialFilterFacets')
 const i18n = require('./src/config/i18n')
-const frontpage = require('./src/config/landingpage')
+const landingpage = require('./src/config/landingpage')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -97,7 +97,7 @@ module.exports = {
           filterMenuInitiallyFolded: false,
           applicationNotification: '',
           menuHeight: 50,
-          frontpage: frontpage,
+          landingpage: landingpage,
           i18n: i18n
         }
       }, null, 4),

@@ -14,7 +14,7 @@ const router = new VueRouter({
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
-      path: '/biobankexplorer',
+      path: '/catalogue',
       component: BiobankExplorer
     },
     {
@@ -48,10 +48,10 @@ const router = new VueRouter({
       path: '/',
       component: FrontpageView,
       beforeEnter: async (to, from, next) => {
-        if (state.landingpage.enabled) {
+        if (state.landingpage.enabled && !Object.keys(to.query).length) {
           next()
         } else {
-          next('/biobankexplorer')
+          next({ path: '/catalogue', query: to.query })
         }
       }
     }
