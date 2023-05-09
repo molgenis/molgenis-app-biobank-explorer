@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BiobankExplorer from '../views/BiobankExplorer'
-import FrontpageView from '../views/FrontpageView'
+import Landingpage from '../views/Landingpage'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
@@ -46,7 +46,7 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      component: FrontpageView,
+      component: Landingpage,
       beforeEnter: async (to, from, next) => {
         if (state.landingpage.enabled && !Object.keys(to.query).length) {
           next()

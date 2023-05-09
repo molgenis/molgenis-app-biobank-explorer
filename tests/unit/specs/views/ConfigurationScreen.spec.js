@@ -68,10 +68,10 @@ describe('ConfigurationScreen', () => {
     expect(editorSetValue).toHaveBeenCalledWith(mockAppConfig)
   })
 
-  it('calls saveDiff when diff-editor emits save and sets the value on the regular editor', async () => {
+  it('calls saveOtherChanges when diff-editor emits save and sets the value on the regular editor', async () => {
     const wrapper = shallowMount(ConfigurationScreen, { store, localVue })
     await flushPromises()
-    wrapper.vm.saveDiff(mockDiffText)
+    wrapper.vm.saveOtherChanges(mockDiffText)
 
     expect(SaveApplicationConfiguration).toHaveBeenCalledWith(expect.anything(), mockDiffText)
     expect(editorSetValue).toHaveBeenCalledWith(mockDiffText)
