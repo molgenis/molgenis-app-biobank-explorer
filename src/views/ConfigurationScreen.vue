@@ -86,7 +86,7 @@
       v-if="editorType === 'diff'"
       :currentConfig="currentConfig"
       :newConfig="uploadedAppConfig"
-      @save="saveOtherChanges"
+      @save="saveDiff"
       @cancel="switchView('editor')"/>
     <!-- End Advanced Editor -->
 
@@ -99,7 +99,9 @@
     </div>
 
     <!-- standard button bar -->
-    <div v-if="editorType !== 'diff' && editorType !== 'landingpage'" class="row px-5 pb-5">
+    <div
+      v-if="editorType !== 'diff' && editorType !== 'landingpage'"
+      class="row px-5 pb-5">
       <div class="col pl-0">
         <button class="btn btn-primary mr-3 save-button" @click="save">
           Save configuration
@@ -152,7 +154,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import DiffEditor from '../components/configuration/DiffEditor.vue'
 import FilterEditor from '../components/configuration/FilterEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
@@ -180,6 +182,8 @@ export default {
       'GetApplicationConfiguration',
       'SaveApplicationConfiguration'
     ]),
+    ...mapMutations(['UpdateLandingpage']),
+
     switchView (view) {
       const viewTimer = setTimeout(() => {
         this.editorType = view
@@ -229,11 +233,15 @@ export default {
       this.dirty = true
       this.newAppConfig = JSON.stringify(newConfig)
     },
-    saveOtherChanges (changesToSave) {
+    saveDiff (changesToSave) {
       this.newAppConfig = changesToSave
       this.saveToDatabase(changesToSave)
 
       this.switchView('editor')
+    },
+    saveOtherChanges (changesToSave) {
+      this.newAppConfig = changesToSave
+      this.saveToDatabase(changesToSave)
     },
     checkJSONStructure (jsonString) {
       try {
@@ -322,8 +330,9 @@ export default {
   },
   async mounted () {
     await this.GetApplicationConfiguration()
-    this.config = JSON.parse(this.appConfig)
 
+    this.config = JSON.parse(this.appConfig)
+    this.UpdateLandingpage(this.config)
     const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
     this.editor = monaco.editor.create(this.$refs.editor, {

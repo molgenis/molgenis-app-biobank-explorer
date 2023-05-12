@@ -39,19 +39,23 @@ const landingpage = {
     collections: [
       {
         id: '',
-        name: 'Collection 1'
+        name: 'Collection 1',
+        linkText: 'See more details'
       },
       {
         id: '',
-        name: 'Collection 2'
+        name: 'Collection 2',
+        linkText: 'See more details'
       },
       {
         id: '',
-        name: 'Collection 3'
+        name: 'Collection 3',
+        linkText: 'See more details'
       },
       {
         id: '',
-        name: 'Collection 4'
+        name: 'Collection 4',
+        linkText: 'See more details'
       }
     ]
   }
