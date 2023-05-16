@@ -1,11 +1,12 @@
 <template>
   <main>
     <section class="d-flex justify-content-center">
-      <landingpage-header :header-text="pageHeader">
+      <landingpage-header :header-text="pageHeader" :css="landingpageCss">
         <landingpage-search
           :buttonText="search.buttonText"
           :ariaLabel="search.ariaLabel"
-          :searchPlaceholder="search.searchPlaceholder"/>
+          :searchPlaceholder="search.searchPlaceholder"
+          :css="landingpageCss"/>
         <button
           class="edit-button header-section"
           @click="$emit('open', 'landingpage-header')"
@@ -27,7 +28,8 @@
         v-for="(cta, index) in callToActions"
         :ctaUrl="cta.ctaUrl"
         :ctaText="cta.ctaText"
-        :bodyHtml="cta.bodyHtml"/>
+        :bodyHtml="cta.bodyHtml"
+        :css="landingpageCss"/>
     </section>
     <section class="d-flex justify-content-between mx-auto mb-5 w-75">
       <landingpage-biobank-spotlight
@@ -35,7 +37,8 @@
         :biobankName="biobankSpotlight.biobankName"
         :biobankId="biobankSpotlight.biobankId"
         :bodyHtml="biobankSpotlight.bodyHtml"
-        :buttonText="biobankSpotlight.buttonText"/>
+        :buttonText="biobankSpotlight.buttonText"
+        :css="landingpageCss"/>
       <button
         class="edit-button biobank-spotlight-section"
         @click="$emit('open', 'landingpage-biobank-spotlight')"
@@ -44,7 +47,8 @@
       </button>
       <landingpage-collection-spotlight
         :headerText="collectionSpotlight.header"
-        :collections="collectionSpotlight.collections"/>
+        :collections="collectionSpotlight.collections"
+        :css="landingpageCss"/>
       <button
         class="edit-button collection-spotlight-section"
         @click="$emit('open', 'landingpage-collection-spotlight')"
@@ -94,6 +98,9 @@ export default {
     },
     callToActions () {
       return this.landingpage.page_call_to_actions
+    },
+    landingpageCss () {
+      return this.landingpage.css
     }
   }
 }

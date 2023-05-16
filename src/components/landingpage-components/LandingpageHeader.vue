@@ -1,7 +1,8 @@
 <template>
   <div
-    class="banner d-flex flex-column justify-content-center align-items-center">
-    <h1 class="text-white mb-5 mt-5">
+    class="d-flex flex-column justify-content-center align-items-center"
+    :style="css.pageHeader.backgroundStyle">
+    <h1 class=" mb-5 mt-5">
       <span>{{ headerText }}</span>
     </h1>
     <slot></slot>
@@ -11,6 +12,17 @@
 <script>
 export default {
   props: {
+    css: {
+      type: Object,
+      required: false,
+      default: () => ({
+        pageHeader: {
+        /* https://pixabay.com/illustrations/bacteria-illness-virus-infection-163711/ as default image */
+          backgroundStyle:
+          'background: url("/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;'
+        }
+      })
+    },
     headerText: {
       type: String,
       required: true
@@ -20,16 +32,7 @@ export default {
 </script>
 
 <style scoped>
-.banner {
-  /* https://pixabay.com/illustrations/bacteria-illness-virus-infection-163711/  */
-  background: url("../../../public/bacteria.jpg");
-  background-size: cover;
-  height: 30rem;
-  width: 75%;
-  border-radius: 1rem;
-}
-
- ::v-deep ~ *  {
+::v-deep ~ * {
   width: 70%;
 }
 </style>

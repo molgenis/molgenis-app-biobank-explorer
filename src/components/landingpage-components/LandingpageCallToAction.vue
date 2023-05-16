@@ -1,13 +1,15 @@
 <template>
   <div
     class="cta d-flex flex-column"
-    :style="'background-color: var(--info);'"
+    :style="css.cta.background"
     ref="cta">
     <section class="m-4" v-html="bodyHtml"></section>
     <section class="m-4 mt-auto">
       <a
         :href="ctaUrl"
-        class="btn btn-secondary"
+        class="btn"
+        :class="css.cta.buttonClasses"
+        :style="css.cta.buttonStyle"
         role="button"
         aria-pressed="true">{{ ctaText }}</a>
     </section>
@@ -17,6 +19,17 @@
 <script>
 export default {
   props: {
+    css: {
+      type: Object,
+      required: false,
+      default: () => ({
+        cta: {
+          backgroundStyle: 'background-color: var(--info);',
+          buttonClasses: 'btn-secondary',
+          buttonStyle: ''
+        }
+      })
+    },
     ctaUrl: {
       type: String,
       required: true

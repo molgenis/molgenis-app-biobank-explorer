@@ -58,6 +58,34 @@ const landingpage = {
         linkText: 'See more details'
       }
     ]
+  },
+  css: {
+    pageHeader: {
+      backgroundStyle:
+        'background: url("/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;'
+    },
+    searchBar: {
+      inputStyle: '',
+      inputClasses: 'border border-dark border-right-0',
+      buttonStyle: '',
+      buttonClasses: 'btn-primary search-button border border-dark border-left-0'
+    },
+    cta: {
+      backgroundStyle: 'background-color: var(--info);',
+      buttonClasses: 'btn-secondary',
+      buttonStyle: ''
+    },
+    biobankSpotlight: {
+      backgroundStyle:
+        "background: url('/microscope.jpg');background-size: cover;height: 30rem;width: 50%;border-radius: 1rem; color: #fff;",
+      buttonClasses: 'btn-primary',
+      buttonStyle: ''
+    },
+    collectionSpotlight: {
+      backgroundStyle: 'background-color: var(--info);',
+      linkClasses: 'text-info',
+      linkStyle: ''
+    }
   }
 }
 

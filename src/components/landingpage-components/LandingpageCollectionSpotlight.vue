@@ -1,7 +1,7 @@
 <template>
   <div
     class="collection-spotlight d-flex flex-column"
-    :style="'background-color: var(--info);'"
+    :style="css.collectionSpotlight.backgroundStyle"
     ref="collectionSpotlight">
     <h1 class="ml-4 mt-4 header-text">
       <span>{{ headerText }}</span>
@@ -15,7 +15,7 @@
           <router-link
             :to="'/collection/' + collection.id"
             :title="`Go to ${collection.name}`">
-            <span class="text-info">{{ collection.linkText }}</span>
+            <span :class="css.collectionSpotlight.linkClasses" :style="css.collectionSpotlight.linkStyle">{{ collection.linkText }}</span>
           </router-link>
         </div>
       </template>
@@ -26,6 +26,17 @@
 <script>
 export default {
   props: {
+    css: {
+      type: Object,
+      required: false,
+      default: () => ({
+        collectionSpotlight: {
+          backgroundStyle: 'background-color: var(--info);',
+          linkClasses: 'text-info',
+          linkStyle: ''
+        }
+      })
+    },
     headerText: {
       type: String,
       required: true

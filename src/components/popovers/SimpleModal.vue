@@ -47,10 +47,12 @@ dialog[open]:not(dialog[open="false"]) {
   justify-content: center;
   align-items: center;
   z-index: 1200;
+  overflow: auto;
 }
 
 article {
-  position: relative;
+  position: absolute;
+  top:1rem;
   z-index: 1210;
   width:auto;
   border-radius: 4px;

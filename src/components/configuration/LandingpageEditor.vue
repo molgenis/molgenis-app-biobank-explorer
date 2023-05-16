@@ -1,4 +1,5 @@
 <template>
+  <!-- todo: break this into components or something. -->
   <div class="container-fluid p-0 landingpage-editor">
     <div>
       <landingpage :key="revision" editable @open="openModal" />
@@ -11,7 +12,14 @@
             Header:
             <input type="text" v-model="newConfig.landingpage.page_header" />
           </label>
-          <b>Searchbox</b>
+
+          <label>
+            Style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.pageHeader.backgroundStyle"/>
+          </label>
+          <b class="my-2">Searchbox</b>
           <label class="mt-2">
             Button text:
             <input
@@ -29,6 +37,31 @@
             <input
               type="text"
               v-model="newConfig.landingpage.page_search.ariaLabel"/>
+          </label>
+
+          <label>
+            Input style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.searchBar.inputStyle"/>
+          </label>
+          <label>
+            Input classes:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.searchBar.inputClasses"/>
+          </label>
+          <label>
+            Button style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.searchBar.buttonStyle"/>
+          </label>
+          <label>
+            Button classes:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.searchBar.buttonClasses"/>
           </label>
         </template>
 
@@ -63,6 +96,25 @@
                 "/>
             </label>
           </div>
+          <b class="my-2">Styling</b>
+          <label>
+            Background style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.cta.backgroundStyle"/>
+          </label>
+          <label>
+            Button style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.cta.buttonStyle"/>
+          </label>
+          <label>
+            Button classes:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.cta.buttonClasses"/>
+          </label>
         </template>
 
         <template v-if="section === 'landingpage-biobank-spotlight'">
@@ -96,6 +148,27 @@
             <input
               type="text"
               v-model="newConfig.landingpage.page_biobank_spotlight.buttonText"/>
+          </label>
+
+          <label>
+            Background style:
+            <input
+              type="text"
+              v-model="
+                newConfig.landingpage.css.biobankSpotlight.backgroundStyle
+              "/>
+          </label>
+          <label>
+            Button style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.biobankSpotlight.buttonStyle"/>
+          </label>
+          <label>
+            Button classes:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.biobankSpotlight.buttonClasses"/>
           </label>
         </template>
 
@@ -145,12 +218,34 @@
                 "/>
             </label>
           </div>
+          <b class="my-2">Styling</b>
+          <label>
+            Background style:
+            <input
+              type="text"
+              v-model="
+                newConfig.landingpage.css.collectionSpotlight.backgroundStyle
+              "/>
+          </label>
+          <label>
+            Link style:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.collectionSpotlight.linkStyle"/>
+          </label>
+          <label>
+            Link classes:
+            <input
+              type="text"
+              v-model="
+                newConfig.landingpage.css.collectionSpotlight.linkClasses
+              "/>
+          </label>
         </template>
       </div>
     </simple-modal>
   </div>
 </template>
-
 <script>
 import { mapMutations } from 'vuex'
 import Landingpage from '../../views/Landingpage.vue'
@@ -226,5 +321,13 @@ label {
 input,
 textarea {
   margin-left: 1rem;
+}
+
+::v-deep input,
+::v-deep textarea {
+  min-width: 75vw;
+}
+::v-deep textarea {
+  min-height: 15vh;
 }
 </style>

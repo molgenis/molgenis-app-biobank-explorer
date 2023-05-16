@@ -1,14 +1,19 @@
 <template>
-  <div class="input-group mb-3 searchbar">
+  <div
+    class="input-group mb-3 searchbar">
     <input
       type="text"
-      class="form-control border border-dark border-right-0"
+      class="form-control"
       :placeholder="searchPlaceholder"
-      :aria-label="ariaLabel"/>
+      :aria-label="ariaLabel"
+      :style="css.searchBar.inputStyle"
+      :class="css.searchBar.inputClasses"/>
     <div class="input-group-append">
       <button
-        class="btn btn-primary search-button border border-dark border-left-0"
-        type="button">
+        type="button"
+        class="btn search-button"
+        :style="css.searchBar.buttonStyle"
+        :class="css.searchBar.buttonClasses">
         {{ buttonText }}
       </button>
     </div>
@@ -18,6 +23,18 @@
 <script>
 export default {
   props: {
+    css: {
+      type: Object,
+      required: false,
+      default: () => ({
+        searchBar: {
+          inputStyle: '',
+          inputClasses: 'border border-dark border-right-0',
+          buttonStyle: '',
+          buttonClasses: 'btn-primary search-button border border-dark border-left-0'
+        }
+      })
+    },
     buttonText: {
       type: String,
       required: true
@@ -45,11 +62,5 @@ export default {
 .searchbar > input {
   height: 3rem;
   font-size: 1.2rem;
-}
-
-.input-group > .custom-select:focus::placeholder,
-.input-group > .form-control:focus::placeholder {
-  color: red;
-  opacity: 0 !important;
 }
 </style>
