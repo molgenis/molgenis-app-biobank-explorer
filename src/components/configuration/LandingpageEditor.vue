@@ -1,6 +1,9 @@
 <template>
   <!-- todo: break this into components or something. -->
   <div class="container-fluid p-0 landingpage-editor">
+    <div class="d-flex">
+      <label><input type="checkbox" class="mr-2" v-model="newConfig.landingpage.enabled" @change="save"/>Landingpage enabled</label>
+    </div>
     <div>
       <landingpage :key="revision" editable @open="openModal" />
     </div>
@@ -341,5 +344,9 @@ textarea {
 }
 ::v-deep textarea {
   min-height: 15vh;
+}
+
+input[type="checkbox"] {
+  min-width: unset;
 }
 </style>
