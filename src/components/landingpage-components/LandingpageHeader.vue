@@ -19,7 +19,7 @@ export default {
         pageHeader: {
         /* https://pixabay.com/illustrations/bacteria-illness-virus-infection-163711/ as default image */
           backgroundStyle:
-          'background: url("/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;'
+          'background: url("/plugin/app/molgenis-app-biobank-explorer/img/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;'
         }
       })
     },

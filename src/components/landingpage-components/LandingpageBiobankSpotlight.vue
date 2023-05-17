@@ -30,7 +30,7 @@ export default {
         biobankSpotlight: {
           /* https://www.pexels.com/photo/close-up-of-microscope-256262/ as default image */
           backgroundStyle:
-            'background: url("/microscope.jpg");background-size: cover;height: 30rem;width: 50%;border-radius: 1rem; color: #fff;',
+            'background: url("/plugin/app/molgenis-app-biobank-explorer/img/microscope.jpg");background-size: cover;height: 30rem;width: 50%;border-radius: 1rem; color: #fff;',
           buttonClasses: 'btn-primary',
           buttonStyle: ''
         }

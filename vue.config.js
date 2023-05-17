@@ -136,6 +136,11 @@ module.exports = {
       '/logout': {
         target: PROXY_TARGET,
         changeOrigin: true
+      },
+      '/plugin/app/molgenis-app-biobank-explorer/img/': {
+        secure: false,
+        pathRewrite: { '^/plugin/app/molgenis-app-biobank-explorer': '' }, /** removes the part of the url, so this will go straight to /img in public folder */
+        target: 'http://localhost:8080'
       }
     },
     // Used as mock in e2e tests
