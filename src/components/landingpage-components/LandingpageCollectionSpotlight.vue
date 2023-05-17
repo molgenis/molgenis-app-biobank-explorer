@@ -9,13 +9,15 @@
     <section class="ml-4 mb-4">
       <template v-for="(collection, index) in collections">
         <div :key="collection.id + '-' + index" v-if="collection.name">
-          <h3 class="border-top mr-4 pt-4 mb-2 mt-1 collection-header">
-            {{ collection.name }}
+          <h3 class="border-top mr-4 pt-4 mb-2 mt-1 collection-header" :title="collection.name">
+            {{ truncateTitle(collection.name) }}
           </h3>
           <router-link
             :to="'/collection/' + collection.id"
             :title="`Go to ${collection.name}`">
-            <span :class="css.collectionSpotlight.linkClasses" :style="css.collectionSpotlight.linkStyle">{{ collection.linkText }}</span>
+            <span
+              :class="css.collectionSpotlight.linkClasses"
+              :style="css.collectionSpotlight.linkStyle">{{ collection.linkText }}</span>
           </router-link>
         </div>
       </template>
@@ -44,6 +46,15 @@ export default {
     collections: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    truncateTitle (title) {
+      if (title.length > 70) {
+        return title.substring(0, 70) + '...'
+      }
+
+      return title
     }
   },
   mounted () {

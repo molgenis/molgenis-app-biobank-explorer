@@ -12,12 +12,24 @@
             Header:
             <input type="text" v-model="newConfig.landingpage.page_header" />
           </label>
+          <label>
+            Catalogue link:
+            <input
+              type="text"
+              v-model="newConfig.landingpage.goto_catalogue_link"/>
+          </label>
 
           <label>
-            Style:
+            Header style:
             <input
               type="text"
               v-model="newConfig.landingpage.css.pageHeader.backgroundStyle"/>
+          </label>
+          <label>
+            Catalogue link style
+            <input
+              type="text"
+              v-model="newConfig.landingpage.css.pageHeader.linkStyle"/>
           </label>
           <b class="my-2">Searchbox</b>
           <label class="mt-2">

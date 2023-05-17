@@ -1,6 +1,7 @@
 const landingpage = {
   enabled: true,
   page_header: 'BBMRI-ERIC Directory',
+  goto_catalogue_link: 'Browse the catalogue',
   page_search: {
     buttonText: 'Search',
     searchPlaceholder: 'Find a biobank or collection',
@@ -62,7 +63,8 @@ const landingpage = {
   css: {
     pageHeader: {
       backgroundStyle:
-        'background: url("/plugin/app/molgenis-app-biobank-explorer/img/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;'
+        'background: url("/plugin/app/molgenis-app-biobank-explorer/img/bacteria.jpg");background-size: cover;height: 30rem;width: 75%;border-radius: 1rem; color: #fff;',
+      linkStyle: 'color: #fff;'
     },
     searchBar: {
       inputStyle: '',

@@ -278,7 +278,7 @@ export default {
         (attr) => attr.type === 'quality'
       ).value
     },
-    /** broken */
+    // broken
     biobankInSelection () {
       if (!this.biobank.collections) return false
 

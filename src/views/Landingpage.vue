@@ -1,7 +1,10 @@
 <template>
   <main>
     <section class="d-flex justify-content-center">
-      <landingpage-header :header-text="pageHeader" :css="landingpageCss">
+      <landingpage-header
+        :header-text="pageHeader"
+        :linkText="gotoCatalogue"
+        :css="landingpageCss">
         <landingpage-search
           :buttonText="search.buttonText"
           :ariaLabel="search.ariaLabel"
@@ -86,6 +89,9 @@ export default {
     ...mapState(['landingpage']),
     pageHeader () {
       return this.landingpage.page_header
+    },
+    gotoCatalogue () {
+      return this.landingpage.goto_catalogue_link
     },
     search () {
       return this.landingpage.page_search
