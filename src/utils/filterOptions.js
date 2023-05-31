@@ -89,6 +89,8 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
       } else {
         url = `${url}?q=${encodeRsqlValue(createDiagnosisLabelQuery(query))}`
       }
+    } else {
+      url += '?q=id=like=icd'
     }
 
     api.get(url).then(response => {
