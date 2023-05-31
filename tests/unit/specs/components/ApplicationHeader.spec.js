@@ -13,6 +13,8 @@ describe('ApplicationHeader', () => {
   let store
 
   const filters = createFilters({ filterFacets: filterDefinitions, filters: { selections: {}, satisfyAll: [] } })
+  /** for testing purposes, hide a filter */
+  filters[5].showFacet = false
   const setFilterActivation = jest.fn()
   const getReducedFilterOptions = jest.fn()
   beforeEach(() => {
@@ -24,7 +26,7 @@ describe('ApplicationHeader', () => {
         foundCollectionIds: () => [],
         selectedCollections: () => [],
         activeFilters: () => ({}),
-        activeSatisfyAll: () => [],
+        activeSatisfyAll: () => []
       },
       actions: {
         setFilterActivation,
@@ -47,13 +49,13 @@ describe('ApplicationHeader', () => {
     const wrapper = shallowMount(ApplicationHeader, { store, localVue, stubs: ['b-dropdown', 'b-button', 'font-awesome-icon', 'vue-slide-up-down'] })
     const adaptiveFacet = store.state.filterFacets.filter(facet => facet.adaptive)[0]
     wrapper.vm.calculateOptions(adaptiveFacet)
-    expect(setFilterActivation).toBeCalledWith(expect.anything(), {filterName: "country", activation: true})
+    expect(setFilterActivation).toBeCalledWith(expect.anything(), { filterName: 'country', activation: true })
   })
 
   it('sets the corresponding filter inactive if the dropdown menu is hidden', () => {
     const wrapper = shallowMount(ApplicationHeader, { store, localVue, stubs: ['b-dropdown', 'b-button', 'font-awesome-icon', 'vue-slide-up-down'] })
     const adaptiveFacet = store.state.filterFacets.filter(facet => facet.adaptive)[0]
     wrapper.vm.setInactive(adaptiveFacet)
-    expect(setFilterActivation).toBeCalledWith(expect.anything(), {filterName: "country", activation: false})
+    expect(setFilterActivation).toBeCalledWith(expect.anything(), { filterName: 'country', activation: false })
   })
 })
