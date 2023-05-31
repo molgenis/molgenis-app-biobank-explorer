@@ -119,6 +119,7 @@
         </span>
 
         <button
+          v-if="moreFacets.length"
           @click="showAllFilters = !showAllFilters"
           class="btn btn-link text-info">
           <span v-if="showAllFilters">Fewer filters</span>
@@ -172,12 +173,12 @@ export default {
     },
     facetsToRender () {
       return this.filterFacets
-        .filter(filter => !filter.builtIn)
-        .filter(filter => filter.showFacet)
+        .filter((filter) => !filter.builtIn)
+        .filter((filter) => filter.showFacet)
     },
     moreFacets () {
       return this.filterFacets.filter(
-        filter => !filter.showFacet && !filter.builtIn
+        (filter) => !filter.showFacet && !filter.builtIn
       )
     },
     iconStyle () {
@@ -211,7 +212,8 @@ export default {
     },
     filterVariant (filterName) {
       const facetColor = 'secondary'
-      const prefix = this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
+      const prefix =
+        this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
       return `${prefix}${facetColor}`
     },
     filterSelectionCount (filterName) {
@@ -239,7 +241,10 @@ export default {
     },
     setInactive (filter) {
       if (filter.adaptive) {
-        this.setFilterActivation({ filterName: filter.name, activation: false })
+        this.setFilterActivation({
+          filterName: filter.name,
+          activation: false
+        })
       } else {
         return 0
       }
