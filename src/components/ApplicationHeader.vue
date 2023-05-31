@@ -125,6 +125,13 @@
           <span v-if="showAllFilters">Fewer filters</span>
           <span v-else>More filters</span>
         </button>
+
+        <toggle-filter
+          v-for="toggleFilter of toggleFilters"
+          @input="(value) => filterChange(toggleFilter.name, value)"
+          :value="activeFilters[toggleFilter.name]"
+          :key="toggleFilter.name"
+          v-bind="toggleFilter"/>
       </div>
     </div>
   </div>
@@ -138,6 +145,7 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import SearchFilter from './filters/SearchFilter.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
+import ToggleFilter from './filters/ToggleFilter.vue'
 import CheckOut from './checkout/CheckOut.vue'
 /** */
 
@@ -147,6 +155,7 @@ export default {
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
+    ToggleFilter,
     CheckOut
   },
   computed: {
@@ -175,6 +184,12 @@ export default {
       return this.filterFacets
         .filter((filter) => !filter.builtIn)
         .filter((filter) => filter.showFacet)
+        .filter((filter) => filter.component !== 'ToggleFilter')
+    },
+    toggleFilters () {
+      return this.filterFacets.filter(
+        (filter) => filter.component === 'ToggleFilter'
+      )
     },
     moreFacets () {
       return this.filterFacets.filter(

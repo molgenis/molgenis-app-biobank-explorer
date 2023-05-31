@@ -1,4 +1,4 @@
-import { genericFilterOptions, diagnosisAvailableFilterOptions, collaborationTypeFilterOptions } from '../utils/filterOptions'
+import { genericFilterOptions, diagnosisAvailableFilterOptions } from '../utils/filterOptions'
 
 export const filterTemplate = {
 
@@ -32,6 +32,7 @@ export const createFilters = (state) => {
         tableName: facet.tableName,
         columnName: facet.columnName,
         filterLabelAttribute: facet.filterLabelAttribute || '',
+        trueOption: facet.trueOption,
         options: getFilterOptions(facet), // uses the removeOptions array
         filters: state.filters.selections[facet.name], // adds the currently active options
         satisfyAll: state.filters.satisfyAll.includes(facet.name),
@@ -55,9 +56,6 @@ function getFilterOptions (filterFacet) {
   switch (filterFacet.name) {
     case 'diagnosis_available':
       options = diagnosisAvailableFilterOptions(filterFacet.tableName, filterFacet.columnName)
-      break
-    case 'commercial_use':
-      options = collaborationTypeFilterOptions()
       break
     default:
       options = genericFilterOptions(filterFacet)

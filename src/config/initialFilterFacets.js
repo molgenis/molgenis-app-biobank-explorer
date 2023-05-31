@@ -51,6 +51,11 @@ const filterDefinitions = [
   },
   {
     name: 'commercial_use',
+    component: 'ToggleFilter',
+    trueOption: {
+      text: 'Available to commercial use',
+      value: 'true'
+    },
     label: 'Collaboration type',
     columnName: 'collaboration_commercial',
     humanReadableString: 'Biobank collaboration type(s):',
