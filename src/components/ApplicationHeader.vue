@@ -127,6 +127,7 @@
         </button>
 
         <toggle-filter
+          class="mb-1"
           v-for="toggleFilter of toggleFilters"
           @input="(value) => filterChange(toggleFilter.name, value)"
           :value="activeFilters[toggleFilter.name]"
