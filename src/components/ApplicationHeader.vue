@@ -22,7 +22,7 @@
           "
           bookmark/>
       </div>
-      <div class="col text-right">
+      <div class="col d-flex justify-content-end align-items-center">
         <router-link
           v-if="showSettings"
           class="btn btn-light border mr-2"
