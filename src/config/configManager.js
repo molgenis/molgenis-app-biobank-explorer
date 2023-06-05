@@ -1,6 +1,7 @@
 import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
 import initialFilterFacets from './initialFilterFacets'
+import initialLandingpage from './initialLandingpage'
 import i18n from './i18n.js'
 
 export const bbmriConfig = () => {
@@ -15,6 +16,7 @@ export const bbmriConfig = () => {
     removeFreemarkerMargin: false,
     biobankCardShowCollections: true,
     menuHeight: 50,
+    landingpage: initialLandingpage,
     i18n
   }
 

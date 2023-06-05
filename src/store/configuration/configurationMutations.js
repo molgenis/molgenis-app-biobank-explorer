@@ -9,5 +9,8 @@ export const configurationMutations = {
   },
   SetAppConfigStatus (state, response) {
     state.configUpdateStatus = response.status
+  },
+  UpdateLandingpage (state, config) {
+    state.landingpage = config.landingpage
   }
 }

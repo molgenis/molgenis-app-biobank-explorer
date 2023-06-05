@@ -13,7 +13,14 @@
         @click="switchView('editor')"
         class="btn btn-link text-white"
         :class="{ 'editor-active': editorType === 'editor' }">
-        JSON Editor
+        JSON
+      </button>
+      <button
+        type="button"
+        @click="switchView('landingpage')"
+        class="btn btn-link text-white"
+        :class="{ 'editor-active': editorType === 'landingpage' }">
+        Landingpage
       </button>
     </nav>
 
@@ -83,7 +90,18 @@
       @cancel="switchView('editor')"/>
     <!-- End Advanced Editor -->
 
-    <div v-if="editorType !== 'diff'" class="row px-5 pb-5">
+    <!-- Landingpage editor -->
+    <div v-if="editorType === 'landingpage'" class="row px-5 pb-5">
+      <landingpage-editor
+        :currentConfig="currentConfig"
+        @save="saveOtherChanges"
+        @cancel="switchView('editor')"/>
+    </div>
+
+    <!-- standard button bar -->
+    <div
+      v-if="editorType !== 'diff' && editorType !== 'landingpage'"
+      class="row px-5 pb-5">
       <div class="col pl-0">
         <button class="btn btn-primary mr-3 save-button" @click="save">
           Save configuration
@@ -136,14 +154,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import DiffEditor from '../components/configuration/DiffEditor.vue'
 import FilterEditor from '../components/configuration/FilterEditor.vue'
 import FilterConfigUI from '../components/configuration/FilterConfigUI.vue'
+import LandingpageEditor from '../components/configuration/LandingpageEditor.vue'
 import { filterTemplate } from '../config/facetConfigurator'
 
 export default {
-  components: { FilterConfigUI, DiffEditor, FilterEditor },
+  components: { FilterConfigUI, DiffEditor, FilterEditor, LandingpageEditor },
   data () {
     return {
       editor: {},
@@ -163,6 +182,8 @@ export default {
       'GetApplicationConfiguration',
       'SaveApplicationConfiguration'
     ]),
+    ...mapMutations(['UpdateLandingpage']),
+
     switchView (view) {
       const viewTimer = setTimeout(() => {
         this.editorType = view
@@ -218,7 +239,12 @@ export default {
 
       this.switchView('editor')
     },
+    saveOtherChanges (changesToSave) {
+      this.newAppConfig = changesToSave
+      this.saveToDatabase(changesToSave)
+    },
     checkJSONStructure (jsonString) {
+      if (typeof jsonString === 'object') return
       try {
         JSON.parse(jsonString)
         this.jsonError = ''
@@ -260,7 +286,7 @@ export default {
     },
     async processUpload (event) {
       const reader = new FileReader()
-      reader.addEventListener('load', event => {
+      reader.addEventListener('load', (event) => {
         this.uploadedAppConfig = atob(event.target.result.split(',')[1])
 
         this.switchView('diff')
@@ -305,8 +331,9 @@ export default {
   },
   async mounted () {
     await this.GetApplicationConfiguration()
-    this.config = JSON.parse(this.appConfig)
 
+    this.config = JSON.parse(this.appConfig)
+    this.UpdateLandingpage(this.config)
     const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
     this.editor = monaco.editor.create(this.$refs.editor, {

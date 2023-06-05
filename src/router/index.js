@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import BiobankExplorer from '../views/BiobankExplorer'
+import Landingpage from '../views/Landingpage'
 import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
-import { INITIAL_STATE } from '../store/state'
+import state, { INITIAL_STATE } from '../store/state'
 import api from '@molgenis/molgenis-api-client'
 
 Vue.use(VueRouter)
@@ -13,7 +14,7 @@ const router = new VueRouter({
   base: INITIAL_STATE.baseUrl,
   routes: [
     {
-      path: '/biobankexplorer',
+      path: '/catalogue',
       component: BiobankExplorer
     },
     {
@@ -45,7 +46,14 @@ const router = new VueRouter({
     },
     {
       path: '/',
-      component: BiobankExplorer
+      component: Landingpage,
+      beforeEnter: async (to, from, next) => {
+        if (state.landingpage.enabled && !Object.keys(to.query).length) {
+          next()
+        } else {
+          next({ path: '/catalogue', query: to.query })
+        }
+      }
     }
   ]
 })

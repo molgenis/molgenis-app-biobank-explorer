@@ -16,6 +16,7 @@ const GetApplicationConfiguration = jest.fn().mockReturnValue(mockAppConfig)
 const SaveApplicationConfiguration = jest.fn()
 const editorGetValue = jest.fn().mockReturnValue(JSON.stringify(mockAppConfig))
 const editorSetValue = jest.fn()
+const UpdateLandingpage = jest.fn()
 
 const mockEditor = {
   create: jest.fn().mockReturnValue(
@@ -40,6 +41,9 @@ describe('ConfigurationScreen', () => {
       actions: {
         GetApplicationConfiguration,
         SaveApplicationConfiguration
+      },
+      mutations: {
+        UpdateLandingpage
       }
     })
   })
@@ -75,5 +79,13 @@ describe('ConfigurationScreen', () => {
 
     expect(SaveApplicationConfiguration).toHaveBeenCalledWith(expect.anything(), mockDiffText)
     expect(editorSetValue).toHaveBeenCalledWith(mockDiffText)
+  })
+
+  it('calls saveOtherChanges when landingpage emits save', async () => {
+    const wrapper = shallowMount(ConfigurationScreen, { store, localVue })
+    await flushPromises()
+    wrapper.vm.saveOtherChanges({ frontpage: 'new frontpage content' })
+
+    expect(SaveApplicationConfiguration).toHaveBeenCalledWith(expect.anything(), { frontpage: 'new frontpage content' })
   })
 })

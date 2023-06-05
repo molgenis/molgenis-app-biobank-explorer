@@ -25,6 +25,7 @@ const initialCollectionColumns = require('./src/config/initialCollectionColumns'
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 const initialFilterFacets = require('./src/config/initialFilterFacets')
 const i18n = require('./src/config/i18n')
+const initialLandingpage = require('./src/config/initialLandingpage')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -96,6 +97,7 @@ module.exports = {
           filterMenuInitiallyFolded: false,
           applicationNotification: '',
           menuHeight: 50,
+          landingpage: initialLandingpage,
           i18n: i18n
         }
       }, null, 4),
@@ -134,6 +136,11 @@ module.exports = {
       '/logout': {
         target: PROXY_TARGET,
         changeOrigin: true
+      },
+      '/plugin/app/molgenis-app-biobank-explorer/img/': {
+        secure: false,
+        pathRewrite: { '^/plugin/app/molgenis-app-biobank-explorer': '' }, /** removes the part of the url, so this will go straight to /img in public folder */
+        target: 'http://localhost:8080'
       }
     },
     // Used as mock in e2e tests

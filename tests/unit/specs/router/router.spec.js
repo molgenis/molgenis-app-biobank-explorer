@@ -16,7 +16,7 @@ describe('Router', () => {
     try {
       await router.push('/configuration')
     } catch (e) {
-      expect(router.currentRoute.path).toBe('/')
+      expect(router.currentRoute.path).toBe('/catalogue')
     }
   })
 

@@ -4,7 +4,7 @@ const i18n = {
     deselect_all_collections: 'Deselect all collections',
     request: 'Request',
     close: 'Close',
-    home: 'Back to the biobank explorer',
+    home: 'Back to the catalogue',
     view: 'View',
     email: 'Email',
     add: 'Add',

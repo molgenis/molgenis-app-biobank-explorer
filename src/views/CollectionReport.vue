@@ -22,7 +22,7 @@
           <nav aria-label="breadcrumb" v-if="collection">
             <ol class="breadcrumb my-1">
               <li class="breadcrumb-item">
-                <router-link to="/" title="Back to biobank explorer">
+                <router-link to="/catalogue" title="Back to the catalogue">
                   {{ uiText["home"] }}
                 </router-link>
               </li>
