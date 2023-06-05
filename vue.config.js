@@ -25,7 +25,7 @@ const initialCollectionColumns = require('./src/config/initialCollectionColumns'
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
 const initialFilterFacets = require('./src/config/initialFilterFacets')
 const i18n = require('./src/config/i18n')
-const landingpage = require('./src/config/landingpage')
+const initialLandingpage = require('./src/config/initialLandingpage')
 
 const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'production') return 'apptemplate/app-template.html'
@@ -33,7 +33,7 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-const PROXY_TARGET = 'https://jelmer.gcc.rug.nl/'
+const PROXY_TARGET = 'https://bbmri-acc.gcc.rug.nl/'
 
 const apiDevServerProxyConf = {
   target: PROXY_TARGET,
@@ -97,7 +97,7 @@ module.exports = {
           filterMenuInitiallyFolded: false,
           applicationNotification: '',
           menuHeight: 50,
-          landingpage: landingpage,
+          landingpage: initialLandingpage,
           i18n: i18n
         }
       }, null, 4),

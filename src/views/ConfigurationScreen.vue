@@ -244,6 +244,7 @@ export default {
       this.saveToDatabase(changesToSave)
     },
     checkJSONStructure (jsonString) {
+      if (typeof jsonString === 'object') return
       try {
         JSON.parse(jsonString)
         this.jsonError = ''

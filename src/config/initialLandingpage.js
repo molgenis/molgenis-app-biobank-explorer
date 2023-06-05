@@ -1,4 +1,4 @@
-const landingpage = {
+const initialLandingpage = {
   enabled: true,
   page_header: 'BBMRI-ERIC Directory',
   goto_catalogue_link: 'Browse the catalogue',
@@ -91,4 +91,4 @@ const landingpage = {
   }
 }
 
-module.exports = landingpage
+module.exports = initialLandingpage
