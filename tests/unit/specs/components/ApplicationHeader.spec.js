@@ -13,6 +13,8 @@ describe('ApplicationHeader', () => {
   let store
 
   const filters = createFilters({ filterFacets: filterDefinitions, filters: { selections: {}, satisfyAll: [] } })
+  /** for testing purposes, hide a filter */
+  filters[5].showFacet = false
   const setFilterActivation = jest.fn()
   const getReducedFilterOptions = jest.fn()
   beforeEach(() => {

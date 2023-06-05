@@ -51,6 +51,11 @@ const filterDefinitions = [
   },
   {
     name: 'commercial_use',
+    component: 'ToggleFilter',
+    trueOption: {
+      text: 'Available to commercial use',
+      value: 'true'
+    },
     label: 'Collaboration type',
     columnName: 'collaboration_commercial',
     humanReadableString: 'Biobank collaboration type(s):',
@@ -63,7 +68,7 @@ const filterDefinitions = [
     columnName: 'capabilities',
     humanReadableString: 'Biobank services:',
     applyTo: ['eu_bbmri_eric_biobanks'],
-    showFacet: false
+    showFacet: true
   },
   {
     name: 'combined_quality',
@@ -71,7 +76,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_assessment_levels',
     columnName: 'combined_quality',
     humanReadableString: 'Quality label(s):',
-    showFacet: false
+    showFacet: true
   },
   {
     name: 'network',
@@ -79,7 +84,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_networks',
     columnName: 'combined_network',
     humanReadableString: 'Network(s):',
-    showFacet: false
+    showFacet: true
   },
   {
     name: 'dataType',
@@ -87,8 +92,8 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'data_categories',
     humanReadableString: 'Data type(s):',
-    removeOptions: ['other'],
-    showFacet: false
+    removeOptions: ['other', 'not available'],
+    showFacet: true
   },
   {
     name: 'search',

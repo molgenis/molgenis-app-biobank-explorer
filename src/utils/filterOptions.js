@@ -89,6 +89,8 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
       } else {
         url = `${url}?q=${encodeRsqlValue(createDiagnosisLabelQuery(query))}`
       }
+    } else {
+      url += '?q=id=like=icd'
     }
 
     api.get(url).then(response => {
@@ -98,13 +100,5 @@ export const diagnosisAvailableFilterOptions = (tableName, filterName) => {
       cache({ filterName, filterOptions })
       resolve(filterOptions)
     })
-  })
-}
-
-export const collaborationTypeFilterOptions = () => {
-  const filterOptions = [{ text: 'Commercial use', value: 'true' }, { text: 'Non-commercial use only', value: 'false' }]
-  cache({ filterName: 'commercial_use', filterOptions })
-  return () => new Promise((resolve) => {
-    resolve(filterOptions)
   })
 }

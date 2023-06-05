@@ -73,7 +73,7 @@
               <option value="Unknown">Unknown</option>
               <optgroup label="━━━━━━━━━━━━">
                 <option value="collapse" class="ml-0 pl-0">
-                  Grouped together
+                  Collapse column
                 </option>
               </optgroup>
             </select>
@@ -90,7 +90,7 @@
               <option value="Unknown">Unknown</option>
               <optgroup label="━━━━━━━━━━━━">
                 <option value="collapse" class="ml-0 pl-0">
-                  Grouped together
+                  Collapse column
                 </option>
               </optgroup>
             </select>
@@ -320,7 +320,7 @@ export default {
     renderValue (value) {
       if (!value) return 'Unknown'
       /** we cannot collapse numbers, so handle it here instead if fixing it in the object itself */
-      if (!isNaN(value) && this.collapseColumns.length > 0) return 'n/a'
+      if (!isNaN(value) && this.collapseColumns.length > 0) return '*'
 
       if (Array.isArray(value)) {
         return value.join(', ')

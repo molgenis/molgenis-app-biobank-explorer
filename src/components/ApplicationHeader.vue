@@ -22,7 +22,7 @@
           "
           bookmark/>
       </div>
-      <div class="col text-right">
+      <div class="col d-flex justify-content-end align-items-center">
         <router-link
           v-if="showSettings"
           class="btn btn-light border mr-2"
@@ -119,11 +119,20 @@
         </span>
 
         <button
+          v-if="moreFacets.length"
           @click="showAllFilters = !showAllFilters"
           class="btn btn-link text-info">
           <span v-if="showAllFilters">Fewer filters</span>
           <span v-else>More filters</span>
         </button>
+
+        <toggle-filter
+          class="mb-1"
+          v-for="toggleFilter of toggleFilters"
+          @input="(value) => filterChange(toggleFilter.name, value)"
+          :value="activeFilters[toggleFilter.name]"
+          :key="toggleFilter.name"
+          v-bind="toggleFilter"/>
       </div>
     </div>
   </div>
@@ -137,6 +146,7 @@ import { mapGetters, mapMutations, mapState, mapActions } from 'vuex'
 import SearchFilter from './filters/SearchFilter.vue'
 import CheckboxFilter from './filters/CheckboxFilter.vue'
 import MultiFilter from './filters/MultiFilter.vue'
+import ToggleFilter from './filters/ToggleFilter.vue'
 import CheckOut from './checkout/CheckOut.vue'
 /** */
 
@@ -146,6 +156,7 @@ export default {
     SearchFilter,
     CheckboxFilter,
     MultiFilter,
+    ToggleFilter,
     CheckOut
   },
   computed: {
@@ -172,12 +183,18 @@ export default {
     },
     facetsToRender () {
       return this.filterFacets
-        .filter(filter => !filter.builtIn)
-        .filter(filter => filter.showFacet)
+        .filter((filter) => !filter.builtIn)
+        .filter((filter) => filter.showFacet)
+        .filter((filter) => filter.component !== 'ToggleFilter')
+    },
+    toggleFilters () {
+      return this.filterFacets.filter(
+        (filter) => filter.component === 'ToggleFilter'
+      )
     },
     moreFacets () {
       return this.filterFacets.filter(
-        filter => !filter.showFacet && !filter.builtIn
+        (filter) => !filter.showFacet && !filter.builtIn
       )
     },
     iconStyle () {
@@ -211,7 +228,8 @@ export default {
     },
     filterVariant (filterName) {
       const facetColor = 'secondary'
-      const prefix = this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
+      const prefix =
+        this.filterSelectionCount(filterName) > 0 ? '' : 'outline-'
       return `${prefix}${facetColor}`
     },
     filterSelectionCount (filterName) {
@@ -239,7 +257,10 @@ export default {
     },
     setInactive (filter) {
       if (filter.adaptive) {
-        this.setFilterActivation({ filterName: filter.name, activation: false })
+        this.setFilterActivation({
+          filterName: filter.name,
+          activation: false
+        })
       } else {
         return 0
       }
