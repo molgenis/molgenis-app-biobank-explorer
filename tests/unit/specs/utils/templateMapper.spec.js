@@ -278,7 +278,7 @@ describe('templateMapper', () => {
               },
               {
                 label: 'DUO Testlabel',
-                uri: '#'
+                uri: ''
               }
             ]
           }

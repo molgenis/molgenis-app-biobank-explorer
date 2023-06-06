@@ -8,13 +8,18 @@
         <div
           v-for="(item, index) in attribute.value"
           :key="`${index}-${displayName(item)}`">
-          <a :href="item.uri" target="_blank" class="text-break mr-2 mb-2">
+          <a
+            v-if="item.uri && item.uri.length"
+            :href="item.uri"
+            target="_blank"
+            class="text-break mr-2 mb-2">
             {{ displayName(item) }}
           </a>
+          <span v-else>{{ displayName(item) }}</span>
         </div>
       </template>
       <template v-else>
-        <span>{{attribute.value.join(', ')}}</span>
+        <span>{{ attribute.value.join(", ") }}</span>
       </template>
     </td>
   </tr>
@@ -33,7 +38,7 @@ export default {
         this.attribute.value.length &&
         typeof this.attribute.value[0] === 'object'
       ) {
-        return this.attribute.value.some(item => item.uri)
+        return this.attribute.value.some((item) => item.uri)
       } else {
         return ''
       }
