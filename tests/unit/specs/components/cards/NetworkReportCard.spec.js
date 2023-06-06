@@ -25,17 +25,7 @@ describe('NetworkReportCard', () => {
           email: 'blaat@bla.nl'
         },
         juridical_person: 'something',
-        url: 'https://blaat.nl',
-        common_collection_focus: true,
-        common_charter: true,
-        common_sops: false,
-        common_data_access_policy: true,
-        common_sample_access_policy: false,
-        common_mta: true,
-        common_image_access_policy: false,
-        common_image_mta: false,
-        common_representation: true,
-        common_url: true
+        url: 'https://blaat.nl'
       }
     }
 
@@ -81,22 +71,6 @@ describe('NetworkReportCard', () => {
       it('should fill contact', () => {
         const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
         expect(wrapper.vm.contact.email).toStrictEqual({ value: 'blaat@bla.nl', type: 'email' })
-      })
-    })
-
-    describe('detailsContent', () => {
-      it('should fill detailsContent', () => {
-        const wrapper = shallowMount(NetworkReportCard, { mocks, stubs, store, localVue })
-        expect(wrapper.vm.detailsContent['Common collection focus'].value).toEqual(true)
-        expect(wrapper.vm.detailsContent['Common charter'].value).toEqual(true)
-        expect(wrapper.vm.detailsContent['Common SOPS'].value).toEqual(false)
-        expect(wrapper.vm.detailsContent['Data access policy'].value).toEqual(true)
-        expect(wrapper.vm.detailsContent['Sample access policy'].value).toEqual(false)
-        expect(wrapper.vm.detailsContent['Common MTA'].value).toEqual(true)
-        expect(wrapper.vm.detailsContent['Common image access policy'].value).toEqual(false)
-        expect(wrapper.vm.detailsContent['Common image MTA'].value).toEqual(false)
-        expect(wrapper.vm.detailsContent['Common representation'].value).toEqual(true)
-        expect(wrapper.vm.detailsContent['Common URL'].value).toEqual(true)
       })
     })
   })

@@ -27,6 +27,16 @@
                 <report-description
                   :description="network.description"
                   :maxLength="500"></report-description>
+                <div v-if="network.common_network_elements && network.common_network_elements.length" class="my-5">
+                  <h3>Network details</h3>
+                  <ul>
+                    <li
+                      v-for="element of network.common_network_elements"
+                      :key="`key-${element}`">
+                      {{ element.label || element.description }}
+                    </li>
+                  </ul>
+                </div>
                 <report-details-list
                   :reportDetails="detailsContent"></report-details-list>
                 <b-tabs
@@ -134,7 +144,6 @@ import ReportDetailsList from '../report-components/ReportDetailsList.vue'
 import ViewGenerator from '../generators/ViewGenerator.vue'
 import CollectionTitle from '../report-components/CollectionTitle.vue'
 import {
-  mapNetworkData,
   mapContactInfo,
   getCollectionDetails
 } from '../../utils/templateMapper'
@@ -170,17 +179,14 @@ export default {
     collections () {
       return this.networkReport.collections
         ? this.networkReport.collections
-          .filter(collection => {
+          .filter((collection) => {
             return !collection.parentCollection
           })
-          .map(col => getCollectionDetails(col))
+          .map((col) => getCollectionDetails(col))
         : []
     },
     biobanks () {
       return this.networkReport.biobanks
-    },
-    detailsContent () {
-      return mapNetworkData(this.network)
     },
     contact () {
       return mapContactInfo(this.network)

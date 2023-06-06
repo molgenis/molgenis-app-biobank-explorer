@@ -3,7 +3,6 @@ import {
   mapRange,
   mapNetworkInfo,
   mapContactInfo,
-  mapNetworkData,
   mapUrl,
   getSize,
   getNameOfHead,
@@ -643,67 +642,6 @@ describe('templateMapper', () => {
 
       const actual = getCollectionDetails(collectionsReport)
       expect(actual.viewmodel).toStrictEqual(expected)
-    })
-  })
-
-  describe('mapNetworkData', () => {
-    it('should map network data', () => {
-      const network = {
-        common_collection_focus: true,
-        common_charter: true,
-        common_sops: false,
-        common_data_access_policy: true,
-        common_sample_access_policy: false,
-        common_mta: true,
-        common_image_access_policy: false,
-        common_image_mta: false,
-        common_representation: true,
-        common_url: true
-      }
-      const expected = {
-        'Common collection focus': {
-          value: true,
-          type: 'bool'
-        },
-        'Common charter': {
-          value: true,
-          type: 'bool'
-        },
-        'Common SOPS': {
-          value: false,
-          type: 'bool'
-        },
-        'Data access policy': {
-          value: true,
-          type: 'bool'
-        },
-        'Sample access policy': {
-          value: false,
-          type: 'bool'
-        },
-        'Common MTA': {
-          value: true,
-          type: 'bool'
-        },
-        'Common image access policy': {
-          value: false,
-          type: 'bool'
-        },
-        'Common image MTA': {
-          value: false,
-          type: 'bool'
-        },
-        'Common representation': {
-          value: true,
-          type: 'bool'
-        },
-        'Common URL': {
-          value: true,
-          type: 'bool'
-        }
-      }
-      const actual = mapNetworkData(network)
-      expect(actual).toStrictEqual(expected)
     })
   })
 
