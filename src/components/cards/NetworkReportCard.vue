@@ -27,7 +27,7 @@
                 <report-description
                   :description="network.description"
                   :maxLength="500"></report-description>
-                <div v-if="network.common_network_elements.length" class="my-5">
+                <div v-if="network.common_network_elements && network.common_network_elements.length" class="my-5">
                   <h3>Network details</h3>
                   <ul>
                     <li
