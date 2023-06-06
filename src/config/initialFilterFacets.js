@@ -26,6 +26,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_collection_types',
     columnName: 'type',
     humanReadableString: 'Collection type(s):',
+    queryOptions: '?sort=label',
     removeOptions: ['other'],
     showFacet: true,
     adaptive: true
@@ -36,6 +37,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_category',
     columnName: 'categories',
     humanReadableString: 'Categories:',
+    queryOptions: '?sort=label',
     showFacet: true,
     adaptive: true
   },
@@ -45,6 +47,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_material_types',
     columnName: 'materials',
     humanReadableString: 'Material type(s):',
+    queryOptions: '?sort=label',
     removeOptions: ['other'],
     showFacet: true,
     adaptive: true
@@ -67,6 +70,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_capabilities',
     columnName: 'capabilities',
     humanReadableString: 'Biobank services:',
+    queryOptions: '?sort=label',
     applyTo: ['eu_bbmri_eric_biobanks'],
     showFacet: true
   },
@@ -76,6 +80,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_assessment_levels',
     columnName: 'combined_quality',
     humanReadableString: 'Quality label(s):',
+    queryOptions: '?sort=label',
     showFacet: true
   },
   {
@@ -84,6 +89,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_networks',
     columnName: 'combined_network',
     humanReadableString: 'Network(s):',
+    queryOptions: '?sort=name',
     showFacet: true
   },
   {
@@ -92,6 +98,7 @@ const filterDefinitions = [
     tableName: 'eu_bbmri_eric_data_types',
     columnName: 'data_categories',
     humanReadableString: 'Data type(s):',
+    queryOptions: '?sort=label',
     removeOptions: ['other', 'not available'],
     showFacet: true
   },

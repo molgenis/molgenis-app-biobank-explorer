@@ -28,6 +28,8 @@ export default {
     commit('SetNetworkReport', undefined)
     commit('SetLoading', true)
 
+    console.log('network report')
+
     const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
       .then(response => commit('SetNetworkReport', response))
       .finally(() => commit('SetLoading', false))
