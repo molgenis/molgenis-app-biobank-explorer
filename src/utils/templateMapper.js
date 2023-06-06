@@ -24,7 +24,7 @@ export const mapToString = (object, property, prefix, suffix) => {
 export const mapObjArray = (objects) => {
   if (!objects) return []
   if (!objects.some(o => o.uri || o.url)) return objects.map(item => getTextForUI(item))
-  else return objects.map(item => ({ label: getTextForUI(item), uri: item.uri || item.url || '#' }))
+  else return objects.map(item => ({ label: getTextForUI(item), uri: item.uri || item.url || '' }))
 }
 
 export const mapUrl = url =>

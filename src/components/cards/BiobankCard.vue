@@ -8,33 +8,49 @@
         'back-side': showCollections,
       },
       fullSize ? 'biobank-card-large' : 'biobank-card',
-      'flip',
     ]">
-    <div tabindex="0">
-      <section>
-        <div v-if="loading" class="loading-screen">
-          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
-        </div>
-        <div v-else>
-          <header class="border-0 card-header p-1">
-            <h5 class="p-1 pb-0 mt-1">
-              <router-link
-                :to="'/biobank/' + biobank.id"
-                title="Biobank details"
-                class="text-dark">
-                <span
-                  class="fa fa-server mr-2 text-primary"
-                  aria-hidden="true"></span>
-                <span class="biobank-name">{{ biobank.name }}</span>
-                <sup
-                  v-if="hasBiobankQuality"
-                  class="fa fa-check-circle-o text-success certificate-icon ml-1"
-                  aria-hidden="true"></sup>
-              </router-link>
-            </h5>
-          </header>
+    <section
+      class="d-flex flex-column justify-content-center align-items-center">
+      <div v-if="loading" class="loading-screen">
+        <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
+      </div>
+      <div class="align-self-stretch" v-else>
+        <header class="border-0 card-header p-1">
+          <h5 class="pt-1 pl-1 pr-1 mt-1">
+            <router-link
+              :to="'/biobank/' + biobank.id"
+              title="Biobank details"
+              class="text-dark">
+              <span
+                class="fa fa-server mr-2 text-primary"
+                aria-hidden="true"></span>
+              <span class="biobank-name">{{ biobank.name }}</span>
+              <sup
+                v-if="hasBiobankQuality"
+                class="d-inline-block"
+                aria-hidden="true">
+                <info-popover
+                  faIcon="fa-check-circle-o"
+                  textColor="text-success"
+                  class="ml-1 certificate-icon"
+                  popover-placement="bottom">
+                  <div
+                    class="popover-content"
+                    v-for="quality of biobankQualities"
+                    :key="quality.label">
+                    <b>{{ quality.label }}</b>
+                    <p class="mt-1">
+                      {{ qualityStandardsDictionary[quality.label] }}
+                    </p>
+                  </div>
+                </info-popover>
+              </sup>
+            </router-link>
+          </h5>
+        </header>
 
-          <div class="shadow-sm" v-if="numberOfCollections">
+        <div v-if="!loading && !showCollections">
+          <div class="mb-1 shadow-sm" v-if="numberOfCollections">
             <button
               class="btn btn-link text-info pl-2"
               @click.prevent="showCollections = true">
@@ -54,43 +70,8 @@
             </small>
           </div>
         </div>
-      </section>
-      <section>
-        <div v-if="loading" class="loading-screen">
-          <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
-        </div>
-        <!-- We need to hide this, because you cannot have two scrollbars at the same time. -->
-        <div v-if="!loading && showCollections">
-          <header class="border-0 card-header p-1">
-            <h5 class="pt-1 pl-1 pr-1 mt-1">
-              <router-link
-                :to="'/biobank/' + biobank.id"
-                title="Biobank details"
-                class="text-dark">
-                <span
-                  class="fa fa-server mr-2 text-primary"
-                  aria-hidden="true"></span>
-                <span class="biobank-name">{{ biobank.name }}</span>
-                <sup
-                  v-if="hasBiobankQuality"
-                  class="d-inline-block"
-                  aria-hidden="true">
-                  <info-popover
-                    faIcon="fa-check-circle-o"
-                    textColor="text-success"
-                    class="ml-1 certificate-icon"
-                    popover-placement="bottom">
-                    <div class="popover-content" v-for="quality of biobankQualities" :key="quality.label">
-                      <b>{{ quality.label }}</b>
-                      <p class="mt-1">
-                        {{ qualityStandardsDictionary[quality.label] }}
-                      </p>
-                    </div>
-                  </info-popover>
-                </sup>
-              </router-link>
-            </h5>
-          </header>
+
+        <div v-else>
           <div class="d-flex mb-1 shadow-sm">
             <button
               class="btn btn-link text-info pl-2"
@@ -161,8 +142,8 @@
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </article>
 </template>
 
@@ -360,7 +341,6 @@ export default {
   background-color: #efefef;
 }
 
-/** Flip card */
 article {
   padding: 1.5rem;
 }
@@ -368,55 +348,19 @@ article {
 article footer {
   padding: 1.5rem 0 0 0;
 }
-article.flip {
+article {
   padding: 0;
   position: relative;
   height: 28rem;
-  perspective: 1000px;
 }
 
-article.flip div[tabindex="0"] {
+article {
   box-shadow: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132),
     0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
 }
 
-article.flip div[tabindex="0"]:focus {
-  outline: none !important;
-}
-
-article.flip [tabindex="0"] section {
-  background-color: #fff;
-  border: 0.1px solid #fff;
-}
-
-article.flip.back-side > [tabindex="0"] {
-  transform: rotateY(180deg);
-}
-article.flip [tabindex="0"] {
-  position: relative;
-  width: 100%;
+article section {
   height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-}
-
-article.flip [tabindex="0"] section {
-  position: absolute;
   width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  /* Safari */
-  backface-visibility: hidden;
-  box-sizing: border-box;
-  visibility: visible;
-  -webkit-perspective: 0;
-  perspective: 0;
 }
-
-article.flip [tabindex="0"] section:last-child {
-  transform: rotateY(180deg);
-}
-
-/** ~~~ */
 </style>
