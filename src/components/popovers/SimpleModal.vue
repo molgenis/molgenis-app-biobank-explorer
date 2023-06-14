@@ -54,6 +54,7 @@ article {
   position: absolute;
   top:1rem;
   z-index: 1210;
+  height:auto;
   width:auto;
   border-radius: 4px;
 }

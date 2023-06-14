@@ -1,7 +1,8 @@
 <template>
   <div
     @click="$root.$emit('bv::hide::popover')"
-    :class="{ 'molgenis-negative-top-margin': removeFreemarkerMargin }">
+    :class="{ 'molgenis-negative-top-margin': removeFreemarkerMargin }"
+    class="app-layout">
     <div
       v-if="applicationNotification"
       class="alert alert-warning"
@@ -80,6 +81,11 @@ export default {
 </script>
 
 <style>
+.app-layout {
+  width: 71%; /** to match the width of the frontpage */
+  margin: 0 auto;
+}
+
 .mg-page-content {
   padding-top: 0 !important;
 }
