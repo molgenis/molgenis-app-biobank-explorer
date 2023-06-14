@@ -10,7 +10,7 @@
       fullSize ? 'biobank-card-large' : 'biobank-card',
     ]">
     <section
-      class="d-flex flex-column justify-content-center align-items-center">
+      class="d-flex flex-column align-items-center">
       <div v-if="loading" class="loading-screen">
         <span class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></span>
       </div>

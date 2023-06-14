@@ -91,7 +91,7 @@ export default {
 
 <style>
 .biobank-cards-container {
-  gap: 2rem;
+  gap: 1.3rem;
 }
 
 .status-text {
