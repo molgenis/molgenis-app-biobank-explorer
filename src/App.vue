@@ -82,7 +82,7 @@ export default {
 
 <style>
 .app-layout {
-  width: 71%; /** to match the width of the frontpage */
+  width: 80%;
   margin: 0 auto;
 }
 
