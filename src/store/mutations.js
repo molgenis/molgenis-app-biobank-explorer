@@ -168,14 +168,9 @@ export default {
   SetQualityStandardDictionary (state, response) {
     if (!response || !response.items) return
 
-    /** Combine arrays from two tables and deduplicate */
-    const allStandards = [...new Set(
-      response.map(response => response.items)
-        .reduce((prev, next) => prev.concat(next)))
-    ]
     const qualityStandardsDictionary = {}
 
-    allStandards.forEach((standard) => {
+    response.items.forEach((standard) => {
       qualityStandardsDictionary[standard.label] = standard.description || ''
     })
 
