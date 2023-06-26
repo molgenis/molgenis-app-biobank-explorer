@@ -28,8 +28,6 @@ export default {
     commit('SetNetworkReport', undefined)
     commit('SetLoading', true)
 
-    console.log('network report')
-
     const networks = api.get(`${NETWORK_API_PATH}/${networkId}`)
       .then(response => commit('SetNetworkReport', response))
       .finally(() => commit('SetLoading', false))
@@ -143,8 +141,8 @@ export default {
   async GetQualityStandardInformation ({ commit }) {
     const biobankQualityInfo = api.get(`${BIOBANK_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
     const collectionQualityInfo = api.get(`${COLLECTION_QUALITY_STANDARDS}?num=10000&attrs=label,description`)
-    const response = await Promise.all([biobankQualityInfo, collectionQualityInfo])
-
+    const responses = await Promise.all([biobankQualityInfo, collectionQualityInfo])
+    const response = { items: responses.flatMap(response => response.items) }
     commit('SetQualityStandardDictionary', response)
   },
 
