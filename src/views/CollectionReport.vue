@@ -9,7 +9,7 @@
     <script
       v-if="bioschemasJsonld && !isLoading"
       v-text="bioschemasJsonld"
-      type="application/ld+json"/>
+      type="application/ld+json"></script>
     <loading
       :active="isLoading"
       loader="dots"
