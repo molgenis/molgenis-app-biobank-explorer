@@ -12,7 +12,7 @@ export const STUDY_REPORT_ATTRIBUTE_SELECTOR = () => {
     rsqlStart += studyRsql.join(',')
   }
 
-  return `${rsqlStart}also_known(*)`
+  return `${rsqlStart}collection(*),also_known(*)`
 }
 
 export const studyActions = {

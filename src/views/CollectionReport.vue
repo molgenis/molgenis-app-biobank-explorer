@@ -65,7 +65,22 @@
               <div class="col-md-8">
                 <report-collection-details
                   v-if="collection"
-                  :collection="collection"/>
+                  :collection="collection" />
+
+                <!-- Studies Part -->
+                <h3 class="mt-4">Related Studies</h3>
+                <div
+                  v-for="(study, index) in studiesData"
+                  :key="study.id">
+                  <hr v-if="index" />
+                  <study-title
+                    :title="study.name"
+                    :id="study.id"/>
+
+                  <view-generator
+                    class="collection-view"
+                    :viewmodel="study.viewmodel"/>
+                </div>
               </div>
 
               <!-- Right side card -->
@@ -90,11 +105,13 @@ import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportTitle from '../components/report-components/ReportTitle'
 import CollectionReportInfoCard from '../components/cards/CollectionReportInfoCard'
-import { collectionReportInformation } from '../utils/templateMapper'
+import { collectionReportInformation, getStudyDetails } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
 import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
 import CheckOut from '../components/checkout/CheckOut.vue'
+import ViewGenerator from '../components/generators/ViewGenerator.vue'
+import StudyTitle from '../components/report-components/StudyTitle'
 
 export default {
   name: 'CollectionReport',
@@ -104,7 +121,9 @@ export default {
     Loading,
     ReportCollectionDetails,
     FactsTable,
-    CheckOut
+    CheckOut,
+    ViewGenerator,
+    StudyTitle
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
@@ -115,6 +134,9 @@ export default {
   computed: {
     ...mapState({ collection: 'collectionReport', isLoading: 'isLoading' }),
     ...mapGetters(['uiText']),
+    collectionDataAvailable () {
+      return Object.keys(this.collection).length
+    },
     info () {
       return collectionReportInformation(this.collection)
     },
@@ -130,6 +152,13 @@ export default {
     factsData () {
       // TODO rework this so that facts are stand-alone, this is a workaround because @ReportCollectionDetails
       return { value: this.collection.facts }
+    },
+    studiesData () {
+      return this.collectionDataAvailable && this.collection.studies
+        ? this.collection.studies
+          .filter(it => !it.parent_collection)
+          .map(col => getStudyDetails(col))
+        : []
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */

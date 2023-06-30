@@ -18,13 +18,13 @@
                   {{ uiText["home"] }}
                 </router-link>
               </li>
-              <!-- <li class="breadcrumb-item">
+              <li class="breadcrumb-item">
                 <router-link
-                  :to="'/collection/' + study.collection.biobank.id"
+                  :to="'/biobank/' + study.collection.biobank.id"
                   :title="'Go to biobank ' + study.collection.biobank.name">
                   {{ study.collection.biobank.name }}
                 </router-link>
-              </li> -->
+              </li>
               <li class="breadcrumb-item">
                 <router-link
                   :to="'/collection/' + study.collection.id"
