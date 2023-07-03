@@ -67,19 +67,16 @@
                   v-if="collection"
                   :collection="collection" />
 
-                <!-- Studies Part -->
-                <h3 class="mt-4">Related Studies</h3>
-                <div
-                  v-for="(study, index) in studiesData"
-                  :key="study.id">
-                  <hr v-if="index" />
+                <!-- Study Part -->
+                <div v-if="studyData">
+                  <h3 class="mt-4">Related Study</h3>
                   <study-title
-                    :title="study.name"
-                    :id="study.id"/>
+                    :title="studyData.title"
+                    :id="studyData.id"/>
 
                   <view-generator
                     class="collection-view"
-                    :viewmodel="study.viewmodel"/>
+                    :viewmodel="studyData.viewmodel"/>
                 </div>
               </div>
 
@@ -153,12 +150,10 @@ export default {
       // TODO rework this so that facts are stand-alone, this is a workaround because @ReportCollectionDetails
       return { value: this.collection.facts }
     },
-    studiesData () {
-      return this.collectionDataAvailable && this.collection.studies
-        ? this.collection.studies
-          .filter(it => !it.parent_collection)
-          .map(col => getStudyDetails(col))
-        : []
+    studyData () {
+      return this.collectionDataAvailable && this.collection.study
+        ? getStudyDetails(this.collection.study)
+        : undefined
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */

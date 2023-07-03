@@ -11,7 +11,7 @@
         <div class="col my-3 shadow-sm">
           <nav aria-label="breadcrumb" v-if="study">
             <ol class="breadcrumb my-1">
-              <li class="breadcrumb-item">
+              <!-- <li class="breadcrumb-item">
                 <router-link
                   to="/"
                   title="Back to biobank explorer">
@@ -34,7 +34,7 @@
               </li>
               <li class="breadcrumb-item active text-dark" aria-current="page">
                 {{ study.name }}
-              </li>
+              </li> -->
             </ol>
           </nav>
         </div>
@@ -42,16 +42,28 @@
 
       <div class="row" v-if="study && !this.isLoading">
         <div class="col">
-          <report-title type="Study" :name="study.name">
+          <report-title type="Study" :name="study.title">
           </report-title>
 
           <div class="container p-0">
             <div class="row">
               <div class="col-md-8">
                 <report-study-details :study="study" />
-              </div>
 
-              <!-- Right side card -->
+                <h3 class="mt-4">Collections with samples of the study</h3>
+                <div class="pt-3">
+                  <div
+                    v-for="(collection, index) in collectionsData"
+                    :key="collection.id">
+                    <hr v-if="index" />
+                    <collection-title
+                      :title="collection.name"
+                      :id="collection.id"/>
+                    <view-generator :viewmodel="collection.viewmodel" />
+                  </div>
+                </div>
+              </div>
+                <!-- Right side card -->
               <study-report-info-card
                 :info="info"></study-report-info-card>
             </div>
@@ -70,17 +82,22 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportTitle from '../components/report-components/ReportTitle'
+import CollectionTitle from '../components/report-components/CollectionTitle'
 import StudyReportInfoCard from '../components/cards/StudyReportInfoCard'
-import { studyReportInformation } from '../utils/templateMapper'
+import ViewGenerator from '../components/generators/ViewGenerator'
+import { studyReportInformation, getCollectionDetails } from '../utils/templateMapper'
 import ReportStudyDetails from '../components/report-components/ReportStudyDetails.vue'
+import { sortCollectionsByName } from '../utils/sorting'
 
 export default {
   name: 'StudyReport',
   components: {
     ReportTitle,
+    CollectionTitle,
     StudyReportInfoCard,
     Loading,
-    ReportStudyDetails
+    ReportStudyDetails,
+    ViewGenerator
   },
   methods: {
     ...mapActions(['GetStudyReport']),
@@ -94,9 +111,19 @@ export default {
     info () {
       return studyReportInformation(this.study)
     },
+    studyDataAvailable () {
+      return Object.keys(this.study).length
+    },
     studyId () {
       const splittedUrl = this.$route.fullPath.split('/')
       return splittedUrl[splittedUrl.length - 1]
+    },
+    collectionsData () {
+      return this.studyDataAvailable && this.study.collections
+        ? sortCollectionsByName(this.study.collections)
+          .filter(it => !it.parent_collection)
+          .map(col => getCollectionDetails(col))
+        : []
     }
   },
   watch: {

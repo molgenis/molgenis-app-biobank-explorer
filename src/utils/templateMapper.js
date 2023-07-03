@@ -291,35 +291,6 @@ export const collectionReportInformation = collection => {
 export const studyReportInformation = study => {
   const studyReport = {}
 
-  if (study.principal_investigator) {
-    studyReport.principal_investigator = {
-      name: getName(study.principal_investigator),
-      email: study.principal_investigator.email ? study.principal_investigator.email : undefined,
-      phone: study.principal_investigator.phone ? study.principal_investigator.phone : undefined
-    }
-  }
-
-  if (study.contact) {
-    studyReport.contact = {
-      name: getName(study.contact),
-      email: study.contact.email ? study.contact.email : undefined,
-      phone: study.contact.phone ? study.contact.phone : undefined
-    }
-  }
-
-  // if (study.collection) {
-  //   studyReport.biobank = {
-  //     id: study.biobank.id,
-  //     name: study.biobank.name,
-  //     juridical_person: study.biobank.juridical_person,
-  //     country: study.country.name,
-  //     report: `/biobank/${study.biobank.id}`,
-  //     website: mapUrl(study.biobank.url),
-  //     email: study.biobank.contact ? study.biobank.contact.email : undefined,
-  //     partnerCharter: study.biobank.partner_charter_signed ? 'yes' : 'no'
-  //   }
-  // }
-
   if (study.also_known) {
     studyReport.also_known = study.also_known.map(ak => {
       return {
