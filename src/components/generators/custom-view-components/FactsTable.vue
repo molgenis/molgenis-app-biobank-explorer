@@ -6,38 +6,34 @@
         <label>
           <input
             type="checkbox"
-            name="sample_type.label"
-            @change="(e) => toggleColumn(e, 'sample_type.label')"
-            :checked="columnChecked('sample_type.label')"/>
+            @change="(e) => toggleColumn(e, 'sample_type')"
+            :checked="columnChecked('sample_type')"/>
           Material type
         </label>
         <label>
           <input
             type="checkbox"
-            @change="(e) => toggleColumn(e, 'sex.CollectionSex')"
-            :checked="columnChecked('sex.CollectionSex')"/>
+            @change="(e) => toggleColumn(e, 'sex')"
+            :checked="columnChecked('sex')"/>
           Sex
         </label>
         <label>
           <input
             type="checkbox"
-            @change="(e) => toggleColumn(e, 'age.CollectionAgeRange')"
-            :checked="columnChecked('age.CollectionAgeRange')"/>
+            @change="(e) => toggleColumn(e, 'age')"
+            :checked="columnChecked('age')"/>
           Age range
         </label>
         <label>
           <input
             type="checkbox"
-            @change="(e) => toggleColumn(e, 'disease.label')"
-            :checked="columnChecked('disease.label')"/>
+            @change="(e) => toggleColumn(e, 'disease')"
+            :checked="columnChecked('disease')"/>
           Disease codes
         </label>
       </div>
     </div>
-    <div
-      v-if="collapseColumnsOrder.length > 0"
-      class="alert alert-dark"
-      role="alert">
+    <div v-if="splitByColumn.length < 4" class="alert alert-dark" role="alert">
       Because of the adopted method of data creation and collection the number
       of donors presented in the table below should not be added as it may give
       the wrong sums.
@@ -45,34 +41,34 @@
     <table class="table border w-100">
       <thead>
         <tr class="facts-header bg-secondary text-white">
-          <th @click="sort('sample_type.label')">
+          <th @click="sort('sample_type')">
             Material type
             <span
-              v-if="sortColumn === 'sample_type.label'"
+              v-if="sortColumn === 'sample_type'"
               class="fa"
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
           </th>
-          <th @click="sort('sex.CollectionSex')">
+          <th @click="sort('sex')">
             Sex
             <span
-              v-if="sortColumn === 'sex.CollectionSex'"
+              v-if="sortColumn === 'sex'"
               class="fa"
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
           </th>
-          <th @click="sort('age.CollectionAgeRange')">
+          <th @click="sort('age')">
             Age range
             <span
-              v-if="sortColumn === 'age.CollectionAgeRange'"
+              v-if="sortColumn === 'age'"
               class="fa"
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
           </th>
-          <th @click="sort('disease.label')">
+          <th @click="sort('disease')">
             Disease codes
             <span
-              v-if="sortColumn === 'disease.label'"
+              v-if="sortColumn === 'disease'"
               class="fa"
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
@@ -96,7 +92,7 @@
         </tr>
         <tr class="filter-bar">
           <th>
-            <select @change="filter('sample_type.label', $event)" class="w-100">
+            <select @change="filter('sample_type', $event)" class="w-100">
               <option value="all">All</option>
               <option
                 v-for="material of materialtypeOptions"
@@ -108,7 +104,7 @@
             </select>
           </th>
           <th>
-            <select @change="filter('sex.CollectionSex', $event)">
+            <select @change="filter('sex', $event)">
               <option value="all">All</option>
               <option
                 v-for="sex of sexOptions"
@@ -121,7 +117,7 @@
           </th>
 
           <th>
-            <select @change="filter('age.CollectionAgeRange', $event)">
+            <select @change="filter('age', $event)">
               <option value="all">All</option>
               <option
                 v-for="ageRange of ageRangeOptions"
@@ -133,7 +129,7 @@
             </select>
           </th>
           <th>
-            <select @change="filter('disease.label', $event)">
+            <select @change="filter('disease', $event)">
               <option value="all">All</option>
               <option
                 v-for="disease of diseaseOptions"
@@ -152,12 +148,12 @@
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
             <th scope="row" class="pr-1 align-top">
-              {{ renderNestedValue(fact.sample_type, "label") }}
+              {{ renderValue(fact.sample_type, "label") }}
             </th>
-            <td>{{ renderNestedValue(fact.sex, "CollectionSex") }}</td>
-            <td>{{ renderNestedValue(fact.age, "CollectionAgeRange") }}</td>
-            <td :title="renderNestedValue(fact.disease, 'id')">
-              {{ renderNestedValue(fact.disease, "label") }}
+            <td>{{ renderValue(fact.sex) }}</td>
+            <td>{{ renderValue(fact.age) }}</td>
+            <td :title="renderValue(fact.disease_id)">
+              {{ renderValue(fact.disease) }}
             </td>
             <td>{{ renderValue(fact.number_of_donors) }}</td>
             <td>{{ renderSamplesValue(fact.number_of_samples) }}</td>
@@ -181,11 +177,22 @@ export default {
       sortColumn: '',
       sortAsc: false,
       filters: [],
-      collapseColumnsOrder: []
+      /** these columns are all the critearia that the rows should be split on. */
+      splitByColumn: ['sample_type', 'sex', 'age', 'disease'],
+      splittableColumns: ['sample_type', 'sex', 'age', 'disease', 'number_of_samples'],
+      factsProperties: [
+        'sample_type.label',
+        'sex.CollectionSex',
+        'age.CollectionAgeRange',
+        'disease.label',
+        'disease.id',
+        'number_of_samples',
+        'number_of_donors'
+      ]
     }
   },
   watch: {
-    collapseColumnsOrder () {
+    splitByColumn () {
       this.collapseRows()
     }
   },
@@ -227,7 +234,7 @@ export default {
       ]
     },
     columnChecked () {
-      return (column) => !this.collapseColumnsOrder.includes(column)
+      return (column) => this.splitByColumn.includes(column)
     },
     factsTable () {
       if (this.filters.length === 0) return this.facts
@@ -240,11 +247,11 @@ export default {
           const propertyValue = this.getValue(fact, filter.column)
           /** it did not match all filters, so goodbye. */
           if (!propertyValue && filter.value !== 'Unknown') {
-            continue
+            break
           } else if (!propertyValue && filter.value === 'Unknown') {
             filteredFacts.push(fact)
           } else if (propertyValue !== filter.value) {
-            continue
+            break
           } else if (index === lastFilterIndex) {
             filteredFacts.push(fact)
           }
@@ -257,12 +264,12 @@ export default {
   methods: {
     toggleColumn (e, columnName) {
       if (e.target.checked) {
-        const columnIndex = this.collapseColumnsOrder.findIndex(
+        this.splitByColumn.push(columnName)
+      } else {
+        const columnIndex = this.splitByColumn.findIndex(
           (cco) => cco === columnName
         )
-        this.collapseColumnsOrder.splice(columnIndex, 1)
-      } else {
-        this.collapseColumnsOrder.push(columnName)
+        this.splitByColumn.splice(columnIndex, 1)
       }
     },
     hasAFactToShow (fact) {
@@ -319,12 +326,6 @@ export default {
       })
     },
     renderValue (value) {
-      if (!value) return 'Unknown'
-      /** we cannot collapse numbers, so handle it here instead if fixing it in the object itself */
-      if (!isNaN(value) && this.collapseColumnsOrder.length > 0) {
-        return 'available'
-      }
-
       if (Array.isArray(value)) {
         return value.join(', ')
       } else return value
@@ -333,18 +334,13 @@ export default {
       if (!value) return 'Unknown'
 
       if (Array.isArray(value)) {
-        const sum = value.reduce((prev, next) => prev + next)
+        const sum = value.reduce(
+          (prev, next) => parseInt(prev) + parseInt(next)
+        )
         return sum
       } else return value
     },
-    renderNestedValue (object, property) {
-      if (!object || !object[property]) return 'Unknown'
-      const value = object[property]
 
-      if (Array.isArray(value)) {
-        return value.join(', ')
-      } else return value
-    },
     getValue (object, propertyString) {
       const trail = propertyString.split('.')
       const trailLength = trail.length
@@ -365,54 +361,8 @@ export default {
     hardcopy (value) {
       return JSON.parse(JSON.stringify(value))
     },
-    collapseObject (from, to) {
-      const keysOfFact = Object.keys(from)
-      for (const key of keysOfFact) {
-        const value = this.getValue(from, key)
-        const valueType = typeof value
-
-        if (Array.isArray(value)) {
-          if (to[key] && !Array.isArray(value)) {
-            if (!to[key].includes(value)) {
-              to[key].push(value)
-            }
-          } else if (Array.isArray(value)) {
-            if (to[key]) {
-              to[key] = [...new Set(to[key].concat(value))]
-            } else {
-              to[key] = value
-            }
-          } else { to[key] = value }
-        } else if (valueType === 'object') {
-          if (to[key]) {
-            to[key] = this.collapseObject(value, to[key])
-          } else {
-            to[key] = value
-          }
-        } else if (key === 'number_of_donors') {
-          to[key] = 'available'
-        } else if (key === 'number_of_samples') {
-          to[key] = to[key] ? to[key] + parseInt(value) : parseInt(value)
-        } else {
-          if (to[key]) {
-            if (typeof to[key] === 'string') {
-              if (to[key] !== value) {
-                to[key] = [to[key], value]
-              }
-            } else {
-              if (!to[key].includes(value)) {
-                to[key].push(value)
-              }
-            }
-          } else {
-            to[key] = [value]
-          }
-        }
-      }
-      return to
-    },
     collapseRows () {
-      if (!this.collapseColumnsOrder.length) {
+      if (this.splitByColumn.length === 4) {
         /** no group together selected, so reset the state */
         this.copyFactsToComponentState()
         return
@@ -421,41 +371,95 @@ export default {
       /** make a copy that we can keep mutating utill we have dealt with all the collapses.
        * order matters!
        */
-      let groupedFacts = this.hardcopy(this.facts)
-      for (const groupByColumn of this.collapseColumnsOrder) {
-        const groupBy = {}
-        for (const fact of groupedFacts) {
-          let groupKey = ''
-          groupKey += this.getValue(fact, groupByColumn)
+      const baseFacts = this.hardcopy(this.factsData())
+      const groupedFacts = []
 
-          if (!groupBy[groupKey]) {
-            groupBy[groupKey] = [fact]
-          } else {
-            groupBy[groupKey].push(fact)
+      const criteriaMet = []
+
+      for (const baseFact of baseFacts) {
+        const criteria = {}
+
+        let newCriteria = ''
+
+        for (const criteriaColumn of this.splittableColumns) {
+          if (this.splitByColumn.includes(criteriaColumn)) {
+            const critValue = this.getValue(baseFact, criteriaColumn)
+            /** for use to group */
+            criteria[criteriaColumn] = critValue
+            /** track which combination of values has been grouped already  */
+            newCriteria += critValue
           }
         }
 
-        const collapsedFacts = []
-        const groupedFactKeys = Object.keys(groupBy)
-
-        for (const groupKey of groupedFactKeys) {
-          let collapsedFact = {}
-          const factsToCollapse = groupBy[groupKey]
-
-          for (const fact of factsToCollapse) {
-            collapsedFact = this.collapseObject(fact, collapsedFact)
+        if (!criteriaMet.includes(newCriteria)) {
+          let critGroup = baseFacts
+          const criteriaKeys = Object.keys(criteria)
+          for (const critKey of criteriaKeys) {
+            critGroup = critGroup.filter(
+              (obj) => obj[critKey] === criteria[critKey]
+            )
           }
-
-          collapsedFacts.push(collapsedFact)
+          criteriaMet.push(newCriteria)
+          groupedFacts.push(critGroup)
         }
-        groupedFacts = collapsedFacts
-        /** set the collapsed fact to the table */
       }
-      this.facts = groupedFacts
+      const collapsedFacts = []
+
+      for (const factGroup of groupedFacts) {
+        let collapsedFact = { }
+
+        for (const fact of factGroup) {
+          if (!Object.keys(collapsedFact).length) {
+            collapsedFact = fact
+            continue
+          }
+
+          for (const column of this.splittableColumns) {
+            if (!this.splitByColumn.includes(column)) {
+              const mergedValue = collapsedFact[column]
+
+              if (Array.isArray(mergedValue)) {
+                const valueToMerge = fact[column]
+                if (Array.isArray(valueToMerge)) {
+                  collapsedFact[column] = [...new Set(...collapsedFact[column].concat(fact[column]))]
+                } else {
+                  if (!collapsedFact[column].includes(fact[column])) {
+                    collapsedFact[column].push(fact[column])
+                  }
+                }
+              } else {
+                if (collapsedFact[column] !== fact[column]) {
+                  collapsedFact[column] = [collapsedFact[column], fact[column]]
+                }
+              }
+            }
+          }
+        }
+        collapsedFact.number_of_donors = 'available'
+        collapsedFacts.push(collapsedFact)
+      }
+      this.facts = collapsedFacts
+    },
+    factsData () {
+      const rawFacts = this.hardcopy(this.attribute.value)
+      const facts = []
+
+      for (const rawFact of rawFacts) {
+        const fact = {}
+        for (const property of this.factsProperties) {
+          const key = property.split('.')[0]
+
+          if (!fact[key]) {
+            fact[key] = this.getValue(rawFact, property)
+          }
+        }
+        facts.push(fact)
+      }
+      return facts
     },
     /** making a hardcopy, so we can alter it without issues */
     copyFactsToComponentState () {
-      this.facts = this.hardcopy(this.attribute.value)
+      this.facts = this.factsData()
     }
   },
   mounted () {
