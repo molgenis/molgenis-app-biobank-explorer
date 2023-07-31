@@ -435,7 +435,7 @@ export default {
             }
           }
         }
-        collapsedFact.number_of_donors = 'available'
+        collapsedFact.number_of_donors = 'Available'
         collapsedFacts.push(collapsedFact)
       }
       this.facts = collapsedFacts
