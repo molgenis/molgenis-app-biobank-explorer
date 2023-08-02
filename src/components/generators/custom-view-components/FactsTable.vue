@@ -34,9 +34,9 @@
       </div>
     </div>
     <div v-if="splitByColumn.length < 4" class="alert alert-dark" role="alert">
-      Because of the adopted method of data creation and collection the number
-      of donors presented in the table below should not be added as it may give
-      the wrong sums.
+      Because of the adopted method of data creation the number of donors
+      presented in the table below should not be added as it may give the wrong
+      sums.
     </div>
     <table class="table border w-100">
       <thead>
@@ -92,52 +92,48 @@
         </tr>
         <tr class="filter-bar">
           <th>
-            <select @change="filter('sample_type', $event)" class="w-100">
+            <select
+              @change="filter('sample_type', $event)"
+              v-model="sampleFilter"
+              class="w-100">
               <option value="all">All</option>
               <option
                 v-for="material of materialtypeOptions"
                 :key="material"
-                :value="renderValue(material)">
-                {{ renderValue(material) }}
+                :value="material">
+                {{ material }}
               </option>
-              <option value="Unknown">Unknown</option>
             </select>
           </th>
           <th>
-            <select @change="filter('sex', $event)">
+            <select @change="filter('sex', $event)" v-model="sexFilter">
               <option value="all">All</option>
-              <option
-                v-for="sex of sexOptions"
-                :key="sex"
-                :value="renderValue(sex)">
-                {{ renderValue(sex) }}
+              <option v-for="sex of sexOptions" :key="sex" :value="sex">
+                {{ sex }}
               </option>
-              <option value="Unknown">Unknown</option>
             </select>
           </th>
 
           <th>
-            <select @change="filter('age', $event)">
+            <select @change="filter('age', $event)" v-model="ageFilter">
               <option value="all">All</option>
               <option
                 v-for="ageRange of ageRangeOptions"
                 :key="ageRange"
-                :value="renderValue(ageRange)">
-                {{ renderValue(ageRange) }}
+                :value="ageRange">
+                {{ ageRange }}
               </option>
-              <option value="Unknown">Unknown</option>
             </select>
           </th>
           <th>
-            <select @change="filter('disease', $event)">
+            <select @change="filter('disease', $event)" v-model="diseaseFilter">
               <option value="all">All</option>
               <option
                 v-for="disease of diseaseOptions"
                 :key="disease"
-                :value="renderValue(disease)">
-                {{ renderValue(disease) }}
+                :value="disease">
+                {{ disease }}
               </option>
-              <option value="Unknown">Unknown</option>
             </select>
           </th>
           <th></th>
@@ -148,15 +144,15 @@
         <template v-for="fact of factsTable">
           <tr :key="fact.id" v-if="hasAFactToShow(fact)">
             <th scope="row" class="pr-1 align-top">
-              {{ renderValue(fact.sample_type, "label") }}
+              {{ fact.sample_type }}
             </th>
-            <td>{{ renderValue(fact.sex) }}</td>
-            <td>{{ renderValue(fact.age) }}</td>
-            <td :title="renderValue(fact.disease_id)">
-              {{ renderValue(fact.disease) }}
+            <td>{{ fact.sex }}</td>
+            <td>{{ fact.age }}</td>
+            <td :title="fact.disease_name">
+              {{ fact.disease }}
             </td>
-            <td>{{ renderValue(fact.number_of_donors) }}</td>
-            <td>{{ renderSamplesValue(fact.number_of_samples) }}</td>
+            <td>{{ fact.number_of_donors }}</td>
+            <td>{{ fact.number_of_samples }}</td>
           </tr>
         </template>
       </tbody>
@@ -177,9 +173,19 @@ export default {
       sortColumn: '',
       sortAsc: false,
       filters: [],
+      sampleFilter: 'all',
+      sexFilter: 'all',
+      ageFilter: 'all',
+      diseaseFilter: 'all',
       /** these columns are all the critearia that the rows should be split on. */
       splitByColumn: ['sample_type', 'sex', 'age', 'disease'],
-      splittableColumns: ['sample_type', 'sex', 'age', 'disease', 'number_of_samples'],
+      splittableColumns: [
+        'sample_type',
+        'sex',
+        'age',
+        'disease',
+        'number_of_samples'
+      ],
       factsProperties: [
         'sample_type.label',
         'sex.CollectionSex',
@@ -191,45 +197,36 @@ export default {
       ]
     }
   },
-  watch: {
-    splitByColumn () {
-      this.collapseRows()
-    }
-  },
   computed: {
     materialtypeOptions () {
       return [
         ...new Set(
-          this.attribute.value
-            .map((attr) => attr.sample_type?.label)
-            .filter((l) => l)
+          this.facts
+            .map((fact) => fact.sample_type)
+            .sort((a, b) => a.localeCompare(b))
         )
       ]
     },
     sexOptions () {
       return [
         ...new Set(
-          this.attribute.value
-            .map((attr) => attr.sex?.CollectionSex)
-            .filter((l) => l)
+          this.facts.map((fact) => fact.sex).sort((a, b) => a.localeCompare(b))
         )
       ]
     },
     ageRangeOptions () {
       return [
         ...new Set(
-          this.attribute.value
-            .map((attr) => attr.age?.CollectionAgeRange)
-            .filter((l) => l)
+          this.facts.map((fact) => fact.age).sort((a, b) => a.localeCompare(b))
         )
       ]
     },
     diseaseOptions () {
       return [
         ...new Set(
-          this.attribute.value
-            .map((attr) => attr.disease?.label)
-            .filter((l) => l)
+          this.facts
+            .map((fact) => fact.disease)
+            .sort((a, b) => a.localeCompare(b))
         )
       ]
     },
@@ -266,11 +263,15 @@ export default {
       if (e.target.checked) {
         this.splitByColumn.push(columnName)
       } else {
-        const columnIndex = this.splitByColumn.findIndex(
-          (cco) => cco === columnName
-        )
-        this.splitByColumn.splice(columnIndex, 1)
+        const newArray = this.splitByColumn.filter((sbc) => sbc !== columnName)
+        this.splitByColumn = newArray
       }
+      this.sampleFilter = 'all'
+      this.sexFilter = 'all'
+      this.ageFilter = 'all'
+      this.diseaseFilter = 'all'
+      this.filters = []
+      this.collapseRows()
     },
     hasAFactToShow (fact) {
       const hasSamples =
@@ -406,7 +407,7 @@ export default {
       const collapsedFacts = []
 
       for (const factGroup of groupedFacts) {
-        let collapsedFact = { }
+        let collapsedFact = {}
 
         for (const fact of factGroup) {
           if (!Object.keys(collapsedFact).length) {
@@ -421,7 +422,9 @@ export default {
               if (Array.isArray(mergedValue)) {
                 const valueToMerge = fact[column]
                 if (Array.isArray(valueToMerge)) {
-                  collapsedFact[column] = [...new Set(...collapsedFact[column].concat(fact[column]))]
+                  collapsedFact[column] = [
+                    ...new Set(...collapsedFact[column].concat(fact[column]))
+                  ]
                 } else {
                   if (!collapsedFact[column].includes(fact[column])) {
                     collapsedFact[column].push(fact[column])
@@ -429,7 +432,15 @@ export default {
                 }
               } else {
                 if (collapsedFact[column] !== fact[column]) {
-                  collapsedFact[column] = [collapsedFact[column], fact[column]]
+                  if (isNaN(collapsedFact[column]) && isNaN(fact[column])) {
+                    collapsedFact[column] = [
+                      collapsedFact[column],
+                      fact[column]
+                    ]
+                  } else {
+                    collapsedFact[column] =
+                      parseInt(collapsedFact[column]) + parseInt(fact[column])
+                  }
                 }
               }
             }
@@ -438,6 +449,15 @@ export default {
         collapsedFact.number_of_donors = 'Available'
         collapsedFacts.push(collapsedFact)
       }
+
+      collapsedFacts.forEach((fact) => {
+        for (const prop in fact) {
+          if (Array.isArray(fact[prop])) {
+            fact[prop] = fact[prop].join(', ')
+          }
+        }
+      })
+
       this.facts = collapsedFacts
     },
     factsData () {
@@ -481,6 +501,7 @@ tr td:not(:first-child) {
 
 .facts-header th {
   border-bottom: none;
+  white-space: nowrap;
 }
 
 .filter-bar th {
