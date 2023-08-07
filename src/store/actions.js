@@ -135,7 +135,7 @@ export default {
     commit('SetUpdateFilter', { filterName, reducedFilterOptions, lastBaseQuery })
   },
   async GetQualityStandardInformation ({ commit }) {
-    const qualityInfo = await api.get('eu_bbmri_eric_standards?num=10000&attrs=label,description')
+    const qualityInfo = await api.get('/api/v2/eu_bbmri_eric_standards?num=10000&attrs=label,description')
     const response = { items: qualityInfo.items }
     commit('SetQualityStandardDictionary', response)
   },
