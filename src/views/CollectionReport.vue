@@ -75,7 +75,7 @@
             <div
               class="row"
               v-if="factsData && Object.keys(factsData).length > 0">
-              <facts-table :attribute="factsData"></facts-table>
+              <facts-table class="w-100 px-3" :attribute="factsData"></facts-table>
             </div>
           </div>
         </div>

@@ -81,8 +81,8 @@ module.exports = {
       new GenerateJsonWebpackPlugin('config.json', {
         name: packageJson.name,
         label: packageJson.name,
+        version: `${pkgVersion}`,
         description: packageJson.description,
-        version: packageJson.version,
         apiDependency: 'v2',
         includeMenuAndFooter: true,
         runtimeOptions: {
