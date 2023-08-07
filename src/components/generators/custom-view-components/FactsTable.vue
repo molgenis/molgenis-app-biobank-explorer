@@ -20,8 +20,8 @@
         <label>
           <input
             type="checkbox"
-            @change="(e) => toggleColumn(e, 'age')"
-            :checked="columnChecked('age')"/>
+            @change="(e) => toggleColumn(e, 'age_range')"
+            :checked="columnChecked('age_range')"/>
           Age range
         </label>
         <label>
@@ -57,10 +57,10 @@
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
           </th>
-          <th @click="sort('age')">
+          <th @click="sort('age_range')">
             Age range
             <span
-              v-if="sortColumn === 'age'"
+              v-if="sortColumn === 'age_range'"
               class="fa"
               :class="sortAsc ? 'fa-sort-asc' : 'fa-sort-desc'"
               aria-hidden="true"></span>
@@ -115,7 +115,7 @@
           </th>
 
           <th>
-            <select @change="filter('age', $event)" v-model="ageFilter">
+            <select @change="filter('age_range', $event)" v-model="ageFilter">
               <option value="all">All</option>
               <option
                 v-for="ageRange of ageRangeOptions"
@@ -147,7 +147,7 @@
               {{ fact.sample_type }}
             </th>
             <td>{{ fact.sex }}</td>
-            <td>{{ fact.age }}</td>
+            <td>{{ fact.age_range }}</td>
             <td :title="fact.disease_name">
               {{ fact.disease }}
             </td>
@@ -178,18 +178,18 @@ export default {
       ageFilter: 'all',
       diseaseFilter: 'all',
       /** these columns are all the critearia that the rows should be split on. */
-      splitByColumn: ['sample_type', 'sex', 'age', 'disease'],
+      splitByColumn: ['sample_type', 'sex', 'age_range', 'disease'],
       splittableColumns: [
         'sample_type',
         'sex',
-        'age',
+        'age_range',
         'disease',
         'number_of_samples'
       ],
       factsProperties: [
         'sample_type.label',
-        'sex.CollectionSex',
-        'age.CollectionAgeRange',
+        'sex.label',
+        'age_range.label',
         'disease.label',
         'disease.id',
         'number_of_samples',
@@ -217,7 +217,7 @@ export default {
     ageRangeOptions () {
       return [
         ...new Set(
-          this.facts.map((fact) => fact.age).sort((a, b) => a.localeCompare(b))
+          this.facts.map((fact) => fact.age_range).sort((a, b) => a.localeCompare(b))
         )
       ]
     },
