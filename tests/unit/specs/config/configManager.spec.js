@@ -1,6 +1,7 @@
 import { bbmriConfig } from '../../../../src/config/configManager'
 import initialBiobankColumns from '../../../../src/config/initialBiobankColumns'
 import initialCollectionColumns from '../../../../src/config/initialCollectionColumns'
+import initialStudyColumns from '../../../../src/config/initialStudyColumns'
 import filterDefinitions from '../../../../src/config/initialFilterFacets'
 import initialLandingpage from '../../../../src/config/initialLandingpage'
 import i18n from '../../../../src/config/i18n'
@@ -10,6 +11,7 @@ let windowSpy
 const initialState = {
   collectionColumns: initialCollectionColumns,
   biobankColumns: initialBiobankColumns,
+  studyColumns: initialStudyColumns,
   biobankCardShowCollections: true,
   filterFacets: filterDefinitions,
   removeFreemarkerMargin: true,

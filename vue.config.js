@@ -23,6 +23,7 @@ BUILD: ${process.env.BUILD_NUMBER}`
 
 const initialCollectionColumns = require('./src/config/initialCollectionColumns')
 const initialBiobankColumns = require('./src/config/initialBiobankColumns')
+const initialStudyColumns = require('./src/config/initialStudyColumns')
 const initialFilterFacets = require('./src/config/initialFilterFacets')
 const i18n = require('./src/config/i18n')
 const initialLandingpage = require('./src/config/initialLandingpage')
@@ -91,6 +92,7 @@ module.exports = {
           filterFacets: initialFilterFacets,
           collectionColumns: initialCollectionColumns,
           biobankColumns: initialBiobankColumns,
+          studyColumns: initialStudyColumns,
           biobankCardShowCollections: true,
           googleAnalyticsKey: '',
           removeFreemarkerMargin: true,
