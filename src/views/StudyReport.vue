@@ -11,30 +11,30 @@
         <div class="col my-3 shadow-sm">
           <nav aria-label="breadcrumb" v-if="study">
             <ol class="breadcrumb my-1">
-              <!-- <li class="breadcrumb-item">
+              <li class="breadcrumb-item">
                 <router-link
                   to="/"
                   title="Back to biobank explorer">
                   {{ uiText["home"] }}
                 </router-link>
               </li>
-              <li class="breadcrumb-item">
+              <!-- <li class="breadcrumb-item">
                 <router-link
                   :to="'/biobank/' + study.collection.biobank.id"
                   :title="'Go to biobank ' + study.collection.biobank.name">
                   {{ study.collection.biobank.name }}
                 </router-link>
-              </li>
-              <li class="breadcrumb-item">
+              </li> -->
+              <!-- <li class="breadcrumb-item">
                 <router-link
                   :to="'/collection/' + study.collection.id"
                   :title="'Go to collection ' + study.collection.name">
                   {{ study.collection.name }}
                 </router-link>
-              </li>
+              </li> -->
               <li class="breadcrumb-item active text-dark" aria-current="page">
                 {{ study.name }}
-              </li> -->
+              </li>
             </ol>
           </nav>
         </div>

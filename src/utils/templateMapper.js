@@ -273,6 +273,13 @@ export const collectionReportInformation = collection => {
     })
   }
 
+  if (collection.study) {
+    collectionReport.study = {
+      title: collection.study.title,
+      report: `/study/${collection.study.id}`
+    }
+  }
+
   collectionReport.certifications = mapObjArray(collection.quality)
 
   collectionReport.collaboration = []

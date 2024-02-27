@@ -22,7 +22,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'CollectionReportInfoCard',
+  name: 'StudyReportInfoCard',
   props: {
     info: {
       type: Object,

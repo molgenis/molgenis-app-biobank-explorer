@@ -66,18 +66,6 @@
                 <report-collection-details
                   v-if="collection"
                   :collection="collection" />
-
-                <!-- Study Part -->
-                <div v-if="studyData">
-                  <h3 class="mt-4">Related Study</h3>
-                  <study-title
-                    :title="studyData.title"
-                    :id="studyData.id"/>
-
-                  <view-generator
-                    class="collection-view"
-                    :viewmodel="studyData.viewmodel"/>
-                </div>
               </div>
 
               <!-- Right side card -->
@@ -107,8 +95,6 @@ import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
 import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
 import CheckOut from '../components/checkout/CheckOut.vue'
-import ViewGenerator from '../components/generators/ViewGenerator.vue'
-import StudyTitle from '../components/report-components/StudyTitle'
 
 export default {
   name: 'CollectionReport',
@@ -118,9 +104,7 @@ export default {
     Loading,
     ReportCollectionDetails,
     FactsTable,
-    CheckOut,
-    ViewGenerator,
-    StudyTitle
+    CheckOut
   },
   methods: {
     ...mapActions(['GetCollectionReport']),
