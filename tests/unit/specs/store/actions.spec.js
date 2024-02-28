@@ -288,7 +288,7 @@ describe('store', () => {
       const response = {
         page: { totalElements: 2 }
       }
-      
+
       api.get.mockResolvedValueOnce(response)
 
       const filterName = 'country'
@@ -302,7 +302,7 @@ describe('store', () => {
     })
 
     it('should not call SetFIlterLoading if the constructed query url equals the last constructed query url for the same filter', async () => {
-      
+
       const filterName = 'country'
       const activeFilters = {'materials' : ['DNA']}
       state.filterOptionDictionary = mockFilterOptionDictionary
@@ -322,6 +322,40 @@ describe('store', () => {
       await actions.getReducedFilterOptions({ state, commit }, { filterName, activeFilters })
 
       expect(commit).toBeCalledWith('SetError', filterReductionError)
+    })
+  })
+
+  describe('GetStudyReport', () => {
+    it('should retrieve a single study entity from the server based on a study id and store it in the state', async () => {
+      const response = {
+        _meta: {
+          name: 'meta'
+        },
+        id: 's-001',
+        name: 'beautiful study',
+        description: 'beautiful study'
+      }
+
+      api.get.mockResolvedValueOnce(response)
+      const studyId = 's-001'
+
+      await actions.GetStudyReport({ commit, state }, studyId)
+      expect(api.get).toHaveBeenLastCalledWith(`/api/v2/eu_bbmri_eric_studies/${studyId}?attrs=*,collections(*),also_known(*)`)
+      expect(commit).toHaveBeenNthCalledWith(1, 'SetLoading', true)
+      expect(commit).toHaveBeenNthCalledWith(2, 'SetStudyReport', response)
+      expect(commit).toHaveBeenNthCalledWith(3, 'SetLoading', false)
+    })
+
+    it('should set an error if the server respond with an error', async () => {
+      const studyId = 's-001'
+      const error = new Error('Error from server')
+      api.get.mockRejectedValue(error)
+
+      await actions.GetStudyReport({ commit, state }, studyId)
+
+      expect(commit).toHaveBeenNthCalledWith(1, 'SetLoading', true)
+      expect(commit).toHaveBeenNthCalledWith(2, 'SetError', error)
+      expect(commit).toHaveBeenNthCalledWith(3, 'SetLoading', false)
     })
   })
 })
