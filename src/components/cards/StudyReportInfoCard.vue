@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'StudyReportInfoCard',
   props: {
@@ -28,18 +27,11 @@ export default {
       type: Object,
       required: true
     }
-  },
-  computed: {
-    ...mapGetters(['uiText'])
   }
 }
 </script>
 
 <style scoped>
-.biobank-id {
-  word-break: break-all;
-}
-
 .right-content-list {
   list-style-type: none;
   margin-left: -2.5rem;
@@ -50,13 +42,5 @@ export default {
 
 .right-content-list li {
   margin-bottom: 0.5rem;
-}
-
-.info-list {
-  margin-bottom: 1rem;
-}
-
-.cert-badge:not(:last-child) {
-  margin-right: 1rem;
 }
 </style>

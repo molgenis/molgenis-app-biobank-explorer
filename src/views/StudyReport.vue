@@ -93,7 +93,7 @@ export default {
       return studyReportInformation(this.study)
     },
     studyDataAvailable () {
-      return Object.keys(this.study).length
+      return Object.keys(this.study).length > 0
     },
     studyId () {
       const splittedUrl = this.$route.fullPath.split('/')
