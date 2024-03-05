@@ -11,12 +11,48 @@
 
       <div
         class="d-flex justify-content-center flex-wrap biobank-cards-container">
+        <!-- Pivot the view of biobank cards to a table of collections: -->
+
+        <!-- information on custom rendering:
+          https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
+
+        <b-table small :fields="collectiontablefields" :items="createCollectionTable" :key="biobanksShown" responsive="sm">
+          <template v-slot:cell(selected)="data">
+            <!-- TODO: center checkbox -->
+            <b-form-group>
+              <collection-selector
+                      class="ml-auto"
+                      :collectionData=data.item.collection
+                      iconOnly
+                      bookmark>
+              </collection-selector>
+            </b-form-group>
+          </template>
+
+          <!-- Link to the collection detail card -->
+          <template #cell(name)="data">
+            <b class="text-info">
+              <router-link :to="'/collection/' + data.item.collectionid">{{ data.item.collectionname }}</router-link>
+            </b>
+          </template>
+
+          <!-- Link to the biobank report card -->
+          <template #cell(provider)="data">
+            <b class="text-info">
+              <router-link :to="'/biobank/' + data.item.biobankid">{{ data.item.biobankname }}</router-link>
+            </b>
+          </template>
+
+        </b-table>
+
+        <!-- TODO: add button to switch between table and card view
         <biobank-card
           v-for="biobank in biobanksShown"
           :key="biobank.id || biobank"
           :biobank="biobank"
           :fullSize="biobanksShown.length === 1">
         </biobank-card>
+        -->
       </div>
       <pagination class="mt-4" />
     </div>
@@ -34,20 +70,58 @@
 </template>
 
 <script>
-import BiobankCard from './cards/BiobankCard.vue'
+// TODO: Add button to switch view between card and table view
+// import BiobankCard from './cards/BiobankCard.vue'
 import Pagination from './buttons/Pagination.vue'
 import ResultHeader from './ResultHeader.vue'
+// Pivot the view of biobank cards:
+// Add the selector for collections to be added to negotiation to the collection table:
+import CollectionSelector from './buttons/CollectionSelector.vue'
+
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 export default {
   name: 'biobank-cards-container',
   components: {
-    BiobankCard,
+    // TODO: Add button to switch view between card and table view
+    // BiobankCard,
     Pagination,
-    ResultHeader
+    ResultHeader,
+    CollectionSelector
+  },
+  data () {
+    return {
+      // Pivot the view of biobank cards to a table of collection:
+      // create a the fields to be displayed in the colleciton table
+      collectiontablefields: [
+        { key: 'selected', label: 'Request', sortable: false },
+        { key: 'biobankname', label: 'Biobank', sortable: false },
+        { key: 'collectionname', label: 'Collection', sortable: false },
+        { key: 'description', label: 'Description', sortable: false }
+      ]
+    }
   },
   methods: {
-    ...mapActions(['GetBiobanks', 'QueryBiobanks'])
+    ...mapActions(['GetBiobanks', 'QueryBiobanks']),
+    // Pivot the view of biobank cards to a table of collections:
+    // create a table of collections to be used in the display of collections
+    createCollectionTable () {
+      const collectionReturn = []
+      for (let k = 0; k < this.biobanksShown.length; k++) {
+        for (let i = 0; i < this.biobanksShown[k].collections.length; i++) {
+          var retVal = {
+            biobankname: this.biobanksShown[k].name,
+            biobankid: this.biobanksShown[k].id,
+            collection: this.biobanksShown[k].collections[i],
+            collectionname: this.biobanksShown[k].collections[i].name,
+            description: this.biobanksShown[k].collections[i].description,
+            collectionid: this.biobanksShown[k].collections[i].id
+          }
+          collectionReturn.push(retVal)
+        }
+      }
+      return collectionReturn
+    }
   },
   computed: {
     ...mapState(['pageSize', 'currentPage']),
