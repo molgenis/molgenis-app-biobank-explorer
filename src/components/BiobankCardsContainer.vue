@@ -1,5 +1,10 @@
 <template>
   <div class="border-bottom p-3">
+    <!-- set the view to Biobank card view if not initialized -->
+    <div v-if="!savedBiobanksCollectionsView">
+      {{ this.savedBiobanksCollectionsView = 'biobank-cards' }}
+    </div>
+      <h2>Biobanks</h2>
     <div v-if="!loading && foundBiobanks > 0">
       <!-- Buttons to switch the Biobank card view and the collection list view -->
       <div class="text-end my-2">
@@ -171,6 +176,9 @@ export default {
   },
   beforeMount () {
     // Initialize the Biobank Card view as default if nothing else stored previously
+    if (this.savedBiobanksCollectionsView === undefined) {
+      this.setSavedBiobanksCollectionsView({ biobanksCollectionsView: 'biobank-cards' })
+    }
     if (this.savedBiobanksCollectionsView === '') {
       this.setSavedBiobanksCollectionsView({ biobanksCollectionsView: 'biobank-cards' })
     }
