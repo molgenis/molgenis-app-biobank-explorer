@@ -145,5 +145,6 @@ export default {
     }
     return 'Something went wrong'
   },
-  getNotificationMessage: state => state.notification
+  getNotificationMessage: state => state.notification,
+  getSavedBiobanksCollectionsView: state => state.savedBiobanksCollectionsView
 }

@@ -1,6 +1,25 @@
 <template>
   <div class="border-bottom p-3">
     <div v-if="!loading && foundBiobanks > 0">
+      <!-- Buttons to switch the Biobank card view and the collection list view -->
+      <div class="text-end my-2">
+        <!-- Button to switch to Biobank card view, active by default -->
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          :class="savedBiobanksCollectionsView === 'biobank-cards' ? 'btn-light':'bg-body'"
+          @click="savedBiobanksCollectionsView = 'biobank-cards', setSavedBiobanksCollectionsView({biobankscollectionsView:'biobank-cards'})">
+          <i class="bi bi-list" />
+        </button>
+        <!-- Button to switch to list view of collections -->
+        <button
+              type="button"
+              class="btn btn-outline-secondary"
+              :class="savedBiobanksCollectionsView === 'collection-table' ? 'btn-light':'bg-body'"
+              @click="savedBiobanksCollectionsView = 'collection-table', setSavedBiobanksCollectionsView({biobankscollectionsView:'collection-table'})">
+              <i class="bi bi-grid" />
+        </button>
+      </div>
       <div class="d-flex mb-4 justify-content-between">
         <result-header v-if="!loading" class="w-25" />
 
@@ -11,48 +30,50 @@
 
       <div
         class="d-flex justify-content-center flex-wrap biobank-cards-container">
+        <!-- Show the Biobank cards view if selected -->
+        <div v-if="savedBiobanksCollectionsView === 'biobank-cards'">
+          <biobank-card
+            v-for="biobank in biobanksShown"
+            :key="biobank.id || biobank"
+            :biobank="biobank"
+            :fullSize="biobanksShown.length === 1">
+          </biobank-card>
+        </div>
+        <!-- Show the Biobank cards view if selected -->
         <!-- Pivot the view of biobank cards to a table of collections: -->
+        <div v-if="savedBiobanksCollectionsView === 'collection-table'">
+          <!-- information on custom rendering:
+            https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
 
-        <!-- information on custom rendering:
-          https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
+          <b-table small :fields="collectiontablefields" :items="createCollectionTable" :key="biobanksShown" responsive="sm">
+            <template v-slot:cell(selected)="data">
+              <!-- TODO: center checkbox -->
+              <b-form-group>
+                <collection-selector
+                        class="ml-auto"
+                        :collectionData=data.item.collection
+                        iconOnly
+                        bookmark>
+                </collection-selector>
+              </b-form-group>
+            </template>
 
-        <b-table small :fields="collectiontablefields" :items="createCollectionTable" :key="biobanksShown" responsive="sm">
-          <template v-slot:cell(selected)="data">
-            <!-- TODO: center checkbox -->
-            <b-form-group>
-              <collection-selector
-                      class="ml-auto"
-                      :collectionData=data.item.collection
-                      iconOnly
-                      bookmark>
-              </collection-selector>
-            </b-form-group>
-          </template>
+            <!-- Link to the collection detail card -->
+            <template #cell(name)="data">
+              <b class="text-info">
+                <router-link :to="'/collection/' + data.item.collectionid">{{ data.item.collectionname }}</router-link>
+              </b>
+            </template>
 
-          <!-- Link to the collection detail card -->
-          <template #cell(name)="data">
-            <b class="text-info">
-              <router-link :to="'/collection/' + data.item.collectionid">{{ data.item.collectionname }}</router-link>
-            </b>
-          </template>
+            <!-- Link to the biobank report card -->
+            <template #cell(provider)="data">
+              <b class="text-info">
+                <router-link :to="'/biobank/' + data.item.biobankid">{{ data.item.biobankname }}</router-link>
+              </b>
+            </template>
 
-          <!-- Link to the biobank report card -->
-          <template #cell(provider)="data">
-            <b class="text-info">
-              <router-link :to="'/biobank/' + data.item.biobankid">{{ data.item.biobankname }}</router-link>
-            </b>
-          </template>
-
-        </b-table>
-
-        <!-- TODO: add button to switch between table and card view
-        <biobank-card
-          v-for="biobank in biobanksShown"
-          :key="biobank.id || biobank"
-          :biobank="biobank"
-          :fullSize="biobanksShown.length === 1">
-        </biobank-card>
-        -->
+          </b-table>
+        </div>
       </div>
       <pagination class="mt-4" />
     </div>
@@ -70,8 +91,7 @@
 </template>
 
 <script>
-// TODO: Add button to switch view between card and table view
-// import BiobankCard from './cards/BiobankCard.vue'
+import BiobankCard from './cards/BiobankCard.vue'
 import Pagination from './buttons/Pagination.vue'
 import ResultHeader from './ResultHeader.vue'
 // Pivot the view of biobank cards:
@@ -83,8 +103,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 export default {
   name: 'biobank-cards-container',
   components: {
-    // TODO: Add button to switch view between card and table view
-    // BiobankCard,
+    BiobankCard,
     Pagination,
     ResultHeader,
     CollectionSelector
@@ -98,11 +117,12 @@ export default {
         { key: 'biobankname', label: 'Biobank', sortable: false },
         { key: 'collectionname', label: 'Collection', sortable: false },
         { key: 'description', label: 'Description', sortable: false }
-      ]
+      ],
+      savedBiobanksCollectionsView: this.getSavedBiobanksCollectionsView
     }
   },
   methods: {
-    ...mapActions(['GetBiobanks', 'QueryBiobanks']),
+    ...mapActions(['GetBiobanks', 'QueryBiobanks', 'setSavedBiobanksCollectionsView']),
     // Pivot the view of biobank cards to a table of collections:
     // create a table of collections to be used in the display of collections
     createCollectionTable () {
@@ -130,7 +150,8 @@ export default {
       'foundBiobanks',
       'loading',
       'biobankRsql',
-      'rsql'
+      'rsql',
+      'getSavedBiobanksCollectionsView'
     ]),
     biobanksShown () {
       if (this.loading) return []
@@ -146,6 +167,12 @@ export default {
     },
     biobankIdsToFetch () {
       return this.biobanksShown.filter(it => typeof it === 'string')
+    }
+  },
+  beforeMount () {
+    // Initialize the Biobank Card view as default if nothing else stored previously
+    if (this.savedBiobanksCollectionsView === '') {
+      this.setSavedBiobanksCollectionsView({ biobanksCollectionsView: 'biobank-cards' })
     }
   },
   watch: {

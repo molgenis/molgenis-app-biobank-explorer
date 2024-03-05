@@ -268,5 +268,8 @@ export default {
   },
   SetNotification (state, notification) {
     state.notification = notification
+  },
+  setSavedBiobanksCollectionsView (state, biobanksCollectionsView) {
+    state.savedBiobanksCollectionsView = biobanksCollectionsView
   }
 }
