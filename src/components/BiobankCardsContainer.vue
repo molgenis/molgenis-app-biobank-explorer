@@ -11,7 +11,7 @@
         <!-- Button to switch to Biobank card view, active by default -->
         <button
           type="button"
-          class="btn btn-outline-secondary"
+          class="btn mb-1 mr-2 btn-outline-secondary"
           :class="savedBiobanksCollectionsView === 'biobank-cards' ? 'btn-light':'bg-body'"
           @click="savedBiobanksCollectionsView = 'biobank-cards', setSavedBiobanksCollectionsView({biobankscollectionsView:'biobank-cards'})">
           <i class="bi bi-list" />
@@ -19,7 +19,7 @@
         <!-- Button to switch to list view of collections -->
         <button
               type="button"
-              class="btn btn-outline-secondary"
+              class="btn mb-1 mr-2 btn-outline-secondary"
               :class="savedBiobanksCollectionsView === 'collection-table' ? 'btn-light':'bg-body'"
               @click="savedBiobanksCollectionsView = 'collection-table', setSavedBiobanksCollectionsView({biobankscollectionsView:'collection-table'})">
               <i class="bi bi-grid" />
