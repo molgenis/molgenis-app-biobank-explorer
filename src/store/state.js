@@ -49,5 +49,6 @@ export default {
   diagnosisAvailableFetched: false, /** whenever a user returns from a bookmark with diagnosis available in the active filter, there is no label. fetch it once for performance. */
   notification: undefined,
   qualityStandardsDictionary: {},
+  savedBiobanksCollectionsView: '', /** holds the current state of the Biobank view, to either display a table of Collections or Biobank cards */
   ...configurationState
 }

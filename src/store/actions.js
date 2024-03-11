@@ -151,5 +151,13 @@ export default {
     }
     return api.post('/plugin/directory/export', options)
       .then(helpers.setLocationHref, error => commit('SetError', error))
+  },
+  /**
+   * Saves the current view to display either Biobank Cards or the Collection Table
+   *  ({ state, commit }, { negotiationsView }) {
+    commit("setSavedNegotiationsView", negotiationsView)
+   */
+  setSavedBiobanksCollectionsView ({ state, commit }, { savedBiobanksCollectionsView }) {
+    commit('setSavedBiobanksCollectionsView', savedBiobanksCollectionsView)
   }
 }
