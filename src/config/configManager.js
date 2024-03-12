@@ -1,5 +1,6 @@
 import initialBiobankColumns from './initialBiobankColumns'
 import initialCollectionColumns from './initialCollectionColumns'
+import initialStudyColumns from './initialStudyColumns'
 import initialFilterFacets from './initialFilterFacets'
 import initialLandingpage from './initialLandingpage'
 import i18n from './i18n.js'
@@ -11,6 +12,7 @@ export const bbmriConfig = () => {
     negotiatorType: 'eric-negotiator',
     collectionColumns: initialCollectionColumns,
     biobankColumns: initialBiobankColumns,
+    studyColumns: initialStudyColumns,
     filterFacets: initialFilterFacets,
     filterMenuInitiallyFolded: false,
     removeFreemarkerMargin: false,

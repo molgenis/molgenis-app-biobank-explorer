@@ -123,3 +123,73 @@ export const mockCollectionResponse = {
       }
     }]
 }
+
+export const mockStudyResponse = {
+  id: 's-001',
+  title: 'Important study',
+  description: 'An important clinical study',
+  type: 'Observational',
+  age_unit: [
+    {
+      _href: '/api/v2/eu_bbmri_eric_age_units/YEAR',
+      id: 'YEAR',
+      label: 'Year'
+    }
+  ],
+  also_known: [
+    {
+      _href: '/api/v2/eu_bbmri_eric_also_known_in/s001-aka-cs-001',
+      id: 'id:001',
+      name_system: 'Another catalog',
+      pid: 'cs-001',
+      url: 'https://another-catalog.eu/study/cs-001',
+      withdrawn: false,
+      label: 'Another Catalog'
+    }
+  ],
+  collections: [
+    {
+      id: 'c-001',
+      name: 'beautiful collection',
+      description: 'beautiful samples',
+      order_of_magnitude: {
+        _href: '/api/v2/eu_bbmri_eric_biobank_size/3',
+        size: '777'
+      },
+      country: {
+        name: 'Genovia'
+      },
+      network: [
+        {
+          id: 'network-x',
+          name: 'Network x'
+        },
+        {
+          id: 'network-y',
+          name: 'Network y'
+        }
+      ],
+      biobank: {
+        id: 'b-001',
+        name: 'beautiful biobank',
+        juridical_person: 'Is this even a person?',
+        email: 'info@beautiful-biobank.gnv',
+        url: 'https://beautiful-biobank.gnv'
+      }
+    }
+  ],
+  age_low: 16,
+  number_of_subjects: 373,
+  sex: [
+    {
+      _href: '/api/v2/eu_bbmri_eric_sex_types/MALE',
+      id: 'MALE',
+      label: 'Male'
+    },
+    {
+      _href: '/api/v2/eu_bbmri_eric_sex_types/FEMALE',
+      id: 'FEMALE',
+      label: 'Female'
+    }
+  ]
+}

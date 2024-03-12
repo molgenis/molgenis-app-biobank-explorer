@@ -8,8 +8,11 @@ import { biobankActions } from './biobank/biobankActions'
 import { configurationActions } from './configuration/configurationActions'
 import { collectionActions, COLLECTION_REPORT_ATTRIBUTE_SELECTOR } from './collection/collectionActions'
 
+import { studyActions } from './study/studyActions'
+
 const BIOBANK_API_PATH = '/api/v2/eu_bbmri_eric_biobanks'
 export const COLLECTION_API_PATH = '/api/v2/eu_bbmri_eric_collections'
+export const STUDY_API_PATH = '/api/v2/eu_bbmri_eric_studies'
 
 const NETWORK_API_PATH = '/api/v2/eu_bbmri_eric_networks'
 /**/
@@ -18,6 +21,7 @@ export default {
   ...collectionActions,
   ...biobankActions,
   ...configurationActions,
+  ...studyActions,
   async GetNetworkReport ({ commit }, networkId) {
     commit('SetNetworkBiobanks', undefined)
     commit('SetNetworkCollections', undefined)

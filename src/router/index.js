@@ -6,6 +6,7 @@ import BiobankReport from '../views/BiobankReport'
 import CollectionReport from '../views/CollectionReport'
 import NetworkReportCard from '../components/cards/NetworkReportCard'
 import state, { INITIAL_STATE } from '../store/state'
+import StudyReport from '../views/StudyReport'
 import api from '@molgenis/molgenis-api-client'
 
 Vue.use(VueRouter)
@@ -35,6 +36,11 @@ const router = new VueRouter({
       path: '/network/:id',
       name: 'network',
       component: NetworkReportCard
+    },
+    {
+      path: '/study/:id',
+      name: 'study',
+      component: StudyReport
     },
     {
       path: '/configuration',

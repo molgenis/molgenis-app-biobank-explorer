@@ -9,7 +9,7 @@
     <script
       v-if="bioschemasJsonld && !isLoading"
       v-text="bioschemasJsonld"
-      type="application/ld+json"/>
+      type="application/ld+json"></script>
     <loading
       :active="isLoading"
       loader="dots"
@@ -65,7 +65,7 @@
               <div class="col-md-8">
                 <report-collection-details
                   v-if="collection"
-                  :collection="collection"/>
+                  :collection="collection" />
               </div>
 
               <!-- Right side card -->
@@ -90,7 +90,7 @@ import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import ReportTitle from '../components/report-components/ReportTitle'
 import CollectionReportInfoCard from '../components/cards/CollectionReportInfoCard'
-import { collectionReportInformation } from '../utils/templateMapper'
+import { collectionReportInformation, getStudyDetails } from '../utils/templateMapper'
 import { mapCollectionToBioschemas } from '../utils/bioschemasMapper'
 import ReportCollectionDetails from '../components/report-components/ReportCollectionDetails.vue'
 import FactsTable from '../components/generators/custom-view-components/FactsTable.vue'
@@ -115,6 +115,9 @@ export default {
   computed: {
     ...mapState({ collection: 'collectionReport', isLoading: 'isLoading' }),
     ...mapGetters(['uiText']),
+    collectionDataAvailable () {
+      return Object.keys(this.collection).length
+    },
     info () {
       return collectionReportInformation(this.collection)
     },
@@ -130,6 +133,11 @@ export default {
     factsData () {
       // TODO rework this so that facts are stand-alone, this is a workaround because @ReportCollectionDetails
       return { value: this.collection.facts }
+    },
+    studyData () {
+      return this.collectionDataAvailable && this.collection.study
+        ? getStudyDetails(this.collection.study)
+        : undefined
     }
   },
   /** needed because if we route back the component is not destroyed but its props are updated for other collection */

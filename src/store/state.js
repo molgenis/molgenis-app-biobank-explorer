@@ -22,6 +22,7 @@ export default {
   collectionInfo: undefined, /** IDs of collections matching the collection filters */
   biobankReport: undefined, /** A single biobank object which is fetched by ID for showing the BiobankReport view */
   collectionReport: undefined,
+  studyReport: undefined,
   networkReport: {
     network: undefined,
     collections: undefined,

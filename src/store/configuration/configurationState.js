@@ -9,6 +9,7 @@ export const configurationState = {
   filterMenuInitiallyFolded: config.filterMenuInitiallyFolded,
   biobankColumns: config.biobankColumns,
   collectionColumns: config.collectionColumns,
+  studyColumns: config.studyColumns,
   filterFacets: config.filterFacets,
   applicationNotification: config.applicationNotification || '',
   isPodium: config.negotiatorType === 'podium',

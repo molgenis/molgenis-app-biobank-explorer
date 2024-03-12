@@ -4,6 +4,7 @@ import { createFilters } from '../config/facetConfigurator'
 import { collectionMutations } from './collection/collectionMutations'
 import { biobankMutations } from './biobank/biobankMutations'
 import { configurationMutations } from './configuration/configurationMutations'
+import { studyMutations } from './study/studyMutations'
 
 function mapLegacyFilterToNewFilter (state, query, oldFilterName, newFilterName) {
   const queryValues = decodeURIComponent(query[oldFilterName]).split(',')
@@ -19,6 +20,7 @@ export default {
   ...biobankMutations,
   ...collectionMutations,
   ...configurationMutations,
+  ...studyMutations,
   /**
    * Updates filter and keeps a history of searches
    * @param {*} state;
